@@ -81,6 +81,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   Dev.type = GIZA_DEVICE_IV;
   int success = -1;
   _giza_init_device_list ();
+  giza_set_text_background (-1);
 
   if (newPrefix)
     {

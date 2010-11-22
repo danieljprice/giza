@@ -19,6 +19,7 @@
 
 #include "giza-private.h"
 #include "giza-text-private.h"
+#include "giza-text-background-private.h"
 #include "giza-transforms-private.h"
 #include "giza-stroke-private.h"
 #include "giza-drivers-private.h"
@@ -58,6 +59,16 @@ giza_ptext (double x, double y, double angle, double just, char *text)
 
   double xbox[4], ybox[4];
   giza_qtext (x, y, angle, just, text, xbox, ybox);
+
+  // Draw the bounding box
+  if (_giza_text_background >= 0)
+  {
+    int oldCi;
+    giza_get_colour_index (&oldCi);
+    giza_set_colour_index (_giza_text_background);
+    giza_polygon (4, xbox, ybox);
+    giza_set_colour_index (oldCi);
+  }
 
   // change the current trans to world coords
   _giza_set_trans (GIZA_TRANS_WORLD);

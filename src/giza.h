@@ -173,6 +173,8 @@ void giza_render_float (int sizex, int sizey, float data[sizey][sizex],
 void giza_set_font (char *font);
 void giza_get_font (char *font, int n);
 
+void giza_set_text_background (int colourIndex);
+
 void
 giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 	     int i1, int i2, int j1, int j2, double scale, int position,

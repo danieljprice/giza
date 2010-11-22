@@ -106,9 +106,9 @@ SOURCE= giza-annotate.c giza-arrow.c giza-arrow-style.c giza-band.c \
 	giza-line-cap.c giza-line-style.c giza-line-width.c giza-move.c \
 	giza-points.c giza-polygon.c giza-prompting.c giza-ptext.c \
 	giza-qtext.c giza-rectangle.c giza-render.c giza-save.c \
-	giza-set-font.c giza-stroke.c giza-text.c giza-transforms.c \
-	giza-vector.c giza-viewport.c giza-warnings.c giza-window.c \
-	lex.yy.c 
+	giza-set-font.c giza-stroke.c giza-text.c giza-text-background.c \
+        giza-transforms.c giza-vector.c giza-viewport.c giza-warnings.c giza-window.c \
+	lex.yy.c
 
 #
 # Private header files
@@ -121,9 +121,9 @@ PHEADERS= giza-arrow-style-private.h giza-band-private.h \
 	  giza-driver-xw-private.h giza-fill-private.h giza-io-private.h \
 	  giza-line-style-private.h giza-private.h giza-prompting-private.h \
 	  giza-set-font-private.h giza-stroke-private.h \
-	  giza-text-private.h giza-transforms-private.h \
-	  giza-viewport-private.h giza-warnings-private.h \
-	  giza-window-private.h
+	  giza-text-private.h giza-text-background-private.h \
+          giza-transforms-private.h giza-viewport-private.h \
+          giza-warnings-private.h giza-window-private.h 
 
 OBJECTS= $(SOURCE:.c=.o)
 
