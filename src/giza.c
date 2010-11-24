@@ -126,3 +126,12 @@ _giza_has_drawn ()
 {
   return drawn;
 }
+
+int 
+_giza_nint (double x)
+{
+  if (x < 0)
+    return (int) (x - 0.5);
+
+  return (int) (x + 0.5);
+}

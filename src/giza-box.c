@@ -97,7 +97,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 
   double xintervalMaj, xintervalMin, xval, xratio;
   double yintervalMaj, yintervalMin, yval, yratio;
-  int sigfig;
+  int nv, np;
   int nMinTicksx, major;
   int nMinTicksy;
   double majTickL, subTickL, currentTickL;
@@ -293,7 +293,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
     {
       int i, i1, i2;
       _giza_tick_intervals (Win.xmin, Win.xmax, xintervalMaj, &i1, &i2);
-      sigfig = _giza_get_sigfigs (Win.xmin, Win.xmax, xintervalMaj);
+      np = floor (log10 (fabs (xintervalMaj)));
+      nv = _giza_nint (xintervalMaj/pow (10., np));
 
       for (i = i1; i <= i2; i++)
 	{
@@ -301,14 +302,14 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	  xratio = (xval - Win.xmin) / (Win.xmax - Win.xmin);
 	  if (xratio >= 0. && xratio <= 1.)
 	    {
-	      char tmp[20 + sigfig];
+	      char tmp[50];
 	      if (xoptl)
 		{
 		  sprintf (tmp, "10^{%i}", _giza_nint (xval));
 		}
 	      else
 		{
-		  giza_format_number (xval, sigfig, tmp);
+		  giza_format_number (i*nv, np, GIZA_NUMBER_FORMAT_AUTO, tmp);
 		}
 
 	      if (xoptn)
@@ -339,7 +340,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		{
 		  xratio = (xval - Win.xmin) / (Win.xmax - Win.xmin);
 		  xval = pow (10, xval);
-		  giza_format_number (xval, 12, tmp);
+		  giza_format_number (j, _giza_nint (i * xintervalMin), GIZA_NUMBER_FORMAT_AUTO, tmp);
 		  if (xoptn)
 		    {
 		      giza_annotate ("B", 1.2, xratio, 0.5, tmp);
@@ -442,7 +443,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
     {
       int i, i1, i2;
       _giza_tick_intervals (Win.ymin, Win.ymax, yintervalMaj, &i1, &i2);
-      sigfig = _giza_get_sigfigs (Win.ymin, Win.ymax, yintervalMaj);
+      np = floor (log10 (fabs (yintervalMaj)));
+      nv = _giza_nint (yintervalMaj/pow (10., np));
 
       for (i = i1; i <= i2; i++)
 	{
@@ -450,14 +452,14 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	  yratio = (yval - Win.ymin) / (Win.ymax - Win.ymin);
 	  if (yratio >= 0. && yratio <= 1.)
 	    {
-	      char tmp[20 + sigfig];
+	      char tmp[50];
 	      if (yoptl)
 		{
 		  sprintf (tmp, "10^{%i}", _giza_nint (yval));
 		}
 	      else
 		{
-		  giza_format_number (yval, sigfig, tmp);
+		  giza_format_number (i*nv, np, GIZA_NUMBER_FORMAT_AUTO, tmp);
 		}
 
 	      if (yoptv)
@@ -493,7 +495,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		{
 		  yratio = (yval - Win.ymin) / (Win.ymax - Win.ymin);
 		  yval = pow (10, yval);
-		  giza_format_number (yval, 12, tmp);
+		  giza_format_number (j, _giza_nint (i*yintervalMin), GIZA_NUMBER_FORMAT_AUTO, tmp);
 		  if (yoptv)
 		    {
 		      if (yoptn)

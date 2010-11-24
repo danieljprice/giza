@@ -17,6 +17,7 @@
  *
  */
 
+#include "giza-shared-cpp.h"
 #include "giza-io-private.h"
 #include "giza-private.h"
 #include <math.h>
@@ -28,6 +29,129 @@ static void _giza_tidy_expo (char *from, int n, char *to);
 /**
  * Utility: giza_format_number
  *
+ * Synopsis: Formats a floating point number to a string. str should be of length 16 + number of digits.
+ *
+ * input:
+ *  -mantissa :- The mantissa of the number
+ *  -power    :- The power of the number
+ *  -form     :- Determine which form to use, see below 
+ *  -string   :- Gets set to the string
+ *
+ * Forms:
+ *  -GIZA_NUMBER_FORMAT_AUTO :- giza decides
+ *  -GIZA_NUMBER_FORMAT_DEC  :- don't use an exponent, unless there are more than ten signifigant figures
+ *  -GIZA_NUMBER_FORMAT_EXP  :- Use an exponent
+ */
+void
+giza_format_number (int mantissa, int power, int form, char *string)
+{
+  int minus, numDigits, digitsBeforePoint;
+  char tmp[100];
+
+  // return "0"
+  if (mantissa == 0)
+    {
+      strcpy (string, "0");
+      return;
+    }
+
+  // Check if mantissa is negative, and make it positive
+  minus = mantissa < 0;
+  mantissa = abs (mantissa);
+
+  // Convert the mantissa to a string, and count the number of digits
+  sprintf (tmp, "%i", mantissa);
+  numDigits = strlen (tmp);
+
+  // Remove zeros on the right increasing power as needed
+  while (tmp[numDigits - 1] == '0')
+    {
+      --numDigits;
+      tmp[numDigits] = '\0';
+      ++power;
+    }
+  // Work out how many digits before the decimal
+  digitsBeforePoint = numDigits + MIN (power, 0);
+
+  // Integers of four or less digits (or forced integers)
+  if ((power >= 0) && ((form == GIZA_NUMBER_FORMAT_AUTO && (power + numDigits) <= 4) || (form == GIZA_NUMBER_FORMAT_DEC && power + numDigits <= 10)))
+    {
+      for (; power > 0; --power)
+        {
+	  tmp[numDigits] = '0';
+	  ++numDigits;
+	}
+    }
+  // Decimal without a power
+  else if (form != GIZA_NUMBER_FORMAT_EXP && digitsBeforePoint >= 1 && digitsBeforePoint <= 4 && digitsBeforePoint < numDigits)
+    {
+      int i;
+      for (i = numDigits; i >= digitsBeforePoint; --i)
+        {
+	  tmp[i+1] = tmp[i];
+	}
+      tmp[i+1] = '.';
+      ++numDigits;
+      power = 0;
+    }
+  // Otherwise the point goes after first digit and adjust power
+  else
+    {
+      power = power + numDigits - 1;
+      if (form != GIZA_NUMBER_FORMAT_EXP && power == -1)
+        {
+	  int i;
+	  for (i = numDigits; i >= 0; --i)
+	    {
+	      tmp[i+1] = tmp[i];
+	    }
+	  tmp[0] = '0';
+	  power = 0;
+	  ++numDigits;
+	}
+      else if (form != GIZA_NUMBER_FORMAT_EXP && power == -2)
+        {
+	  int i;
+	  for (i = numDigits; i >= 0; --i)
+	    {
+	      tmp[i+2] = tmp[i];
+	    }
+	  tmp[0] = '0';
+	  tmp[1] = '0';
+	  power = 0;
+	  numDigits += 2;
+	}
+      if (numDigits > 1)
+        {
+	  int i;
+	  for (i = numDigits; i > 0; --i)
+	    {
+	      tmp[i+1] = tmp[i];
+	    }
+	  tmp[1] = '.';
+	  ++numDigits;
+	}
+    }
+
+  // Add in the exponent
+  if (power != 0)
+    {
+      sprintf (&tmp[numDigits], "\\times10^{%i}", power);
+    }
+
+  // Add leading minus sign and copy the result to output
+  string[0] = '\0';
+  if (minus)
+    {
+      string[0] = '-';
+      string[1] = '\0';
+    }
+  strcat (string, tmp);
+}
+
+/*
+ * Utility: giza_format_number
+ *
  * Synopsis: Formats a floating point number to a string. str should be of length 16 + n.
  *
  * input:
@@ -35,6 +159,7 @@ static void _giza_tidy_expo (char *from, int n, char *to);
  *  -n :- The number of significant figures
  *  -str :- Gets set to the string
  */
+/*
 void
 giza_format_number (double x, int n, char *str)
 {
@@ -87,7 +212,7 @@ giza_format_number (double x, int n, char *str)
       _giza_tidy_expo (tmp, n, str);
     }
 }
-
+*/
 /**
  * Formats a floating point number to a string, in a fasion for log ticks
  */
@@ -111,14 +236,6 @@ giza_format_number_log (double power, char *str)
 }
 */
 
-int 
-_giza_nint (double x)
-{
-  if (x < 0)
-    return (int) (x - 0.5);
-
-  return (int) (x + 0.5);
-}
 /**
  * 'Cleans up' the exponential part of a string representation of a float.
  * Removes unnecessary '+' and '0' and converts E to \times10^{. 

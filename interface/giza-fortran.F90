@@ -693,7 +693,7 @@ private
     end subroutine giza_get_line_cap
  end interface
 
- interface
+ interface giza_set_line_style
     subroutine giza_set_line_style(ls) bind(C)
       import
       implicit none
@@ -701,7 +701,7 @@ private
     end subroutine giza_set_line_style
  end interface
 
- interface
+ interface giza_get_line_style
     subroutine giza_get_line_style(ls) bind(C)
       import
       implicit none
@@ -1079,16 +1079,15 @@ private
  end interface
 
  interface giza_format_number
-    module procedure giza_format_number_f2c,giza_format_number_f2c_float
+    module procedure giza_format_number_f2c
  end interface
 
  !private :: giza_format_number_c
  interface giza_format_number_c
-    subroutine giza_format_number_c(x,n,string) bind(C,name="giza_format_number")
+    subroutine giza_format_number_c(mantissa,power,iform,string) bind(C,name="giza_format_number")
       import
       implicit none
-      real(kind=c_double),value,intent(in)    :: x
-      integer(kind=c_int),value,intent(in)    :: n
+      integer(kind=c_int),value,intent(in)    :: mantissa,power,iform
       character(kind=c_char,len=1),intent(out) :: string
     end subroutine giza_format_number_c
  end interface
@@ -1258,29 +1257,15 @@ contains
 
   end subroutine giza_intern_set_font_f2c
 
-  subroutine giza_format_number_f2c(x,n,string)
+  subroutine giza_format_number_f2c(mantissa,power,iform,string)
     implicit none
-    real(kind=c_double),intent(in) :: x
-    integer(kind=c_int),intent(in) :: n
+    integer(kind=c_int),intent(in) :: mantissa,power,iform
     character(len=*),intent(out) :: string
   
-    call giza_format_number_c(x,n,string)
+    call giza_format_number_c(mantissa,power,iform,string)
     string = fstring(string)
 
   end subroutine giza_format_number_f2c
-
-  subroutine giza_format_number_f2c_float(x,n,string)
-    implicit none
-    real(kind=c_float) ,intent(in) :: x
-    integer(kind=c_int),intent(in) :: n
-    character(len=*),intent(out)   :: string
-    real(kind=c_double) :: xd
-  
-    xd = dble(x)  
-    call giza_format_number_c(xd,n,string) 
-    string = fstring(string)
-
-  end subroutine giza_format_number_f2c_float
 
   subroutine giza_query_device_f2c(qtype,string)
     implicit none

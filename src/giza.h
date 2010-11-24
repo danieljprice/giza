@@ -106,7 +106,7 @@ void giza_error_bars_vert_float (int n, float *xpts, float *ypts, float *ypts2, 
 void giza_set_fill (int fs);
 void giza_get_fill (int *fs);
 
-void giza_format_number (double x, int n, char *str);
+void giza_format_number (int mantissa, int power, int form, char *str);
 
 void giza_function_x (double (*func)(double *x), int n, double xmin, double xmax, int flag);
 void giza_function_x_float (float (*func)(float *x), int n, float xmin, float xmax, int flag);

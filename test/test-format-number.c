@@ -20,17 +20,29 @@
  */
 
 #include <giza.h>
+#include <math.h>
 
 int
 main ()
 {
 
-  double x;
+  int m, p;
+  double num;
   char   string[40];
 
+  m = 20000;
+  p = -1;
+  num = ((double) m) * pow (10, p);
+  giza_format_number (m, p, 0, string);
+  printf ("%e: %s\n", num, string);
+
+  m = 20000;
+  p = -1;
+  num = ((double) m) * pow (10, p);
+  giza_format_number (m, p, 0, string);
+  printf ("%e: %s\n", num, string);
 /*
- * exponentials: with 3 digit exponents (-ve)
- */
+ // exponentials: with 3 digit exponents (-ve)
   x = -1.e-300;
   giza_format_number(x, 3, string);
   printf("%e: %s \n",x,string);
@@ -59,9 +71,7 @@ main ()
 
   giza_format_number(x, 10, string);
   printf("%e: %s \n",x,string);
-/*
- * exponentials: with 3 digit exponents (+ve)
- */
+ // exponentials: with 3 digit exponents (+ve)
   x = 2.e-300;
   giza_format_number(x, 3, string);
   printf("%e: %s \n",x,string);
@@ -90,9 +100,7 @@ main ()
 
   giza_format_number(x, 10, string);
   printf("%e: %s \n",x,string);
-/*
- * exponentials: with 2 digit exponents (+ve)
- */
+ // exponentials: with 2 digit exponents (+ve)
   x = -1.e-30;
   giza_format_number(x, 3, string);
   printf("%e: %s \n",x,string);
@@ -137,5 +145,6 @@ main ()
   x = -4.99999999999999980217349007449654627661539343338E-24;
   giza_format_number(x, 3, string);
   printf("%e: %s \n",x,string);
+*/
 
 }
