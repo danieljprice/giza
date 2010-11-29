@@ -16,17 +16,13 @@
  * Contact: wetter.j@gmail.com
  *
  */
-#ifdef CAIRO_HAS_XLIB_SURFACE
-#define _GIZA_HAS_XW 1
 
-int _giza_open_device_xw ();
-void _giza_init_norm_xw ();
-void _giza_flush_device_xw ();
-void _giza_change_page_xw ();
-void _giza_draw_background_xw ();
-void _giza_close_device_xw ();
-void _giza_expand_clipping_xw ();
-void _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanch, double *x, double *y, char *ch);
-int _giza_init_band_xw (int mode);
+#if CAIRO_VERSION_MINOR >= 6
+#define _GIZA_HAS_EPS 1
+int _giza_open_device_eps (int vert);
+void _giza_flush_device_eps ();
+void _giza_change_page_eps ();
+void _giza_close_device_eps ();
+void _giza_draw_background_eps ();
 
 #endif

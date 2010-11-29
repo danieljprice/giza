@@ -98,7 +98,7 @@ SOURCE= giza-annotate.c giza-arrow.c giza-arrow-style.c giza-band.c \
 	giza-band-style.c giza-box.c giza-buffering.c giza.c \
 	giza-character-size.c giza-circle.c giza-colour-index.c \
 	giza-colour-table.c giza-contour.c giza-device-has-cursor.c \
-	giza-draw.c giza-driver-null.c giza-driver-pdf.c giza-driver-png.c \
+	giza-draw.c giza-driver-eps.c giza-driver-null.c giza-driver-pdf.c giza-driver-png.c \
 	giza-driver-ps.c giza-drivers.c giza-driver-xw.c giza-environment.c \
 	giza-error-bars.c giza-fill.c giza-format-number.c giza-function-t.c \
 	giza-function-x.c giza-function-y.c giza-get-key-press.c \
@@ -115,7 +115,7 @@ SOURCE= giza-annotate.c giza-arrow.c giza-arrow-style.c giza-band.c \
 #
 PHEADERS= giza-arrow-style-private.h giza-band-private.h \
 	  giza-character-size-private.h giza-colour-index-private.h \
-	  giza-colour-table-private.h giza-driver-null-private.h \
+	  giza-colour-table-private.h giza-driver-eps-private.h giza-driver-null-private.h \
 	  giza-driver-pdf-private.h giza-driver-png-private.h \
 	  giza-driver-ps-private.h giza-drivers-private.h \
 	  giza-driver-xw-private.h giza-fill-private.h giza-io-private.h \

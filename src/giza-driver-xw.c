@@ -26,6 +26,9 @@
 #include "giza-transforms-private.h"
 #include "giza-character-size-private.h"
 #include "giza-band-private.h"
+
+#ifdef _GIZA_HAS_XW
+
 #include <giza.h>
 #include <cairo/cairo-xlib.h>
 #include <X11/keysym.h>
@@ -406,3 +409,5 @@ _giza_init_band_xw (int mode)
       Band.maxWidth = XW.width;
       return 1;
 }
+
+#endif

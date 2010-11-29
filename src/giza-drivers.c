@@ -23,6 +23,7 @@
 #include "giza-driver-png-private.h"
 #include "giza-driver-pdf-private.h"
 #include "giza-driver-ps-private.h"
+#include "giza-driver-eps-private.h"
 #include "giza-driver-null-private.h"
 #include "giza-io-private.h"
 #include "giza-viewport-private.h"
@@ -58,7 +59,7 @@ static void _giza_free_prefix ();
  * any drawing can take place.
  *
  * Input:
- *  -newDeviceName :- Specifies the type of device to be opened.
+ *  -newDeviceName :- Specifies the name and type of device to be opened.
  *                    See below for details.
  *  -newPrefix     :- Specifies the default prefix to be used for file names.
  *
@@ -70,8 +71,11 @@ static void _giza_free_prefix ();
  *  -?    :- User selects device
  *  -/xw  :- X-window
  *  -/pdf :- Portable Document Format
- *  -/ps  :- Postscript
+ *  -/vpdf :- Landscape Portable Document Format
+ *  -/ps  :- PostScript
+ *  -/vps :- Landscape PostScript
  *  -/png :- Portable Network Graphics file
+ *  -/eps :- EncapsulatedPostScript
  */
 int
 giza_open_device (char *newDeviceName, char *newPrefix)
@@ -105,9 +109,11 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   /* Determine which driver is required */
   switch (Dev.type)
     {
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       success = _giza_open_device_xw ();
       break;
+#endif
     case GIZA_DEVICE_PNG:
       success = _giza_open_device_png ();
       break;
@@ -126,6 +132,11 @@ giza_open_device (char *newDeviceName, char *newPrefix)
     case GIZA_DEVICE_NULL:
       success = _giza_open_device_null ();
       break;
+#ifdef _GIZA_HAS_EPS
+    case GIZA_DEVICE_EPS:
+      success = _giza_open_device_eps (0);
+      break;
+#endif
     case GIZA_DEVICE_IV:
     default:
       _giza_error ("giza_open_device", "Unknown device, device not opened");
@@ -221,9 +232,11 @@ giza_flush_device ()
 
   switch (Dev.type)
     {
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_flush_device_xw ();
       break;
+#endif
     case GIZA_DEVICE_PNG:
       _giza_flush_device_png ();
       break;
@@ -238,6 +251,11 @@ giza_flush_device ()
     case GIZA_DEVICE_NULL:
       _giza_flush_device_null ();
       break;
+#ifdef _GIZA_HAS_EPS
+    case GIZA_DEVICE_EPS:
+      _giza_flush_device_eps ();
+      break;
+#endif
     default:
       _giza_error ("giza_flush_device", "No device open, cannot flush");
       return;
@@ -269,9 +287,11 @@ giza_change_page ()
 
   switch (Dev.type)
     {
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_change_page_xw ();
       break;
+#endif
     case GIZA_DEVICE_PNG:
       _giza_change_page_png ();
       break;
@@ -286,6 +306,11 @@ giza_change_page ()
     case GIZA_DEVICE_NULL:
       _giza_open_device_null ();
       break;
+#ifdef _GIZA_HAS_EPS
+    case GIZA_DEVICE_EPS:
+      _giza_change_page_eps ();
+      break;
+#endif
     default:
       _giza_error ("giza_change_page", "No device open");
       return;
@@ -315,9 +340,11 @@ giza_close_device ()
 
   switch (Dev.type)
     {
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_close_device_xw ();
       break;
+#endif
     case GIZA_DEVICE_PNG:
       _giza_close_device_png ();
       break;
@@ -332,6 +359,11 @@ giza_close_device ()
     case GIZA_DEVICE_NULL:
       _giza_close_device_null ();
       break;
+#ifdef _GIZA_HAS_EPS
+    case GIZA_DEVICE_EPS:
+      _giza_close_device_eps ();
+      break;
+#endif
     default:
        return;
     }
@@ -410,9 +442,11 @@ _giza_draw_background ()
   
   switch (Dev.type)
     {
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_draw_background_xw ();
       break;
+#endif
     case GIZA_DEVICE_PNG:
       _giza_draw_background_png ();
       break;
@@ -427,6 +461,11 @@ _giza_draw_background ()
     case GIZA_DEVICE_NULL:
       _giza_draw_background_null ();
       break;
+#ifdef _GIZA_HAS_EPS
+    case GIZA_DEVICE_EPS:
+      _giza_draw_background_eps ();
+      break;
+#endif
     default:
       _giza_error ("giza_draw_background", "No device open, cannot draw background");
       break;
@@ -474,10 +513,12 @@ _giza_get_key_press (int mode, int moveCurs, double xanch, double yanch, double 
       _giza_warning ("giza_get_key_press", "Current device does not support a cursor, returning x = 0, y = 0, ch = a");
       return 1;
       break;
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_get_key_press_xw (mode, moveCurs, xanch, yanch, x, y, ch);
       return 0;
       break;
+#endif
     case GIZA_DEVICE_IV:
     default:
       _giza_error ("giza_get_key_press", "Unknown device");
@@ -524,20 +565,28 @@ _giza_device_to_int (char *newDeviceName)
 {
   int newDevice;
 
-  if (!strcmp (newDeviceName, "/xw"))
+  if (!strcmp (newDeviceName, "/null"))
+    newDevice = GIZA_DEVICE_NULL;
+#ifdef _GIZA_HAS_XW
+  else if (!strcmp (newDeviceName, "/xw"))
     newDevice = GIZA_DEVICE_XW;
+#endif
   else if (!strcmp (newDeviceName, "/png"))
     newDevice = GIZA_DEVICE_PNG;
   else if (!strcmp (newDeviceName, "/pdf"))
     newDevice = GIZA_DEVICE_PDF;
   else if (!strcmp (newDeviceName, "/ps"))
     newDevice = GIZA_DEVICE_PS;
-  else if (!strcmp (newDeviceName, "/null"))
-    newDevice = GIZA_DEVICE_NULL;
   else if (!strcmp (newDeviceName, "/vpdf"))
     newDevice = GIZA_DEVICE_VPDF;
   else if (!strcmp (newDeviceName, "/vps"))
     newDevice = GIZA_DEVICE_VPS;
+  else if (!strcmp (newDeviceName, "/vps"))
+    newDevice = GIZA_DEVICE_VPS;
+#ifdef _GIZA_HAS_EPS
+  else if (!strcmp (newDeviceName, "/eps"))
+    newDevice = GIZA_DEVICE_EPS;
+#endif
   else
     {
       newDevice = GIZA_DEVICE_IV;
@@ -575,9 +624,16 @@ _giza_int_to_device (int numDevice, char *DeviceName)
     case GIZA_DEVICE_VPS:
       strncpy(DeviceName,"/vps",sizeof(DeviceName));
       break;
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       strncpy(DeviceName,"/xw",sizeof(DeviceName));
       break;
+#endif
+#ifdef _GIZA_HAS_EPS
+    case GIZA_DEVICE_EPS:
+      strncpy(DeviceName,"/eps",sizeof(DeviceName));
+      break;
+#endif
     default:
     /* Do not print an error here as this is an internal routine:
        Instead, make sure the error is handled in the calling routine */
@@ -603,8 +659,15 @@ void giza_print_device_list ()
 static void
 _giza_init_device_list ()
 {
-  deviceList = malloc (293 * sizeof(char));
-  deviceList = "Interactive devices:\n\t/xw\t(X Window)\nNon-interactive file formats:\n\t/png\t(Portable network graphics file)\n\t/pdf\t(Portable document format file)\n\t/vpdf\t(Portable document format file portrait)\n\t/ps\t(Post script file)\n\t/vps\t(Post script file portrait)\n\t/null\t(Null device)\n";
+  deviceList = malloc (326 * sizeof(char));
+#ifdef _GIZA_HAS_XW
+  strcat (deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
+#endif
+  strcat (deviceList, "Non-interactive file formats:\n\t/png\t(Portable network graphics file)\n\t/pdf\t(Portable document format file)\n\t/vpdf\t(Portable document format file portrait)\n\t/ps\t(PostScript file)\n\t/vps\t(PostScript file portrait)\n");
+#ifdef _GIZA_HAS_EPS
+  strcat (deviceList, "\t/eps\t(Encapsulated PostScript file)\n");
+#endif
+  strcat (deviceList, "\t/null\t(Null device)\n");
 }
 
 /**
@@ -630,9 +693,11 @@ _giza_init_norm ()
 
   switch (Dev.type)
     {
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_init_norm_xw ();
       break;
+#endif
     default:
     /*
      * The cairo transformations are:
@@ -665,9 +730,11 @@ _giza_expand_clipping ()
     return;
   switch (Dev.type)
     {
+#ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_expand_clipping_xw ();
       break;
+#endif
     default:
       _giza_set_trans (GIZA_TRANS_IDEN);
       cairo_reset_clip (context);
@@ -708,9 +775,11 @@ _giza_init_band (int mode)
   int success = 1;
   switch (Dev.type)
     {
+#ifdef _GIZA_HAS_XW
       case GIZA_DEVICE_XW:
         success = _giza_init_band_xw (mode);
         break;
+#endif
       default:
         _giza_error ("_giza_init_band", "band not implemented for this device");
 	break;
