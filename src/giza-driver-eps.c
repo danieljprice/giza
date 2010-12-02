@@ -80,8 +80,9 @@ _giza_open_device_eps (int vert)
       return -1;
     }
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
   cairo_ps_surface_set_eps (surface, 1);
-
+#endif
   return 0;
 }
 
@@ -140,9 +141,11 @@ _giza_change_page_eps ()
     }
   else
     {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
       cairo_ps_surface_set_eps (surface, 1);
+#endif
     }
 
-  return 0;
+  return;
 }
 #endif

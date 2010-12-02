@@ -79,7 +79,11 @@ giza_render (int sizex, int sizey, double data[sizey][sizex], int i1, int i2,
   cairo_transform (context, &mat);
 
   // allocate data for the pixmap
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
   stride = cairo_format_stride_for_width (format, width);
+#else
+  stride = 4*width;
+#endif
   pixdata = malloc (stride * height);
 
   // colour each pixel in the pixmap
@@ -159,7 +163,11 @@ giza_render_float (int sizex, int sizey, float data[sizey][sizex], int i1,
 		     (double) affine[4], (double) affine[5]);
   cairo_transform (context, &mat);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
   stride = cairo_format_stride_for_width (format, width);
+#else
+  stride = 4*width;
+#endif
   pixdata = malloc (stride * height);
 
   int i, j;
