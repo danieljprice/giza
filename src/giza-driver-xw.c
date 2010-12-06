@@ -269,8 +269,12 @@ _giza_close_device_xw ()
 static void
 _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int *y, char *ch)
 {
-  //anchorx += GIZA_XW_MARGIN;
-  //anchory += GIZA_XW_MARGIN;
+  // move the cursor to the given position
+  if (moveCurs)
+    {
+      XWarpPointer (XW.display, None, XW.window, 0, 0, 0, 0, *x, *y);
+    }
+
   XEvent event;
   XSelectInput (XW.display, XW.window, ExposureMask | KeyPressMask | StructureNotifyMask | ButtonPressMask | PointerMotionMask);
 
@@ -380,7 +384,8 @@ _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanc, double
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_user_to_device (context, &xanc, &yanc);
-  int ix, iy;
+  cairo_user_to_device (context, x, y);
+  int ix = (int) *x, iy = (int) *y;
   _giza_xevent_loop (mode, moveCurs, xanc, yanc, &ix, &iy, ch);
 
   *x = (double) ix;
@@ -394,7 +399,7 @@ _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanc, double
  * Creates the surfaces for drawing the band
  */
 int
-_giza_init_band_xw (int mode)
+_giza_init_band_xw ()
 {
       // Set up box so it can draw the box...
       Band.onscreen = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);

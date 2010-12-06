@@ -18,6 +18,8 @@
  */
 
 #include "giza-private.h"
+#include "giza-fill-private.h"
+#include "giza-stroke-private.h"
 #include "giza-arrow-style-private.h"
 #include "giza-transforms-private.h"
 #include <giza.h>

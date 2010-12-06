@@ -36,13 +36,9 @@
 void
 giza_circle (double x, double y, double r)
 {
-  double dummy;
-  int fillStyle, oldTrans = _giza_get_trans ();
+  int oldTrans = _giza_get_trans ();
 
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_user_to_device_distance (context, &r, &dummy);
-  cairo_user_to_device (context, &x, &y);
-  _giza_set_trans (GIZA_TRANS_IDEN);
 
   cairo_arc (context, x, y, r, 0., 2 * M_PI);
 

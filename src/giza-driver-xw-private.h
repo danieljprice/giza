@@ -27,6 +27,6 @@ void _giza_draw_background_xw ();
 void _giza_close_device_xw ();
 void _giza_expand_clipping_xw ();
 void _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanch, double *x, double *y, char *ch);
-int _giza_init_band_xw (int mode);
+int _giza_init_band_xw ();
 
 #endif

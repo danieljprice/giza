@@ -19,7 +19,9 @@
  */
 
 #include "giza-private.h"
+#include "giza-io-private.h"
 #include <giza.h>
+
 #define GIZA_SAVE_MAX 30
 int _giza_save_ncalls;
 double lw[GIZA_SAVE_MAX];

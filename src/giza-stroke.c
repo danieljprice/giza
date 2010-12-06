@@ -20,6 +20,7 @@
 #include "giza-transforms-private.h"
 #include "giza-private.h"
 #include "giza-line-style-private.h"
+#include <giza.h>
 
 /**
  * An internal function to ensure line width

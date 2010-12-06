@@ -21,6 +21,8 @@
 #include "giza-private.h"
 #include "giza-transforms-private.h"
 #include "giza-fill-private.h"
+#include "giza-io-private.h"
+#include "giza-stroke-private.h"
 #include <giza.h>
 
 /**
@@ -49,7 +51,7 @@ giza_polygon (int n, double *xpts, double *ypts)
       return;
     }
 
-  int fillStyle, oldTrans = _giza_get_trans ();
+  int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_move_to (context, xpts[0], ypts[0]);
  
@@ -91,7 +93,7 @@ giza_polygon_float (int n, float *xpts, float *ypts)
       return;
     }
 
-  int fillStyle, oldTrans = _giza_get_trans ();
+  int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_move_to (context, (double) xpts[n-1],(double) ypts[n-1]);
  

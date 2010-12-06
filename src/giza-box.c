@@ -33,8 +33,8 @@
 static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
 				  int *i1, int *i2);
 static double _giza_round (double x, int *nsub);
-static int _giza_get_sigfigs (const double xmin, const double xmax,
-			      const double xinterval);
+//static int _giza_get_sigfigs (const double xmin, const double xmax,
+//			      const double xinterval);
 
 /**
  * Drawing: giza_box
@@ -260,7 +260,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		  xval = (i + logTab[j]) * xintervalMin;
 
 		  // don't draw over axis or outside the box
-		  if (xopta && (i == 0) || (xval >= Win.xmax) || (xval <= Win.xmin))
+		  if ((xopta && (i == 0)) || (xval >= Win.xmax) || (xval <= Win.xmin))
 		    currentTickL = 0;
 
 		  // bottom
@@ -410,7 +410,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		  yval = (i + logTab[j]) * yintervalMin;
 
 		  // don't draw over the axis or outside the box
-		  if (yopta && i == 0 || yval >= Win.ymax || yval <= Win.ymin)
+		  if ((yopta && (i == 0)) || yval >= Win.ymax || yval <= Win.ymin)
 		    currentTickL = 0.;
 
 		  // left
@@ -670,27 +670,28 @@ _giza_round (double x, int *nsub)
  * Finds the required number of significant figures to distinguish
  * between the tick intervals (DJP)
  */
-static int
-_giza_get_sigfigs (const double xmin, const double xmax,
-		   const double xinterval)
-{
-  double max = fabs (xmax), min = fabs (xmin);
-  int nsigfig;
-  if (max > min)
-    {
-      nsigfig = fabs (log10 (max)) + 1;
-    }
-  else
-    {
-      nsigfig = fabs (log10 (min)) + 1;
-    }
-  nsigfig = nsigfig + fabs (log10 (xinterval)) + 1;
+//static int
+//_giza_get_sigfigs (const double xmin, const double xmax,
+//		   const double xinterval)
+//{
+//  double max = fabs (xmax), min = fabs (xmin);
+//  int nsigfig;
+//  if (max > min)
+//    {
+//      nsigfig = fabs (log10 (max)) + 1;
+//    }
+//  else
+//    {
+//      nsigfig = fabs (log10 (min)) + 1;
+//    }
+//  nsigfig = nsigfig + fabs (log10 (xinterval)) + 1;
+//
+//  /* DJP: this is a workaround for the fact that
+//   * the sigfigs calculation does not work at all
+//   * for exponentials: just use a maximum
+//   */
+//  if (nsigfig > 12 || nsigfig < 2)
+//    nsigfig = 12;
+//  return nsigfig;
+//}
 
-  /* DJP: this is a workaround for the fact that
-   * the sigfigs calculation does not work at all
-   * for exponentials: just use a maximum
-   */
-  if (nsigfig > 12 | nsigfig < 2)
-    nsigfig = 12;
-  return nsigfig;
-}

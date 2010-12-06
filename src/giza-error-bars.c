@@ -18,6 +18,7 @@
  */
 
 #include "giza-private.h"
+#include "giza-stroke-private.h"
 #include "giza-io-private.h"
 #include "giza-transforms-private.h"
 #include <giza.h>
@@ -395,7 +396,7 @@ giza_error_bars_hori_float (int n, float *xpts, float *ypts, float *errors)
 static void
 _giza_error_bar_vert (double x, double y, double error, double term)
 {
-  double endWidth, dummy, currentX, currentY, currentError;
+  double endWidth, dummy;
   giza_get_character_size (GIZA_UNITS_WORLD, &dummy, &endWidth);
   endWidth = 0.5 * endWidth * term;
 
@@ -415,7 +416,7 @@ _giza_error_bar_vert (double x, double y, double error, double term)
 static void
 _giza_error_bar_hori (double x, double y, double error, double term)
 {
-  double endWidth, dummy, currentX, currentY, currentError;
+  double endWidth, dummy;
   giza_get_character_size (GIZA_UNITS_WORLD, &endWidth, &dummy);
   endWidth = 0.5 * endWidth * term;
 

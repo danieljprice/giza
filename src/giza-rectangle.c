@@ -40,7 +40,6 @@ void
 giza_rectangle (double x1, double x2, double y1, double y2)
 {
   int oldTrans = _giza_get_trans ();
-  double width, height;
 
   _giza_set_trans (GIZA_TRANS_WORLD);
 

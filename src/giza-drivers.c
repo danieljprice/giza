@@ -35,6 +35,7 @@
 #include "giza-colour-index-private.h"
 #include "giza-colour-table-private.h"
 #include "giza-arrow-style-private.h"
+#include "giza-fill-private.h"
 #include "giza-line-style-private.h"
 #include "giza-band-private.h"
 #include <giza.h>
@@ -397,35 +398,36 @@ giza_query_device (char *querytype, char *returnval)
 
   if (!strcmp(querytype,"type"))
      {
-     if (!_giza_int_to_device(Dev.type,returnval)) { ierr = 1; }
+       if (!_giza_int_to_device(Dev.type,returnval)) 
+         { 
+           ierr = 1; 
+         }
      }
-
   /* Query whether or not device has cursor */
-
   else if (!strcmp(querytype,"cursor"))
-     if (Dev.isInteractive)
-     {
-        strncpy(returnval,"YES",sizeof(returnval));
-     }
-     else
-     {
-        strncpy(returnval,"NO",sizeof(returnval));   
-     }
-
+    {
+      if (Dev.isInteractive)
+        {
+          strncpy(returnval,"YES",sizeof(returnval));
+        }
+      else
+        {
+          strncpy(returnval,"NO",sizeof(returnval));   
+        }
+    }
   /* Query whether or not device is hard copy or not */
-
   else if (!strcmp(querytype,"hardcopy"))
-     if (Dev.isInteractive)
-     {
-        strncpy(returnval,"NO",sizeof(returnval));
-     }
-     else
-     {
-        strncpy(returnval,"YES",sizeof(returnval));   
-     }
-
-/*  else if (!strcmp(querytype,"file")) */
-
+    {
+      if (Dev.isInteractive)
+        {
+          strncpy(returnval,"NO",sizeof(returnval));
+        }
+      else
+        {
+          strncpy(returnval,"YES",sizeof(returnval));   
+        }
+    }
+   /*  else if (!strcmp(querytype,"file")) */
   return ierr;
 }
 
@@ -570,7 +572,7 @@ _giza_device_to_int (char *newDeviceName)
   char devName[strlen (newDeviceName) + 1];
 
   int i;
-  for (i = 0; i < strlen (newDeviceName); ++i)
+  for (i = 0; i < (signed ) strlen (newDeviceName); ++i)
     {
       devName[i] = tolower (newDeviceName[i]);
     }
@@ -788,7 +790,7 @@ _giza_init_band (int mode)
     {
 #ifdef _GIZA_HAS_XW
       case GIZA_DEVICE_XW:
-        success = _giza_init_band_xw (mode);
+        success = _giza_init_band_xw ();
         break;
 #endif
       default:
