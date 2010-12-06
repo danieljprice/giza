@@ -70,7 +70,7 @@ KNOWN_SYSTEM=no
 ifeq ($(SYSTEM),linux)
   # using gcc
   CC= gcc
-  CFLAGS += -fPIC
+  CFLAGS += -fPIC -Wall -Wextra
   SHAREDLIBFLAGS= -shared
   SHAREDEXT=.so
   DEBUGFLAG= -Wall -Wextra -g -O0
