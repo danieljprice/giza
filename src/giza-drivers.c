@@ -40,6 +40,7 @@
 #include <giza.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #define GIZA_DEFAULT_MARGIN 0
 
@@ -565,26 +566,36 @@ _giza_device_to_int (char *newDeviceName)
 {
   int newDevice;
 
-  if (!strcmp (newDeviceName, "/null"))
+  // copy the string and make it lower case
+  char devName[strlen (newDeviceName) + 1];
+
+  int i;
+  for (i = 0; i < strlen (newDeviceName); ++i)
+    {
+      devName[i] = tolower (newDeviceName[i]);
+    }
+  devName[i] = '\0';
+
+  if (!strcmp (devName, "/null"))
     newDevice = GIZA_DEVICE_NULL;
 #ifdef _GIZA_HAS_XW
-  else if (!strcmp (newDeviceName, "/xw"))
+  else if (!strcmp (devName, "/xw"))
     newDevice = GIZA_DEVICE_XW;
 #endif
-  else if (!strcmp (newDeviceName, "/png"))
+  else if (!strcmp (devName, "/png"))
     newDevice = GIZA_DEVICE_PNG;
-  else if (!strcmp (newDeviceName, "/pdf"))
+  else if (!strcmp (devName, "/pdf"))
     newDevice = GIZA_DEVICE_PDF;
-  else if (!strcmp (newDeviceName, "/ps"))
+  else if (!strcmp (devName, "/ps"))
     newDevice = GIZA_DEVICE_PS;
-  else if (!strcmp (newDeviceName, "/vpdf"))
+  else if (!strcmp (devName, "/vpdf"))
     newDevice = GIZA_DEVICE_VPDF;
-  else if (!strcmp (newDeviceName, "/vps"))
+  else if (!strcmp (devName, "/vps"))
     newDevice = GIZA_DEVICE_VPS;
-  else if (!strcmp (newDeviceName, "/vps"))
+  else if (!strcmp (devName, "/vps"))
     newDevice = GIZA_DEVICE_VPS;
 #ifdef _GIZA_HAS_EPS
-  else if (!strcmp (newDeviceName, "/eps"))
+  else if (!strcmp (devName, "/eps"))
     newDevice = GIZA_DEVICE_EPS;
 #endif
   else
