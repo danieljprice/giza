@@ -78,6 +78,7 @@ module giza
       giza_polygon, &
       giza_start_prompting, &
       giza_stop_prompting, &
+      giza_set_text_background, &
       giza_text, &
       giza_ptext, &
       giza_qtext, &
@@ -814,6 +815,14 @@ private
  interface giza_text
     module procedure giza_intern_text_f2c    
     module procedure giza_intern_text_float_f2c
+ end interface
+
+ interface giza_set_text_background
+    subroutine giza_set_text_background(ci) bind(C)
+      import
+      implicit none
+      integer(kind=c_int), value, intent(in) :: ci
+    end subroutine giza_set_text_background
  end interface
 
  interface giza_text_c
