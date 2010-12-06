@@ -102,6 +102,7 @@ void
 _giza_close_device_eps ()
 {
   cairo_surface_destroy (surface);
+  cairo_destroy (context);
 }
 
 /**
@@ -146,6 +147,7 @@ _giza_change_page_eps ()
 #endif
     }
 
+  context = cairo_create (surface);
   return;
 }
 #endif
