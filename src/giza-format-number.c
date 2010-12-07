@@ -133,6 +133,8 @@ giza_format_number (int mantissa, int power, int form, char *string)
 	  ++numDigits;
 	}
     }
+  // Put in a null character
+  tmp[numDigits] = '\0';
 
   // Add in the exponent
   if (power != 0)

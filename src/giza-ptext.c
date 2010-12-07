@@ -46,6 +46,8 @@ giza_ptext (double x, double y, double angle, double just, char *text)
       return;
     }
 
+  //printf ("Text: %s\nLength: %i\n\n", text, strlen (text));
+
   // save the character height (can be changed during superscript/subscripting)
   double ch;
   giza_get_character_height (&ch);
