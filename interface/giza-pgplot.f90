@@ -94,11 +94,17 @@ end subroutine pgarro
 
 !------------------------------------------------------------------------
 ! Module: PGASK -- control new page prompting
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGASK (FLAG)
  implicit none
  logical, intent(in) :: FLAG
+
+ if (FLAG) then
+   call giza_start_prompting
+ else
+   call giza_stop_prompting
+ end if
 
 end subroutine pgask
 
