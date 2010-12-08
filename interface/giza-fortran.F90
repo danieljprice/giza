@@ -357,7 +357,7 @@ private
       implicit none
       integer(kind=c_int),intent(in),value       :: ci
       real(kind=c_double),intent(out) :: red,green,blue,alpha
-    end subroutine giza_get_colour_representation
+    end subroutine giza_get_colour_representation_alpha
    
     subroutine giza_get_colour_representation_alpha_float(ci,red,green,blue,alpha) bind(C)
       import

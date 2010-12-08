@@ -175,8 +175,8 @@ void
 giza_set_colour_representation_alpha_float (int ci, float red, float green,
 					    float blue, float alpha)
 {
-  giza_set_colour_representation (ci, (double) red, (double) green,
-				  (double) blue);
+  giza_set_colour_representation_alpha (ci, (double) red, (double) green,
+					(double) blue, (double) alpha);
 }
 
 /**
@@ -289,7 +289,7 @@ giza_get_colour_representation_alpha_float (int ci, float *red, float *green,
     }
 
   double dred, dgreen, dblue, dalpha;
-  giza_get_colour_representation (ci, &dred, &dgreen, &dblue, &dalpha);
+  giza_get_colour_representation_alpha (ci, &dred, &dgreen, &dblue, &dalpha);
   *red = (float) dred;
   *green = (float) dgreen;
   *blue = (float) dblue;
