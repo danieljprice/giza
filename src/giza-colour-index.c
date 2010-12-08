@@ -26,7 +26,7 @@
 #define GIZA_COLOUR_INDEX_MIN 0
 #define GIZA_COLOUR_INDEX_MAX 20
 
-double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][3];
+double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][4];
 int _giza_ci;
 
 /**
@@ -46,13 +46,16 @@ giza_set_colour_index (int ci)
 
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
-      _giza_warning ("giza_set_colour_index", "Invalid colour index, colour index not set");
+      _giza_warning ("giza_set_colour_index",
+		     "Invalid colour index, colour index not set");
       return;
     }
 
   _giza_ci = ci;
-  cairo_set_source_rgb (context, colourIndex[ci][0],
-			colourIndex[ci][1], colourIndex[ci][2]);
+
+  cairo_set_source_rgba (context, colourIndex[ci][0],
+			 colourIndex[ci][1], colourIndex[ci][2],
+			 colourIndex[ci][3]);
 
 }
 
@@ -67,10 +70,10 @@ giza_set_colour_index (int ci)
 void
 giza_get_colour_index (int *ci)
 {
-    if (!_giza_check_device_ready ("giza_get_colour_index"))
-      return;
+  if (!_giza_check_device_ready ("giza_get_colour_index"))
+    return;
 
-    *ci = _giza_ci;
+  *ci = _giza_ci;
 }
 
 /**
@@ -85,21 +88,22 @@ giza_get_colour_index (int *ci)
  *   -blue  :- The blue component of the colour (between 0 and 1).
  */
 void
-giza_set_colour_representation (int ci, double red, double green,
-				     double blue)
+giza_set_colour_representation (int ci, double red, double green, double blue)
 {
   if (!_giza_check_device_ready ("giza_set_colour_representation"))
     return;
 
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
-      _giza_warning ("giza_set_colour_representation", "Invalid colour index, colour representation not set");
+      _giza_warning ("giza_set_colour_representation",
+		     "Invalid colour index, colour representation not set");
       return;
     }
 
   colourIndex[ci][0] = red;
   colourIndex[ci][1] = green;
   colourIndex[ci][2] = blue;
+  colourIndex[ci][3] = 1.;
 
 /*  if (ci == 0)
     {
@@ -115,9 +119,64 @@ giza_set_colour_representation (int ci, double red, double green,
  */
 void
 giza_set_colour_representation_float (int ci, float red, float green,
-					   float blue)
+				      float blue)
 {
-  giza_set_colour_representation (ci, (double) red, (double) green, (double) blue);
+  giza_set_colour_representation (ci, (double) red, (double) green,
+				  (double) blue);
+}
+
+/**
+ * Settings: giza_set_colour_representation_alpha
+ *
+ * Synopsis: Allows the user to set the colour represented by the given colour index, aswell
+ * as the alpha.
+ *
+ * Input:
+ *   -ci   :- Which colour index to set.
+ *   -red  :- The red component of the colour (between 0 and 1).
+ *   -green  :- The green component of the colour (between 0 and 1).
+ *   -blue  :- The blue component of the colour (between 0 and 1).
+ *   -alpha :- The alpha used when drawing with this colour index (between 0 and 1).
+ */
+void
+giza_set_colour_representation_alpha (int ci, double red, double green,
+				      double blue, double alpha)
+{
+  if (!_giza_check_device_ready ("giza_set_colour_representation"))
+    return;
+
+  if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
+    {
+      _giza_warning ("giza_set_colour_representation",
+		     "Invalid colour index, colour representation not set");
+      return;
+    }
+
+  colourIndex[ci][0] = red;
+  colourIndex[ci][1] = green;
+  colourIndex[ci][2] = blue;
+  colourIndex[ci][3] = alpha;
+
+/*  if (ci == 0)
+    {
+      _giza_draw_background ();
+    }
+*/
+}
+
+/**
+ * Settings: giza_set_colour_representation_alpha_float
+ *
+ * Synopsis: Same functionality as giza_set_colour_representation_alpha but takes floats.
+ *
+ * See Also: giza_set_colour_representation_alpha, giza_set_colour_representation
+ */
+void
+giza_set_colour_representation_alpha_float (int ci, float red, float green,
+					    float blue, float alpha)
+{
+  giza_set_colour_representation (ci, (double) red, (double) green,
+				  (double) blue);
 }
 
 /**
@@ -132,20 +191,22 @@ giza_set_colour_representation_float (int ci, float red, float green,
  *  -blue  :- Gets set to the blue value at ci
  */
 void
-giza_get_colour_representation (int ci, double *red, double *green, double *blue)
+giza_get_colour_representation (int ci, double *red, double *green,
+				double *blue)
 {
   if (!_giza_check_device_ready ("giza_get_colour_representation"))
     return;
 
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
-      _giza_warning ("giza_get_colour_representation", "Invalid colour index");
+      _giza_warning ("giza_get_colour_representation",
+		     "Invalid colour index");
       return;
     }
 
-  *red   = colourIndex[ci][0];
+  *red = colourIndex[ci][0];
   *green = colourIndex[ci][1];
-  *blue  = colourIndex[ci][2];
+  *blue = colourIndex[ci][2];
 }
 
 /**
@@ -154,29 +215,92 @@ giza_get_colour_representation (int ci, double *red, double *green, double *blue
  * Synopsis: Same functionality as giza_get_colour_representation but takes floats.
  */
 void
-giza_get_colour_representation_float (int ci, float *red, float *green, float *blue)
+giza_get_colour_representation_float (int ci, float *red, float *green,
+				      float *blue)
 {
   if (!_giza_check_device_ready ("giza_get_colour_representation_float"))
     return;
 
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
-      _giza_error ("giza_get_colour_representation_float", "Invalid colour index");
+      _giza_error ("giza_get_colour_representation_float",
+		   "Invalid colour index");
       return;
     }
 
   double dred, dgreen, dblue;
   giza_get_colour_representation (ci, &dred, &dgreen, &dblue);
-  *red   = (float) dred;
+  *red = (float) dred;
   *green = (float) dgreen;
-  *blue  = (float) dblue;
+  *blue = (float) dblue;
+}
+
+/**
+ * Settings: giza_get_colour_representation_alpha
+ *
+ * Synopsis: Query the RGB and alpha at a given colour index.
+ *
+ * Input:
+ *  -ci    :- The index to enquire about
+ *  -red   :- Gets set to the red value at ci
+ *  -green :- Gets set to the green value at ci
+ *  -blue  :- Gets set to the blue value at ci
+ *  -alpha :- Gets set to the alpha at ci
+ */
+void
+giza_get_colour_representation_alpha (int ci, double *red, double *green,
+				      double *blue, double *alpha)
+{
+  if (!_giza_check_device_ready ("giza_get_colour_representation"))
+    return;
+
+  if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
+    {
+      _giza_warning ("giza_get_colour_representation",
+		     "Invalid colour index");
+      return;
+    }
+
+  *red = colourIndex[ci][0];
+  *green = colourIndex[ci][1];
+  *blue = colourIndex[ci][2];
+  *alpha = colourIndex[ci][3];
+}
+
+/**
+ * Settings giza_set_colour_representation_alpha_float
+ *
+ * Synopsis: Same functionality as giza_get_colour_representation_alpha but takes floats.
+ *
+ * See Also: giza_get_colour_representation_alpha
+ */
+void
+giza_get_colour_representation_alpha_float (int ci, float *red, float *green,
+					    float *blue, float *alpha)
+{
+  if (!_giza_check_device_ready ("giza_get_colour_representation_float"))
+    return;
+
+  if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
+    {
+      _giza_error ("giza_get_colour_representation_float",
+		   "Invalid colour index");
+      return;
+    }
+
+  double dred, dgreen, dblue, dalpha;
+  giza_get_colour_representation (ci, &dred, &dgreen, &dblue, &dalpha);
+  *red = (float) dred;
+  *green = (float) dgreen;
+  *blue = (float) dblue;
+  *alpha = (float) dalpha;
 }
 
 void
 _giza_init_colour_index ()
 {
-  giza_set_colour_representation (0, 1., 1., 1.); // white
-  giza_set_colour_representation (1, 0., 0., 0.); // black
+  giza_set_colour_representation (0, 1., 1., 1.);	// white
+  giza_set_colour_representation (1, 0., 0., 0.);	// black
 
   // red
   //giza_set_colour_representation (2, 1., 0., 0.);
@@ -197,8 +321,8 @@ _giza_init_colour_index ()
 
 
   // cyan
-  giza_set_colour_representation (7, 0.0, 0.825, 0.825); 
-  
+  giza_set_colour_representation (7, 0.0, 0.825, 0.825);
+
   // Indian red
   //giza_set_colour_representation (7, 0.804, 0.361, 0.361); 
 
@@ -207,10 +331,17 @@ _giza_init_colour_index ()
   giza_set_colour_representation (8, 1., 0.31, 0.);
 
   // cadet blue
-  giza_set_colour_representation (9, 0.373, 0.62,0.627);
+  giza_set_colour_representation (9, 0.373, 0.62, 0.627);
 
   // peach puff
   giza_set_colour_representation (10, 0.933, 0.796, 0.678);
+
+  // All alpha default to 1
+  int i;
+  for (i = GIZA_COLOUR_INDEX_MIN; i <= GIZA_COLOUR_INDEX_MAX; ++i)
+    {
+      colourIndex[i][3] = 1.;
+    }
 
   giza_set_colour_index (1);
 }

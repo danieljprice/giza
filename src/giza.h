@@ -26,7 +26,8 @@ void giza_arrow_float (float x1, float y1, float x2, float y2);
 void giza_set_arrow_style (int fillStyle, double angle, double cutback);
 void giza_set_arrow_style_float (int fillStyle, float angle, float cutback);
 void giza_get_arrow_style (int *fillStyle, double *angle, double *cutback);
-void giza_get_arrow_style_float (int *fillStyle, float *angle, float *cutback);
+void giza_get_arrow_style_float (int *fillStyle, float *angle,
+				 float *cutback);
 
 void giza_annotate (char *side, double displacment, double coord,
 		    double justification, char *string);
@@ -62,10 +63,20 @@ void giza_set_colour_representation (int ci, double red, double green,
 				     double blue);
 void giza_set_colour_representation_float (int ci, float red, float green,
 					   float blue);
+void giza_set_colour_representation_alpha (int ci, double red, double green,
+					   double blue, double alpha);
+void giza_set_colour_representation_alpha_float (int ci, float red,
+						 float green, float blue,
+						 float alpha);
 void giza_get_colour_representation (int ci, double *red, double *green,
 				     double *blue);
 void giza_get_colour_representation_float (int ci, float *red, float *green,
 					   float *blue);
+void giza_get_colour_representation_alpha (int ci, double *red, double *green,
+					   double *blue, double *alpha);
+void giza_get_colour_representation_alpha_float (int ci, float *red,
+						 float *green, float *blue,
+						 float *alpha);
 
 int giza_set_colour_table (double *controlPoints, double *red, double *green,
 			   double *blue, int n);
@@ -95,25 +106,39 @@ int giza_get_key_press_float (float *x, float *y, char *ch);
 void giza_draw (double xpt, double ypt);
 void giza_draw_float (float xpt, float ypt);
 
-void giza_set_environment (double xmin, double xmax, double ymin, double ymax, int just, int axis);
-void giza_set_environment_float (float xmin, float xmax, float ymin, float ymax, int just, int axis);
+void giza_set_environment (double xmin, double xmax, double ymin, double ymax,
+			   int just, int axis);
+void giza_set_environment_float (float xmin, float xmax, float ymin,
+				 float ymax, int just, int axis);
 
-void giza_error_bars (int dir, int n, double *xpts, double *ypts, double *error, double term);
-void giza_error_bars_float (int dir, int n, float *xpts, float *ypts, float *error, float term);
-void giza_error_bars_vert (int n, double *xpts, double *ypts, double *ypts2, double term);
-void giza_error_bars_vert_float (int n, float *xpts, float *ypts, float *ypts2, float term);
+void giza_error_bars (int dir, int n, double *xpts, double *ypts,
+		      double *error, double term);
+void giza_error_bars_float (int dir, int n, float *xpts, float *ypts,
+			    float *error, float term);
+void giza_error_bars_vert (int n, double *xpts, double *ypts, double *ypts2,
+			   double term);
+void giza_error_bars_vert_float (int n, float *xpts, float *ypts,
+				 float *ypts2, float term);
 
 void giza_set_fill (int fs);
 void giza_get_fill (int *fs);
 
 void giza_format_number (int mantissa, int power, int form, char *str);
 
-void giza_function_x (double (*func)(double *x), int n, double xmin, double xmax, int flag);
-void giza_function_x_float (float (*func)(float *x), int n, float xmin, float xmax, int flag);
-void giza_function_y (double (*func)(double *y), int n, double ymin, double ymax, int flag);
-void giza_function_y_float (float (*func)(float *y), int n, float ymin, float ymax, int flag);
-void giza_function_t (double (*funcx)(double *t),double (*funcy)(double *t), int n, double ymin, double ymax, int flag);
-void giza_function_t_float (float (*funcx)(float *t),float (*funcy)(float *t), int n, float ymin, float ymax, int flag);
+void giza_function_x (double (*func) (double *x), int n, double xmin,
+		      double xmax, int flag);
+void giza_function_x_float (float (*func) (float *x), int n, float xmin,
+			    float xmax, int flag);
+void giza_function_y (double (*func) (double *y), int n, double ymin,
+		      double ymax, int flag);
+void giza_function_y_float (float (*func) (float *y), int n, float ymin,
+			    float ymax, int flag);
+void giza_function_t (double (*funcx) (double *t),
+		      double (*funcy) (double *t), int n, double ymin,
+		      double ymax, int flag);
+void giza_function_t_float (float (*funcx) (float *t),
+			    float (*funcy) (float *t), int n, float ymin,
+			    float ymax, int flag);
 
 void giza_get_surface_size (double *x1, double *x2, double *y1, double *y2);
 void giza_get_surface_size_float (float *x1, float *x2, float *y1, float *y2);
@@ -188,10 +213,12 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
 void giza_set_viewport (double xleft, double xright, double ybottom,
 			double ytop);
 void giza_set_viewport_float (float xleft, float xright, float ybottom,
-			float ytop);
+			      float ytop);
 void giza_set_viewport_default ();
-void giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2);
-void giza_get_viewport_float (int units, float *x1, float *x2, float *y1, float *y2);
+void giza_get_viewport (int units, double *x1, double *x2, double *y1,
+			double *y2);
+void giza_get_viewport_float (int units, float *x1, float *x2, float *y1,
+			      float *y2);
 
 void giza_start_warnings ();
 void giza_stop_warnings ();
