@@ -29,8 +29,6 @@
 
 #define GIZA_DEFAULT_PREFIX "giza"
 
-char *deviceList;
-
 int _giza_get_key_press (int mode, int moveCurs, double xanc, double yanc, double *x, double *y, char *ch);
 void _giza_split_device_string (char *deviceString, char **devType);
 int _giza_device_to_int (char *newDeviceName);
@@ -39,3 +37,5 @@ void _giza_draw_background ();
 void _giza_init_norm ();
 void _giza_expand_clipping ();
 void _giza_restore_clipping ();
+void _giza_init_device_list (char *deviceList);
+void _giza_free_device_list (char *deviceList);

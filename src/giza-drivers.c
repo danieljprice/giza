@@ -45,8 +45,6 @@
 
 #define GIZA_DEFAULT_MARGIN 0
 
-static void _giza_init_device_list ();
-static void _giza_free_device_list ();
 static void _giza_set_prefix (char *prefix);
 static void _giza_free_prefix ();
 
@@ -87,7 +85,6 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   Dev.type = GIZA_DEVICE_IV;
   Dev.defaultBackgroundAlpha = 0.;
   int success = -1;
-  _giza_init_device_list ();
   giza_set_text_background (-1);
 
   if (newPrefix)
@@ -376,7 +373,6 @@ giza_close_device ()
   _giza_reset_sizeSpecified ();
 
   // Destroy the font
-  _giza_free_device_list ();
   _giza_free_font ();
   _giza_free_colour_table ();
   _giza_free_prefix ();
@@ -662,7 +658,6 @@ _giza_int_to_device (int numDevice, char *DeviceName)
  */
 void giza_print_device_list ()
 {
-   if (!deviceList) _giza_init_device_list ();
    _giza_display_devices();
 }
 
@@ -670,8 +665,8 @@ void giza_print_device_list ()
  * NOTE: Should use if defs to only add the devices that are available.
  * Allocates memory for the device list and sets it to a list of available devices.
  */
-static void
-_giza_init_device_list ()
+void
+_giza_init_device_list (char *deviceList)
 {
   deviceList = malloc (326 * sizeof(char));
 #ifdef _GIZA_HAS_XW
@@ -687,12 +682,12 @@ _giza_init_device_list ()
 /**
  * Frees the memory alloacted for the deviceList
  */
-static void
-_giza_free_device_list ()
+void
+_giza_free_device_list (char *deviceList)
 {
   if (deviceList)
     {
-      //      free (deviceList);
+      free (deviceList);
     }
 }
 

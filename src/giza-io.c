@@ -124,7 +124,10 @@ _giza_prompt_for_device ()
 void
 _giza_display_devices ()
 {
+  char *deviceList;
+  _giza_init_device_list (deviceList);
   printf ("%s\n", deviceList);
+  _giza_free_device_list (deviceList);
 }
 
 /**
