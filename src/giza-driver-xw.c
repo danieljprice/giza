@@ -153,6 +153,8 @@ _giza_open_device_xw ()
       _giza_error ("_giza_open_device_xw", "Could not create surface");
       return 5;
     }
+  
+  Dev.defaultBackgroundAlpha = 1.;
 
   return 0;
 }

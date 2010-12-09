@@ -43,6 +43,7 @@ struct GIZA_Device
   char *prefix;
   int pgNum;
   int CurrentTrans;
+  double defaultBackgroundAlpha;
 } Dev;
 
 cairo_t *context;

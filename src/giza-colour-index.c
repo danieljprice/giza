@@ -337,8 +337,9 @@ _giza_init_colour_index ()
   giza_set_colour_representation (10, 0.933, 0.796, 0.678);
 
   // All alpha default to 1
+  colourIndex[0][3] = Dev.defaultBackgroundAlpha;
   int i;
-  for (i = GIZA_COLOUR_INDEX_MIN; i <= GIZA_COLOUR_INDEX_MAX; ++i)
+  for (i = GIZA_COLOUR_INDEX_MIN + 1; i <= GIZA_COLOUR_INDEX_MAX; ++i)
     {
       colourIndex[i][3] = 1.;
     }
