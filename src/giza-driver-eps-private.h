@@ -20,9 +20,9 @@
 #if CAIRO_VERSION_MINOR >= 6
 #define _GIZA_HAS_EPS 1
 int _giza_open_device_eps (int vert);
-void _giza_flush_device_eps ();
-void _giza_change_page_eps ();
-void _giza_close_device_eps ();
-void _giza_draw_background_eps ();
+void _giza_flush_device_eps (void);
+void _giza_change_page_eps (void);
+void _giza_close_device_eps (void);
+void _giza_draw_background_eps (void);
 
 #endif

@@ -17,4 +17,4 @@
  *
  */
 
-void _giza_stroke ();
+void _giza_stroke (void);

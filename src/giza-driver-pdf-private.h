@@ -18,7 +18,7 @@
  */
 
 int _giza_open_device_pdf (int vert);
-void _giza_flush_device_pdf ();
-void _giza_change_page_pdf ();
-void _giza_close_device_pdf ();
-void _giza_draw_background_pdf ();
+void _giza_flush_device_pdf (void);
+void _giza_change_page_pdf (void);
+void _giza_close_device_pdf (void);
+void _giza_draw_background_pdf (void);

@@ -46,7 +46,7 @@
 #define GIZA_DEFAULT_MARGIN 0
 
 static void _giza_set_prefix (char *prefix);
-static void _giza_free_prefix ();
+static void _giza_free_prefix (void);
 
 /* 
  * NOTE: Should clean up surfaces etc if device open was not successful.
@@ -223,7 +223,7 @@ giza_open_device_size_float (char *newDeviceName, char *newPrefix, float width, 
  * Synopsis: Flushes the currently open device.
  */
 void
-giza_flush_device ()
+giza_flush_device (void)
 {
   if (!_giza_check_device_ready ("giza_flush_device"))
     return;
@@ -271,7 +271,7 @@ giza_flush_device ()
  * opened or the last call to giza_change_page the call is ignored.
  */
 void
-giza_change_page ()
+giza_change_page (void)
 {
   if (!_giza_has_drawn ())
     return;
@@ -333,7 +333,7 @@ giza_change_page ()
  * as it frees associated memory.
  */
 void
-giza_close_device ()
+giza_close_device (void)
 {
   if (!_giza_check_device_ready ("giza_close_device"))
     return;
@@ -432,7 +432,7 @@ giza_query_device (char *querytype, char *returnval)
  * Redraws the background of the currently open device
  */
 void
-_giza_draw_background ()
+_giza_draw_background (void)
 {
   if (!_giza_check_device_ready ("_giza_draw_background"))
     return;
@@ -656,7 +656,8 @@ _giza_int_to_device (int numDevice, char *DeviceName)
 /**
  * Prints a list of currently available devices to stdout
  */
-void giza_print_device_list ()
+void 
+giza_print_device_list (void)
 {
    _giza_display_devices();
 }
@@ -695,7 +696,7 @@ _giza_free_device_list (char *deviceList)
  * Initialises the normalised device coords matrix.
  */
 void
-_giza_init_norm ()
+_giza_init_norm (void)
 {
   if (!_giza_check_device_ready ("_giza_init_norm"))
     return;
@@ -733,7 +734,7 @@ _giza_init_norm ()
  * Expands clipping so that the whole surface can be drawn to.
  */
 void
-_giza_expand_clipping ()
+_giza_expand_clipping (void)
 {
     if (!_giza_check_device_ready ("_giza_expand_clipping"))
     return;
@@ -768,7 +769,7 @@ _giza_set_prefix (char *prefix)
  * Frees the memory associated with Dev.prefix
  */
 static void
-_giza_free_prefix ()
+_giza_free_prefix (void)
 {
   free (Dev.prefix);
 }

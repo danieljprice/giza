@@ -90,7 +90,7 @@ giza_get_font (char *font, int n)
  * otherwise the system specific default is used.
  */
 void
-_giza_init_font ()
+_giza_init_font (void)
 {
   char *tmp = getenv("GIZA_FONT");
   if(!tmp)
@@ -108,7 +108,7 @@ _giza_init_font ()
  * Frees the memory associated with fontFam
  */
 void
-_giza_free_font ()
+_giza_free_font (void)
 {
   free (_giza_fontFam);
 }

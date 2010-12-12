@@ -83,7 +83,7 @@ _giza_open_device_pdf (int vert)
  * Flushes the pdf surface.
  */
 void
-_giza_flush_device_pdf ()
+_giza_flush_device_pdf (void)
 {
   cairo_surface_flush (surface);
 }
@@ -92,7 +92,7 @@ _giza_flush_device_pdf ()
  * Advances the pdf device to its next page.
  */
 void
-_giza_change_page_pdf ()
+_giza_change_page_pdf (void)
 {
   cairo_show_page (context);
   _giza_draw_background_pdf ();
@@ -104,7 +104,7 @@ _giza_change_page_pdf ()
  * Destroys the cairo surface freeing the associated memory
  */
 void
-_giza_close_device_pdf ()
+_giza_close_device_pdf (void)
 {
   cairo_surface_destroy (surface);
 }
@@ -114,7 +114,7 @@ _giza_close_device_pdf ()
  * Draws the pdf background.
  */
 void
-_giza_draw_background_pdf ()
+_giza_draw_background_pdf (void)
 {
   cairo_save (context);
   cairo_reset_clip (context);

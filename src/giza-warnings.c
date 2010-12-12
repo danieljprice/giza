@@ -27,7 +27,7 @@ int _giza_warnings = 1;
  * See Also: giza_stop_warnings
  */
 void
-giza_start_warnings ()
+giza_start_warnings (void)
 {
   _giza_warnings = 1;
 }
@@ -40,7 +40,7 @@ giza_start_warnings ()
  * See Also: giza_start_warnings
  */
 void
-giza_stop_warnings ()
+giza_stop_warnings (void)
 {
   _giza_warnings = 0;
 }
@@ -49,7 +49,7 @@ giza_stop_warnings ()
  * Returns 0 if warnings are on, returns 0 if warnings are off
  */
 int
-_giza_get_warnings ()
+_giza_get_warnings (void)
 {
   return _giza_warnings;
 }

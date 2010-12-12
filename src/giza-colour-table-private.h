@@ -17,6 +17,6 @@
  *
  */
 
-void _giza_init_colour_table ();
-void _giza_free_colour_table ();
+void _giza_init_colour_table (void);
+void _giza_free_colour_table (void);
 

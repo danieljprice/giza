@@ -61,7 +61,7 @@ _giza_open_device_ps (int vert)
   Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
 
   // set all device specific settings
-  if (_giza_sizeSpecified() )
+  if (_giza_sizeSpecified())
     {
       Dev.width  = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;
       Dev.height = (int) (Dev.deviceUnitsPermm * 10. * Dev.heightCM) + 1;
@@ -91,7 +91,7 @@ _giza_open_device_ps (int vert)
  * Flushes the ps surface.
  */
 void
-_giza_flush_device_ps ()
+_giza_flush_device_ps (void)
 {
   cairo_surface_flush (surface);
 }
@@ -100,7 +100,7 @@ _giza_flush_device_ps ()
  * Advances the ps device to its next page.
  */
 void
-_giza_change_page_ps ()
+_giza_change_page_ps (void)
 {
   cairo_show_page (context);
   _giza_draw_background_ps ();
@@ -112,7 +112,7 @@ _giza_change_page_ps ()
  * Destroys the cairo surface freeing the associated memory
  */
 void
-_giza_close_device_ps ()
+_giza_close_device_ps (void)
 {
   cairo_surface_destroy (surface);
 }
@@ -122,7 +122,7 @@ _giza_close_device_ps ()
  * Draws the ps background.
  */
 void
-_giza_draw_background_ps ()
+_giza_draw_background_ps (void)
 {
   cairo_save (context);
   cairo_reset_clip (context);

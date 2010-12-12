@@ -17,4 +17,4 @@
  *
  */
 
-int _giza_get_warnings ();
+int _giza_get_warnings (void);

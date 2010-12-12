@@ -18,6 +18,6 @@
  */
 
 
-void _giza_set_cairo_dashes ();
-void _giza_init_line_style ();
-void _giza_set_line_style(int ls, cairo_t *ct);
+void _giza_set_cairo_dashes (cairo_t *cr);
+void _giza_init_line_style (void);
+void _giza_set_line_style (int ls, cairo_t *ct);

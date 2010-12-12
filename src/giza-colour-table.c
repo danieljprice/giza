@@ -255,7 +255,7 @@ giza_rgb_from_table_float (double pos, float *red, float *green, float *blue)
  * Sets up memory for the colour table and establishes a grey scale colour table
  */
 void
-_giza_init_colour_table ()
+_giza_init_colour_table (void)
 {
   _giza_colour_table.controlPoints = malloc (2 * sizeof(double));
   _giza_colour_table.red = malloc (2 * sizeof(double));
@@ -279,7 +279,7 @@ _giza_init_colour_table ()
  * Frees the memory associated with the colour table
  */
 void
-_giza_free_colour_table ()
+_giza_free_colour_table (void)
 {
   free (_giza_colour_table.controlPoints);
   free (_giza_colour_table.red);

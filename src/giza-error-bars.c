@@ -58,7 +58,7 @@ giza_error_bars (int dir, int n, double *xpts, double *ypts, double *error, doub
       return;
     }
 
-  int oldTrans = _giza_get_trans();
+  int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   int sign, vert;
@@ -128,7 +128,7 @@ giza_error_bars_float (int dir, int n, float *xpts, float *ypts, float *error, f
       return;
     }
 
-  int oldTrans = _giza_get_trans();
+  int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   int sign, vert;
@@ -208,7 +208,7 @@ giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double 
   double endWidth, dummy;
   giza_get_character_size (GIZA_UNITS_WORLD, &endWidth, &dummy);
   endWidth = 0.5 * endWidth * term;
-  int oldTrans = _giza_get_trans();
+  int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   
   int i;
@@ -255,7 +255,7 @@ giza_error_bars_vert_float (int n, float *xpts, float *ypts1, float *ypts2, floa
   double endWidth, dummy, currentX, currentY1, currentY2;
   giza_get_character_size (GIZA_UNITS_WORLD, &endWidth, &dummy);
   endWidth = 0.5 * endWidth * (double)term;
-  int oldTrans = _giza_get_trans();
+  int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   
   int i;

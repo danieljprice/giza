@@ -17,4 +17,4 @@
  *
  */
 
-void _giza_init_colour_index ();
+void _giza_init_colour_index (void);

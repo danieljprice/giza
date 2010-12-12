@@ -24,14 +24,14 @@
 
 void _giza_parse_string (const char *text, double *width, double *height, void(*action)(const char *, double *, double *));
 void _giza_get_text_width (double *width, char *text);
-void _giza_set_default_font ();
+void _giza_set_default_font (void);
 void _giza_scale_character_size (double scalefac);
 
 void _giza_action_get_size (const char *text, double *width, double *height);
 void _giza_action_print (const char *text, double *width, double *height);
 
-void _giza_start_super ();
-void _giza_stop_super ();
-void _giza_start_sub ();
-void _giza_stop_sub ();
+void _giza_start_super (void);
+void _giza_stop_super (void);
+void _giza_start_sub (void);
+void _giza_stop_sub (void);
 

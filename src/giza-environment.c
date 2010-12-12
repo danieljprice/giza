@@ -48,8 +48,8 @@ giza_set_environment (double xmin, double xmax, double ymin, double ymax, int ju
   if(!_giza_check_device_ready ("giza_set_environment"))
     return;
     
-  giza_change_page();
-  giza_set_viewport_default();
+  giza_change_page ();
+  giza_set_viewport_default ();
 
   char opts[7];
   

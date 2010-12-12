@@ -188,7 +188,7 @@ giza_get_character_size_float (int units, float *xch, float *ych)
  * WARNING: will cause the character height to be set to one
  */
 void
-_giza_init_character_height ()
+_giza_init_character_height (void)
 {
   giza_set_character_height(1.);
 }

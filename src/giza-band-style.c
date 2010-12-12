@@ -43,7 +43,7 @@ giza_set_band_style (int ls, double lw)
  * Initalises the default style for band
  */
 void
-_giza_init_band_style ()
+_giza_init_band_style (void)
 {
   Band.ls = 1;
   Band.lw = 1.;

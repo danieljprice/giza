@@ -29,7 +29,7 @@
  * See Also: giza_end_buffer
  */
 void
-giza_begin_buffer ()
+giza_begin_buffer (void)
 {
   if (!_giza_check_device_ready ("giza_begin_buffer")) return;
   Sets.buf = 1;
@@ -43,7 +43,7 @@ giza_begin_buffer ()
  * See Also: giza_begin_buffer
  */
 void
-giza_end_buffer ()
+giza_end_buffer (void)
 {
   if(!_giza_check_device_ready ("giza_end_buffer")) return;
   giza_flush_device ();

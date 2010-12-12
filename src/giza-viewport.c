@@ -166,7 +166,7 @@ giza_get_viewport_float (int units, float *x1, float *x2, float *y1, float *y2)
  * Sets the viewport to the default
  */
 void
-giza_set_viewport_default ()
+giza_set_viewport_default (void)
 {
   if(!_giza_check_device_ready("giza_set_viewport_default")) return;
   

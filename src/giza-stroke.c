@@ -27,7 +27,7 @@
  * is are honoured for all strokes.
  */
 void
-_giza_stroke ()
+_giza_stroke (void)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);

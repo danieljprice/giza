@@ -59,15 +59,15 @@ struct GIZA_Settings
 } Sets;
 
 int _giza_check_device_ready (char *source);
-void _giza_set_deviceOpen ();
-void _giza_reset_deviceOpen ();
+void _giza_set_deviceOpen (void);
+void _giza_reset_deviceOpen (void);
 
-int _giza_sizeSpecified ();
-int _giza_has_drawn ();
-void _giza_set_sizeSpecified ();
-void _giza_reset_sizeSpecified ();
-void _giza_set_drawn ();
-void _giza_reset_drawn ();
+int _giza_sizeSpecified (void);
+int _giza_has_drawn (void);
+void _giza_set_sizeSpecified (void);
+void _giza_reset_sizeSpecified (void);
+void _giza_set_drawn (void);
+void _giza_reset_drawn (void);
 
 int _giza_nint (double x);
-void _giza_init_save();
+void _giza_init_save (void);

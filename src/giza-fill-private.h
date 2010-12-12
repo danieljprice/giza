@@ -17,5 +17,5 @@
  *
  */
 
-void _giza_init_fill ();
-void _giza_fill ();
+void _giza_init_fill (void);
+void _giza_fill (void);

@@ -67,7 +67,7 @@ _giza_set_trans (int trans)
  *  -returns the integer value of the current transform.
  */
 int
-_giza_get_trans ()
+_giza_get_trans (void)
 {
   if (!_giza_check_device_ready ("_giza_get_trans"))
     return -1;

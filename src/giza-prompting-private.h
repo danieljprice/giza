@@ -17,4 +17,4 @@
  *
  */
 
-int _giza_get_prompting ();
+int _giza_get_prompting (void);

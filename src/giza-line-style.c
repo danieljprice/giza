@@ -139,7 +139,7 @@ _giza_set_cairo_dashes (cairo_t *ct)
 }
 
 void
-_giza_init_line_style ()
+_giza_init_line_style (void)
 {
   _giza_line_style = GIZA_LS_SOLID;
 }

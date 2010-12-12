@@ -17,8 +17,8 @@
  *
  */
 
-int _giza_open_device_png ();
-void _giza_flush_device_png ();
-void _giza_change_page_png ();
-void _giza_close_device_png ();
-void _giza_draw_background_png ();
+int _giza_open_device_png (void);
+void _giza_flush_device_png (void);
+void _giza_change_page_png (void);
+void _giza_close_device_png (void);
+void _giza_draw_background_png (void);

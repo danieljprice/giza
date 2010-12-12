@@ -59,7 +59,7 @@ _giza_error (char *source, char *message)
  * Prompts the user to enter a device
  */
 int
-_giza_prompt_for_device ()
+_giza_prompt_for_device (void)
 {
   char input[20];
   int count = 0;
@@ -82,7 +82,7 @@ _giza_prompt_for_device ()
              {
                if (last == 0)
                  {
-                   devType = _giza_default_device();
+                   devType = _giza_default_device ();
                    break;
                  } 
                else
@@ -122,7 +122,7 @@ _giza_prompt_for_device ()
  * This routine prints the avaliable devices.
  */
 void
-_giza_display_devices ()
+_giza_display_devices (void)
 {
   char *deviceList;
   _giza_init_device_list (deviceList);
@@ -134,7 +134,7 @@ _giza_display_devices ()
  * This routine gives the default device
  */
 int
-_giza_default_device ()
+_giza_default_device (void)
 {
   return GIZA_DEVICE_XW;
 }

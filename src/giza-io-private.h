@@ -20,6 +20,6 @@
 void _giza_warning (char *source, char *message);
 void _giza_message (char *message);
 void _giza_error (char *source, char *message);
-int _giza_prompt_for_device ();
-void _giza_display_devices ();
-int _giza_default_device ();
+int _giza_prompt_for_device (void);
+void _giza_display_devices (void);
+int _giza_default_device (void);

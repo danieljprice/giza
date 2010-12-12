@@ -80,7 +80,7 @@ static void _giza_change_size_xw (int width, int height);
  *  -5 :- No cairo surface could be created.
  */
 int
-_giza_open_device_xw ()
+_giza_open_device_xw (void)
 {
   Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
   Dev.isInteractive = GIZA_DEVICE_INTERACTIVE;
@@ -163,7 +163,7 @@ _giza_open_device_xw ()
  * Flushes the X device.
  */
 void
-_giza_flush_device_xw ()
+_giza_flush_device_xw (void)
 {
   // flush the offscreen surface
   cairo_surface_flush (surface);
@@ -186,7 +186,7 @@ _giza_flush_device_xw ()
  * 
  */
 void
-_giza_change_page_xw ()
+_giza_change_page_xw (void)
 {
   if (_giza_get_prompting ())
     {
@@ -224,7 +224,7 @@ _giza_change_page_xw ()
  * Initialises the normalised device coords matrix
  */
 void
-_giza_init_norm_xw ()
+_giza_init_norm_xw (void)
 {
   cairo_matrix_init (&(Win.normCoords), Dev.width, 0, 0, -Dev.height, GIZA_XW_MARGIN,
 		     Dev.height + GIZA_XW_MARGIN);
@@ -235,7 +235,7 @@ _giza_init_norm_xw ()
  * redraws the background colour.
  */
 void
-_giza_draw_background_xw ()
+_giza_draw_background_xw (void)
 {
   cairo_save (context);
   cairo_reset_clip (context);
@@ -251,7 +251,7 @@ _giza_draw_background_xw ()
  * or a mouse is clicked inside the X window.
  */
 void
-_giza_close_device_xw ()
+_giza_close_device_xw (void)
 {
   if (_giza_get_prompting ())
     {
@@ -369,7 +369,7 @@ _giza_change_size_xw (int width, int height)
  * Expands clipping so the whole surface can be drawn to.
  */
 void
-_giza_expand_clipping_xw ()
+_giza_expand_clipping_xw (void)
 {
   _giza_set_trans (GIZA_TRANS_IDEN);
   cairo_reset_clip (context);
@@ -401,7 +401,7 @@ _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanc, double
  * Creates the surfaces for drawing the band
  */
 int
-_giza_init_band_xw ()
+_giza_init_band_xw (void)
 {
       // Set up box so it can draw the box...
       Band.onscreen = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);

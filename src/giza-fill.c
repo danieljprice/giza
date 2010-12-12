@@ -72,7 +72,7 @@ giza_get_fill (int *fs)
 }
 
 void
-_giza_init_fill ()
+_giza_init_fill (void)
 {
   _giza_fill_style = 1;
 }
@@ -81,7 +81,7 @@ _giza_init_fill ()
  * Fills the currently drawn path.
  */
 void
-_giza_fill ()
+_giza_fill (void)
 {
   if(!_giza_check_device_ready ("_giza_fill"))
      return;

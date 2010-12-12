@@ -44,8 +44,8 @@ void giza_box (const char *xopt, double xtick, int nxsub,
 void giza_box_float (const char *xopt, float xtick, int nxsub,
 		     const char *yopt, float ytick, int nysub);
 
-void giza_begin_buffer ();
-void giza_end_buffer ();
+void giza_begin_buffer (void);
+void giza_end_buffer (void);
 
 void giza_circle (double x, double y, double r);
 void giza_circle_float (float x, float y, float r);
@@ -91,15 +91,15 @@ void giza_contour (int sizex, int sizey, const double data[sizey][sizex],
 		   int i1, int i2, int j1, int j2, int ncont,
 		   const double cont[ncont], const double *affine);
 
-void giza_print_device_list ();
+void giza_print_device_list (void);
 int giza_open_device (char *newDeviceName, char *newPrefix);
 int giza_open_device_size (char *newDeviceName, char *newPrefix, double width,
 			   double height);
 int giza_open_device_size_float (char *newDeviceName, char *newPrefix,
 				 float width, float height);
-void giza_flush_device ();
-void giza_change_page ();
-void giza_close_device ();
+void giza_flush_device (void);
+void giza_change_page (void);
+void giza_close_device (void);
 int giza_get_key_press (double *x, double *y, char *ch);
 int giza_get_key_press_float (float *x, float *y, char *ch);
 
@@ -143,7 +143,7 @@ void giza_function_t_float (float (*funcx) (float *t),
 void giza_get_surface_size (double *x1, double *x2, double *y1, double *y2);
 void giza_get_surface_size_float (float *x1, float *x2, float *y1, float *y2);
 
-int giza_device_has_cursor ();
+int giza_device_has_cursor (void);
 
 void giza_label (char *labelx, char *labely, char *title);
 
@@ -172,8 +172,8 @@ void giza_single_point_float (float x, float y, int symbol);
 void giza_polygon (int n, double *xpts, double *ypts);
 void giza_polygon_float (int n, float *xpts, float *ypts);
 
-void giza_start_prompting ();
-void giza_stop_prompting ();
+void giza_start_prompting (void);
+void giza_stop_prompting (void);
 
 void giza_text (double x, double y, char *text);
 void giza_text_float (float x, float y, char *text);
@@ -214,17 +214,17 @@ void giza_set_viewport (double xleft, double xright, double ybottom,
 			double ytop);
 void giza_set_viewport_float (float xleft, float xright, float ybottom,
 			      float ytop);
-void giza_set_viewport_default ();
+void giza_set_viewport_default (void);
 void giza_get_viewport (int units, double *x1, double *x2, double *y1,
 			double *y2);
 void giza_get_viewport_float (int units, float *x1, float *x2, float *y1,
 			      float *y2);
 
-void giza_start_warnings ();
-void giza_stop_warnings ();
+void giza_start_warnings (void);
+void giza_stop_warnings (void);
 
-void giza_save ();
-void giza_restore ();
+void giza_save (void);
+void giza_restore (void);
 
 void giza_set_window (double x1, double x2, double y1, double y2);
 void giza_set_window_float (float x1, float x2, float y1, float y2);

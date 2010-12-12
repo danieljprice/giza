@@ -39,7 +39,7 @@
  *  -Creates the cairo image surface.
  */
 int
-_giza_open_device_png ()
+_giza_open_device_png (void)
 {
   Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
   Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
@@ -70,7 +70,7 @@ _giza_open_device_png ()
  * Flushes the png surface.
  */
 void
-_giza_flush_device_png ()
+_giza_flush_device_png (void)
 {
   cairo_surface_flush (surface);
 }
@@ -79,7 +79,7 @@ _giza_flush_device_png ()
  * Saves the current png to file and opens a new one.
  */
 void
-_giza_change_page_png ()
+_giza_change_page_png (void)
 {
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
@@ -101,7 +101,7 @@ _giza_change_page_png ()
  * to a file prefixed with the current page number.
  */
 void
-_giza_close_device_png ()
+_giza_close_device_png (void)
 {
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
@@ -127,7 +127,7 @@ _giza_close_device_png ()
  * Redraws the background.
  */
 void
-_giza_draw_background_png ()
+_giza_draw_background_png (void)
 {
   cairo_save (context);
   cairo_reset_clip (context);

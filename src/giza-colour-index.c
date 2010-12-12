@@ -297,7 +297,7 @@ giza_get_colour_representation_alpha_float (int ci, float *red, float *green,
 }
 
 void
-_giza_init_colour_index ()
+_giza_init_colour_index (void)
 {
   giza_set_colour_representation (0, 1., 1., 1.);	// white
   giza_set_colour_representation (1, 0., 0., 0.);	// black

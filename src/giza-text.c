@@ -46,7 +46,7 @@ void _giza_action_print (const char *text, double *width, double *height)
  * Moves the current position to continue writing in superscript.
  */
 void
-_giza_start_super ()
+_giza_start_super (void)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -70,7 +70,7 @@ _giza_start_super ()
  * If currently writing superscript returns to normal position.
  */
 void
-_giza_stop_super ()
+_giza_stop_super (void)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -91,7 +91,7 @@ _giza_stop_super ()
  * Must be in GIZA_TRANS_IDEN.
  */
 void
-_giza_start_sub ()
+_giza_start_sub (void)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -112,7 +112,7 @@ _giza_start_sub ()
  * Must be in GIZA_TRANS_IDEN.
  */
 void
-_giza_stop_sub ()
+_giza_stop_sub (void)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);

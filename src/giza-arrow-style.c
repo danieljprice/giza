@@ -119,7 +119,7 @@ giza_get_arrow_style_float (int *fillStyle, float *angle, float *cutback)
  * Sets the arrow style to defaults.
  */
 void
-_giza_init_arrow_style ()
+_giza_init_arrow_style (void)
 {
   Arrow.fs = GIZA_DEFAULT_FILL;
   Arrow.angle = GIZA_DEFAULT_ANGLE;

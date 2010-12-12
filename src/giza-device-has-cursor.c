@@ -30,7 +30,7 @@
  *   -1 :- If the device is interactive.
  */
 int
-giza_device_has_cursor ()
+giza_device_has_cursor (void)
 {
   return Dev.isInteractive;
 }

@@ -90,7 +90,7 @@ _giza_open_device_eps (int vert)
  * Flush the eps
  */
 void
-_giza_flush_device_eps ()
+_giza_flush_device_eps (void)
 {
   //cairo_surface_flush (context);
 }
@@ -99,7 +99,7 @@ _giza_flush_device_eps ()
  * Closes the eps device
  */ 
 void
-_giza_close_device_eps ()
+_giza_close_device_eps (void)
 {
   cairo_surface_destroy (surface);
   cairo_destroy (context);
@@ -109,7 +109,7 @@ _giza_close_device_eps ()
  * Draws the background
  */
 void
-_giza_draw_background_eps ()
+_giza_draw_background_eps (void)
 {
   cairo_save (context);
   cairo_reset_clip (context);
@@ -122,7 +122,7 @@ _giza_draw_background_eps ()
  * Change the page
  */
 void
-_giza_change_page_eps ()
+_giza_change_page_eps (void)
 {
   // Close the old eps
   _giza_close_device_eps ();

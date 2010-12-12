@@ -25,4 +25,4 @@ struct GIZA_Arrow_Style
   double cutback;
 } Arrow;
 
-void _giza_init_arrow_style ();
+void _giza_init_arrow_style (void);

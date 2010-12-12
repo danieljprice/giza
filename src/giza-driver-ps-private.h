@@ -18,7 +18,7 @@
  */
 
 int _giza_open_device_ps (int vert);
-void _giza_flush_device_ps ();
-void _giza_change_page_ps ();
-void _giza_close_device_ps ();
-void _giza_draw_background_ps ();
+void _giza_flush_device_ps (void);
+void _giza_change_page_ps (void);
+void _giza_close_device_ps (void);
+void _giza_draw_background_ps (void);

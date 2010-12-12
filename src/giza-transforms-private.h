@@ -22,4 +22,4 @@
 #define GIZA_TRANS_FONT  3
 
 void _giza_set_trans (int trans);
-int _giza_get_trans ();
+int _giza_get_trans (void);

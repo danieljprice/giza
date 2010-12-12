@@ -17,4 +17,4 @@
  *
  */
 
-void _giza_init_character_height ();
+void _giza_init_character_height (void);

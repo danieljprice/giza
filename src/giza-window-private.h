@@ -32,4 +32,4 @@ struct GIZA_Window
   cairo_matrix_t normCoords;
 } Win;
 
-void _giza_init_window ();
+void _giza_init_window (void);

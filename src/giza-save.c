@@ -42,7 +42,7 @@ double arrowcutback[GIZA_SAVE_MAX];
  * See Also: giza_restore
  */
 void
-giza_save ()
+giza_save (void)
 {
   if (!_giza_check_device_ready ("giza_save"))
     return;
@@ -71,7 +71,7 @@ giza_save ()
  * See Also: giza_save
  */
 void
-giza_restore ()
+giza_restore (void)
 {
   if (!_giza_check_device_ready ("giza_restore"))
     return;
@@ -99,7 +99,7 @@ giza_restore ()
  *
  */
 void
-_giza_init_save()
+_giza_init_save (void)
 {
   _giza_save_ncalls = 0;
   return;

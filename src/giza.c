@@ -53,7 +53,7 @@ _giza_check_device_ready (char *source)
  * Sets the private variable deviceOpen to one.
  */
 void
-_giza_set_deviceOpen ()
+_giza_set_deviceOpen (void)
 {
   deviceOpen = 1;
   drawn = 0;
@@ -63,7 +63,7 @@ _giza_set_deviceOpen ()
  * Sets the private variable deviceOpen to zero.
  */
 void
-_giza_reset_deviceOpen ()
+_giza_reset_deviceOpen (void)
 {
   deviceOpen = 0;
   drawn = 0;
@@ -77,7 +77,7 @@ _giza_reset_deviceOpen ()
  *  -0 if it has not been specified.
  */
 int
-_giza_sizeSpecified ()
+_giza_sizeSpecified (void)
 {
   return sizeSpecified;
 }
@@ -86,7 +86,7 @@ _giza_sizeSpecified ()
  * Sets the private variable sizeSpecified to one.
  */
 void
-_giza_set_sizeSpecified ()
+_giza_set_sizeSpecified (void)
 {
   sizeSpecified = 1;
 }
@@ -95,7 +95,7 @@ _giza_set_sizeSpecified ()
  * Sets the private variable sizeSpecified to zero.
  */
 void
-_giza_reset_sizeSpecified ()
+_giza_reset_sizeSpecified (void)
 {
   sizeSpecified = 0;
 }
@@ -104,7 +104,7 @@ _giza_reset_sizeSpecified ()
  * Set the private variable drawn to 1.
  */
 void
-_giza_set_drawn ()
+_giza_set_drawn (void)
 {
   drawn = 1;
 }
@@ -113,7 +113,7 @@ _giza_set_drawn ()
  * Set the private variable drawn to 0.
  */
 void
-_giza_reset_drawn ()
+_giza_reset_drawn (void)
 {
   drawn = 0;
 }
@@ -122,7 +122,7 @@ _giza_reset_drawn ()
  * Checks it something has been drawn to the device
  */
 int
-_giza_has_drawn ()
+_giza_has_drawn (void)
 {
   return drawn;
 }

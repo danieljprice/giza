@@ -37,7 +37,7 @@
  *  -Creates the cairo image surface.
  */
 int
-_giza_open_device_null ()
+_giza_open_device_null (void)
 {
   Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
   Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
@@ -65,7 +65,7 @@ _giza_open_device_null ()
 }
 
 void
-_giza_flush_device_null ()
+_giza_flush_device_null (void)
 {
   cairo_surface_flush (surface);
 }
@@ -75,7 +75,7 @@ _giza_flush_device_null ()
  *
  */
 void
-_giza_change_page_null ()
+_giza_change_page_null (void)
 {
   _giza_draw_background_null ();
 }
@@ -85,7 +85,7 @@ _giza_change_page_null ()
  * Just destroys the drawing surface
  */
 void
-_giza_close_device_null ()
+_giza_close_device_null (void)
 {
   cairo_surface_destroy (surface);
 }
@@ -94,7 +94,7 @@ _giza_close_device_null ()
  * Draws the background.
  */
 void
-_giza_draw_background_null ()
+_giza_draw_background_null (void)
 {
   cairo_save (context);
   cairo_reset_clip (context);
