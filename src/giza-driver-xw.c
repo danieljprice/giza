@@ -196,29 +196,14 @@ _giza_change_page_xw (void)
     }
 
   // create a new pixmap
-  Pixmap old;
-  old = XW.pixmap;
-  XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
-  XFreePixmap (XW.display, old);
-
-  // recreate the cairo surface and context
   cairo_surface_destroy (surface);
-  surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  XFreePixmap (XW.display, XW.pixmap);
+  XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
-  // Make the new context the same as the old one
-  int oldLineCap = cairo_get_line_cap (context);
-  int oldCi;
-  char fontFam[20];
-  giza_get_colour_index (&oldCi);
-  giza_get_font (fontFam, 20);
+  // recreate the cairo surface
+  surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
   context = cairo_create (surface);
-  _giza_draw_background_xw ();
-  _giza_init_norm ();
-  _giza_init_character_height ();
-  giza_set_colour_index (oldCi);
-  giza_set_line_cap (oldLineCap);
-  giza_set_font (fontFam);
- }
+}
 
 /**
  * Initialises the normalised device coords matrix

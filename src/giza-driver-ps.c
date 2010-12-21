@@ -103,7 +103,6 @@ void
 _giza_change_page_ps (void)
 {
   cairo_show_page (context);
-  _giza_draw_background_ps ();
 }
 
 /**

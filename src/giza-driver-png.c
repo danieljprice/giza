@@ -81,15 +81,41 @@ _giza_flush_device_png (void)
 void
 _giza_change_page_png (void)
 {
+  // Destroy old context
+  cairo_destroy (context);
+
+  // File name
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
   char fileName[length + 1];
   sprintf (fileName, "%s_%04d%s", Dev.prefix, Dev.pgNum, GIZA_DEVICE_EXTENSION);
+
+  // Save to file
   cairo_surface_write_to_png (surface, fileName);
+
+  // Print the message
   char tmp[length + 10];
   sprintf(tmp, "%s created", fileName);
-  _giza_draw_background_png ();
   _giza_message (tmp);
+
+  // Destroy the old surface and create a new one
+  cairo_surface_destroy (surface);
+  surface =
+    cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width,
+				Dev.height);
+
+  if (!surface)
+    {
+      _giza_error ("_giza_change_page_png", "Could not create cairo PNG surface");
+      return;
+    }
+  context = cairo_create (surface);
+  if (!context)
+    {
+      _giza_error ("_giza_change_page_png", "Could not create cairo context");
+      return;
+    }
+  return;
 }
 
 /**

@@ -102,7 +102,6 @@ void
 _giza_close_device_eps (void)
 {
   cairo_surface_destroy (surface);
-  cairo_destroy (context);
 }
 
 /**
@@ -125,7 +124,8 @@ void
 _giza_change_page_eps (void)
 {
   // Close the old eps
-  _giza_close_device_eps ();
+  cairo_destroy (context);
+  cairo_surface_destroy (surface);
 
   // name the new eps
   int length;
@@ -138,16 +138,18 @@ _giza_change_page_eps (void)
 
   if (!surface)
     {
-      _giza_error ("_giza_open_device_eps", "Could not create cairo PS surface");
+      _giza_error ("_giza_change_page_eps", "Could not create cairo PS surface");
+      return;
     }
-  else
-    {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
       cairo_ps_surface_set_eps (surface, 1);
 #endif
-    }
 
   context = cairo_create (surface);
-  return;
+  if (!context)
+    {
+      _giza_error ("_giza_change_page_eps", "Could not create cairo context");
+      return;
+    }
 }
 #endif

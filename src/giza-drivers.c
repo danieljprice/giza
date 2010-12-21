@@ -316,13 +316,16 @@ giza_change_page (void)
       return;
     }
   Dev.pgNum++;
+
+  // Reset stuff
   giza_set_viewport (VP.xmin,VP.xmax, VP.ymin, VP.ymax);
   giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);
   giza_set_character_height (oldCh);
   giza_set_line_width (oldLw);
   giza_set_colour_index (oldCi);
   _giza_reset_drawn ();
-  //_giza_draw_background ();
+  _giza_draw_background ();
+  giza_flush_device ();
   return;
 }
 
@@ -439,7 +442,7 @@ _giza_draw_background (void)
 
   int oldCi;
   giza_get_colour_index (&oldCi);
-  
+
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
@@ -472,7 +475,6 @@ _giza_draw_background (void)
     }
 
   giza_set_colour_index (oldCi);
-  
   return;
 }
 
@@ -667,17 +669,17 @@ giza_print_device_list (void)
  * Allocates memory for the device list and sets it to a list of available devices.
  */
 void
-_giza_init_device_list (char *deviceList)
+_giza_init_device_list (char **deviceList)
 {
-  deviceList = malloc (326 * sizeof(char));
+  *deviceList = malloc (326 * sizeof(char));
 #ifdef _GIZA_HAS_XW
-  strcat (deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
+  strcat (*deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
 #endif
-  strcat (deviceList, "Non-interactive file formats:\n\t/png\t(Portable network graphics file)\n\t/pdf\t(Portable document format file)\n\t/vpdf\t(Portable document format file portrait)\n\t/ps\t(PostScript file)\n\t/vps\t(PostScript file portrait)\n");
+  strcat (*deviceList, "Non-interactive file formats:\n\t/png\t(Portable network graphics file)\n\t/pdf\t(Portable document format file)\n\t/vpdf\t(Portable document format file portrait)\n\t/ps\t(PostScript file)\n\t/vps\t(PostScript file portrait)\n");
 #ifdef _GIZA_HAS_EPS
-  strcat (deviceList, "\t/eps\t(Encapsulated PostScript file)\n");
+  strcat (*deviceList, "\t/eps\t(Encapsulated PostScript file)\n");
 #endif
-  strcat (deviceList, "\t/null\t(Null device)\n");
+  strcat (*deviceList, "\t/null\t(Null device)\n");
 }
 
 /**

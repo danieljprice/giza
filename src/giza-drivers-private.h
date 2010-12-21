@@ -37,5 +37,5 @@ void _giza_draw_background (void);
 void _giza_init_norm (void);
 void _giza_expand_clipping (void);
 void _giza_restore_clipping (void);
-void _giza_init_device_list (char *deviceList);
+void _giza_init_device_list (char **deviceList);
 void _giza_free_device_list (char *deviceList);

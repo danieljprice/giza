@@ -95,7 +95,6 @@ void
 _giza_change_page_pdf (void)
 {
   cairo_show_page (context);
-  _giza_draw_background_pdf ();
 }
 
 /**

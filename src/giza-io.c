@@ -125,7 +125,7 @@ void
 _giza_display_devices (void)
 {
   char *deviceList;
-  _giza_init_device_list (deviceList);
+  _giza_init_device_list (&deviceList);
   printf ("%s\n", deviceList);
   _giza_free_device_list (deviceList);
 }
