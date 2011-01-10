@@ -49,6 +49,7 @@ CFLAGS=
 #
 X11LIBS= -L/usr/X11R6/lib -lX11
 CAIROLIBS= -L/usr/local/lib -lcairo
+GLLIBS= -L/usr/X11R6/lib -lGL -lXext
 INCFLAGS= -I/usr/X11R6/include -I$(INCDIR) -I$(SRCDIR)
 
 LDFLAGS= $(X11LIBS) $(CAIROLIBS) -lm
@@ -108,7 +109,7 @@ SOURCE= giza-annotate.c giza-arrow.c giza-arrow-style.c giza-band.c \
 	giza-qtext.c giza-rectangle.c giza-render.c giza-save.c \
 	giza-set-font.c giza-stroke.c giza-text.c giza-text-background.c \
         giza-transforms.c giza-vector.c giza-viewport.c giza-warnings.c giza-window.c \
-	lex.yy.c
+	lex.yy.c giza-gl-interactive.c
 
 #
 # Private header files
@@ -134,6 +135,8 @@ giza: checksystem $(OBJECTS)
 	@#rm -f $(LIBDIR)/libgiza$(SHAREDEXT)
 	ln -sf $(LIBDIR)/libgiza$(SHAREDEXT).$(VERSION) $(LIBDIR)/libgiza$(SHAREDEXT)
 	cp $(SRCDIR)/giza.h $(INCDIR)
+	cp $(SRCDIR)/giza-gl.h $(INCDIR)
+	cp $(SRCDIR)/giza-features.h $(INCDIR)
 	cp $(SRCDIR)/giza-shared-cpp.h $(INCDIR)
 
 install: checksystem giza

@@ -19,6 +19,11 @@
 #ifdef CAIRO_HAS_XLIB_SURFACE
 #define _GIZA_HAS_XW 1
 
+#include <giza.h>
+#include <cairo/cairo-xlib.h>
+#include <X11/keysym.h>
+#include <X11/Xutil.h>
+
 int _giza_open_device_xw (void);
 void _giza_init_norm_xw (void);
 void _giza_flush_device_xw (void);
@@ -28,5 +33,30 @@ void _giza_close_device_xw (void);
 void _giza_expand_clipping_xw (void);
 void _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanch, double *x, double *y, char *ch);
 int _giza_init_band_xw (void);
+
+/**
+ * Global variables specific to X.
+ */
+struct GIZA_XWindow
+{
+  Display *display;
+  Pixmap pixmap;
+  Window window;
+  Screen *screenptr;
+  int screennum;
+  Visual *visual;
+  GC gc;
+  XImage *ximage;
+  Colormap colormap;
+  
+  unsigned char *virtualscreen;
+  int videoaccesstype;
+
+  int width;
+  int height;
+  int depth;
+  int pixelsize;
+  int screensize;
+} XW;
 
 #endif

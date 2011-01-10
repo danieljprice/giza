@@ -29,36 +29,6 @@
 
 #ifdef _GIZA_HAS_XW
 
-#include <giza.h>
-#include <cairo/cairo-xlib.h>
-#include <X11/keysym.h>
-#include <X11/Xutil.h>
-
-/**
- * Global variables specific to X.
- */
-struct GIZA_XWindow
-{
-  Display *display;
-  Pixmap pixmap;
-  Window window;
-  Screen *screenptr;
-  int screennum;
-  Visual *visual;
-  GC gc;
-  XImage *ximage;
-  Colormap colormap;
-  
-  unsigned char *virtualscreen;
-  int videoaccesstype;
-
-  int width;
-  int height;
-  int depth;
-  int pixelsize;
-  int screensize;
-} XW;
-
 #define GIZA_DEFAULT_WIDTH 800
 #define GIZA_DEFAULT_HEIGHT 600
 #define GIZA_DEVICE_UNITS_PER_MM 3.7054 // so "width" is 8.5 inches as in ps driver
