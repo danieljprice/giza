@@ -697,13 +697,17 @@ end subroutine PGNCUR
 
 !------------------------------------------------------------------------
 ! Module: PGNUMB -- convert a number into a plotable character string
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGNUMB (MM, PP, FORM, STRING, NC)
+ use giza, only:giza_format_number
  implicit none
  integer,       intent(in)  :: MM, PP, FORM
  character*(*), intent(out) :: STRING
  integer,       intent(out) :: NC
+
+ call giza_format_number(mm,pp,form,string)
+ nc = len_trim(string)
 
 end subroutine PGNUMB
 
