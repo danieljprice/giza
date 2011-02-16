@@ -97,6 +97,7 @@ end subroutine pgarro
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGASK (FLAG)
+ use giza, only:giza_start_prompting, giza_stop_prompting
  implicit none
  logical, intent(in) :: FLAG
 
