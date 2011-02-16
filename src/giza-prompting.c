@@ -37,8 +37,6 @@ int _giza_prompting;
 void
 giza_start_prompting (void)
 {
-  if (!_giza_check_device_ready ("giza_get_colour_representation"))
-    return;
   _giza_prompting = 1;
 }
 
@@ -53,8 +51,6 @@ giza_start_prompting (void)
 void
 giza_stop_prompting (void)
 {
-  if (!_giza_check_device_ready ("giza_get_colour_representation"))
-    return;
   _giza_prompting = 0;
 }
 
