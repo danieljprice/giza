@@ -57,6 +57,7 @@ module giza
       giza_draw, &
       giza_set_environment, &
       giza_error_bars, &
+      giza_error_bars_x, &
       giza_error_bars_y, &
       giza_set_fill, &
       giza_get_fill, &
@@ -549,6 +550,24 @@ private
       real(kind=c_float),intent(in),value :: term
       real(kind=c_float),dimension(n),intent(in) :: xpts,ypts,error
     end subroutine giza_error_bars_float
+ end interface
+
+ interface giza_error_bars_x
+    subroutine giza_error_bars_hori(n,xpts,ypts1,ypts2,term) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: n
+      real(kind=c_double),intent(in),value :: term
+      real(kind=c_double),dimension(n),intent(in) :: xpts,ypts1,ypts2
+    end subroutine giza_error_bars_hori
+
+    subroutine giza_error_bars_hori_float(n,xpts,ypts1,ypts2,term) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: n
+      real(kind=c_float),intent(in),value :: term
+      real(kind=c_float),dimension(n),intent(in) :: xpts,ypts1,ypts2
+    end subroutine giza_error_bars_hori_float
  end interface
 
  interface giza_error_bars_y

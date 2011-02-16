@@ -438,14 +438,17 @@ end subroutine PGERRB
 
 !------------------------------------------------------------------------
 ! Module: PGERRX -- horizontal error bar
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 
 subroutine PGERRX (N, X1, X2, Y, T)
+ use giza, only:giza_error_bars_x
  implicit none
  integer, intent(in) :: N
  real,    intent(in) :: X1(*), X2(*), Y(*)
  real,    intent(in) :: T
+
+ call giza_error_bars_x(N, X1, X2, Y, T)
 
 end subroutine PGERRX
 

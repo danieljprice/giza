@@ -190,8 +190,9 @@ giza_error_bars_float (int dir, int n, float *xpts, float *ypts, float *error, f
  * Input:
  *  -n      :- the number of bars to draw
  *  -xpts   :- the x world coords of the points
- *  -ypts1   :- the y world coords of the lower part of the error bar
- *  -ypts2   :- the y world coords of the upper part of the error bar
+ *  -ypts1  :- the y world coords of the lower part of the error bar
+ *  -ypts2  :- the y world coords of the upper part of the error bar
+ *  -term   :- length of the terminals, as a multiple of default length (T <= 0.0 means no terminals drawn)
  */
 void
 giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double term)
@@ -219,11 +220,13 @@ giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double 
       cairo_line_to (context, xpts[i], ypts2[i]);
       
       // draw the ends
-      cairo_move_to (context, xpts[i] - endWidth, ypts1[i]);
-      cairo_line_to (context, xpts[i] + endWidth, ypts1[i]);
-      
-      cairo_move_to (context, xpts[i] - endWidth, ypts2[i]);
-      cairo_line_to (context, xpts[i] + endWidth, ypts2[i]);
+      if (term > 0.)
+        {
+          cairo_move_to (context, xpts[i] - endWidth, ypts1[i]);
+          cairo_line_to (context, xpts[i] + endWidth, ypts1[i]);
+          cairo_move_to (context, xpts[i] - endWidth, ypts2[i]);
+          cairo_line_to (context, xpts[i] + endWidth, ypts2[i]);
+        }
     }
   
   _giza_stroke ();
@@ -291,13 +294,13 @@ giza_error_bars_vert_float (int n, float *xpts, float *ypts1, float *ypts2, floa
  *
  * Input:
  *  -n      :- the number of bars to draw
- *  -xpts   :- the x world coords of the points
+ *  -xpts1  :- the x world coords of the lower end of the error bars
+ *  -xpts2  :- the x world coords of the upper end of the error bars
  *  -ypts   :- the y world coords of the points
- *  -errors :- the distance in world coords that each error bar should extend above and below the point
+ *  -term   :- length of the terminals, as a multiple of default length (T <= 0.0 means no terminals drawn)
  */
-  /*
 void
-giza_error_bars_hori (int n, double *xpts, double *ypts, double *errors)
+giza_error_bars_hori (int n, double *xpts1, double *xpts2, double *ypts, double term)
 {
   if (!_giza_check_device_ready ("giza_error_bars_hori"))
     return;
@@ -310,23 +313,25 @@ giza_error_bars_hori (int n, double *xpts, double *ypts, double *errors)
   
   double endWidth, dummy;
   giza_get_character_size (GIZA_UNITS_WORLD, &dummy, &endWidth);
-  endWidth = 0.25 * endWidth;
-  int oldTrans = _giza_get_trans();
+  endWidth = 0.5 * endWidth * term;
+  int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   
   int i;
   for (i = 0; i < n; i++)
     {
       // draw the bar
-      cairo_move_to (context, xpts[i] - errors[i], ypts[i]);
-      cairo_line_to (context, xpts[i] + errors[i], ypts[i]);
+      cairo_move_to (context, xpts1[i], ypts[i]);
+      cairo_line_to (context, xpts2[i], ypts[i]);
       
       // draw the ends
-      cairo_move_to (context, xpts[i] - errors[i], ypts[i] - endWidth);
-      cairo_line_to (context, xpts[i] - errors[i], ypts[i] + endWidth);
-      
-      cairo_move_to (context, xpts[i] + errors[i], ypts[i] - endWidth);
-      cairo_line_to (context, xpts[i] + errors[i], ypts[i] + endWidth);
+      if (term > 0.) 
+        {
+          cairo_move_to (context, xpts1[i], ypts[i] - endWidth);
+          cairo_line_to (context, xpts1[i], ypts[i] + endWidth);
+          cairo_move_to (context, xpts2[i], ypts[i] - endWidth);
+          cairo_line_to (context, xpts2[i], ypts[i] + endWidth);
+        }
     }
   
   _giza_stroke ();
@@ -337,14 +342,12 @@ giza_error_bars_hori (int n, double *xpts, double *ypts, double *errors)
       giza_flush_device ();
     }
 }
-*/
    
 /**
  * Same functionality as giza_error_bars_hori but takes floats.
  */
-   /*
 void
-giza_error_bars_hori_float (int n, float *xpts, float *ypts, float *errors)
+giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, float *ypts, float term)
 {
   if (!_giza_check_device_ready ("giza_error_bars_hori_float"))
     return;
@@ -355,29 +358,31 @@ giza_error_bars_hori_float (int n, float *xpts, float *ypts, float *errors)
       return;
     }
   
-  double endWidth, dummy, currentX, currentY, currentError;
-  giza_get_character_size (1, &endWidth, &dummy);
-  endWidth = 0.25 * endWidth;
-  int oldTrans = _giza_get_trans();
+  double endWidth, dummy, currentX1, currentX2, currentY;
+  giza_get_character_size (GIZA_UNITS_WORLD, &dummy, &endWidth);
+  endWidth = 0.5 * endWidth * term;
+  int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   
   int i;
   for (i = 0; i < n; i++)
     {
-      currentX = (double) xpts[i];
-      currentY = (double) ypts[i];
-      currentError = (double) errors[i];
+      currentX1 = (double) xpts1[i];
+      currentX2 = (double) xpts2[i];
+      currentY  = (double) ypts[i];
 
       // draw the bar
-      cairo_move_to (context, currentX - currentError, currentY);
-      cairo_line_to (context, currentX - currentError, currentY);
+      cairo_move_to (context, currentX1, currentY);
+      cairo_line_to (context, currentX2, currentY);
       
       // draw the ends
-      cairo_move_to (context, currentX - currentError, currentY - endWidth);
-      cairo_line_to (context, currentX - currentError , currentY + endWidth);
-      
-      cairo_move_to (context, currentX + currentError, currentY - endWidth);
-      cairo_line_to (context, currentX + currentError, currentY + endWidth);
+      if (term > 0.)
+        {
+          cairo_move_to (context, currentX1, currentY - endWidth);
+          cairo_line_to (context, currentX1, currentY + endWidth);
+          cairo_move_to (context, currentX2, currentY - endWidth);
+          cairo_line_to (context, currentX2, currentY + endWidth);
+        }
     }
   
   _giza_stroke ();
@@ -388,9 +393,8 @@ giza_error_bars_hori_float (int n, float *xpts, float *ypts, float *errors)
       giza_flush_device ();
     }
 }
-*/
 /**
- * Plots a single vertical error bar at x, y of length length (measured in +ve x direction),
+ * Plots a single vertical error bar at x, y of length error (measured in +ve x direction),
  * with terminals of length term
  */
 static void
@@ -405,12 +409,15 @@ _giza_error_bar_vert (double x, double y, double error, double term)
   cairo_line_to (context, x + error, y);
   
   // draw the ends
-  cairo_move_to (context, x + error, y - endWidth * 0.5);
-  cairo_line_to (context, x + error, y + endWidth * 0.5);
+  if (term > 0.)
+    {
+      cairo_move_to (context, x + error, y - endWidth * 0.5);
+      cairo_line_to (context, x + error, y + endWidth * 0.5);
+    }
 }
 
 /**
- * Plots a single horizontal error bar at x, y of length length (measured in +ve y direction),
+ * Plots a single horizontal error bar at x, y of length error (measured in +ve y direction),
  * with terminals of length term
  */
 static void
@@ -425,6 +432,9 @@ _giza_error_bar_hori (double x, double y, double error, double term)
   cairo_line_to (context, x, y + error);
   
   // draw the end
-  cairo_move_to (context, x - endWidth * 0.5, y + error);
-  cairo_line_to (context, x + endWidth * 0.5, y + error);
+  if (term > 0.) 
+    {
+      cairo_move_to (context, x - endWidth * 0.5, y + error);
+      cairo_line_to (context, x + endWidth * 0.5, y + error);
+    }
 }
