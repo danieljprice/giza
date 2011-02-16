@@ -188,13 +188,13 @@ _giza_flush_device_xw (void)
 void
 _giza_change_page_xw (void)
 {
-  if (_giza_get_prompting ())
+  /*if (_giza_get_prompting ())
     {
       int x, y;
       char ch;
       _giza_xevent_loop (0, 0, 0, 0, &x, &y, &ch);
     }
-
+  */
   // create a new pixmap
   cairo_surface_destroy (surface);
   XFreePixmap (XW.display, XW.pixmap);
@@ -238,13 +238,13 @@ _giza_draw_background_xw (void)
 void
 _giza_close_device_xw (void)
 {
-  if (_giza_get_prompting ())
+  /*if (_giza_get_prompting ())
     {
       int x, y;
       char ch;
       _giza_xevent_loop (0, 0, 0, 0, &x, &y, &ch);
     }
-
+   */
   XCloseDisplay (XW.display);
   cairo_surface_destroy (surface);
 }

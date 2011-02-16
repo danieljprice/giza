@@ -19,8 +19,12 @@
 
 #include "giza-private.h"
 
-int _giza_prompting = 1;
-
+/*
+ * The initial value of _giza_prompting is set by a call
+ * either to giza_start_prompting or giza_stop_prompting
+ * in giza_open_device
+ */
+int _giza_prompting;
 
 /**
  * Settings: giza_start_prompting

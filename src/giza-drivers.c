@@ -86,6 +86,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   Dev.defaultBackgroundAlpha = 0.;
   int success = -1;
   giza_set_text_background (-1);
+  giza_start_prompting ();
 
   if (newPrefix)
     {
@@ -315,6 +316,12 @@ giza_change_page (void)
       _giza_error ("giza_change_page", "No device open");
       return;
     }
+
+  if (_giza_get_prompting () && Dev.isInteractive)
+    {
+      _giza_newpage_prompt();
+    }
+
   Dev.pgNum++;
 
   // Reset stuff
@@ -706,6 +713,10 @@ _giza_init_norm (void)
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
+    /* 
+     *  X-Windows device is different because it has additional margins around the giza window
+     *  (this should in principle be for *all* interactive devices...)
+     */
     case GIZA_DEVICE_XW:
       _giza_init_norm_xw ();
       break;

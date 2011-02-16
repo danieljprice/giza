@@ -119,7 +119,7 @@ _giza_prompt_for_device (void)
 }
 
 /**
- * This routine prints the avaliable devices.
+ * This routine prints the available devices.
  */
 void
 _giza_display_devices (void)
@@ -128,6 +128,18 @@ _giza_display_devices (void)
   _giza_init_device_list (&deviceList);
   printf ("%s\n", deviceList);
   _giza_free_device_list (deviceList);
+}
+
+void
+_giza_newpage_prompt (void)
+{ 
+  char input[2];
+  printf (" Press RETURN for next page: ");
+  /*
+   *  Use fgets here instead of scanf so that we can accept a
+   *  newline character as the default input
+   */
+  char *p = fgets(input,2,stdin);
 }
 
 /**
