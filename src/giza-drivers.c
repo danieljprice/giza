@@ -73,9 +73,9 @@ static void _giza_free_prefix (void);
  *  -/pdf :- Portable Document Format
  *  -/vpdf :- Landscape Portable Document Format
  *  -/ps  :- PostScript
- *  -/vps :- Landscape PostScript
+ *  -/vps :- Landscape Postscript
  *  -/png :- Portable Network Graphics file
- *  -/eps :- EncapsulatedPostScript
+ *  -/eps :- Encapsulated Postscript
  */
 int
 giza_open_device (char *newDeviceName, char *newPrefix)
@@ -682,9 +682,14 @@ _giza_init_device_list (char **deviceList)
 #ifdef _GIZA_HAS_XW
   strcat (*deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
 #endif
-  strcat (*deviceList, "Non-interactive file formats:\n\t/png\t(Portable network graphics file)\n\t/pdf\t(Portable document format file)\n\t/vpdf\t(Portable document format file portrait)\n\t/ps\t(PostScript file)\n\t/vps\t(PostScript file portrait)\n");
+  strcat (*deviceList, "Non-interactive file formats:\n");
+  strcat (*deviceList, "\t/png\t(Portable network graphics file)\n");
+  strcat (*deviceList, "\t/pdf\t(Portable document format file)\n");
+  strcat (*deviceList, "\t/vpdf\t(Portable document format file portrait)\n");
+  strcat (*deviceList, "\t/ps\t(Postscript file, multiple pages per file)\n");
+  strcat (*deviceList, "\t/vps\t(Postscript file portrait, multiple pages per file)\n");
 #ifdef _GIZA_HAS_EPS
-  strcat (*deviceList, "\t/eps\t(Encapsulated PostScript file)\n");
+  strcat (*deviceList, "\t/eps\t(Encapsulated Postscript, one file per page)\n");
 #endif
   strcat (*deviceList, "\t/null\t(Null device)\n");
 }
