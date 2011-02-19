@@ -32,7 +32,6 @@
 
 static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
 				  int *i1, int *i2);
-static double _giza_round (double x, int *nsub);
 //static int _giza_get_sigfigs (const double xmin, const double xmax,
 //			      const double xinterval);
 
@@ -225,7 +224,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
       if (xintervalMaj < 0.05)
 	xintervalMaj = 0.05;
       xintervalMaj = xintervalMaj * (Win.xmax - Win.xmin);
-      xintervalMaj = _giza_round (xintervalMaj, &nMinTicksx);
+      xintervalMaj = giza_round (xintervalMaj, &nMinTicksx);
     }
   else
     {
@@ -377,7 +376,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
       if (yintervalMaj > 0.2) yintervalMaj = 0.2;
       if (yintervalMaj < 0.05) yintervalMaj = 0.05;
       yintervalMaj = yintervalMaj * (Win.ymax - Win.ymin);
-      yintervalMaj = _giza_round (yintervalMaj, &nMinTicksy);
+      yintervalMaj = giza_round (yintervalMaj, &nMinTicksy);
     }
   else
     {
@@ -631,8 +630,8 @@ _giza_tick_intervals (double xmin, double xmax, double xinterval, int *i1,
  *
  * Return: The smallest 'round' number.
  */
-static double
-_giza_round (double x, int *nsub)
+double
+giza_round (double x, int *nsub)
 {
   int i, ilog;
   double frac, pwr, xlog, xx;
@@ -666,6 +665,16 @@ _giza_round (double x, int *nsub)
   return pwr * nice[i];
 }
 
+/**
+ * Same as giza_round but accepts floats
+ */
+float
+giza_round_float (float x, int *nsub)
+{
+  float result;
+  result = (float) giza_round((double) x, nsub);
+  return result;
+}
 /**
  * Finds the required number of significant figures to distinguish
  * between the tick intervals (DJP)

@@ -89,6 +89,7 @@ module giza
       giza_rectangle, &
       giza_render, &
       giza_restore, &
+      giza_round, &
       giza_save, &
       giza_set_font, &
       giza_vector, &
@@ -999,6 +1000,24 @@ private
     subroutine giza_restore() bind(C)
     end subroutine giza_restore
  end interface
+
+ interface giza_round
+    function giza_round_db(x,nsub) bind(C,name="giza_round")
+      import
+      implicit none
+      real(kind=c_double), intent(in) :: x
+      integer(kind=c_int), intent(out) :: nsub
+      real(kind=c_double) :: giza_round_db
+    end function giza_round_db
+
+    function giza_round_float(x,nsub) bind(C,name="giza_round_float")
+      import
+      implicit none
+      real(kind=c_float), intent(in) :: x
+      integer(kind=c_int), intent(out) :: nsub
+      real(kind=c_float) :: giza_round_float
+    end function giza_round_float
+ end interface giza_round
  
  interface giza_save
     subroutine giza_save() bind(C)

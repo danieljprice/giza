@@ -195,6 +195,9 @@ void giza_render_float (int sizex, int sizey, float data[sizey][sizex],
 			int i1, int i2, int j1, int j2, float valMin,
 			float valMax, float *affine);
 
+double giza_round (double x, int *nsub);
+float giza_round_float (float x, int *nsub);
+
 void giza_set_font (char *font);
 void giza_get_font (char *font, int n);
 

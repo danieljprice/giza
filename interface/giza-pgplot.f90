@@ -945,6 +945,9 @@ subroutine PGQCOL (CI1, CI2)
  implicit none
  integer, intent(out) :: CI1, CI2
 
+ CI1 = 0
+ CI2 = 256
+
 end subroutine PGQCOL
 
 !------------------------------------------------------------------------
@@ -1220,12 +1223,15 @@ end subroutine PGRECT
 
 !------------------------------------------------------------------------
 ! Module: PGRND -- find the smallest `round' number greater than x
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 real function PGRND (X, NSUB)
+ use giza, only:giza_round
  implicit none
  real,    intent(in)  :: X
  integer, intent(out) :: NSUB
+
+ PGRND = giza_round(X, NSUB)
 
 end function PGRND
 
