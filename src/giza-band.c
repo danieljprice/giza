@@ -46,15 +46,15 @@
  *  -0 :- The call was successful
  *
  * Modes:
- *  -0 :- None, behaves like giza_get_key_press
- *  -1 :- Straight line drawn from anchor point
- *  -2 :- Hollow rectangle
- *  -3 :- Two horizontal lines
- *  -4 :- Two vertical lines
- *  -5 :- Single horizontal line, ignores anchor point
- *  -6 :- Single vertical lines, ignores anchor point
- *  -7 :- Cross hair, ignores anchor point
- *  -8 :- Circle centred on anchor point
+ *  -0 or GIZA_BAND_NONE      :- None, behaves like giza_get_key_press
+ *  -1 or GIZA_BAND_LINE      :- Straight line drawn from anchor point
+ *  -2 or GIZA_BAND_RECTANGLE :- Hollow rectangle
+ *  -3 or GIZA_BAND_HORZLINES :- Two horizontal lines
+ *  -4 or GIZA_BAND_VERTLINES :- Two vertical lines
+ *  -5 or GIZA_BAND_HORZLINE  :- Single horizontal line, ignores anchor point
+ *  -6 or GIZA_BAND_VERTLINE  :- Single vertical lines, ignores anchor point
+ *  -7 or GIZA_BAND_CROSSHAIR :- Cross hair, ignores anchor point
+ *  -8 or GIZA_BAND_CIRCLE    :- Circle centred on anchor point
  *
  * See Also: giza_get_key_press
  */
