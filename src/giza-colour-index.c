@@ -105,6 +105,16 @@ giza_set_colour_representation (int ci, double red, double green, double blue)
   colourIndex[ci][2] = blue;
   colourIndex[ci][3] = 1.;
 
+  /* If we are changing the current colour index
+     make the change teke effect immediately 
+   */
+  if (ci == _giza_ci) 
+     {
+       cairo_set_source_rgba (context, colourIndex[ci][0],
+			 colourIndex[ci][1], colourIndex[ci][2],
+			 colourIndex[ci][3]);
+     }
+
 /*  if (ci == 0)
     {
       _giza_draw_background ();
@@ -156,6 +166,16 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
   colourIndex[ci][1] = green;
   colourIndex[ci][2] = blue;
   colourIndex[ci][3] = alpha;
+
+  /* If we are changing the current colour index
+     make the change teke effect immediately 
+   */
+  if (ci == _giza_ci) 
+     {
+       cairo_set_source_rgba (context, colourIndex[ci][0],
+			 colourIndex[ci][1], colourIndex[ci][2],
+			 colourIndex[ci][3]);
+     }
 
 /*  if (ci == 0)
     {
