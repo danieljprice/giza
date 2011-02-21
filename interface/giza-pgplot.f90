@@ -107,7 +107,7 @@ subroutine PGASK (FLAG)
    call giza_stop_prompting
  end if
 
-end subroutine pgask
+end subroutine PGASK
 
 !------------------------------------------------------------------------
 ! Module: PGAXIS -- draw an axis
@@ -120,7 +120,7 @@ subroutine PGAXIS (OPT, X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, 
  real, intent(in) :: ORIENT
  integer, intent(in) :: NSUB
 
-end subroutine pgaxis
+end subroutine PGAXIS
 
 !------------------------------------------------------------------------
 ! Module: PGBAND -- read cursor position, with anchor
@@ -133,10 +133,18 @@ integer function PGBAND (MODE, POSN, XREF, YREF, X, Y, CH)
  real, intent(in)    :: XREF, YREF
  real, intent(inout) :: X, Y
  character*(*), intent(out) :: CH
+ integer :: ierr
 
- PGBAND = giza_band(MODE, POSN, XREF, YREF, X, Y, CH)
+ ierr = giza_band(MODE, POSN, XREF, YREF, X, Y, CH)
 
-end function pgband
+ !--PGBAND returns 1 on successful completion
+ if (ierr.eq.0) then
+    PGBAND = 1
+ else
+    PGBAND = 0
+ endif
+
+end function PGBAND
 
 !------------------------------------------------------------------------
 ! Module: PGBBUF -- begin batch of output (buffer)
@@ -148,7 +156,7 @@ subroutine PGBBUF
  
  call giza_begin_buffer()
 
-end subroutine pgbbuf
+end subroutine PGBBUF
 
 !------------------------------------------------------------------------
 ! Module: PGBEG -- open a graphics device
@@ -603,13 +611,16 @@ end subroutine PGLAB
 
 !------------------------------------------------------------------------
 ! Module: PGLCUR -- draw a line using the cursor
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGLCUR (MAXPT, NPT, X, Y)
+ use giza, only:giza_mark_line
  implicit none
  integer, intent(in) :: MAXPT
  integer, intent(inout) :: NPT
  real,    intent(inout) :: X(*), Y(*)
+
+ call giza_mark_line(MAXPT, NPT, X, Y)
 
 end subroutine PGLCUR
 
@@ -713,14 +724,17 @@ end subroutine PGNUMB
 
 !------------------------------------------------------------------------
 ! Module: PGOLIN -- mark a set of points using the cursor
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGOLIN (MAXPT, NPT, X, Y, SYMBOL)
+ use giza, only:giza_mark_points
  implicit none
  integer, intent(in)    :: MAXPT
  integer, intent(inout) :: NPT
  real,    intent(inout) :: X(*), Y(*)
  integer, intent(in)    :: SYMBOL
+
+ call giza_mark_points(maxpt,npt,x,y,symbol)
 
 end subroutine PGOLIN
 

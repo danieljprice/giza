@@ -73,6 +73,8 @@ module giza
       giza_get_line_cap, &
       giza_set_line_style, &
       giza_get_line_style, &
+      giza_mark_line, &
+      giza_mark_points, &
       giza_move, &
       giza_set_paper_size, &
       giza_get_paper_size, &
@@ -763,7 +765,49 @@ private
       integer(c_int),intent(out) :: ls
     end subroutine giza_get_line_style
  end interface
+ 
+ interface giza_mark_line
+    subroutine giza_mark_line(maxpts,npts,xpts,ypts) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: maxpts
+      integer(kind=c_int),intent(inout) :: npts
+      real(kind=c_double), dimension(*), intent(inout) :: xpts
+      real(kind=c_double), dimension(*), intent(inout) :: ypts
+    end subroutine giza_mark_line
+    
+    subroutine giza_mark_line_float(maxpts,npts,xpts,ypts) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: maxpts
+      integer(kind=c_int),intent(inout) :: npts
+      real(kind=c_float), dimension(*), intent(inout) :: xpts
+      real(kind=c_float), dimension(*), intent(inout) :: ypts
+    end subroutine giza_mark_line_float
+ end interface
 
+ interface giza_mark_points
+    subroutine giza_mark_points(maxpts,npts,xpts,ypts,symbol) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: maxpts
+      integer(kind=c_int),intent(inout) :: npts
+      real(kind=c_double), dimension(*), intent(inout) :: xpts
+      real(kind=c_double), dimension(*), intent(inout) :: ypts
+      integer(kind=c_int),intent(in),value :: symbol
+    end subroutine giza_mark_points
+    
+    subroutine giza_mark_points_float(maxpts,npts,xpts,ypts,symbol) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: maxpts
+      integer(kind=c_int),intent(inout) :: npts
+      real(kind=c_float), dimension(*), intent(inout) :: xpts
+      real(kind=c_float), dimension(*), intent(inout) :: ypts
+      integer(kind=c_int),intent(in),value :: symbol
+    end subroutine giza_mark_points_float
+ end interface
+ 
  interface giza_move
     subroutine giza_move(x,y) bind(C)
       import
