@@ -367,7 +367,7 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	case -6:
 	case -7:
 	case -8:
-          _giza_circle_size (xd, yd, 0.15*fabs(symbol), 1);
+          _giza_circle_size (xd, yd, 0.2*fabs(symbol), 1);
           break;
 	default:
 	  _giza_point (xd, yd);
