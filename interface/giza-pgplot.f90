@@ -1322,17 +1322,17 @@ end subroutine PGUNSA
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSCF (FONT)
- use giza, only:giza_set_font
+ use giza, only:giza_set_font,giza_set_font_italic !,giza_set_font_bold
  implicit none
  integer, intent(in) :: FONT
  
  select case(FONT)
  case(4) 
-    call giza_set_font('Lucida Handwriting')
+    call giza_set_font('cursive')
  case(3) 
-    call giza_set_font('Times New Roman Italic')
+    call giza_set_font_italic('times')
  case(2)
-    call giza_set_font('Times')
+    call giza_set_font('times')
  case default
     call giza_set_font(' ')
  end select
