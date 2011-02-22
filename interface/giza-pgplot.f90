@@ -31,9 +31,10 @@
 !------------------------------------------------------------------------
 module gizapgplot
  implicit none
+ !--Settings unique to PGPLOT
+ integer, public :: pgfont = 1
 
 contains
-
 !------------------------------------------------------------
 ! Function to convert PGPLOT units value to giza units value
 !------------------------------------------------------------
@@ -896,11 +897,20 @@ end subroutine PGQAH
 
 !------------------------------------------------------------------------
 ! Module: PGQCF -- inquire character font
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQCF (FONT)
+ use gizapgplot, only:pgfont
  implicit none
  integer, intent(out) :: FONT
+
+ !
+ !--this is a setting for the PGPLOT frontend only
+ !  (giza has much more general fonts than PGPLOT)
+ !
+ !  the value of pgfont is set by the call to PGSCF 
+ !
+ FONT = pgfont
 
 end subroutine PGQCF
 
@@ -1322,7 +1332,8 @@ end subroutine PGUNSA
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSCF (FONT)
- use giza, only:giza_set_font,giza_set_font_italic !,giza_set_font_bold
+ use giza,       only:giza_set_font,giza_set_font_italic !,giza_set_font_bold
+ use gizapgplot, only:pgfont
  implicit none
  integer, intent(in) :: FONT
  
@@ -1336,6 +1347,13 @@ subroutine PGSCF (FONT)
  case default
     call giza_set_font(' ')
  end select
+ !
+ !--this is a setting for the PGPLOT frontend only
+ !  (giza has much more general fonts than PGPLOT)
+ !
+ !  set pgfont so that query calls to PGQCF are successful 
+ !
+ pgfont = FONT
 
 end subroutine PGSCF
 
