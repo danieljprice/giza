@@ -349,6 +349,11 @@ giza_close_device (void)
   if (!_giza_check_device_ready ("giza_close_device"))
     return;
 
+  if (_giza_get_prompting () && Dev.isInteractive)
+    {
+      _giza_newpage_prompt();
+    }
+
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
@@ -388,6 +393,7 @@ giza_close_device (void)
   _giza_free_colour_table ();
   _giza_free_prefix ();
   Dev.type = GIZA_DEVICE_IV;
+ 
   return;
 }
 
