@@ -142,7 +142,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
        
        } else {
        
-         printf("char = %i %s\n",*ch,ch);
+         //printf("char = %i %s\n",*ch,ch);
          _giza_message("unknown command, use (a)dd (d)elete/backspace, e(x)it or (q)uit/Esc");
 
        }

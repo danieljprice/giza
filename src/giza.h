@@ -161,6 +161,19 @@ void giza_get_line_width_float (float *lw);
 void giza_set_line_cap (int lc);
 void giza_get_line_cap (int *lc);
 
+void giza_mark_line (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts]);
+void giza_mark_line_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts]);
+void giza_mark_line_ordered (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts]);
+void giza_mark_line_ordered_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts]);
+void giza_mark_points (int maxpts, int *npts, double xpts[maxpts],
+                       double ypts[maxpts], int symbol);
+void giza_mark_points_float (int maxpts, int *npts, float xpts[maxpts],
+                             float ypts[maxpts], int symbol);
+void giza_mark_points_ordered (int maxpts, int *npts, double xpts[maxpts], 
+                               double ypts[maxpts], int symbol);
+void giza_mark_points_ordered_float (int maxpts, int *npts, float xpts[maxpts],
+                                     float ypts[maxpts], int symbol);
+
 void giza_move (double xpt, double ypt);
 void giza_move_float (float xpt, float ypt);
 
