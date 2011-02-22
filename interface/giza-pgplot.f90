@@ -662,7 +662,7 @@ subroutine PGLINE (N, XPTS, YPTS)
  integer, intent(in) :: N
  real,    intent(in) :: XPTS(*), YPTS(*)
 
- call giza_line(n,xpts,ypts)
+ call giza_line(N,XPTS,YPTS)
 
 end subroutine PGLINE
 
@@ -933,7 +933,7 @@ end subroutine PGQCI
 
 !------------------------------------------------------------------------
 ! Module: PGQCIR -- inquire color index range
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQCIR(ICILO, ICIHI)
  implicit none
@@ -946,17 +946,20 @@ end subroutine PGQCIR
 
 !------------------------------------------------------------------------
 ! Module: PGQCLP -- inquire clipping status
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQCLP(STATE)
+ use giza, only:giza_get_clipping
  implicit none
  integer, intent(out) :: STATE
+ 
+ call giza_get_clipping(STATE)
 
 end subroutine PGQCLP
 
 !------------------------------------------------------------------------
 ! Module: PGQCOL -- inquire color capability
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQCOL (CI1, CI2)
  implicit none
@@ -1135,7 +1138,7 @@ end subroutine PGQLW
 
 !------------------------------------------------------------------------
 ! Module: PGQNDT -- inquire number of available device types
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQNDT(N)
  implicit none
@@ -1374,10 +1377,13 @@ end subroutine PGSCIR
 
 !------------------------------------------------------------------------
 ! Module: PGSCLP -- enable or disable clipping at edge of viewport
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSCLP(STATE)
+ use giza, only:giza_set_clipping
  integer, intent(in) :: STATE
+
+ call giza_set_clipping(STATE)
 
 end subroutine PGSCLP
 

@@ -37,6 +37,8 @@ module giza
       giza_set_character_height, &
       giza_get_character_height, &
       giza_get_character_size, &
+      giza_set_clipping, &
+      giza_get_clipping, &
       giza_set_colour_index, &
       giza_get_colour_index, &
       giza_set_colour_representation, &
@@ -293,6 +295,22 @@ private
       integer(kind=c_int),intent(in),value :: units
       real(kind=c_float),intent(out)       :: xch,ych
     end subroutine giza_get_character_size_float
+ end interface
+
+ interface giza_set_clipping
+    subroutine giza_set_clipping(clip) bind(C)
+      import
+      implicit none
+      integer(kind=c_int), value, intent(in) :: clip
+    end subroutine giza_set_clipping
+ end interface
+
+ interface giza_get_clipping
+    subroutine giza_get_clipping(clip) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(out) :: clip
+    end subroutine giza_get_clipping
  end interface
 
  interface giza_set_colour_index

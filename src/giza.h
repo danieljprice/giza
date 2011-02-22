@@ -57,6 +57,9 @@ void giza_get_character_height_float (float *ch);
 void giza_get_character_size (int units, double *heightx, double *heighty);
 void giza_get_character_size_float (int units, float *xch, float *ych);
 
+void giza_set_clipping (int clip);
+void giza_get_clipping (int *clip);
+
 void giza_set_colour_index (int ci);
 void giza_get_colour_index (int *ci);
 void giza_set_colour_representation (int ci, double red, double green,

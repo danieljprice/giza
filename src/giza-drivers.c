@@ -182,6 +182,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   _giza_init_fill ();
   _giza_init_band_style ();
   _giza_init_save ();
+  giza_set_clipping(1);
 
   return 0;
 }
