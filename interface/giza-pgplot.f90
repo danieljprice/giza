@@ -611,7 +611,7 @@ end subroutine PGLAB
 
 !------------------------------------------------------------------------
 ! Module: PGLCUR -- draw a line using the cursor
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGLCUR (MAXPT, NPT, X, Y)
  use giza, only:giza_mark_line
@@ -695,14 +695,17 @@ end subroutine PGMTXT
 
 !------------------------------------------------------------------------
 ! Module: PGNCUR -- mark a set of points using the cursor
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGNCUR (MAXPT, NPT, X, Y, SYMBOL)
+ use giza, only:giza_mark_points_ordered
  implicit none
  integer, intent(in)    :: MAXPT
  integer, intent(inout) :: NPT
  real,    intent(inout) :: X(*), Y(*)
  integer, intent(in)    :: SYMBOL
+
+ call giza_mark_points_ordered(MAXPT, NPT, X, Y, SYMBOL)
 
 end subroutine PGNCUR
 
@@ -1721,7 +1724,7 @@ end subroutine PGMTEXT
 
 !------------------------------------------------------------------------
 ! Module: PGNCURSE -- non-standard alias for PGNCUR
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGNCURSE (MAXPT, NPT, X, Y, SYMBOL)
  implicit none
