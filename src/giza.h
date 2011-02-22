@@ -202,6 +202,7 @@ void giza_set_font (char *font);
 void giza_get_font (char *font, int n);
 
 void giza_set_text_background (int colourIndex);
+void giza_get_text_background (int *colourIndex);
 
 void
 giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],

@@ -1157,11 +1157,14 @@ end subroutine PGQPOS
 
 !------------------------------------------------------------------------
 ! Module: PGQTBG -- inquire text background color index
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQTBG (TBCI)
+ use giza, only:giza_get_text_background
  implicit none
  integer, intent(out) :: TBCI
+ 
+ call giza_get_text_background(TBCI)
 
 end subroutine PGQTBG
 
@@ -1370,7 +1373,6 @@ end subroutine PGSCIR
 ! Module: PGSCLP -- enable or disable clipping at edge of viewport
 ! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
-
 subroutine PGSCLP(STATE)
  integer, intent(in) :: STATE
 
@@ -1380,7 +1382,6 @@ end subroutine PGSCLP
 ! Module: PGSCR -- set color representation
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
-
 subroutine PGSCR (CI, CR, CG, CB)
  use giza, only:giza_set_colour_representation
  implicit none
@@ -1395,7 +1396,6 @@ end subroutine PGSCR
 ! Module: PGSCRL -- scroll window
 ! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
-
 subroutine PGSCRL (DX, DY)
  implicit none
  real, intent(in) :: DX, DY
@@ -1406,7 +1406,6 @@ end subroutine PGSCRL
 ! Module: PGSCRN -- set color representation by name
 ! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
-
 subroutine PGSCRN(CI, NAME, IER)
  implicit none
  integer,       intent(in)  :: CI
@@ -1419,7 +1418,6 @@ end subroutine PGSCRN
 ! Module: PGSFS -- set fill-area style
 ! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
-
 subroutine PGSFS (FS)
  use giza, only:giza_set_fill
  implicit none
@@ -1433,7 +1431,6 @@ end subroutine PGSFS
 ! Module: PGSHLS -- set color representation using HLS system
 ! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
-
 subroutine PGSHLS (CI, CH, CL, CS)
  implicit none
  integer, intent(in) :: CI
@@ -1445,7 +1442,6 @@ end subroutine PGSHLS
 ! Module: PGSHS -- set hatching style
 ! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
-
 subroutine PGSHS (ANGLE, SEPN, PHASE)
  implicit none
  real, intent(in) :: ANGLE, SEPN, PHASE
@@ -1456,7 +1452,6 @@ end subroutine PGSHS
 ! Module: PGSITF -- set image transfer function
 ! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
-
 subroutine PGSITF (ITF)
  implicit none
  integer, intent(in) :: ITF
@@ -1501,11 +1496,14 @@ end subroutine PGSLW
 
 !------------------------------------------------------------------------
 ! Module: PGSTBG -- set text background color index
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSTBG (TBCI)
+ use giza, only:giza_set_text_background
  implicit none
  integer, intent(in) :: TBCI
+ 
+ call giza_set_text_background(TBCI)
 
 end subroutine PGSTBG
 

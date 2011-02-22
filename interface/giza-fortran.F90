@@ -86,6 +86,7 @@ module giza
       giza_start_prompting, &
       giza_stop_prompting, &
       giza_set_text_background, &
+      giza_get_text_background, &
       giza_text, &
       giza_ptext, &
       giza_qtext, &
@@ -965,6 +966,14 @@ private
       implicit none
       integer(kind=c_int), value, intent(in) :: ci
     end subroutine giza_set_text_background
+ end interface
+
+ interface giza_get_text_background
+    subroutine giza_get_text_background(ci) bind(C)
+      import
+      implicit none
+      integer(kind=c_int), intent(out) :: ci
+    end subroutine giza_get_text_background
  end interface
 
  interface giza_text_c

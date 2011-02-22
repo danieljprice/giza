@@ -32,3 +32,17 @@ giza_set_text_background (int colourIndex)
 {
   _giza_text_background = colourIndex;
 }
+
+/**
+ * Settings: giza_get_text_background
+ *
+ * Synopsis: Queries the current text background colour
+ *
+ * Output:
+ *  -colourIndex :- Current setting for the background text colour.
+ */
+void
+giza_get_text_background (int *colourIndex)
+{
+  *colourIndex = _giza_text_background;
+}
