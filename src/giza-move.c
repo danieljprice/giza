@@ -62,3 +62,45 @@ giza_move_float (float xpt, float ypt)
   giza_move((double) xpt, (double) ypt);
 
 }
+
+/**
+ * Drawing: giza_get_current_point
+ *
+ * Synopsis: Query current pen position
+ *
+ * Output:
+ *  -xpt :- The world x-coordinates of the point
+ *  -ypt :- The world y-coordinates of the point
+ *
+ * See Also: giza_get_current_point_float
+ */
+void
+giza_get_current_point (double *xpt, double *ypt)
+{
+  if (!_giza_check_device_ready ("giza_get_current_point"))
+    return;
+
+  int oldTrans = _giza_get_trans ();
+  _giza_set_trans (GIZA_TRANS_WORLD);
+  cairo_get_current_point (context, xpt, ypt);
+  _giza_set_trans (oldTrans);
+}
+
+/**
+ * Drawing: giza_get_current_point_float
+ *
+ * Synopsis: The same functionality as giza_get_current_point, but uses floats
+ *
+ * See Also: giza_get_current_point
+ */
+void
+giza_get_current_point_float (float *xpt, float *ypt)
+{
+  if (!_giza_check_device_ready ("giza_move"))
+    return;
+
+  double xptd, yptd;
+  giza_get_current_point(&xptd, &yptd);
+  *xpt = (float) xptd;
+  *ypt = (float) yptd;
+}

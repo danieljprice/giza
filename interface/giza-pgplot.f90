@@ -1147,11 +1147,14 @@ end subroutine PGQNDT
 
 !------------------------------------------------------------------------
 ! Module: PGQPOS -- inquire current pen position
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQPOS (X, Y)
+ use giza, only:giza_get_current_point
  implicit none
  real, intent(out) :: X, Y
+
+ call giza_get_current_point(X, Y)
 
 end subroutine PGQPOS
 

@@ -91,6 +91,9 @@ void giza_contour (int sizex, int sizey, const double data[sizey][sizex],
 		   int i1, int i2, int j1, int j2, int ncont,
 		   const double cont[ncont], const double *affine);
 
+void giza_get_current_point (double *xpt, double *ypt);
+void giza_get_current_point_float (float *xpt, float *ypt);
+
 void giza_print_device_list (void);
 int giza_open_device (char *newDeviceName, char *newPrefix);
 int giza_open_device_size (char *newDeviceName, char *newPrefix, double width,

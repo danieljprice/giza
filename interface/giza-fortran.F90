@@ -45,6 +45,7 @@ module giza
       giza_get_colour_representation_alpha, &
       giza_set_colour_table, &
       giza_contour, &
+      giza_get_current_point, &
       giza_rgb_from_table, &
       giza_print_device_list, &
       giza_open_device, &
@@ -408,6 +409,20 @@ private
       real(kind=c_float),intent(in) :: cont(ncont)
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_contour_float
+ end interface
+
+ interface giza_get_current_point
+    subroutine giza_get_current_point(xpt,ypt) bind(C)
+      import
+      implicit none
+      real(kind=c_double),intent(out) :: xpt,ypt
+    end subroutine giza_get_current_point
+    
+    subroutine giza_get_current_point_float(xpt,ypt) bind(C)
+      import
+      implicit none
+      real(kind=c_float),intent(out) :: xpt,ypt
+    end subroutine giza_get_current_point_float
  end interface
 
  interface giza_rgb_from_table
