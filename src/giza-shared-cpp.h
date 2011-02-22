@@ -1,4 +1,4 @@
-#define GIZA_LEFT_CLICK "A"
+#define GIZA_LEFT_CLICK 'A'
 
 #define GIZA_LS_SOLID      1
 #define GIZA_LS_LONG_DASH  2
