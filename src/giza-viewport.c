@@ -56,7 +56,11 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
   _giza_set_trans (GIZA_TRANS_NORM);
   cairo_reset_clip (context);
   cairo_rectangle (context, xleft, ybottom, xright - xleft, ytop - ybottom);
-  cairo_clip (context);
+
+  int clip;
+  giza_get_clipping(&clip);
+  if (clip)
+    cairo_clip (context);
 
   giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);
 }
@@ -178,7 +182,11 @@ giza_set_viewport_default (void)
   _giza_set_trans (GIZA_TRANS_NORM);
   cairo_reset_clip (context);
   cairo_rectangle (context, VP.xmin, VP.ymin, VP.xmax - VP.xmin, VP.ymax - VP.ymin);
-  cairo_clip (context);
+
+  int clip;
+  giza_get_clipping(&clip);
+  if (clip)
+    cairo_clip (context);
 }
 
 /**
