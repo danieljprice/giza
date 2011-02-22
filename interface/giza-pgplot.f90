@@ -1138,7 +1138,7 @@ end subroutine PGQLW
 
 !------------------------------------------------------------------------
 ! Module: PGQNDT -- inquire number of available device types
-! Status: PARTIALLY IMPLEMENTED
+! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQNDT(N)
  implicit none
@@ -1425,7 +1425,7 @@ end subroutine PGSCRN
 
 !------------------------------------------------------------------------
 ! Module: PGSFS -- set fill-area style
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSFS (FS)
  use giza, only:giza_set_fill
