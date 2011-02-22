@@ -100,6 +100,9 @@ module giza
       giza_round, &
       giza_save, &
       giza_set_font, &
+      giza_set_font_bold, &
+      giza_set_font_italic, &
+      giza_set_font_bold_italic, &
       giza_vector, &
       giza_set_viewport_default, &
       giza_set_viewport, &
@@ -1158,12 +1161,45 @@ private
     module procedure giza_intern_set_font_f2c
  end interface
 
+ interface giza_set_font_bold
+    module procedure giza_intern_set_font_bold_f2c
+ end interface
+
+ interface giza_set_font_italic
+    module procedure giza_intern_set_font_italic_f2c
+ end interface
+
+ interface giza_set_font_bold_italic
+    module procedure giza_intern_set_font_bold_italic_f2c
+ end interface
+
  interface giza_set_font_c
     subroutine giza_set_font_c(font) bind(C,name="giza_set_font")
       import
       implicit none
       character(kind=c_char,len=1),intent(in) :: font
     end subroutine giza_set_font_c
+ end interface
+ interface giza_set_font_bold_c
+    subroutine giza_set_font_bold_c(font) bind(C,name="giza_set_font_bold")
+      import
+      implicit none
+      character(kind=c_char,len=1),intent(in) :: font
+    end subroutine giza_set_font_bold_c
+ end interface
+ interface giza_set_font_italic_c
+    subroutine giza_set_font_italic_c(font) bind(C,name="giza_set_font_italic")
+      import
+      implicit none
+      character(kind=c_char,len=1),intent(in) :: font
+    end subroutine giza_set_font_italic_c
+ end interface
+ interface giza_set_font_bold_italic_c
+    subroutine giza_set_font_bold_italic_c(font) bind(C,name="giza_set_font_bold_italic")
+      import
+      implicit none
+      character(kind=c_char,len=1),intent(in) :: font
+    end subroutine giza_set_font_bold_italic_c
  end interface
 
  interface giza_vector
@@ -1467,6 +1503,30 @@ contains
     call giza_set_font_c(cstring(font))
 
   end subroutine giza_intern_set_font_f2c
+
+  subroutine giza_intern_set_font_bold_f2c(font)
+    implicit none
+    character(len=*),intent(in) :: font
+  
+    call giza_set_font_bold_c(cstring(font))
+
+  end subroutine giza_intern_set_font_bold_f2c
+
+  subroutine giza_intern_set_font_italic_f2c(font)
+    implicit none
+    character(len=*),intent(in) :: font
+  
+    call giza_set_font_italic_c(cstring(font))
+
+  end subroutine giza_intern_set_font_italic_f2c
+
+  subroutine giza_intern_set_font_bold_italic_f2c(font)
+    implicit none
+    character(len=*),intent(in) :: font
+  
+    call giza_set_font_bold_italic_c(cstring(font))
+
+  end subroutine giza_intern_set_font_bold_italic_f2c
 
   subroutine giza_format_number_f2c(mantissa,power,iform,string)
     implicit none
