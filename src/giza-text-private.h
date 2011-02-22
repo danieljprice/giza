@@ -34,4 +34,5 @@ void _giza_start_super (void);
 void _giza_stop_super (void);
 void _giza_start_sub (void);
 void _giza_stop_sub (void);
+void _giza_switch_font (int fonttype);
 

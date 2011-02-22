@@ -46,6 +46,11 @@
 #define GIZA_TOKEN_INTEGRAL 10
 #define GIZA_TOKEN_NABLA 11
 
+#define GIZA_TOKEN_FONT_NORMAL 12
+#define GIZA_TOKEN_FONT_ROMAN 13
+#define GIZA_TOKEN_FONT_ITALIC 14
+#define GIZA_TOKEN_FONT_SCRIPT 15
+
 #define GIZA_TOKEN_ALPHA   21
 #define GIZA_TOKEN_BETA    22
 #define GIZA_TOKEN_GAMMA   23
@@ -112,9 +117,14 @@ RAISE    "\\u"
 LOWER    "\\d"
 OB       \173 
 CB       \175
-TIMES    "\\times"
+TIMES    "\\times"|"\\x"
 INTEGRAL "\\int"|"\\(2268)"
 NABLA    "\\nabla"|"\\(2266)"
+
+FONT_NORMAL "\\fn"
+FONT_ROMAN "\\fr"|"\\rm"
+FONT_ITALIC "\\fi"|"\\it"
+FONT_SCRIPT "\\fs"|"\\cal"
 
 ALPHA    "\\ga"|"\\alpha"
 BETA     "\\gb"|"\\beta"
@@ -167,7 +177,7 @@ BIGPSI     "\\gQ"|"\\Psi"
 BIGOMEGA   "\\gW"|"\\Omega"
 
 OTHER  [\0-\135]|[\138-\172]|[\174]|[\176-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
-PRINT  {TIMES}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
+PRINT  {FONT_NORMAL}|{FONT_ROMAN}|{FONT_ITALIC}|{FONT_SCRIPT}|{TIMES}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
 ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
 
 %%
@@ -185,6 +195,11 @@ ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\
 {CB}    { return GIZA_TOKEN_CB; }
 
 {OTHER} { return GIZA_TOKEN_OTHER; }
+
+{FONT_NORMAL} { return GIZA_TOKEN_FONT_NORMAL; }
+{FONT_ROMAN} { return GIZA_TOKEN_FONT_ROMAN; }
+{FONT_ITALIC} { return GIZA_TOKEN_FONT_ITALIC; }
+{FONT_SCRIPT} { return GIZA_TOKEN_FONT_SCRIPT; }
 
 {TIMES} { return GIZA_TOKEN_TIMES; }
 {INTEGRAL} { return GIZA_TOKEN_INTEGRAL; }
@@ -399,6 +414,47 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
              insub += 1;
             }
           break;
+        case GIZA_TOKEN_FONT_NORMAL:
+        case GIZA_TOKEN_FONT_ROMAN:
+        case GIZA_TOKEN_FONT_ITALIC:
+        case GIZA_TOKEN_FONT_SCRIPT:
+          // Perform action on the text so far parsed
+          action (processed, width, height);
+          processed[0] = '\0';
+
+          // Parse the brackets
+          chunkLength = _giza_get_chunk (text + posInText);
+          strncpy (processed, text + posInText, chunkLength);
+          processed[chunkLength] = '\0';
+
+          // perform action on this chunk
+          switch (token)
+            {
+            case GIZA_TOKEN_FONT_SCRIPT:
+              _giza_switch_font (4);
+              break;
+            case GIZA_TOKEN_FONT_ITALIC:
+              _giza_switch_font (3);
+              break;
+            case GIZA_TOKEN_FONT_ROMAN:
+              _giza_switch_font (2);
+              break;
+            case GIZA_TOKEN_FONT_NORMAL:
+              _giza_switch_font (1);
+              break;
+            }
+          _giza_parse_string (processed, width, height, action);
+
+          // restart the scanner at the new position!
+          yylex_destroy (scanner);
+          yylex_init (&scanner);
+          yy_scan_string (text + posInText + chunkLength, scanner);
+
+          posInText += chunkLength;
+
+          processed[0] = '\0';
+          break;
+
         case GIZA_TOKEN_END:
           stop = 1;
           break;

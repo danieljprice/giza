@@ -126,3 +126,27 @@ _giza_stop_sub (void)
   cairo_rel_move_to (context, x, y);
   _giza_set_trans (oldTrans);
 }
+
+/**
+ * Switches font family during text write
+ *
+ */
+void
+_giza_switch_font (int fonttype)
+{
+  switch(fonttype)
+    {
+    case 4:
+      giza_set_font("cursive");
+      break;
+    case 3:
+      giza_set_font_italic("times");
+      break;
+    case 2:
+      giza_set_font("times");
+      break;
+    case 1:
+      giza_set_font(" ");
+      break;
+    }
+}
