@@ -1352,7 +1352,7 @@ subroutine PGSCF (FONT)
  case(2)
     call giza_set_font('times')
  case default
-    call giza_set_font(' ')
+    call giza_set_font('arial')
  end select
  !
  !--this is a setting for the PGPLOT frontend only

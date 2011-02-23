@@ -146,7 +146,7 @@ _giza_switch_font (int fonttype)
       giza_set_font("times");
       break;
     case 1:
-      giza_set_font(" ");
+      giza_set_font("arial");
       break;
     }
 }
