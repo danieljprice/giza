@@ -117,7 +117,7 @@ giza_set_colour_representation (int ci, double red, double green, double blue)
 
 /*  if (ci == 0)
     {
-      _giza_draw_background ();
+      giza_draw_background ();
     }
 */
 }
@@ -179,7 +179,7 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
 
 /*  if (ci == 0)
     {
-      _giza_draw_background ();
+      giza_draw_background ();
     }
 */
 }

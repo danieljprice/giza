@@ -12,16 +12,37 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
-#if CAIRO_VERSION_MINOR >= 6
-#define _GIZA_HAS_EPS 1
-int _giza_open_device_eps (int vert);
-void _giza_flush_device_eps (void);
-void _giza_change_page_eps (void);
-void _giza_close_device_eps (void);
+#include "giza-private.h"
+#include "giza-io-private.h"
+#include <giza.h>
 
-#endif
+/**
+ * Drawing: giza_draw_background
+ *
+ * Synopsis: Redraws the background of the currently open device (erase)
+ *
+ */
+void
+giza_draw_background (void)
+{
+  if (!_giza_check_device_ready ("giza_draw_background"))
+    return;
+
+  int oldCi;
+  giza_get_colour_index (&oldCi);
+
+  cairo_save (context);
+  cairo_reset_clip (context);
+  giza_set_colour_index (0);
+  cairo_paint (context);
+  cairo_restore (context);
+
+  giza_set_colour_index (oldCi);
+  return;
+}

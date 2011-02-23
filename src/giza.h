@@ -114,6 +114,8 @@ int giza_get_key_press_float (float *x, float *y, char *ch);
 void giza_draw (double xpt, double ypt);
 void giza_draw_float (float xpt, float ypt);
 
+void giza_draw_background (void);
+
 void giza_set_environment (double xmin, double xmax, double ymin, double ymax,
 			   int just, int axis);
 void giza_set_environment_float (float xmin, float xmax, float ymin,

@@ -21,4 +21,3 @@ int _giza_open_device_null (void);
 void _giza_flush_device_null (void);
 void _giza_change_page_null (void);
 void _giza_close_device_null (void);
-void _giza_draw_background_null (void);

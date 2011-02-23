@@ -105,19 +105,6 @@ _giza_close_device_eps (void)
 }
 
 /**
- * Draws the background
- */
-void
-_giza_draw_background_eps (void)
-{
-  cairo_save (context);
-  cairo_reset_clip (context);
-  giza_set_colour_index (0);
-  cairo_paint (context);
-  cairo_restore (context);
-}
-
-/**
  * Change the page
  */
 void

@@ -216,20 +216,6 @@ _giza_init_norm_xw (void)
 }
 
 /**
- * NOTE: This needs to be redone!
- * redraws the background colour.
- */
-void
-_giza_draw_background_xw (void)
-{
-  cairo_save (context);
-  cairo_reset_clip (context);
-  giza_set_colour_index (0);
-  cairo_paint (context);
-  cairo_restore (context);
-}
-
-/**
  * This routine closes the X window device and cleans up associated memory.
  *
  * If propting is turned on this will not occur until a key is pressed

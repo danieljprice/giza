@@ -23,7 +23,6 @@ int _giza_open_device_xw (void);
 void _giza_init_norm_xw (void);
 void _giza_flush_device_xw (void);
 void _giza_change_page_xw (void);
-void _giza_draw_background_xw (void);
 void _giza_close_device_xw (void);
 void _giza_expand_clipping_xw (void);
 void _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanch, double *x, double *y, char *ch);

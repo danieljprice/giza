@@ -170,7 +170,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();
-  _giza_draw_background ();
+  giza_draw_background ();
   _giza_init_colour_table ();
   _giza_set_trans (GIZA_TRANS_IDEN);
   _giza_init_norm ();
@@ -332,7 +332,7 @@ giza_change_page (void)
   giza_set_line_width (oldLw);
   giza_set_colour_index (oldCi);
   _giza_reset_drawn ();
-  _giza_draw_background ();
+  giza_draw_background ();
   giza_flush_device ();
   return;
 }
@@ -443,53 +443,6 @@ giza_query_device (char *querytype, char *returnval)
     }
    /*  else if (!strcmp(querytype,"file")) */
   return ierr;
-}
-
-/**
- * Redraws the background of the currently open device
- */
-void
-_giza_draw_background (void)
-{
-  if (!_giza_check_device_ready ("_giza_draw_background"))
-    return;
-
-  int oldCi;
-  giza_get_colour_index (&oldCi);
-
-  switch (Dev.type)
-    {
-#ifdef _GIZA_HAS_XW
-    case GIZA_DEVICE_XW:
-      _giza_draw_background_xw ();
-      break;
-#endif
-    case GIZA_DEVICE_PNG:
-      _giza_draw_background_png ();
-      break;
-    case GIZA_DEVICE_PDF:
-    case GIZA_DEVICE_VPDF:
-      _giza_draw_background_pdf ();
-      break;
-    case GIZA_DEVICE_PS:
-    case GIZA_DEVICE_VPS:
-      _giza_draw_background_ps ();
-      break;
-    case GIZA_DEVICE_NULL:
-      _giza_draw_background_null ();
-      break;
-#ifdef _GIZA_HAS_EPS
-    case GIZA_DEVICE_EPS:
-      _giza_draw_background_eps ();
-      break;
-#endif
-    default:
-      _giza_error ("giza_draw_background", "No device open, cannot draw background");
-      break;
-    }
-
-  giza_set_colour_index (oldCi);
-  return;
 }
 
 /**

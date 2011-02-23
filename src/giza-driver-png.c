@@ -149,15 +149,3 @@ _giza_close_device_png (void)
   cairo_surface_destroy (surface);
 }
 
-/**
- * Redraws the background.
- */
-void
-_giza_draw_background_png (void)
-{
-  cairo_save (context);
-  cairo_reset_clip (context);
-  giza_set_colour_index (0);
-  cairo_paint (context);
-  cairo_restore (context);
-}

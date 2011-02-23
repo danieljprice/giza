@@ -115,17 +115,3 @@ _giza_close_device_ps (void)
 {
   cairo_surface_destroy (surface);
 }
-
-/**
- * NOTE: Transparent background should be default.
- * Draws the ps background.
- */
-void
-_giza_draw_background_ps (void)
-{
-  cairo_save (context);
-  cairo_reset_clip (context);
-  giza_set_colour_index (0);
-  cairo_paint (context);
-  cairo_restore (context);
-}

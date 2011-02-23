@@ -77,7 +77,7 @@ _giza_flush_device_null (void)
 void
 _giza_change_page_null (void)
 {
-  _giza_draw_background_null ();
+  giza_draw_background ();
 }
 
 /**
@@ -88,17 +88,4 @@ void
 _giza_close_device_null (void)
 {
   cairo_surface_destroy (surface);
-}
-
-/**
- * Draws the background.
- */
-void
-_giza_draw_background_null (void)
-{
-  cairo_save (context);
-  cairo_reset_clip (context);
-  giza_set_colour_index (0);
-  cairo_paint (context);
-  cairo_restore (context);
 }

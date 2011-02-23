@@ -59,6 +59,7 @@ module giza
       giza_get_key_press, &
       giza_device_has_cursor, &
       giza_draw, &
+      giza_draw_background, &
       giza_set_environment, &
       giza_error_bars, &
       giza_error_bars_x, &
@@ -566,6 +567,11 @@ private
       implicit none
       real(kind=c_float),intent(in),value :: x,y
     end subroutine giza_draw_float
+ end interface
+
+ interface giza_draw_background
+    subroutine giza_draw_background() bind(C)
+    end subroutine
  end interface
 
  interface giza_set_environment
