@@ -69,6 +69,8 @@ module giza
       giza_function_y, &
       giza_function_t, &
       giza_get_surface_size, &
+      giza_set_hatching_style, &
+      giza_get_hatching_style, &
       giza_label, &
       giza_line, &
       giza_set_line_width, &
@@ -719,6 +721,34 @@ private
       real(kind=c_double),intent(out) :: x1,x2,y1,y2
     end subroutine giza_get_surface_size
  end interface
+ 
+ interface giza_set_hatching_style
+    subroutine giza_set_hatching_style(angle,spacing,phase) bind(C)
+      import
+      implicit none
+      real(kind=c_double),intent(in) :: angle,spacing,phase
+    end subroutine giza_set_hatching_style
+
+    subroutine giza_set_hatching_style_float(angle,spacing,phase) bind(C)
+      import
+      implicit none
+      real(kind=c_float),intent(in) :: angle,spacing,phase
+    end subroutine giza_set_hatching_style_float
+ end interface giza_set_hatching_style
+
+ interface giza_get_hatching_style
+    subroutine giza_get_hatching_style(angle,spacing,phase) bind(C)
+      import
+      implicit none
+      real(kind=c_double),intent(out) :: angle,spacing,phase
+    end subroutine giza_get_hatching_style
+
+    subroutine giza_get_hatching_style_float(angle,spacing,phase) bind(C)
+      import
+      implicit none
+      real(kind=c_float),intent(out) :: angle,spacing,phase
+    end subroutine giza_get_hatching_style_float
+ end interface giza_get_hatching_style
 
  interface giza_label
     module procedure giza_intern_label_f2c
