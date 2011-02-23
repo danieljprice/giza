@@ -152,6 +152,11 @@ void giza_get_surface_size_float (float *x1, float *x2, float *y1, float *y2);
 
 int giza_device_has_cursor (void);
 
+void giza_set_hatching_style (double angle, double spacing, double phase);
+void giza_set_hatching_style_float (float angle, float spacing, float phase);
+void giza_get_hatching_style (double *angle, double *spacing, double *phase);
+void giza_get_hatching_style_float (float *angle, float *spacing, float *phase);
+
 void giza_label (char *labelx, char *labely, char *title);
 
 void giza_line (int n, double *xpts, double *ypts);

@@ -1036,11 +1036,14 @@ end subroutine PGQFS
 
 !------------------------------------------------------------------------
 ! Module: PGQHS -- inquire hatching style
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQHS (ANGLE, SEPN, PHASE)
+ use giza, only:giza_get_hatching_style
  implicit none
  real, intent(out) :: ANGLE, SEPN, PHASE
+
+ call giza_get_hatching_style(ANGLE,SEPN,PHASE)
 
 end subroutine PGQHS
 
@@ -1467,11 +1470,14 @@ end subroutine PGSHLS
 
 !------------------------------------------------------------------------
 ! Module: PGSHS -- set hatching style
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSHS (ANGLE, SEPN, PHASE)
+ use giza, only:giza_set_hatching_style
  implicit none
  real, intent(in) :: ANGLE, SEPN, PHASE
+
+ call giza_set_hatching_style(ANGLE,SEPN,PHASE)
 
 end subroutine PGSHS
 

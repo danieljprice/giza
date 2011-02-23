@@ -23,6 +23,7 @@
 #include "giza-io-private.h"
 #include "giza-stroke-private.h"
 #include "giza-transforms-private.h"
+#include <math.h>
 
 #define GIZA_FILL_SOLID  1
 #define GIZA_FILL_HOLLOW 2
@@ -33,6 +34,9 @@
 
 
 int _giza_fill_style;
+double _giza_hatch_angle;
+double _giza_hatch_spacing;
+double _giza_hatch_phase;
 
 /**
  * Settings: giza_set_fill
@@ -84,6 +88,9 @@ void
 _giza_init_fill (void)
 {
   _giza_fill_style = GIZA_FILL_SOLID;
+  _giza_hatch_angle = 45.;
+  _giza_hatch_spacing = 1.;
+  _giza_hatch_phase = 0.;
 }
 
 /**
@@ -105,6 +112,8 @@ _giza_fill (void)
   int ci;
   int hatch_size;
   int lw;
+  double cosangle,sinangle,dx;
+  double pi = 3.1415926536;
 
   switch (_giza_fill_style)
     {
@@ -115,7 +124,7 @@ _giza_fill (void)
        * because the hatching needs to be done 
        * with the current colour index
        */
-      hatch_size = 7;
+      hatch_size = (int) 7.*_giza_hatch_spacing;
       lw = 1.5;
       /* create a temporary bitmap (cairo surface) to hold the hatching pattern */
       hatchsurface = cairo_surface_create_similar(cairo_get_target(context),
@@ -137,10 +146,15 @@ _giza_fill (void)
       //cairo_set_line_cap(ct, CAIRO_LINE_CAP_BUTT);
       //cairo_set_line_join(ct, CAIRO_LINE_JOIN_BEVEL);
       //cairo_pattern_set_extend(cairo_get_source(ct), CAIRO_EXTEND_PAD);
+      
+      cosangle = sqrt(2.)*cos(pi*_giza_hatch_angle/180.);
+      sinangle = sqrt(2.)*sin(pi*_giza_hatch_angle/180.);
+      printf(" cos = %f sin = %f angle = %f \n",cosangle,sinangle,_giza_hatch_angle);
+      dx = hatch_size*_giza_hatch_phase;
       if (_giza_fill_style == GIZA_FILL_CROSSHATCH) 
         {
-          cairo_move_to(ct, hatch_size, hatch_size);
-          cairo_line_to(ct, 0., 0.);
+          cairo_move_to(ct, hatch_size*cosangle + dx, hatch_size*sinangle);
+          cairo_line_to(ct, dx, 0.);
         } else {
           /* the antialiasing causes a dashed look in the hatched pattern
            * that is fixed by turning it off - there should be a better 
@@ -149,8 +163,8 @@ _giza_fill (void)
            * rendered to the surface */
           cairo_set_antialias(ct, CAIRO_ANTIALIAS_NONE);    
         }
-      cairo_move_to(ct, 0., hatch_size);
-      cairo_line_to(ct, hatch_size, 0.);
+      cairo_move_to(ct, dx, hatch_size*sinangle);
+      cairo_line_to(ct, hatch_size*cosangle + dx, 0.);
       cairo_stroke(ct);
 
       /* finally, make our surface (bitmap) into a pattern object that can be used for fills */
@@ -183,4 +197,74 @@ _giza_fill (void)
     }
 
   _giza_set_trans (oldTrans);
+}
+
+/**
+ * Settings: giza_set_hatching_style
+ *
+ * Synopsis: Sets the hatching style when using GIZA_FILL_HATCH
+ *
+ * Input:
+ *  -angle   :- the angle of the hatching pattern with respect to the horizontal
+ *  -spacing :- the line spacing, in units of the default (1.0)
+ *  -phase   :- a number between 0.0 and 1.0 specifying the offset
+ *              along the horizontal axis to start the hatching lines
+ *
+ * See Also: giza_fill, giza_get_hatching_style
+ */
+void
+giza_set_hatching_style (double angle, double spacing, double phase)
+{
+  _giza_hatch_angle = angle;
+  _giza_hatch_spacing = spacing;
+  _giza_hatch_phase = phase;
+}
+
+/**
+ * Settings: giza_set_hatching_style_float
+ *
+ * Synopsis: Same as giza_set_hatching_style, but takes floats
+ *
+ */
+void
+giza_set_hatching_style_float (float angle, float spacing, float phase)
+{
+  _giza_hatch_angle = (double) angle;
+  _giza_hatch_spacing = (double) spacing;
+  _giza_hatch_phase = (double) phase;
+}
+
+/**
+ * Settings: giza_get_hatching_style
+ *
+ * Synopsis: Queries the current hatching style wgen using GIZA_FILL_HATCH
+ *
+ * Output:
+ *  -angle   :- the angle of the hatching pattern with respect to the horizontal
+ *  -spacing :- the line spacing, in units of the default (1.0)
+ *  -phase   :- a number between 0.0 and 1.0 specifying the offset
+ *              along the horizontal axis to start the hatching lines
+ *
+ * See Also: giza_fill, giza_set_hatching_style
+ */
+void
+giza_get_hatching_style (double *angle, double *spacing, double *phase)
+{
+  *angle = _giza_hatch_angle;
+  *spacing = _giza_hatch_spacing;
+  *phase = _giza_hatch_phase;
+}
+
+/**
+ * Settings: giza_get_hatching_style_float
+ *
+ * Synopsis: Same as giza_get_hatching_style, but takes floats
+ *
+ */
+void
+giza_get_hatching_style_float (float *angle, float *spacing, float *phase)
+{
+  *angle = (float) _giza_hatch_angle;
+  *spacing = (float) _giza_hatch_spacing;
+  *phase = (float) _giza_hatch_phase;
 }
