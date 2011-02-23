@@ -726,13 +726,13 @@ private
     subroutine giza_set_hatching_style(angle,spacing,phase) bind(C)
       import
       implicit none
-      real(kind=c_double),intent(in) :: angle,spacing,phase
+      real(kind=c_double),intent(in),value :: angle,spacing,phase
     end subroutine giza_set_hatching_style
 
     subroutine giza_set_hatching_style_float(angle,spacing,phase) bind(C)
       import
       implicit none
-      real(kind=c_float),intent(in) :: angle,spacing,phase
+      real(kind=c_float),intent(in),value :: angle,spacing,phase
     end subroutine giza_set_hatching_style_float
  end interface giza_set_hatching_style
 
