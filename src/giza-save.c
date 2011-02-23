@@ -37,6 +37,8 @@ double arrowcutback[GIZA_SAVE_MAX];
 double hatch_angle[GIZA_SAVE_MAX];
 double hatch_spacing[GIZA_SAVE_MAX];
 double hatch_phase[GIZA_SAVE_MAX];
+double band_lw[GIZA_SAVE_MAX];
+int band_ls[GIZA_SAVE_MAX];
 
 /**
  * Settings: giza_save
@@ -67,6 +69,7 @@ giza_save (void)
   giza_get_arrow_style(&arrowfs[i],&arrowangle[i],&arrowcutback[i]);
 //  giza_get_font(&font[i]);
   giza_get_hatching_style(&hatch_angle[i],&hatch_spacing[i],&hatch_phase[i]);
+  giza_get_band_style(&band_ls[i],&band_lw[i]);
 }
 
 /**
@@ -99,6 +102,7 @@ giza_restore (void)
   giza_set_arrow_style(arrowfs[i],arrowangle[i],arrowcutback[i]);
 // giza_set_font(&font[i]);
   giza_set_hatching_style(hatch_angle[i],hatch_spacing[i],hatch_phase[i]);
+  giza_set_band_style(band_ls[i],band_lw[i]);
 
 }
 

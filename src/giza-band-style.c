@@ -20,6 +20,7 @@
 #include "giza-private.h"
 #include "giza-io-private.h"
 #include "giza-band-private.h"
+#include <giza.h>
 
 /**
  * Settings: giza_set_band_style
@@ -30,13 +31,31 @@
  *  -ls :- the line style for the band
  *  -lw :- the width for the line
  *
- * See Also: giza_band
+ * See Also: giza_band, giza_get_band_style
  */
 void
 giza_set_band_style (int ls, double lw)
 {
   Band.ls = ls;
   Band.lw = lw;
+}
+
+/**
+ * Settings: giza_get_band_style
+ *
+ * Synopsis: Queries the current band style settings to be used by giza_band
+ *
+ * Output:
+ *  -ls :- the line style for the band
+ *  -lw :- the width for the line
+ *
+ * See Also: giza_band, giza_set_band_style
+ */
+void
+giza_get_band_style (int *ls, double *lw)
+{
+  *ls = Band.ls;
+  *lw = Band.lw;
 }
 
 /**

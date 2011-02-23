@@ -37,6 +37,7 @@ void giza_annotate_float (char *side, float displacment, float coord,
 int giza_band (int mode, int moveCursm, double xanc, double yanc, double *x,
 	       double *y, char *ch);
 
+void giza_get_band_style (int *ls, double *lw);
 void giza_set_band_style (int ls, double lw);
 
 void giza_box (const char *xopt, double xtick, int nxsub,
