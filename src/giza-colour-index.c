@@ -356,6 +356,13 @@ _giza_init_colour_index (void)
   // peach puff
   giza_set_colour_representation (10, 0.933, 0.796, 0.678);
 
+  giza_set_colour_representation (11, 0.0, 1.0, 0.5);
+  giza_set_colour_representation (12, 0.0, 0.5, 1.0);
+  giza_set_colour_representation (13, 0.5, 0.0, 0.0);
+  giza_set_colour_representation (14, 1.0, 0.0, 0.5);
+  giza_set_colour_representation (15, 0.333, 0.333, 0.333);
+  giza_set_colour_representation (16, 0.667, 0.667, 0.667);
+
   // All alpha default to 1
   colourIndex[0][3] = Dev.defaultBackgroundAlpha;
   int i;
