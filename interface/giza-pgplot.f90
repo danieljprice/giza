@@ -406,10 +406,14 @@ end subroutine PGENV
 
 !------------------------------------------------------------------------
 ! Module: PGERAS -- erase all graphics from current page
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGERAS
+ use giza, only:giza_draw_background
  implicit none
+ 
+ call giza_draw_background()
+ 
 end subroutine PGERAS
 
 !------------------------------------------------------------------------
