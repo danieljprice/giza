@@ -30,9 +30,13 @@ int ls[GIZA_SAVE_MAX];
 int lc[GIZA_SAVE_MAX];
 int fs[GIZA_SAVE_MAX];
 int ci[GIZA_SAVE_MAX];
+int textbgci[GIZA_SAVE_MAX];
 int arrowfs[GIZA_SAVE_MAX];
 double arrowangle[GIZA_SAVE_MAX];
 double arrowcutback[GIZA_SAVE_MAX];
+double hatch_angle[GIZA_SAVE_MAX];
+double hatch_spacing[GIZA_SAVE_MAX];
+double hatch_phase[GIZA_SAVE_MAX];
 
 /**
  * Settings: giza_save
@@ -58,9 +62,11 @@ giza_save (void)
   giza_get_line_cap(&lc[i]);
   giza_get_fill(&fs[i]);
   giza_get_colour_index(&ci[i]);
+  giza_get_text_background(&textbgci[i]);
   giza_get_character_height(&ch[i]);
   giza_get_arrow_style(&arrowfs[i],&arrowangle[i],&arrowcutback[i]);
 //  giza_get_font(&font[i]);
+  giza_get_hatching_style(&hatch_angle[i],&hatch_spacing[i],&hatch_phase[i]);
 }
 
 /**
@@ -88,9 +94,11 @@ giza_restore (void)
   giza_set_line_cap(lc[i]);
   giza_set_fill(fs[i]);
   giza_set_colour_index(ci[i]);
+  giza_set_text_background(textbgci[i]);
   giza_set_character_height(ch[i]);
   giza_set_arrow_style(arrowfs[i],arrowangle[i],arrowcutback[i]);
 // giza_set_font(&font[i]);
+  giza_set_hatching_style(hatch_angle[i],hatch_spacing[i],hatch_phase[i]);
 
 }
 
