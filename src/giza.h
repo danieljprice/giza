@@ -46,6 +46,7 @@ void giza_box_float (const char *xopt, float xtick, int nxsub,
 
 void giza_begin_buffer (void);
 void giza_end_buffer (void);
+void giza_flush_buffer (void);
 
 void giza_circle (double x, double y, double r);
 void giza_circle_float (float x, float y, float r);

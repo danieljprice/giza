@@ -33,6 +33,7 @@ module giza
       giza_box, &
       giza_begin_buffer, &
       giza_end_buffer, &
+      giza_flush_buffer, &
       giza_circle, &
       giza_set_character_height, &
       giza_get_character_height, &
@@ -240,6 +241,11 @@ private
  interface giza_end_buffer
     subroutine giza_end_buffer() bind(C)
     end subroutine giza_end_buffer
+ end interface
+
+ interface giza_flush_buffer
+    subroutine giza_flush_buffer() bind(C)
+    end subroutine giza_flush_buffer
  end interface
 
  interface giza_circle

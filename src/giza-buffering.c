@@ -26,7 +26,7 @@
  *
  * Synopsis: Begins buffering
  *
- * See Also: giza_end_buffer
+ * See Also: giza_end_buffer, giza_flush_buffer
  */
 void
 giza_begin_buffer (void)
@@ -40,7 +40,7 @@ giza_begin_buffer (void)
  *
  * Synopsis: Ends buffering
  *
- * See Also: giza_begin_buffer
+ * See Also: giza_begin_buffer, giza_flush_buffer
  */
 void
 giza_end_buffer (void)
@@ -48,4 +48,21 @@ giza_end_buffer (void)
   if(!_giza_check_device_ready ("giza_end_buffer")) return;
   giza_flush_device ();
   Sets.buf = 0;
+}
+
+/**
+ * Settings: giza_flush_buffer
+ *
+ * Synopsis: Updates graphics display
+ *           Can be used to flush the graphics buffer
+ *           manually between calls to giza_begin_buffer
+ *           and giza_end_buffer
+ *
+ * See Also: giza_begin_buffer, giza_end_buffer
+ */
+void
+giza_flush_buffer (void)
+{
+  if(!_giza_check_device_ready ("giza_flush_buffer")) return;
+  giza_flush_device ();
 }

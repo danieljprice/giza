@@ -1609,10 +1609,13 @@ end subroutine PGTICK
 
 !------------------------------------------------------------------------
 ! Module: PGUPDT -- update display
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGUPDT
+ use giza, only:giza_flush_buffer
  implicit none
+ 
+ call giza_flush_buffer()
 
 end subroutine PGUPDT
 
