@@ -112,8 +112,11 @@ _giza_fill (void)
   int ci;
   int hatch_size;
   int lw;
-  double cosangle,sinangle,dx;
+  double cosangle,sinangle,dx,sizex,sizey;
   double pi = 3.1415926536;
+  int i;
+  int ntile = 4;
+  cairo_matrix_t mat;
 
   switch (_giza_fill_style)
     {
@@ -124,19 +127,42 @@ _giza_fill (void)
        * because the hatching needs to be done 
        * with the current colour index
        */
-      hatch_size = (int) 7.*_giza_hatch_spacing;
+      hatch_size = (int) 8.*_giza_hatch_spacing;
+      if (hatch_size <= 0)
+        {
+          _giza_error("giza_fill","hatch spacing <= 0, ignoring fill attributes");
+        }
       lw = 1.5;
       /* create a temporary bitmap (cairo surface) to hold the hatching pattern */
-      hatchsurface = cairo_surface_create_similar(cairo_get_target(context),
-                                                  CAIRO_CONTENT_COLOR,hatch_size,hatch_size);
+      cosangle = sqrt(2.)*cos(pi*_giza_hatch_angle/180.);
+      sinangle = sqrt(2.)*sin(pi*_giza_hatch_angle/180.);
+      if (cosangle > 0.)
+        {
+          sizex = 4.*hatch_size/cosangle;
+        } else {
+          sizex = hatch_size;
+        }
+//      sizex = 4.*hatch_size/cosangle;
+      
+      if (sinangle > 0.)
+        {
+          sizey = 4.*hatch_size/sinangle;
+        } else {
+          sizey = hatch_size;
+        }
+      
+      printf("sizex = %f sizey = %f cos %f sin %f spacing %i \n",sizex,sizey,cosangle,sinangle,hatch_size);
+  //    hatchsurface = cairo_surface_create_similar(cairo_get_target(context),
+    //                                              CAIRO_CONTENT_COLOR,sizex,sizey);
+      hatchsurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,sizex,sizey);
       ct = cairo_create(hatchsurface);
       /* query the current background colour and 
        * set the paint colour equal to this      */
-      giza_get_colour_representation_alpha(GIZA_BACKGROUND_COLOUR,&ri,&gi,&bi,&alphai);
-      cairo_set_source_rgba(ct, ri, gi, bi, alphai);
+     // giza_get_colour_representation_alpha(GIZA_BACKGROUND_COLOUR,&ri,&gi,&bi,&alphai);
+   //   cairo_set_source_rgba(ct, ri, gi, bi, alphai);
       /* paint with this pattern */
-      cairo_rectangle(ct,0,0,hatch_size,hatch_size);
-      cairo_fill(ct);
+//      cairo_rectangle(ct,0,0,sizex,sizey);
+ //     cairo_fill(ct);
 
       /* draw lines making the pattern with current colour index */
       giza_get_colour_index(&ci);
@@ -147,14 +173,20 @@ _giza_fill (void)
       //cairo_set_line_join(ct, CAIRO_LINE_JOIN_BEVEL);
       //cairo_pattern_set_extend(cairo_get_source(ct), CAIRO_EXTEND_PAD);
       
-      cosangle = sqrt(2.)*cos(pi*_giza_hatch_angle/180.);
-      sinangle = sqrt(2.)*sin(pi*_giza_hatch_angle/180.);
       printf(" cos = %f sin = %f angle = %f \n",cosangle,sinangle,_giza_hatch_angle);
       dx = hatch_size*_giza_hatch_phase;
       if (_giza_fill_style == GIZA_FILL_CROSSHATCH) 
         {
-          cairo_move_to(ct, hatch_size*cosangle + dx, hatch_size*sinangle);
-          cairo_line_to(ct, dx, 0.);
+          /* draw lines going in the \ direction */
+         for (i = 0; i < 3*ntile; i++)
+            {
+             cairo_move_to(ct, sizex + dx, i*hatch_size*sinangle); // bottom left corner
+             cairo_line_to(ct, dx, (i-1)*hatch_size*sinangle); // top right corner
+            }
+
+          //cairo_move_to(ct, hatch_size*cosangle + dx, hatch_size*sinangle);
+          //cairo_line_to(ct, dx, 0.);
+          //cairo_set_antialias(ct, CAIRO_ANTIALIAS_NONE);    
         } else {
           /* the antialiasing causes a dashed look in the hatched pattern
            * that is fixed by turning it off - there should be a better 
@@ -163,12 +195,19 @@ _giza_fill (void)
            * rendered to the surface */
           cairo_set_antialias(ct, CAIRO_ANTIALIAS_NONE);    
         }
-      cairo_move_to(ct, dx, hatch_size*sinangle);
-      cairo_line_to(ct, hatch_size*cosangle + dx, 0.);
+      
+      /* draw lines going in the / direction */
+      for (i = 0; i < 3*ntile; i++)
+         {
+          cairo_move_to(ct, dx, sizey - (i-1)*hatch_size*sinangle); // bottom left corner
+          cairo_line_to(ct, sizex + dx, sizey - i*hatch_size*sinangle); // top right corner
+         }
       cairo_stroke(ct);
 
       /* finally, make our surface (bitmap) into a pattern object that can be used for fills */
       hatchpattern = cairo_pattern_create_for_surface(hatchsurface);
+      
+      cairo_surface_write_to_png(hatchsurface,"hatch.png");
 
       /* finished with the temporary surface, so we can get rid of it */
       cairo_surface_destroy(hatchsurface);
@@ -232,6 +271,7 @@ giza_set_hatching_style_float (float angle, float spacing, float phase)
   _giza_hatch_angle = (double) angle;
   _giza_hatch_spacing = (double) spacing;
   _giza_hatch_phase = (double) phase;
+//  printf(" got angle = %f spacing = %f phase = %f \n",_giza_hatch_angle,_giza_hatch_spacing,_giza_hatch_phase);
 }
 
 /**
