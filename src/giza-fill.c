@@ -105,18 +105,14 @@ _giza_fill (void)
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  cairo_t *ct;
-  cairo_surface_t *hatchsurface;
-  cairo_pattern_t *hatchpattern;
   double ri,gi,bi,alphai;
   int ci;
   int hatch_size;
   int lw;
-  double cosangle,sinangle,dx,sizex,sizey;
+  double cosangle,sinangle,tanangle,dx,sizex,sizey;
   double pi = 3.1415926536;
-  int i;
-  int ntile = 4;
-  cairo_matrix_t mat;
+  double xmin,xmax,ymin,ymax;
+  int i, nlines;
 
   switch (_giza_fill_style)
     {
@@ -131,98 +127,63 @@ _giza_fill (void)
       if (hatch_size <= 0)
         {
           _giza_error("giza_fill","hatch spacing <= 0, ignoring fill attributes");
+          return;
         }
       lw = 1.5;
-      /* create a temporary bitmap (cairo surface) to hold the hatching pattern */
-      cosangle = sqrt(2.)*cos(pi*_giza_hatch_angle/180.);
-      sinangle = sqrt(2.)*sin(pi*_giza_hatch_angle/180.);
-      if (cosangle > 0.)
-        {
-          sizex = 4.*hatch_size/cosangle;
-        } else {
-          sizex = hatch_size;
-        }
-//      sizex = 4.*hatch_size/cosangle;
+      tanangle = tan(pi*_giza_hatch_angle/180.);
+      cosangle = cos(pi*_giza_hatch_angle/180.);
+      sinangle = sin(pi*_giza_hatch_angle/180.);
+      cairo_save(context);
+      /* clip plotting to within the fill area
+       * but do not (yet) destroy the fill area */
+      cairo_clip_preserve(context);
+      cairo_clip_extents(context, &xmin,&ymin,&xmax,&ymax);
+      sizex = xmax - xmin;
+      sizey = ymax - ymin;
+      printf("clip extent = xmin: %f xmax: %f ymin:%f ymax: %f \n",xmin,xmax,ymin,ymax);
       
-      if (sinangle > 0.)
-        {
-          sizey = 4.*hatch_size/sinangle;
-        } else {
-          sizey = hatch_size;
-        }
-      
-      printf("sizex = %f sizey = %f cos %f sin %f spacing %i \n",sizex,sizey,cosangle,sinangle,hatch_size);
-  //    hatchsurface = cairo_surface_create_similar(cairo_get_target(context),
-    //                                              CAIRO_CONTENT_COLOR,sizex,sizey);
-      hatchsurface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,sizex,sizey);
-      ct = cairo_create(hatchsurface);
-      /* query the current background colour and 
-       * set the paint colour equal to this      */
-     // giza_get_colour_representation_alpha(GIZA_BACKGROUND_COLOUR,&ri,&gi,&bi,&alphai);
-   //   cairo_set_source_rgba(ct, ri, gi, bi, alphai);
-      /* paint with this pattern */
-//      cairo_rectangle(ct,0,0,sizex,sizey);
- //     cairo_fill(ct);
+      cairo_identity_matrix(context);
+      /* fill with a transparent background */
+      giza_get_colour_representation_alpha(GIZA_BACKGROUND_COLOUR,&ri,&gi,&bi,&alphai);
+      cairo_set_source_rgba(context, ri, gi, bi, 0.);
+      cairo_fill(context);
 
       /* draw lines making the pattern with current colour index */
       giza_get_colour_index(&ci);
       giza_get_colour_representation_alpha(ci,&ri,&gi,&bi,&alphai);
-      cairo_set_source_rgba(ct, ri, gi, bi, alphai);
-      cairo_set_line_width(ct, lw);
-      //cairo_set_line_cap(ct, CAIRO_LINE_CAP_BUTT);
-      //cairo_set_line_join(ct, CAIRO_LINE_JOIN_BEVEL);
-      //cairo_pattern_set_extend(cairo_get_source(ct), CAIRO_EXTEND_PAD);
+      cairo_set_source_rgba(context, ri, gi, bi, alphai);
+      cairo_set_line_width(context, lw);
       
-      printf(" cos = %f sin = %f angle = %f \n",cosangle,sinangle,_giza_hatch_angle);
       dx = hatch_size*_giza_hatch_phase;
+      nlines = 3*(int) (xmax - xmin)/hatch_size + 1;
       if (_giza_fill_style == GIZA_FILL_CROSSHATCH) 
         {
-          /* draw lines going in the \ direction */
-         for (i = 0; i < 3*ntile; i++)
+          //cairo_set_antialias(context, CAIRO_ANTIALIAS_NONE);    
+
+          /* draw vertical or / lines */
+         for (i = 0; i <= nlines; i++)
             {
-             cairo_move_to(ct, sizex + dx, i*hatch_size*sinangle); // bottom left corner
-             cairo_line_to(ct, dx, (i-1)*hatch_size*sinangle); // top right corner
+             cairo_move_to(context, xmin + (i-1)*hatch_size + dx -sizex, ymin);
+             cairo_line_to(context, xmin + (i-1)*hatch_size + dx + (ymax-ymin)*tanangle -sizex, ymax);
             }
 
-          //cairo_move_to(ct, hatch_size*cosangle + dx, hatch_size*sinangle);
-          //cairo_line_to(ct, dx, 0.);
-          //cairo_set_antialias(ct, CAIRO_ANTIALIAS_NONE);    
         } else {
           /* the antialiasing causes a dashed look in the hatched pattern
            * that is fixed by turning it off - there should be a better 
            * way but this is a workaround for the fact that cairo
            * renders the pattern pixmap before it is finally
            * rendered to the surface */
-          cairo_set_antialias(ct, CAIRO_ANTIALIAS_NONE);    
         }
+          /* draw horizontal or \ lines */
+         for (i = 0; i <= nlines; i++)
+            {
+             cairo_move_to(context, xmin, ymin + (i-1)*hatch_size);
+             cairo_line_to(context, xmax, ymin + (i-1)*hatch_size - (xmax-xmin)*tanangle);
+            }
       
-      /* draw lines going in the / direction */
-      for (i = 0; i < 3*ntile; i++)
-         {
-          cairo_move_to(ct, dx, sizey - (i-1)*hatch_size*sinangle); // bottom left corner
-          cairo_line_to(ct, sizex + dx, sizey - i*hatch_size*sinangle); // top right corner
-         }
-      cairo_stroke(ct);
-
-      /* finally, make our surface (bitmap) into a pattern object that can be used for fills */
-      hatchpattern = cairo_pattern_create_for_surface(hatchsurface);
-      
-      cairo_surface_write_to_png(hatchsurface,"hatch.png");
-
-      /* finished with the temporary surface, so we can get rid of it */
-      cairo_surface_destroy(hatchsurface);
-
-      /* finally, set the fill for the actual context to be the pattern we have created */
-      cairo_set_source(context, hatchpattern);
-      cairo_pattern_set_extend(cairo_get_source(context), CAIRO_EXTEND_REPEAT);
-
-      /* perform the fill */
-      cairo_fill(context);
-      
-      /* destroy the pattern, cleanup */
-      cairo_pattern_destroy(hatchpattern);
+      cairo_stroke(context);
+      cairo_restore(context);
       break;
-
     case GIZA_FILL_SOLID:
       cairo_fill (context);
       break;
