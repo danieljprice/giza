@@ -227,6 +227,9 @@ double giza_round (double x, int *nsub);
 float giza_round_float (float x, int *nsub);
 
 void giza_set_font (char *font);
+void giza_set_font_bold (char *font);
+void giza_set_font_bold_italic (char *font);
+void giza_set_font_italic (char *font);
 void giza_get_font (char *font, int n);
 
 void giza_set_text_background (int colourIndex);

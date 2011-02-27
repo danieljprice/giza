@@ -21,6 +21,7 @@
 #include "giza-io-private.h"
 #include "giza-text-private.h"
 #include "giza-transforms-private.h"
+#include <giza.h>
 #include <math.h>
 #include <stdio.h>
 
