@@ -18,11 +18,11 @@
  *
  */
 
-#include "giza.h"
 #include "giza-private.h"
 #include "giza-io-private.h"
 #include "giza-stroke-private.h"
 #include "giza-transforms-private.h"
+#include <giza.h>
 #include <math.h>
 
 #define GIZA_FILL_SOLID  1
@@ -32,6 +32,7 @@
 
 #define GIZA_MAX_FILL_STYLES 4
 
+void _giza_rotate_pos (double *x, double *y, double angle, double x0, double y0);
 
 int _giza_fill_style;
 double _giza_hatch_angle;
@@ -59,7 +60,6 @@ giza_set_fill (int fs)
     return;
   if (fs < 1 || fs > GIZA_MAX_FILL_STYLES)
     {
-      printf(" fill style = %i \n",fs);
       _giza_warning ("giza_set_fill", "Invalid fill style, fill style not set");
       return;
     }
@@ -109,9 +109,9 @@ _giza_fill (void)
   int ci;
   int hatch_size;
   int lw;
-  double cosangle,sinangle,tanangle,dx,sizex,sizey;
+  double dx,sizex,sizey;
   double pi = 3.1415926536;
-  double xmin,xmax,ymin,ymax;
+  double xmin,xmax,ymin,ymax,x0,y0,x,y,angle;
   int i, nlines;
 
   switch (_giza_fill_style)
@@ -130,9 +130,7 @@ _giza_fill (void)
           return;
         }
       lw = 1.5;
-      tanangle = tan(pi*_giza_hatch_angle/180.);
-      cosangle = cos(pi*_giza_hatch_angle/180.);
-      sinangle = sin(pi*_giza_hatch_angle/180.);
+      angle = -pi*_giza_hatch_angle/180.;
       cairo_save(context);
       /* clip plotting to within the fill area
        * but do not (yet) destroy the fill area */
@@ -140,8 +138,9 @@ _giza_fill (void)
       cairo_clip_extents(context, &xmin,&ymin,&xmax,&ymax);
       sizex = xmax - xmin;
       sizey = ymax - ymin;
-      printf("clip extent = xmin: %f xmax: %f ymin:%f ymax: %f \n",xmin,xmax,ymin,ymax);
-      
+      x0 = 0.5*(xmin + xmax);
+      y0 = 0.5*(ymin + ymax);
+     
       cairo_identity_matrix(context);
       /* fill with a transparent background */
       giza_get_colour_representation_alpha(GIZA_BACKGROUND_COLOUR,&ri,&gi,&bi,&alphai);
@@ -163,8 +162,15 @@ _giza_fill (void)
           /* draw vertical or / lines */
          for (i = 0; i <= nlines; i++)
             {
-             cairo_move_to(context, xmin + (i-1)*hatch_size + dx -sizex, ymin);
-             cairo_line_to(context, xmin + (i-1)*hatch_size + dx + (ymax-ymin)*tanangle -sizex, ymax);
+             x = xmin + (i-1)*hatch_size + dx;
+             y = ymin;
+             _giza_rotate_pos(&x,&y,angle,x0,y0);
+             cairo_move_to(context, x, y);
+
+             x = xmin + (i-1)*hatch_size + dx;
+             y = ymax;
+             _giza_rotate_pos(&x,&y,angle,x0,y0);
+             cairo_line_to(context, x, y);
             }
 
         } else {
@@ -177,8 +183,15 @@ _giza_fill (void)
           /* draw horizontal or \ lines */
          for (i = 0; i <= nlines; i++)
             {
-             cairo_move_to(context, xmin, ymin + (i-1)*hatch_size);
-             cairo_line_to(context, xmax, ymin + (i-1)*hatch_size - (xmax-xmin)*tanangle);
+             x = xmin;
+             y = ymin + (i-1)*hatch_size;
+             _giza_rotate_pos(&x,&y,angle,x0,y0);
+             cairo_move_to(context, x, y);
+
+             x = xmax;
+             y = ymin + (i-1)*hatch_size;
+             _giza_rotate_pos(&x,&y,angle,x0,y0);
+             cairo_line_to(context, x, y);
             }
       
       cairo_stroke(context);
@@ -198,6 +211,17 @@ _giza_fill (void)
 
   _giza_set_trans (oldTrans);
 }
+
+void
+_giza_rotate_pos (double *x, double *y, double angle, double x0, double y0)
+{
+   double xnew,ynew;
+   xnew = (*x - x0)*cos(angle) - (*y - y0)*sin(angle);
+   ynew = (*x - x0)*sin(angle) + (*y - y0)*cos(angle);
+   *x = xnew + x0;
+   *y = ynew + y0;
+}
+
 
 /**
  * Settings: giza_set_hatching_style
