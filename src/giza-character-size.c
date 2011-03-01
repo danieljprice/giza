@@ -108,10 +108,12 @@ giza_get_character_height_float (float *ch)
  *  -height :- will be set to the height of a character.
  *
  * Units:
- *  -0 :- normalised device coords.
- *  -1 :- world coords.
- *  -2 :- device coords.
- *  Other values cause an error message and are treated as 0
+ *  -GIZA_UNITS_NORMALIZED :- normalised device coords.
+ *  -GIZA_UNITS_WORLD      :- world coords.
+ *  -GIZA_UNITS_DEVICE     :- device coords.
+ *  -GIZA_UNITS_MM         :- mm
+ *  -GIZA_UNITS_INCHES     :- inches
+ *  Other values cause an error message and are treated as GIZA_UNITS_NORMALIZED
  */
 void
 giza_get_character_size (int units, double *heightx, double *heighty)
