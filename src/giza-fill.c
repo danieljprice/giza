@@ -109,7 +109,7 @@ _giza_fill (void)
   int ci;
   int hatch_size;
   int lw;
-  double dx,sizex,sizey;
+  double xoffset,dx,dy,dr;
   double pi = 3.1415926536;
   double xmin,xmax,ymin,ymax,x0,y0,x,y,angle;
   int i, nlines;
@@ -136,10 +136,16 @@ _giza_fill (void)
        * but do not (yet) destroy the fill area */
       cairo_clip_preserve(context);
       cairo_clip_extents(context, &xmin,&ymin,&xmax,&ymax);
-      sizex = xmax - xmin;
-      sizey = ymax - ymin;
+      dx = xmax - xmin;
+      dy = ymax - ymin;
+      /* set geometry of box */
       x0 = 0.5*(xmin + xmax);
       y0 = 0.5*(ymin + ymax);
+      dr = sqrt(dx*dx + dy*dy);
+      xmin = x0 - 0.5*dr;
+      xmax = x0 + 0.5*dr;
+      ymin = y0 - 0.5*dr;
+      ymax = y0 + 0.5*dr;
      
       cairo_identity_matrix(context);
       /* fill with a transparent background */
@@ -153,46 +159,38 @@ _giza_fill (void)
       cairo_set_source_rgba(context, ri, gi, bi, alphai);
       cairo_set_line_width(context, lw);
       
-      dx = hatch_size*_giza_hatch_phase;
-      nlines = 3*(int) (xmax - xmin)/hatch_size + 1;
+      xoffset = hatch_size*_giza_hatch_phase;
+      nlines = (int) (xmax - xmin)/hatch_size + 1;
       if (_giza_fill_style == GIZA_FILL_CROSSHATCH) 
         {
-          //cairo_set_antialias(context, CAIRO_ANTIALIAS_NONE);    
-
           /* draw vertical or / lines */
          for (i = 0; i <= nlines; i++)
             {
-             x = xmin + (i-1)*hatch_size + dx;
+             x = xmin + (i-1)*hatch_size + xoffset;
              y = ymin;
              _giza_rotate_pos(&x,&y,angle,x0,y0);
              cairo_move_to(context, x, y);
 
-             x = xmin + (i-1)*hatch_size + dx;
+             x = xmin + (i-1)*hatch_size + xoffset;
              y = ymax;
              _giza_rotate_pos(&x,&y,angle,x0,y0);
              cairo_line_to(context, x, y);
             }
-
-        } else {
-          /* the antialiasing causes a dashed look in the hatched pattern
-           * that is fixed by turning it off - there should be a better 
-           * way but this is a workaround for the fact that cairo
-           * renders the pattern pixmap before it is finally
-           * rendered to the surface */
         }
-          /* draw horizontal or \ lines */
-         for (i = 0; i <= nlines; i++)
-            {
-             x = xmin;
-             y = ymin + (i-1)*hatch_size;
-             _giza_rotate_pos(&x,&y,angle,x0,y0);
-             cairo_move_to(context, x, y);
 
-             x = xmax;
-             y = ymin + (i-1)*hatch_size;
-             _giza_rotate_pos(&x,&y,angle,x0,y0);
-             cairo_line_to(context, x, y);
-            }
+       /* draw horizontal or \ lines */
+      for (i = 0; i <= nlines; i++)
+        {
+          x = xmin + xoffset;
+          y = ymin + (i-1)*hatch_size;
+          _giza_rotate_pos(&x,&y,angle,x0,y0);
+          cairo_move_to(context, x, y);
+
+          x = xmax + xoffset;
+          y = ymin + (i-1)*hatch_size;
+          _giza_rotate_pos(&x,&y,angle,x0,y0);
+          cairo_line_to(context, x, y);
+        }
       
       cairo_stroke(context);
       cairo_restore(context);
