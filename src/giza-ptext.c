@@ -36,7 +36,7 @@
  *  -y     :- The y world coord.
  *  -angle :- The angle to be drawn at.
  *  -just  :- The justification.
- *  -test  :- The text to be drawn.
+ *  -text  :- The text to be drawn.
  */
 void
 giza_ptext (double x, double y, double angle, double just, char *text)
@@ -45,8 +45,6 @@ giza_ptext (double x, double y, double angle, double just, char *text)
     {
       return;
     }
-
-  //printf ("Text: %s\nLength: %i\n\n", text, strlen (text));
 
   // save the character height (can be changed during superscript/subscripting)
   double ch;
@@ -115,7 +113,7 @@ giza_ptext_float (float x, float y, float angle, float just, char *text)
 /**
  * Text: giza_text
  *
- * Synopsis: Draws text at the posistion (x, y).
+ * Synopsis: Draws text at the position (x, y).
  *
  * Input:
  *  -x    :- The x-coordinate of the bottom left corner of the text.
