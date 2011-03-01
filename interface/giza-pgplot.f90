@@ -1474,7 +1474,7 @@ end subroutine PGSHLS
 
 !------------------------------------------------------------------------
 ! Module: PGSHS -- set hatching style
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSHS (ANGLE, SEPN, PHASE)
  use giza, only:giza_set_hatching_style
