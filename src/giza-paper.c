@@ -54,9 +54,16 @@ giza_set_paper_size_float (float width, float aspect)
  * in a variety of units
  *
  * Input:
- *  -width  :- Width of the device surface in cm
- *  -aspect :- Aspect ratio of the device surface
+ *  -units  :- Specify the units to return values in
+ *  -width  :- Width of the device surface
+ *  -height :- Height of the device surface
  *
+ * Units:
+ *  -0 or GIZA_UNITS_NORMALIZED :- normalised device units
+ *  -1 or GIZA_UNITS_INCHES     :- inches
+ *  -2 or GIZA_UNITS_MM         :- mm
+ *  -3 or GIZA_UNITS_DEVICE     :- device units (pixels or points)
+ *  -default                    :- cm
  */
 void
 giza_get_paper_size (int units, double *width, double *height)
@@ -83,7 +90,7 @@ giza_get_paper_size (int units, double *width, double *height)
        *height = Dev.height;
        break;
      default:
-       *width = Dev.widthCM;
+       *width  = Dev.widthCM;
        *height = Dev.heightCM;
        break;
      }
