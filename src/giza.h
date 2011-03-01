@@ -192,6 +192,11 @@ void giza_mark_points_ordered_float (int maxpts, int *npts, float xpts[maxpts],
 void giza_move (double xpt, double ypt);
 void giza_move_float (float xpt, float ypt);
 
+void giza_set_paper_size (double width, double aspect);
+void giza_set_paper_size_float (float width, float aspect);
+void giza_get_paper_size (int units, double *width, double *height);
+void giza_get_paper_size_float (int units, float *width, float *height);
+
 void giza_points (int n, double x[n], double y[n], int symbol);
 void giza_points_float (int n, float x[n], float y[n], int symbol);
 void giza_single_point (double x, double y, int symbol);
