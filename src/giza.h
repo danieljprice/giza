@@ -199,6 +199,7 @@ void giza_single_point_float (float x, float y, int symbol);
 
 void giza_polygon (int n, double *xpts, double *ypts);
 void giza_polygon_float (int n, float *xpts, float *ypts);
+void giza_print_id (void);
 
 void giza_start_prompting (void);
 void giza_stop_prompting (void);
@@ -212,6 +213,8 @@ void giza_qtext (double x, double y, double angle, double just, char *text,
 		 double xbox[4], double ybox[4]);
 void giza_qtext_float (float x, float y, float angle, float just, char *text,
 		       float xbox[4], float ybox[4]);
+void giza_qtextlen (int units, char *text, double *xlen, double *ylen);
+void giza_qtextlen_float (int units, char *text, float *xlen, float *ylen);
 
 void giza_rectangle (double x1, double x2, double y1, double y2);
 void giza_rectangle_float (float x1, float x2, float y1, float y2);
