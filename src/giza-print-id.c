@@ -54,18 +54,19 @@ giza_print_id (void)
   strftime(date,sizeof(date)," %e-%h-%Y %H:%M",current);
   char *string = strcat(userid,date);
   
-  double ch;
+  double ch,xch,ych;
   giza_get_character_height(&ch);
   giza_set_character_height(0.6);
+  giza_get_character_size(GIZA_UNITS_DEVICE,&xch,&ych);
 
   /* query dimensions of the surface and size of string */
-  double dx,dy,x,y,width,height;
+  double width,height;
   giza_get_paper_size(GIZA_UNITS_DEVICE,&width,&height);
-  giza_qtextlen(GIZA_UNITS_DEVICE,string,&dx,&dy);
   
   /* place text at bottom right corner of surface */
-  x = width - 0.1*dx;
-  y = height - dy;
+  double x,y;
+  x = width - xch;
+  y = height - ych;
 
   /* convert this to world coordinates */
   int oldtrans = _giza_get_trans();
