@@ -577,10 +577,13 @@ end subroutine PGHIST
 
 !------------------------------------------------------------------------
 ! Module: PGIDEN -- write username, date, and time at bottom of plot
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGIDEN
+ use giza, only:giza_print_id
  implicit none
+ 
+ call giza_print_id()
 
 end subroutine PGIDEN
 

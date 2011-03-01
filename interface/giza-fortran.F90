@@ -90,6 +90,7 @@ module giza
       giza_points, &
       giza_single_point, &
       giza_polygon, &
+      giza_print_id, &
       giza_start_prompting, &
       giza_stop_prompting, &
       giza_set_text_background, &
@@ -1021,6 +1022,11 @@ private
       integer(kind=c_int), value, intent(in) :: n
       real(kind=c_float), dimension(n), intent(in) :: xpts,ypts
     end subroutine giza_polygon_float
+ end interface
+
+ interface giza_print_id
+    subroutine giza_print_id() bind(C)
+    end subroutine giza_print_id
  end interface
 
  interface giza_start_prompting
