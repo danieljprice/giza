@@ -809,13 +809,16 @@ end subroutine PGPAP
 
 !------------------------------------------------------------------------
 ! Module: PGPIXL -- draw pixels
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGPIXL (IA, IDIM, JDIM, I1, I2, J1, J2, X1, X2, Y1, Y2)
+ use giza, only:giza_draw_pixels
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2
  integer, intent(in) :: IA(IDIM,JDIM)
  real,    intent(in) :: X1, X2, Y1, Y2
+
+ call giza_draw_pixels(IDIM, JDIM, IA, I1-1, I2-1, J1-1, J2-1, X1, X2, Y1, Y2)
 
 end subroutine PGPIXL
 
@@ -956,8 +959,8 @@ subroutine PGQCIR(ICILO, ICIHI)
  implicit none
  integer, intent(out) :: ICILO, ICIHI
 
- ICILO = 1
- ICIHI = 256
+ ICILO = 0
+ ICIHI = 255
 
 end subroutine PGQCIR
 
@@ -976,14 +979,15 @@ end subroutine PGQCLP
 
 !------------------------------------------------------------------------
 ! Module: PGQCOL -- inquire color capability
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQCOL (CI1, CI2)
+ use giza, only:giza_colour_index_min,giza_colour_index_max
  implicit none
  integer, intent(out) :: CI1, CI2
 
- CI1 = 0
- CI2 = 256
+ CI1 = giza_colour_index_min
+ CI2 = giza_colour_index_max
 
 end subroutine PGQCOL
 

@@ -101,6 +101,7 @@ module giza
       giza_qtextlen, &
       giza_rectangle, &
       giza_render, &
+      giza_draw_pixels, &
       giza_restore, &
       giza_round, &
       giza_save, &
@@ -129,6 +130,8 @@ module giza
   integer, parameter, public :: giza_units_normalized = GIZA_UNITS_NORMALIZED
   integer, parameter, public :: giza_units_device = GIZA_UNITS_DEVICE
   integer, parameter, public :: giza_units_world = GIZA_UNITS_WORLD
+  integer, parameter, public :: giza_colour_index_min = GIZA_COLOUR_INDEX_MIN
+  integer, parameter, public :: giza_colour_index_max = GIZA_COLOUR_INDEX_MAX
 private
 
 !---------------------------------------------------------
@@ -1161,6 +1164,24 @@ private
       real(kind=c_float),intent(in),value :: valMin,valMax
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_render_float
+ end interface
+
+ interface giza_draw_pixels
+    subroutine giza_draw_pixels(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      integer(kind=c_int),intent(in) :: idata(sizex,sizey)
+      real(kind=c_double),intent(in),value :: xmin,xmax,ymin,ymax
+    end subroutine giza_draw_pixels
+    
+    subroutine giza_draw_pixels_float(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      integer(kind=c_int),intent(in) :: idata(sizex,sizey)
+      real(kind=c_float),intent(in),value :: xmin,xmax,ymin,ymax
+    end subroutine giza_draw_pixels_float
  end interface
 
  interface giza_rectangle

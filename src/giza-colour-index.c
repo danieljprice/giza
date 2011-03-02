@@ -22,9 +22,7 @@
 #include "giza-io-private.h"
 #include "giza-drivers-private.h"
 #include <stdio.h>
-
-#define GIZA_COLOUR_INDEX_MIN 0
-#define GIZA_COLOUR_INDEX_MAX 20
+#include <giza.h>
 
 double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][4];
 int _giza_ci;
