@@ -97,7 +97,8 @@ giza_open_device (char *newDeviceName, char *newPrefix)
     }
 
   /* Determine which type of device to open */
-  if (!strcmp (newDeviceName, "?"))
+  char firstchar = newDeviceName[0];
+  if (firstchar == '?')
     Dev.type = _giza_prompt_for_device ();
   else
     {
@@ -546,19 +547,20 @@ _giza_device_to_int (char *newDeviceName)
   if (!strcmp (devName, "/null"))
     newDevice = GIZA_DEVICE_NULL;
 #ifdef _GIZA_HAS_XW
-  else if (!strcmp (devName, "/xw"))
+  else if (!strcmp (devName, "/xw") 
+        || !strcmp (devName, "/xwin"))
     newDevice = GIZA_DEVICE_XW;
 #endif
   else if (!strcmp (devName, "/png"))
     newDevice = GIZA_DEVICE_PNG;
   else if (!strcmp (devName, "/pdf"))
     newDevice = GIZA_DEVICE_PDF;
-  else if (!strcmp (devName, "/ps"))
+  else if (!strcmp (devName, "/ps") 
+        || !strcmp (devName, "/cps") 
+        || !strcmp (devName, "/postscript"))
     newDevice = GIZA_DEVICE_PS;
   else if (!strcmp (devName, "/vpdf"))
     newDevice = GIZA_DEVICE_VPDF;
-  else if (!strcmp (devName, "/vps"))
-    newDevice = GIZA_DEVICE_VPS;
   else if (!strcmp (devName, "/vps"))
     newDevice = GIZA_DEVICE_VPS;
 #ifdef _GIZA_HAS_EPS
