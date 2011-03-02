@@ -139,7 +139,7 @@ _giza_newpage_prompt (void)
    *  Use fgets here instead of scanf so that we can accept a
    *  newline character as the default input
    */
-  char *p = fgets(input,2,stdin);
+  fgets(input,2,stdin);
 }
 
 /**
