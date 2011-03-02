@@ -394,8 +394,31 @@ _giza_init_colour_index (void)
 void
 giza_set_colour_index_range (int cimin, int cimax)
 {
-  _giza_colour_index_min = cimin;
-  _giza_colour_index_max = cimax;
+  if (cimin < GIZA_COLOUR_INDEX_MIN) 
+    {
+      _giza_colour_index_min = GIZA_COLOUR_INDEX_MIN;     
+    }
+   else if (cimin > GIZA_COLOUR_INDEX_MAX)
+    {
+      _giza_colour_index_min = GIZA_COLOUR_INDEX_MAX;    
+    }
+   else
+    {
+      _giza_colour_index_min = cimin;
+    }
+
+  if (cimax < GIZA_COLOUR_INDEX_MIN) 
+    {
+      _giza_colour_index_max = GIZA_COLOUR_INDEX_MIN;     
+    }
+   else if (cimax > GIZA_COLOUR_INDEX_MAX)
+    {
+      _giza_colour_index_max = GIZA_COLOUR_INDEX_MAX;    
+    }
+   else
+    {
+      _giza_colour_index_max = cimax;
+    }
 }
 
 /**
