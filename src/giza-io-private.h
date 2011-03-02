@@ -23,3 +23,7 @@ void _giza_error (char *source, char *message);
 int _giza_prompt_for_device (void);
 void _giza_display_devices (void);
 int _giza_default_device (void);
+void _giza_newpage_prompt (void);
+int _giza_get_prompting (void);
+
+

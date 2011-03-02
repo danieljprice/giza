@@ -18,6 +18,7 @@
  */
 
 #include "giza-private.h"
+#include "giza-io-private.h"
 
 /*
  * The initial value of _giza_prompting is set by a call
