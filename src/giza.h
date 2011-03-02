@@ -86,6 +86,9 @@ void giza_get_colour_representation_alpha (int ci, double *red, double *green,
 void giza_get_colour_representation_alpha_float (int ci, float *red,
 						 float *green, float *blue,
 						 float *alpha);
+void giza_set_colour_representation_hls (int ci, double hue, double lightness, double saturation);
+void giza_set_colour_representation_hls_float (int ci, float hue, float lightness,
+                                               float saturation);
 
 int giza_set_colour_table (double *controlPoints, double *red, double *green,
 			   double *blue, int n);

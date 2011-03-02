@@ -1473,12 +1473,15 @@ end subroutine PGSFS
 
 !------------------------------------------------------------------------
 ! Module: PGSHLS -- set color representation using HLS system
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSHLS (CI, CH, CL, CS)
+ use giza, only:giza_set_colour_representation_hls
  implicit none
  integer, intent(in) :: CI
  real,    intent(in) :: CH, CL, CS
+ 
+ call giza_set_colour_representation_hls(CI, CH, CL, CS)
 
 end subroutine PGSHLS
 

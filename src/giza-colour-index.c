@@ -23,9 +23,13 @@
 #include "giza-drivers-private.h"
 #include <stdio.h>
 #include <giza.h>
+#include <math.h>
 
 double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][4];
 int _giza_ci;
+void _giza_hls_to_rgb (double hue, double lightness, double saturation, 
+                       double *red, double *green, double *blue);
+void _giza_set_in_range (double *val, double val1, double val2);
 
 /**
  * Settings: giza_set_colour_index
@@ -91,33 +95,7 @@ giza_set_colour_representation (int ci, double red, double green, double blue)
   if (!_giza_check_device_ready ("giza_set_colour_representation"))
     return;
 
-  if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
-    {
-      _giza_warning ("giza_set_colour_representation",
-		     "Invalid colour index, colour representation not set");
-      return;
-    }
-
-  colourIndex[ci][0] = red;
-  colourIndex[ci][1] = green;
-  colourIndex[ci][2] = blue;
-  colourIndex[ci][3] = 1.;
-
-  /* If we are changing the current colour index
-     make the change teke effect immediately 
-   */
-  if (ci == _giza_ci) 
-     {
-       cairo_set_source_rgba (context, colourIndex[ci][0],
-			 colourIndex[ci][1], colourIndex[ci][2],
-			 colourIndex[ci][3]);
-     }
-
-/*  if (ci == 0)
-    {
-      giza_draw_background ();
-    }
-*/
+  giza_set_colour_representation_alpha (ci, red, green, blue, 1.);
 }
 
 /**
@@ -126,11 +104,9 @@ giza_set_colour_representation (int ci, double red, double green, double blue)
  * Synopsis: Same functionality as giza_set_colour_representation but takes floats/
  */
 void
-giza_set_colour_representation_float (int ci, float red, float green,
-				      float blue)
+giza_set_colour_representation_float (int ci, float red, float green, float blue)
 {
-  giza_set_colour_representation (ci, (double) red, (double) green,
-				  (double) blue);
+  giza_set_colour_representation (ci, (double) red, (double) green, (double) blue);
 }
 
 /**
@@ -195,6 +171,42 @@ giza_set_colour_representation_alpha_float (int ci, float red, float green,
 {
   giza_set_colour_representation_alpha (ci, (double) red, (double) green,
 					(double) blue, (double) alpha);
+}
+
+/**
+ * Settings: giza_set_colour_representation_hls
+ *
+ * Synopsis: Allows the user to set the colour represented by the given colour index
+ *           This routine accepts colours in the Hue, Lightness and Saturation system.
+ *
+ * Input:
+ *   -ci   :- Which colour index to set.
+ *   -hue         :- The Hue component of the colour (between 0 and 360 degrees).
+ *   -lightness   :- The Lightness component of the colour (between 0 and 1).
+ *   -saturation  :- The Saturation component of the colour (between 0 and 1).
+ */
+void
+giza_set_colour_representation_hls (int ci, double hue, double lightness, double saturation)
+{
+  if (!_giza_check_device_ready ("giza_set_colour_representation"))
+    return;
+
+  double red, green, blue;
+  _giza_hls_to_rgb(hue,lightness,saturation,&red,&green,&blue);
+  giza_set_colour_representation_alpha (ci, red, green, blue, 1.);
+}
+
+/**
+ * Settings: giza_set_colour_representation_hls_float
+ *
+ * Synopsis: Same functionality as giza_set_colour_representation_hls but takes floats
+ */
+void
+giza_set_colour_representation_hls_float (int ci, float hue, float lightness, float saturation)
+{
+  double red, green, blue;
+  _giza_hls_to_rgb((double) hue,(double) lightness,(double) saturation,&red,&green,&blue);
+  giza_set_colour_representation (ci, red, green, blue);
 }
 
 /**
@@ -453,3 +465,99 @@ giza_set_range_as_colour_table (int *cimin, int *cimax)
  // *cimax = _giza_colour_index_max;
 }
 */
+
+/**
+ * Converts hls to rgb colour representation
+ * See: http://en.wikipedia.org/wiki/HSL_and_HSV#From_HSL
+ */
+void _giza_hls_to_rgb (double hue, double lightness, double saturation,
+                       double *red, double *green, double *blue)
+{
+  hue = fmod(hue,360.); /* wrap to 0->360 degrees */
+
+  double Chroma,Hdash,X,R1,G1,B1,m;
+  Chroma = (1. - fabs(2.*lightness - 1.))*saturation;
+  Hdash = hue/60.;
+  X = Chroma*(1. - fabs( fmod(Hdash,2.) - 1.));
+  
+  if (Hdash >= 0. && Hdash < 1.)
+    {
+      R1 = Chroma;
+      G1 = X;
+      B1 = 0.;
+    }
+  else if (Hdash < 2.)
+    {
+      R1 = X;
+      G1 = Chroma;
+      B1 = 0.;
+    }
+  else if (Hdash < 3.)
+    {
+      R1 = 0.;
+      G1 = Chroma;
+      B1 = X;
+    }
+  else if (Hdash < 4.)
+    {
+      R1 = 0.;
+      G1 = X;
+      B1 = Chroma;
+    }
+  else if (Hdash < 5.)
+    {
+      R1 = X;
+      G1 = 0.;
+      B1 = Chroma;
+    }
+  else if (Hdash < 6.)
+    {
+      R1 = Chroma;
+      G1 = 0.;
+      B1 = X;
+    }
+  else /* H undefined */
+    {
+      R1 = 0.;
+      G1 = 0.;
+      B1 = 0.;
+    }
+  
+  /* Now get RGB by matching lightness */
+  m = lightness - 0.5*Chroma;
+  
+  *red   = R1 + m;
+  *green = G1 + m;
+  *blue  = B1 + m;
+  _giza_set_in_range(red, 0., 1.);
+  _giza_set_in_range(green, 0., 1.);
+  _giza_set_in_range(blue, 0., 1.);
+}
+
+/**
+ * Ensures value of the input variable falls in the range
+ * given by val1 and val2
+ */
+void _giza_set_in_range (double *val, double val1, double val2)
+{
+  double valmin, valmax;
+  if (val1 < val2)
+    {
+      valmin = val1;
+      valmax = val2;
+    }
+  else
+    {
+      valmin = val2;
+      valmax = val1;
+    }
+
+  if (*val < valmin)
+    {
+      *val = valmin;
+    }
+  else if (*val > valmax)
+    {
+      *val = valmax;
+    }
+}

@@ -48,6 +48,7 @@ module giza
       giza_set_colour_representation_alpha, &
       giza_get_colour_representation, &
       giza_get_colour_representation_alpha, &
+      giza_set_colour_representation_hls, &
       giza_set_colour_table, &
       giza_contour, &
       giza_get_current_point, &
@@ -425,6 +426,22 @@ private
       integer(kind=c_int),intent(in),value       :: ci
       real(kind=c_float),intent(out) :: red,green,blue,alpha
     end subroutine giza_get_colour_representation_alpha_float
+ end interface
+
+ interface giza_set_colour_representation_hls
+    subroutine giza_set_colour_representation_hls(ci,hue,light,sat) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: ci
+      real(kind=c_double),intent(in),value :: hue,light,sat
+    end subroutine giza_set_colour_representation_hls
+
+    subroutine giza_set_colour_representation_hls_float(ci,hue,light,sat) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: ci
+      real(kind=c_float),intent(in),value  :: hue,light,sat
+    end subroutine giza_set_colour_representation_hls_float
  end interface
 
  interface giza_set_colour_table
