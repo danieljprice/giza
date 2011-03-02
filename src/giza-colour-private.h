@@ -12,9 +12,15 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
 void _giza_init_colour_index (void);
+void _giza_init_colour_table (void);
+void _giza_free_colour_table (void);
+
+int _giza_colour_index_min;
+int _giza_colour_index_max;
