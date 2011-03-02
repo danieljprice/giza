@@ -953,14 +953,14 @@ end subroutine PGQCI
 
 !------------------------------------------------------------------------
 ! Module: PGQCIR -- inquire color index range
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQCIR(ICILO, ICIHI)
+ use giza, only:giza_get_colour_index_range
  implicit none
  integer, intent(out) :: ICILO, ICIHI
 
- ICILO = 0
- ICIHI = 255
+ call giza_get_colour_index_range(ICILO,ICIHI)
 
 end subroutine PGQCIR
 
@@ -1399,11 +1399,14 @@ end subroutine PGSCI
 
 !------------------------------------------------------------------------
 ! Module: PGSCIR -- set color index range
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSCIR(ICILO, ICIHI)
+ use giza, only:giza_set_colour_index_range
  implicit none
  integer, intent(in) :: ICILO, ICIHI
+ 
+ call giza_set_colour_index_range(ICILO,ICIHI)
 
 end subroutine PGSCIR
 

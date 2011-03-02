@@ -17,7 +17,7 @@
  *
  */
 
-#include "giza-colour-index-private.h"
+#include "giza-colour-private.h"
 #include "giza-private.h"
 #include "giza-io-private.h"
 #include "giza-drivers-private.h"
@@ -361,6 +361,14 @@ _giza_init_colour_index (void)
   giza_set_colour_representation (15, 0.333, 0.333, 0.333);
   giza_set_colour_representation (16, 0.667, 0.667, 0.667);
 
+  /*
+   * allow the rest of the colour indices to be
+   * set by giza_set_colour_table
+   * (this range can be changed by 
+   *  calling giza_set_colour_index_range)
+   */
+  giza_set_colour_index_range(16,GIZA_COLOUR_INDEX_MAX);
+
   // All alpha default to 1
   colourIndex[0][3] = Dev.defaultBackgroundAlpha;
   int i;
@@ -371,3 +379,54 @@ _giza_init_colour_index (void)
 
   giza_set_colour_index (1);
 }
+
+/**
+ * Settings: giza_set_colour_index_range
+ *
+ * Synopsis: Set the range of colour indices that are affected by giza_set_colour_table
+ *
+ * Note: giza_render is not affected by this setting
+ *
+ * Input:
+ *  -cimin  :- lowest colour index in range
+ *  -cimax  :- highest colour index in range
+ */
+void
+giza_set_colour_index_range (int cimin, int cimax)
+{
+  _giza_colour_index_min = cimin;
+  _giza_colour_index_max = cimax;
+}
+
+/**
+ * Settings: giza_get_colour_index_range
+ *
+ * Synopsis: Queries the current range of colour indices affected by giza_set_colour_table,
+ *           as set by giza_set_colour_index_range
+ *
+ * Output:
+ *  -cimin  :- lowest colour index in range
+ *  -cimax  :- highest colour index in range
+ */
+void
+giza_get_colour_index_range (int *cimin, int *cimax)
+{
+  *cimin = _giza_colour_index_min;
+  *cimax = _giza_colour_index_max;
+}
+
+/**
+ * Settings: giza_set_range_as_colour_table
+ *
+ * Synopsis: Can be used in place of giza_set_colour_table to install
+ *           the colour table from a predefined set of colour indices
+ *
+ * See Also: giza_set_colour_table
+ */
+/*void
+giza_set_range_as_colour_table (int *cimin, int *cimax)
+{
+ // *cimin = _giza_colour_index_min;
+ // *cimax = _giza_colour_index_max;
+}
+*/

@@ -12,16 +12,18 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
-#include "giza-colour-table-private.h"
+#include "giza-colour-private.h"
 #include "giza-private.h"
 #include "giza-io-private.h"
 #include <math.h>
 #include <stdlib.h>
+#include <giza.h>
 
 struct CP_Colour_Table
 {
@@ -32,6 +34,7 @@ struct CP_Colour_Table
   double *blue;
 } _giza_colour_table;
 
+void _giza_set_range_from_colour_table (int cimin, int cimax);
 
 /**
  * Settings: giza_set_colour_table
@@ -101,7 +104,8 @@ giza_set_colour_table (double *controlPoints, double *red, double *green, double
 	    }
 	}
     }
-  _giza_colour_table.n = tmpn;
+  _giza_colour_table.n = tmpn; 
+  _giza_set_range_from_colour_table(_giza_colour_index_min,_giza_colour_index_max);
 
   return 0;
 }
@@ -164,6 +168,7 @@ giza_set_colour_table_float (float *controlPoints, float *red, float *green, flo
 	}
     }
   _giza_colour_table.n = tmpn;
+  _giza_set_range_from_colour_table(_giza_colour_index_min,_giza_colour_index_max);
 
   return 0;
 }
@@ -285,4 +290,23 @@ _giza_free_colour_table (void)
   free (_giza_colour_table.red);
   free (_giza_colour_table.green);
   free (_giza_colour_table.blue);
+}
+
+/**
+ * Sets rgb colours for the colour indices in the given range
+ * as a linear ramp based on the current giza colour table
+ */
+void
+_giza_set_range_from_colour_table (int cimin, int cimax)
+{
+  double delta = (double) (cimax - cimin);
+  double pos,r,g,b;
+  int i;
+  
+  for (i = cimin; i <= cimax; i++)
+    {
+      pos = (i - cimin)/delta;
+      giza_rgb_from_table(pos,&r,&g,&b);
+      giza_set_colour_representation(i,r,g,b);
+    }
 }

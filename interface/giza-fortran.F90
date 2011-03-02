@@ -42,6 +42,8 @@ module giza
       giza_get_clipping, &
       giza_set_colour_index, &
       giza_get_colour_index, &
+      giza_set_colour_index_range, &
+      giza_get_colour_index_range, &
       giza_set_colour_representation, &
       giza_set_colour_representation_alpha, &
       giza_get_colour_representation, &
@@ -343,6 +345,22 @@ private
       implicit none
       integer(kind=c_int),intent(out) :: ci
     end subroutine giza_get_colour_index
+ end interface
+
+ interface giza_set_colour_index_range
+    subroutine giza_set_colour_index_range(cimin,cimax) bind(C)
+      import
+      implicit none
+      integer(kind=c_int), value, intent(in) :: cimin,cimax
+    end subroutine giza_set_colour_index_range
+ end interface
+
+ interface giza_get_colour_index_range
+    subroutine giza_get_colour_index_range(cimin,cimax) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(out) :: cimin,cimax
+    end subroutine giza_get_colour_index_range
  end interface
 
  interface giza_set_colour_representation
