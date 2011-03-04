@@ -280,13 +280,10 @@ giza_change_page (void)
   if (!_giza_check_device_ready ("giza_change_page"))
     return;
 
-  double oldCh, oldLw;
-  giza_get_character_height (&oldCh);
-  giza_get_line_width (&oldLw);
-
-  int oldCi;
-  giza_get_colour_index (&oldCi);
-
+  /* save a whole bunch of settings 
+    (line style, width, colour index etc.) */
+  giza_save();
+  
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
@@ -328,9 +325,10 @@ giza_change_page (void)
   // Reset stuff
   giza_set_viewport (VP.xmin,VP.xmax, VP.ymin, VP.ymax);
   giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);
-  giza_set_character_height (oldCh);
-  giza_set_line_width (oldLw);
-  giza_set_colour_index (oldCi);
+
+  /* restore the previously saved settings */
+  giza_restore();
+
   _giza_reset_drawn ();
   giza_draw_background ();
   giza_flush_device ();
@@ -516,7 +514,7 @@ _giza_split_device_string (char *deviceString, char **devType)
 
   /* Set the name */
   int nameLength = strlen (deviceString) - strlen (*devType);
-  /* Ignore no name (use defualt) */
+  /* Ignore no name (use default) */
   if (nameLength != 0)
     {
       char devName[nameLength + 1];
