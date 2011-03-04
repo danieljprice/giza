@@ -135,7 +135,7 @@ giza_get_font (char *font, int n)
 
    if (n < 1)
      {
-       _giza_warning ("giza_get_font", "String is to short, returning null");
+       _giza_warning ("giza_get_font", "String is too short, returning null");
        font = NULL;
        return;
      }
