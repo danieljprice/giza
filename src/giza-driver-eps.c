@@ -92,7 +92,7 @@ _giza_open_device_eps (int vert)
 void
 _giza_flush_device_eps (void)
 {
-  //cairo_surface_flush (context);
+  cairo_surface_flush (surface);
 }
 
 /**
