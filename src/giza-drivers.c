@@ -82,7 +82,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   /* Some general initialisation */
   Dev.pgNum = 0;
   Dev.type = GIZA_DEVICE_IV;
-  Dev.defaultBackgroundAlpha = 0.;
+  Dev.defaultBackgroundAlpha = 1.;
   int success = -1;
   giza_set_text_background (-1);
   giza_start_prompting ();
