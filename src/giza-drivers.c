@@ -106,6 +106,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
       Dev.type = _giza_device_to_int (devTypeStr);
     }
 
+      printf("GOT Dev.type = %i \n",Dev.type);
   /* Determine which driver is required */
   switch (Dev.type)
     {
@@ -622,7 +623,7 @@ giza_print_device_list (void)
 void
 _giza_init_device_list (char **deviceList)
 {
-  *deviceList = malloc (326 * sizeof(char));
+  *deviceList = malloc (500 * sizeof(char)); /* be CAREFUL here to make sure the string is big enough */
 #ifdef _GIZA_HAS_XW
   strcat (*deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
 #endif
