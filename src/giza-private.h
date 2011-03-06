@@ -40,7 +40,7 @@ struct GIZA_Device
   double heightCM;
   double deviceUnitsPermm;
   int isInteractive;
-  char *prefix;
+  char prefix[30];
   int pgNum;
   int CurrentTrans;
   double defaultBackgroundAlpha;

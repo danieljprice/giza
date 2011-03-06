@@ -45,7 +45,6 @@
 #define GIZA_DEFAULT_MARGIN 0
 
 static void _giza_set_prefix (char *prefix);
-static void _giza_free_prefix (void);
 
 /* 
  * NOTE: Should clean up surfaces etc if device open was not successful.
@@ -376,7 +375,6 @@ giza_close_device (void)
   // Destroy the font
   _giza_free_font ();
   _giza_free_colour_table ();
-  _giza_free_prefix ();
   Dev.type = GIZA_DEVICE_IV;
  
   return;
@@ -724,18 +722,7 @@ _giza_expand_clipping (void)
 static void
 _giza_set_prefix (char *prefix)
 {
-  int len = strlen (prefix);
-  Dev.prefix = malloc ((len + 1) * sizeof (char));
-  strcpy (Dev.prefix, prefix);
-}
-
-/**
- * Frees the memory associated with Dev.prefix
- */
-static void
-_giza_free_prefix (void)
-{
-  free (Dev.prefix);
+  strncpy (Dev.prefix, prefix, sizeof(Dev.prefix));
 }
 
 /*
