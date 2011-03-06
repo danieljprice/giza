@@ -239,27 +239,14 @@ giza_flush_device (void)
       _giza_flush_device_xw ();
       break;
 #endif
-    case GIZA_DEVICE_PNG:
-      _giza_flush_device_png ();
-      break;
-    case GIZA_DEVICE_PDF:
-    case GIZA_DEVICE_VPDF:
-      _giza_flush_device_pdf ();
-      break;
-    case GIZA_DEVICE_PS:
-    case GIZA_DEVICE_VPS:
-      _giza_flush_device_ps ();
-      break;
-    case GIZA_DEVICE_NULL:
-      _giza_flush_device_null ();
-      break;
-#ifdef _GIZA_HAS_EPS
-    case GIZA_DEVICE_EPS:
-      _giza_flush_device_eps ();
-      break;
-#endif
     default:
-      _giza_error ("giza_flush_device", "No device open, cannot flush");
+      if (!surface) 
+        {
+          _giza_error ("giza_flush_device", "No device open, cannot flush");
+          return;
+        } else {
+          cairo_surface_flush(surface);        
+        }
       return;
     }
   return;
