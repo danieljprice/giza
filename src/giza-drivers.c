@@ -183,7 +183,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   _giza_init_save ();
   giza_set_clipping(1);
 
-  return 0;
+  return Dev.pgnum;
 }
 
 /**
