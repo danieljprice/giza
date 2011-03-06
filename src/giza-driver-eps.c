@@ -54,6 +54,7 @@ _giza_open_device_eps (int vert)
 
   Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
   Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
+  Dev.defaultBackgroundAlpha = 0.;
 
   // set all device specific settings
   if (_giza_sizeSpecified() )
