@@ -106,7 +106,6 @@ giza_open_device (char *newDeviceName, char *newPrefix)
       Dev.type = _giza_device_to_int (devTypeStr);
     }
 
-      printf("GOT Dev.type = %i \n",Dev.type);
   /* Determine which driver is required */
   switch (Dev.type)
     {
