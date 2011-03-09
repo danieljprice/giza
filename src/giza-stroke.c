@@ -20,6 +20,7 @@
 #include "giza-transforms-private.h"
 #include "giza-private.h"
 #include "giza-line-style-private.h"
+#include "giza-stroke-private.h"
 #include <giza.h>
 
 /**
@@ -32,8 +33,8 @@ _giza_stroke (void)
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  // set the line style incase there has been a change in character 
-  // height/line width
+  /* set the line style in case there has been a change in character 
+     height or line width */
   int ls;
   giza_get_line_style (&ls);
   giza_set_line_style (ls);
