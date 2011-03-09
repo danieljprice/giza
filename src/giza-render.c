@@ -47,7 +47,7 @@ static void _giza_colour_pixel (unsigned char *array, int pixNum, double pos);
  *  -affine        :- The affine transformation matrix that will be applied to the data.
  */
 void
-giza_render (int sizex, int sizey, double data[sizey][sizex], int i1, int i2,
+giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int i2,
 	    int j1, int j2, double valMin, double valMax, double *affine)
 {
   if (!_giza_check_device_ready ("giza_render"))
@@ -129,7 +129,7 @@ giza_render (int sizex, int sizey, double data[sizey][sizex], int i1, int i2,
  * See Also: giza_render
  */
 void
-giza_render_float (int sizex, int sizey, float data[sizey][sizex], int i1,
+giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
 		  float *affine)
 {
@@ -177,7 +177,7 @@ giza_render_float (int sizex, int sizey, float data[sizey][sizex], int i1,
     {
       for (i = i1; i <= i2; i++)
 	{
-	  pos = (double) (data[j][i] - valMin) / (valMax - valMin);
+          pos = (double) (data[j][i] - valMin) / (valMax - valMin);
 	  _giza_colour_pixel (pixdata, pixnum, pos);
 	  pixnum = pixnum + 1;
 	}
@@ -214,9 +214,9 @@ _giza_colour_pixel (unsigned char *array, int pixNum, double pos)
 {
   double r, g, b;
   giza_rgb_from_table (pos, &r, &g, &b);
-  // set the alpha
+  /* set the alpha */
   array[pixNum * 4 + 3] = 255;
-  // set the red, green, and blue
+  /* set the red, green, and blue */
   array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
   array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
   array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
@@ -235,9 +235,9 @@ _giza_colour_pixel_index (unsigned char *array, int pixNum, int ci)
 {
   double r, g, b,alpha;
   giza_get_colour_representation_alpha(ci, &r, &g, &b, &alpha);
-  // set the alpha
+  /* set the alpha */
   array[pixNum * 4 + 3] = (unsigned char) (alpha * 255.);
-  // set the red, green, and blue
+  /* set the red, green, and blue */
   array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
   array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
   array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
@@ -262,7 +262,7 @@ _giza_colour_pixel_index (unsigned char *array, int pixNum, int ci)
  *  -ymax        :- world coordinate corresponding to top of pixel array
  */
 void
-giza_draw_pixels (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
+giza_draw_pixels (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
 	    int j1, int j2, double xmin, double xmax, double ymin, double ymax)
 {
   if (!_giza_check_device_ready ("giza_render_pixels"))
@@ -284,7 +284,7 @@ giza_draw_pixels (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
 
-  // apply the transformation
+  /* apply the transformation */
   int oldCi;
   giza_get_colour_index (&oldCi);
   int oldTrans = _giza_get_trans ();
@@ -296,7 +296,7 @@ giza_draw_pixels (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
 		     xmin, ymin);
   cairo_transform (context, &mat);
 
-  // allocate data for the pixmap
+  /* allocate data for the pixmap */
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
   stride = cairo_format_stride_for_width (format, width);
 #else
@@ -304,7 +304,7 @@ giza_draw_pixels (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
 #endif
   pixdata = malloc (stride * height);
 
-  // colour each pixel in the pixmap
+  /* colour each pixel in the pixmap */
   int i, j;
   pixnum = 0;
   for (j = j1; j <= j2; j++)
@@ -317,16 +317,16 @@ giza_draw_pixels (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
 	}
     }
 
-  // create the cairo surface from the pixmap
+  /* create the cairo surface from the pixmap */
   pixmap = cairo_image_surface_create_for_data (pixdata, format,
 						width, height, stride);
 
-  // paint the pixmap to the primary surface
+  /* paint the pixmap to the primary surface */
   cairo_set_source_surface (context, pixmap, 0, 0);
   cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_PAD);
   cairo_paint (context);
 
-  // clean up and restore settings
+  /* clean up and restore settings */
   _giza_set_trans (oldTrans);
   giza_set_colour_index (oldCi);
   cairo_surface_destroy (pixmap);
@@ -347,7 +347,7 @@ giza_draw_pixels (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
  */
 
 void
-giza_draw_pixels_float (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
+giza_draw_pixels_float (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
 	    int j1, int j2, float xmin, float xmax, float ymin, float ymax)
 {
   if (!_giza_check_device_ready ("giza_render_pixels_float"))
