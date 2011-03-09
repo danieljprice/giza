@@ -17,6 +17,7 @@
  *
  */
 #include "giza-text-background-private.h"
+#include <giza.h>
 
 /**
  * Settings: giza_set_text_background
