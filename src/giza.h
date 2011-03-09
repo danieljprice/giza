@@ -273,6 +273,10 @@ void giza_get_viewport (int units, double *x1, double *x2, double *y1,
 			double *y2);
 void giza_get_viewport_float (int units, float *x1, float *x2, float *y1,
 			      float *y2);
+void giza_set_viewport_inches (double xleftin, double xrightin, 
+                               double ybottomin, double ytopin);
+void giza_set_viewport_inches_float (float xleftin, float xrightin,
+                                     float ybottomin, float ytopin);
 
 void giza_start_warnings (void);
 void giza_stop_warnings (void);
