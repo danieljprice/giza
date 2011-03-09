@@ -105,6 +105,13 @@ giza_set_colour_table (double *controlPoints, double *red, double *green, double
 	}
     }
   _giza_colour_table.n = tmpn; 
+   if (tmpn < 2)
+   {
+     _giza_warning ("giza_set_colour_table", "Invalid values for control points in colour table settings");
+     return 2;
+   }
+
+  /* use the installed colour table to set the colours of colour indices in the specified range */
   _giza_set_range_from_colour_table(_giza_colour_index_min,_giza_colour_index_max);
 
   return 0;
@@ -168,6 +175,13 @@ giza_set_colour_table_float (float *controlPoints, float *red, float *green, flo
 	}
     }
   _giza_colour_table.n = tmpn;
+   if (tmpn < 2)
+   {
+     _giza_warning ("giza_set_colour_table_float", "Invalid values for control points in colour table settings");
+     return 2;
+   }
+
+  /* use the installed colour table to set the colours of colour indices in the specified range */
   _giza_set_range_from_colour_table(_giza_colour_index_min,_giza_colour_index_max);
 
   return 0;
@@ -192,10 +206,11 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
   if (!_giza_check_device_ready ("giza_rgb_from_table"))
     return;
 
-  //
-  // find between which control points pos lies
+  *red = -1.;
+
+  /* find between which control points pos lies */
   int i;
-  // If it is lower than lowest control point get the lowest colour
+  /* If it is lower than lowest control point get the lowest colour */
   if (pos < _giza_colour_table.controlPoints[0])
     {
       *red = _giza_colour_table.red[0];
@@ -203,21 +218,21 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
       *blue = _giza_colour_table.blue[0];
       return;
     }
-  // If it is higher than the highest control point get the highest colour
-  if (pos > _giza_colour_table.controlPoints[_giza_colour_table.n - 1])
+  /* If it is higher than the highest control point get the highest colour */
+  if (pos >= _giza_colour_table.controlPoints[_giza_colour_table.n - 1])
     {
       *red = _giza_colour_table.red[_giza_colour_table.n - 1];
       *green = _giza_colour_table.green[_giza_colour_table.n - 1];
       *blue = _giza_colour_table.blue[_giza_colour_table.n - 1];
       return;
     }
-  // Other wise look in the table
+  /* Otherwise look in the table */
   for (i = 1; i < _giza_colour_table.n; i++)
     {
       if (pos < _giza_colour_table.controlPoints[i])
 	{
 	  double fraction, d_giza_colour_table;
-	  // find where between the two control points pos lies
+	  /* find where between the two control points pos lies */
 	  d_giza_colour_table = (_giza_colour_table.controlPoints[i] - _giza_colour_table.controlPoints[i - 1]);
 	  if (fabs (d_giza_colour_table) > GIZA_TINY)
 	    {
@@ -227,7 +242,7 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
 	    {
 	      fraction = 1.;
 	    }
-	  // set the r,g,b using this fraction
+	  /* set the r,g,b using this fraction */
 	  *red = _giza_colour_table.red[i - 1] + fraction * (_giza_colour_table.red[i] - _giza_colour_table.red[i - 1]);
 	  *green =
 	    _giza_colour_table.green[i - 1] + fraction * (_giza_colour_table.green[i] -
@@ -237,6 +252,8 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
 	  return;
 	}
     }
+    
+   if (*red < 0.) _giza_error("giza_rgb_from_table","Internal error, colour not set");
 }
 
 /**
