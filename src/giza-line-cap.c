@@ -19,6 +19,7 @@
 
 #include "giza-private.h"
 #include "giza-io-private.h"
+#include <giza.h>
 
 /**
  * Settings: giza_set_line_cap
