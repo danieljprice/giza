@@ -19,6 +19,7 @@
 
 #include "giza-private.h"
 #include "giza-io-private.h"
+#include "giza-set-font-private.h"
 #include <giza.h>
 #include <stdlib.h>
 #include <string.h>
