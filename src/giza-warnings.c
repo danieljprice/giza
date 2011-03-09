@@ -16,6 +16,8 @@
  * Contact: wetter.j@gmail.com
  *
  */
+ 
+#include <giza.h>
 
 int _giza_warnings = 1;
 
@@ -33,7 +35,7 @@ giza_start_warnings (void)
 }
 
 /**
- * Seetings: giza_stop_warnings
+ * Settings: giza_stop_warnings
  *
  * Synopsis: Warnings will not be printed to stderr.
  *
