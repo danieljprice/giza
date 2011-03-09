@@ -20,6 +20,7 @@
 #include "giza-private.h"
 #include "giza-transforms-private.h"
 #include "giza-io-private.h"
+#include <giza.h>
 #define GIZA_SMALLEST_LW 1.e-6
 
 double _giza_lw;
@@ -49,7 +50,7 @@ giza_set_line_width (double lw)
 
   _giza_lw = lw;
 
-  // adjust the line width so it is uniform across devices and 1 is a good size
+  /* adjust the line width so it is uniform across devices and 1 is a good size */
   double lwDevice = lw * Dev.deviceUnitsPermm * 0.25;
 
   int oldTrans = _giza_get_trans ();
