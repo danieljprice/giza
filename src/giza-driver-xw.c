@@ -202,6 +202,7 @@ _giza_change_page_xw (void)
 
   // recreate the cairo surface
   surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  cairo_destroy(context);
   context = cairo_create (surface);
 }
 
@@ -231,6 +232,7 @@ _giza_close_device_xw (void)
       _giza_xevent_loop (0, 0, 0, 0, &x, &y, &ch);
     }
    */
+  /*XFreePixmap (XW.display, XW.pixmap); do we need this?*/
   XCloseDisplay (XW.display);
   cairo_surface_destroy (surface);
 }
