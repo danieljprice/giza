@@ -66,7 +66,7 @@ void giza_set_colour_index (int ci);
 void giza_get_colour_index (int *ci);
 void giza_set_colour_index_range (int cimin, int cimax);
 void giza_get_colour_index_range (int *cimin, int *cimax);
-//void giza_set_range_as_colour_table (int *cimin, int *cimax)
+/*void giza_set_range_as_colour_table (int *cimin, int *cimax)*/
 
 void giza_set_colour_representation (int ci, double red, double green,
 				     double blue);
@@ -102,6 +102,8 @@ void giza_rgb_from_table_float (double pos, float *red, float *green,
 void giza_contour (int sizex, int sizey, const double data[sizey][sizex],
 		   int i1, int i2, int j1, int j2, int ncont,
 		   const double cont[ncont], const double *affine);
+void giza_contour_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
+	      int i2, int j1, int j2, int ncont, const float cont[ncont], const float *affine);
 
 void giza_get_current_point (double *xpt, double *ypt);
 void giza_get_current_point_float (float *xpt, float *ypt);
@@ -231,15 +233,15 @@ void giza_qtextlen_float (int units, char *text, float *xlen, float *ylen);
 void giza_rectangle (double x1, double x2, double y1, double y2);
 void giza_rectangle_float (float x1, float x2, float y1, float y2);
 
-void giza_render (int sizex, int sizey, double data[sizey][sizex], int i1,
+void giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
 		  double *affine);
-void giza_render_float (int sizex, int sizey, float data[sizey][sizex],
+void giza_render_float (int sizex, int sizey, const float data[sizey][sizex],
 			int i1, int i2, int j1, int j2, float valMin,
 			float valMax, float *affine);
-void giza_draw_pixels (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
+void giza_draw_pixels (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
 	    int j1, int j2, double xmin, double xmax, double ymin, double ymax);
-void giza_draw_pixels_float (int sizex, int sizey, int idata[sizey][sizex], int i1, int i2,
+void giza_draw_pixels_float (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
 	    int j1, int j2, float xmin, float xmax, float ymin, float ymax);
 
 double giza_round (double x, int *nsub);
