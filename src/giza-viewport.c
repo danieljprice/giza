@@ -23,6 +23,7 @@
 #include "giza-transforms-private.h"
 #include "giza-window-private.h"
 #include <giza.h>
+#include <stdio.h>
 
 #define GIZA_DEFAULT_VP_MARGIN_VERT 0.08
 #define GIZA_DEFAULT_VP_MARGIN_HORI 0.08
@@ -46,7 +47,12 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
   if (!_giza_check_device_ready ("giza_set_viewport"))
     return;
   if (xleft >= xright || ybottom >= ytop)
-    _giza_warning ("giza_set_viewport", "Invalid arguments, viewport not set");
+    {
+      printf("giza_viewport: xmin %f xmax %f ymin %f ymax %f \n",xleft,xright,ybottom,ytop);
+      _giza_warning ("giza_set_viewport", "Invalid arguments, using default viewport");
+      giza_set_viewport_default();
+      return;
+    }
 
   VP.xmin = xleft;
   VP.xmax = xright;
