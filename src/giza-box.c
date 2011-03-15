@@ -100,16 +100,17 @@ giza_box (const char *xopt, double xtick, int nxsub,
   int nMinTicksx, major;
   int nMinTicksy;
   double majTickL, subTickL, currentTickL;
+  char tmp[100];
+  int i, i1, i2, j, jmax;
 
-  // set x-options
-  int i;
+  /* set x-options */
   for (i = 0; xopt[i]; i++)
     {
       switch (xopt[i])
 	{
 	case ('a'):
 	case ('A'):
-	  // Check the axis will be inside the box!
+	  /* Check the axis will be inside the box! */
 	  if (Win.ymin < 0 && Win.ymax > 0)
 	    xopta = 1;
 	  break;
@@ -146,14 +147,14 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	}
     }
 
-  // set y-options
+  /* set y-options */
   for (i = 0; yopt[i]; i++)
     {
       switch (yopt[i])
 	{
 	case ('a'):
 	case ('A'):
-	  // check the axis will be in the box!
+	  /* check the axis will be in the box! */
 	  if (Win.xmin < 0 && Win.xmax > 0)
 	    yopta = 1;
 	  break;
@@ -197,18 +198,18 @@ giza_box (const char *xopt, double xtick, int nxsub,
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  // set major tick length in pixels
+  /* set major tick length in pixels */
   majTickL = Sets.fontExtents.max_x_advance * 0.33;
   subTickL = 0.;
 
-  //convert to world coords
+  /* convert to world coords */
   cairo_device_to_user_distance (context, &subTickL, &majTickL);
   majTickL = -majTickL;
 
-  // set minor tick length as a fraction of the major tick length
+  /* set minor tick length as a fraction of the major tick length */
   subTickL = majTickL * 0.5;
 
-  // Choose x tick intervals
+  /* Choose x tick intervals */
   if (xoptl)
     {
       nMinTicksx = 1;
@@ -235,10 +236,9 @@ giza_box (const char *xopt, double xtick, int nxsub,
     }
   xintervalMin = xintervalMaj / (double) nMinTicksx;
 
-  // Draw X ticks
+  /* Draw X ticks */
   if (xoptt || xopts)
     {
-      int i, i1, i2, j, jmax;
       _giza_tick_intervals (Win.xmin, Win.xmax, xintervalMin, &i1, &i2);
       jmax = 0;
       if (xoptl)
@@ -248,33 +248,33 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	{
 	  for (i = i1; i <= i2; i++)
 	    {
-	      // If log axis ticks always have 9 minor ticks
+	      /* If log axis ticks always have 9 minor ticks */
 	      for (j = 0; j <= jmax; j++)
 		{
-		  // log axis ticks are major when j = 0
+		  /* log axis ticks are major when j = 0 */
 		  major = (i % nMinTicksx == 0) && xoptt && (j == 0);
 		  currentTickL = subTickL;
 		  if (major)
 		    currentTickL = majTickL;
 		  xval = (i + logTab[j]) * xintervalMin;
 
-		  // don't draw over axis or outside the box
+		  /* don't draw over axis or outside the box */
 		  if ((xopta && (i == 0)) || (xval >= Win.xmax) || (xval <= Win.xmin))
 		    currentTickL = 0;
 
-		  // bottom
+		  /* bottom */
 		  if (xoptb)
 		    {
 		      cairo_move_to (context, xval, Win.ymin);
 		      cairo_line_to (context, xval, Win.ymin + currentTickL);
 		    }
-		  // axis
+		  /* axis */
 		  if (xopta)
 		    {
 		      cairo_move_to (context, xval, 0.);
 		      cairo_line_to (context, xval, currentTickL);
 		    }
-		  // top
+		  /* top */
 		  if (xoptc)
 		    {
 		      cairo_move_to (context, xval, Win.ymax);
@@ -287,10 +287,9 @@ giza_box (const char *xopt, double xtick, int nxsub,
       _giza_stroke ();
     }
 
-  // X labels
+  /* X labels */
   if (xoptn || xoptm)
     {
-      int i, i1, i2;
       _giza_tick_intervals (Win.xmin, Win.xmax, xintervalMaj, &i1, &i2);
       np = floor (log10 (fabs (xintervalMaj)));
       nv = _giza_nint (xintervalMaj/pow (10., np));
@@ -301,7 +300,6 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	  xratio = (xval - Win.xmin) / (Win.xmax - Win.xmin);
 	  if (xratio >= 0. && xratio <= 1.)
 	    {
-	      char tmp[50];
 	      if (xoptl)
 		{
 		  sprintf (tmp, "10^{%i}", _giza_nint (xval));
@@ -324,11 +322,9 @@ giza_box (const char *xopt, double xtick, int nxsub,
       _giza_stroke ();
     }
 
-  // extra labels for log axis
+  /* extra labels for log axis */
   if (xoptl && (Win.xmax - Win.xmin < 2.))
     {
-      int i, i1, i2, j;
-      char tmp[100];
       _giza_tick_intervals (Win.xmin, Win.xmax, xintervalMin, &i1, &i2);
       for (i = i1 - 1; i <= i2; i++)
 	{
@@ -353,16 +349,16 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	}
     }
 
-  // set major tick length in pixels
+  /* set major tick length in pixels */
   majTickL = Sets.fontExtents.max_x_advance * 0.33;
   subTickL = 0.;
-  //convert to world coords
+  /* convert to world coords */
   cairo_device_to_user_distance (context, &majTickL, &subTickL);
 
-  // set minor tick as a fraction of the major length
+  /* set minor tick as a fraction of the major length */
   subTickL = majTickL * 0.5;
 
-  // Choose y tick intervals
+  /* Choose y tick intervals */
   if (yoptl)
     {
       nMinTicksy = 1;
@@ -387,10 +383,9 @@ giza_box (const char *xopt, double xtick, int nxsub,
     }
   yintervalMin = yintervalMaj / (double) nMinTicksy;
 
-  // Draw y ticks
+  /* Draw y ticks */
   if (yoptt || yopts)
     {
-      int i, i1, i2, j, jmax;
       _giza_tick_intervals (Win.ymin, Win.ymax, yintervalMin, &i1, &i2);
       jmax = 0;
       if (yoptl)
@@ -408,23 +403,23 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		    currentTickL = majTickL;
 		  yval = (i + logTab[j]) * yintervalMin;
 
-		  // don't draw over the axis or outside the box
+		  /* don't draw over the axis or outside the box */
 		  if ((yopta && (i == 0)) || yval >= Win.ymax || yval <= Win.ymin)
 		    currentTickL = 0.;
 
-		  // left
+		  /* left */
 		  if (yoptb)
 		    {
 		      cairo_move_to (context, Win.xmin, yval);
 		      cairo_line_to (context, Win.xmin + currentTickL, yval);
 		    }
-		  // axis
+		  /* axis */
 		  if (yopta)
 		    {
 		      cairo_move_to (context, 0., yval);
 		      cairo_line_to (context, currentTickL, yval);
 		    }
-		  // right
+		  /* right */
 		  if (yoptc)
 		    {
 		      cairo_move_to (context, Win.xmax, yval);
@@ -437,10 +432,9 @@ giza_box (const char *xopt, double xtick, int nxsub,
       _giza_stroke ();
     }
 
-  // Label Y
+  /* Label Y */
   if (yoptn || yoptm)
     {
-      int i, i1, i2;
       _giza_tick_intervals (Win.ymin, Win.ymax, yintervalMaj, &i1, &i2);
       np = floor (log10 (fabs (yintervalMaj)));
       nv = _giza_nint (yintervalMaj/pow (10., np));
@@ -451,7 +445,6 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	  yratio = (yval - Win.ymin) / (Win.ymax - Win.ymin);
 	  if (yratio >= 0. && yratio <= 1.)
 	    {
-	      char tmp[50];
 	      if (yoptl)
 		{
 		  sprintf (tmp, "10^{%i}", _giza_nint (yval));
@@ -479,11 +472,9 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	}
     }
 
-  // extra labels for log axis
+  /* extra labels for log axis */
   if (yoptl && (Win.ymax - Win.ymin < 2.))
     {
-      int i, i1, i2, j;
-      char tmp[100];
       _giza_tick_intervals (Win.ymin, Win.ymax, yintervalMin, &i1, &i2);
       for (i = i1 - 1; i <= i2; i++)
 	{
@@ -522,49 +513,49 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	}
     }
 
-  // draw the bottom of the box
+  /* draw the bottom of the box */
   if (xoptb)
     {
       cairo_move_to (context, Win.xmin, Win.ymin);
       cairo_line_to (context, Win.xmax, Win.ymin);
     }
 
-  // draw the right of the box
+  /* draw the right of the box */
   if (yoptc)
     {
       cairo_move_to (context, Win.xmax, Win.ymin);
       cairo_line_to (context, Win.xmax, Win.ymax);
     }
 
-  // draw the top of the box
+  /* draw the top of the box */
   if (xoptc)
     {
       cairo_move_to (context, Win.xmax, Win.ymax);
       cairo_line_to (context, Win.xmin, Win.ymax);
     }
 
-  // draw the left of the box
+  /* draw the left of the box */
   if (yoptb)
     {
       cairo_move_to (context, Win.xmin, Win.ymax);
       cairo_line_to (context, Win.xmin, Win.ymin);
     }
 
-  // draw the x axis
+  /* draw the x axis */
   if (xopta)
     {
       cairo_move_to (context, Win.xmin, 0.);
       cairo_line_to (context, Win.xmax, 0.);
     }
 
-  // draw the y axis
+  /* draw the y axis */
   if (yopta)
     {
       cairo_move_to (context, 0., Win.ymin);
       cairo_line_to (context, 0., Win.ymax);
     }
 
-  // stroke all the paths
+  /* stroke all the paths */
   int lc;
   giza_get_line_cap (&lc);
   giza_set_line_cap (CAIRO_LINE_CAP_SQUARE);
@@ -572,7 +563,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   giza_set_line_cap (lc);
   _giza_set_trans (oldTrans);
 
-  // end buffer if it was not on before this function call
+  /* end buffer if it was not on before this function call */
   if (!oldBuf)
     {
       giza_end_buffer ();
@@ -583,7 +574,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
       giza_flush_device ();
     }
 
-  // Restore clipping
+  /* Restore clipping */
   giza_set_viewport (VP.xmin, VP.xmax, VP.ymin, VP.ymax);
 }
 
@@ -679,28 +670,30 @@ giza_round_float (float x, int *nsub)
  * Finds the required number of significant figures to distinguish
  * between the tick intervals (DJP)
  */
-//static int
-//_giza_get_sigfigs (const double xmin, const double xmax,
-//		   const double xinterval)
-//{
-//  double max = fabs (xmax), min = fabs (xmin);
-//  int nsigfig;
-//  if (max > min)
-//    {
-//      nsigfig = fabs (log10 (max)) + 1;
-//    }
-//  else
-//    {
-//      nsigfig = fabs (log10 (min)) + 1;
-//    }
-//  nsigfig = nsigfig + fabs (log10 (xinterval)) + 1;
-//
-//  /* DJP: this is a workaround for the fact that
-//   * the sigfigs calculation does not work at all
-//   * for exponentials: just use a maximum
-//   */
-//  if (nsigfig > 12 || nsigfig < 2)
-//    nsigfig = 12;
-//  return nsigfig;
-//}
+/*static int
+_giza_get_sigfigs (const double xmin, const double xmax,
+		   const double xinterval)
+{
+  double max = fabs (xmax), min = fabs (xmin);
+  int nsigfig;
+  if (max > min)
+    {
+      nsigfig = fabs (log10 (max)) + 1;
+    }
+  else
+    {
+      nsigfig = fabs (log10 (min)) + 1;
+    }
+  nsigfig = nsigfig + fabs (log10 (xinterval)) + 1;
+*/
 
+  /* DJP: this is a workaround for the fact that
+   * the sigfigs calculation does not work at all
+   * for exponentials: just use a maximum
+   */
+/*
+  if (nsigfig > 12 || nsigfig < 2)
+    nsigfig = 12;
+  return nsigfig;
+}
+*/
