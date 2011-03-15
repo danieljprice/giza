@@ -361,7 +361,8 @@ _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanc, double
   cairo_user_to_device (context, &xanc, &yanc);
   cairo_user_to_device (context, x, y);
   int ix = (int) *x, iy = (int) *y;
-  _giza_xevent_loop (mode, moveCurs, xanc, yanc, &ix, &iy, ch);
+  int ixanc = (int) xanc, iyanc = (int) yanc;
+  _giza_xevent_loop (mode, moveCurs, ixanc, iyanc, &ix, &iy, ch);
 
   *x = (double) ix;
   *y = (double) iy;
