@@ -272,7 +272,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 	nret = XLookupString((XKeyEvent *)&event, buffer,
 			     (int) (sizeof(buffer)/sizeof(char)), &key, NULL);
 	
-	/* ignore irrelavent keys */
+	/* ignore irrelevant keys */
 	if(nret==1 && (key < XK_Shift_L || key > XK_Hyper_R)) {
 	  *x = event.xkey.x ;/*- GIZA_XW_MARGIN; */
 	  *y = event.xkey.y ;/*- GIZA_XW_MARGIN; */
