@@ -67,93 +67,93 @@ giza_annotate (char *side, double displacment, double coord,
 
   int oldTrans = _giza_get_trans ();
 
-  // work out where to put the text (done in world coords)
+  /* work out where to put the text (done in world coords) */
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   double x = 0, y = 0, angle = 0;
   double xch, ych;
   giza_get_character_size (GIZA_UNITS_WORLD, &xch, &ych);
 
-  // check which side to draw on
-  // if drawing along the bottom
+  /* check which side to draw on */
+  /* if drawing along the bottom */
   if (strchr (side, 'B') || strchr (side, 'b'))
     {
-      // find the position on the x axis to place text
+      /* find the position on the x axis to place text */
       x = Win.xmin + (Win.xmax - Win.xmin) * coord;
 
-      // find the x axis
+      /* find the x axis */
       y = Win.ymin;
 
-      // shift the position of the text away from the view port by displacement
+      /* shift the position of the text away from the view port by displacement */
       y = y - (ych * displacment);
     }
-  // if drawing along the top
+  /* if drawing along the top */
   else if (strchr (side, 'T') || strchr (side, 't'))
     {
-      // find the position on the x axis to place text
+      /* find the position on the x axis to place text */
       x = Win.xmin + (Win.xmax - Win.xmin) * coord;
 
-      // find the x axis
+      /* find the x axis */
       y = Win.ymax;
 
-      // shift the position of the text away from the view port by displacement
+      /* shift the position of the text away from the view port by displacement */
       y = y + ych * displacment;
     }
-  // if drawing along the left
+  /* if drawing along the left */
   else if (strchr (side, 'L') || strchr (side, 'l'))
     {
       if (strchr (side, 'V') || strchr (side, 'v'))
 	{
-	  // find the position on the y axis
+	  /* find the position on the y axis */
 	  y = Win.ymin + (Win.ymax - Win.ymin) * coord - ych * 0.25;
 
-	  // find the distance from the y axis
+	  /* find the distance from the y axis */
 	  x = Win.xmin - (xch * displacment);
 
-	  // Set the angle
+	  /* Set the angle */
 	  angle = 0;
 	}
       else
 	{
-	  // find the position on the y axis to place text
+	  /* find the position on the y axis to place text */
 	  y = Win.ymin + (Win.ymax - Win.ymin) * coord;
 
-	  // find the y axis
+	  /* find the y axis */
 	  x = Win.xmin;
 
-	  // shift the position of the text away from the view port by displacement
+	  /* shift the position of the text away from the view port by displacement */
 	  x = x - (xch * displacment);
 
-	  // set the angle
+	  /* set the angle */
 	  angle = 90;
 	}
     }
-  // if drawing along the right
+  /* if drawing along the right */
   else if (strchr (side, 'R') || strchr (side, 'r'))
     {
       if (strchr (side, 'V') || strchr (side, 'v'))
 	{
-	  // find the position on the y axis
+	  /* find the position on the y axis */
 	  y = Win.ymin + (Win.ymax - Win.ymin) * coord - ych * 0.25;
 
-	  // find the distance from the y axis
+	  /* find the distance from the y axis */
 	  x = Win.xmax + (xch * displacment);
 
-	  // Set the angle
+	  /* Set the angle */
 	  angle = 0;
 	}
       else
 	{
-	  // find the position on the y axis to place text
+	  /* find the position on the y axis to place text */
 	  y = Win.ymin + (Win.ymax - Win.ymin) * coord;
 
-	  // find the y axis
+	  /* find the y axis */
 	  x = Win.xmax;
 
-	  // shift the position of the text away from the view port by displacement
+	  /* shift the position of the text away from the view port by displacement */
 	  x = x + (xch * displacment);
 
-	  // set the angle
+	  /* set the angle */
 	  angle = 90;
 	}
     }

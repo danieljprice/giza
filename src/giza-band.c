@@ -102,11 +102,10 @@ _giza_refresh_band (int mode, int x1, int y1, int x2, int y2)
 {
   if (mode <= 0 || mode > GIZA_MAX_BAND_MODES) return;
 
-  // Draw over the old band
+  /* Draw over the old band */
   cairo_paint (Band.restore);
  
 /* 
-  // set clipping
   int topleftx = x1 - 10;
   int toplefty = y1 - 10;
   int bottomrightx = x2 + 10;
@@ -130,49 +129,49 @@ _giza_refresh_band (int mode, int x1, int y1, int x2, int y2)
  */
   switch (mode)
     {
-      case 1: // Straight line
-       // Draw the band
+      case 1: /* Straight line */
+       /* Draw the band */
 	cairo_move_to (Band.box, x1, y1);
 	cairo_line_to (Band.box, x2, y2);
 	cairo_stroke (Band.box);
 	break;
-      case 2: // empty rectangle
-        // Draw the band
+      case 2: /* empty rectangle */
+        /* Draw the band */
         cairo_rectangle (Band.box, x1, y1, x2 - x1, y2 - y1);
         cairo_stroke (Band.box);
 	break;
-      case 3: // Two horizontal lines
+      case 3: /* Two horizontal lines */
         cairo_move_to (Band.box, 0., y1);
         cairo_line_to (Band.box, Band.maxWidth, y1);
         cairo_move_to (Band.box, 0., y2);
         cairo_line_to (Band.box, Band.maxWidth, y2);
         cairo_stroke (Band.box);
 	break;
-      case 4: // Two vertical lines
+      case 4: /* Two vertical lines */
         cairo_move_to (Band.box, x1, 0.);
         cairo_line_to (Band.box, x1, Band.maxHeight);
         cairo_move_to (Band.box, x2, 0.);
         cairo_line_to (Band.box, x2, Band.maxHeight);
         cairo_stroke (Band.box);
 	break;
-      case 5: // Single, horizontal line
+      case 5: /* Single, horizontal line */
         cairo_move_to (Band.box, 0., y2);
         cairo_line_to (Band.box, Band.maxWidth, y2);
         cairo_stroke (Band.box);
 	break;
-      case 6: // Single, vertical line
+      case 6: /* Single, vertical line */
         cairo_move_to (Band.box, x2, 0.);
         cairo_line_to (Band.box, x2, Band.maxHeight);
         cairo_stroke (Band.box);
 	break;
-      case 7: // Crosshair
+      case 7: /* Crosshair */
         cairo_move_to (Band.box, 0., y2);
         cairo_line_to (Band.box, Band.maxWidth, y2);
         cairo_move_to (Band.box, x2, 0.);
         cairo_line_to (Band.box, x2, Band.maxHeight);
         cairo_stroke (Band.box);
 	break;
-      case 8: // Circle
+      case 8: /* Circle */
         cairo_arc (Band.box, x1, y1, sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)), 0., 2 * M_PI);
         cairo_stroke (Band.box);
 	break;
@@ -190,12 +189,12 @@ _giza_destroy_band (int mode)
 {
   if (mode == 0) return;
 
-  // Free memory
+  /* Free memory */
   cairo_destroy (Band.restore);
   cairo_destroy (Band.box);
   cairo_surface_destroy (Band.onscreen);
 
-  // remove the last band
+  /* remove the last band */
   giza_flush_device ();
 }
 

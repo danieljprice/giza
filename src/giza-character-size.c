@@ -45,8 +45,8 @@ giza_set_character_height (double ch)
       return;
     }
 
-  // Sets the character size as a ratio of the current character size
-  // so that the font matrix is not destroyed
+  /* Sets the character size as a ratio of the current character size */
+  /* so that the font matrix is not destroyed */
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
@@ -212,15 +212,15 @@ _giza_scale_character_size (double scalefac)
       return;
     }
 
-  // Sets the character size as a ratio of the current character size
-  // so that the font matrix is not destroyed
+  /* Sets the character size as a ratio of the current character size */
+  /* so that the font matrix is not destroyed */
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
   cairo_matrix_t mat;
   cairo_get_font_matrix (context, &mat);
 
-//  _giza_ch = scalefac * _giza_ch;
+/*  _giza_ch = scalefac * _giza_ch; */
 
   cairo_matrix_scale (&mat, scalefac, scalefac);
   cairo_set_font_matrix (context, &mat);

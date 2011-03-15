@@ -165,7 +165,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
 
   /* some final initialisation */
   _giza_set_deviceOpen ();
-  //  _giza_set_defaults ();
+  /*  _giza_set_defaults (); */
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();
@@ -308,7 +308,7 @@ giza_change_page (void)
 
   Dev.pgNum++;
 
-  // Reset stuff
+  /* Reset stuff */
   giza_set_viewport (VP.xmin,VP.xmax, VP.ymin, VP.ymax);
   giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);
 
@@ -372,7 +372,7 @@ giza_close_device (void)
   _giza_reset_deviceOpen ();
   _giza_reset_sizeSpecified ();
 
-  // Destroy the font
+  /* Destroy the font */
   _giza_free_font ();
   _giza_free_colour_table ();
   Dev.type = GIZA_DEVICE_IV;
@@ -517,7 +517,7 @@ _giza_device_to_int (char *newDeviceName)
 {
   int newDevice;
 
-  // copy the string and make it lower case
+  /* copy the string and make it lower case */
   char devName[strlen (newDeviceName) + 1];
 
   int i;

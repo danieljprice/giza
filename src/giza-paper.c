@@ -33,13 +33,13 @@
 void
 giza_set_paper_size (double width, double aspect)
 {
-//  if (!_giza_check_device_ready ("giza_set_paper_size"))
-//    return;
+/*  if (!_giza_check_device_ready ("giza_set_paper_size")) */
+/*    return; */
 
   Dev.widthCM = width;
   Dev.heightCM = width * aspect;
   _giza_set_sizeSpecified ();
-  //giza_flush_device ();
+  /*giza_flush_device (); */
 }
 
 void

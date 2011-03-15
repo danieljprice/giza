@@ -29,7 +29,7 @@
 #include <cairo/cairo-ps.h>
 
 #define GIZA_DEFAULT_WIDTH 612
-#define GIZA_DEFAULT_HEIGHT 459 // use 4:3 aspect ratio
+#define GIZA_DEFAULT_HEIGHT 459 /* use 4:3 aspect ratio */
 #define GIZA_DEVICE_UNITS_PER_MM 2.8346
 #define GIZA_DEVICE_INTERACTIVE 0
 #define GIZA_DEVICE_EXTENSION ".eps"
@@ -56,7 +56,7 @@ _giza_open_device_eps (int vert)
   Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
   Dev.defaultBackgroundAlpha = 0.;
 
-  // set all device specific settings
+  /* set all device specific settings */
   if (_giza_sizeSpecified() )
     {
       Dev.width  = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;
@@ -111,17 +111,17 @@ _giza_close_device_eps (void)
 void
 _giza_change_page_eps (void)
 {
-  // Close the old eps
+  /* Close the old eps */
   cairo_destroy (context);
   cairo_surface_destroy (surface);
 
-  // name the new eps
+  /* name the new eps */
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
   char fileName[length + 1];
   sprintf (fileName, "%s_%04d%s", Dev.prefix, Dev.pgNum + 1, GIZA_DEVICE_EXTENSION);
 
-  // Open it
+  /* Open it */
   surface = cairo_ps_surface_create (fileName, Dev.width, Dev.height);
 
   if (!surface)

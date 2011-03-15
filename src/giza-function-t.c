@@ -55,8 +55,8 @@ giza_function_t (double (*funcx)(double *t), double (*funcy)(double *t),
   xpt0 = funcx(&tmin);
   ypt0 = funcy(&tmin);
   
-  if (flag==0)  // Find min/max in x,y automatically
-     {          // and call giza_environment
+  if (flag==0)  /* Find min/max in x,y automatically */
+     {          /* and call giza_environment */
        double xmin = xpt0;
        double xmax = xpt0;
        double ymin = ypt0;
@@ -144,8 +144,8 @@ giza_function_t_float (float (*funcx)(float *t), float (*funcy)(float *t),
   xpt0 = funcx(&tmin);
   ypt0 = funcy(&tmin);
   
-  if (flag==0)  // Find min/max in x,y automatically
-     {          // and call giza_environment
+  if (flag==0)  /* Find min/max in x,y automatically */
+     {          /* and call giza_environment */
        float xmin = xpt0;
        float xmax = xpt0;
        float ymin = ypt0;

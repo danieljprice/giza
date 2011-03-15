@@ -55,7 +55,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
     {
       xanc = xpts[*npts-1];
       yanc = ypts[*npts-1];     
-      // plot previously drawn line segments/points
+      /* plot previously drawn line segments/points */
       if (mode == GIZA_BAND_LINE)
         {
           giza_line(*npts,xpts,ypts);
@@ -77,7 +77,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
      err = _giza_get_key_press (modein, moveCurs, xanc, yanc, &x, &y, ch);
      modein = mode;
      
-     if (!strcmp(ch,"A") || !strcmp(ch,"a")) // || !strcmp(ch,GIZA_LEFT_CLICK))
+     if (!strcmp(ch,"A") || !strcmp(ch,"a")) /* || !strcmp(ch,GIZA_LEFT_CLICK)) */
        {
          if (*npts < maxpts-1)
            {
@@ -142,7 +142,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
        
        } else {
        
-         //printf("char = %i %s\n",*ch,ch);
+         /*printf("char = %i %s\n",*ch,ch); */
          _giza_message("unknown command, use (a)dd (d)elete/backspace, e(x)it or (q)uit/Esc");
 
        }

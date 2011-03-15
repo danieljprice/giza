@@ -72,7 +72,7 @@ giza_set_colour_table (double *controlPoints, double *red, double *green, double
 
   for (i = 0; i < n; i++)
     {
-      // check the control point is valid
+      /* check the control point is valid */
       if(controlPoints[i] >= 0.  && controlPoints[i] <= 1.)
 	{
 	  if(tmpn <= 0 || controlPoints[i] > _giza_colour_table.controlPoints[tmpn - 1])
@@ -142,7 +142,7 @@ giza_set_colour_table_float (float *controlPoints, float *red, float *green, flo
 
   for (i = 0; i < n; i++)
     {
-      // check the control point is valid
+      /* check the control point is valid */
       if(controlPoints[i] >= 0.  && controlPoints[i] <= 1.)
 	{
 	  if(tmpn <= 0 || controlPoints[i] > _giza_colour_table.controlPoints[tmpn - 1])

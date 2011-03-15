@@ -54,11 +54,11 @@ giza_contour (int sizex, int sizey, const double data[sizey][sizex], int i1,
     {{9, 6, 7}, {5, 2, 0}, {8, 0, 0}}
   };
 
-  // start buffering
+  /* start buffering */
   int oldBuf = Sets.buf;
   giza_begin_buffer ();
 
-  // Get the affine matrix ready
+  /* Get the affine matrix ready */
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
@@ -67,7 +67,7 @@ giza_contour (int sizex, int sizey, const double data[sizey][sizex], int i1,
   cairo_get_matrix (context, &mat);
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  // set up the line style
+  /* set up the line style */
   int ls;
   giza_get_line_style (&ls);
   giza_set_line_style (ls);
@@ -77,17 +77,17 @@ giza_contour (int sizex, int sizey, const double data[sizey][sizex], int i1,
     {
       for (i = i1; i < i2; i++)
 	{
-	  // find the minimum value at the corners of a 1x1 box
+	  /* find the minimum value at the corners of a 1x1 box */
 	  temp1 = MIN (data[j][i], data[j + 1][i]);
 	  temp2 = MIN (data[j][i + 1], data[j + 1][i + 1]);
 	  dmin = MIN (temp1, temp2);
 
-	  // find the max value at the corners of the 1x1 box
+	  /* find the max value at the corners of the 1x1 box */
 	  temp1 = MAX (data[j][i], data[j + 1][i]);
 	  temp2 = MAX (data[j][i + 1], data[j + 1][i + 1]);
 	  dmax = MAX (temp1, temp2);
 
-	  // Check it is in the range of a contour
+	  /* Check it is in the range of a contour */
 	  if (dmax < cont[0] || dmin > cont[ncont - 1])
 	    continue;
 
@@ -98,10 +98,10 @@ giza_contour (int sizex, int sizey, const double data[sizey][sizex], int i1,
 
 	      for (m = 4; m >= 0; m--)
 		{
-		  // calculate the relative height of the four corners and centre of the square
-		  // (i, j)   (i+1, j)
-		  // (i, j+1) (i+1, j+1)
-		  // as well as their device co-ords
+		  /* calculate the relative height of the four corners and centre of the square */
+		  /* (i, j)   (i+1, j) */
+		  /* (i, j+1) (i+1, j+1) */
+		  /* as well as their device co-ords */
 		  if (m > 0)
 		    {
 		      h[m] = data[j + jm[m - 1]][i + im[m - 1]] - cont[k];
@@ -138,43 +138,43 @@ giza_contour (int sizex, int sizey, const double data[sizey][sizex], int i1,
 
 		  switch (case_value)
 		    {
-		    case 1:	// Line between (i, j) (i + 1, j)
+		    case 1:	/* Line between (i, j) (i + 1, j) */
 		      x1 = xh[m1];
 		      y1 = yh[m1];
 		      x2 = xh[m2];
 		      y2 = yh[m2];
 		      break;
-		    case 2:	// Line between (i + 1, j) (i + 1, j + 1)
+		    case 2:	/* Line between (i + 1, j) (i + 1, j + 1) */
 		      x1 = xh[m2];
 		      y1 = yh[m2];
 		      x2 = xh[m3];
 		      y2 = yh[m3];
 		      break;
-		    case 3:	// Line between (i, j) (i + 1, j + 1)
+		    case 3:	/* Line between (i, j) (i + 1, j + 1) */
 		      x1 = xh[m3];
 		      y1 = yh[m3];
 		      x2 = xh[m1];
 		      y2 = yh[m1];
 		      break;
-		    case 4:	// Line between (i, j) and between (i + 1, j), (i + 1, j + 1)
+		    case 4:	/* Line between (i, j) and between (i + 1, j), (i + 1, j + 1) */
 		      x1 = xh[m1];
 		      y1 = yh[m1];
 		      x2 = xsect (m2, m3);
 		      y2 = ysect (m2, m3);
 		      break;
-		    case 5:	// Line between (i + 1, j) and between (i, j), (i + 1, j + 1)
+		    case 5:	/* Line between (i + 1, j) and between (i, j), (i + 1, j + 1) */
 		      x1 = xh[m2];
 		      y1 = yh[m2];
 		      x2 = xsect (m3, m1);
 		      y2 = ysect (m3, m1);
 		      break;
-		    case 6:	// Line between (i + 1, j + 1) and between (i, j), (i + 1, j + 1) 
+		    case 6:	/* Line between (i + 1, j + 1) and between (i, j), (i + 1, j + 1)  */
 		      x1 = xh[m3];
 		      y1 = yh[m3];
 		      x2 = xsect (m3, m2);
 		      y2 = ysect (m3, m2);
 		      break;
-		    case 7:	// Line between sides 1-2 and 2-3 
+		    case 7:	/* Line between sides 1-2 and 2-3  */
 		      x1 = xsect (m1, m2);
 		      y1 = ysect (m1, m2);
 		      x2 = xsect (m2, m3);
@@ -195,11 +195,11 @@ giza_contour (int sizex, int sizey, const double data[sizey][sizex], int i1,
 		    default:
 		      break;
 		    }
-		  // draw the line
+		  /* draw the line */
                   cairo_matrix_transform_point (&mat, &x1, &y1);
                   cairo_matrix_transform_point (&mat, &x2, &y2);
-                  //printf ("In index: (x1, y1) = (%f, %f)\n", x1, y1);
-                  //printf ("In coord: (x1, y1) = (%f, %f)\n", x1, y1);
+                  /*printf ("In index: (x1, y1) = (%f, %f)\n", x1, y1); */
+                  /*printf ("In coord: (x1, y1) = (%f, %f)\n", x1, y1); */
                   cairo_move_to (context, x1, y1);
 		  cairo_line_to (context, x2, y2);
 		  cairo_stroke (context);
@@ -208,10 +208,10 @@ giza_contour (int sizex, int sizey, const double data[sizey][sizex], int i1,
 	}
     }
 
-  // restore the transformation
+  /* restore the transformation */
   _giza_set_trans (oldTrans);
 
-  // restore buffering and stroke
+  /* restore buffering and stroke */
   if (!oldBuf)
     giza_end_buffer ();
   if (!Sets.buf)

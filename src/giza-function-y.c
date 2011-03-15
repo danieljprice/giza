@@ -44,8 +44,8 @@ giza_function_y (double (*func)(double *y), int n, double ymin, double ymax, int
   dy   = (ymax - ymin)/((double) n);
   xpt0 = func(&ymin);
 
-  if (flag==0)  // Find min/max in y automatically
-     {          // and call giza_environment
+  if (flag==0)  /* Find min/max in y automatically */
+     {          /* and call giza_environment */
        double xmin = xpt0;
        double xmax = xpt0;
        for (i = 1; i <= n; i++)
@@ -109,8 +109,8 @@ giza_function_y_float (float (*func)(float *y), int n, float ymin, float ymax, i
   dy   = (ymax - ymin)/((float) n);
   xpt0 = func(&ymin);
 
-  if (flag==0)  // Find min/max in y automatically
-     {        // and call giza_environment
+  if (flag==0)  /* Find min/max in y automatically */
+     {        /* and call giza_environment */
        float xmin = xpt0;
        float xmax = xpt0;
        for (i = 1; i <= n; i++)

@@ -113,7 +113,7 @@ _giza_prompt_for_device (void)
         }
       count++;
     }
-  while (count>0); //(count < 3);
+  while (count>0); /*(count < 3); */
 
   return devType;
 }

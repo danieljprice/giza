@@ -43,7 +43,7 @@ giza_line (int n, double *xpts, double *ypts)
   if (!_giza_check_device_ready ("giza_line"))
     return;
 
-  // check the line has at least one segment
+  /* check the line has at least one segment */
   if (n < 2)
     {
       _giza_warning ("giza_line",

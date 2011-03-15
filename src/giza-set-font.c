@@ -26,7 +26,6 @@
 
 char *_giza_fontFam;
 
-
 /**
  * Settings: giza_set_font
  *

@@ -17,7 +17,7 @@
  *
  */
 
-// Store arrow head settings
+/* Store arrow head settings */
 struct GIZA_Arrow_Style
 {
   int fs;

@@ -70,7 +70,7 @@ giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int 
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
   double pos;
 
-  // apply the transformation
+  /* apply the transformation */
   int oldCi;
   giza_get_colour_index (&oldCi);
   int oldTrans = _giza_get_trans ();
@@ -79,7 +79,7 @@ giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int 
 		     affine[4], affine[5]);
   cairo_transform (context, &mat);
 
-  // allocate data for the pixmap
+  /* allocate data for the pixmap */
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
   stride = cairo_format_stride_for_width (format, width);
 #else
@@ -87,7 +87,7 @@ giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int 
 #endif
   pixdata = malloc (stride * height);
 
-  // colour each pixel in the pixmap
+  /* colour each pixel in the pixmap */
   int i, j;
   pixnum = 0;
   for (j = j1; j <= j2; j++)
@@ -100,16 +100,16 @@ giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int 
 	}
     }
 
-  // create the cairo surface from the pixmap
+  /* create the cairo surface from the pixmap */
   pixmap = cairo_image_surface_create_for_data (pixdata, format,
 						width, height, stride);
 
-  // paint the pixmap to the primary surface
+  /* paint the pixmap to the primary surface */
   cairo_set_source_surface (context, pixmap, 0, 0);
   cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_REPEAT);
   cairo_paint (context);
 
-  // clean up and restore settings
+  /* clean up and restore settings */
   _giza_set_trans (oldTrans);
   giza_set_colour_index (oldCi);
   cairo_surface_destroy (pixmap);

@@ -43,7 +43,7 @@ giza_polygon (int n, double *xpts, double *ypts)
   if (!_giza_check_device_ready ("giza_polygon"))
     return;
 
-  // check the line has at least one segment
+  /* check the line has at least one segment */
   if (n < 1)
     {
       _giza_warning ("giza_polygon",
@@ -85,7 +85,7 @@ giza_polygon_float (int n, float *xpts, float *ypts)
   if (!_giza_check_device_ready ("giza_polygon"))
     return;
 
-  // check the line has at least one segment
+  /* check the line has at least one segment */
   if (n < 1)
     {
       _giza_warning ("giza_polygon",

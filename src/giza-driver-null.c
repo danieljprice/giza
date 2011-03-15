@@ -25,7 +25,7 @@
 
 #define GIZA_DEFAULT_WIDTH 800
 #define GIZA_DEFAULT_HEIGHT 600
-#define GIZA_DEVICE_UNITS_PER_MM 3.7054 // same as png driver
+#define GIZA_DEVICE_UNITS_PER_MM 3.7054 /* same as png driver */
 #define GIZA_DEVICE_INTERACTIVE 0
 #define GIZA_DEVICE_EXTENSION ".null"
 

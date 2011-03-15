@@ -52,24 +52,24 @@ giza_set_window (double x1, double x2, double y1, double y2)
   Win.ymin = y1;
   Win.ymax = y2;
 
-  // Transform to normalised device coords
+  /* Transform to normalised device coords */
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_NORM);
 
-  // Transform from normalised device coords to world coords.
-  // Scaling
+  /* Transform from normalised device coords to world coords. */
+  /* Scaling */
   double horiScale = (VP.xmax - VP.xmin) / (Win.xmax - Win.xmin);
   double vertScale = (VP.ymax - VP.ymin) / (Win.ymax - Win.ymin);
 
-  // Translation:
+  /* Translation: */
   double horiTrans = VP.xmin - Win.xmin * horiScale;
   double vertTrans = VP.ymin - Win.ymin * vertScale;
 
   cairo_matrix_init (&(Win.userCoords), horiScale, 0, 0, vertScale, horiTrans, vertTrans);
   cairo_matrix_multiply(&(Win.userCoords),&(Win.userCoords),&(Win.normCoords));
 
-//  cairo_transform (context, &(Win.userCoords));
-//  cairo_get_matrix (context, &(Win.userCoords));
+/*  cairo_transform (context, &(Win.userCoords)); */
+/*  cairo_get_matrix (context, &(Win.userCoords)); */
 
   _giza_set_trans (oldTrans);
 }
@@ -106,7 +106,7 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
   if (!_giza_check_device_ready ("giza_set_window_equal_scale"))
     return;
 
-  // Check the input is valid
+  /* Check the input is valid */
   /*if (x2 <= x1 || y2 <= y1)
     {
       _giza_error ("giza_set_window_equal_scale", "Invalid arguments, window not set");
@@ -114,12 +114,12 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
     }
   */
 
-  // set xrange and yrange
+  /* set xrange and yrange */
   double yrange = y2 - y1;
   double xrange = x2 - x1;
   double scale, scalex, scaley, newWidth, newHeight;
 
-  // Scale is Device units per World coords.
+  /* Scale is Device units per World coords. */
   scaley = (VP.ymax - VP.ymin) * Dev.height / yrange;
   scalex = (VP.xmax - VP.xmin) * Dev.width / xrange;
   if (scaley < scalex)
@@ -131,18 +131,18 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
       scale = scalex;
     }
   
-  // Find the position of the new viewport relative to the centre of the old
-  // Find the width of the new vp in normalised device coords
+  /* Find the position of the new viewport relative to the centre of the old */
+  /* Find the width of the new vp in normalised device coords */
   newWidth = scale * xrange / Dev.width;
   VP.xmin = (VP.xmax + VP.xmin - newWidth) * 0.5;
   VP.xmax = VP.xmin + newWidth;
 
-  // Find the height of the new vp
+  /* Find the height of the new vp */
   newHeight = scale * yrange / Dev.height;
   VP.ymin = (VP.ymax + VP.ymin - newHeight) * 0.5;
   VP.ymax = VP.ymin + newHeight;
 
-  // Set the window and vp
+  /* Set the window and vp */
   giza_set_window (x1, x2, y1, y2);
   giza_set_viewport (VP.xmin, VP.xmax, VP.ymin, VP.ymax);
 }
@@ -213,18 +213,18 @@ _giza_init_window (void)
 
    _giza_set_trans (GIZA_TRANS_NORM);
 
-  // Transform from normalised device coords to world coords.
-  // Scaling
+  /* Transform from normalised device coords to world coords. */
+  /* Scaling */
   double horiScale = (VP.xmax - VP.xmin) / (Win.xmax - Win.xmin);
   double vertScale = (VP.ymax - VP.ymin) / (Win.ymax - Win.ymin);
 
-  // Translation:
+  /* Translation: */
   double horiTrans = VP.xmin - Win.xmin * horiScale;
   double vertTrans = VP.ymin - Win.ymin * vertScale;
 
   cairo_matrix_init (&(Win.userCoords), horiScale, 0, 0, vertScale, horiTrans, vertTrans);
   cairo_matrix_multiply(&(Win.userCoords),&(Win.userCoords),&(Win.normCoords));
 
-//  cairo_transform (context, &(Win.userCoords));
-//  cairo_get_matrix (context, &(Win.userCoords));
+/*  cairo_transform (context, &(Win.userCoords)); */
+/*  cairo_get_matrix (context, &(Win.userCoords)); */
 }

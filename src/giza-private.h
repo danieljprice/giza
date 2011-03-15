@@ -27,10 +27,10 @@
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) < (Y) ? (Y) : (X))
 
-// Structures:
-// Store variables relating to the current view-port
+/* Structures: */
+/* Store variables relating to the current view-port */
 
-// Store variables relating to the current device
+/* Store variables relating to the current device */
 struct GIZA_Device
 {
   int type;
@@ -50,7 +50,7 @@ cairo_t *context;
 cairo_surface_t *surface;
 
 
-// Store the current settings of giza
+/* Store the current settings of giza */
 struct GIZA_Settings
 {
   cairo_font_extents_t fontExtents;

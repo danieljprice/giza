@@ -45,25 +45,25 @@ giza_arrow (double x1, double y1, double x2, double y2)
   if (!_giza_check_device_ready ("giza_arrow"))
     return;
 
-  // Set the current transformation to world coords
+  /* Set the current transformation to world coords */
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  // convert the points to device coords
+  /* convert the points to device coords */
   cairo_user_to_device (context, &x1, &y1);
   cairo_user_to_device (context, &x2, &y2);
 
-  // Set the current transformation to the idenity
+  /* Set the current transformation to the idenity */
   _giza_set_trans (GIZA_TRANS_IDEN);
 
   double xpts[4], ypts[4], dx, dy, chx, chy, dxUnit, dyUnit, magnitude;
   double dxPerp, dyPerp;
 
-  // set dx and dy to the change in the x and y direction respectivly
+  /* set dx and dy to the change in the x and y direction respectivly */
   dx = x2 - x1;
   dy = y2 - y1;
 
-  // Get the character size in device coords and scale a little
+  /* Get the character size in device coords and scale a little */
   giza_get_character_size (GIZA_UNITS_DEVICE, &chx, &chy);
   chx = 0.5 * chx;
 
@@ -71,12 +71,12 @@ giza_arrow (double x1, double y1, double x2, double y2)
     {
       if (dx != 0 || dy != 0)
 	{
-	  // find a unit vector in the direction of the arrow
+	  /* find a unit vector in the direction of the arrow */
 	  magnitude = sqrt (dx * dx + dy * dy);
 	  dxUnit = dx / magnitude;
 	  dyUnit = dy / magnitude;
 
-	  // find a prependicular unit vector
+	  /* find a prependicular unit vector */
 	  if (dxUnit == 0)
 	    {
 	      dxPerp = 1;
@@ -96,28 +96,28 @@ giza_arrow (double x1, double y1, double x2, double y2)
 	      dyPerp = dyPerp / magnitude;
 	    }
 
-	  // Calculate where the verticies of the arrow head are
-	  // The point
+	  /* Calculate where the verticies of the arrow head are */
+	  /* The point */
 	  xpts[0] = x2;
 	  ypts[0] = y2;
-	  // 'above' the unit vector
+	  /* 'above' the unit vector */
 	  xpts[1] = x2 - (dxUnit + dxPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
 	  ypts[1] = y2 - (dyUnit + dyPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
-	  // on the unit vector, the cutback
+	  /* on the unit vector, the cutback */
 	  xpts[2] = x2 - (1 - Arrow.cutback) * chx * dxUnit;
 	  ypts[2] = y2 - (1 - Arrow.cutback) * chx * dyUnit;
-	  // 'below' the unit vector
+	  /* 'below' the unit vector */
 	  xpts[3] = x2 - (dxUnit - dxPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
 	  ypts[3] = y2 - (dyUnit - dyPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
 
-	  // draw the head
+	  /* draw the head */
 	  cairo_move_to (context, xpts[0], ypts[0]);
 	  cairo_line_to (context, xpts[1], ypts[1]);
 	  cairo_line_to (context, xpts[2], ypts[2]);
 	  cairo_line_to (context, xpts[3], ypts[3]);
 	  cairo_line_to (context, xpts[0], ypts[0]);
 
-	  // fill it in!
+	  /* fill it in! */
 	  double oldMiter = cairo_get_miter_limit (context);
 	  cairo_set_miter_limit (context, 0.);
 	  giza_set_fill (Arrow.fs);
@@ -125,7 +125,7 @@ giza_arrow (double x1, double y1, double x2, double y2)
 	  _giza_fill ();
 	  cairo_set_miter_limit (context, oldMiter);  
 
-	  // draw the tail
+	  /* draw the tail */
 	  cairo_move_to (context, x1, y1);
 	  cairo_line_to (context, xpts[2], ypts[2]);
 	  

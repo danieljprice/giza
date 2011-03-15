@@ -31,7 +31,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
   if (!_giza_check_device_ready ("giza_vector"))
     return;
 
-  // Check ranges
+  /* Check ranges */
   if (i1 < 0 || i2 >= n || i1 > i2)
     {
       _giza_error ("giza_vector",
@@ -52,7 +52,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
                      affine[4], affine[5]); 
 
   double dscale = scale;
-  // Find the scaling factor
+  /* Find the scaling factor */
   if (fabs (dscale) < GIZA_ZERO_DOUBLE)
     {
       for (j = j1; j <= j2; j++)
@@ -83,7 +83,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
   oldBuf = Sets.buf;
   giza_begin_buffer ();
 
- // Draw the arrows!
+ /* Draw the arrows! */
   double x, y;
   for (j = j1; j <= j2; j++)
     {
@@ -136,7 +136,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
   if (!_giza_check_device_ready ("giza_vector"))
     return;
 
-  // Check ranges
+  /* Check ranges */
   if (i1 < 0 || i2 >= n || i1 > i2)
     {
       _giza_error ("giza_vector",
@@ -156,7 +156,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
                      affine[4], affine[5]); 
 
- // Find the scaling factor
+ /* Find the scaling factor */
   double dscale = (double) scale;
   if (fabs (scale) < GIZA_ZERO_FLOAT)
     {
@@ -188,7 +188,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
   oldBuf = Sets.buf;
   giza_begin_buffer ();
 
-    // Draw the arrows!
+    /* Draw the arrows! */
   double x, y;
   for (j = j1; j <= j2; j++)
     {

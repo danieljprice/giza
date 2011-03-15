@@ -53,13 +53,13 @@ giza_qtext (double x, double y, double angle, double just, char *text, double xb
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_user_to_device (context, &x, &y);
 
-  // Set the rotation matrix
-  //double theta = -angle * GIZA_DEG_TO_RAD;
-  //Sets.fontAngle = theta;
-  //cairo_matrix_t mat;
-  //cairo_get_font_matrix (context, &mat);
-  //cairo_matrix_rotate (&mat, theta);
-  //cairo_set_font_matrix (context, &mat);
+  /* Set the rotation matrix */
+  /*double theta = -angle * GIZA_DEG_TO_RAD; */
+  /*Sets.fontAngle = theta; */
+  /*cairo_matrix_t mat; */
+  /*cairo_get_font_matrix (context, &mat); */
+  /*cairo_matrix_rotate (&mat, theta); */
+  /*cairo_set_font_matrix (context, &mat); */
 
   double width = 0., height = 0.;
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -161,7 +161,7 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
       _giza_set_trans (GIZA_TRANS_NORM);
       cairo_user_to_device_distance (context, xlen, ylen);
       break;
-//    case GIZA_UNITS_VPFRAC:
+/*    case GIZA_UNITS_VPFRAC: */
     default:
       _giza_warning ("giza_get_viewport", "Invalid units, using normalised device units.");
       *xlen = *xlen / Dev.width;

@@ -27,7 +27,7 @@
 
 #define GIZA_DEFAULT_WIDTH 800
 #define GIZA_DEFAULT_HEIGHT 600
-#define GIZA_DEVICE_UNITS_PER_MM 3.7054 // so "width" is 8.5 inches as in ps driver
+#define GIZA_DEVICE_UNITS_PER_MM 3.7054 /* so "width" is 8.5 inches as in ps driver */
 #define GIZA_DEVICE_INTERACTIVE 0
 #define GIZA_DEVICE_EXTENSION ".png"
 
@@ -81,24 +81,24 @@ _giza_flush_device_png (void)
 void
 _giza_change_page_png (void)
 {
-  // Destroy old context
+  /* Destroy old context */
   cairo_destroy (context);
 
-  // File name
+  /* File name */
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
   char fileName[length + 1];
   sprintf (fileName, "%s_%04d%s", Dev.prefix, Dev.pgNum, GIZA_DEVICE_EXTENSION);
 
-  // Save to file
+  /* Save to file */
   cairo_surface_write_to_png (surface, fileName);
 
-  // Print the message
+  /* Print the message */
   char tmp[length + 10];
   sprintf(tmp, "%s created", fileName);
   _giza_message (tmp);
 
-  // Destroy the old surface and create a new one
+  /* Destroy the old surface and create a new one */
   cairo_surface_destroy (surface);
   surface =
     cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width,

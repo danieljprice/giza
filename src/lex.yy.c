@@ -2499,7 +2499,7 @@ int
 _giza_get_chunk (char *text)
 {
 
-  // initialise the scanner
+  /* initialise the scanner */
   yyscan_t scanner;
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
@@ -2531,7 +2531,7 @@ _giza_get_chunk (char *text)
 	if (openb < 1) return length;
     }
  
-   return length; // DJP: assumes whole string if unclosed open bracket
+   return length; /* DJP: assumes whole string if unclosed open bracket */
 }
 
 /**
@@ -2550,7 +2550,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  // initialise the scanner
+  /* initialise the scanner */
   yyscan_t scanner;
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
@@ -2559,29 +2559,29 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
     {
       token = yylex(scanner);
       posInText += yyget_leng (scanner);;
-      //printf("in parse string, token = %i pos = %i processed=\"%s\"\n",token,posInText,processed);
+      /*printf("in parse string, token = %i pos = %i processed=\"%s\"\n",token,posInText,processed); */
 
       switch(token)
         {
         case GIZA_TOKEN_OB:
-        case GIZA_TOKEN_CB: // ignore closing bracket!
+        case GIZA_TOKEN_CB: /* ignore closing bracket! */
           break;
         case GIZA_TOKEN_SUPER:
-          // Perform action on the text so far parsed
+          /* Perform action on the text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
 
-          // Parse the brackets, i.e. get the chunk of text that needs to be superscript
+          /* Parse the brackets, i.e. get the chunk of text that needs to be superscript */
           chunkLength = _giza_get_chunk (text + posInText);
           strncpy (processed, text + posInText, chunkLength);
           processed[chunkLength] = '\0';
           
-          // Perform the action on this chunk
+          /* Perform the action on this chunk */
           _giza_start_super ();
           _giza_parse_string (processed, width, height, action);
           _giza_stop_super ();
 
-          // restart the scanner at the new position!
+          /* restart the scanner at the new position! */
           yylex_destroy (scanner);
           yylex_init (&scanner);
           yy_scan_string (text + posInText + chunkLength, scanner);
@@ -2591,21 +2591,21 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           processed[0] = '\0';
           break;
         case GIZA_TOKEN_SUB:
-          // Perform action on text so far parsed
+          /* Perform action on text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
 
-          // Parse the brackets
+          /* Parse the brackets */
           chunkLength = _giza_get_chunk (text + posInText);
           strncpy (processed, text + posInText, chunkLength);
           processed[chunkLength] = '\0';
 
-          // perform action on this chunk
+          /* perform action on this chunk */
           _giza_start_sub ();
           _giza_parse_string (processed, width, height, action);
           _giza_stop_sub ();
 
-          // restart the scanner at the new position!
+          /* restart the scanner at the new position! */
           yylex_destroy (scanner);
           yylex_init (&scanner);
           yy_scan_string (text + posInText + chunkLength, scanner);
@@ -2615,7 +2615,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           processed[0] = '\0';
           break;
         case GIZA_TOKEN_RAISE:
-          // Perform action on the text so far parsed
+          /* Perform action on the text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
           if (insub > 0)
@@ -2630,7 +2630,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
             }
           break;
         case GIZA_TOKEN_LOWER:
-          // Perform action on the text so far parsed
+          /* Perform action on the text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
           if (insuper > 0)
@@ -2648,16 +2648,16 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
         case GIZA_TOKEN_FONT_ROMAN:
         case GIZA_TOKEN_FONT_ITALIC:
         case GIZA_TOKEN_FONT_SCRIPT:
-          // Perform action on the text so far parsed
+          /* Perform action on the text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
 
-          // Parse the brackets
+          /* Parse the brackets */
           chunkLength = _giza_get_chunk (text + posInText);
           strncpy (processed, text + posInText, chunkLength);
           processed[chunkLength] = '\0';
 
-          // perform action on this chunk
+          /* perform action on this chunk */
           switch (token)
             {
             case GIZA_TOKEN_FONT_SCRIPT:
@@ -2675,7 +2675,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
             }
           _giza_parse_string (processed, width, height, action);
 
-          // restart the scanner at the new position!
+          /* restart the scanner at the new position! */
           yylex_destroy (scanner);
           yylex_init (&scanner);
           yy_scan_string (text + posInText + chunkLength, scanner);
@@ -2695,7 +2695,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
     }
   yylex_destroy (scanner);
 
-  // Perform action on the last section of text
+  /* Perform action on the last section of text */
   action (processed, width, height);
 
   _giza_set_trans (oldTrans);

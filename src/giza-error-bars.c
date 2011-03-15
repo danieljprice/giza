@@ -215,11 +215,11 @@ giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double 
   int i;
   for (i = 0; i < n; i++)
     {
-      // draw the bar
+      /* draw the bar */
       cairo_move_to (context, xpts[i], ypts1[i]);
       cairo_line_to (context, xpts[i], ypts2[i]);
       
-      // draw the ends
+      /* draw the ends */
       if (term > 0.)
         {
           cairo_move_to (context, xpts[i] - endWidth, ypts1[i]);
@@ -268,11 +268,11 @@ giza_error_bars_vert_float (int n, float *xpts, float *ypts1, float *ypts2, floa
       currentY1 = (double) ypts1[i];
       currentY2 = (double) ypts2[i];
 
-      // draw the bar
+      /* draw the bar */
       cairo_move_to (context, currentX, currentY1);
       cairo_line_to (context, currentX, currentY2);
       
-      // draw the ends
+      /* draw the ends */
       cairo_move_to (context, currentX - endWidth, currentY1);
       cairo_line_to (context, currentX + endWidth, currentY1);
       
@@ -320,11 +320,11 @@ giza_error_bars_hori (int n, double *xpts1, double *xpts2, double *ypts, double 
   int i;
   for (i = 0; i < n; i++)
     {
-      // draw the bar
+      /* draw the bar */
       cairo_move_to (context, xpts1[i], ypts[i]);
       cairo_line_to (context, xpts2[i], ypts[i]);
       
-      // draw the ends
+      /* draw the ends */
       if (term > 0.) 
         {
           cairo_move_to (context, xpts1[i], ypts[i] - endWidth);
@@ -371,11 +371,11 @@ giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, float *ypts, floa
       currentX2 = (double) xpts2[i];
       currentY  = (double) ypts[i];
 
-      // draw the bar
+      /* draw the bar */
       cairo_move_to (context, currentX1, currentY);
       cairo_line_to (context, currentX2, currentY);
       
-      // draw the ends
+      /* draw the ends */
       if (term > 0.)
         {
           cairo_move_to (context, currentX1, currentY - endWidth);
@@ -404,11 +404,11 @@ _giza_error_bar_vert (double x, double y, double error, double term)
   giza_get_character_size (GIZA_UNITS_WORLD, &dummy, &endWidth);
   endWidth = 0.5 * endWidth * term;
 
-  // draw the bar
+  /* draw the bar */
   cairo_move_to (context, x, y);
   cairo_line_to (context, x + error, y);
   
-  // draw the ends
+  /* draw the ends */
   if (term > 0.)
     {
       cairo_move_to (context, x + error, y - endWidth * 0.5);
@@ -427,11 +427,11 @@ _giza_error_bar_hori (double x, double y, double error, double term)
   giza_get_character_size (GIZA_UNITS_WORLD, &endWidth, &dummy);
   endWidth = 0.5 * endWidth * term;
 
-  // draw the bar
+  /* draw the bar */
   cairo_move_to (context, x, y);
   cairo_line_to (context, x, y + error);
   
-  // draw the end
+  /* draw the end */
   if (term > 0.) 
     {
       cairo_move_to (context, x - endWidth * 0.5, y + error);

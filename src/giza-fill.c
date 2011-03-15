@@ -254,7 +254,7 @@ giza_set_hatching_style_float (float angle, float spacing, float phase)
   _giza_hatch_angle = (double) angle;
   _giza_hatch_spacing = (double) spacing;
   _giza_hatch_phase = (double) phase;
-//  printf(" got angle = %f spacing = %f phase = %f \n",_giza_hatch_angle,_giza_hatch_spacing,_giza_hatch_phase);
+/*  printf(" got angle = %f spacing = %f phase = %f \n",_giza_hatch_angle,_giza_hatch_spacing,_giza_hatch_phase); */
 }
 
 /**

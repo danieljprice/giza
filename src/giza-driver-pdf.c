@@ -25,8 +25,8 @@
 #include <string.h>
 #include <cairo/cairo-pdf.h>
 
-#define GIZA_DEFAULT_WIDTH 612  // same as ps driver
-#define GIZA_DEFAULT_HEIGHT 459 // use 4:3 aspect ratio
+#define GIZA_DEFAULT_WIDTH 612  /* same as ps driver */
+#define GIZA_DEFAULT_HEIGHT 459 /* use 4:3 aspect ratio */
 #define GIZA_DEVICE_UNITS_PER_MM 2.8346
 #define GIZA_DEVICE_INTERACTIVE 0
 #define GIZA_DEVICE_EXTENSION ".pdf"
@@ -53,7 +53,7 @@ _giza_open_device_pdf (int vert)
   Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
   Dev.defaultBackgroundAlpha = 0.;
 
-  // set all device specific settings
+  /* set all device specific settings */
   if (_giza_sizeSpecified ())
     {
       Dev.width  = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;

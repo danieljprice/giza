@@ -46,7 +46,7 @@ giza_ptext (double x, double y, double angle, double just, char *text)
       return;
     }
 
-  // save the character height (can be changed during superscript/subscripting)
+  /* save the character height (can be changed during superscript/subscripting) */
   double ch;
   giza_get_character_height (&ch);
 
@@ -54,13 +54,13 @@ giza_ptext (double x, double y, double angle, double just, char *text)
 
   _giza_expand_clipping ();
 
-  // change x and y to device coords
-  //cairo_user_to_device (context, &x, &y);
+  /* change x and y to device coords */
+  /*cairo_user_to_device (context, &x, &y); */
 
   double xbox[4], ybox[4];
   giza_qtext (x, y, angle, just, text, xbox, ybox);
 
-  // Draw the bounding box
+  /* Draw the bounding box */
   if (_giza_text_background >= 0)
   {
     int oldCi;
@@ -70,11 +70,11 @@ giza_ptext (double x, double y, double angle, double just, char *text)
     giza_set_colour_index (oldCi);
   }
 
-  // change the current trans to world coords
+  /* change the current trans to world coords */
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_move_to (context, xbox[0], ybox[0]);
 
-  // Set the rotation matrix
+  /* Set the rotation matrix */
   double theta = -angle * GIZA_DEG_TO_RAD;
   Sets.fontAngle = theta;
   cairo_matrix_t mat;
@@ -93,7 +93,7 @@ giza_ptext (double x, double y, double angle, double just, char *text)
       giza_flush_device ();
     }
 
-  // restore the original character height (and font matrix)
+  /* restore the original character height (and font matrix) */
   giza_set_character_height (ch);
 }
 

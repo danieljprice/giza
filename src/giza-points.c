@@ -88,22 +88,22 @@ giza_points (int n, double x[n], double y[n], int symbol)
   int oldTrans,oldLineStyle,oldLineCap;
   double oldLineWidth,oldCh;
 
-  // initialise symbol drawing
+  /* initialise symbol drawing */
   _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldLineWidth,&oldCh);
 
-  // for each point find where to put each marker
+  /* for each point find where to put each marker */
   int i;
   double xd, yd;
   for (i = 0; i < n; i++)
     {
-      // convert world coords to device coords
+      /* convert world coords to device coords */
       _giza_set_trans (GIZA_TRANS_WORLD);
       xd = x[i];
       yd = y[i];
       cairo_user_to_device (context, &xd, &yd);
       _giza_set_trans (GIZA_TRANS_IDEN);
 
-      // draw the symbol
+      /* draw the symbol */
       _giza_draw_symbol(xd, yd, symbol);
     }
 
@@ -113,7 +113,7 @@ giza_points (int n, double x[n], double y[n], int symbol)
       giza_flush_device ();
     }
 
-  // restore old setting
+  /* restore old setting */
   _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
 }
 
@@ -137,10 +137,10 @@ giza_points_float (int n, float x[n], float y[n], int symbol)
   int oldTrans,oldLineStyle,oldLineCap;
   double oldLineWidth,oldCh;
 
-  // initialise symbol drawing
+  /* initialise symbol drawing */
   _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldLineWidth,&oldCh);
 
-  // for each point find where to put each marker
+  /* for each point find where to put each marker */
   double xd, yd;
   int i;
   for (i = 0; i < n; i++)
@@ -148,12 +148,12 @@ giza_points_float (int n, float x[n], float y[n], int symbol)
       xd = (double) x[i];
       yd = (double) y[i];
 
-      // convert world coords to device coords
+      /* convert world coords to device coords */
       _giza_set_trans (GIZA_TRANS_WORLD);
       cairo_user_to_device (context, &xd, &yd);
       _giza_set_trans (GIZA_TRANS_IDEN);
       
-      // draw the symbol
+      /* draw the symbol */
       _giza_draw_symbol(xd, yd, symbol);
     }
 
@@ -164,7 +164,7 @@ giza_points_float (int n, float x[n], float y[n], int symbol)
       giza_flush_device ();
     }
 
-  // restore old settings
+  /* restore old settings */
   _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
 }
 
@@ -213,24 +213,24 @@ void
 _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
                           double *oldLineWidth, double *oldCh)
 {
-  // store the old trans and line width
+  /* store the old trans and line width */
   *oldTrans = _giza_get_trans ();
   giza_get_line_style       (oldLineStyle);
   giza_get_line_cap         (oldLineCap);
   giza_get_line_width       (oldLineWidth);
   giza_get_character_height (oldCh);
 
-  // Set the height for manually drawn markers
+  /* Set the height for manually drawn markers */
   markerHeight = Sets.fontExtents.max_x_advance * 0.2;
 
-  // Set the line width for manually drawn markers
-  //_giza_set_trans (GIZA_TRANS_IDEN);
+  /* Set the line width for manually drawn markers */
+  /*_giza_set_trans (GIZA_TRANS_IDEN); */
   
   giza_set_line_width(1.5);
   giza_set_line_style(1);
   giza_set_line_cap(0);
 
-  // Set the character size to draw the Unicode markers at
+  /* Set the character size to draw the Unicode markers at */
   giza_set_character_height (*oldCh * 0.8);
 
 }
@@ -239,7 +239,7 @@ void
 _giza_end_draw_symbols (int oldTrans, int oldLineStyle, int oldLineCap,
                         double oldLineWidth, double oldCh)
 {
-  // restore old settings
+  /* restore old settings */
   _giza_set_trans (oldTrans);
   giza_set_line_style       (oldLineStyle);
   giza_set_line_cap         (oldLineCap);
@@ -262,29 +262,29 @@ void
 _giza_draw_symbol (double xd, double yd, int symbol)
 {
 
-  // Use Unicode to draw the marker
+  /* Use Unicode to draw the marker */
   if (symbol > 31)
     {
       _giza_char (symbol, xd, yd);
     }
-  // Manually draw the marker
+  /* Manually draw the marker */
   else
     {
       switch (symbol)
 	{
-        case 31: // down arrow
+        case 31: /* down arrow */
           _giza_arrow (xd, yd, 0.5*M_PI);
           break;
-        case 30: // up arrow
+        case 30: /* up arrow */
           _giza_arrow (xd, yd, -0.5*M_PI);
           break;
-        case 29: // right arrow
+        case 29: /* right arrow */
           _giza_arrow (xd, yd, 0.);
           break;
-        case 28: // left arrow
+        case 28: /* left arrow */
           _giza_arrow (xd, yd, M_PI);
           break;
-        case 27: // hollow circles of various sizes
+        case 27: /* hollow circles of various sizes */
         case 26:
         case 25:
         case 24:
@@ -293,73 +293,73 @@ _giza_draw_symbol (double xd, double yd, int symbol)
         case 21:
           _giza_circle_size (xd, yd, 0.33*fabs(symbol-20), 0);
           break;
-        case 20: // 7 pointed star
+        case 20: /* 7 pointed star */
           _giza_star (xd, yd, 7, 0.25, 0);
           break;
-        case 19: // hexagon with cross
+        case 19: /* hexagon with cross */
           _giza_polygon (xd, yd, 6, 0);
           _giza_cross (xd, yd);
           break;
-        case 18: // filled diamond
+        case 18: /* filled diamond */
           _giza_diamond (xd, yd, 1);
           break;
-	case 17: // solid circle
+	case 17: /* solid circle */
 	  _giza_circle_size (xd, yd, 0.75, 1);
           break;
-        case 16: // filled square
+        case 16: /* filled square */
 	  _giza_rect (xd, yd, 1);
           break;
-        case 15: // hollow triangle up
+        case 15: /* hollow triangle up */
           _giza_polygon (xd, yd, 3, 0);
           break;
-        case 14: // pentagon
+        case 14: /* pentagon */
           _giza_polygon (xd, yd, 5, 0);
           break;
-        case 13: // solid triangle
+        case 13: /* solid triangle */
           _giza_triangle(xd, yd, 1);
           break;
-        case 12: // five-pointed star
+        case 12: /* five-pointed star */
           _giza_star (xd, yd, 5, 0.5, 0);
           break;
-        case 11: // hollow diamond
+        case 11: /* hollow diamond */
           _giza_diamond (xd, yd, 0);
           break;
-        case 10: // asterisk made from combined + and x
+        case 10: /* asterisk made from combined + and x */
           _giza_cross(xd, yd);
           _giza_plus(xd, yd);
           break;
-        case 9: // circle with small dot (like Sun symbol)
+        case 9: /* circle with small dot (like Sun symbol) */
           _giza_point (xd, yd);
 	  _giza_circle_size (xd, yd, 1.25, 0);
           break;
-        case 8: // circle and plus
+        case 8: /* circle and plus */
           _giza_circle_size (xd, yd, 1.25, 0);
           _giza_plus (xd, yd);
           break;
-        case 7: // hollow downward-pointing triangle
+        case 7: /* hollow downward-pointing triangle */
           _giza_triangle(xd, yd, 0);
           break;
-	case 5: // cross (x)
+	case 5: /* cross (x) */
 	  _giza_cross (xd, yd);
           break;
-	case 4: // hollow circle
+	case 4: /* hollow circle */
 	  _giza_circle (xd, yd);
 	  break;
-	case 3: // asterisk
+	case 3: /* asterisk */
 	  _giza_drawchar ("*",xd, yd);
 	  break;
-	case 2: // plus
-	  //_giza_drawchar ("+",xd, yd);
+	case 2: /* plus */
+	  /*_giza_drawchar ("+",xd, yd); */
 	  _giza_plus (xd, yd);
 	  break;
-	case 1: // single small point
+	case 1: /* single small point */
 	  _giza_point (xd, yd);
 	  break;
-        case 6: // hollow square
+        case 6: /* hollow square */
 	case 0:
 	  _giza_rect (xd, yd, 0);
 	  break;
-	case -1: // solid circles of various sizes
+	case -1: /* solid circles of various sizes */
 	case -2:
 	case -3:
 	case -4:
@@ -503,14 +503,14 @@ _giza_arrow (double x, double y, double angle)
 static void
 _giza_polygon (double x, double y, int nsides, int fill)
 {
- // Define radius
+ /* Define radius */
  double r = 0.5 * markerHeight;
 
- // Set first vertex so that shape appears flat-bottomed
+ /* Set first vertex so that shape appears flat-bottomed */
  double alpha = (0.5 + 1./nsides)* M_PI;
  cairo_move_to (context, x + r * cos(alpha), y + r * sin(alpha));
 
- // Define other vertexes
+ /* Define other vertexes */
  double alpha_step = 2 * M_PI / nsides;
  int i;
  for (i = 1; i < nsides; i++)
@@ -530,15 +530,15 @@ _giza_polygon (double x, double y, int nsides, int fill)
 static void
 _giza_star (double x, double y, int npoints, double ratio, int fill)
 {
- // Define outer and inner radius
+ /* Define outer and inner radius */
  double r = 0.5 * markerHeight;
  double ri = ratio * r;
 
- // Set first vertex so that shape appears flat-bottomed
+ /* Set first vertex so that shape appears flat-bottomed */
  double alpha = (0.5 + 1./npoints)* M_PI;
  cairo_move_to (context, x + r * cos(alpha), y + r * sin(alpha));
 
- // Define other vertexes
+ /* Define other vertexes */
  double alpha_step = 2 * M_PI / npoints;
  int i;
  for (i = 1; i < npoints; i++)
@@ -564,7 +564,7 @@ static void
 _giza_char (int symbol, double x, double y)
 {
   char str[4];
-//  cairo_text_extents_t extents;
+/*  cairo_text_extents_t extents; */
   if (symbol <= 127)
     {
       str[0] = (char) symbol;

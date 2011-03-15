@@ -329,41 +329,41 @@ giza_get_colour_representation_alpha_float (int ci, float *red, float *green,
 void
 _giza_init_colour_index (void)
 {
-  giza_set_colour_representation (0, 1., 1., 1.);	// white
-  giza_set_colour_representation (1, 0., 0., 0.);	// black
+  giza_set_colour_representation (0, 1., 1., 1.);	/* white */
+  giza_set_colour_representation (1, 0., 0., 0.);	/* black */
 
-  // red
-  //giza_set_colour_representation (2, 1., 0., 0.);
+  /* red */
+  /*giza_set_colour_representation (2, 1., 0., 0.); */
   giza_set_colour_representation (2, .933, 0.173, 0.173);
 
-  // green
-  //giza_set_colour_representation (3, 0., 1., 0.);
+  /* green */
+  /*giza_set_colour_representation (3, 0., 1., 0.); */
   giza_set_colour_representation (3, 0.18, 0.545, 0.341);
 
-  // blue
+  /* blue */
   giza_set_colour_representation (4, 0., 0., 1.);
 
-  // Dark slate gray
+  /* Dark slate gray */
   giza_set_colour_representation (5, 0.192, 0.31, 0.31);
 
-  // Dark violet
+  /* Dark violet */
   giza_set_colour_representation (6, 0.58, 0., 0.827);
 
 
-  // cyan
+  /* cyan */
   giza_set_colour_representation (7, 0.0, 0.825, 0.825);
 
-  // Indian red
-  //giza_set_colour_representation (7, 0.804, 0.361, 0.361); 
+  /* Indian red */
+  /*giza_set_colour_representation (7, 0.804, 0.361, 0.361);  */
 
-  // Gold
-  //giza_set_colour_representation (7, 1., 0.843, 0.);
+  /* Gold */
+  /*giza_set_colour_representation (7, 1., 0.843, 0.); */
   giza_set_colour_representation (8, 1., 0.31, 0.);
 
-  // cadet blue
+  /* cadet blue */
   giza_set_colour_representation (9, 0.373, 0.62, 0.627);
 
-  // peach puff
+  /* peach puff */
   giza_set_colour_representation (10, 0.933, 0.796, 0.678);
 
   giza_set_colour_representation (11, 0.0, 1.0, 0.5);
@@ -381,7 +381,7 @@ _giza_init_colour_index (void)
    */
   giza_set_colour_index_range(16,GIZA_COLOUR_INDEX_MAX);
 
-  // All alpha default to 1
+  /* All alpha default to 1 */
   colourIndex[0][3] = Dev.defaultBackgroundAlpha;
   int i;
   for (i = GIZA_COLOUR_INDEX_MIN + 1; i <= GIZA_COLOUR_INDEX_MAX; ++i)
@@ -461,8 +461,8 @@ giza_get_colour_index_range (int *cimin, int *cimax)
 /*void
 giza_set_range_as_colour_table (int *cimin, int *cimax)
 {
- // *cimin = _giza_colour_index_min;
- // *cimax = _giza_colour_index_max;
+  *cimin = _giza_colour_index_min;
+  *cimax = _giza_colour_index_max;
 }
 */
 

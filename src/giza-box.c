@@ -32,8 +32,8 @@
 
 static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
 				  int *i1, int *i2);
-//static int _giza_get_sigfigs (const double xmin, const double xmax,
-//			      const double xinterval);
+/*static int _giza_get_sigfigs (const double xmin, const double xmax, */
+/*			      const double xinterval); */
 
 /**
  * Drawing: giza_box

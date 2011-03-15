@@ -34,7 +34,7 @@
  *  needing fancy arguments.
  */
 #define GIZA_DEFAULT_WIDTH 612
-#define GIZA_DEFAULT_HEIGHT 459 // use 4:3 aspect ratio
+#define GIZA_DEFAULT_HEIGHT 459 /* use 4:3 aspect ratio */
 #define GIZA_DEVICE_UNITS_PER_MM 2.8346
 #define GIZA_DEVICE_INTERACTIVE 0
 #define GIZA_DEVICE_EXTENSION ".ps"
@@ -61,7 +61,7 @@ _giza_open_device_ps (int vert)
   Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
   Dev.defaultBackgroundAlpha = 0.;
 
-  // set all device specific settings
+  /* set all device specific settings */
   if (_giza_sizeSpecified())
     {
       Dev.width  = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;
