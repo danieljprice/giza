@@ -4,7 +4,7 @@
 #
 F90C=gfortran
 CC=gcc
-CFLAGS=-Wall -O3 -I../src -I/usr/X11/include
+CFLAGS=-Wall -Wextra -O3 -I../src -I/usr/X11/include
 VPATH=../src
 X11LIBS = -L/usr/X11R6/lib -lX11 -lcairo
 LIBS=$(X11LIBS) -L/usr/local/lib/x86_64/ -lgfortran
