@@ -77,7 +77,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 
   int oldBuf = Sets.buf;
 
-  // Table of log10() values for log axis ticks
+  /* Table of log10() values for log axis ticks */
   double logTab[9];
   int k;
   for (k = 0; k < 9; k++)
@@ -85,7 +85,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
       logTab[k] = log10 (k + 1);
     }
 
-  // Begin buffering
+  /* Begin buffering */
   giza_begin_buffer ();
 
   int xopta = 0, xoptb = 0, xoptc = 0, xoptt = 0, xopts = 0, xoptn =
@@ -291,7 +291,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   if (xoptn || xoptm)
     {
       _giza_tick_intervals (Win.xmin, Win.xmax, xintervalMaj, &i1, &i2);
-      np = floor (log10 (fabs (xintervalMaj)));
+      np = (int) floor (log10 (fabs (xintervalMaj)));
       nv = _giza_nint (xintervalMaj/pow (10., np));
 
       for (i = i1; i <= i2; i++)
@@ -436,7 +436,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   if (yoptn || yoptm)
     {
       _giza_tick_intervals (Win.ymin, Win.ymax, yintervalMaj, &i1, &i2);
-      np = floor (log10 (fabs (yintervalMaj)));
+      np = (int) floor (log10 (fabs (yintervalMaj)));
       nv = _giza_nint (yintervalMaj/pow (10., np));
 
       for (i = i1; i <= i2; i++)
@@ -638,7 +638,7 @@ giza_round (double x, int *nsub)
   if (x < 0)
     xx = -x;
   xlog = log10 (xx);
-  ilog = xlog;
+  ilog = (int) xlog;
   if (xlog < 0)
     ilog = ilog - 1;
   pwr = pow (10.0, ilog);
