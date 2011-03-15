@@ -2498,15 +2498,14 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 int
 _giza_get_chunk (char *text)
 {
+  int openb = 0;
+  int length = 0;
+  int token, stop = 0;
 
   /* initialise the scanner */
   yyscan_t scanner;
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
-
-  int openb = 0;
-  int length = 0;
-  int token, stop = 0;
  
   while(!stop)
     {
@@ -2540,18 +2539,18 @@ _giza_get_chunk (char *text)
 void
 _giza_parse_string (const char *text, double *width, double *height, void (*action)(const char *, double *, double *))
 {
+  yyscan_t scanner;
   int stop = 0, token, chunkLength, oldTrans;
-  char processed[strlen (text) + 1];
   int posInText = 0;
-  processed[0] = '\0';
   int insuper = 0;
   int insub   = 0;
+  char processed[strlen (text) + 1];
+  processed[0] = '\0';
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
   /* initialise the scanner */
-  yyscan_t scanner;
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
  
