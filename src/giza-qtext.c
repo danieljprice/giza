@@ -70,15 +70,17 @@ giza_qtext (double x, double y, double angle, double just, char *text, double xb
   cairo_move_to (context, 0., 0.);
   _giza_parse_string (text, &width, &height, _giza_action_get_size);
 
-  xbox[0] = x - width * just * cos (angle * GIZA_DEG_TO_RAD);
-  xbox[3] = x + width * (1 - just) * cos (angle * GIZA_DEG_TO_RAD);
-  xbox[1] = xbox[0] - height * sin (angle * GIZA_DEG_TO_RAD);
-  xbox[2] = xbox[3] - height * sin (angle * GIZA_DEG_TO_RAD);
+  double cosangle = cos(angle * GIZA_DEG_TO_RAD);
+  double sinangle = sin(angle * GIZA_DEG_TO_RAD);
+  xbox[0] = x - width * just * cosangle;
+  xbox[3] = x + width * (1 - just) * cosangle;
+  xbox[1] = xbox[0] - height * sinangle;
+  xbox[2] = xbox[3] - height * sinangle;
 
-  ybox[0] = y + width * just * sin (angle * GIZA_DEG_TO_RAD);
-  ybox[3] = y - width * (1 - just) * sin (angle * GIZA_DEG_TO_RAD);
-  ybox[1] = ybox[0] - height * cos (angle * GIZA_DEG_TO_RAD);
-  ybox[2] = ybox[3] - height * cos (angle * GIZA_DEG_TO_RAD);
+  ybox[0] = y + width * just * sinangle;
+  ybox[3] = y - width * (1 - just) * sinangle;
+  ybox[1] = ybox[0] - height * cosangle;
+  ybox[2] = ybox[3] - height * cosangle;
 
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_device_to_user (context, &xbox[0], &ybox[0]);
@@ -106,15 +108,15 @@ giza_qtext_float (float x, float y, float angle, float just, char *text, float x
 
   giza_qtext ((double) x, (double) y, (double) angle, (double) just, text, xboxd, yboxd);
 
-  xbox[0] = (double) xboxd[0];
-  xbox[1] = (double) xboxd[1];
-  xbox[2] = (double) xboxd[2];
-  xbox[3] = (double) xboxd[3];
+  xbox[0] = (float) xboxd[0];
+  xbox[1] = (float) xboxd[1];
+  xbox[2] = (float) xboxd[2];
+  xbox[3] = (float) xboxd[3];
 
-  ybox[0] = (double) yboxd[0];
-  ybox[1] = (double) yboxd[1];
-  ybox[2] = (double) yboxd[2];
-  ybox[3] = (double) yboxd[3];
+  ybox[0] = (float) yboxd[0];
+  ybox[1] = (float) yboxd[1];
+  ybox[2] = (float) yboxd[2];
+  ybox[3] = (float) yboxd[3];
 }
 
 /**
