@@ -135,7 +135,14 @@ _giza_fill (void)
       /* clip plotting to within the fill area
        * but do not (yet) destroy the fill area */
       cairo_clip_preserve(context);
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
       cairo_clip_extents(context, &xmin,&ymin,&xmax,&ymax);
+#else
+      xmin = 0.;
+      xmax = Dev.width;
+      ymin = 0.;
+      ymax = Dev.height;
+#endif
       dx = xmax - xmin;
       dy = ymax - ymin;
       /* set geometry of box */
