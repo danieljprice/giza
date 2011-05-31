@@ -48,6 +48,10 @@ giza_qtext (double x, double y, double angle, double just, char *text, double xb
       return;
     }
 
+  /* save the character height (can be changed during superscript/subscripting) */
+  double ch;
+  giza_get_character_height (&ch);
+
   cairo_save (context);
 
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -83,6 +87,9 @@ giza_qtext (double x, double y, double angle, double just, char *text, double xb
   cairo_device_to_user (context, &xbox[3], &ybox[3]);
 
   cairo_restore (context);
+
+  /* restore the original character height (and font matrix) */
+  giza_set_character_height (ch);
 }
 
 /**
@@ -132,6 +139,10 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
       return;
     }
 
+  /* save the character height (can be changed during superscript/subscripting) */
+  double ch;
+  giza_get_character_height (&ch);
+
   cairo_save (context);
 
   _giza_set_trans (GIZA_TRANS_IDEN); 
@@ -170,6 +181,9 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
     }
    
   cairo_restore (context);
+
+  /* restore the original character height (and font matrix) */
+  giza_set_character_height (ch);
 }
 
 /**
