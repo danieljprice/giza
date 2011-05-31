@@ -159,12 +159,13 @@ _giza_open_device_xw (void)
   XMapWindow (XW.display, XW.window);
 
   /* create the pixmap */
-  //XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
+  XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
-  /* cairo stuff */
-  //surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
-  surface = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
-
+  /* create Xlib surface in cairo */
+  surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  /* uncomment below for drawing direct to window
+   surface = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
+   */
   if (!surface)
     {
       _giza_error ("_giza_open_device_xw", "Could not create surface");
@@ -186,7 +187,7 @@ _giza_flush_device_xw (void)
   cairo_surface_flush (surface);
 
   /* move the offscreen surface to the onscreen one */
-  //XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, 0, 0, (unsigned) XW.width, (unsigned) XW.height, 0, 0);
+  XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, 0, 0, (unsigned) XW.width, (unsigned) XW.height, 0, 0);
 
   if (!XFlush (XW.display))
     {
@@ -214,12 +215,14 @@ _giza_change_page_xw (void)
   */
   /* create a new pixmap */
   cairo_surface_destroy (surface);
-  //XFreePixmap (XW.display, XW.pixmap);
-  //XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
+  XFreePixmap (XW.display, XW.pixmap);
+  XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
   /* recreate the cairo surface */
-  //surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  /*
   surface = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
+  */
   cairo_destroy(context);
   context = cairo_create (surface);
 }
@@ -250,7 +253,7 @@ _giza_close_device_xw (void)
       _giza_xevent_loop (0, 0, 0, 0, &x, &y, &ch);
     }
    */
-  /*XFreePixmap (XW.display, XW.pixmap); do we need this?*/
+  XFreePixmap (XW.display, XW.pixmap);
   XCloseDisplay (XW.display);
   cairo_surface_destroy (surface);
 }
@@ -335,14 +338,10 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 static void
 _giza_expose_xw (XEvent *event)
 {
-/*  XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, event->xexpose.x,
+  XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, event->xexpose.x,
 	     event->xexpose.y, (unsigned) event->xexpose.width, 
 	     (unsigned) event->xexpose.height, event->xexpose.x,
 	     event->xexpose.y);
-*/
-/* I think we should do a cairo_surface_flush here if the XCopyArea
-   above is used, since we are modifying the Xwin surface with
-   a non-cairo function: call is cairo_surface_flush(surface) */
 
   XFlush(XW.display);
 }
@@ -405,8 +404,11 @@ _giza_init_band_xw (void)
       /* Set up box so it can draw the box... */
       Band.onscreen = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
       Band.box = cairo_create (Band.onscreen);
-      /* How should we choose this colour?? */
-      cairo_set_source_rgba (Band.box, 0., 0., 0., 0.5);
+      
+      /* Draw band using the current foreground colour */
+      double red,blue,green,alpha;
+      giza_get_colour_representation_alpha(1,&red,&blue,&green,&alpha);
+      cairo_set_source_rgba (Band.box, red, blue, green, alpha);
 
       /* Set up restore to remove box */
       Band.restore = cairo_create (Band.onscreen);
