@@ -123,7 +123,6 @@ giza_get_character_size (int units, double *heightx, double *heighty)
 
   int oldTrans = _giza_get_trans ();
 
-  _giza_set_trans (GIZA_TRANS_IDEN);
   *heighty = Sets.fontExtents.ascent;
   *heightx = *heighty;
 
