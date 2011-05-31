@@ -109,12 +109,28 @@ _giza_open_device_xw (void)
       return 1;
     }
 
-  /* set the depth */
-  XW.depth = 24;
-
   /* get an identifier for the screen */
   XW.screenptr = DefaultScreenOfDisplay(XW.display);
   XW.screennum = DefaultScreen (XW.display);
+
+  /* set the depth */
+  XW.depth = DefaultDepth(XW.display,XW.screennum);
+
+  /* Debugging info */
+  printf("giza_xw_debug: XW display: %s\n",XDisplayName((char*)XW.display));
+  printf("giza_xw_debug: XW monitor resolution: %d x %d\n",
+                          DisplayWidth(XW.display,XW.screennum),
+                          DisplayHeight(XW.display,XW.screennum));
+ /* printf("Connection number is %d\n",XW/); */
+
+  if (XW.depth == 1)
+    {
+       printf("WARNING: XW depth = 1: no colour possible\n");
+    }
+  else 
+    {
+       printf("giza_xw_debug: XW colour depth = %d\n",XW.depth);
+    }
 
   /* create a visual */
   XW.visual = DefaultVisual (XW.display, XW.screennum);
@@ -143,10 +159,11 @@ _giza_open_device_xw (void)
   XMapWindow (XW.display, XW.window);
 
   /* create the pixmap */
-  XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
+  //XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
   /* cairo stuff */
-  surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  //surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  surface = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
 
   if (!surface)
     {
@@ -169,7 +186,7 @@ _giza_flush_device_xw (void)
   cairo_surface_flush (surface);
 
   /* move the offscreen surface to the onscreen one */
-  XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, 0, 0, (unsigned) XW.width, (unsigned) XW.height, 0, 0);
+  //XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, 0, 0, (unsigned) XW.width, (unsigned) XW.height, 0, 0);
 
   if (!XFlush (XW.display))
     {
@@ -197,11 +214,12 @@ _giza_change_page_xw (void)
   */
   /* create a new pixmap */
   cairo_surface_destroy (surface);
-  XFreePixmap (XW.display, XW.pixmap);
-  XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
+  //XFreePixmap (XW.display, XW.pixmap);
+  //XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
   /* recreate the cairo surface */
-  surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  //surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  surface = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
   cairo_destroy(context);
   context = cairo_create (surface);
 }
@@ -317,10 +335,15 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 static void
 _giza_expose_xw (XEvent *event)
 {
-  XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, event->xexpose.x,
+/*  XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, event->xexpose.x,
 	     event->xexpose.y, (unsigned) event->xexpose.width, 
 	     (unsigned) event->xexpose.height, event->xexpose.x,
 	     event->xexpose.y);
+*/
+/* I think we should do a cairo_surface_flush here if the XCopyArea
+   above is used, since we are modifying the Xwin surface with
+   a non-cairo function: call is cairo_surface_flush(surface) */
+
   XFlush(XW.display);
 }
 
@@ -336,6 +359,8 @@ _giza_change_size_xw (int width, int height)
 
   XW.width = width;
   XW.height = height;
+  
+  cairo_xlib_surface_set_size(surface,width,height);
 }
 
 /**
@@ -381,7 +406,7 @@ _giza_init_band_xw (void)
       Band.onscreen = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
       Band.box = cairo_create (Band.onscreen);
       /* How should we choose this colour?? */
-      cairo_set_source_rgb (Band.box, 0., 0., 0.);
+      cairo_set_source_rgba (Band.box, 0., 0., 0., 0.5);
 
       /* Set up restore to remove box */
       Band.restore = cairo_create (Band.onscreen);
