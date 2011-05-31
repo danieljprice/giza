@@ -12,7 +12,7 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
  *
  */
@@ -110,6 +110,8 @@ giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
   *x2 = (VP.xmax);
   *y1 = (VP.ymin);
   *y2 = (VP.ymax);
+  double ymin = *y1;
+  double ymax = *y2;
 
   int oldTrans = _giza_get_trans ();
 
@@ -121,9 +123,14 @@ giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
     case GIZA_UNITS_INCHES:
     case GIZA_UNITS_DEVICE:
       _giza_set_trans (GIZA_TRANS_NORM);
-      double ymin = *y1, ymax = *y2;
       cairo_user_to_device (context, x1, &ymin);
       cairo_user_to_device (context, x2, &ymax);
+      /* y direction is done differently, because
+         cairo counts 0,0 as the top left of the
+         pixmap in device units, whereas we want it to be the 
+         bottom left, hence ymax->ymin and ymin->ymax 
+         (so our "device units" are slightly different
+          to those of the cairo device) */
       *y1 = ymax;
       *y2 = ymin;
       break;
@@ -193,6 +200,9 @@ giza_set_viewport_default (void)
   giza_get_clipping(&clip);
   if (clip)
     cairo_clip (context);
+
+  giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);
+
 }
 
 /**
