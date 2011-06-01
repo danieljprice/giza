@@ -1668,7 +1668,7 @@ contains
     if (len_trim(string).gt.0) then
        cstring = trim(string)//achar(0)
     else
-       cstring = achar(0)
+       cstring = ' '//achar(0)
     endif
     
   end function cstring
