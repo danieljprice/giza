@@ -68,7 +68,8 @@ void _giza_set_sizeSpecified (void);
 void _giza_reset_sizeSpecified (void);
 void _giza_set_drawn (void);
 void _giza_reset_drawn (void);
-
+void _giza_init_character_height (void);
+void _giza_scale_character_size (double scalefac);
 int _giza_nint (double x);
 void _giza_init_save (void);
 void _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight);
