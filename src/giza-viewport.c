@@ -50,14 +50,20 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
     {
       printf("giza_viewport: xmin %f xmax %f ymin %f ymax %f \n",xleft,xright,ybottom,ytop);
       _giza_warning ("giza_set_viewport", "Invalid arguments, using default viewport");
-      giza_set_viewport_default();
-      return;
-    }
 
-  VP.xmin = xleft;
-  VP.xmax = xright;
-  VP.ymin = ybottom;
-  VP.ymax = ytop;
+      VP.xmin = GIZA_DEFAULT_VP_MARGIN_HORI;
+      VP.xmax = 1. - GIZA_DEFAULT_VP_MARGIN_HORI;
+      VP.ymin = GIZA_DEFAULT_VP_MARGIN_VERT; 
+      VP.ymax = 1. - GIZA_DEFAULT_VP_MARGIN_VERT;
+
+    } else {
+
+      VP.xmin = xleft;
+      VP.xmax = xright;
+      VP.ymin = ybottom;
+      VP.ymax = ytop;    
+
+    }
 
   _giza_set_trans (GIZA_TRANS_NORM);
   cairo_reset_clip (context);
@@ -68,7 +74,6 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
   if (clip)
     cairo_clip (context);
 
-  giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);
 }
 
 /**
@@ -79,8 +84,7 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
  * See Also: giza_set_viewport
  */
 void
-giza_set_viewport_float (float xleft, float xright, float ybottom,
-			      float ytop)
+giza_set_viewport_float (float xleft, float xright, float ybottom, float ytop)
 {
   giza_set_viewport ((double) xleft, (double) xright, (double) ybottom, (double) ytop);
 }
@@ -187,20 +191,13 @@ giza_set_viewport_default (void)
 {
   if(!_giza_check_device_ready("giza_set_viewport_default")) return;
   
-  VP.xmin = GIZA_DEFAULT_VP_MARGIN_VERT;
-  VP.xmax = 1. - GIZA_DEFAULT_VP_MARGIN_VERT;
-  VP.ymin = GIZA_DEFAULT_VP_MARGIN_HORI; 
-  VP.ymax = 1. - GIZA_DEFAULT_VP_MARGIN_HORI;
-
-  _giza_set_trans (GIZA_TRANS_NORM);
-  cairo_reset_clip (context);
-  cairo_rectangle (context, VP.xmin, VP.ymin, VP.xmax - VP.xmin, VP.ymax - VP.ymin);
-
-  int clip;
-  giza_get_clipping(&clip);
-  if (clip)
-    cairo_clip (context);
-
+  double xmin = GIZA_DEFAULT_VP_MARGIN_HORI;
+  double xmax = 1. - GIZA_DEFAULT_VP_MARGIN_HORI;
+  double ymin = GIZA_DEFAULT_VP_MARGIN_VERT; 
+  double ymax = 1. - GIZA_DEFAULT_VP_MARGIN_VERT;
+  
+  giza_set_viewport(xmin,xmax,ymin,ymax);
+  /* also set window if calling default viewport routine */
   giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);
 
 }
