@@ -311,7 +311,7 @@ _giza_get_chunk (char *text)
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
  */
 void
-_giza_parse_string (const char *text, double *width, double *height, void (*action)(const char *, double *, double *))
+_giza_parse_string (char *text, double *width, double *height, void (*action)(const char *, double *, double *))
 {
   yyscan_t scanner;
   int stop = 0, token, chunkLength, oldTrans;
