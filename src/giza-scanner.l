@@ -297,9 +297,13 @@ _giza_get_chunk (char *text)
 	    break;
         }
 
-	if (openb < 1) return length;
+	if (openb < 1) 
+          {
+            yylex_destroy (scanner);
+            return length;
+          }
     }
- 
+   yylex_destroy (scanner);
    return length; /* DJP: assumes whole string if unclosed open bracket */
 }
 
