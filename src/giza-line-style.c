@@ -74,7 +74,7 @@ _giza_set_line_style (int ls, cairo_t *ct)
 {
   double longDash, shortDash, lw;
 
-  giza_get_character_size (2, &longDash, &shortDash);
+  giza_get_character_size (GIZA_UNITS_MM, &longDash, &shortDash);
   longDash = 0.85 * longDash;
   shortDash = 0.33 * longDash;
 
