@@ -2548,7 +2548,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   int posInText = 0;
   int insuper = 0;
   int insub   = 0;
-  char processed[strlen (text) + 1];
+  char processed[strlen (text) + 2];
   processed[0] = '\0';
 
   oldTrans = _giza_get_trans ();
