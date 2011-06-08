@@ -2548,7 +2548,8 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
   int posInText = 0;
   int insuper = 0;
   int insub   = 0;
-  char processed[strlen (text) + 2];
+  int lenstr  = strlen(text);
+  char processed[lenstr + 1];
   processed[0] = '\0';
 
   oldTrans = _giza_get_trans ();
@@ -2574,6 +2575,13 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
           action (processed, width, height);
           processed[0] = '\0';
 
+          /* if end of string, do nothing */
+          if (posInText >= lenstr)
+            { 
+              stop = 1;
+              break;
+            }
+
           /* Parse the brackets, i.e. get the chunk of text that needs to be superscript */
           chunkLength = _giza_get_chunk (text + posInText);
           strncpy (processed, text + posInText, chunkLength);
@@ -2597,6 +2605,13 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
           /* Perform action on text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
+
+          /* if end of string, do nothing */
+          if (posInText >= lenstr)
+            { 
+              stop = 1;
+              break;
+            }
 
           /* Parse the brackets */
           chunkLength = _giza_get_chunk (text + posInText);
@@ -2654,6 +2669,13 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
           /* Perform action on the text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
+
+          /* if end of string, do nothing */
+          if (posInText >= lenstr)
+            { 
+              stop = 1;
+              break;
+            }
 
           /* Parse the brackets */
           chunkLength = _giza_get_chunk (text + posInText);
