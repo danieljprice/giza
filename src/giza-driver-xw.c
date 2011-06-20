@@ -68,6 +68,7 @@ struct GIZA_XWindow
 static void _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int *y, char *ch);
 static void _giza_expose_xw (XEvent *event);
 static void _giza_change_size_xw (int width, int height);
+static void _giza_flush_xw_event_queue (XEvent *event);
 
 /**
  * Opens an XWindow device for drawing to.
@@ -302,6 +303,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 	    *ch = buffer[0];
 
           _giza_destroy_band (mode);
+          _giza_flush_xw_event_queue(&event);
 	  return;
 	};
       
@@ -317,6 +319,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 	*y = event.xbutton.y ;/*- GIZA_XW_MARGIN; */
 	*ch = GIZA_LEFT_CLICK;
         _giza_destroy_band (mode);
+        _giza_flush_xw_event_queue(&event);
 	return;
       }
     case MotionNotify:
@@ -328,8 +331,23 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
     }
     
   }
-
+  
+  _giza_flush_xw_event_queue(&event);
   _giza_destroy_band (mode);
+}
+
+/**
+ * expunge the Xwindow event queue
+ */
+
+static void
+_giza_flush_xw_event_queue (XEvent *event)
+{
+  /* Flush all remaining events from the X event queue */
+  while (XPending(XW.display)) {
+     /*printf("removing pending XW event \n");*/
+     XNextEvent(XW.display, event);
+  }
 }
 
 /**
