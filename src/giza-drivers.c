@@ -395,6 +395,16 @@ giza_close_device (void)
  * Device: giza_query_device
  *
  * Synopsis: Queries various things about the current device.
+ *
+ * Input:
+ *  -querytype :- a string containing the query type
+ *  -returnval :- string with result of query
+ *
+ * The following query types are possible:
+ *  "type"     :- returns device type of the current device (e.g. /png,/xw)
+ *  "cursor"   :- returns whether or not device has a cursor ("YES" or "NO")
+ *  "hardcopy" :- returns whether device is a hardcopy device ("YES" or "NO")
+ *
  */
 int
 giza_query_device (char *querytype, char *returnval)
