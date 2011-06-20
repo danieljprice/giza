@@ -271,8 +271,12 @@ giza_flush_device (void)
 void
 giza_change_page (void)
 {
-  if (!_giza_has_drawn ())
+  if (!_giza_has_drawn ()) {
+    /* if nothing has changed, safe to redraw/reset the background colour */
+    giza_draw_background ();
     return;
+  }
+
   if (!_giza_check_device_ready ("giza_change_page"))
     return;
 
@@ -791,9 +795,11 @@ void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, cha
      if (pgNum == 0) {
         sprintf (filename, "%s", prefix);    
      } else {
-        /* here we need a number, but it should come BEFORE the device extension */
-        
-        /* find the first occurrence of . in the filename */
+        /*
+         * Here we need a number, but it should come BEFORE the device extension
+         * so find the first occurrence of . in the filename, and insert number
+         * before this position.
+         */
         char *firstpart = strsep (&prefix,".");
         sprintf (filename, "%s_%04d%s", firstpart, pgNum, extension);
      }
