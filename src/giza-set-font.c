@@ -111,6 +111,11 @@ _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight
    strcpy (_giza_fontFam, font);
 
    cairo_select_font_face (context, font, slant, weight);
+
+/*   cairo_matrix_t mat;
+   cairo_matrix_init_identity(&mat);
+   cairo_set_font_matrix (context, &mat);
+*/
    double oldCh;
    giza_get_character_height (&oldCh);
    giza_set_character_height (oldCh);
