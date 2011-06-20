@@ -45,8 +45,6 @@ giza_set_character_height (double ch)
       return;
     }
 
-  /* Sets the character size as a ratio of the current character size */
-  /* so that the font matrix is not destroyed */
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
@@ -191,7 +189,9 @@ giza_get_character_size_float (int units, float *xch, float *ych)
 void
 _giza_init_character_height (void)
 {
-  giza_set_character_height(1.);
+  /* Note: do not call giza_set_character_height here
+     This is done from giza_init_font */
+  _giza_ch = 1.;
 }
 
 /**
