@@ -45,11 +45,7 @@ giza_line (int n, double *xpts, double *ypts)
 
   /* check the line has at least one segment */
   if (n < 2)
-    {
-      _giza_warning ("giza_line",
-		    "The line has less than two segments and will not be plotted.");
-      return;
-    }
+    return;
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -84,12 +80,9 @@ giza_line_float (int n, float *xpts, float *ypts)
   if (!_giza_check_device_ready ("giza_line_float"))
     return;
 
-  if (n < 2)
-    {
-      _giza_warning ("giza_line_float",
-		    "The line has less than two segments and will not be plotted.");
-      return;
-    }
+  if (n < 2) 
+    return;
+
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_move_to (context, (double) xpts[0], (double) ypts[0]);
