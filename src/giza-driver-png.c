@@ -132,14 +132,8 @@ _giza_close_device_png (void)
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
   char fileName[length + 1];
-  if (Dev.pgNum == 0)
-    {
-      sprintf (fileName, "%s%s", Dev.prefix, GIZA_DEVICE_EXTENSION);
-    }
-  else
-    {
-      sprintf (fileName, "%s_%04d%s", Dev.prefix, Dev.pgNum, GIZA_DEVICE_EXTENSION);
-    }
+  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION);
+  
   cairo_surface_write_to_png (surface, fileName);
 
   char tmp[length + 10];

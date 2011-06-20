@@ -21,10 +21,10 @@
 #include "giza-io-private.h"
 #include "giza-driver-eps-private.h"
 #include "giza-driver-ps-private.h"
+#include "giza-drivers-private.h"
 
 #ifdef _GIZA_HAS_EPS
 #include <giza.h>
-#include <stdio.h>
 #include <string.h>
 #include <cairo/cairo-ps.h>
 
@@ -50,7 +50,7 @@ _giza_open_device_eps (int vert)
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
   char fileName[length + 1];
-  sprintf (fileName, "%s_%04d%s", Dev.prefix, Dev.pgNum, GIZA_DEVICE_EXTENSION);
+  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION);
 
   Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
   Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
@@ -119,7 +119,7 @@ _giza_change_page_eps (void)
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
   char fileName[length + 1];
-  sprintf (fileName, "%s_%04d%s", Dev.prefix, Dev.pgNum + 1, GIZA_DEVICE_EXTENSION);
+  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum + 1,GIZA_DEVICE_EXTENSION);
 
   /* Open it */
   surface = cairo_ps_surface_create (fileName, Dev.width, Dev.height);
