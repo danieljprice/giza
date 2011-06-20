@@ -40,6 +40,7 @@
 #include <giza.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <ctype.h>
 
 #define GIZA_DEFAULT_MARGIN 0
@@ -176,13 +177,22 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   giza_set_viewport_default ();
   _giza_init_window ();
   giza_set_line_width (1);
+  
+  /*printf("debug: init font \n");*/
   _giza_init_character_height ();
   _giza_init_font ();
+  /*
+  printf("debug: init char height \n");
+  printf("debug: init fill \n");
+  */
   _giza_init_fill ();
   _giza_init_band_style ();
   _giza_init_save ();
   giza_set_clipping(1);
 
+  /*
+  printf("debug: device opened \n");
+  */
   return Dev.pgNum;
 }
 
@@ -289,6 +299,7 @@ giza_change_page (void)
       _giza_change_page_ps ();
       break;
     case GIZA_DEVICE_NULL:
+      _giza_close_device_null ();
       _giza_open_device_null ();
       break;
 #ifdef _GIZA_HAS_EPS
@@ -510,7 +521,7 @@ _giza_split_device_string (char *deviceString, char **devType)
 }
 
 /**
- * An internal function that converts a device string to it integer representation
+ * An internal function that converts a device string to its integer representation
  */
 int
 _giza_device_to_int (char *newDeviceName)
@@ -752,3 +763,29 @@ _giza_init_band (int mode)
   return success;
 }
 
+/**
+ * Internal utility to construct device filenames
+ * given the prefix, the device extension and page number
+ */
+void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension)
+{
+  if (!strcasestr(prefix,extension)) {
+  /* Add the device extension if prefix string does not already contain it */
+     if (pgNum == 0) {
+        sprintf (filename, "%s%s", prefix, extension);
+     } else {
+        sprintf (filename, "%s_%04d%s", prefix, pgNum, extension);
+     }
+  } else {
+  /* Do not add the device extension if the prefix already contains it  */
+     if (pgNum == 0) {
+        sprintf (filename, "%s", prefix);    
+     } else {
+        /* here we need a number, but it should come BEFORE the device extension */
+        
+        /* find the first occurrence of . in the filename */
+        char *firstpart = strsep (&prefix,".");
+        sprintf (filename, "%s_%04d%s", firstpart, pgNum, extension);
+     }
+  }
+}
