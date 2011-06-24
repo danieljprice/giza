@@ -345,7 +345,6 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 static void
 _giza_flush_xw_event_queue (XEvent *event)
 {
-  return;
   /* Flush all remaining events from the X event queue */
   while (XPending(XW.display)) {
      /*printf("removing pending XW event \n");*/
