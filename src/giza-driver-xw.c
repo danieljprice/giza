@@ -118,19 +118,21 @@ _giza_open_device_xw (void)
   XW.depth = DefaultDepth(XW.display,XW.screennum);
 
   /* Debugging info */
+  /*
   printf("giza_xw_debug: XW display: %s\n",XDisplayName((char*)XW.display));
   printf("giza_xw_debug: XW monitor resolution: %d x %d\n",
                           DisplayWidth(XW.display,XW.screennum),
                           DisplayHeight(XW.display,XW.screennum));
+  */
  /* printf("Connection number is %d\n",XW/); */
 
   if (XW.depth == 1)
     {
-       printf("WARNING: XW depth = 1: no colour possible\n");
+       _giza_error("_giza_open_device_xw","XW depth = 1: no colour possible");
     }
   else 
     {
-       printf("giza_xw_debug: XW colour depth = %d\n",XW.depth);
+       /*printf("giza_xw_debug: XW colour depth = %d\n",XW.depth);*/
     }
 
   /* create a visual */
@@ -343,6 +345,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 static void
 _giza_flush_xw_event_queue (XEvent *event)
 {
+  return;
   /* Flush all remaining events from the X event queue */
   while (XPending(XW.display)) {
      /*printf("removing pending XW event \n");*/
