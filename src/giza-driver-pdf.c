@@ -28,6 +28,7 @@
 #define GIZA_DEFAULT_WIDTH 612  /* same as ps driver */
 #define GIZA_DEFAULT_HEIGHT 459 /* use 4:3 aspect ratio */
 #define GIZA_DEVICE_UNITS_PER_MM 2.8346
+#define GIZA_DEVICE_UNITS_PER_PIXEL 0.765 /* so pixel resolution is same as pixel devices */
 #define GIZA_DEVICE_INTERACTIVE 0
 #define GIZA_DEVICE_EXTENSION ".pdf"
 
@@ -49,8 +50,9 @@ _giza_open_device_pdf (int vert)
   char fileName[length + 1];
   sprintf (fileName, "%s%s", Dev.prefix, GIZA_DEVICE_EXTENSION);
 
-  Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
+  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
   Dev.defaultBackgroundAlpha = 0.;
 
   /* set all device specific settings */

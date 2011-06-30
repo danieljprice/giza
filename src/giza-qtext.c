@@ -160,6 +160,10 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
       *xlen = *xlen / Dev.width;
       *ylen = *ylen / Dev.height;
       break;
+    case GIZA_UNITS_PIXELS:
+      *xlen = *xlen * Dev.deviceUnitsPerPixel;
+      *ylen = *ylen * Dev.deviceUnitsPerPixel;
+      break;
     case GIZA_UNITS_DEVICE:
       break;
     case GIZA_UNITS_MM:
@@ -174,7 +178,6 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
       _giza_set_trans (GIZA_TRANS_NORM);
       cairo_user_to_device_distance (context, xlen, ylen);
       break;
-/*    case GIZA_UNITS_VPFRAC: */
     default:
       _giza_warning ("giza_get_viewport", "Invalid units, using normalised device units.");
       *xlen = *xlen / Dev.width;

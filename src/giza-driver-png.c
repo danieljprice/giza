@@ -28,6 +28,7 @@
 #define GIZA_DEFAULT_WIDTH 800
 #define GIZA_DEFAULT_HEIGHT 600
 #define GIZA_DEVICE_UNITS_PER_MM 3.7054 /* so "width" is 8.5 inches as in ps driver */
+#define GIZA_DEVICE_UNITS_PER_PIXEL 1.0 /* device units are pixels */
 #define GIZA_DEVICE_INTERACTIVE 0
 #define GIZA_DEVICE_EXTENSION ".png"
 
@@ -41,8 +42,9 @@
 int
 _giza_open_device_png (void)
 {
-  Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
+  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
 
   if(_giza_sizeSpecified ())
     {

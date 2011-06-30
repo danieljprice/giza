@@ -52,7 +52,7 @@ contains
   case(2)
      units_giza = giza_units_mm
   case(3)
-     units_giza = giza_units_device
+     units_giza = giza_units_pixels
   case(4)
      units_giza = giza_units_world
   case default  ! giza will give an error

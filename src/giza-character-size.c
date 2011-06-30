@@ -108,6 +108,7 @@ giza_get_character_height_float (float *ch)
  * Units:
  *  -GIZA_UNITS_NORMALIZED :- normalised device coords.
  *  -GIZA_UNITS_WORLD      :- world coords.
+ *  -GIZA_UNITS_PIXELS     :- pixels
  *  -GIZA_UNITS_DEVICE     :- device coords.
  *  -GIZA_UNITS_MM         :- mm
  *  -GIZA_UNITS_INCHES     :- inches
@@ -133,6 +134,7 @@ giza_get_character_size (int units, double *heightx, double *heighty)
       break;
     case GIZA_UNITS_MM:
     case GIZA_UNITS_INCHES:
+    case GIZA_UNITS_PIXELS:
     case GIZA_UNITS_DEVICE:
       _giza_set_trans (GIZA_TRANS_IDEN);
       cairo_device_to_user_distance (context, heightx, heighty);
@@ -153,6 +155,10 @@ giza_get_character_size (int units, double *heightx, double *heighty)
    /* Now convert to mm/inches */
    switch (units)
    {
+   case GIZA_UNITS_PIXELS:
+      *heightx = *heightx * Dev.deviceUnitsPerPixel;
+      *heighty = *heighty * Dev.deviceUnitsPerPixel;
+      break;
    case GIZA_UNITS_MM:
       *heightx = *heightx * Dev.deviceUnitsPermm;
       *heighty = *heighty * Dev.deviceUnitsPermm;

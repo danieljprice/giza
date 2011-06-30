@@ -14,7 +14,7 @@
  *
  * Copyright (C) 2010 James Wetter & Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
- *          daniel.price@sci.monash.edu.au
+ *          daniel.price@monash.edu
  *
  */
 #include "giza-private.h"
@@ -31,6 +31,7 @@
 #define GIZA_DEFAULT_WIDTH 612
 #define GIZA_DEFAULT_HEIGHT 459 /* use 4:3 aspect ratio */
 #define GIZA_DEVICE_UNITS_PER_MM 2.8346
+#define GIZA_DEVICE_UNITS_PER_PIXEL 0.765 /* so pixel resolution is same as pixel devices */
 #define GIZA_DEVICE_INTERACTIVE 0
 #define GIZA_DEVICE_EXTENSION ".eps"
 
@@ -52,8 +53,9 @@ _giza_open_device_eps (int vert)
   char fileName[length + 1];
   _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION);
 
-  Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
+  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
   Dev.defaultBackgroundAlpha = 0.;
 
   /* set all device specific settings */

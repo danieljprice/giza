@@ -40,6 +40,7 @@ struct GIZA_Device
   double widthCM;
   double heightCM;
   double deviceUnitsPermm;
+  double deviceUnitsPerPixel;
   int isInteractive;
   char prefix[30];
   int pgNum;

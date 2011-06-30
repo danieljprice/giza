@@ -134,6 +134,7 @@ module giza
   integer, parameter, public :: giza_units_inches = GIZA_UNITS_INCHES
   integer, parameter, public :: giza_units_normalized = GIZA_UNITS_NORMALIZED
   integer, parameter, public :: giza_units_device = GIZA_UNITS_DEVICE
+  integer, parameter, public :: giza_units_pixels = GIZA_UNITS_PIXELS
   integer, parameter, public :: giza_units_world = GIZA_UNITS_WORLD
   integer, parameter, public :: giza_colour_index_min = GIZA_COLOUR_INDEX_MIN
   integer, parameter, public :: giza_colour_index_max = GIZA_COLOUR_INDEX_MAX

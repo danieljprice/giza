@@ -62,6 +62,7 @@ struct GIZA_XWindow
 #define GIZA_DEFAULT_WIDTH 800
 #define GIZA_DEFAULT_HEIGHT 600
 #define GIZA_DEVICE_UNITS_PER_MM 3.7054 /* so "width" is 8.5 inches as in ps driver */
+#define GIZA_DEVICE_UNITS_PER_PIXEL 1.0 /* device units are pixels */
 #define GIZA_DEVICE_INTERACTIVE 1
 #define GIZA_XW_MARGIN 20
 
@@ -83,8 +84,9 @@ static void _giza_flush_xw_event_queue (XEvent *event);
 int
 _giza_open_device_xw (void)
 {
-  Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.isInteractive = GIZA_DEVICE_INTERACTIVE;
+  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
 
   /* set all device specific settings */
   if (!_giza_sizeSpecified ())

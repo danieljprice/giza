@@ -14,6 +14,7 @@
  *
  * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
@@ -102,8 +103,12 @@ giza_set_viewport_float (float xleft, float xright, float ybottom, float ytop)
  *  -y2    :- set to y-coord of lower-right corner
  *
  * Units:
- *  -0 :- normalised device coords
- *  -1 :- pixels or points
+ *  -0 or GIZA_UNITS_NORMALIZED :- normalised device units
+ *  -1 or GIZA_UNITS_INCHES     :- inches
+ *  -2 or GIZA_UNITS_MM         :- mm
+ *  -3 or GIZA_UNITS_PIXELS     :- pixels
+ *  -5 or GIZA_UNITS_DEVICE     :- device units (pixels or points)
+ *  -default                    :- normalised device units
  */
 void
 giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
@@ -126,6 +131,7 @@ giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
     case GIZA_UNITS_MM:
     case GIZA_UNITS_INCHES:
     case GIZA_UNITS_DEVICE:
+    case GIZA_UNITS_PIXELS:
       _giza_set_trans (GIZA_TRANS_NORM);
       cairo_user_to_device (context, x1, &ymin);
       cairo_user_to_device (context, x2, &ymax);
@@ -146,6 +152,12 @@ giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
    /* Now convert to mm/inches */
    switch (units)
    {
+   case GIZA_UNITS_PIXELS:
+      *x1 = *x1 / Dev.deviceUnitsPerPixel;
+      *x2 = *x2 / Dev.deviceUnitsPerPixel;
+      *y1 = *y1 / Dev.deviceUnitsPerPixel;
+      *y2 = *y2 / Dev.deviceUnitsPerPixel;
+      break;
    case GIZA_UNITS_MM:
       *x1 = *x1 / Dev.deviceUnitsPermm;
       *x2 = *x2 / Dev.deviceUnitsPermm;
