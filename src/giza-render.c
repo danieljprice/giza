@@ -212,11 +212,10 @@ giza_render_gray (int sizex, int sizey, const double data[sizey][sizex], int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
 		  double *affine)
 {
-  double cp[2], r[2], g[2], b[2];
-  cp[0] = 0.; r[0] = 0.; g[0] = 0.; b[0] = 0.;
-  cp[1] = 1.; r[1] = 1.; g[1] = 1.; b[1] = 1.;
-  giza_set_colour_table (cp, r, g, b, 2);  
+  giza_save_colour_table();
+  giza_set_colour_table_gray ();  
   giza_render (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, affine);
+  giza_restore_colour_table();
 }
 
 /**
@@ -231,11 +230,10 @@ giza_render_gray_float (int sizex, int sizey, const float data[sizey][sizex], in
 		  int i2, int j1, int j2, float valMin, float valMax,
 		  float *affine)
 {
-  double cp[2], r[2], g[2], b[2];
-  cp[0] = 0.; r[0] = 0.; g[0] = 0.; b[0] = 0.;
-  cp[1] = 1.; r[1] = 1.; g[1] = 1.; b[1] = 1.;
-  giza_set_colour_table (cp, r, g, b, 2);
+  giza_save_colour_table();
+  giza_set_colour_table_gray();
   giza_render_float (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, affine);
+  giza_restore_colour_table();
 }
 
 /**

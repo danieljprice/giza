@@ -94,6 +94,9 @@ int giza_set_colour_table (double *controlPoints, double *red, double *green,
 			   double *blue, int n);
 int giza_set_colour_table_float (float *controlPoints, float *red,
 				 float *green, float *blue, int n);
+int giza_set_colour_table_gray (void);
+void giza_save_colour_table (void);
+void giza_restore_colour_table (void);
 void giza_rgb_from_table (double pos, double *red, double *green,
 			  double *blue);
 void giza_rgb_from_table_float (double pos, float *red, float *green,

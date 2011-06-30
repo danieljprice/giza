@@ -25,14 +25,14 @@
 #include <stdlib.h>
 #include <giza.h>
 
-struct CP_Colour_Table
-{
-  int n;
-  double *controlPoints;
-  double *red;
-  double *green;
-  double *blue;
-} _giza_colour_table;
+void _giza_set_range_from_colour_table (int cimin, int cimax);
+void _giza_allocate_colour_table (giza_ctab *ct, int n);
+void _giza_reallocate_colour_table (giza_ctab *ct, int n);
+void _giza_deallocate_colour_table (giza_ctab *ct);
+
+giza_ctab _giza_colour_table;
+giza_ctab _giza_saved_colour_tables[GIZA_CTAB_SAVE_MAX];
+int _giza_save_ctab_ncalls;
 
 /**
  * Settings: giza_set_colour_table
@@ -56,13 +56,13 @@ giza_set_colour_table (double *controlPoints, double *red, double *green, double
   if (!_giza_check_device_ready ("giza_set_colour_table"))
     return 1;
   
-  if (n < 2)
+  if (n < 2 || n > GIZA_CTAB_MAXSIZE)
     {
       _giza_warning ("giza_set_colour_table", "Invalid number of control points, colour table not set");
       return 1;
     }
 
-  _giza_reallocate_colour_table(n);
+  /*_giza_reallocate_colour_table(&_giza_colour_table, n);*/
   int i, tmpn = 0;
 
   for (i = 0; i < n; i++)
@@ -105,13 +105,13 @@ giza_set_colour_table_float (float *controlPoints, float *red, float *green, flo
   if (!_giza_check_device_ready ("giza_set_colour_table_float"))
     return 1;
   
-  if (n < 2)
+  if (n < 2 || n > GIZA_CTAB_MAXSIZE)
     {
       _giza_warning ("giza_set_colour_table_float", "Invalid number of control points, colour table not set");
       return 1;
     }
    
-  _giza_reallocate_colour_table(n);
+  /*_giza_reallocate_colour_table(&_giza_colour_table, n);*/
   int i, tmpn = 0;
 
   for (i = 0; i < n; i++)
@@ -122,9 +122,9 @@ giza_set_colour_table_float (float *controlPoints, float *red, float *green, flo
 	  if(tmpn <= 0 || controlPoints[i] > _giza_colour_table.controlPoints[tmpn - 1])
 	    {
 	      _giza_colour_table.controlPoints[i] = (double) controlPoints[i];
-              _giza_colour_table.red[i]   = _giza_set_in_range((double) red[i],0.,1.);
+              _giza_colour_table.red[i]   = _giza_set_in_range((double) red[i],  0.,1.);
               _giza_colour_table.green[i] = _giza_set_in_range((double) green[i],0.,1.);
-              _giza_colour_table.blue[i]  = _giza_set_in_range((double) blue[i],0.,1.);      
+              _giza_colour_table.blue[i]  = _giza_set_in_range((double) blue[i], 0.,1.);      
 	      tmpn++;
 	    }
 	}
@@ -168,9 +168,9 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
   /* If it is lower than lowest control point get the lowest colour */
   if (pos < _giza_colour_table.controlPoints[0])
     {
-      *red = _giza_colour_table.red[0];
+      *red   = _giza_colour_table.red[0];
       *green = _giza_colour_table.green[0];
-      *blue = _giza_colour_table.blue[0];
+      *blue  = _giza_colour_table.blue[0];
       return;
     }
   /* If it is higher than the highest control point get the highest colour */
@@ -230,51 +230,134 @@ giza_rgb_from_table_float (double pos, float *red, float *green, float *blue)
 
   giza_rgb_from_table (pos, &dred, &dgreen, &dblue);
 
-  *red = (float) dred;
+  *red   = (float) dred;
   *green = (float) dgreen;
-  *blue = (float) dblue;
+  *blue  = (float) dblue;
 }
 
 /**
- * Sets up memory for the colour table and establishes a grey scale colour table
+ * Sets up memory for the main colour table and establishes a grey scale colour table
  */
 void
 _giza_init_colour_table (void)
 {
-  _giza_colour_table.controlPoints = malloc (2 * sizeof(double));
-  _giza_colour_table.red = malloc (2 * sizeof(double));
-  _giza_colour_table.green = malloc (2 * sizeof(double));
-  _giza_colour_table.blue = malloc (2 * sizeof(double));
+  _giza_save_ctab_ncalls = 0;
+  /*_giza_allocate_colour_table (&_giza_colour_table, 2);*/
+
+  printf("initialising colour table %i \n",_giza_save_ctab_ncalls);
 
   double cp[2], r[2], g[2], b[2];
   cp[0] = 0.; r[0] = 0.; g[0] = 0.; b[0] = 0.;
   cp[1] = 1.; r[1] = 1.; g[1] = 1.; b[1] = 1.;
 
+  printf("calling set colour table %i \n",_giza_save_ctab_ncalls);
   giza_set_colour_table (cp, r, g, b, 2);
+  printf("initialised colour table %i \n",_giza_save_ctab_ncalls);
 }
 
 /**
- * Reallocates the memory associated with the colour table
- */
-void
-_giza_reallocate_colour_table (int n)
-{
-  _giza_colour_table.controlPoints = realloc (_giza_colour_table.controlPoints, n * sizeof(double));
-  _giza_colour_table.red = realloc (_giza_colour_table.red, n * sizeof(double));
-  _giza_colour_table.green = realloc (_giza_colour_table.green, n * sizeof(double));
-  _giza_colour_table.blue = realloc (_giza_colour_table.blue, n * sizeof(double));
-}
-
-/**
- * Frees the memory associated with the colour table
+ * Frees the memory associated with the main colour table
  */
 void
 _giza_free_colour_table (void)
 {
-  free (_giza_colour_table.controlPoints);
-  free (_giza_colour_table.red);
-  free (_giza_colour_table.green);
-  free (_giza_colour_table.blue);
+  /*_giza_deallocate_colour_table(&_giza_colour_table);*/
+}
+
+/**
+ * Allocates the memory within a given colour table
+ */
+/*
+void
+_giza_allocate_colour_table (giza_ctab *ct, int n)
+{
+  (*ct).controlPoints = malloc (n * sizeof(double));
+  (*ct).red   = malloc (n * sizeof(double));
+  (*ct).green = malloc (n * sizeof(double));
+  (*ct).blue  = malloc (n * sizeof(double));
+}
+*/
+
+/**
+ * Reallocates the memory associated a given colour table
+ */
+/*
+void
+_giza_reallocate_colour_table (giza_ctab *ct, int n)
+{
+  (*ct).controlPoints = realloc ((*ct).controlPoints, n * sizeof(double));
+  (*ct).red   = realloc ((*ct).red,   n * sizeof(double));
+  (*ct).green = realloc ((*ct).green, n * sizeof(double));
+  (*ct).blue  = realloc ((*ct).blue,  n * sizeof(double));
+}
+*/
+
+/**
+ * Frees the memory associated with a given colour table
+ */
+/*void
+_giza_deallocate_colour_table (giza_ctab *ct)
+{
+  free ((*ct).controlPoints);
+  free ((*ct).red);
+  free ((*ct).green);
+  free ((*ct).blue);
+}
+*/
+
+/**
+ * Saves the current colour table
+ */
+void giza_save_colour_table (void)
+{
+  _giza_save_ctab_ncalls += 1;
+  if (_giza_save_ctab_ncalls > GIZA_CTAB_SAVE_MAX) {
+     _giza_warning("giza_save_colour_table","max number of giza_save_colour_table calls exceeded");
+     return;
+  }
+  int i = _giza_save_ctab_ncalls - 1;
+
+  printf("saving colour table %i with size %i\n",i,_giza_colour_table.n);
+  /* allocate the next colour table in the array */
+  /*_giza_allocate_colour_table(&_giza_saved_colour_tables[i],_giza_colour_table.n);*/
+  
+  /* save the current colour table to the array */
+  _giza_saved_colour_tables[i] = _giza_colour_table;
+}
+
+/**
+ * Restores the colour table from a previously saved one
+ */
+void giza_restore_colour_table (void)
+{
+  _giza_save_ctab_ncalls -= 1;
+  if (_giza_save_ctab_ncalls < 0) {
+     _giza_warning("giza_restore_colour_table","unmatched save/restore calls");
+     _giza_save_ctab_ncalls = 0;
+     return;
+  }
+
+  /* Restore the colour table from the saved array */
+  int i = _giza_save_ctab_ncalls;
+  /*_giza_reallocate_colour_table(&_giza_colour_table, _giza_saved_colour_tables[i].n);*/
+  printf("restoring colour table %i with size %i\n",i,_giza_saved_colour_tables[i].n);
+  _giza_colour_table = _giza_saved_colour_tables[i];
+
+  printf("freeing memory %i \n",_giza_save_ctab_ncalls);
+  /* Free associated memory */
+  /*_giza_deallocate_colour_table(&_giza_saved_colour_tables[i]);*/
+}
+
+/**
+ * (Re)sets the colour table to a simple black->white ramp
+ */
+int
+giza_set_colour_table_gray (void)
+{
+  double cp[2], r[2], g[2], b[2];
+  cp[0] = 0.; r[0] = 0.; g[0] = 0.; b[0] = 0.;
+  cp[1] = 1.; r[1] = 1.; g[1] = 1.; b[1] = 1.;
+  return giza_set_colour_table (cp, r, g, b, 2);
 }
 
 /**
