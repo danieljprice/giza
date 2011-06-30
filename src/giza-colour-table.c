@@ -34,10 +34,6 @@ struct CP_Colour_Table
   double *blue;
 } _giza_colour_table;
 
-void _giza_set_range_from_colour_table (int cimin, int cimax);
-void _giza_reallocate_colour_table (int n);
-
-
 /**
  * Settings: giza_set_colour_table
  *
@@ -77,28 +73,9 @@ giza_set_colour_table (double *controlPoints, double *red, double *green, double
 	  if(tmpn <= 0 || controlPoints[i] > _giza_colour_table.controlPoints[tmpn - 1])
 	    {
 	      _giza_colour_table.controlPoints[i] = controlPoints[i];
-
-	      if (red[i] > 1.) 
-		_giza_colour_table.red[i] = 1.;
-	      else if (red[i] < 0.) 
-		_giza_colour_table.red[i] = 0.;
-	      else
-		_giza_colour_table.red[i] = red[i];
-
-	      if (green[i] > 1.) 
-		_giza_colour_table.green[i] = 1.;
-	      else if (green[i] < 0.) 
-		_giza_colour_table.green[i] = 0.;
-	      else
-		_giza_colour_table.green[i] = green[i];
-
-	      if (blue[i] > 1.) 
-		_giza_colour_table.blue[i] = 1.;
-	      else if (blue[i] < 0.) 
-		_giza_colour_table.blue[i] = 0.;
-	      else
-		_giza_colour_table.blue[i] = blue[i];
-      
+              _giza_colour_table.red[i]   = _giza_set_in_range(red[i],0.,1.);
+              _giza_colour_table.green[i] = _giza_set_in_range(green[i],0.,1.);
+              _giza_colour_table.blue[i]  = _giza_set_in_range(blue[i],0.,1.);      
 	      tmpn++;
 	    }
 	}
@@ -127,7 +104,8 @@ giza_set_colour_table_float (float *controlPoints, float *red, float *green, flo
 {
   if (!_giza_check_device_ready ("giza_set_colour_table_float"))
     return 1;
-    if (n < 2)
+  
+  if (n < 2)
     {
       _giza_warning ("giza_set_colour_table_float", "Invalid number of control points, colour table not set");
       return 1;
@@ -144,28 +122,9 @@ giza_set_colour_table_float (float *controlPoints, float *red, float *green, flo
 	  if(tmpn <= 0 || controlPoints[i] > _giza_colour_table.controlPoints[tmpn - 1])
 	    {
 	      _giza_colour_table.controlPoints[i] = (double) controlPoints[i];
-
-	      if (red[i] > 1.) 
-		_giza_colour_table.red[i] = 1.;
-	      else if (red[i] < 0.) 
-		_giza_colour_table.red[i] = 0.;
-	      else
-		_giza_colour_table.red[i] = (double) red[i];
-
-	      if (green[i] > 1.) 
-		_giza_colour_table.green[i] = 1.;
-	      else if (green[i] < 0.) 
-		_giza_colour_table.green[i] = 0.;
-	      else
-		_giza_colour_table.green[i] = (double) green[i];
-
-	      if (blue[i] > 1.) 
-		_giza_colour_table.blue[i] = 1.;
-	      else if (blue[i] < 0.) 
-		_giza_colour_table.blue[i] = 0.;
-	      else
-		_giza_colour_table.blue[i] = (double) blue[i];
-      
+              _giza_colour_table.red[i]   = _giza_set_in_range((double) red[i],0.,1.);
+              _giza_colour_table.green[i] = _giza_set_in_range((double) green[i],0.,1.);
+              _giza_colour_table.blue[i]  = _giza_set_in_range((double) blue[i],0.,1.);      
 	      tmpn++;
 	    }
 	}
@@ -336,3 +295,4 @@ _giza_set_range_from_colour_table (int cimin, int cimax)
       giza_set_colour_representation(i,r,g,b);
     }
 }
+

@@ -29,7 +29,6 @@ double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][4];
 int _giza_ci;
 void _giza_hls_to_rgb (double hue, double lightness, double saturation, 
                        double *red, double *green, double *blue);
-void _giza_set_in_range (double *val, double val1, double val2);
 
 /**
  * Settings: giza_set_colour_index
@@ -521,19 +520,16 @@ void _giza_hls_to_rgb (double hue, double lightness, double saturation,
   /* Now get RGB by matching lightness */
   m = lightness - 0.5*Chroma;
   
-  *red   = R1 + m;
-  *green = G1 + m;
-  *blue  = B1 + m;
-  _giza_set_in_range(red, 0., 1.);
-  _giza_set_in_range(green, 0., 1.);
-  _giza_set_in_range(blue, 0., 1.);
+  *red   = _giza_set_in_range(R1 + m,0.,1.);
+  *green = _giza_set_in_range(G1 + m,0.,1.);
+  *blue  = _giza_set_in_range(B1 + m,0.,1.);
 }
 
 /**
  * Ensures value of the input variable falls in the range
  * given by val1 and val2
  */
-void _giza_set_in_range (double *val, double val1, double val2)
+double _giza_set_in_range (double val, double val1, double val2)
 {
   double valmin, valmax;
   if (val1 < val2)
@@ -547,12 +543,10 @@ void _giza_set_in_range (double *val, double val1, double val2)
       valmax = val1;
     }
 
-  if (*val < valmin)
-    {
-      *val = valmin;
-    }
-  else if (*val > valmax)
-    {
-      *val = valmax;
-    }
+  if (val < valmin)
+    return valmin;
+  else if (val > valmax)
+    return valmax;
+  else
+    return val;
 }
