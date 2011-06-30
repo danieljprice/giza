@@ -105,6 +105,7 @@ module giza
       giza_rectangle, &
       giza_render, &
       giza_render_gray, &
+      giza_render_transparent, &
       giza_draw_pixels, &
       giza_restore, &
       giza_round, &
@@ -1200,6 +1201,27 @@ private
       real(kind=c_float),intent(in),value :: valMin,valMax
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_render_float
+
+ end interface
+
+ interface giza_render_transparent
+    subroutine giza_render_transparent(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      real(kind=c_double),intent(in) :: data(sizex,sizey)
+      real(kind=c_double),intent(in),value :: valMin,valMax
+      real(kind=c_double),intent(in) :: affine(6)
+    end subroutine giza_render_transparent
+    
+    subroutine giza_render_transparent_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      real(kind=c_float),intent(in) :: data(sizex,sizey)
+      real(kind=c_float),intent(in),value :: valMin,valMax
+      real(kind=c_float),intent(in) :: affine(6)
+    end subroutine giza_render_transparent_float
  end interface
 
  interface giza_render_gray
