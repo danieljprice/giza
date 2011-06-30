@@ -201,6 +201,44 @@ giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
 }
 
 /**
+ * Drawing: giza_render_grey
+ *
+ * Synopsis: Same functionality as giza_render but renders in greyscale
+ *
+ * See Also: giza_render
+ */
+void
+giza_render_gray (int sizex, int sizey, const double data[sizey][sizex], int i1,
+		  int i2, int j1, int j2, double valMin, double valMax,
+		  double *affine)
+{
+  double cp[2], r[2], g[2], b[2];
+  cp[0] = 0.; r[0] = 0.; g[0] = 0.; b[0] = 0.;
+  cp[1] = 1.; r[1] = 1.; g[1] = 1.; b[1] = 1.;
+  giza_set_colour_table (cp, r, g, b, 2);  
+  giza_render (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, affine);
+}
+
+/**
+ * Drawing: giza_render_grey_float
+ *
+ * Synopsis: Same functionality as giza_render_grey but renders in greyscale
+ *
+ * See Also: giza_render_grey, giza_render
+ */
+void
+giza_render_gray_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
+		  int i2, int j1, int j2, float valMin, float valMax,
+		  float *affine)
+{
+  double cp[2], r[2], g[2], b[2];
+  cp[0] = 0.; r[0] = 0.; g[0] = 0.; b[0] = 0.;
+  cp[1] = 1.; r[1] = 1.; g[1] = 1.; b[1] = 1.;
+  giza_set_colour_table (cp, r, g, b, 2);
+  giza_render_float (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, affine);
+}
+
+/**
  * Sets the rgb for a given pixel, given position in the colour table.
  * NOTE: This function needs to be changed to operate on different endians.
  *

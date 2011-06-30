@@ -538,12 +538,18 @@ end subroutine PGFUNY
 
 !------------------------------------------------------------------------
 ! Module: PGGRAY -- gray-scale map of a 2D data array
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED (does not reset colour table)
 !------------------------------------------------------------------------
 subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
+ use giza,       only:giza_render_gray
+ use gizapgplot, only:convert_tr_to_affine
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2
  real,    intent(in) :: A(IDIM,JDIM), FG, BG, TR(6)
+ real, dimension(6)  :: affine
+
+ call convert_tr_to_affine(tr,affine)
+ call giza_render_gray(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,a1,a2,affine)
 
 end subroutine PGGRAY
 

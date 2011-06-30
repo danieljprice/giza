@@ -239,6 +239,12 @@ void giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1,
 void giza_render_float (int sizex, int sizey, const float data[sizey][sizex],
 			int i1, int i2, int j1, int j2, float valMin,
 			float valMax, float *affine);
+void giza_render_gray (int sizex, int sizey, const double data[sizey][sizex], int i1,
+		  int i2, int j1, int j2, double valMin, double valMax,
+		  double *affine);
+void giza_render_gray_float (int sizex, int sizey, const float data[sizey][sizex],
+			int i1, int i2, int j1, int j2, float valMin,
+			float valMax, float *affine);
 void giza_draw_pixels (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
 	    int j1, int j2, double xmin, double xmax, double ymin, double ymax);
 void giza_draw_pixels_float (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
