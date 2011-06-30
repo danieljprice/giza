@@ -35,6 +35,8 @@ struct CP_Colour_Table
 } _giza_colour_table;
 
 void _giza_set_range_from_colour_table (int cimin, int cimax);
+void _giza_reallocate_colour_table (int n);
+
 
 /**
  * Settings: giza_set_colour_table
@@ -64,10 +66,7 @@ giza_set_colour_table (double *controlPoints, double *red, double *green, double
       return 1;
     }
 
-  _giza_colour_table.controlPoints = realloc (_giza_colour_table.controlPoints, n * sizeof(double));
-  _giza_colour_table.red = realloc (_giza_colour_table.red, n * sizeof(double));
-  _giza_colour_table.green = realloc (_giza_colour_table.green, n * sizeof(double));
-  _giza_colour_table.blue = realloc (_giza_colour_table.blue, n * sizeof(double));
+  _giza_reallocate_colour_table(n);
   int i, tmpn = 0;
 
   for (i = 0; i < n; i++)
@@ -133,11 +132,8 @@ giza_set_colour_table_float (float *controlPoints, float *red, float *green, flo
       _giza_warning ("giza_set_colour_table_float", "Invalid number of control points, colour table not set");
       return 1;
     }
-    
-  _giza_colour_table.controlPoints = realloc (_giza_colour_table.controlPoints, n * sizeof(double));
-  _giza_colour_table.red = realloc (_giza_colour_table.red, n * sizeof(double));
-  _giza_colour_table.green = realloc (_giza_colour_table.green, n * sizeof(double));
-  _giza_colour_table.blue = realloc (_giza_colour_table.blue, n * sizeof(double));
+   
+  _giza_reallocate_colour_table(n);
   int i, tmpn = 0;
 
   for (i = 0; i < n; i++)
@@ -292,16 +288,22 @@ _giza_init_colour_table (void)
   _giza_colour_table.blue = malloc (2 * sizeof(double));
 
   double cp[2], r[2], g[2], b[2];
-  cp[0] = 0.;
-  r[0] = 0.;
-  g[0] = 0.;
-  b[0] = 0.;
-  cp[1] = 1.;
-  r[1] = 1.;
-  g[1] = 1.;
-  b[1] = 1.;
+  cp[0] = 0.; r[0] = 0.; g[0] = 0.; b[0] = 0.;
+  cp[1] = 1.; r[1] = 1.; g[1] = 1.; b[1] = 1.;
 
   giza_set_colour_table (cp, r, g, b, 2);
+}
+
+/**
+ * Reallocates the memory associated with the colour table
+ */
+void
+_giza_reallocate_colour_table (int n)
+{
+  _giza_colour_table.controlPoints = realloc (_giza_colour_table.controlPoints, n * sizeof(double));
+  _giza_colour_table.red = realloc (_giza_colour_table.red, n * sizeof(double));
+  _giza_colour_table.green = realloc (_giza_colour_table.green, n * sizeof(double));
+  _giza_colour_table.blue = realloc (_giza_colour_table.blue, n * sizeof(double));
 }
 
 /**
