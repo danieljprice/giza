@@ -151,11 +151,6 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
 			 colourIndex[ci][3]);
      }
 
-/*  if (ci == 0)
-    {
-      giza_draw_background ();
-    }
-*/
 }
 
 /**
