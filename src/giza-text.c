@@ -27,6 +27,7 @@
 
 void _giza_action_get_size (const char *text, double *width, double *height)
 {
+  if (strlen(text) <= 0) return;
   double newHeight, dummy;
   cairo_get_current_point (context, &dummy, &newHeight);
   cairo_text_extents_t extents;
@@ -40,7 +41,9 @@ void _giza_action_get_size (const char *text, double *width, double *height)
 
 void _giza_action_print (const char *text, double *width, double *height)
 {
-  cairo_show_text (context, text);
+  if (strlen(text) > 0) {
+     cairo_show_text (context, text);
+  }
 }
 
 /**
