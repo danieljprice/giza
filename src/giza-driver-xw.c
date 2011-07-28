@@ -274,7 +274,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
   /* move the cursor to the given position */
   if (moveCurs)
     {
-      XWarpPointer (XW.display, None, XW.window, 0, 0, 0, 0, *x, *y);
+      XWarpPointer (XW.display, None, XW.window, 0, 0, 0, 0, anchorx, anchory);
     }
 
   XEvent event;
@@ -284,6 +284,10 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
   while (1)  {
     /* wait for key press/expose */
     XNextEvent(XW.display, &event);
+    
+    /* always return x, y values for safety */
+    *x = 0;
+    *y = 0;
 
     switch  (event.type) {
     case Expose: /* redraw */
