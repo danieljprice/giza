@@ -21,8 +21,8 @@
 #include <cairo/cairo.h>
 
 #define GIZA_TINY 0.1e-30
-#define GIZA_ZERO_FLOAT 2.e-38
-#define GIZA_ZERO_DOUBLE 3.e-308
+#define GIZA_ZERO_FLOAT 2.e-30
+#define GIZA_ZERO_DOUBLE 3.e-300
 #define GIZA_DEG_TO_RAD 0.0174532925
 
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
