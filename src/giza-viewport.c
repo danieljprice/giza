@@ -210,7 +210,9 @@ giza_set_viewport_default (void)
   
   giza_set_viewport(xmin,xmax,ymin,ymax);
   /* also set window if calling default viewport routine */
-  /*giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);*/
+  /*giza_set_window(GIZA_DEFAULT_WINDOW_X1,GIZA_DEFAULT_WINDOW_X2, 
+                  GIZA_DEFAULT_WINDOW_Y1,GIZA_DEFAULT_WINDOW_Y2);
+  */
 
 }
 
