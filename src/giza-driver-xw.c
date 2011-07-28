@@ -12,8 +12,9 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
@@ -238,7 +239,7 @@ _giza_change_page_xw (void)
 void
 _giza_init_norm_xw (void)
 {
-  cairo_matrix_init (&(Win.normCoords), Dev.width, 0, 0, -Dev.height, GIZA_XW_MARGIN,
+  cairo_matrix_init (&(Win.normCoords),(double) Dev.width, 0, 0, (double) -Dev.height, GIZA_XW_MARGIN,
 		     Dev.height + GIZA_XW_MARGIN);
 }
 
@@ -375,10 +376,10 @@ void
 _giza_change_size_xw (int width, int height)
 {
   /* Set the new device size */
-  Dev.width = width - 2 * GIZA_XW_MARGIN;
+  Dev.width  = width  - 2 * GIZA_XW_MARGIN;
   Dev.height = height - 2 * GIZA_XW_MARGIN;
 
-  XW.width = width;
+  XW.width  = width;
   XW.height = height;
   
   cairo_xlib_surface_set_size(surface,width,height);
@@ -405,8 +406,8 @@ _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanc, double
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_user_to_device (context, &xanc, &yanc);
-  cairo_user_to_device (context, x, y);
-  int ix = (int) *x, iy = (int) *y;
+
+  int ix,iy;
   int ixanc = (int) xanc, iyanc = (int) yanc;
   _giza_xevent_loop (mode, moveCurs, ixanc, iyanc, &ix, &iy, ch);
 
