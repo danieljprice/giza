@@ -12,8 +12,9 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
@@ -23,7 +24,6 @@
 #include "giza-transforms-private.h"
 #include "giza-viewport-private.h"
 #include <giza.h>
-#include <stdlib.h>
 
 /**
  * Settings: giza_set_window
@@ -65,11 +65,9 @@ giza_set_window (double x1, double x2, double y1, double y2)
   /* Scaling */
   double dxWin = (Win.xmax - Win.xmin);
   double dyWin = (Win.ymax - Win.ymin);
-  if (abs(dxWin) < GIZA_ZERO_DOUBLE) dxWin = 1.;
-  if (abs(dyWin) < GIZA_ZERO_DOUBLE) dyWin = 1.;
-  
-  double horiScale = (VP.xmax - VP.xmin) / dxWin;
-  double vertScale = (VP.ymax - VP.ymin) / dyWin;
+
+  double horiScale = (VP.xmax - VP.xmin) / dxWin; /* this is safe as we have already */
+  double vertScale = (VP.ymax - VP.ymin) / dyWin; /* checked x1 /= x2 and y1 /= y2   */
 
   /* Translation: */
   double horiTrans = VP.xmin - Win.xmin * horiScale;
