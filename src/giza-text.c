@@ -24,6 +24,7 @@
 #include <giza.h>
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
 void _giza_action_get_size (const char *text, double *width, double *height)
 {
