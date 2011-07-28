@@ -432,10 +432,8 @@ _giza_init_band_xw (void)
       Band.onscreen = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
       Band.box = cairo_create (Band.onscreen);
       
-      /* Draw band using the current foreground colour */
-      double red,blue,green,alpha;
-      giza_get_colour_representation_alpha(1,&red,&blue,&green,&alpha);
-      cairo_set_source_rgba (Band.box, red, blue, green, alpha);
+      /* use grey for band */
+      cairo_set_source_rgb (Band.box, 0.5, 0.5, 0.5);
 
       /* Set up restore to remove box */
       Band.restore = cairo_create (Band.onscreen);
