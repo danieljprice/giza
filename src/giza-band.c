@@ -84,8 +84,7 @@ int
 giza_band_float (int mode, int moveCurs, float xanc, float yanc, float *x, float *y, char *ch)
 {
   int success;
-  double dx = (double) *x;
-  double dy = (double) *y;
+  double dx, dy;
 
   success = giza_band (mode, moveCurs, (double) xanc, (double) yanc, &dx, &dy, ch);
   *x = (float) dx;
