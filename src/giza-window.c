@@ -23,6 +23,7 @@
 #include "giza-transforms-private.h"
 #include "giza-viewport-private.h"
 #include <giza.h>
+#include <stdlib.h>
 
 /**
  * Settings: giza_set_window
@@ -41,12 +42,16 @@ giza_set_window (double x1, double x2, double y1, double y2)
   if (!_giza_check_device_ready ("giza_set_window"))
     return;
 
-  /*if (x2 <= x1 || y2 <= y1)
+  /* Check the input is valid */
+  if (x2 == x1 || y2 == y1)
     {
-      _giza_warning ("giza_set_window", "Invalid arguments, window not set");
-      return;
+      _giza_error ("giza_set_window", "Invalid arguments, reverting to default");
+      x1 = GIZA_DEFAULT_WINDOW_X1;
+      x2 = GIZA_DEFAULT_WINDOW_X2;
+      y1 = GIZA_DEFAULT_WINDOW_Y1;
+      y2 = GIZA_DEFAULT_WINDOW_Y2;
     }
-  */
+
   Win.xmin = x1;
   Win.xmax = x2;
   Win.ymin = y1;
@@ -58,8 +63,13 @@ giza_set_window (double x1, double x2, double y1, double y2)
 
   /* Transform from normalised device coords to world coords. */
   /* Scaling */
-  double horiScale = (VP.xmax - VP.xmin) / (Win.xmax - Win.xmin);
-  double vertScale = (VP.ymax - VP.ymin) / (Win.ymax - Win.ymin);
+  double dxWin = (Win.xmax - Win.xmin);
+  double dyWin = (Win.ymax - Win.ymin);
+  if (abs(dxWin) < GIZA_ZERO_DOUBLE) dxWin = 1.;
+  if (abs(dyWin) < GIZA_ZERO_DOUBLE) dyWin = 1.;
+  
+  double horiScale = (VP.xmax - VP.xmin) / dxWin;
+  double vertScale = (VP.ymax - VP.ymin) / dyWin;
 
   /* Translation: */
   double horiTrans = VP.xmin - Win.xmin * horiScale;
@@ -107,12 +117,14 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
     return;
 
   /* Check the input is valid */
-  /*if (x2 <= x1 || y2 <= y1)
+  if (x2 == x1 || y2 == y1)
     {
-      _giza_error ("giza_set_window_equal_scale", "Invalid arguments, window not set");
-      return;
+      _giza_error ("giza_set_window_equal_scale", "Invalid arguments, reverting to default");
+      x1 = GIZA_DEFAULT_WINDOW_X1;
+      x2 = GIZA_DEFAULT_WINDOW_X2;
+      y1 = GIZA_DEFAULT_WINDOW_Y1;
+      y2 = GIZA_DEFAULT_WINDOW_Y2;
     }
-  */
 
   /* set xrange and yrange */
   double yrange = y2 - y1;
@@ -121,7 +133,7 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
 
   /* Scale is Device units per World coords. */
   scaley = (VP.ymax - VP.ymin) * Dev.height / yrange;
-  scalex = (VP.xmax - VP.xmin) * Dev.width / xrange;
+  scalex = (VP.xmax - VP.xmin) * Dev.width /  xrange;
   if (scaley < scalex)
     {
       scale = scaley;
@@ -206,25 +218,7 @@ _giza_init_window (void)
 {
   if(!_giza_check_device_ready("_giza_init_window")) return;
 
-  Win.xmin = GIZA_DEFAULT_WINDOW_X1;
-  Win.xmax = GIZA_DEFAULT_WINDOW_X2;
-  Win.ymin = GIZA_DEFAULT_WINDOW_Y1;
-  Win.ymax = GIZA_DEFAULT_WINDOW_Y2;
-
    _giza_set_trans (GIZA_TRANS_NORM);
-
-  /* Transform from normalised device coords to world coords. */
-  /* Scaling */
-  double horiScale = (VP.xmax - VP.xmin) / (Win.xmax - Win.xmin);
-  double vertScale = (VP.ymax - VP.ymin) / (Win.ymax - Win.ymin);
-
-  /* Translation: */
-  double horiTrans = VP.xmin - Win.xmin * horiScale;
-  double vertTrans = VP.ymin - Win.ymin * vertScale;
-
-  cairo_matrix_init (&(Win.userCoords), horiScale, 0, 0, vertScale, horiTrans, vertTrans);
-  cairo_matrix_multiply(&(Win.userCoords),&(Win.userCoords),&(Win.normCoords));
-
-/*  cairo_transform (context, &(Win.userCoords)); */
-/*  cairo_get_matrix (context, &(Win.userCoords)); */
+  giza_set_window(GIZA_DEFAULT_WINDOW_X1,GIZA_DEFAULT_WINDOW_X2, 
+                  GIZA_DEFAULT_WINDOW_Y1,GIZA_DEFAULT_WINDOW_Y2);
 }
