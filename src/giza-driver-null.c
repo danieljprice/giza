@@ -54,9 +54,7 @@ _giza_open_device_null (void)
       Dev.height = GIZA_DEFAULT_HEIGHT;
     }
 
-  surface =
-    cairo_image_surface_create (CAIRO_FORMAT_ARGB32, (double) Dev.width,
-				(double) Dev.height);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width, Dev.height);
   if (!surface)
     {
       _giza_error ("_giza_open_device_null", "Could not create cairo surface");
