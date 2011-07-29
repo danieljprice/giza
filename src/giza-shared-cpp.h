@@ -1,3 +1,15 @@
+#include "giza-version.h"
+
+#define GIZA_VERSION_STRINGIZE_(major, minor, micro)   \
+        #major"."#minor"."#micro
+#define GIZA_VERSION_STRINGIZE(major, minor, micro)    \
+        GIZA_VERSION_STRINGIZE_(major, minor, micro)
+
+#define GIZA_VERSION_STRING CAIRO_VERSION_STRINGIZE(   \
+        GIZA_VERSION_MAJOR,                            \
+        GIZA_VERSION_MINOR,                            \
+        GIZA_VERSION_MICRO)
+
 #define GIZA_LEFT_CLICK 'A'
 
 #define GIZA_LS_SOLID      1

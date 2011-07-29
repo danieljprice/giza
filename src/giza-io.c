@@ -23,6 +23,7 @@
 #include "giza-warnings-private.h"
 #include <stdio.h>
 #include <string.h>
+#include <giza.h>
 
 /**
  * If warnings are switched on displays a warning message to stderr
@@ -126,6 +127,8 @@ _giza_display_devices (void)
 {
   char *deviceList;
   _giza_init_device_list (&deviceList);
+  printf ("%%giza version %s built with cairo v%s\n\n",
+          GIZA_VERSION_STRING,CAIRO_VERSION_STRING);
   printf ("%s\n", deviceList);
   _giza_free_device_list (deviceList);
 }
