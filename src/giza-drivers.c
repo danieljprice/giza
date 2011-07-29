@@ -354,6 +354,9 @@ giza_close_device (void)
       _giza_newpage_prompt();
     }
 
+  /* destroy the cairo context */
+  if (context) cairo_destroy(context);
+  
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
@@ -384,7 +387,6 @@ giza_close_device (void)
        return;
     }
 
-  cairo_destroy (context);
   _giza_reset_deviceOpen ();
   _giza_reset_sizeSpecified ();
 
