@@ -39,10 +39,10 @@
 #include "giza-line-style-private.h"
 #include "giza-band-private.h"
 #include <giza.h>
-#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 #define GIZA_DEFAULT_MARGIN 0
 
@@ -526,7 +526,9 @@ _giza_split_device_string (char *deviceString, char **devType)
     }
 
   /* Set the name */
-  int nameLength = strlen (deviceString) - strlen (*devType);
+  int lendev  = strlen(deviceString);  /* long-winded to avoid */
+  int lentype = strlen(*devType);      /* icc compile warnings */
+  int nameLength = lendev - lentype;
   /* Ignore no name (use default) */
   if (nameLength != 0)
     {
@@ -687,6 +689,8 @@ _giza_init_norm (void)
   if (!_giza_check_device_ready ("_giza_init_norm"))
     return;
 
+  double xx,yy,x0,y0;
+
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
@@ -712,8 +716,12 @@ _giza_init_norm (void)
      * DJP: Here we can allow small margins in the transformation
      *      to normalised device coords to avoid clipping at the edge
      */
-      cairo_matrix_init (&(Win.normCoords), Dev.width-2.*GIZA_DEFAULT_MARGIN, 0, 0, -Dev.height+2.*GIZA_DEFAULT_MARGIN, GIZA_DEFAULT_MARGIN,
-			 Dev.height-GIZA_DEFAULT_MARGIN);
+
+      xx = (double) Dev.width - 2.*GIZA_DEFAULT_MARGIN;
+      yy = 2.*GIZA_DEFAULT_MARGIN - (double) Dev.height;
+      x0 = GIZA_DEFAULT_MARGIN;
+      y0 = (double) Dev.height - GIZA_DEFAULT_MARGIN;
+      cairo_matrix_init (&(Win.normCoords), xx, 0, 0, yy, x0, y0);
       _giza_set_trans (GIZA_TRANS_NORM);
       break;
     }
