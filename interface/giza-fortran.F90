@@ -213,13 +213,13 @@ private
  interface giza_annotate_c
     subroutine giza_annotate_c (side,displacement,coord,justification,text) bind(C,name="giza_annotate")
       import
-      character(kind=c_char,len=1),intent(in) :: side,text
+      character(kind=c_char),dimension(*),intent(in) :: side,text
       real(kind=c_double),intent(in),value    ::displacement,coord,justification
     end subroutine giza_annotate_c
     
     subroutine giza_annotate_float_c (side,displacement,coord,justification,text) bind(C,name="giza_annotate_float")
       import
-      character(kind=c_char,len=1),intent(in) :: side,text
+      character(kind=c_char),dimension(*),intent(in) :: side,text
       real(kind=c_float),intent(in),value     ::displacement,coord,justification
     end subroutine giza_annotate_float_c
  end interface
@@ -232,7 +232,7 @@ private
     subroutine giza_box_float_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box_float")
       import
       implicit none
-      character(kind=c_char,len=1), intent(in) :: xopt,yopt
+      character(kind=c_char),dimension(*), intent(in) :: xopt,yopt
       real(kind=c_float), value, intent(in)    :: xtick,ytick
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
     end subroutine giza_box_float_c
@@ -240,7 +240,7 @@ private
     subroutine giza_box_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box")
       import
       implicit none
-      character(kind=c_char,len=1), intent(in) :: xopt,yopt
+      character(kind=c_char),dimension(*), intent(in) :: xopt,yopt
       real(kind=c_double), value, intent(in)   :: xtick,ytick
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
     end subroutine giza_box_c
@@ -525,7 +525,7 @@ private
     integer(kind=c_int) function giza_open_device_c (dev,prefix) bind(C,name="giza_open_device")
       import
       implicit none
-      character(kind=c_char,len=1),intent(in) :: dev,prefix
+      character(kind=c_char),dimension(*),intent(in) :: dev,prefix
     end function  giza_open_device_c
  end interface
 
@@ -538,14 +538,14 @@ private
     integer(kind=c_int) function giza_open_device_size_c (dev,prefix,width,height) bind(C,name="giza_open_device_size")
       import
       implicit none
-      character(kind=c_char,len=1),intent(in) :: dev,prefix
+      character(kind=c_char),dimension(*),intent(in) :: dev,prefix
       real(kind=c_double),intent(in),value    :: height,width
     end function giza_open_device_size_c
 
     integer(kind=c_int) function giza_open_device_size_float_c(dev,prefix,width,height) bind(C,name="giza_open_device_size_float")
       import
       implicit none
-      character(kind=c_char,len=1),intent(in) :: dev,prefix
+      character(kind=c_char),dimension(*),intent(in) :: dev,prefix
       real(kind=c_float),intent(in),value     :: height,width
     end function giza_open_device_size_float_c
  end interface
@@ -805,7 +805,7 @@ private
  interface giza_label_c
     subroutine giza_label_c (labelx,labely,title) bind(C,name="giza_label")
       import
-      character(kind=c_char,len=1),intent(in) :: labelx,labely,title
+      character(kind=c_char),dimension(*),intent(in) :: labelx,labely,title
     end subroutine giza_label_c
  end interface giza_label_c
 
@@ -1106,14 +1106,14 @@ private
       import
       implicit none
       real(kind=c_double),value,intent(in)    :: x,y
-      character(kind=c_char,len=1),intent(in) :: text
+      character(kind=c_char),dimension(*),intent(in) :: text
     end subroutine giza_text_c
 
     subroutine giza_text_float_c(x,y,text) bind(C,name="giza_text_float")
       import
       implicit none
       real(kind=c_float),value,intent(in)     :: x,y
-      character(kind=c_char,len=1),intent(in) :: text
+      character(kind=c_char),dimension(*),intent(in) :: text
     end subroutine giza_text_float_c
  end interface
 
@@ -1127,14 +1127,14 @@ private
       import
       implicit none
       real(kind=c_double),value,intent(in)    :: x,y,angle,just
-      character(kind=c_char,len=1),intent(in) :: text
+      character(kind=c_char),dimension(*),intent(in) :: text
     end subroutine giza_ptext_c
 
     subroutine giza_ptext_float_c(x,y,angle,just,text) bind(C,name="giza_ptext_float")
       import
       implicit none
       real(kind=c_float),value,intent(in)     :: x,y,angle,just
-      character(kind=c_char,len=1),intent(in) :: text
+      character(kind=c_char),dimension(*),intent(in) :: text
     end subroutine giza_ptext_float_c
  end interface
 
@@ -1149,7 +1149,7 @@ private
       implicit none
       real(kind=c_double),value,intent(in)    :: x,y,angle,just
       real(kind=c_double),intent(out)         :: xbox(4),ybox(4)
-      character(kind=c_char,len=1),intent(in) :: text
+      character(kind=c_char),dimension(*),intent(in) :: text
     end subroutine giza_qtext_c
 
     subroutine giza_qtext_float_c(x,y,angle,just,text,xbox,ybox) bind(C,name="giza_qtext_float")
@@ -1157,7 +1157,7 @@ private
       implicit none
       real(kind=c_float),value,intent(in)     :: x,y,angle,just
       real(kind=c_float),intent(out)          :: xbox(4),ybox(4)
-      character(kind=c_char,len=1),intent(in) :: text
+      character(kind=c_char),dimension(*),intent(in) :: text
     end subroutine giza_qtext_float_c
  end interface
 
@@ -1171,7 +1171,7 @@ private
       import
       implicit none
       integer(kind=c_int),value,intent(in)    :: units
-      character(kind=c_char,len=1),intent(in) :: text
+      character(kind=c_char),dimension(*),intent(in) :: text
       real(kind=c_double),intent(out)         :: xlen,ylen
     end subroutine giza_qtextlen_c
 
@@ -1179,7 +1179,7 @@ private
       import
       implicit none
       integer(kind=c_int),value,intent(in)    :: units
-      character(kind=c_char,len=1),intent(in) :: text
+      character(kind=c_char),dimension(*),intent(in) :: text
       real(kind=c_float),intent(out)          :: xlen,ylen
     end subroutine giza_qtextlen_float_c
  end interface
@@ -1325,28 +1325,28 @@ private
     subroutine giza_set_font_c(font) bind(C,name="giza_set_font")
       import
       implicit none
-      character(kind=c_char,len=1),intent(in) :: font
+      character(kind=c_char),dimension(*),intent(in) :: font
     end subroutine giza_set_font_c
  end interface
  interface giza_set_font_bold_c
     subroutine giza_set_font_bold_c(font) bind(C,name="giza_set_font_bold")
       import
       implicit none
-      character(kind=c_char,len=1),intent(in) :: font
+      character(kind=c_char),dimension(*),intent(in) :: font
     end subroutine giza_set_font_bold_c
  end interface
  interface giza_set_font_italic_c
     subroutine giza_set_font_italic_c(font) bind(C,name="giza_set_font_italic")
       import
       implicit none
-      character(kind=c_char,len=1),intent(in) :: font
+      character(kind=c_char),dimension(*),intent(in) :: font
     end subroutine giza_set_font_italic_c
  end interface
  interface giza_set_font_bold_italic_c
     subroutine giza_set_font_bold_italic_c(font) bind(C,name="giza_set_font_bold_italic")
       import
       implicit none
-      character(kind=c_char,len=1),intent(in) :: font
+      character(kind=c_char),dimension(*),intent(in) :: font
     end subroutine giza_set_font_bold_italic_c
  end interface
 
@@ -1483,7 +1483,7 @@ private
       import
       implicit none
       integer(kind=c_int),value,intent(in)    :: mantissa,power,iform
-      character(kind=c_char,len=1),intent(out) :: string
+      character(kind=c_char),dimension(*),intent(out) :: string
     end subroutine giza_format_number_c
  end interface
 
@@ -1495,8 +1495,8 @@ private
     integer(kind=c_int) function giza_query_device_c(qtype,string) bind(C,name="giza_query_device")
       import
       implicit none
-      character(kind=c_char,len=1),intent(in)  :: qtype
-      character(kind=c_char,len=1),intent(out) :: string
+      character(kind=c_char),dimension(*),intent(in)  :: qtype
+      character(kind=c_char),dimension(*),intent(out) :: string
     end function giza_query_device_c
  end interface
 !------------------ end of interfaces -----------------------
@@ -1679,10 +1679,11 @@ contains
   subroutine giza_format_number_f2c(mantissa,power,iform,string)
     implicit none
     integer(kind=c_int),intent(in) :: mantissa,power,iform
-    character(len=*),intent(out) :: string
+    character(len=*),  intent(out) :: string
+    character(kind=c_char), dimension(len(string)+1) :: stringc
   
-    call giza_format_number_c(mantissa,power,iform,string)
-    string = fstring(string)
+    call giza_format_number_c(mantissa,power,iform,stringc)
+    string = fstring(stringc)
 
   end subroutine giza_format_number_f2c
 
@@ -1691,9 +1692,10 @@ contains
     character(len=*),intent(in)  :: qtype
     character(len=*),intent(out) :: string
     integer(kind=c_int) :: ierr
+    character(kind=c_char), dimension(len(string)+1) :: stringc
     
-    ierr = giza_query_device_c(cstring(qtype),string)
-    string = fstring(string)
+    ierr = giza_query_device_c(cstring(qtype),stringc)
+    string = fstring(stringc)
   
   end subroutine giza_query_device_f2c
 
@@ -1704,36 +1706,36 @@ contains
   ! ascii null character)
   !
   !---------------------------------------------------------------------------
-  function cstring(string)
+  function cstring(string) result(array)
     implicit none
     character(len=*), intent(in) :: string
-    character(len=len(string)+1) :: cstring
+    character(kind=c_char), dimension(len(string)+1) :: array
+    integer :: i
 
-    if (len_trim(string).gt.0) then
-       cstring = trim(string)//achar(0)
-    else
-       cstring = ' '//achar(0)
-    endif
-    
+    do i=1, len(string)
+      array(i)=string(i:i)
+    end do
+    array(len(string)+1)=achar(0)
+
   end function cstring
+
   !---------------------------------------------------------------------------
   !
   ! function to safely convert a string from c format (ie. with a terminating
   ! ascii null character) back to a normal Fortran string
   !
   !---------------------------------------------------------------------------
-   function fstring(string)
+   function fstring(array)
     implicit none
-    character(len=*), intent(in) :: string  !< the name of the dataset
-    character(len=len(string)) :: fstring
-    integer :: idx
+    character(kind=c_char), dimension(:), intent(in) :: array
+    character(len=size(array)-1) :: fstring
+    integer :: i
 
-    idx = index(string,char(0))
-    if (idx.gt.1) then
-       fstring = string(1:idx-1)
-    else
-       fstring = ''
-    endif
+    fstring = ''
+    do i=1,size(array)
+       if (array(i).eq.achar(0)) exit
+       fstring(i:i) = array(i)
+    enddo
 
    end function fstring
 
