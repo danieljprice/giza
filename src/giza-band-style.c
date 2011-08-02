@@ -65,6 +65,6 @@ void
 _giza_init_band_style (void)
 {
   Band.ls = 1;
-  Band.lw = 1.;
+  Band.lw = 0.9;
 }
 

@@ -428,7 +428,7 @@ _giza_init_band_xw (void)
       Band.box = cairo_create (Band.onscreen);
       
       /* use grey for band */
-      cairo_set_source_rgb (Band.box, 0.5, 0.5, 0.5);
+      cairo_set_source_rgba (Band.box, 0.5, 0.5, 0.5, 1.0);
 
       /* Set up restore to remove box */
       Band.restore = cairo_create (Band.onscreen);

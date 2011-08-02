@@ -136,8 +136,12 @@ _giza_refresh_band (int mode, int x1, int y1, int x2, int y2)
 	break;
       case 2: /* empty rectangle */
         /* Draw the band */
+        cairo_set_source_rgba(Band.box,1.,1.,1.,0.2);
         cairo_rectangle (Band.box, x1, y1, x2 - x1, y2 - y1);
-        cairo_stroke (Band.box);
+        cairo_fill(Band.box);
+        cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
+        cairo_rectangle (Band.box, x1, y1, x2 - x1, y2 - y1);
+        cairo_stroke(Band.box);
 	break;
       case 3: /* Two horizontal lines */
         cairo_move_to (Band.box, 0., y1);
