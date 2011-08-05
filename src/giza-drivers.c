@@ -794,7 +794,7 @@ void _giza_lowercase(char *string, char *lowerstring)
 
    while ( string[i] )
    {
-      lowerstring[i] = tolower(string[i]);
+      lowerstring[i] = (char) tolower(string[i]);
       i++;
    }
    return;
