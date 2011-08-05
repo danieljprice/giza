@@ -788,13 +788,34 @@ _giza_init_band (int mode)
   return success;
 }
 
+void _giza_lowercase(char *string, char *lowerstring)
+{
+   int  i = 0;
+
+   while ( string[i] )
+   {
+      lowerstring[i] = tolower(string[i]);
+      i++;
+   }
+   return;
+}
+
 /**
  * Internal utility to construct device filenames
  * given the prefix, the device extension and page number
  */
 void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension)
 {
-  if (!strcasestr(prefix,extension)) {
+  
+  /* this stuff is instead of using strcasestr 
+   * (giza should not use non-standard extensions)
+   */
+  char lprefix[strlen(prefix)];
+  char lextens[strlen(extension)];
+  _giza_lowercase(prefix,lprefix);
+  _giza_lowercase(extension,lextens);
+
+  if (!strstr(lprefix,lextens)) {
   /* Add the device extension if prefix string does not already contain it */
      if (pgNum == 0) {
         sprintf (filename, "%s%s", prefix, extension);

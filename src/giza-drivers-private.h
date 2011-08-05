@@ -38,4 +38,5 @@ void _giza_expand_clipping (void);
 void _giza_restore_clipping (void);
 void _giza_init_device_list (char **deviceList);
 void _giza_free_device_list (char *deviceList);
+void _giza_lowercase(char *string, char *lowerstring);
 void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension);
