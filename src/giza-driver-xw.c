@@ -164,6 +164,10 @@ _giza_open_device_xw (void)
   XStoreName (XW.display, XW.window, Dev.prefix);
   XMapWindow (XW.display, XW.window);
 
+   /* register interest in the delete window message */
+  Atom wmDeleteMessage = XInternAtom(XW.display, "WM_DELETE_WINDOW", 1);
+  XSetWMProtocols(XW.display, XW.window, &wmDeleteMessage, 1);
+ 
   /* create the pixmap */
   XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
@@ -275,6 +279,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 
   _giza_init_band (mode);
   while (1)  {
+   
     /* wait for key press/expose */
     XNextEvent(XW.display, &event);
     
@@ -283,6 +288,11 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
     *y = 0;
 
     switch  (event.type) {
+    case ClientMessage:
+      *ch = 'q';
+      if (!strcmp( XGetAtomName( XW.display, event.xclient.message_type ), "WM_PROTOCOLS" )) {
+         return;
+      }
     case Expose: /* redraw */
       _giza_expose_xw (&event);
       break;
