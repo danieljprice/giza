@@ -101,6 +101,8 @@
 #define GIZA_TOKEN_BIGPSI     67
 #define GIZA_TOKEN_BIGOMEGA   68
 
+#define GIZA_TOKEN_ODOT 69
+
 #define GIZA_SCALE_SUPERS 0.65
 #define GIZA_RAISE_SUPERS 0.4
 #define GIZA_SCALE_SUBS   0.65
@@ -175,9 +177,10 @@ BIGPHI     "\\gF"|"\\Phi"
 BIGCHI     "\\gX"|"\\Chi"
 BIGPSI     "\\gQ"|"\\Psi"
 BIGOMEGA   "\\gW"|"\\Omega"
+ODOT       "\\odot"|"\\Sun"
 
 OTHER  [\0-\135]|[\138-\172]|[\174]|[\176-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
-PRINT  {FONT_NORMAL}|{FONT_ROMAN}|{FONT_ITALIC}|{FONT_SCRIPT}|{TIMES}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
+PRINT  {FONT_NORMAL}|{FONT_ROMAN}|{FONT_ITALIC}|{FONT_SCRIPT}|{TIMES}|{ODOT}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
 ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
 
 %%
@@ -204,6 +207,7 @@ ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\
 {TIMES} { return GIZA_TOKEN_TIMES; }
 {INTEGRAL} { return GIZA_TOKEN_INTEGRAL; }
 {NABLA} { return GIZA_TOKEN_NABLA; }
+{ODOT} { return GIZA_TOKEN_ODOT; }
 
 {ALPHA}     { return GIZA_TOKEN_ALPHA; }
 {BETA}      { return GIZA_TOKEN_BETA; }
@@ -655,10 +659,13 @@ _giza_add_token_to_string (char *string, yyscan_t scanner, int token)
        strcat (string, "Ω");
        break;
      case GIZA_TOKEN_INTEGRAL:
-       strcat (string, "\u222B");
+       strcat (string, "∫");
        break;
      case GIZA_TOKEN_NABLA:
-       strcat (string, "\u2207");
+       strcat (string, "∇");
+       break;
+     case GIZA_TOKEN_ODOT:
+       strcat (string, "⊙");
        break;
      default:
        break;
