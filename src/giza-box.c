@@ -215,7 +215,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
       nMinTicksx = 1;
       xintervalMaj = 1.;
     }
-  else if (xtick == 0)
+  else if (_giza_equal(xtick,0.))
     {
       xintervalMaj =
 	7. * Sets.fontExtents.max_x_advance / ((VP.xmax - VP.xmin) *
@@ -364,7 +364,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
       nMinTicksy = 1;
       yintervalMaj = 1.;
     }
-  else if (ytick == 0)
+  else if (_giza_equal(ytick,0.))
     {
       yintervalMaj =
 	7. * Sets.fontExtents.max_x_advance / ((VP.ymax - VP.ymin) *

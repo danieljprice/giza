@@ -22,17 +22,9 @@
 #include "giza-io-private.h"
 #include "giza-stroke-private.h"
 #include "giza-transforms-private.h"
+#include "giza-fill-private.h"
 #include <giza.h>
 #include <math.h>
-
-#define GIZA_FILL_SOLID  1
-#define GIZA_FILL_HOLLOW 2
-#define GIZA_FILL_HATCH 3
-#define GIZA_FILL_CROSSHATCH 4
-
-#define GIZA_MAX_FILL_STYLES 4
-
-void _giza_rotate_pos (double *x, double *y, double angle, double x0, double y0);
 
 int _giza_fill_style;
 double _giza_hatch_angle;
@@ -123,7 +115,7 @@ _giza_fill (void)
        * because the hatching needs to be done 
        * with the current colour index
        */
-      hatch_size = (int) 8.*_giza_hatch_spacing;
+      hatch_size = (int) (8.*_giza_hatch_spacing);
       if (hatch_size <= 0)
         {
           _giza_error("giza_fill","hatch spacing <= 0, ignoring fill attributes");
@@ -221,8 +213,10 @@ void
 _giza_rotate_pos (double *x, double *y, double angle, double x0, double y0)
 {
    double xnew,ynew;
-   xnew = (*x - x0)*cos(angle) - (*y - y0)*sin(angle);
-   ynew = (*x - x0)*sin(angle) + (*y - y0)*cos(angle);
+   double cosangle = cos(angle);
+   double sinangle = sin(angle);
+   xnew = (*x - x0)*cosangle - (*y - y0)*sinangle;
+   ynew = (*x - x0)*sinangle + (*y - y0)*cosangle;
    *x = xnew + x0;
    *y = ynew + y0;
 }

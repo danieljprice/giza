@@ -43,7 +43,7 @@ giza_set_window (double x1, double x2, double y1, double y2)
     return;
 
   /* Check the input is valid */
-  if (x2 == x1 || y2 == y1)
+  if (_giza_equal(x2,x1) || _giza_equal(y2,y1))
     {
       _giza_error ("giza_set_window", "Invalid arguments, reverting to default");
       x1 = GIZA_DEFAULT_WINDOW_X1;
@@ -115,7 +115,7 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
     return;
 
   /* Check the input is valid */
-  if (x2 == x1 || y2 == y1)
+  if (_giza_equal(x2,x1) || _giza_equal(y2,y1))
     {
       _giza_error ("giza_set_window_equal_scale", "Invalid arguments, reverting to default");
       x1 = GIZA_DEFAULT_WINDOW_X1;

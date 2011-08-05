@@ -34,7 +34,7 @@
 #include <cairo/cairo-xlib.h>
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
-
+#include <string.h>
 /**
  * Global variables specific to X.
  */

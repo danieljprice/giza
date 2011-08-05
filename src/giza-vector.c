@@ -59,7 +59,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 	{
 	  for (i = i1; i <= i2; i++)
 	    {
-	      if (horizontal[j][i] != blank && vertical[j][i] != blank)
+	      if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
 		{
 		  double tmp =
 		    sqrt (horizontal[j][i] * horizontal[j][i] +
@@ -89,7 +89,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
     {
       for (i = i1; i <= i2; i++)
 	{
-	  if (!(horizontal[j][i] == blank && vertical[j][i] == blank))
+	  if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
           {	  
              x = (double) i + 0.5;
              y = (double) j + 0.5;
@@ -101,7 +101,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 	         x1 = x2 - horizontal[j][i] * dscale;
 	         y1 = y2 - vertical[j][i] * dscale;
 	       }
-	     else if (position == 0)
+	     else if (_giza_equal(position,0.))
 	       {
 	         x2 = x + 0.5 * horizontal[j][i] * dscale;
 	         y2 = y + 0.5 * vertical[j][i] * dscale;
@@ -164,7 +164,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
 	{
 	  for (i = i1; i <= i2; i++)
 	    {
-	      if (horizontal[j][i] != blank && vertical[j][i] != blank)
+	      if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
 		{
 		  double tmp =
 		    sqrt (horizontal[j][i] * horizontal[j][i] +
@@ -194,7 +194,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
     {
       for (i = i1; i <= i2; i++)
 	{
-	  if (!(horizontal[j][i] == blank && vertical[j][i] == blank))
+	  if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
           {	  
              x = (double) i + 0.5;
              y = (double) j + 0.5;
@@ -207,7 +207,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
 	         x1 = x2 - horizontal[j][i] * dscale;
 	         y1 = y2 - vertical[j][i] * dscale;
 	       }
-	     else if (position == 0)
+	     else if (_giza_equal(position,0.))
 	       {
 	         x2 = x + 0.5 * horizontal[j][i] * dscale;
 	         y2 = y + 0.5 * vertical[j][i] * dscale;

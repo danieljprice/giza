@@ -12,12 +12,15 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
 #include "giza-io-private.h"
+#include <math.h>
+#include "giza-private.h"
 
 /* Indicates if a device is open and ready to be drawn to. */
 static int deviceOpen = 0;
@@ -135,3 +138,14 @@ _giza_nint (double x)
 
   return (int) (x + 0.5);
 }
+
+int
+_giza_equal(double x1, double x2)
+{
+  if (fabs(x1-x2) <= GIZA_TINY) {
+     return 1;
+  } else {
+     return 0;
+  }
+}
+

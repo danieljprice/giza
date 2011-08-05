@@ -20,6 +20,7 @@
 #include "giza-shared-cpp.h"
 #include "giza-io-private.h"
 #include "giza-private.h"
+#include <giza.h>
 #include <math.h>
 #include <string.h>
 #include <stdio.h>

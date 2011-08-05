@@ -72,7 +72,7 @@ giza_function_t (double (*funcx)(double *t), double (*funcy)(double *t),
             if (ypt > ymax) ymax = ypt;
          }
        double dxlim = xmax - xmin;
-       if (dxlim==0.)
+       if (_giza_equal(dxlim,0.))
          {
            xmax += 1.;
            xmin -= 1.;
@@ -83,7 +83,7 @@ giza_function_t (double (*funcx)(double *t), double (*funcy)(double *t),
            xmin -= 0.05*(xmax-xmin);
          }
        double dylim = ymax - ymin;
-       if (dylim==0.)
+       if (_giza_equal(dylim,0.))
          {
            ymax += 1.;
            ymin -= 1.;
@@ -161,26 +161,26 @@ giza_function_t_float (float (*funcx)(float *t), float (*funcy)(float *t),
             if (ypt > ymax) ymax = ypt;
          }
        float dxlim = xmax - xmin;
-       if (dxlim==0.)
+       if (_giza_equal(dxlim,0.))
          {
-           xmax += 1.;
-           xmin -= 1.;
+           xmax += 1.f;
+           xmin -= 1.f;
          }
        else
          {
-           xmax += 0.05*(xmax-xmin);
-           xmin -= 0.05*(xmax-xmin);
+           xmax += 0.05f*(xmax-xmin);
+           xmin -= 0.05f*(xmax-xmin);
          }
        float dylim = ymax - ymin;
-       if (dylim==0.)
+       if (_giza_equal(dylim,0.))
          {
-           ymax += 1.;
-           ymin -= 1.;
+           ymax += 1.f;
+           ymin -= 1.f;
          }
        else
          {
-           ymax += 0.05*(ymax-ymin);
-           ymin -= 0.05*(ymax-ymin);
+           ymax += 0.05f*(ymax-ymin);
+           ymin -= 0.05f*(ymax-ymin);
          }
        giza_set_environment_float(xmin,xmax,ymin,ymax,0,0);
      }

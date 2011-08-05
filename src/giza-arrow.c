@@ -69,7 +69,7 @@ giza_arrow (double x1, double y1, double x2, double y2)
 
   if (chx > 0)
     {
-      if (dx != 0 || dy != 0)
+      if (!_giza_equal(dx,0.) || !_giza_equal(dy,0.))
 	{
 	  /* find a unit vector in the direction of the arrow */
 	  magnitude = sqrt (dx * dx + dy * dy);
@@ -77,12 +77,12 @@ giza_arrow (double x1, double y1, double x2, double y2)
 	  dyUnit = dy / magnitude;
 
 	  /* find a prependicular unit vector */
-	  if (dxUnit == 0)
+	  if (_giza_equal(dxUnit,0.))
 	    {
 	      dxPerp = 1;
 	      dyPerp = 0;
 	    }
-	  else if (dyUnit == 0)
+	  else if (_giza_equal(dyUnit,0.))
 	    {
 	      dxPerp = 0;
 	      dyPerp = 1;

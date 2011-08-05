@@ -21,17 +21,10 @@
 #include "giza-io-private.h"
 #include "giza-private.h"
 #include "giza-transforms-private.h"
+#include "giza-render-private.h"
 #include <giza.h>
 #include <stdlib.h>
 #include <math.h>
-
-static void _giza_colour_pixel (unsigned char *array, int pixNum, double pos);
-static void _giza_colour_pixel_transparent (unsigned char *array, int pixNum, double pos);
-void _giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int i2,
-	           int j1, int j2, double valMin, double valMax, double *affine, int transparent);
-void _giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
-		   int i2, int j1, int j2, float valMin, float valMax,
-		   float *affine, int transparent);
 
 /**
  * Drawing: giza_render

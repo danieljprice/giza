@@ -36,6 +36,8 @@ void giza_annotate_float (char *side, float displacment, float coord,
 
 int giza_band (int mode, int moveCursm, double xanc, double yanc, double *x,
 	       double *y, char *ch);
+int giza_band_float (int mode, int moveCurs, float xanc, float yanc, float *x, 
+               float *y, char *ch);
 
 void giza_get_band_style (int *ls, double *lw);
 void giza_set_band_style (int ls, double lw);
@@ -102,7 +104,7 @@ void giza_rgb_from_table (double pos, double *red, double *green,
 void giza_rgb_from_table_float (double pos, float *red, float *green,
 				float *blue);
 
-void giza_contour (int sizex, int sizey, const double data[sizey][sizex],
+void giza_contour (int sizex, int sizey, double data[sizey][sizex],
 		   int i1, int i2, int j1, int j2, int ncont,
 		   const double cont[ncont], const double *affine);
 void giza_contour_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
@@ -121,7 +123,7 @@ void giza_flush_device (void);
 void giza_change_page (void);
 void giza_close_device (void);
 int giza_query_device (char *querytype, char *returnval);
-
+int giza_device_has_cursor (void);
 int giza_get_key_press (double *x, double *y, char *ch);
 int giza_get_key_press_float (float *x, float *y, char *ch);
 
@@ -143,6 +145,11 @@ void giza_error_bars_vert (int n, double *xpts, double *ypts, double *ypts2,
 			   double term);
 void giza_error_bars_vert_float (int n, float *xpts, float *ypts,
 				 float *ypts2, float term);
+void giza_error_bars_hori (int n, double *xpts1, double *xpts2,
+                                  double *ypts, double term);
+void giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, 
+                                 float *ypts, float term);
+
 
 void giza_set_fill (int fs);
 void giza_get_fill (int *fs);
@@ -166,8 +173,6 @@ void giza_function_t_float (float (*funcx) (float *t),
 
 void giza_get_surface_size (double *x1, double *x2, double *y1, double *y2);
 void giza_get_surface_size_float (float *x1, float *x2, float *y1, float *y2);
-
-int giza_device_has_cursor (void);
 
 void giza_set_hatching_style (double angle, double spacing, double phase);
 void giza_set_hatching_style_float (float angle, float spacing, float phase);

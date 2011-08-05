@@ -25,8 +25,6 @@
 #include <stdlib.h>
 #include <giza.h>
 
-void _giza_set_range_from_colour_table (int cimin, int cimax);
-
 giza_ctab _giza_colour_table;
 giza_ctab _giza_saved_colour_tables[GIZA_CTAB_SAVE_MAX];
 int _giza_save_ctab_ncalls;

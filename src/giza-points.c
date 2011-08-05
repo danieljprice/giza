@@ -508,7 +508,9 @@ _giza_polygon (double x, double y, int nsides, int fill)
 
  /* Set first vertex so that shape appears flat-bottomed */
  double alpha = (0.5 + 1./nsides)* M_PI;
- cairo_move_to (context, x + r * cos(alpha), y + r * sin(alpha));
+ double cosalpha = cos(alpha);
+ double sinalpha = sin(alpha);
+ cairo_move_to (context, x + r * cosalpha, y + r * sinalpha);
 
  /* Define other vertexes */
  double alpha_step = 2 * M_PI / nsides;
@@ -516,7 +518,7 @@ _giza_polygon (double x, double y, int nsides, int fill)
  for (i = 1; i < nsides; i++)
  {
   alpha += alpha_step;
-  cairo_line_to (context, x + r * cos(alpha), y + r * sin(alpha));
+  cairo_line_to (context, x + r * cosalpha, y + r * sinalpha);
  }
  cairo_close_path(context);
  if (fill) { cairo_fill(context); }
@@ -536,7 +538,9 @@ _giza_star (double x, double y, int npoints, double ratio, int fill)
 
  /* Set first vertex so that shape appears flat-bottomed */
  double alpha = (0.5 + 1./npoints)* M_PI;
- cairo_move_to (context, x + r * cos(alpha), y + r * sin(alpha));
+ double cosalpha = cos(alpha);
+ double sinalpha = sin(alpha);
+ cairo_move_to (context, x + r * cosalpha, y + r * sinalpha);
 
  /* Define other vertexes */
  double alpha_step = 2 * M_PI / npoints;
@@ -544,12 +548,12 @@ _giza_star (double x, double y, int npoints, double ratio, int fill)
  for (i = 1; i < npoints; i++)
  {
   alpha += 0.5*alpha_step;
-  cairo_line_to (context, x + ri * cos(alpha), y + ri * sin(alpha));
+  cairo_line_to (context, x + ri * cosalpha, y + ri * sinalpha);
   alpha += 0.5*alpha_step;
-  cairo_line_to (context, x + r * cos(alpha), y + r * sin(alpha));
+  cairo_line_to (context, x + r * cosalpha, y + r * sinalpha);
  }
  alpha += 0.5*alpha_step;
- cairo_line_to (context, x + ri * cos(alpha), y + ri * sin(alpha));
+ cairo_line_to (context, x + ri * cosalpha, y + ri * sinalpha);
  cairo_close_path(context);
  if (fill) { cairo_fill(context); }
   _giza_stroke ();

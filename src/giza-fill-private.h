@@ -19,3 +19,4 @@
 
 void _giza_init_fill (void);
 void _giza_fill (void);
+void _giza_rotate_pos (double *x, double *y, double angle, double x0, double y0);

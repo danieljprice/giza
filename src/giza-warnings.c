@@ -18,6 +18,7 @@
  */
  
 #include <giza.h>
+#include "giza-warnings-private.h"
 
 int _giza_warnings = 1;
 

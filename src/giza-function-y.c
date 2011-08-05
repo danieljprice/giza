@@ -56,7 +56,7 @@ giza_function_y (double (*func)(double *y), int n, double ymin, double ymax, int
             if (xpt > xmax) xmax = xpt;
          }
        double dxlim = xmax - xmin;
-       if (dxlim==0.)
+       if (_giza_equal(dxlim,0.))
          {
            xmax += 1.;
            xmin -= 1.;
@@ -121,15 +121,15 @@ giza_function_y_float (float (*func)(float *y), int n, float ymin, float ymax, i
             if (xpt > xmax) xmax = xpt;
          }
        float dxlim = xmax - xmin;
-       if (dxlim==0.)
+       if (_giza_equal(dxlim,0.))
          {
-           xmax += 1.;
-           xmin -= 1.;
+           xmax += 1.f;
+           xmin -= 1.f;
          }
        else
          {
-           xmax += 0.05*(xmax-xmin);
-           xmax -= 0.05*(xmax-xmin);
+           xmax += 0.05f*(xmax-xmin);
+           xmax -= 0.05f*(xmax-xmin);
          }
        giza_set_environment_float(xmin,xmax,ymin,ymax,0,0);
      }

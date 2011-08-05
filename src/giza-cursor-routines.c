@@ -20,6 +20,7 @@
 #include "giza-private.h"
 #include "giza-io-private.h"
 #include "giza-drivers-private.h"
+#include "giza-cursor-private.h"
 #include <giza.h>
 #include <string.h>
 #define GIZA_MARK_ORDERED 1

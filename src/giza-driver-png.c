@@ -87,8 +87,8 @@ _giza_change_page_png (void)
   cairo_destroy (context);
 
   /* File name */
-  int length;
-  length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
+  int lenext = strlen(GIZA_DEVICE_EXTENSION);
+  int length = strlen (Dev.prefix) + lenext + 5;
   char fileName[length + 1];
   sprintf (fileName, "%s_%04d%s", Dev.prefix, Dev.pgNum, GIZA_DEVICE_EXTENSION);
 
@@ -131,8 +131,8 @@ _giza_change_page_png (void)
 void
 _giza_close_device_png (void)
 {
-  int length;
-  length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
+  int lenext = strlen (GIZA_DEVICE_EXTENSION);
+  int length = strlen (Dev.prefix) + lenext + 5;
   char fileName[length + 1];
   _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION);
   

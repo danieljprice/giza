@@ -18,24 +18,10 @@
  *
  */
 
-#define GIZA_CTAB_SAVE_MAX 10
-#define GIZA_CTAB_MAXSIZE 256
-
-typedef struct
-{
-  int n;
-  double controlPoints[GIZA_CTAB_MAXSIZE];
-  double red[GIZA_CTAB_MAXSIZE];
-  double green[GIZA_CTAB_MAXSIZE];
-  double blue[GIZA_CTAB_MAXSIZE];
-} giza_ctab;
-
-void _giza_set_range_from_colour_table (int cimin, int cimax);
-void _giza_init_colour_index (void);
-void _giza_init_colour_table (void);
-void _giza_free_colour_table (void);
-void _giza_hls_to_rgb (double hue, double lightness, double saturation, 
-                       double *red, double *green, double *blue);
-
-int _giza_colour_index_min;
-int _giza_colour_index_max;
+static void _giza_colour_pixel (unsigned char *array, int pixNum, double pos);
+static void _giza_colour_pixel_transparent (unsigned char *array, int pixNum, double pos);
+void _giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int i2,
+	           int j1, int j2, double valMin, double valMax, double *affine, int transparent);
+void _giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
+		   int i2, int j1, int j2, float valMin, float valMax,
+		   float *affine, int transparent);

@@ -28,8 +28,6 @@
 
 double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][4];
 int _giza_ci;
-void _giza_hls_to_rgb (double hue, double lightness, double saturation, 
-                       double *red, double *green, double *blue);
 
 /**
  * Settings: giza_set_colour_index

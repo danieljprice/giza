@@ -18,6 +18,7 @@
  */
 
 #include "giza-private.h"
+#include <giza.h>
 
 /**
  * Device: giza_get_surface_size

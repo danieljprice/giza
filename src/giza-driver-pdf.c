@@ -45,8 +45,8 @@
 int
 _giza_open_device_pdf (int vert)
 {
-  int length;
-  length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION);
+  int lenext = strlen (GIZA_DEVICE_EXTENSION);
+  int length = strlen (Dev.prefix) + lenext;
   char fileName[length + 1];
   sprintf (fileName, "%s%s", Dev.prefix, GIZA_DEVICE_EXTENSION);
 
