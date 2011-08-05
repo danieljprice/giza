@@ -553,7 +553,7 @@ _giza_device_to_int (char *newDeviceName)
   int i;
   for (i = 0; i < (signed ) strlen (newDeviceName); ++i)
     {
-      devName[i] = tolower (newDeviceName[i]);
+      devName[i] = (char) tolower (newDeviceName[i]);
     }
   devName[i] = '\0';
 
