@@ -229,12 +229,12 @@ void cpgcont(const float *a, int idim, int jdim, int i1, int i2, \
 
 /***************************************************************
  * cpgctab -- install the color table to be used by pgimag
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgctab(const float *l, const float *r, const float *g, \
  const float *b, int nc, float contra, float bright)
 {
-
+   giza_set_colour_table_float(l,r,g,b,nc);
 }
 
 /***************************************************************

@@ -46,7 +46,7 @@ int _giza_save_ctab_ncalls;
  *  -1 :- An error occurred.
  */
 int
-giza_set_colour_table (double *controlPoints, double *red, double *green, double *blue, int n)
+giza_set_colour_table (const double *controlPoints, const double *red, const double *green, const double *blue, int n)
 {
   if (!_giza_check_device_ready ("giza_set_colour_table"))
     return 1;
@@ -94,7 +94,7 @@ giza_set_colour_table (double *controlPoints, double *red, double *green, double
  * avoid memory wastage for big arrays.
  */
 int
-giza_set_colour_table_float (float *controlPoints, float *red, float *green, float *blue, int n)
+giza_set_colour_table_float (const float *controlPoints, const float *red, const float *green, const float *blue, int n)
 {
   if (!_giza_check_device_ready ("giza_set_colour_table_float"))
     return 1;
