@@ -73,7 +73,8 @@ void convert_tr_to_affine(const float *tr, float *affine)
 }
 
 /***************************************************************
- * PGARRO -- draw an arrow
+ * cpgarro -- draw an arrow
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgarro(float x1, float y1, float x2, float y2)
 {
@@ -81,7 +82,8 @@ void cpgarro(float x1, float y1, float x2, float y2)
 }
 
 /***************************************************************
- * PGASK -- control new page prompting
+ * cpgask -- control new page prompting
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgask(Logical flag)
 {
@@ -89,7 +91,8 @@ void cpgask(Logical flag)
 }
 
 /***************************************************************
- * PGAXIS -- draw an axis
+ * cpgaxis -- draw an axis
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgaxis(const char *opt, float x1, float y1, float x2, float y2, \
              float v1, float v2, float step, int nsub, float dmajl, \
@@ -99,7 +102,8 @@ void cpgaxis(const char *opt, float x1, float y1, float x2, float y2, \
 }
 
 /***************************************************************
- * PGBAND -- read cursor position, with anchor
+ * cpgband -- read cursor position, with anchor
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 int cpgband(int mode, int posn, float xref, float yref, float *x,\
             float *y, char *ch_scalar)
@@ -108,7 +112,8 @@ int cpgband(int mode, int posn, float xref, float yref, float *x,\
 }
 
 /***************************************************************
- * PGBBUF -- begin batch of output (buffer)
+ * cpgbbuf -- begin batch of output (buffer)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgbbuf(void)
 {
@@ -116,7 +121,8 @@ void cpgbbuf(void)
 }
 
 /***************************************************************
- * PGBEG -- open a graphics device
+ * cpgbeg -- open a graphics device
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 int cpgbeg(int unit, const char *file, int nxsub, int nysub)
 {
@@ -124,7 +130,8 @@ int cpgbeg(int unit, const char *file, int nxsub, int nysub)
 }
 
 /***************************************************************
- * PGBIN -- histogram of binned data
+ * cpgbin -- histogram of binned data
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgbin(int nbin, const float *x, const float *data, \
  Logical center)
@@ -133,7 +140,8 @@ void cpgbin(int nbin, const float *x, const float *data, \
 }
 
 /***************************************************************
- * PGBOX -- draw labeled frame around viewport
+ * cpgbox -- draw labeled frame around viewport
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgbox(const char *xopt, float xtick, int nxsub, \
  const char *yopt, float ytick, int nysub)
@@ -142,7 +150,8 @@ void cpgbox(const char *xopt, float xtick, int nxsub, \
 }
 
 /***************************************************************
- * PGCIRC -- draw a circle, using fill-area attributes
+ * cpgcirc -- draw a circle, using fill-area attributes
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgcirc(float xcent, float ycent, float radius)
 {
@@ -150,7 +159,8 @@ void cpgcirc(float xcent, float ycent, float radius)
 }
 
 /***************************************************************
- * PGCLOS -- close the selected graphics device
+ * cpgclos -- close the selected graphics device
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgclos(void)
 {
@@ -158,7 +168,8 @@ void cpgclos(void)
 }
 
 /***************************************************************
- * PGCONB -- contour map of a 2D data array, with blanking
+ * cpgconb -- contour map of a 2D data array, with blanking
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgconb(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr, \
@@ -168,7 +179,8 @@ void cpgconb(const float *a, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * PGCONF -- fill between two contours
+ * cpgconf -- fill between two contours
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgconf(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float c1, float c2, const float *tr)
@@ -177,7 +189,8 @@ void cpgconf(const float *a, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * PGCONL -- label contour map of a 2D data array
+ * cpgconl -- label contour map of a 2D data array
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgconl(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float c, const float *tr, const char *label, \
@@ -187,7 +200,8 @@ void cpgconl(const float *a, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * PGCONS -- contour map of a 2D data array (fast algorithm)
+ * cpgcons -- contour map of a 2D data array (fast algorithm)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgcons(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr)
@@ -196,7 +210,8 @@ void cpgcons(const float *a, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * PGCONT -- contour map of a 2D data array (contour-following)
+ * cpgcont -- contour map of a 2D data array (contour-following)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgcont(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr)
@@ -205,7 +220,8 @@ void cpgcont(const float *a, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * PGCTAB -- install the color table to be used by PGIMAG
+ * cpgctab -- install the color table to be used by pgimag
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgctab(const float *l, const float *r, const float *g, \
  const float *b, int nc, float contra, float bright)
@@ -214,7 +230,8 @@ void cpgctab(const float *l, const float *r, const float *g, \
 }
 
 /***************************************************************
- * PGCURS -- read cursor position
+ * cpgcurs -- read cursor position
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 int cpgcurs(float *x, float *y, char *ch_scalar)
 {
@@ -222,7 +239,8 @@ int cpgcurs(float *x, float *y, char *ch_scalar)
 }
 
 /***************************************************************
- * PGDRAW -- draw a line from the current pen position to a point
+ * cpgdraw -- draw a line from the current pen position to a point
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgdraw(float x, float y)
 {
@@ -230,7 +248,8 @@ void cpgdraw(float x, float y)
 }
 
 /***************************************************************
- * PGEBUF -- end batch of output (buffer)
+ * cpgebuf -- end batch of output (buffer)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgebuf(void)
 {
@@ -238,7 +257,8 @@ void cpgebuf(void)
 }
 
 /***************************************************************
- * PGEND -- close all open graphics devices
+ * cpgend -- close all open graphics devices
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgend(void)
 {
@@ -246,7 +266,8 @@ void cpgend(void)
 }
 
 /***************************************************************
- * PGENV -- set window and viewport and draw labeled frame
+ * cpgenv -- set window and viewport and draw labeled frame
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgenv(float xmin, float xmax, float ymin, float ymax, \
  int just, int axis)
@@ -255,7 +276,8 @@ void cpgenv(float xmin, float xmax, float ymin, float ymax, \
 }
 
 /***************************************************************
- * PGERAS -- erase all graphics from current page
+ * cpgeras -- erase all graphics from current page
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgeras(void)
 {
@@ -263,7 +285,8 @@ void cpgeras(void)
 }
 
 /***************************************************************
- * PGERR1 -- horizontal or vertical error bar
+ * cpgerr1 -- horizontal or vertical error bar
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgerr1(int dir, float x, float y, float e, float t)
 {
@@ -271,7 +294,8 @@ void cpgerr1(int dir, float x, float y, float e, float t)
 }
 
 /***************************************************************
- * PGERRB -- horizontal or vertical error bar
+ * cpgerrb -- horizontal or vertical error bar
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgerrb(int dir, int n, const float *x, const float *y, \
  const float *e, float t)
@@ -280,7 +304,8 @@ void cpgerrb(int dir, int n, const float *x, const float *y, \
 }
 
 /***************************************************************
- * PGERRX -- horizontal error bar
+ * cpgerrx -- horizontal error bar
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgerrx(int n, const float *x1, const float *x2, \
  const float *y, float t)
@@ -289,7 +314,8 @@ void cpgerrx(int n, const float *x1, const float *x2, \
 }
 
 /***************************************************************
- * PGERRY -- vertical error bar
+ * cpgerry -- vertical error bar
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgerry(int n, const float *x, const float *y1, \
  const float *y2, float t)
@@ -298,7 +324,8 @@ void cpgerry(int n, const float *x, const float *y1, \
 }
 
 /***************************************************************
- * PGETXT -- erase text from graphics display
+ * cpgetxt -- erase text from graphics display
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgetxt(void)
 {
@@ -306,16 +333,20 @@ void cpgetxt(void)
 }
 
 /***************************************************************
- * PGFUNT -- function defined by X = F(T), Y = G(T)
+ * cpgfunt -- function defined by x = f(t), y = g(t)
+ ***************************************************************/
 
 /***************************************************************
- * PGFUNX -- function defined by Y = F(X)
+ * cpgfunx -- function defined by y = f(x)
+ ***************************************************************/
 
 /***************************************************************
- * PGFUNY -- function defined by X = F(Y)
+ * cpgfuny -- function defined by x = f(y)
+ ***************************************************************/
 
 /***************************************************************
- * PGGRAY -- gray-scale map of a 2D data array
+ * cpggray -- gray-scale map of a 2D data array
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpggray(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float fg, float bg, const float *tr)
@@ -324,9 +355,10 @@ void cpggray(const float *a, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * PGHI2D -- cross-sections through a 2D data array
+ * cpghi2D -- cross-sections through a 2D data array
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
-void cpghi2d(const float *data, int nxv, int nyv, int ix1, \
+void cpghi2D(const float *data, int nxv, int nyv, int ix1, \
  int ix2, int iy1, int iy2, const float *x, int ioff, float bias, \
  Logical center, float *ylims)
 {
@@ -334,7 +366,8 @@ void cpghi2d(const float *data, int nxv, int nyv, int ix1, \
 }
 
 /***************************************************************
- * PGHIST -- histogram of unbinned data
+ * cpghist -- histogram of unbinned data
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpghist(int n, const float *data, float datmin, float datmax, \
  int nbin, int pgflag)
@@ -343,7 +376,8 @@ void cpghist(int n, const float *data, float datmin, float datmax, \
 }
 
 /***************************************************************
- * PGIDEN -- write username, date, and time at bottom of plot
+ * cpgiden -- write username, date, and time at bottom of plot
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgiden(void)
 {
@@ -351,7 +385,8 @@ void cpgiden(void)
 }
 
 /***************************************************************
- * PGIMAG -- color image from a 2D data array
+ * cpgimag -- color image from a 2D data array
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgimag(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float a1, float a2, const float *tr)
@@ -360,7 +395,8 @@ void cpgimag(const float *a, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * PGLAB -- write labels for x-axis, y-axis, and top of plot
+ * cpglab -- write labels for x-axis, y-axis, and top of plot
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpglab(const char *xlbl, const char *ylbl, const char *toplbl)
 {
@@ -368,7 +404,8 @@ void cpglab(const char *xlbl, const char *ylbl, const char *toplbl)
 }
 
 /***************************************************************
- * PGLCUR -- draw a line using the cursor
+ * cpglcur -- draw a line using the cursor
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpglcur(int maxpt, int *npt, float *x, float *y)
 {
@@ -376,7 +413,8 @@ void cpglcur(int maxpt, int *npt, float *x, float *y)
 }
 
 /***************************************************************
- * PGLDEV -- list available device types on standard output
+ * cpgldev -- list available device types on standard output
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgldev(void)
 {
@@ -384,7 +422,8 @@ void cpgldev(void)
 }
 
 /***************************************************************
- * PGLEN -- find length of a string in a variety of units
+ * cpglen -- find length of a string in a variety of units
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpglen(int units, const char *string, float *xl, float *yl)
 {
@@ -392,7 +431,8 @@ void cpglen(int units, const char *string, float *xl, float *yl)
 }
 
 /***************************************************************
- * PGLINE -- draw a polyline (curve defined by line-segments)
+ * cpgline -- draw a polyline (curve defined by line-segments)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgline(int n, const float *xpts, const float *ypts)
 {
@@ -400,7 +440,8 @@ void cpgline(int n, const float *xpts, const float *ypts)
 }
 
 /***************************************************************
- * PGMOVE -- move pen (change current pen position)
+ * cpgmove -- move pen (change current pen position)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgmove(float x, float y)
 {
@@ -408,7 +449,8 @@ void cpgmove(float x, float y)
 }
 
 /***************************************************************
- * PGMTXT -- write text at position relative to viewport
+ * cpgmtxt -- write text at position relative to viewport
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgmtxt(const char *side, float disp, float coord, \
  float fjust, const char *text)
@@ -417,7 +459,8 @@ void cpgmtxt(const char *side, float disp, float coord, \
 }
 
 /***************************************************************
- * PGNCUR -- mark a set of points using the cursor
+ * cpgncur -- mark a set of points using the cursor
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgncur(int maxpt, int *npt, float *x, float *y, int symbol)
 {
@@ -425,7 +468,8 @@ void cpgncur(int maxpt, int *npt, float *x, float *y, int symbol)
 }
 
 /***************************************************************
- * PGNUMB -- convert a number into a plottable character string
+ * cpgnumb -- convert a number into a plottable character string
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgnumb(int mm, int pp, int form, char *string, \
  int *string_length)
@@ -434,7 +478,8 @@ void cpgnumb(int mm, int pp, int form, char *string, \
 }
 
 /***************************************************************
- * PGOLIN -- mark a set of points using the cursor
+ * cpgolin -- mark a set of points using the cursor
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgolin(int maxpt, int *npt, float *x, float *y, int symbol)
 {
@@ -442,7 +487,8 @@ void cpgolin(int maxpt, int *npt, float *x, float *y, int symbol)
 }
 
 /***************************************************************
- * PGOPEN -- open a graphics device
+ * cpgopen -- open a graphics device
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 int cpgopen(const char *device)
 {
@@ -450,7 +496,8 @@ int cpgopen(const char *device)
 }
 
 /***************************************************************
- * PGPAGE -- advance to new page
+ * cpgpage -- advance to new page
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgpage(void)
 {
@@ -458,7 +505,8 @@ void cpgpage(void)
 }
 
 /***************************************************************
- * PGPANL -- switch to a different panel on the view surface
+ * cpgpanl -- switch to a different panel on the view surface
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgpanl(int nxc, int nyc)
 {
@@ -466,7 +514,8 @@ void cpgpanl(int nxc, int nyc)
 }
 
 /***************************************************************
- * PGPAP -- change the size of the view surface
+ * cpgpap -- change the size of the view surface
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgpap(float width, float aspect)
 {
@@ -474,7 +523,8 @@ void cpgpap(float width, float aspect)
 }
 
 /***************************************************************
- * PGPIXL -- draw pixels
+ * cpgpixl -- draw pixels
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgpixl(const int *ia, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float x1, float x2, float y1, float y2)
@@ -483,7 +533,8 @@ void cpgpixl(const int *ia, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * PGPNTS -- draw several graph markers, not all the same
+ * cpgpnts -- draw several graph markers, not all the same
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgpnts(int n, const float *x, const float *y, \
  const int *symbol, int ns)
@@ -492,7 +543,8 @@ void cpgpnts(int n, const float *x, const float *y, \
 }
 
 /***************************************************************
- * PGPOLY -- draw a polygon, using fill-area attributes
+ * cpgpoly -- draw a polygon, using fill-area attributes
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgpoly(int n, const float *xpts, const float *ypts)
 {
@@ -500,7 +552,8 @@ void cpgpoly(int n, const float *xpts, const float *ypts)
 }
 
 /***************************************************************
- * PGPT -- draw several graph markers
+ * cpgpt -- draw several graph markers
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgpt(int n, const float *xpts, const float *ypts, int symbol)
 {
@@ -508,7 +561,8 @@ void cpgpt(int n, const float *xpts, const float *ypts, int symbol)
 }
 
 /***************************************************************
- * PGPT1 -- draw one graph marker
+ * cpgpt1 -- draw one graph marker
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgpt1(float xpt, float ypt, int symbol)
 {
@@ -516,7 +570,8 @@ void cpgpt1(float xpt, float ypt, int symbol)
 }
 
 /***************************************************************
- * PGPTXT -- write text at arbitrary position and angle
+ * cpgptxt -- write text at arbitrary position and angle
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgptxt(float x, float y, float angle, float fjust, \
  const char *text)
@@ -525,7 +580,8 @@ void cpgptxt(float x, float y, float angle, float fjust, \
 }
 
 /***************************************************************
- * PGQAH -- inquire arrow-head style
+ * cpgqah -- inquire arrow-head style
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqah(int *fs, float *angle, float *barb)
 {
@@ -533,7 +589,8 @@ void cpgqah(int *fs, float *angle, float *barb)
 }
 
 /***************************************************************
- * PGQCF -- inquire character font
+ * cpgqcf -- inquire character font
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqcf(int *font)
 {
@@ -541,7 +598,8 @@ void cpgqcf(int *font)
 }
 
 /***************************************************************
- * PGQCH -- inquire character height
+ * cpgqch -- inquire character height
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqch(float *size)
 {
@@ -549,7 +607,8 @@ void cpgqch(float *size)
 }
 
 /***************************************************************
- * PGQCI -- inquire color index
+ * cpgqci -- inquire color index
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqci(int *ci)
 {
@@ -557,7 +616,8 @@ void cpgqci(int *ci)
 }
 
 /***************************************************************
- * PGQCIR -- inquire color index range
+ * cpgqcir -- inquire color index range
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqcir(int *icilo, int *icihi)
 {
@@ -565,7 +625,8 @@ void cpgqcir(int *icilo, int *icihi)
 }
 
 /***************************************************************
- * PGQCLP -- inquire clipping status
+ * cpgqclp -- inquire clipping Status
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqclp(int *state)
 {
@@ -573,7 +634,8 @@ void cpgqclp(int *state)
 }
 
 /***************************************************************
- * PGQCOL -- inquire color capability
+ * cpgqcol -- inquire color capability
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqcol(int *ci1, int *ci2)
 {
@@ -581,7 +643,8 @@ void cpgqcol(int *ci1, int *ci2)
 }
 
 /***************************************************************
- * PGQCR -- inquire color representation
+ * cpgqcr -- inquire color representation
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqcr(int ci, float *cr, float *cg, float *cb)
 {
@@ -589,7 +652,8 @@ void cpgqcr(int ci, float *cr, float *cg, float *cb)
 }
 
 /***************************************************************
- * PGQCS -- inquire character height in a variety of units
+ * cpgqcs -- inquire character height in a variety of units
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqcs(int units, float *xch, float *ych)
 {
@@ -597,7 +661,8 @@ void cpgqcs(int units, float *xch, float *ych)
 }
 
 /***************************************************************
- * PGQDT -- inquire name of nth available device type
+ * cpgqdt -- inquire name of nth available device type
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqdt(int n, char *type, int *type_length, char *descr, \
  int *descr_length, int *inter)
@@ -606,7 +671,8 @@ void cpgqdt(int n, char *type, int *type_length, char *descr, \
 }
 
 /***************************************************************
- * PGQFS -- inquire fill-area style
+ * cpgqfs -- inquire fill-area style
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqfs(int *fs)
 {
@@ -614,7 +680,8 @@ void cpgqfs(int *fs)
 }
 
 /***************************************************************
- * PGQHS -- inquire hatching style
+ * cpgqhs -- inquire hatching style
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqhs(float *angle, float *sepn, float* phase)
 {
@@ -622,7 +689,8 @@ void cpgqhs(float *angle, float *sepn, float* phase)
 }
 
 /***************************************************************
- * PGQID -- inquire current device identifier
+ * cpgqid -- inquire current device identifier
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqid(int *id)
 {
@@ -630,7 +698,8 @@ void cpgqid(int *id)
 }
 
 /***************************************************************
- * PGQINF -- inquire PGPLOT general information
+ * cpgqinf -- inquire pgplot general information
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqinf(const char *item, char *value, int *value_length)
 {
@@ -638,7 +707,8 @@ void cpgqinf(const char *item, char *value, int *value_length)
 }
 
 /***************************************************************
- * PGQITF -- inquire image transfer function
+ * cpgqitf -- inquire image transfer function
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqitf(int *itf)
 {
@@ -646,7 +716,8 @@ void cpgqitf(int *itf)
 }
 
 /***************************************************************
- * PGQLS -- inquire line style
+ * cpgqls -- inquire line style
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqls(int *ls)
 {
@@ -654,7 +725,8 @@ void cpgqls(int *ls)
 }
 
 /***************************************************************
- * PGQLW -- inquire line width
+ * cpgqlw -- inquire line width
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqlw(int *lw)
 {
@@ -662,7 +734,8 @@ void cpgqlw(int *lw)
 }
 
 /***************************************************************
- * PGQNDT -- inquire number of available device types
+ * cpgqndt -- inquire number of available device types
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqndt(int *n)
 {
@@ -670,7 +743,8 @@ void cpgqndt(int *n)
 }
 
 /***************************************************************
- * PGQPOS -- inquire current pen position
+ * cpgqpos -- inquire current pen position
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqpos(float *x, float *y)
 {
@@ -678,7 +752,8 @@ void cpgqpos(float *x, float *y)
 }
 
 /***************************************************************
- * PGQTBG -- inquire text background color index
+ * cpgqtbg -- inquire text background color index
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqtbg(int *tbci)
 {
@@ -686,7 +761,8 @@ void cpgqtbg(int *tbci)
 }
 
 /***************************************************************
- * PGQTXT -- find bounding box of text string
+ * cpgqtxt -- find bounding box of text string
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqtxt(float x, float y, float angle, float fjust, \
  const char *text, float *xbox, float *ybox)
@@ -695,7 +771,8 @@ void cpgqtxt(float x, float y, float angle, float fjust, \
 }
 
 /***************************************************************
- * PGQVP -- inquire viewport size and position
+ * cpgqvp -- inquire viewport size and position
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqvp(int units, float *x1, float *x2, float *y1, float *y2)
 {
@@ -703,7 +780,8 @@ void cpgqvp(int units, float *x1, float *x2, float *y1, float *y2)
 }
 
 /***************************************************************
- * PGQVSZ -- inquire size of view surface
+ * cpgqvsz -- inquire size of view surface
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqvsz(int units, float *x1, float *x2, float *y1, float *y2)
 {
@@ -711,7 +789,8 @@ void cpgqvsz(int units, float *x1, float *x2, float *y1, float *y2)
 }
 
 /***************************************************************
- * PGQWIN -- inquire window boundary coordinates
+ * cpgqwin -- inquire window boundary coordinates
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgqwin(float *x1, float *x2, float *y1, float *y2)
 {
@@ -719,7 +798,8 @@ void cpgqwin(float *x1, float *x2, float *y1, float *y2)
 }
 
 /***************************************************************
- * PGRECT -- draw a rectangle, using fill-area attributes
+ * cpgrect -- draw a rectangle, using fill-area attributes
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgrect(float x1, float x2, float y1, float y2)
 {
@@ -727,7 +807,8 @@ void cpgrect(float x1, float x2, float y1, float y2)
 }
 
 /***************************************************************
- * PGRND -- find the smallest `round' number greater than x
+ * cpgrnd -- find the smallest `round' number greater than x
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 float cpgrnd(float x, int *nsub)
 {
@@ -735,7 +816,8 @@ float cpgrnd(float x, int *nsub)
 }
 
 /***************************************************************
- * PGRNGE -- choose axis limits
+ * cpgrnge -- choose axis limits
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgrnge(float x1, float x2, float *xlo, float *xhi)
 {
@@ -743,7 +825,8 @@ void cpgrnge(float x1, float x2, float *xlo, float *xhi)
 }
 
 /***************************************************************
- * PGSAH -- set arrow-head style
+ * cpgsah -- set arrow-head style
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsah(int fs, float angle, float barb)
 {
@@ -751,7 +834,8 @@ void cpgsah(int fs, float angle, float barb)
 }
 
 /***************************************************************
- * PGSAVE -- save PGPLOT attributes
+ * cpgsave -- save pgplot attributes
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsave(void)
 {
@@ -759,7 +843,8 @@ void cpgsave(void)
 }
 
 /***************************************************************
- * PGUNSA -- restore PGPLOT attributes
+ * cpgunsa -- restore pgplot attributes
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgunsa(void)
 {
@@ -767,7 +852,8 @@ void cpgunsa(void)
 }
 
 /***************************************************************
- * PGSCF -- set character font
+ * cpgscf -- set character font
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgscf(int font)
 {
@@ -775,7 +861,8 @@ void cpgscf(int font)
 }
 
 /***************************************************************
- * PGSCH -- set character height
+ * cpgsch -- set character height
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsch(float size)
 {
@@ -783,7 +870,8 @@ void cpgsch(float size)
 }
 
 /***************************************************************
- * PGSCI -- set color index
+ * cpgsci -- set color index
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsci(int ci)
 {
@@ -791,7 +879,8 @@ void cpgsci(int ci)
 }
 
 /***************************************************************
- * PGSCIR -- set color index range
+ * cpgscir -- set color index range
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgscir(int icilo, int icihi)
 {
@@ -799,7 +888,8 @@ void cpgscir(int icilo, int icihi)
 }
 
 /***************************************************************
- * PGSCLP -- enable or disable clipping at edge of viewport
+ * cpgsclp -- enable or disable clipping at edge of viewport
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsclp(int state)
 {
@@ -807,7 +897,8 @@ void cpgsclp(int state)
 }
 
 /***************************************************************
- * PGSCR -- set color representation
+ * cpgscr -- set color representation
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgscr(int ci, float cr, float cg, float cb)
 {
@@ -815,7 +906,8 @@ void cpgscr(int ci, float cr, float cg, float cb)
 }
 
 /***************************************************************
- * PGSCRL -- scroll window
+ * cpgscrl -- scroll window
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgscrl(float dx, float dy)
 {
@@ -823,7 +915,8 @@ void cpgscrl(float dx, float dy)
 }
 
 /***************************************************************
- * PGSCRN -- set color representation by name
+ * cpgscrn -- set color representation by name
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgscrn(int ci, const char *name, int *ier)
 {
@@ -831,7 +924,8 @@ void cpgscrn(int ci, const char *name, int *ier)
 }
 
 /***************************************************************
- * PGSFS -- set fill-area style
+ * cpgsfs -- set fill-area style
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsfs(int fs)
 {
@@ -839,7 +933,8 @@ void cpgsfs(int fs)
 }
 
 /***************************************************************
- * PGSHLS -- set color representation using HLS system
+ * cpgshls -- set color representation using hls system
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgshls(int ci, float ch, float cl, float cs)
 {
@@ -847,7 +942,8 @@ void cpgshls(int ci, float ch, float cl, float cs)
 }
 
 /***************************************************************
- * PGSHS -- set hatching style
+ * cpgshs -- set hatching style
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgshs(float angle, float sepn, float phase)
 {
@@ -855,7 +951,8 @@ void cpgshs(float angle, float sepn, float phase)
 }
 
 /***************************************************************
- * PGSITF -- set image transfer function
+ * cpgsitf -- set image transfer function
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsitf(int itf)
 {
@@ -863,7 +960,8 @@ void cpgsitf(int itf)
 }
 
 /***************************************************************
- * PGSLCT -- select an open graphics device
+ * cpgslct -- select an open graphics device
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgslct(int id)
 {
@@ -871,7 +969,8 @@ void cpgslct(int id)
 }
 
 /***************************************************************
- * PGSLS -- set line style
+ * cpgsls -- set line style
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsls(int ls)
 {
@@ -879,7 +978,8 @@ void cpgsls(int ls)
 }
 
 /***************************************************************
- * PGSLW -- set line width
+ * cpgslw -- set line width
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgslw(int lw)
 {
@@ -887,7 +987,8 @@ void cpgslw(int lw)
 }
 
 /***************************************************************
- * PGSTBG -- set text background color index
+ * cpgstbg -- set text background color index
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgstbg(int tbci)
 {
@@ -895,7 +996,8 @@ void cpgstbg(int tbci)
 }
 
 /***************************************************************
- * PGSUBP -- subdivide view surface into panels
+ * cpgsubp -- subdivide view surface into panels
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsubp(int nxsub, int nysub)
 {
@@ -903,7 +1005,8 @@ void cpgsubp(int nxsub, int nysub)
 }
 
 /***************************************************************
- * PGSVP -- set viewport (normalized device coordinates)
+ * cpgsvp -- set viewport (normalized device coordinates)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgsvp(float xleft, float xright, float ybot, float ytop)
 {
@@ -911,7 +1014,8 @@ void cpgsvp(float xleft, float xright, float ybot, float ytop)
 }
 
 /***************************************************************
- * PGSWIN -- set window
+ * cpgswin -- set window
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgswin(float x1, float x2, float y1, float y2)
 {
@@ -919,7 +1023,8 @@ void cpgswin(float x1, float x2, float y1, float y2)
 }
 
 /***************************************************************
- * PGTBOX -- draw frame and write (DD) HH MM SS.S labelling
+ * cpgtbox -- draw frame and write (dd) hh mm ss.s labelling
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgtbox(const char *xopt, float xtick, int nxsub, \
  const char *yopt, float ytick, int nysub)
@@ -928,7 +1033,8 @@ void cpgtbox(const char *xopt, float xtick, int nxsub, \
 }
 
 /***************************************************************
- * PGTEXT -- write text (horizontal, left-justified)
+ * cpgtext -- write text (horizontal, left-justified)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgtext(float x, float y, const char *text)
 {
@@ -936,7 +1042,8 @@ void cpgtext(float x, float y, const char *text)
 }
 
 /***************************************************************
- * PGTICK -- draw a single tick mark on an axis
+ * cpgtick -- draw a single tick mark on an axis
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgtick(float x1, float y1, float x2, float y2, float v, \
  float tikl, float tikr, float disp, float orient, const char *str)
@@ -945,7 +1052,8 @@ void cpgtick(float x1, float y1, float x2, float y2, float v, \
 }
 
 /***************************************************************
- * PGUPDT -- update display
+ * cpgupdt -- update display
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgupdt(void)
 {
@@ -953,7 +1061,8 @@ void cpgupdt(void)
 }
 
 /***************************************************************
- * PGVECT -- vector map of a 2D data array, with blanking
+ * cpgvect -- vector map of a 2D data array, with blanking
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgvect(const float *a, const float *b, int idim, int jdim, \
  int i1, int i2, int j1, int j2, float c, int nc, \
@@ -963,7 +1072,8 @@ void cpgvect(const float *a, const float *b, int idim, int jdim, \
 }
 
 /***************************************************************
- * PGVSIZ -- set viewport (inches)
+ * cpgvsiz -- set viewport (inches)
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgvsiz(float xleft, float xright, float ybot, float ytop)
 {
@@ -971,7 +1081,8 @@ void cpgvsiz(float xleft, float xright, float ybot, float ytop)
 }
 
 /***************************************************************
- * PGVSTD -- set standard (default) viewport
+ * cpgvstd -- set standard (default) viewport
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgvstd(void)
 {
@@ -979,7 +1090,8 @@ void cpgvstd(void)
 }
 
 /***************************************************************
- * PGWEDG -- annotate an image plot with a wedge
+ * cpgwedg -- annotate an image plot with a wedge
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgwedg(const char *side, float disp, float width, \
  float fg, float bg, const char *label)
@@ -988,7 +1100,8 @@ void cpgwedg(const char *side, float disp, float width, \
 }
 
 /***************************************************************
- * PGWNAD -- set window and adjust viewport to same aspect ratio
+ * cpgwnad -- set window and adjust viewport to same aspect ratio
+ * Status: NOT IMPLEMENTED
  ***************************************************************/
 void cpgwnad(float x1, float x2, float y1, float y2)
 {
