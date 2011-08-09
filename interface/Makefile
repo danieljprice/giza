@@ -32,14 +32,28 @@ SHARED_LIB=libpgplot.dylib
 SHARED_LD=gcc -shared -o libpgplot.dylib
 SHARED_LIB_LIBS=${GIZA_LIB}
 
+SHARED_LIBC=libcpgplot.dylib
+SHARED_LDC=gcc -shared -o libcpgplot.dylib
+
+all: lib libc
+
 lib: libpgplot.a $(SHARED_LIB)
+
+libc: libcpgplot.a $(SHARED_LIBC)
 
 libpgplot.a: $(OBJ)
 	ar ru libpgplot.a $(OBJ)
 	$(RANLIB) libpgplot.a
 
+libcpgplot.a: $(GIZAOBJ) giza-cpgplot.o
+	ar ru libcpgplot.a $(GIZAOBJ) giza-cpgplot.o
+	$(RANLIB) libcpgplot.a
+
 $(SHARED_LIB): $(OBJ)
 	$(SHARED_LD) $(LIBS) $(OBJ) $(SHARED_LIB_LIBS)
 
+$(SHARED_LIBC): $(GIZAOBJ) giza-cpgplot.o
+	$(SHARED_LDC) $(LIBS) $(GIZAOBJ) giza-cpgplot.o $(SHARED_LIB_LIBS)
+
 clean:
-	rm -f libpgplot.a $(SHARED_LIB) *.o *.mod
+	rm -f libpgplot.a libcpgplot.a $(SHARED_LIB) $(SHARED_LIBC) *.o *.mod

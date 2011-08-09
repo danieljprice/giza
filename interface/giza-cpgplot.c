@@ -239,57 +239,57 @@ void cpgctab(const float *l, const float *r, const float *g, \
 
 /***************************************************************
  * cpgcurs -- read cursor position
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 int cpgcurs(float *x, float *y, char *ch_scalar)
 {
-
+   return giza_get_key_press_float(x,y,ch_scalar);
 }
 
 /***************************************************************
  * cpgdraw -- draw a line from the current pen position to a point
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgdraw(float x, float y)
 {
-
+   giza_draw_float(x, y);
 }
 
 /***************************************************************
  * cpgebuf -- end batch of output (buffer)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgebuf(void)
 {
-
+   giza_end_buffer();
 }
 
 /***************************************************************
  * cpgend -- close all open graphics devices
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgend(void)
 {
-
+   giza_close_device();
 }
 
 /***************************************************************
  * cpgenv -- set window and viewport and draw labeled frame
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgenv(float xmin, float xmax, float ymin, float ymax, \
  int just, int axis)
 {
-
+  giza_set_environment_float(xmin, xmax, ymin, ymax, just, axis);
 }
 
 /***************************************************************
  * cpgeras -- erase all graphics from current page
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgeras(void)
 {
-
+  giza_draw_background();
 }
 
 /***************************************************************
