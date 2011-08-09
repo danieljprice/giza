@@ -74,19 +74,24 @@ void convert_tr_to_affine(const float *tr, float *affine)
 
 /***************************************************************
  * cpgarro -- draw an arrow
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgarro(float x1, float y1, float x2, float y2)
 {
-
+  giza_arrow_float(x1,y1,x2,y2);
 }
 
 /***************************************************************
  * cpgask -- control new page prompting
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgask(Logical flag)
 {
+  if (flag) {
+    giza_start_prompting();
+  } else {
+    giza_stop_prompting();
+  }
 
 }
 
@@ -103,21 +108,21 @@ void cpgaxis(const char *opt, float x1, float y1, float x2, float y2, \
 
 /***************************************************************
  * cpgband -- read cursor position, with anchor
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 int cpgband(int mode, int posn, float xref, float yref, float *x,\
             float *y, char *ch_scalar)
 {
-
+   return giza_band_float(mode,posn,xref,yref,x,y,ch_scalar);
 }
 
 /***************************************************************
  * cpgbbuf -- begin batch of output (buffer)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgbbuf(void)
 {
-
+  giza_begin_buffer();
 }
 
 /***************************************************************
@@ -151,20 +156,20 @@ void cpgbox(const char *xopt, float xtick, int nxsub, \
 
 /***************************************************************
  * cpgcirc -- draw a circle, using fill-area attributes
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgcirc(float xcent, float ycent, float radius)
 {
-
+  giza_circle_float(xcent,ycent,radius);
 }
 
 /***************************************************************
  * cpgclos -- close the selected graphics device
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgclos(void)
 {
-
+  giza_close_device();
 }
 
 /***************************************************************
@@ -175,7 +180,10 @@ void cpgconb(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr, \
  float blank)
 {
-
+  float affine[6];
+  convert_tr_to_affine(tr,affine);
+/*  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);
+*/
 }
 
 /***************************************************************
