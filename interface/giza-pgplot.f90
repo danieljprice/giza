@@ -40,7 +40,8 @@ contains
 !------------------------------------------------------------
  integer function units_giza(pgplotunits)
   use giza, only:giza_units_normalized,giza_units_inches, &
-                 giza_units_mm,giza_units_device,giza_units_world
+                 giza_units_mm,giza_units_device,giza_units_world,&
+                 giza_units_pixels
   implicit none
   integer, intent(in) :: pgplotunits
   
@@ -538,7 +539,7 @@ end subroutine PGFUNY
 
 !------------------------------------------------------------------------
 ! Module: PGGRAY -- gray-scale map of a 2D data array
-! Status: PARTIALLY IMPLEMENTED (does not reset colour table)
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
  use giza,       only:giza_render_gray
@@ -549,7 +550,7 @@ subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
  real, dimension(6)  :: affine
 
  call convert_tr_to_affine(tr,affine)
- call giza_render_gray(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,a1,a2,affine)
+ call giza_render_gray(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,affine)
 
 end subroutine PGGRAY
 
