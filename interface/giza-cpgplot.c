@@ -27,6 +27,7 @@
 
 #include "giza.h"
 #include "cpgplot.h"
+#include <string.h>
 
 /***************************************************************
  * Function to convert PGPLOT units value to giza units value
@@ -127,11 +128,11 @@ void cpgbbuf(void)
 
 /***************************************************************
  * cpgbeg -- open a graphics device
- * Status: NOT IMPLEMENTED
+ * Status: PARTIALLY IMPLEMENTED
  ***************************************************************/
 int cpgbeg(int unit, const char *file, int nxsub, int nysub)
 {
-
+  return cpgopen(file);
 }
 
 /***************************************************************
@@ -146,12 +147,12 @@ void cpgbin(int nbin, const float *x, const float *data, \
 
 /***************************************************************
  * cpgbox -- draw labeled frame around viewport
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgbox(const char *xopt, float xtick, int nxsub, \
  const char *yopt, float ytick, int nysub)
 {
-
+  giza_box(xopt, xtick, nxsub, yopt, ytick, nysub);
 }
 
 /***************************************************************
@@ -204,6 +205,9 @@ void cpgconl(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float c, const float *tr, const char *label, \
  int intval, int minint)
 {
+  float affine[6];
+  convert_tr_to_affine(tr,affine);
+/*  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);*/
 
 }
 
@@ -214,7 +218,9 @@ void cpgconl(const float *a, int idim, int jdim, int i1, int i2, \
 void cpgcons(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr)
 {
-
+  float affine[6];
+  convert_tr_to_affine(tr,affine);
+/*  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);*/
 }
 
 /***************************************************************
@@ -224,7 +230,9 @@ void cpgcons(const float *a, int idim, int jdim, int i1, int i2, \
 void cpgcont(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr)
 {
-
+  float affine[6];
+  convert_tr_to_affine(tr,affine);
+/*  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);*/
 }
 
 /***************************************************************
@@ -294,41 +302,45 @@ void cpgeras(void)
 
 /***************************************************************
  * cpgerr1 -- horizontal or vertical error bar
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgerr1(int dir, float x, float y, float e, float t)
 {
-
+  float xi[1], yi[1], ei[1];
+  xi[0] = x;
+  yi[0] = y;
+  ei[0] = e;
+  cpgerrb(dir, 1, xi, yi, ei, t);
 }
 
 /***************************************************************
  * cpgerrb -- horizontal or vertical error bar
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgerrb(int dir, int n, const float *x, const float *y, \
  const float *e, float t)
 {
-
+  giza_error_bars_float(dir, n, x, y, e, t);
 }
 
 /***************************************************************
  * cpgerrx -- horizontal error bar
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgerrx(int n, const float *x1, const float *x2, \
  const float *y, float t)
 {
-
+  giza_error_bars_hori_float(n, x1, x2, y, t);
 }
 
 /***************************************************************
  * cpgerry -- vertical error bar
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgerry(int n, const float *x, const float *y1, \
  const float *y2, float t)
 {
-
+  giza_error_bars_vert_float(n, x, y1, y2, t);
 }
 
 /***************************************************************
@@ -385,11 +397,11 @@ void cpghist(int n, const float *data, float datmin, float datmax, \
 
 /***************************************************************
  * cpgiden -- write username, date, and time at bottom of plot
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgiden(void)
 {
-
+  giza_print_id();
 }
 
 /***************************************************************
@@ -404,112 +416,124 @@ void cpgimag(const float *a, int idim, int jdim, int i1, int i2, \
 
 /***************************************************************
  * cpglab -- write labels for x-axis, y-axis, and top of plot
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpglab(const char *xlbl, const char *ylbl, const char *toplbl)
 {
-
+  giza_label(xlbl, ylbl, toplbl);
 }
 
 /***************************************************************
  * cpglcur -- draw a line using the cursor
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpglcur(int maxpt, int *npt, float *x, float *y)
 {
-
+  giza_mark_line_float(maxpt, npt, x, y);
 }
 
 /***************************************************************
  * cpgldev -- list available device types on standard output
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgldev(void)
 {
-
+  giza_print_device_list();
 }
 
 /***************************************************************
  * cpglen -- find length of a string in a variety of units
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpglen(int units, const char *string, float *xl, float *yl)
 {
-
+  giza_qtextlen_float(units_giza(units),string,xl,yl);
 }
 
 /***************************************************************
  * cpgline -- draw a polyline (curve defined by line-segments)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgline(int n, const float *xpts, const float *ypts)
 {
-
+  giza_line_float(n, xpts, ypts);
 }
 
 /***************************************************************
  * cpgmove -- move pen (change current pen position)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgmove(float x, float y)
 {
-
+  giza_move_float(x, y);
 }
 
 /***************************************************************
  * cpgmtxt -- write text at position relative to viewport
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgmtxt(const char *side, float disp, float coord, \
  float fjust, const char *text)
 {
-
+  giza_annotate_float(side, disp, coord, fjust, text);
 }
 
 /***************************************************************
  * cpgncur -- mark a set of points using the cursor
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgncur(int maxpt, int *npt, float *x, float *y, int symbol)
 {
-
+  giza_mark_points_ordered_float(maxpt, npt, x, y, symbol);
 }
 
 /***************************************************************
  * cpgnumb -- convert a number into a plottable character string
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgnumb(int mm, int pp, int form, char *string, \
  int *string_length)
 {
-
+  giza_format_number(mm, pp, form, string);
+  *string_length = strlen(string);
 }
 
 /***************************************************************
  * cpgolin -- mark a set of points using the cursor
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgolin(int maxpt, int *npt, float *x, float *y, int symbol)
 {
-
+  giza_mark_points_float(maxpt, npt, x, y, symbol);
 }
 
 /***************************************************************
  * cpgopen -- open a graphics device
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 int cpgopen(const char *device)
 {
+  int pgopen = giza_open_device(device,"giza");
+ 
+ /*  PGPLOT gets pgopen = id on success
+  *  and <= 0 for errors
+  */
+ if (pgopen!=0) {
+    pgopen = -1;
+ } else {
+    pgopen = 1;
+ }
+ return pgopen;
 
 }
 
 /***************************************************************
  * cpgpage -- advance to new page
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgpage(void)
 {
-
+  giza_change_page();
 }
 
 /***************************************************************
