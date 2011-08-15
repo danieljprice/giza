@@ -209,14 +209,17 @@ giza_get_window_float (float *x1, float *x2, float *y1, float *y2)
 }
 
 /**
- * Sets the window to the default. The viewport and normalised matrix must have been already set.
+ * Sets the window to the default (before viewport is set). Must be followed by
+ * a call to set viewport, which in turn calls the set_window routine
  */
 void
 _giza_init_window (void)
 {
   if(!_giza_check_device_ready("_giza_init_window")) return;
 
-   _giza_set_trans (GIZA_TRANS_NORM);
-  giza_set_window(GIZA_DEFAULT_WINDOW_X1,GIZA_DEFAULT_WINDOW_X2, 
-                  GIZA_DEFAULT_WINDOW_Y1,GIZA_DEFAULT_WINDOW_Y2);
+  Win.xmin = GIZA_DEFAULT_WINDOW_X1;
+  Win.xmax = GIZA_DEFAULT_WINDOW_X2;
+  Win.ymin = GIZA_DEFAULT_WINDOW_Y1;
+  Win.ymax = GIZA_DEFAULT_WINDOW_Y2;
+
 }

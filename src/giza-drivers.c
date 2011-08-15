@@ -175,8 +175,8 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   _giza_init_colour_table ();
   _giza_set_trans (GIZA_TRANS_IDEN);
   _giza_init_norm ();
+  _giza_init_window (); /* call init_window BEFORE set_viewport */
   giza_set_viewport_default ();
-  _giza_init_window ();
   giza_set_line_width (1);
   
   /*printf("debug: init font \n");*/

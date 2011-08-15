@@ -75,6 +75,8 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
   if (clip)
     cairo_clip (context);
 
+  giza_set_window(Win.xmin,Win.xmax,Win.ymin,Win.ymax);
+
 }
 
 /**
