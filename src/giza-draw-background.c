@@ -40,7 +40,16 @@ giza_draw_background (void)
   cairo_save (context);
   cairo_reset_clip (context);
   giza_set_colour_index (0);
-  cairo_paint (context);
+  /*
+   * Only paint the background colour if it is not transparent
+   * This is to avoid bounding box issues
+   * (i.e., eps is tightly cropped)
+   */
+  double r,g,b,a;
+  giza_get_colour_representation_alpha(0,&r,&g,&b,&a);
+  if (a > 0.) {
+     cairo_paint (context);
+  }
   cairo_restore (context);
 
   giza_set_colour_index (oldCi);
