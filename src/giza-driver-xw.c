@@ -69,7 +69,6 @@ struct GIZA_XWindow
 
 static void _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int *y, char *ch);
 static void _giza_expose_xw (XEvent *event);
-static void _giza_change_size_xw (int width, int height);
 static void _giza_flush_xw_event_queue (XEvent *event);
 
 /**
@@ -216,13 +215,6 @@ _giza_flush_device_xw (void)
 void
 _giza_change_page_xw (void)
 {
-  /*if (_giza_get_prompting ())
-    {
-      int x, y;
-      char ch;
-      _giza_xevent_loop (0, 0, 0, 0, &x, &y, &ch);
-    }
-  */
   /* create a new pixmap */
   cairo_destroy(context);
   cairo_surface_destroy (surface);
@@ -231,9 +223,6 @@ _giza_change_page_xw (void)
 
   /* recreate the cairo surface */
   surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
-  /*
-  surface = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
-  */
   context = cairo_create (surface);
 }
 
@@ -288,7 +277,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
     *y = 0;
 
     switch  (event.type) {
-    case ClientMessage:
+    case ClientMessage: /* catch close window event */
       *ch = 'q';
       if (!strcmp( XGetAtomName( XW.display, event.xclient.message_type ), "WM_PROTOCOLS" )) {
          return;
