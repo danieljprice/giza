@@ -25,6 +25,7 @@
 #include "giza-driver-pdf-private.h"
 #include "giza-driver-ps-private.h"
 #include "giza-driver-eps-private.h"
+#include "giza-driver-svg-private.h"
 #include "giza-driver-null-private.h"
 #include "giza-io-private.h"
 #include "giza-viewport-private.h"
@@ -70,12 +71,13 @@ static void _giza_set_prefix (char *prefix);
  * Available devices:
  *  -?    :- User selects device
  *  -/xw  :- X-window
+ *  -/eps :- Encapsulated Postscript
+ *  -/png :- Portable Network Graphics file
+ *  -/svg :- Scalable Vector Graphics file
  *  -/pdf :- Portable Document Format
  *  -/vpdf :- Landscape Portable Document Format
  *  -/ps  :- PostScript
  *  -/vps :- Landscape Postscript
- *  -/png :- Portable Network Graphics file
- *  -/eps :- Encapsulated Postscript
  */
 int
 giza_open_device (char *newDeviceName, char *newPrefix)
@@ -130,6 +132,9 @@ giza_open_device (char *newDeviceName, char *newPrefix)
       break;
     case GIZA_DEVICE_VPS:
       success = _giza_open_device_ps (1);
+      break;
+    case GIZA_DEVICE_SVG:
+      success = _giza_open_device_svg (0);
       break;
     case GIZA_DEVICE_NULL:
       success = _giza_open_device_null ();
@@ -263,6 +268,24 @@ giza_flush_device (void)
 }
 
 /**
+ * Device: giza_resize_device
+ *
+ * Synopsis: Flushes the currently open device.
+ */
+void
+_giza_resize_device (int width, int height)
+{
+  switch (Dev.type)
+    {
+#ifdef _GIZA_HAS_XW
+    case GIZA_DEVICE_XW:
+      _giza_change_size_xw (width + 40, height + 40);
+      break;
+#endif
+    }
+}
+
+/**
  * Device: giza_change_page
  *
  * Synopsis: Advances the currently open device to the next page, and redraws
@@ -273,6 +296,11 @@ void
 giza_change_page (void)
 {
   if (!_giza_has_drawn ()) {
+    /*int width  = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;
+    int height = (int) (Dev.deviceUnitsPermm * 10. * Dev.heightCM) + 1;
+    _giza_resize_device(width, height);
+    _giza_change_page_xw();
+    */
     /* if nothing has changed, safe to redraw/reset the background colour */
     giza_draw_background ();
     return;
@@ -294,6 +322,9 @@ giza_change_page (void)
 #endif
     case GIZA_DEVICE_PNG:
       _giza_change_page_png ();
+      break;
+    case GIZA_DEVICE_SVG:
+      _giza_change_page_svg ();
       break;
     case GIZA_DEVICE_PDF:
     case GIZA_DEVICE_VPDF:
@@ -366,6 +397,9 @@ giza_close_device (void)
 #endif
     case GIZA_DEVICE_PNG:
       _giza_close_device_png ();
+      break;
+    case GIZA_DEVICE_SVG:
+      _giza_close_device_svg ();
       break;
     case GIZA_DEVICE_PDF:
     case GIZA_DEVICE_VPDF:
@@ -488,6 +522,7 @@ _giza_get_key_press (int mode, int moveCurs, double xanch, double yanch, double 
     case GIZA_DEVICE_PDF:
     case GIZA_DEVICE_VPDF:
     case GIZA_DEVICE_PNG:
+    case GIZA_DEVICE_SVG:
     case GIZA_DEVICE_PS:
     case GIZA_DEVICE_VPS:
       _giza_warning ("giza_get_key_press", "Current device does not support a cursor, returning x = 0, y = 0, ch = a");
@@ -566,6 +601,8 @@ _giza_device_to_int (char *newDeviceName)
 #endif
   else if (!strcmp (devName, "/png"))
     newDevice = GIZA_DEVICE_PNG;
+  else if (!strcmp (devName, "/svg"))
+    newDevice = GIZA_DEVICE_SVG;
   else if (!strcmp (devName, "/pdf"))
     newDevice = GIZA_DEVICE_PDF;
   else if (!strcmp (devName, "/ps") 
@@ -610,6 +647,9 @@ _giza_int_to_device (int numDevice, char *DeviceName)
       break;
     case GIZA_DEVICE_PNG:
       strncpy(DeviceName,"/png",sizeof(DeviceName));
+      break;
+    case GIZA_DEVICE_SVG:
+      strncpy(DeviceName,"/svg",sizeof(DeviceName));
       break;
     case GIZA_DEVICE_PS:
       strncpy(DeviceName,"/ps",sizeof(DeviceName));
@@ -658,13 +698,14 @@ _giza_init_device_list (char **deviceList)
 #endif
   strcat (*deviceList, "Non-interactive file formats:\n");
   strcat (*deviceList, "\t/png\t(Portable network graphics file)\n");
+  strcat (*deviceList, "\t/svg\t(Scalable vector graphics file)\n");
+#ifdef _GIZA_HAS_EPS
+  strcat (*deviceList, "\t/eps\t(Encapsulated Postscript, one file per page)\n");
+#endif
   strcat (*deviceList, "\t/pdf\t(Portable document format file)\n");
   strcat (*deviceList, "\t/vpdf\t(Portable document format file portrait)\n");
   strcat (*deviceList, "\t/ps\t(Postscript file, multiple pages per file)\n");
   strcat (*deviceList, "\t/vps\t(Postscript file portrait, multiple pages per file)\n");
-#ifdef _GIZA_HAS_EPS
-  strcat (*deviceList, "\t/eps\t(Encapsulated Postscript, one file per page)\n");
-#endif
   strcat (*deviceList, "\t/null\t(Null device)\n");
 }
 
