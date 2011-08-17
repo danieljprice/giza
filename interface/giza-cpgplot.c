@@ -28,6 +28,7 @@
 #include "giza.h"
 #include "cpgplot.h"
 #include <string.h>
+int pgfont;
 
 /***************************************************************
  * Function to convert PGPLOT units value to giza units value
@@ -547,10 +548,13 @@ void cpgpanl(int nxc, int nyc)
 
 /***************************************************************
  * cpgpap -- change the size of the view surface
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED (NOT WORKING)
  ***************************************************************/
 void cpgpap(float width, float aspect)
 {
+ 
+ float widthCM = width * 2.54;  /* convert to cm */
+ giza_set_paper_size_float(widthCM,aspect);
 
 }
 
@@ -576,102 +580,104 @@ void cpgpnts(int n, const float *x, const float *y, \
 
 /***************************************************************
  * cpgpoly -- draw a polygon, using fill-area attributes
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgpoly(int n, const float *xpts, const float *ypts)
 {
-
+  giza_polygon_float(n, xpts, ypts);
 }
 
 /***************************************************************
  * cpgpt -- draw several graph markers
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgpt(int n, const float *xpts, const float *ypts, int symbol)
 {
-
+  giza_points_float(n, xpts, ypts, symbol);
 }
 
 /***************************************************************
  * cpgpt1 -- draw one graph marker
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgpt1(float xpt, float ypt, int symbol)
 {
-
+  giza_single_point_float(xpt, ypt, symbol);
 }
 
 /***************************************************************
  * cpgptxt -- write text at arbitrary position and angle
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgptxt(float x, float y, float angle, float fjust, \
  const char *text)
 {
-
+  giza_ptext_float(x, y, angle, fjust, text);
 }
 
 /***************************************************************
  * cpgqah -- inquire arrow-head style
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqah(int *fs, float *angle, float *barb)
 {
-
+  giza_get_arrow_style_float(fs, angle, barb);
 }
 
 /***************************************************************
  * cpgqcf -- inquire character font
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqcf(int *font)
 {
-
+  /* pgfont set by call to cpgscf */
+  *font = pgfont;
 }
 
 /***************************************************************
  * cpgqch -- inquire character height
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqch(float *size)
 {
-
+  giza_get_character_height_float(size);
 }
 
 /***************************************************************
  * cpgqci -- inquire color index
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqci(int *ci)
 {
-
+  giza_get_colour_index(ci);
 }
 
 /***************************************************************
  * cpgqcir -- inquire color index range
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqcir(int *icilo, int *icihi)
 {
-
+  giza_get_colour_index_range(icilo, icihi);
 }
 
 /***************************************************************
  * cpgqclp -- inquire clipping Status
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqclp(int *state)
 {
-
+  giza_get_clipping(state);
 }
 
 /***************************************************************
  * cpgqcol -- inquire color capability
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqcol(int *ci1, int *ci2)
 {
-
+  *ci1 = GIZA_COLOUR_INDEX_MIN;
+  *ci2 = GIZA_COLOUR_INDEX_MAX;
 }
 
 /***************************************************************
