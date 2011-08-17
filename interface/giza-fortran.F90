@@ -130,6 +130,7 @@ module giza
 
 #include "../src/giza-shared-cpp.h"
   character(len=1),parameter :: giza_left_click_f = GIZA_LEFT_CLICK
+  character(len=*), parameter, public :: giza_version_string = '0.7.0'
   integer, parameter, public :: giza_units_mm = GIZA_UNITS_MM
   integer, parameter, public :: giza_units_inches = GIZA_UNITS_INCHES
   integer, parameter, public :: giza_units_normalized = GIZA_UNITS_NORMALIZED
@@ -1529,6 +1530,7 @@ contains
     implicit none
     character(len=*),intent(in) :: dev,prefix
     
+    print*,' GIZA VERSION = ',giza_version_string
     giza_intern_open_device = giza_open_device_c(cstring(dev),cstring(prefix))
   end function giza_intern_open_device
 
@@ -1537,6 +1539,7 @@ contains
     character(len=*),intent(in) :: dev,prefix
     real,intent(in)             :: width,height
     
+    print*,' GIZA VERSION = ',giza_version_string
     giza_intern_open_device_size = giza_open_device_size_c(cstring(dev),cstring(prefix),width,height)
   
   end function giza_intern_open_device_size

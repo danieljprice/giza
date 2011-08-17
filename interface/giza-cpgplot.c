@@ -682,20 +682,20 @@ void cpgqcol(int *ci1, int *ci2)
 
 /***************************************************************
  * cpgqcr -- inquire color representation
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqcr(int ci, float *cr, float *cg, float *cb)
 {
-
+  giza_get_colour_representation_float(ci,cr,cg,cb);
 }
 
 /***************************************************************
  * cpgqcs -- inquire character height in a variety of units
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqcs(int units, float *xch, float *ych)
 {
-
+  giza_get_character_size_float(units_giza(units),xch,ych);
 }
 
 /***************************************************************
@@ -710,20 +710,20 @@ void cpgqdt(int n, char *type, int *type_length, char *descr, \
 
 /***************************************************************
  * cpgqfs -- inquire fill-area style
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqfs(int *fs)
 {
-
+  giza_get_fill(fs);
 }
 
 /***************************************************************
  * cpgqhs -- inquire hatching style
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqhs(float *angle, float *sepn, float* phase)
 {
-
+  giza_get_hatching_style_float(angle,sepn,phase);
 }
 
 /***************************************************************
@@ -732,7 +732,7 @@ void cpgqhs(float *angle, float *sepn, float* phase)
  ***************************************************************/
 void cpgqid(int *id)
 {
-
+  *id = 1;
 }
 
 /***************************************************************
@@ -755,20 +755,20 @@ void cpgqitf(int *itf)
 
 /***************************************************************
  * cpgqls -- inquire line style
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqls(int *ls)
 {
-
+  giza_get_line_style(ls);
 }
 
 /***************************************************************
  * cpgqlw -- inquire line width
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqlw(int *lw)
 {
-
+  giza_get_line_width(lw);
 }
 
 /***************************************************************
@@ -782,11 +782,11 @@ void cpgqndt(int *n)
 
 /***************************************************************
  * cpgqpos -- inquire current pen position
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqpos(float *x, float *y)
 {
-
+  giza_get_current_point_float(x, y);
 }
 
 /***************************************************************

@@ -1082,7 +1082,7 @@ end subroutine PGQID
 ! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQINF (ITEM, VALUE, LENGTH)
- use giza, only:giza_query_device
+ use giza, only:giza_query_device,giza_version_string
  implicit none
  character*(*), intent(in) :: ITEM
  character*(*), intent(out) :: VALUE
@@ -1092,7 +1092,7 @@ subroutine PGQINF (ITEM, VALUE, LENGTH)
 
  select case(trim(item))
  case('VERSION','version')
-    value = 'giza-0.1'
+    value = 'giza-'//trim(giza_version_string)
  case('STATE','state')
     print*,' WARNING: query for STATE not yet implemented in giza'
  case('USER','user')
