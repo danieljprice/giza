@@ -1248,7 +1248,7 @@ subroutine PGQVSZ (UNITS, X1, X2, Y1, Y2)
  
  X1 = 0.
  Y1 = 0.
- call giza_get_paper_size(units_giza(UNITS),X2,X2)
+ call giza_get_paper_size(units_giza(UNITS),X2,Y2)
  
 end subroutine PGQVSZ
 
