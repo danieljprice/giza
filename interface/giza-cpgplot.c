@@ -26,6 +26,7 @@
  */
 
 #include "giza.h"
+#include "giza-private.h"
 #include "cpgplot.h"
 #include <string.h>
 int pgfont;
@@ -763,12 +764,14 @@ void cpgqls(int *ls)
 }
 
 /***************************************************************
- * cpgqlw -- inquire line width
+ * cpgqlw -- inquire line width (as integer)
  * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqlw(int *lw)
 {
-  giza_get_line_width(lw);
+  double width;
+  giza_get_line_width(&width);
+  *lw = _giza_nint(width - 0.5);
 }
 
 /***************************************************************
@@ -791,156 +794,181 @@ void cpgqpos(float *x, float *y)
 
 /***************************************************************
  * cpgqtbg -- inquire text background color index
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqtbg(int *tbci)
 {
-
+  giza_get_text_background(tbci);
 }
 
 /***************************************************************
  * cpgqtxt -- find bounding box of text string
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqtxt(float x, float y, float angle, float fjust, \
  const char *text, float *xbox, float *ybox)
 {
-
+  giza_qtext_float(x, y, angle, fjust, text, xbox, ybox);
 }
 
 /***************************************************************
  * cpgqvp -- inquire viewport size and position
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqvp(int units, float *x1, float *x2, float *y1, float *y2)
 {
-
+  giza_get_viewport_float(units_giza(units), x1, x2, y1, y2);
 }
 
 /***************************************************************
  * cpgqvsz -- inquire size of view surface
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqvsz(int units, float *x1, float *x2, float *y1, float *y2)
 {
-
+ *x1 = 0.;
+ *y1 = 0.;
+ giza_get_paper_size_float(units_giza(units),x2,y2);
 }
 
 /***************************************************************
  * cpgqwin -- inquire window boundary coordinates
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqwin(float *x1, float *x2, float *y1, float *y2)
 {
-
+  giza_get_window_float(x1,x2,y1,y2);
 }
 
 /***************************************************************
  * cpgrect -- draw a rectangle, using fill-area attributes
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgrect(float x1, float x2, float y1, float y2)
 {
-
+  giza_rectangle(x1,x2,y1,y2);
 }
 
 /***************************************************************
  * cpgrnd -- find the smallest `round' number greater than x
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 float cpgrnd(float x, int *nsub)
 {
-
+  return giza_round_float(x, nsub);
 }
 
 /***************************************************************
  * cpgrnge -- choose axis limits
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgrnge(float x1, float x2, float *xlo, float *xhi)
 {
-
+  float dx = x2 - x1;
+  *xlo = x1 - 0.1*dx;
+  *xhi = x2 + 0.1*dx;
+  if (*xlo < 0. && x1 >= 0.) *xlo = 0.;
+  if (*xhi > 0. && x2 <= 0.) *xhi = 0.;
 }
 
 /***************************************************************
  * cpgsah -- set arrow-head style
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsah(int fs, float angle, float barb)
 {
-
+  giza_set_arrow_style_float(fs,angle,barb);
 }
 
 /***************************************************************
  * cpgsave -- save pgplot attributes
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsave(void)
 {
-
+  giza_save();
 }
 
 /***************************************************************
  * cpgunsa -- restore pgplot attributes
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgunsa(void)
 {
-
+  giza_restore();
 }
 
 /***************************************************************
  * cpgscf -- set character font
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgscf(int font)
 {
-
+  switch(font)
+  {
+  case 4:
+     giza_set_font("cursive");
+     break;
+  case 3:
+     giza_set_font_italic("times");
+     break;
+  case 2:
+     giza_set_font("times");
+     break;
+  default:
+     giza_set_font("arial");
+     break;
+  }
+  /*
+   * set pgfont so that query calls to PGQCF are successful
+   */
+  pgfont = font;
+  
 }
 
 /***************************************************************
  * cpgsch -- set character height
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsch(float size)
 {
-
+  giza_set_character_height_float(size);
 }
 
 /***************************************************************
  * cpgsci -- set color index
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsci(int ci)
 {
-
+  giza_set_colour_index(ci);
 }
 
 /***************************************************************
  * cpgscir -- set color index range
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgscir(int icilo, int icihi)
 {
-
+  giza_set_colour_index_range(icilo, icihi);
 }
 
 /***************************************************************
  * cpgsclp -- enable or disable clipping at edge of viewport
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsclp(int state)
 {
-
+  giza_set_clipping(state);
 }
 
 /***************************************************************
  * cpgscr -- set color representation
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgscr(int ci, float cr, float cg, float cb)
 {
-
+  giza_set_colour_representation_float(ci, cr, cg, cb);
 }
 
 /***************************************************************
@@ -963,29 +991,29 @@ void cpgscrn(int ci, const char *name, int *ier)
 
 /***************************************************************
  * cpgsfs -- set fill-area style
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsfs(int fs)
 {
-
+  giza_set_fill(fs);
 }
 
 /***************************************************************
  * cpgshls -- set color representation using hls system
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgshls(int ci, float ch, float cl, float cs)
 {
-
+  giza_set_colour_representation_hls_float(ci, ch, cl, cs);
 }
 
 /***************************************************************
  * cpgshs -- set hatching style
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgshs(float angle, float sepn, float phase)
 {
-
+  giza_set_hatching_style_float(angle, sepn, phase);
 }
 
 /***************************************************************
@@ -1008,29 +1036,29 @@ void cpgslct(int id)
 
 /***************************************************************
  * cpgsls -- set line style
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsls(int ls)
 {
-
+  giza_set_line_style(ls);
 }
 
 /***************************************************************
  * cpgslw -- set line width
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgslw(int lw)
 {
-
+  giza_set_line_width(lw);
 }
 
 /***************************************************************
  * cpgstbg -- set text background color index
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgstbg(int tbci)
 {
-
+  giza_set_text_background(tbci);
 }
 
 /***************************************************************
@@ -1044,20 +1072,20 @@ void cpgsubp(int nxsub, int nysub)
 
 /***************************************************************
  * cpgsvp -- set viewport (normalized device coordinates)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsvp(float xleft, float xright, float ybot, float ytop)
 {
-
+  giza_set_viewport_float(xleft,xright,ybot,ytop);
 }
 
 /***************************************************************
  * cpgswin -- set window
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgswin(float x1, float x2, float y1, float y2)
 {
-
+  giza_set_window_float(x2, x2, y1, y2);
 }
 
 /***************************************************************
@@ -1072,11 +1100,11 @@ void cpgtbox(const char *xopt, float xtick, int nxsub, \
 
 /***************************************************************
  * cpgtext -- write text (horizontal, left-justified)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgtext(float x, float y, const char *text)
 {
-
+  giza_text_float(x, y, text);
 }
 
 /***************************************************************
@@ -1091,11 +1119,11 @@ void cpgtick(float x1, float y1, float x2, float y2, float v, \
 
 /***************************************************************
  * cpgupdt -- update display
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgupdt(void)
 {
-
+  giza_flush_buffer();
 }
 
 /***************************************************************
@@ -1111,20 +1139,20 @@ void cpgvect(const float *a, const float *b, int idim, int jdim, \
 
 /***************************************************************
  * cpgvsiz -- set viewport (inches)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgvsiz(float xleft, float xright, float ybot, float ytop)
 {
-
+  giza_set_viewport_inches_float(xleft, xright, ybot, ytop);
 }
 
 /***************************************************************
  * cpgvstd -- set standard (default) viewport
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgvstd(void)
 {
-
+  giza_set_viewport_default();
 }
 
 /***************************************************************
@@ -1139,9 +1167,9 @@ void cpgwedg(const char *side, float disp, float width, \
 
 /***************************************************************
  * cpgwnad -- set window and adjust viewport to same aspect ratio
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgwnad(float x1, float x2, float y1, float y2)
 {
-
+  giza_set_window_equal_scale_float(x1, x2, y1, y2);
 }
