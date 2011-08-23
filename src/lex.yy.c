@@ -348,8 +348,8 @@ static void yy_fatal_error (yyconst char msg[] ,yyscan_t yyscanner );
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 65
-#define YY_END_OF_BUFFER 66
+#define YY_NUM_RULES 66
+#define YY_END_OF_BUFFER 67
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -359,21 +359,21 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[235] =
     {   0,
-        0,    0,   66,    7,    7,    7,    1,    2,    5,    6,
-       65,   65,   65,   65,    0,    0,    0,    0,    0,    0,
+        0,    0,   67,    7,    7,    7,    1,    2,    5,    6,
+       66,   66,   66,   66,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    4,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,   16,    0,    0,    0,    0,    0,
         0,    3,   12,    0,    7,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,   51,   52,
-        0,    0,   55,    0,    0,    0,    0,    0,    0,    0,
-       53,    0,    0,    0,    0,    0,    0,    0,    0,   10,
-        8,    9,   11,   40,   41,   43,   44,   60,   42,   47,
+        0,    0,    0,    0,    0,    0,    0,    0,   52,   53,
+        0,    0,   56,    0,    0,    0,    0,    0,    0,    0,
+       54,    0,    0,    0,    0,    0,    0,    0,    0,   10,
+        8,    9,   11,   41,   42,   44,   45,   61,   43,   48,
 
-       48,   49,   50,   54,   62,   56,   57,   58,   59,   63,
-       61,   46,   45,   16,   17,   29,   19,   20,   36,   18,
-       23,   24,   25,   26,   27,   28,   30,   31,   38,   32,
-       33,   34,   35,   39,   37,   22,   21,    0,    0,    0,
+       49,   50,   51,   55,   63,   57,   58,   59,   60,   64,
+       62,   47,   46,   17,   18,   30,   20,   21,   37,   19,
+       24,   25,   26,   27,   28,   29,   31,   32,   39,   33,
+       34,   35,   36,   40,   38,   23,   22,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,   15,    0,    0,    0,    0,
@@ -383,7 +383,7 @@ static yyconst flex_int16_t yy_accept[235] =
 
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-       16,    0,    0,   14,    0,   12,    0,    0,    0,    0,
+       17,    0,    0,   14,    0,   12,    0,    0,    0,    0,
         0,    0,    0,    0
     } ;
 
@@ -700,6 +700,7 @@ static yyconst flex_int16_t yy_chk[422] =
 #define GIZA_TOKEN_BIGOMEGA   68
 
 #define GIZA_TOKEN_ODOT 69
+#define GIZA_TOKEN_MARKER 70
 
 #define GIZA_SCALE_SUPERS 0.65
 #define GIZA_RAISE_SUPERS 0.4
@@ -709,7 +710,7 @@ static yyconst flex_int16_t yy_chk[422] =
 void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
 int _giza_get_chunk (char *text);
 
-#line 713 "lex.yy.c"
+#line 714 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -930,10 +931,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 186 "giza-scanner.l"
+#line 188 "giza-scanner.l"
 
 
-#line 937 "lex.yy.c"
+#line 938 "lex.yy.c"
 
 	if ( !yyg->yy_init )
 		{
@@ -1018,336 +1019,341 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 188 "giza-scanner.l"
+#line 190 "giza-scanner.l"
 { return GIZA_TOKEN_SUPER; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 190 "giza-scanner.l"
+#line 192 "giza-scanner.l"
 { return GIZA_TOKEN_SUB; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 192 "giza-scanner.l"
+#line 194 "giza-scanner.l"
 { return GIZA_TOKEN_RAISE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 194 "giza-scanner.l"
+#line 196 "giza-scanner.l"
 { return GIZA_TOKEN_LOWER; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 196 "giza-scanner.l"
+#line 198 "giza-scanner.l"
 { return GIZA_TOKEN_OB; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 198 "giza-scanner.l"
+#line 200 "giza-scanner.l"
 { return GIZA_TOKEN_CB; }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 200 "giza-scanner.l"
+#line 202 "giza-scanner.l"
 { return GIZA_TOKEN_OTHER; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 202 "giza-scanner.l"
+#line 204 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_NORMAL; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 203 "giza-scanner.l"
+#line 205 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_ROMAN; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 204 "giza-scanner.l"
+#line 206 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_ITALIC; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 205 "giza-scanner.l"
+#line 207 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_SCRIPT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 207 "giza-scanner.l"
+#line 209 "giza-scanner.l"
 { return GIZA_TOKEN_TIMES; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 208 "giza-scanner.l"
+#line 210 "giza-scanner.l"
 { return GIZA_TOKEN_INTEGRAL; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 209 "giza-scanner.l"
+#line 211 "giza-scanner.l"
 { return GIZA_TOKEN_NABLA; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 210 "giza-scanner.l"
+#line 212 "giza-scanner.l"
 { return GIZA_TOKEN_ODOT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 212 "giza-scanner.l"
-{ return GIZA_TOKEN_ALPHA; }
+#line 213 "giza-scanner.l"
+{ return GIZA_TOKEN_MARKER; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 213 "giza-scanner.l"
-{ return GIZA_TOKEN_BETA; }
+#line 215 "giza-scanner.l"
+{ return GIZA_TOKEN_ALPHA; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 214 "giza-scanner.l"
-{ return GIZA_TOKEN_GAMMA; }
+#line 216 "giza-scanner.l"
+{ return GIZA_TOKEN_BETA; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 215 "giza-scanner.l"
-{ return GIZA_TOKEN_DELTA; }
+#line 217 "giza-scanner.l"
+{ return GIZA_TOKEN_GAMMA; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 216 "giza-scanner.l"
-{ return GIZA_TOKEN_EPSILON; }
+#line 218 "giza-scanner.l"
+{ return GIZA_TOKEN_DELTA; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 217 "giza-scanner.l"
-{ return GIZA_TOKEN_ZETA; }
+#line 219 "giza-scanner.l"
+{ return GIZA_TOKEN_EPSILON; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 218 "giza-scanner.l"
-{ return GIZA_TOKEN_ETA; }
+#line 220 "giza-scanner.l"
+{ return GIZA_TOKEN_ZETA; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 219 "giza-scanner.l"
-{ return GIZA_TOKEN_THETA; }
+#line 221 "giza-scanner.l"
+{ return GIZA_TOKEN_ETA; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 220 "giza-scanner.l"
-{ return GIZA_TOKEN_IOTA; }
+#line 222 "giza-scanner.l"
+{ return GIZA_TOKEN_THETA; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 221 "giza-scanner.l"
-{ return GIZA_TOKEN_KAPPA; }
+#line 223 "giza-scanner.l"
+{ return GIZA_TOKEN_IOTA; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 222 "giza-scanner.l"
-{ return GIZA_TOKEN_LAMBDA; }
+#line 224 "giza-scanner.l"
+{ return GIZA_TOKEN_KAPPA; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 223 "giza-scanner.l"
-{ return GIZA_TOKEN_MU; }
+#line 225 "giza-scanner.l"
+{ return GIZA_TOKEN_LAMBDA; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 224 "giza-scanner.l"
-{ return GIZA_TOKEN_NU; }
+#line 226 "giza-scanner.l"
+{ return GIZA_TOKEN_MU; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 225 "giza-scanner.l"
-{ return GIZA_TOKEN_XI; }
+#line 227 "giza-scanner.l"
+{ return GIZA_TOKEN_NU; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 226 "giza-scanner.l"
-{ return GIZA_TOKEN_OMICRON; }
+#line 228 "giza-scanner.l"
+{ return GIZA_TOKEN_XI; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 227 "giza-scanner.l"
-{ return GIZA_TOKEN_PI; }
+#line 229 "giza-scanner.l"
+{ return GIZA_TOKEN_OMICRON; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 228 "giza-scanner.l"
-{ return GIZA_TOKEN_RHO; }
+#line 230 "giza-scanner.l"
+{ return GIZA_TOKEN_PI; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 229 "giza-scanner.l"
-{ return GIZA_TOKEN_SIGMA; }
+#line 231 "giza-scanner.l"
+{ return GIZA_TOKEN_RHO; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 230 "giza-scanner.l"
-{ return GIZA_TOKEN_TAU; }
+#line 232 "giza-scanner.l"
+{ return GIZA_TOKEN_SIGMA; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 231 "giza-scanner.l"
-{ return GIZA_TOKEN_UPSILON; }
+#line 233 "giza-scanner.l"
+{ return GIZA_TOKEN_TAU; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 232 "giza-scanner.l"
-{ return GIZA_TOKEN_PHI; }
+#line 234 "giza-scanner.l"
+{ return GIZA_TOKEN_UPSILON; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 233 "giza-scanner.l"
-{ return GIZA_TOKEN_CHI; }
+#line 235 "giza-scanner.l"
+{ return GIZA_TOKEN_PHI; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 234 "giza-scanner.l"
-{ return GIZA_TOKEN_PSI; }
+#line 236 "giza-scanner.l"
+{ return GIZA_TOKEN_CHI; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 235 "giza-scanner.l"
-{ return GIZA_TOKEN_OMEGA; }
+#line 237 "giza-scanner.l"
+{ return GIZA_TOKEN_PSI; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 237 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGALPHA; }
+#line 238 "giza-scanner.l"
+{ return GIZA_TOKEN_OMEGA; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 238 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGBETA; }
+#line 240 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGALPHA; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 239 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGGAMMA; }
+#line 241 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGBETA; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 240 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGDELTA; }
+#line 242 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGGAMMA; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 241 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGEPSILON; }
+#line 243 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGDELTA; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 242 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGZETA; }
+#line 244 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGEPSILON; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 243 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGETA; }
+#line 245 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGZETA; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 244 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGTHETA; }
+#line 246 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGETA; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 245 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGIOTA; }
+#line 247 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGTHETA; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 246 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGKAPPA; }
+#line 248 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGIOTA; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 247 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGLAMBDA; }
+#line 249 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGKAPPA; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 248 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGMU; }
+#line 250 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGLAMBDA; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 249 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGNU; }
+#line 251 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGMU; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 250 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGXI; }
+#line 252 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGNU; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 251 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGOMICRON; }
+#line 253 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGXI; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 252 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPI; }
+#line 254 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGOMICRON; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 253 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGRHO; }
+#line 255 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPI; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 254 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGSIGMA; }
+#line 256 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGRHO; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 255 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGTAU; }
+#line 257 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGSIGMA; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 256 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGUPSILON; }
+#line 258 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGTAU; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 257 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPHI; }
+#line 259 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGUPSILON; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 258 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGCHI; }
+#line 260 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPHI; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 259 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPSI; }
+#line 261 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGCHI; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 260 "giza-scanner.l"
+#line 262 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPSI; }
+	YY_BREAK
+case 64:
+YY_RULE_SETUP
+#line 263 "giza-scanner.l"
 { return GIZA_TOKEN_BIGOMEGA; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 263 "giza-scanner.l"
+#line 266 "giza-scanner.l"
 { return GIZA_TOKEN_END; }
 	YY_BREAK
-case 64:
-/* rule 64 can match eol */
+case 65:
+/* rule 65 can match eol */
 YY_RULE_SETUP
-#line 265 "giza-scanner.l"
+#line 268 "giza-scanner.l"
 { return GIZA_TOKEN_ERROR; }
 	YY_BREAK
-case 65:
+case 66:
 YY_RULE_SETUP
-#line 267 "giza-scanner.l"
+#line 270 "giza-scanner.l"
 ECHO;
 	YY_BREAK
-#line 1351 "lex.yy.c"
+#line 1357 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2500,7 +2506,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 267 "giza-scanner.l"
+#line 270 "giza-scanner.l"
 
 
 
@@ -2548,6 +2554,7 @@ _giza_get_chunk (char *text)
    yylex_destroy (scanner);
    return length; /* DJP: assumes whole string if unclosed open bracket */
 }
+
 
 /**
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
@@ -2711,6 +2718,55 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
               break;
             }
           _giza_parse_string (processed, width, height, action);
+
+          /* restart the scanner at the new position! */
+          yylex_destroy (scanner);
+          yylex_init (&scanner);
+          yy_scan_string (text + posInText + chunkLength, scanner);
+
+          posInText += chunkLength;
+
+          processed[0] = '\0';
+          break;
+        case GIZA_TOKEN_MARKER:
+          /* Perform action on the text so far parsed */
+          action (processed, width, height);
+
+          /* if end of string, do nothing */
+          if (posInText >= lenstr)
+            { 
+              stop = 1;
+              break;
+            }
+
+          /* get current marker height */
+          double markerHeight;
+          _giza_get_markerheight(&markerHeight);
+
+          /* extract the symbol number from in front of the \m */
+          int number;
+          sscanf(text+posInText,"%i",&number);
+          
+          /* 
+           * get the length of the string containing the number 
+           * so we know how many characters we have processed
+           */
+          char temp[4];
+          sprintf(temp,"%i",number);
+          chunkLength = strlen(temp);
+          
+          /* either draw the symbol or increment the width */
+          if (*width < 0.) {
+             double xp, yp;
+             cairo_get_current_point(context, &xp, &yp); /* current pen position */
+             _giza_draw_symbol_device(xp + 0.75*markerHeight, yp - 0.5*markerHeight, number);
+             cairo_move_to(context, xp + 1.25*markerHeight, yp); /* restore pen position */
+
+          } else {
+             /* return width if action is _giza_action_get_size */
+             *width = *width + 1.25*markerHeight;
+          }
+          
 
           /* restart the scanner at the new position! */
           yylex_destroy (scanner);

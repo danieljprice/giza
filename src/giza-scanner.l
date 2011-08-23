@@ -102,6 +102,7 @@
 #define GIZA_TOKEN_BIGOMEGA   68
 
 #define GIZA_TOKEN_ODOT 69
+#define GIZA_TOKEN_MARKER 70
 
 #define GIZA_SCALE_SUPERS 0.65
 #define GIZA_RAISE_SUPERS 0.4
@@ -122,6 +123,7 @@ CB       \175
 TIMES    "\\times"|"\\x"
 INTEGRAL "\\int"|"\\(2268)"
 NABLA    "\\nabla"|"\\(2266)"
+MARKER   "\\m"
 
 FONT_NORMAL "\\fn"
 FONT_ROMAN "\\fr"|"\\rm"
@@ -208,6 +210,7 @@ ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\
 {INTEGRAL} { return GIZA_TOKEN_INTEGRAL; }
 {NABLA} { return GIZA_TOKEN_NABLA; }
 {ODOT} { return GIZA_TOKEN_ODOT; }
+{MARKER} { return GIZA_TOKEN_MARKER; }
 
 {ALPHA}     { return GIZA_TOKEN_ALPHA; }
 {BETA}      { return GIZA_TOKEN_BETA; }
@@ -310,6 +313,7 @@ _giza_get_chunk (char *text)
    yylex_destroy (scanner);
    return length; /* DJP: assumes whole string if unclosed open bracket */
 }
+
 
 /**
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
@@ -473,6 +477,55 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
               break;
             }
           _giza_parse_string (processed, width, height, action);
+
+          /* restart the scanner at the new position! */
+          yylex_destroy (scanner);
+          yylex_init (&scanner);
+          yy_scan_string (text + posInText + chunkLength, scanner);
+
+          posInText += chunkLength;
+
+          processed[0] = '\0';
+          break;
+        case GIZA_TOKEN_MARKER:
+          /* Perform action on the text so far parsed */
+          action (processed, width, height);
+
+          /* if end of string, do nothing */
+          if (posInText >= lenstr)
+            { 
+              stop = 1;
+              break;
+            }
+
+          /* get current marker height */
+          double markerHeight;
+          _giza_get_markerheight(&markerHeight);
+
+          /* extract the symbol number from in front of the \m */
+          int number;
+          sscanf(text+posInText,"%i",&number);
+          
+          /* 
+           * get the length of the string containing the number 
+           * so we know how many characters we have processed
+           */
+          char temp[4];
+          sprintf(temp,"%i",number);
+          chunkLength = strlen(temp);
+          
+          /* either draw the symbol or increment the width */
+          if (*width < 0.) {
+             double xp, yp;
+             cairo_get_current_point(context, &xp, &yp); /* current pen position */
+             _giza_draw_symbol_device(xp + 0.75*markerHeight, yp - 0.5*markerHeight, number);
+             cairo_move_to(context, xp + 1.25*markerHeight, yp); /* restore pen position */
+
+          } else {
+             /* return width if action is _giza_action_get_size */
+             *width = *width + 1.25*markerHeight;
+          }
+          
 
           /* restart the scanner at the new position! */
           yylex_destroy (scanner);

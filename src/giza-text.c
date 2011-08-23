@@ -45,6 +45,8 @@ void _giza_action_print (const char *text, double *width, double *height)
   if (strlen(text) > 0) {
      cairo_show_text (context, text);
   }
+  *width = -1.;
+  *height = -1.;
 }
 
 /**

@@ -206,6 +206,33 @@ giza_single_point_float (float x, float y, int symbol)
 }
 
 /**
+ * DJP: Internal routine to draw symbol at a given position
+ *      in device coordinates
+ */
+void
+_giza_draw_symbol_device (double xd, double yd, int symbol)
+{
+  int oldTrans,oldLineStyle,oldLineCap;
+  double oldLineWidth,oldCh;
+
+  /* initialise symbol drawing */
+  _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldLineWidth,&oldCh);
+
+  /* for each point find where to put each marker */
+  _giza_draw_symbol(xd, yd, symbol);
+
+  _giza_stroke ();
+  if (!Sets.buf)
+    {
+      giza_flush_device ();
+    }
+
+  /* restore old setting */
+  _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
+}
+
+
+/**
  * DJP: Internal routine to initialise drawing of symbols
  *      (mainly to avoid repeated code in float/double versions)
  */
@@ -221,7 +248,7 @@ _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
   giza_get_character_height (oldCh);
 
   /* Set the height for manually drawn markers */
-  markerHeight = Sets.fontExtents.max_x_advance * 0.2;
+  _giza_get_markerheight(&markerHeight);
 
   /* Set the line width for manually drawn markers */
   /*_giza_set_trans (GIZA_TRANS_IDEN); */
@@ -418,6 +445,7 @@ _giza_plus (double x, double y)
 static void
 _giza_circle (double x, double y)
 {
+  cairo_move_to(context, x + markerHeight*0.5, y);
   cairo_arc (context, x, y, markerHeight * 0.5, 0., 2. * M_PI);
   _giza_stroke ();
 }
@@ -428,6 +456,7 @@ _giza_circle (double x, double y)
 static void
 _giza_circle_size (double x, double y, double size, int fill)
 {
+  cairo_move_to(context, x + size*markerHeight*0.5, y);
   cairo_arc (context, x, y, size * markerHeight * 0.5, 0., 2. * M_PI);
   if (fill) { cairo_fill(context); }
   _giza_stroke ();
@@ -507,13 +536,13 @@ _giza_polygon (double x, double y, int nsides, int fill)
  double r = 0.5 * markerHeight;
 
  /* Set first vertex so that shape appears flat-bottomed */
- double alpha = (0.5 + 1./nsides)* M_PI;
+ double alpha = (0.5 + 1./((double) nsides))* M_PI;
  double cosalpha = cos(alpha);
  double sinalpha = sin(alpha);
  cairo_move_to (context, x + r * cosalpha, y + r * sinalpha);
 
  /* Define other vertexes */
- double alpha_step = 2 * M_PI / nsides;
+ double alpha_step = 2. * M_PI / ((double) nsides);
  int i;
  for (i = 1; i < nsides; i++)
  {
@@ -597,4 +626,11 @@ _giza_drawchar (const char *str, double x, double y)
   cairo_move_to (context, x - 0.5*extents.width  - extents.x_bearing,
                           y - 0.5*extents.height - extents.y_bearing);
   cairo_show_text (context, str);
+}
+
+void
+_giza_get_markerheight (double *mheight)
+{
+  *mheight = Sets.fontExtents.max_x_advance * 0.2;
+  return;
 }
