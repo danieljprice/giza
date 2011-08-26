@@ -1530,7 +1530,6 @@ contains
     implicit none
     character(len=*),intent(in) :: dev,prefix
     
-    print*,' GIZA VERSION = ',giza_version_string
     giza_intern_open_device = giza_open_device_c(cstring(dev),cstring(prefix))
   end function giza_intern_open_device
 
@@ -1539,7 +1538,6 @@ contains
     character(len=*),intent(in) :: dev,prefix
     real,intent(in)             :: width,height
     
-    print*,' GIZA VERSION = ',giza_version_string
     giza_intern_open_device_size = giza_open_device_size_c(cstring(dev),cstring(prefix),width,height)
   
   end function giza_intern_open_device_size
