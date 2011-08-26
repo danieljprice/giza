@@ -43,8 +43,12 @@ SHELL=/bin/bash
 #
 # Some basic defaults
 #
-CC=
-CFLAGS=
+ifndef CC
+CC= gcc
+endif
+ifndef CFLAGS
+CFLAGS= -fPIC -Wall -Wextra -O3
+endif
 
 #
 # Change the following lines if giza can't find x11 or giza
@@ -214,12 +218,7 @@ install: checksystem giza
 	cp -r $(LIBDIR) $(PREFIX)/
 	cp -r $(INCDIR) $(PREFIX)/
 
-clean:
-	rm -f $(LIBDIR)/* *.o $(INCDIR)/* ../*.tar.gz
-	rm -fr ../$(DISTDIR)
-	rm -f ../$(DISTDIR).tar.gz
-
-dist: clean
+dist: distclean
 	mkdir ../$(DISTDIR)
 	cp -r ../build ../$(DISTDIR)
 	cp -r ../docs ../$(DISTDIR)
@@ -232,6 +231,14 @@ dist: clean
 	cp ../INSTALL ../$(DISTDIR)
 	tar czvf ../$(DISTDIR).tar.gz ../$(DISTDIR)
 	rm -rf ../$(DISTDIR)
+
+clean:
+	rm -f $(LIBDIR)/* *.o $(INCDIR)/* ../*.tar.gz
+
+distclean: clean
+	rm -fr ../$(DISTDIR)
+	rm -f ../$(DISTDIR).tar.gz
+
 
 checksystem:
     ifeq ($(KNOWN_SYSTEM), yes)
