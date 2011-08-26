@@ -128,9 +128,9 @@ module giza
       giza_format_number, &
       giza_query_device
 
-#include "../src/giza-shared-cpp.h"
+#include "giza-shared.h"
   character(len=1),parameter :: giza_left_click_f = GIZA_LEFT_CLICK
-  character(len=*), parameter, public :: giza_version_string = '0.7.0'
+  character(len=*), parameter, public :: giza_version_string = GIZA_VERSION_STRING
   integer, parameter, public :: giza_units_mm = GIZA_UNITS_MM
   integer, parameter, public :: giza_units_inches = GIZA_UNITS_INCHES
   integer, parameter, public :: giza_units_normalized = GIZA_UNITS_NORMALIZED
