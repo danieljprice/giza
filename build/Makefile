@@ -72,7 +72,7 @@ KNOWN_SYSTEM=no
 #ifeq ($(SYSTEM),linux)
   # using gcc
   CC= gcc
-  CFLAGS += -fPIC -Wall -Wextra
+  CFLAGS += -fPIC -Wall -Wextra -O3
   SHAREDLIBFLAGS= -shared
   SHAREDEXT=.so
   DEBUGFLAG= -Wall -Wextra -g -O0
@@ -153,8 +153,8 @@ OBJECTS= $(SOURCE:.c=.o)
 all: giza pgplot
 
 giza: $(GIZALIB) $(SHARED_LIB_GIZA)
-	cp $(SRCDIR)/giza.h $(INCDIR)
-	cp $(SRCDIR)/giza-shared.h $(INCDIR)
+	cp $(SRCDIR)/giza.h $(INCDIR)/
+	cp $(SRCDIR)/giza-shared.h $(INCDIR)/
 	@echo ""
 	@echo "Finished building giza"
 	@echo ""
@@ -165,7 +165,7 @@ pgplot: $(PGPLOTLIB) $(SHARED_LIB_PGPLOT)
 	@echo ""
 
 cpgplot: $(CPGPLOTLIB) $(SHARED_LIB_CPGPLOT)
-	cp $(SRCDIR)/cpgplot.h $(INCDIR)
+	cp $(SRCDIR)/cpgplot.h $(INCDIR)/
 	@echo ""
 	@echo "Finished building libcpgplot"
 	@echo ""
@@ -244,6 +244,4 @@ checksystem:
 	  @echo " => set the environment variable SYSTEM to one listed "
 	  @echo "    in build/Makefile and try again"
 	  @echo ""
-	  @${MAKE} compilers
-	  @$(MAKE) err;
     endif
