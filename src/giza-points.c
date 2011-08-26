@@ -547,11 +547,13 @@ _giza_polygon (double x, double y, int nsides, int fill)
  for (i = 1; i < nsides; i++)
  {
   alpha += alpha_step;
+  cosalpha = cos(alpha);
+  sinalpha = sin(alpha);
   cairo_line_to (context, x + r * cosalpha, y + r * sinalpha);
  }
  cairo_close_path(context);
  if (fill) { cairo_fill(context); }
-  _giza_stroke ();
+ _giza_stroke ();
 
 }
 
@@ -577,11 +579,17 @@ _giza_star (double x, double y, int npoints, double ratio, int fill)
  for (i = 1; i < npoints; i++)
  {
   alpha += 0.5*alpha_step;
+  cosalpha = cos(alpha);
+  sinalpha = sin(alpha);
   cairo_line_to (context, x + ri * cosalpha, y + ri * sinalpha);
   alpha += 0.5*alpha_step;
+  cosalpha = cos(alpha);
+  sinalpha = sin(alpha);
   cairo_line_to (context, x + r * cosalpha, y + r * sinalpha);
  }
  alpha += 0.5*alpha_step;
+ cosalpha = cos(alpha);
+ sinalpha = sin(alpha);
  cairo_line_to (context, x + ri * cosalpha, y + ri * sinalpha);
  cairo_close_path(context);
  if (fill) { cairo_fill(context); }
