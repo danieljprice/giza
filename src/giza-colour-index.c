@@ -218,7 +218,12 @@ giza_get_colour_representation (int ci, double *red, double *green,
 				double *blue)
 {
   if (!_giza_check_device_ready ("giza_get_colour_representation"))
-    return;
+    {
+      *red = 0.;
+      *green = 0.;
+      *blue = 0.;
+      return;
+    }
 
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
@@ -275,7 +280,13 @@ giza_get_colour_representation_alpha (int ci, double *red, double *green,
 				      double *blue, double *alpha)
 {
   if (!_giza_check_device_ready ("giza_get_colour_representation"))
-    return;
+    {
+      *red = 0.;
+      *green = 0.;
+      *blue = 0.;
+      *alpha = 0.; 
+      return;
+    }
 
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
