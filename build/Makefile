@@ -77,7 +77,7 @@ KNOWN_SYSTEM=no
   SHAREDEXT=.so
   DEBUGFLAG= -Wall -Wextra -g -O0
   RANLIB= ranlib
-  F90C= gfortran
+  FC= gfortran
   KNOWN_SYSTEM=yes
 #endif
 
@@ -85,7 +85,7 @@ KNOWN_SYSTEM=no
 #--libpgplot needs to be linked against the
 #  library from the Fortran compiler used
 #
-FORTRAN_COMPILER_LIBS= -L/usr/local/lib/x86_64/ -lgfortran
+FLIBS= -L/usr/local/lib/x86_64/ -lgfortran
 
 GIZALIB=$(LIBDIR)/libgiza.a
 PGPLOTLIB=$(LIBDIR)/libpgplot.a
@@ -108,9 +108,9 @@ endif
 %.o: %.c
 	$(CC) -c $(CFLAGS) $(INCFLAGS) $< -o $@
 %.o : %.f90
-	$(F90C) $(F90FLAGS) $(INCFLAGS) -c $< -o $@
+	$(FC) $(FFLAGS) $(INCFLAGS) -c $< -o $@
 %.o : %.F90
-	$(F90C) $(F90FLAGS) $(INCFLAGS) -c $< -o $@
+	$(FC) $(FFLAGS) $(INCFLAGS) -c $< -o $@
 
 #
 # The source files
@@ -152,7 +152,9 @@ OBJECTS= $(SOURCE:.c=.o)
 
 all: giza pgplot
 
-giza: $(GIZALIB) $(SHARED_LIB_GIZA)
+giza: libgiza $(SHARED_LIB_GIZA)
+
+libgiza: $(GIZALIB)
 	cp $(SRCDIR)/giza.h $(INCDIR)/
 	cp $(SRCDIR)/giza-shared.h $(INCDIR)/
 	@echo ""
@@ -193,7 +195,7 @@ $(SHARED_LIB_GIZA): $(INCDIR)/giza-version.h $(OBJECTS)
 	ln -sf $(SHARED_LIB_GIZA).$(VERSION) $(SHARED_LIB_GIZA)
 
 $(SHARED_LIB_PGPLOT): $(INCDIR)/giza-version.h $(OBJECTS) giza-fortran.o giza-pgplot.o
-	$(CC) $(SHAREDLIBFLAGS) -o $@ $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS) $(FORTRAN_COMPILER_LIBS)
+	$(CC) $(SHAREDLIBFLAGS) -o $@ $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS) $(FLIBS)
 
 $(SHARED_LIB_CPGPLOT):  $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
 	$(CC) $(SHAREDLIBFLAGS) -o $@ $(OBJECTS) giza-cpgplot.o $(LDFLAGS)
