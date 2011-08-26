@@ -2,3 +2,5 @@
 *.mod
 *.a
 *.dylib
+include/*
+lib/*
