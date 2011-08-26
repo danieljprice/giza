@@ -41,9 +41,6 @@
 void
 giza_set_arrow_style (int fillStyle, double angle, double cutback)
 {
-  if (!_giza_check_device_ready ("giza_set_arrow_style"))
-    return;
-
   if (angle < 0. || angle > 90.)
     {
       _giza_warning ("giza_set_arrow_style", "Invalid angle, angle set to default");
@@ -91,7 +88,12 @@ void
 giza_get_arrow_style (int *fillStyle, double *angle, double *cutback)
 {
   if (!_giza_check_device_ready ("giza_get_arrow_style"))
-    return;
+    {
+      *fillStyle = GIZA_DEFAULT_FILL;
+      *angle     = GIZA_DEFAULT_ANGLE;
+      *cutback   = GIZA_DEFAULT_CUTBACK;
+      return;
+    }
 
   *fillStyle = Arrow.fs;
   *angle     = Arrow.angle;
