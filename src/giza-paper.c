@@ -70,7 +70,11 @@ void
 giza_get_paper_size (int units, double *width, double *height)
 {
   if (!_giza_check_device_ready ("giza_set_paper_size"))
-    return;
+    {
+      *width = 0.;
+      *height = 0.;
+      return;
+    }
 
   switch(units)
      {
