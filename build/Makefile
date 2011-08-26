@@ -154,6 +154,8 @@ PHEADERS= giza-arrow-style-private.h giza-band-private.h \
 
 OBJECTS= $(SOURCE:.c=.o)
 
+.PHONY: libgiza giza pgplot cpgplot
+
 all: giza pgplot
 
 giza: libgiza $(SHARED_LIB_GIZA)
@@ -195,11 +197,11 @@ $(CPGPLOTLIB): $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
 #--dynamic libraries
 #
 $(SHARED_LIB_GIZA): $(INCDIR)/giza-version.h $(OBJECTS)
-	$(CC) $(SHAREDLIBFLAGS) -o $@.$(VERSION) $(OBJECTS) $(LDFLAGS)
+	$(CC) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_GIZA).$(VERSION) $(OBJECTS) $(LDFLAGS)
 	ln -sf $(SHARED_LIB_GIZA).$(VERSION) $(SHARED_LIB_GIZA)
 
 $(SHARED_LIB_PGPLOT): $(INCDIR)/giza-version.h $(OBJECTS) giza-fortran.o giza-pgplot.o
-	$(CC) $(SHAREDLIBFLAGS) -o $@ $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS) $(FLIBS)
+	$(CC) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_PGPLOT) $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS) $(FLIBS)
 
 $(SHARED_LIB_CPGPLOT):  $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
 	$(CC) $(SHAREDLIBFLAGS) -o $@ $(OBJECTS) giza-cpgplot.o $(LDFLAGS)
