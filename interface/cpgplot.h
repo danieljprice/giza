@@ -1,13 +1,14 @@
 #ifndef cpgplot_h
 #define cpgplot_h
 
-/*
- * this is the giza version of cpgplot.h
- */
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * this is the giza version of cpgplot.h, pulled
+ * from the online pgplot documentation
+ */
 
 typedef int Logical;
 
