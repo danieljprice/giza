@@ -76,7 +76,7 @@ KNOWN_SYSTEM=no
 #ifeq ($(SYSTEM),linux)
   # using gcc
   CC= gcc
-  CFLAGS += -fPIC -Wall -Wextra -O3
+  CFLAGS= -fPIC -Wall -Wextra -O3
   SHAREDLIBFLAGS= -shared
   SHAREDEXT=.so
   DEBUGFLAG= -Wall -Wextra -g -O0
