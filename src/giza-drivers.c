@@ -183,7 +183,13 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   /*  _giza_set_defaults (); */
   _giza_init_arrow_style ();
   _giza_init_line_style ();
-  _giza_init_colour_index ();
+  
+  char *pgmode = getenv("GIZA_PGPLOT_STRICT");
+  if (pgmode) {
+     _giza_init_colour_index_pgplot ();
+  } else {
+     _giza_init_colour_index ();
+  }
   giza_draw_background ();
   _giza_init_colour_table ();
   _giza_set_trans (GIZA_TRANS_IDEN);

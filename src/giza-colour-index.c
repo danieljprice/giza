@@ -396,6 +396,46 @@ _giza_init_colour_index (void)
   giza_set_colour_index (1);
 }
 
+void
+_giza_init_colour_index_pgplot (void)
+{
+  /* Installs the standard PGPLOT colour table */
+  giza_set_colour_representation (0,1.0,1.0,1.0);	/* white */
+  giza_set_colour_representation (1,0.0,0.0,0.0);	/* black */
+  giza_set_colour_representation (2,1.0,0.0,0.0);
+  giza_set_colour_representation (3,0.0,1.0,0.0);
+  giza_set_colour_representation (4,0.0,0.0,1.0);
+  giza_set_colour_representation (5,0.0,1.0,1.0); 
+  giza_set_colour_representation (6,1.0,0.0,1.0);
+  giza_set_colour_representation (7,1.0,1.0,0.0);
+  giza_set_colour_representation (8,1.0,0.5,0.0);
+  giza_set_colour_representation (9,0.5,1.0,0.0);
+  giza_set_colour_representation (10,0.0,1.0,0.5);
+  giza_set_colour_representation (11,0.0,0.5,1.0);
+  giza_set_colour_representation (12,0.5,0.0,1.0); 
+  giza_set_colour_representation (13,1.0,0.0,0.5);
+  giza_set_colour_representation (14,0.333,0.333,0.333);
+  giza_set_colour_representation (15,0.667,0.667,0.667);
+
+  /*
+   * allow the rest of the colour indices to be
+   * set by giza_set_colour_table
+   * (this range can be changed by 
+   *  calling giza_set_colour_index_range)
+   */
+  giza_set_colour_index_range(16,GIZA_COLOUR_INDEX_MAX);
+
+  /* All alpha default to 1 */
+  colourIndex[0][3] = Dev.defaultBackgroundAlpha;
+  int i;
+  for (i = GIZA_COLOUR_INDEX_MIN + 1; i <= GIZA_COLOUR_INDEX_MAX; ++i)
+    {
+      colourIndex[i][3] = 1.;
+    }
+
+  giza_set_colour_index (1);
+}
+
 /**
  * Settings: giza_set_colour_index_range
  *
