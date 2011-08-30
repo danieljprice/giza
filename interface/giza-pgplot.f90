@@ -1162,8 +1162,10 @@ subroutine PGQLW (LW)
  use giza, only:giza_get_line_width
  implicit none
  integer, intent(out) :: LW
+ real :: giza_lw
  
- call giza_get_line_width(LW)
+ call giza_get_line_width(giza_lw)
+ LW = int(2.*giza_lw)
 
 end subroutine PGQLW
 
@@ -1547,7 +1549,7 @@ subroutine PGSLW (LW)
  implicit none
  integer, intent(in) :: LW
  
- call giza_set_line_width(LW)
+ call giza_set_line_width(0.5 + 0.5*LW)
  
 end subroutine PGSLW
 
