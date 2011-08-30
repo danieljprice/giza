@@ -77,10 +77,11 @@ KNOWN_SYSTEM=no
   # using gcc
   CC= gcc
   CFLAGS= -fPIC -Wall -Wextra -O3
-  SHAREDLIBFLAGS= -shared
-  SHAREDEXT=.so
+  SHAREDLIBFLAGS= -dynamic
+  SHAREDEXT=.dylib
   DEBUGFLAG= -Wall -Wextra -g -O0
   RANLIB= ranlib
+  LIBTOOL= libtool
   FC= gfortran
   KNOWN_SYSTEM=yes
 #endif
@@ -197,14 +198,14 @@ $(CPGPLOTLIB): $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
 #--dynamic libraries
 #
 $(SHARED_LIB_GIZA): $(INCDIR)/giza-version.h $(OBJECTS)
-	$(CC) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_GIZA).$(VERSION) $(OBJECTS) $(LDFLAGS)
+	$(LIBTOOL) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_GIZA).$(VERSION) $(OBJECTS) $(LDFLAGS)
 	ln -sf $(SHARED_LIB_GIZA).$(VERSION) $(SHARED_LIB_GIZA)
 
 $(SHARED_LIB_PGPLOT): $(INCDIR)/giza-version.h $(OBJECTS) giza-fortran.o giza-pgplot.o
-	$(CC) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_PGPLOT) $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS) $(FLIBS)
+	$(LIBTOOL) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_PGPLOT) $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS) $(FLIBS)
 
 $(SHARED_LIB_CPGPLOT):  $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
-	$(CC) $(SHAREDLIBFLAGS) -o $@ $(OBJECTS) giza-cpgplot.o $(LDFLAGS)
+	$(LIBTOOL) $(SHAREDLIBFLAGS) -o $@ $(OBJECTS) giza-cpgplot.o $(LDFLAGS)
 
 #
 #--header file specifying current giza version
