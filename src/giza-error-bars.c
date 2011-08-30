@@ -52,11 +52,7 @@ giza_error_bars (int dir, int n, double *xpts, double *ypts, double *error, doub
 {
   if (!_giza_check_device_ready ("giza_error_bars"))
     return;
-  if (n < 1)
-    { 
-      _giza_warning ("giza_error_bars", "less than one point, skipping error bars");
-      return;
-    }
+  if (n < 1) return;
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -122,11 +118,7 @@ giza_error_bars_float (int dir, int n, float *xpts, float *ypts, float *error, f
 {
   if (!_giza_check_device_ready ("giza_error_bars"))
     return;
-  if (n < 1)
-    { 
-      _giza_warning ("giza_error_bars", "less than one point, skipping error bars");
-      return;
-    }
+  if (n < 1) return;
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -200,11 +192,7 @@ giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double 
   if (!_giza_check_device_ready ("giza_error_bars_vert"))
     return;
   
-  if (n < 1)
-    {
-      _giza_warning ("giza_error_bars_vert", "Invalid number of points, not drawing the error bars");
-      return;
-    }
+  if (n < 1) return;
   
   double endWidth, dummy;
   giza_get_character_size (GIZA_UNITS_WORLD, &endWidth, &dummy);
@@ -249,11 +237,7 @@ giza_error_bars_vert_float (int n, float *xpts, float *ypts1, float *ypts2, floa
   if (!_giza_check_device_ready ("giza_error_bars_vert_float"))
     return;
 
-  if (n < 1)
-    {
-      _giza_warning ("giza_error_bars_vert_float", "Invalid number of points, not drawing the error bars");
-      return;
-    }
+  if (n < 1) return;
   
   double endWidth, dummy, currentX, currentY1, currentY2;
   giza_get_character_size (GIZA_UNITS_WORLD, &endWidth, &dummy);
@@ -305,11 +289,7 @@ giza_error_bars_hori (int n, double *xpts1, double *xpts2, double *ypts, double 
   if (!_giza_check_device_ready ("giza_error_bars_hori"))
     return;
   
-  if (n < 1)
-    {
-      _giza_warning ("giza_error_bars_hori", "Invalid number of points, not drawing the error bars");
-      return;
-    }
+  if (n < 1) return;
   
   double endWidth, dummy;
   giza_get_character_size (GIZA_UNITS_WORLD, &dummy, &endWidth);
@@ -352,11 +332,7 @@ giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, float *ypts, floa
   if (!_giza_check_device_ready ("giza_error_bars_hori_float"))
     return;
 
-  if (n < 1)
-    {
-      _giza_warning ("giza_error_bars_hori_float", "Invalid number of points, not drawing the error bars");
-      return;
-    }
+  if (n < 1) return;
   
   double endWidth, dummy, currentX1, currentX2, currentY;
   giza_get_character_size (GIZA_UNITS_WORLD, &dummy, &endWidth);
