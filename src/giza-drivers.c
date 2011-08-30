@@ -844,7 +844,6 @@ void _giza_lowercase(char *string, char *lowerstring)
    while ( string[i] )
    {
       lowerstring[i] = (char) tolower(string[i]);
-      printf("%i char = \"%c\"\n",i,lowerstring[i]);
       i++;
    }
    lowerstring[i] = '\0';
