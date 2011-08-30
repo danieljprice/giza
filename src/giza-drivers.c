@@ -48,6 +48,7 @@
 #define GIZA_DEFAULT_MARGIN 0
 
 static void _giza_set_prefix (char *prefix);
+static int id = 0;
 
 /* 
  * NOTE: Should clean up surfaces etc if device open was not successful.
@@ -82,7 +83,14 @@ static void _giza_set_prefix (char *prefix);
 int
 giza_open_device (char *newDeviceName, char *newPrefix)
 {
-  /* Some general initialisation */
+  
+  if (id != 0) {
+     _giza_warning("giza_open_device", "previous device was not closed");
+     giza_close_device();
+  }
+  id += 1;
+
+  /* Some general initialisation */  
   Dev.pgNum = 0;
   Dev.type = GIZA_DEVICE_IV;
   Dev.defaultBackgroundAlpha = 1.;
@@ -371,7 +379,7 @@ giza_change_page (void)
 /**
  * Device: giza_close_device
  *
- * Synopsis: Closes the currently open device. Should always be called before exiting you program
+ * Synopsis: Closes the currently open device. Should always be called before exiting your program
  * as it frees associated memory.
  */
 void
@@ -836,8 +844,10 @@ void _giza_lowercase(char *string, char *lowerstring)
    while ( string[i] )
    {
       lowerstring[i] = (char) tolower(string[i]);
+      printf("%i char = \"%c\"\n",i,lowerstring[i]);
       i++;
    }
+   lowerstring[i] = '\0';
    return;
 }
 
