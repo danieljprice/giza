@@ -837,6 +837,9 @@ _giza_init_band (int mode)
   return success;
 }
 
+/**
+ * Internal utility to convert a string to lowercase
+ */
 void _giza_lowercase(char *string, char *lowerstring)
 {
    int  i = 0;
@@ -849,6 +852,22 @@ void _giza_lowercase(char *string, char *lowerstring)
    lowerstring[i] = '\0';
    return;
 }
+
+
+/**
+ * Internal utility to trim strings
+ * NB: lots of examples on the web return char*
+ *     but this is pointless as they all modify the
+ *     input string
+ */
+void _giza_trim(char *str) {
+   int len = strlen(str);
+   int i;
+   for (i=0; i<len && isspace(str[i]); i++, str++);
+   for (i=len-1; i>=0 && isspace(str[i]); str[i]=0, i--);
+   return;
+}
+
 
 /**
  * Internal utility to construct device filenames
@@ -864,26 +883,33 @@ void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, cha
   char lextens[strlen(extension)];
   _giza_lowercase(prefix,lprefix);
   _giza_lowercase(extension,lextens);
+  
+  char *prefixtrim = prefix;
+  char *ext = extension;
+  _giza_trim(prefixtrim);
+  _giza_trim(ext);
+  
+  /*printf(" got prefix = \"%s\" extension=\"%s\" \n",prefixtrim,ext);*/
 
   if (!strstr(lprefix,lextens)) {
   /* Add the device extension if prefix string does not already contain it */
      if (pgNum == 0) {
-        sprintf (filename, "%s%s", prefix, extension);
+        sprintf (filename, "%s%s", prefixtrim, ext);
      } else {
-        sprintf (filename, "%s_%04d%s", prefix, pgNum, extension);
+        sprintf (filename, "%s_%04d%s", prefixtrim, pgNum, ext);
      }
   } else {
   /* Do not add the device extension if the prefix already contains it  */
      if (pgNum == 0) {
-        sprintf (filename, "%s", prefix);    
+        sprintf (filename, "%s", prefixtrim);    
      } else {
         /*
          * Here we need a number, but it should come BEFORE the device extension
          * so find the first occurrence of . in the filename, and insert number
          * before this position.
          */
-        char *firstpart = strsep (&prefix,".");
-        sprintf (filename, "%s_%04d%s", firstpart, pgNum, extension);
+        char *firstpart = strsep (&prefixtrim,".");
+        sprintf (filename, "%s_%04d%s", firstpart, pgNum, ext);
      }
   }
 }
