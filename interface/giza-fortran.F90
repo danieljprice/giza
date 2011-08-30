@@ -1713,7 +1713,7 @@ contains
     character(kind=c_char), dimension(len(string)+1) :: array
     integer :: i
 
-    do i=1, len(string)
+    do i=1, len_trim(string) ! pass the trimmed string
       array(i)=string(i:i)
     end do
     array(len(string)+1)=achar(0)
