@@ -325,7 +325,12 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
       }
     case MotionNotify:
       {
+        /* discard all except the last pointer motion event */
+        while(XCheckWindowEvent(XW.display, XW.window,
+                              (long)(PointerMotionMask), &event) == True);
+
         _giza_refresh_band (mode, anchorx, anchory, event.xmotion.x, event.xmotion.y);
+        _giza_flush_xw_event_queue(&event);
       }
     default:
       break;
@@ -346,11 +351,20 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 static void
 _giza_flush_xw_event_queue (XEvent *event)
 {
-  /* Flush all remaining events from the X event queue */
+  /*
+   * Discard un-handled ButtonPress, KeyPress and MotionNotify events
+   * without blocking.
+   */
+  while(XCheckWindowEvent(XW.display, XW.window, 
+       (long) (ButtonPressMask | KeyPressMask | PointerMotionMask), event));
+
+
+  /* Flush all remaining events from the X event queue 
   while (XPending(XW.display)) {
-     /*printf("removing pending XW event \n");*/
+     printf("removing pending XW event \n");
      XNextEvent(XW.display, event);
   }
+  */
 }
 
 /**
