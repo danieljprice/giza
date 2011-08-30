@@ -79,11 +79,7 @@ giza_points (int n, double x[n], double y[n], int symbol)
 {
   if (!_giza_check_device_ready ("giza_points"))
     return;
-  if (n < 1)
-    {
-      _giza_warning ("giza_points", "Invalid number of points.");
-      return;
-    }
+  if (n < 1) return;
 
   int oldTrans,oldLineStyle,oldLineCap;
   double oldLineWidth,oldCh;
@@ -129,10 +125,7 @@ giza_points_float (int n, float x[n], float y[n], int symbol)
 {
   if (!_giza_check_device_ready ("giza_points"))
     return;
-  if (n < 1)
-    {
-      _giza_warning ("giza_points_float", "Invalid number of points.");
-    }
+  if (n < 1) return;
 
   int oldTrans,oldLineStyle,oldLineCap;
   double oldLineWidth,oldCh;

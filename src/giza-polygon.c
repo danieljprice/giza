@@ -44,12 +44,7 @@ giza_polygon (int n, double *xpts, double *ypts)
     return;
 
   /* check the line has at least one segment */
-  if (n < 1)
-    {
-      _giza_warning ("giza_polygon",
-                     "The polygon has less than one segment and will not be plotted.");
-      return;
-    }
+  if (n < 1) return;
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -86,12 +81,7 @@ giza_polygon_float (int n, float *xpts, float *ypts)
     return;
 
   /* check the line has at least one segment */
-  if (n < 1)
-    {
-      _giza_warning ("giza_polygon",
-                     "The polygon has less than one segment and will not be plotted.");
-      return;
-    }
+  if (n < 1) return;
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
