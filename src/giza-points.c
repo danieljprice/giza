@@ -72,7 +72,7 @@ double markerHeight;
  *  -4       :- o
  *  -5       :- x
  *  ->31    :- from the Unicode table
- *  
+ *
  */
 void
 giza_points (int n, double x[n], double y[n], int symbol)
@@ -145,7 +145,7 @@ giza_points_float (int n, float x[n], float y[n], int symbol)
       _giza_set_trans (GIZA_TRANS_WORLD);
       cairo_user_to_device (context, &xd, &yd);
       _giza_set_trans (GIZA_TRANS_IDEN);
-      
+
       /* draw the symbol */
       _giza_draw_symbol(xd, yd, symbol);
     }
@@ -245,7 +245,7 @@ _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
 
   /* Set the line width for manually drawn markers */
   /*_giza_set_trans (GIZA_TRANS_IDEN); */
-  
+
   giza_set_line_width(1.5);
   giza_set_line_style(1);
   giza_set_line_cap(0);
@@ -267,7 +267,7 @@ _giza_end_draw_symbols (int oldTrans, int oldLineStyle, int oldLineCap,
   giza_set_character_height (oldCh);
 }
 /**
- * DJP: Internal routine to draw a single point, 
+ * DJP: Internal routine to draw a single point,
  * assuming initialisation routines have been called
  * (so cannot be called externally)
  *
@@ -620,7 +620,7 @@ _giza_drawchar (const char *str, double x, double y)
 {
   cairo_text_extents_t extents;
   cairo_text_extents (context, str, &extents);
-  /* 
+  /*
    * use information about the glyph to centre
    * the character on the x, y position
    */

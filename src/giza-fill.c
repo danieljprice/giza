@@ -112,7 +112,7 @@ _giza_fill (void)
     case GIZA_FILL_HATCH:
       /* For hatched pattern we must initialise
        * the pattern every time fill is called,
-       * because the hatching needs to be done 
+       * because the hatching needs to be done
        * with the current colour index
        */
       hatch_size = (int) (8.*_giza_hatch_spacing);
@@ -145,7 +145,7 @@ _giza_fill (void)
       xmax = x0 + 0.5*dr;
       ymin = y0 - 0.5*dr;
       ymax = y0 + 0.5*dr;
-     
+
       cairo_identity_matrix(context);
       /* fill with a transparent background */
       giza_get_colour_representation_alpha(GIZA_BACKGROUND_COLOUR,&ri,&gi,&bi,&alphai);
@@ -157,10 +157,10 @@ _giza_fill (void)
       giza_get_colour_representation_alpha(ci,&ri,&gi,&bi,&alphai);
       cairo_set_source_rgba(context, ri, gi, bi, alphai);
       cairo_set_line_width(context, lw);
-      
+
       xoffset = hatch_size*_giza_hatch_phase;
       nlines = (int) (xmax - xmin)/hatch_size + 1;
-      if (_giza_fill_style == GIZA_FILL_CROSSHATCH) 
+      if (_giza_fill_style == GIZA_FILL_CROSSHATCH)
         {
           /* draw vertical or / lines */
          for (i = 0; i <= nlines; i++)
@@ -190,7 +190,7 @@ _giza_fill (void)
           _giza_rotate_pos(&x,&y,angle,x0,y0);
           cairo_line_to(context, x, y);
         }
-      
+
       cairo_stroke(context);
       cairo_restore(context);
       break;

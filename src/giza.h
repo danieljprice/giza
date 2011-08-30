@@ -36,7 +36,7 @@ void giza_annotate_float (char *side, float displacment, float coord,
 
 int giza_band (int mode, int moveCursm, double xanc, double yanc, double *x,
 	       double *y, char *ch);
-int giza_band_float (int mode, int moveCurs, float xanc, float yanc, float *x, 
+int giza_band_float (int mode, int moveCurs, float xanc, float yanc, float *x,
                float *y, char *ch);
 
 void giza_get_band_style (int *ls, double *lw);
@@ -147,7 +147,7 @@ void giza_error_bars_vert_float (int n, float *xpts, float *ypts,
 				 float *ypts2, float term);
 void giza_error_bars_hori (int n, double *xpts1, double *xpts2,
                                   double *ypts, double term);
-void giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, 
+void giza_error_bars_hori_float (int n, float *xpts1, float *xpts2,
                                  float *ypts, float term);
 
 
@@ -203,7 +203,7 @@ void giza_mark_points (int maxpts, int *npts, double xpts[maxpts],
                        double ypts[maxpts], int symbol);
 void giza_mark_points_float (int maxpts, int *npts, float xpts[maxpts],
                              float ypts[maxpts], int symbol);
-void giza_mark_points_ordered (int maxpts, int *npts, double xpts[maxpts], 
+void giza_mark_points_ordered (int maxpts, int *npts, double xpts[maxpts],
                                double ypts[maxpts], int symbol);
 void giza_mark_points_ordered_float (int maxpts, int *npts, float xpts[maxpts],
                                      float ypts[maxpts], int symbol);
@@ -298,7 +298,7 @@ void giza_get_viewport (int units, double *x1, double *x2, double *y1,
 			double *y2);
 void giza_get_viewport_float (int units, float *x1, float *x2, float *y1,
 			      float *y2);
-void giza_set_viewport_inches (double xleftin, double xrightin, 
+void giza_set_viewport_inches (double xleftin, double xrightin,
                                double ybottomin, double ytopin);
 void giza_set_viewport_inches_float (float xleftin, float xrightin,
                                      float ybottomin, float ytopin);

@@ -38,7 +38,7 @@ giza_set_clipping (int clip)
     return;
 
   _giza_clip = clip;
-  if (!clip) 
+  if (!clip)
     {
       cairo_reset_clip(context);
     }

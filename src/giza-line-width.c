@@ -76,7 +76,7 @@ giza_set_line_width_float (float lw)
  * Settings: giza_get_line_width
  *
  * Synopsis: Queries the current line width.
- * 
+ *
  * Input:
  *  -lw :- gets set to the current line width.
  */

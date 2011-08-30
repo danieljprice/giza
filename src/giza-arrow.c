@@ -123,12 +123,12 @@ giza_arrow (double x1, double y1, double x2, double y2)
 	  giza_set_fill (Arrow.fs);
 	  cairo_stroke_preserve (context);
 	  _giza_fill ();
-	  cairo_set_miter_limit (context, oldMiter);  
+	  cairo_set_miter_limit (context, oldMiter);
 
 	  /* draw the tail */
 	  cairo_move_to (context, x1, y1);
 	  cairo_line_to (context, xpts[2], ypts[2]);
-	  
+
 	  _giza_stroke ();
 	}
     }

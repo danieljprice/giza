@@ -140,9 +140,9 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
   colourIndex[ci][3] = alpha;
 
   /* If we are changing the current colour index
-     make the change teke effect immediately 
+     make the change teke effect immediately
    */
-  if (ci == _giza_ci) 
+  if (ci == _giza_ci)
      {
        cairo_set_source_rgba (context, colourIndex[ci][0],
 			 colourIndex[ci][1], colourIndex[ci][2],
@@ -284,7 +284,7 @@ giza_get_colour_representation_alpha (int ci, double *red, double *green,
       *red = 0.;
       *green = 0.;
       *blue = 0.;
-      *alpha = 0.; 
+      *alpha = 0.;
       return;
     }
 
@@ -380,7 +380,7 @@ _giza_init_colour_index (void)
   /*
    * allow the rest of the colour indices to be
    * set by giza_set_colour_table
-   * (this range can be changed by 
+   * (this range can be changed by
    *  calling giza_set_colour_index_range)
    */
   giza_set_colour_index_range(16,GIZA_COLOUR_INDEX_MAX);
@@ -405,14 +405,14 @@ _giza_init_colour_index_pgplot (void)
   giza_set_colour_representation (2,1.0,0.0,0.0);
   giza_set_colour_representation (3,0.0,1.0,0.0);
   giza_set_colour_representation (4,0.0,0.0,1.0);
-  giza_set_colour_representation (5,0.0,1.0,1.0); 
+  giza_set_colour_representation (5,0.0,1.0,1.0);
   giza_set_colour_representation (6,1.0,0.0,1.0);
   giza_set_colour_representation (7,1.0,1.0,0.0);
   giza_set_colour_representation (8,1.0,0.5,0.0);
   giza_set_colour_representation (9,0.5,1.0,0.0);
   giza_set_colour_representation (10,0.0,1.0,0.5);
   giza_set_colour_representation (11,0.0,0.5,1.0);
-  giza_set_colour_representation (12,0.5,0.0,1.0); 
+  giza_set_colour_representation (12,0.5,0.0,1.0);
   giza_set_colour_representation (13,1.0,0.0,0.5);
   giza_set_colour_representation (14,0.333,0.333,0.333);
   giza_set_colour_representation (15,0.667,0.667,0.667);
@@ -420,7 +420,7 @@ _giza_init_colour_index_pgplot (void)
   /*
    * allow the rest of the colour indices to be
    * set by giza_set_colour_table
-   * (this range can be changed by 
+   * (this range can be changed by
    *  calling giza_set_colour_index_range)
    */
   giza_set_colour_index_range(16,GIZA_COLOUR_INDEX_MAX);
@@ -450,26 +450,26 @@ _giza_init_colour_index_pgplot (void)
 void
 giza_set_colour_index_range (int cimin, int cimax)
 {
-  if (cimin < GIZA_COLOUR_INDEX_MIN) 
+  if (cimin < GIZA_COLOUR_INDEX_MIN)
     {
-      _giza_colour_index_min = GIZA_COLOUR_INDEX_MIN;     
+      _giza_colour_index_min = GIZA_COLOUR_INDEX_MIN;
     }
    else if (cimin > GIZA_COLOUR_INDEX_MAX)
     {
-      _giza_colour_index_min = GIZA_COLOUR_INDEX_MAX;    
+      _giza_colour_index_min = GIZA_COLOUR_INDEX_MAX;
     }
    else
     {
       _giza_colour_index_min = cimin;
     }
 
-  if (cimax < GIZA_COLOUR_INDEX_MIN) 
+  if (cimax < GIZA_COLOUR_INDEX_MIN)
     {
-      _giza_colour_index_max = GIZA_COLOUR_INDEX_MIN;     
+      _giza_colour_index_max = GIZA_COLOUR_INDEX_MIN;
     }
    else if (cimax > GIZA_COLOUR_INDEX_MAX)
     {
-      _giza_colour_index_max = GIZA_COLOUR_INDEX_MAX;    
+      _giza_colour_index_max = GIZA_COLOUR_INDEX_MAX;
     }
    else
     {
@@ -523,7 +523,7 @@ void _giza_hls_to_rgb (double hue, double lightness, double saturation,
   Chroma = (1. - fabs(2.*lightness - 1.))*saturation;
   Hdash = hue/60.;
   X = Chroma*(1. - fabs( fmod(Hdash,2.) - 1.));
-  
+
   if (Hdash >= 0. && Hdash < 1.)
     {
       R1 = Chroma;
@@ -566,10 +566,10 @@ void _giza_hls_to_rgb (double hue, double lightness, double saturation,
       G1 = 0.;
       B1 = 0.;
     }
-  
+
   /* Now get RGB by matching lightness */
   m = lightness - 0.5*Chroma;
-  
+
   *red   = _giza_set_in_range(R1 + m,0.,1.);
   *green = _giza_set_in_range(G1 + m,0.,1.);
   *blue  = _giza_set_in_range(B1 + m,0.,1.);

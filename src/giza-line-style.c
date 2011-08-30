@@ -48,7 +48,7 @@ giza_set_line_style (int ls)
 {
   if (!_giza_check_device_ready ("giza_set_fill"))
     return;
-  
+
   _giza_set_line_style (ls, context);
   _giza_line_style = ls;
 }

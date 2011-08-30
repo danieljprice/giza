@@ -44,8 +44,8 @@ giza_start_prompting (void)
 
 /**
  * Settings: giza_stop_prompting
- * 
- * Synopsis: Turns off prompting, i.e. the user will not be prompted 
+ *
+ * Synopsis: Turns off prompting, i.e. the user will not be prompted
  * before a page change or a device being closed.
  *
  * See Also: giza_start_prompting

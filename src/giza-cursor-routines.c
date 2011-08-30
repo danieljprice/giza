@@ -31,7 +31,7 @@
 /**
  *  _giza_mark_with_cursor
  *
- *  This is the general (currently internal) routine to which 
+ *  This is the general (currently internal) routine to which
  *  giza_mark_points, giza_mark_lines etc are merely interfaces
  *
  */
@@ -42,7 +42,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
   if(!_giza_check_device_ready ("_giza_mark_with_cursor")) /* should be done in parent routines anyway */
     return;
 
-  if (maxpts <= 0) 
+  if (maxpts <= 0)
     {
       _giza_error("_giza_mark_with_cursor","maxpts < 0 on input");
       return;
@@ -52,16 +52,16 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
   double xmin,xmax,ymin,ymax;
   giza_get_window(&xmin,&xmax,&ymin,&ymax);
 
-  if (*npts > 0) 
+  if (*npts > 0)
     {
       xanc = xpts[*npts-1];
-      yanc = ypts[*npts-1];     
+      yanc = ypts[*npts-1];
       /* plot previously drawn line segments/points */
       if (mode == GIZA_BAND_LINE)
         {
           giza_line(*npts,xpts,ypts);
         } else {
-          giza_points(*npts,xpts,ypts,symbol);    
+          giza_points(*npts,xpts,ypts,symbol);
         }
     } else {
       /* PGPLOT default is to put the cursor
@@ -73,11 +73,11 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
   int err = 0;
   int moveCurs = 0;
   int modein = 0;
-  
+
   while(err == 0) {
      err = _giza_get_key_press (modein, moveCurs, xanc, yanc, &x, &y, ch);
      modein = mode;
-     
+
      if (!strcmp(ch,"A") || !strcmp(ch,"a")) /* || !strcmp(ch,GIZA_LEFT_CLICK)) */
        {
          if (*npts < maxpts-1)
@@ -93,10 +93,10 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
                  giza_single_point(x,y,symbol);
                }
            } else {
-             _giza_message("reached array limits, cannot add more points");        
+             _giza_message("reached array limits, cannot add more points");
            }
        } else if (!strcmp(ch,"D") || !strcmp(ch,"d") || *ch == 8 ) {
-              
+
          if (*npts > 0)
            {
              /* erase the previous point by colouring over it in the background colour */
@@ -111,11 +111,11 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
                  giza_move(xpts[*npts-1],ypts[*npts-1]);
                  giza_draw(xpts[*npts-2],ypts[*npts-2]);
                } else {
-                 giza_single_point(xpts[*npts-1],ypts[*npts-1],17);           
+                 giza_single_point(xpts[*npts-1],ypts[*npts-1],17);
                }
              giza_set_colour_index(GIZA_FOREGROUND_COLOUR);
              giza_set_line_width(lw);
-             
+
              *npts -= 1;
              if (*npts > 0)
                {
@@ -131,7 +131,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
            } else {
              _giza_message("no points left to delete");
            }
-         
+
        } else if (!strcmp(ch,"X") || !strcmp(ch,"x") || *ch == 13) {
 
          return;
@@ -140,9 +140,9 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
          /* quit without saving */
          *npts = 0;
          return;
-       
+
        } else {
-       
+
          /*printf("char = %i %s\n",*ch,ch); */
          _giza_message("unknown command, use (a)dd (d)elete/backspace, e(x)it or (q)uit/Esc");
 
@@ -152,7 +152,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[
      yanc = y;
 
   }
-   
+
 }
 
 /**
@@ -222,7 +222,7 @@ giza_mark_points_float (int maxpts, int *npts, float xpts[maxpts], float ypts[ma
 {
    if(!_giza_check_device_ready ("giza_mark_points_float"))
      return;
-   
+
    _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_UNORDERED, GIZA_BAND_NONE);
 }
 
@@ -266,7 +266,7 @@ giza_mark_points_ordered_float (int maxpts, int *npts, float xpts[maxpts], float
 {
    if(!_giza_check_device_ready ("giza_mark_points_ordered_float"))
      return;
-   
+
    _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_ORDERED, GIZA_BAND_NONE);
 }
 
@@ -306,7 +306,7 @@ giza_mark_line_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxp
 {
    if(!_giza_check_device_ready ("giza_mark_line_float"))
      return;
-   
+
    _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, 1, GIZA_MARK_UNORDERED, GIZA_BAND_LINE);
 }
 
@@ -349,6 +349,6 @@ giza_mark_line_ordered_float (int maxpts, int *npts, float xpts[maxpts], float y
 {
    if(!_giza_check_device_ready ("giza_mark_line_ordered_float"))
      return;
-   
+
    _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, 1, GIZA_MARK_ORDERED, GIZA_BAND_LINE);
 }

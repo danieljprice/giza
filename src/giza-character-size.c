@@ -151,7 +151,7 @@ giza_get_character_size (int units, double *heightx, double *heighty)
       *heighty = -*heighty;
       break;
     }
-  
+
    /* Now convert to mm/inches */
    switch (units)
    {

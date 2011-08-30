@@ -23,7 +23,7 @@
 /**
  * Device: giza_get_surface_size
  *
- * Synopsis: Gets the size of the current surface that can be drawn to in device 
+ * Synopsis: Gets the size of the current surface that can be drawn to in device
  * units (pixels or points).
  *
  * Input:

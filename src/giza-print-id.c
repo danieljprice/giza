@@ -42,7 +42,7 @@ giza_print_id (void)
   /* get user id */
   char *userid = getlogin();
   if (userid == NULL) userid = "";
-  
+
   /* get current date and time */
   struct tm *current;
   time_t now;
@@ -53,7 +53,7 @@ giza_print_id (void)
   char date[20];
   strftime(date,sizeof(date)," %e-%h-%Y %H:%M",current);
   char *string = strcat(userid,date);
-  
+
   double ch,xch,ych;
   giza_get_character_height(&ch);
   giza_set_character_height(0.6);
@@ -62,7 +62,7 @@ giza_print_id (void)
   /* query dimensions of the surface and size of string */
   double width,height;
   giza_get_paper_size(GIZA_UNITS_DEVICE,&width,&height);
-  
+
   /* place text at bottom right corner of surface */
   double x,y;
   x = width - xch;
@@ -72,10 +72,10 @@ giza_print_id (void)
   int oldtrans = _giza_get_trans();
   _giza_set_trans(GIZA_TRANS_WORLD);
   cairo_device_to_user (context, &x, &y);
-  
+
   /* print text at location */
   giza_ptext(x,y,0.,1.,string);
-  
+
   /* reset settings */
   _giza_set_trans(oldtrans);
   giza_set_character_height(ch);

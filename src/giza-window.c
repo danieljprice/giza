@@ -106,7 +106,7 @@ giza_set_window_float (float x1, float x2, float y1, float y2)
  *  -x1 :- the lowest value of the x axis
  *  -x2 :- the highest value of the x axis
  *  -y1 :- the lowest value of the y axis
- *  -y2 :- the highest value of the y axis 
+ *  -y2 :- the highest value of the y axis
  */
 void
 giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
@@ -136,11 +136,11 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
     {
       scale = scaley;
     }
-  else 
+  else
     {
       scale = scalex;
     }
-  
+
   /* Find the position of the new viewport relative to the centre of the old */
   /* Find the width of the new vp in normalised device coords */
   newWidth = scale * xrange / Dev.width;

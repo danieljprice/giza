@@ -144,7 +144,7 @@ giza_get_font (char *font, int n)
        font = NULL;
        return;
      }
-   
+
    strncpy (font, _giza_fontFam, n - 1);
 }
 
@@ -163,7 +163,7 @@ _giza_init_font (void)
     {
       tmp = "Times";
     }
-  
+
   _giza_fontFam = malloc ((strlen (tmp) + 1) * sizeof (char));
   strcpy (_giza_fontFam, tmp);
 

@@ -50,7 +50,7 @@ giza_set_colour_table (const double *controlPoints, const double *red, const dou
 {
   if (!_giza_check_device_ready ("giza_set_colour_table"))
     return 1;
-  
+
   if (n < 2 || n > GIZA_CTAB_MAXSIZE)
     {
       _giza_warning ("giza_set_colour_table", "Invalid number of control points, colour table not set");
@@ -69,12 +69,12 @@ giza_set_colour_table (const double *controlPoints, const double *red, const dou
 	      _giza_colour_table.controlPoints[i] = controlPoints[i];
               _giza_colour_table.red[i]   = _giza_set_in_range(red[i],0.,1.);
               _giza_colour_table.green[i] = _giza_set_in_range(green[i],0.,1.);
-              _giza_colour_table.blue[i]  = _giza_set_in_range(blue[i],0.,1.);      
+              _giza_colour_table.blue[i]  = _giza_set_in_range(blue[i],0.,1.);
 	      tmpn++;
 	    }
 	}
     }
-  _giza_colour_table.n = tmpn; 
+  _giza_colour_table.n = tmpn;
    if (tmpn < 2)
    {
      _giza_warning ("giza_set_colour_table", "Invalid values for control points in colour table settings");
@@ -98,13 +98,13 @@ giza_set_colour_table_float (const float *controlPoints, const float *red, const
 {
   if (!_giza_check_device_ready ("giza_set_colour_table_float"))
     return 1;
-  
+
   if (n < 2 || n > GIZA_CTAB_MAXSIZE)
     {
       _giza_warning ("giza_set_colour_table_float", "Invalid number of control points, colour table not set");
       return 1;
     }
-   
+
   int i, tmpn = 0;
 
   for (i = 0; i < n; i++)
@@ -117,7 +117,7 @@ giza_set_colour_table_float (const float *controlPoints, const float *red, const
 	      _giza_colour_table.controlPoints[i] = (double) controlPoints[i];
               _giza_colour_table.red[i]   = _giza_set_in_range((double) red[i],  0.,1.);
               _giza_colour_table.green[i] = _giza_set_in_range((double) green[i],0.,1.);
-              _giza_colour_table.blue[i]  = _giza_set_in_range((double) blue[i], 0.,1.);      
+              _giza_colour_table.blue[i]  = _giza_set_in_range((double) blue[i], 0.,1.);
 	      tmpn++;
 	    }
 	}
@@ -142,7 +142,7 @@ giza_set_colour_table_float (const float *controlPoints, const float *red, const
  *
  * Input:
  *  -pos   :- The fraction along the table to retrieve the colour from.
- *           A value less then 0 is assigned the colour at zero, and above one assigned 
+ *           A value less then 0 is assigned the colour at zero, and above one assigned
  *           the colour at one.
  *  -red    :- Gets set to the red component of the colour at pos.
  *  -green  :- Gets set to the green component of the colour at pos.
@@ -200,9 +200,9 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
 	  return;
 	}
     }
-    
+
    /* this should never happen */
-   if (*red < 0.) 
+   if (*red < 0.)
      {
       _giza_error("giza_rgb_from_table","Internal error, colour not set");
       *red = 0.;
@@ -235,7 +235,7 @@ void
 _giza_init_colour_table (void)
 {
   _giza_save_ctab_ncalls = 0;
-  giza_set_colour_table_gray();  
+  giza_set_colour_table_gray();
 }
 
 /**
@@ -303,7 +303,7 @@ _giza_set_range_from_colour_table (int cimin, int cimax)
   double delta = (double) (cimax - cimin);
   double pos,r,g,b;
   int i;
-  
+
   for (i = cimin; i <= cimax; i++)
     {
       pos = (i - cimin)/delta;

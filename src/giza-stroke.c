@@ -33,7 +33,7 @@ _giza_stroke (void)
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  /* set the line style in case there has been a change in character 
+  /* set the line style in case there has been a change in character
      height or line width */
   int ls;
   giza_get_line_style (&ls);

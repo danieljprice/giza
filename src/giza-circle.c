@@ -45,12 +45,12 @@ giza_circle (double x, double y, double r)
   _giza_fill ();
 
   _giza_set_trans (oldTrans);
-  
+
   if (!Sets.buf) giza_flush_device ();
 }
 
 /**
- * Drawing: giza_circle_float 
+ * Drawing: giza_circle_float
  *
  * Synopsis: Same functionality as giza_circle, but takes floats
  *

@@ -228,21 +228,21 @@ giza_contour_float (int sizex, int sizey, const float data[sizey][sizex], int i1
   double dcont[ncont];
   double daffine[6];
   int i, j;
-  
+
   for (j=j1; j<=j2; j++) {
       for (i=i1; i<=i2; i++) {
           ddata[j][i] = (double) data[j][i];
       }
   }
-  
+
   for (i=0; i<=ncont; i++) {
       dcont[i] = (double) cont[i];
   }
-  
+
   for (i=0; i<6; i++) {
      daffine[i] = (double) affine[i];
   }
-  
+
   giza_contour (sizex, sizey, ddata, i1, i2, j1, j2, ncont, dcont, daffine);
 
 }

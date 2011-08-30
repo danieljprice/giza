@@ -16,7 +16,7 @@
  * Contact: wetter.j@gmail.com
  *
  */
- 
+
 #include <giza.h>
 #include "giza-warnings-private.h"
 

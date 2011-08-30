@@ -75,7 +75,7 @@ giza_function_x (double (*func)(double *x), int n, double xmin, double xmax, int
          }
        giza_set_environment(xmin,xmax,ymin,ymax,0,0);
      }
-  
+
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
@@ -144,7 +144,7 @@ giza_function_x_float (float (*func)(float *x), int n, float xmin, float xmax, i
          }
        giza_set_environment_float(xmin,xmax,ymin,ymax,0,0);
      }
-  
+
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 

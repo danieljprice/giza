@@ -64,7 +64,7 @@ giza_band (int mode, int moveCurs, double xanc, double yanc, double *x, double *
   if(!_giza_check_device_ready ("giza_band"))
     return 1;
 
-  if (mode < 0 || mode > GIZA_MAX_BAND_MODES) 
+  if (mode < 0 || mode > GIZA_MAX_BAND_MODES)
     {
       _giza_error("giza_band","Invalid band mode selected");
       return 2;
@@ -103,8 +103,8 @@ _giza_refresh_band (int mode, int x1, int y1, int x2, int y2)
 
   /* Draw over the old band */
   cairo_paint (Band.restore);
- 
-/* 
+
+/*
   int topleftx = x1 - 10;
   int toplefty = y1 - 10;
   int bottomrightx = x2 + 10;

@@ -124,7 +124,7 @@ _giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int
 	    _giza_colour_pixel_transparent (pixdata, pixnum, pos);
 	    pixnum = pixnum + 1;
 	  }
-      }  
+      }
   } else {
     /* render each pixel, usual routine */
     for (j = j1; j <= j2; j++)
@@ -249,7 +249,7 @@ _giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1
 	    _giza_colour_pixel_transparent (pixdata, pixnum, pos);
 	    pixnum = pixnum + 1;
 	  }
-      }  
+      }
   } else {
     /* render each pixel, usual routine */
     for (j = j1; j <= j2; j++)
@@ -293,7 +293,7 @@ giza_render_gray (int sizex, int sizey, const double data[sizey][sizex], int i1,
 		  double *affine)
 {
   giza_save_colour_table();
-  giza_set_colour_table_gray ();  
+  giza_set_colour_table_gray ();
   giza_render (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, affine);
   giza_restore_colour_table();
 }
@@ -430,7 +430,7 @@ giza_draw_pixels (int sizex, int sizey, const int idata[sizey][sizex], int i1, i
   giza_get_colour_index (&oldCi);
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  
+
   double dxpix = (xmax - xmin)/((double) width);
   double dypix = (ymax - ymin)/((double) height);
   cairo_matrix_init (&mat, dxpix, 0.,0., dypix,
@@ -493,7 +493,7 @@ giza_draw_pixels_float (int sizex, int sizey, const int idata[sizey][sizex], int
 {
   if (!_giza_check_device_ready ("giza_render_pixels_float"))
     return;
-  
+
   giza_draw_pixels (sizex, sizey, idata, i1, i2,
 	    j1, j2, (double) xmin, (double) xmax, (double) ymin, (double) ymax);
 

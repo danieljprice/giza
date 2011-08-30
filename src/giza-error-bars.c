@@ -191,22 +191,22 @@ giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double 
 {
   if (!_giza_check_device_ready ("giza_error_bars_vert"))
     return;
-  
+
   if (n < 1) return;
-  
+
   double endWidth, dummy;
   giza_get_character_size (GIZA_UNITS_WORLD, &endWidth, &dummy);
   endWidth = 0.5 * endWidth * term;
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  
+
   int i;
   for (i = 0; i < n; i++)
     {
       /* draw the bar */
       cairo_move_to (context, xpts[i], ypts1[i]);
       cairo_line_to (context, xpts[i], ypts2[i]);
-      
+
       /* draw the ends */
       if (term > 0.)
         {
@@ -216,9 +216,9 @@ giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double 
           cairo_line_to (context, xpts[i] + endWidth, ypts2[i]);
         }
     }
-  
+
   _giza_stroke ();
-  
+
   _giza_set_trans (oldTrans);
   if (!Sets.buf)
     {
@@ -238,13 +238,13 @@ giza_error_bars_vert_float (int n, float *xpts, float *ypts1, float *ypts2, floa
     return;
 
   if (n < 1) return;
-  
+
   double endWidth, dummy, currentX, currentY1, currentY2;
   giza_get_character_size (GIZA_UNITS_WORLD, &endWidth, &dummy);
   endWidth = 0.5 * endWidth * (double)term;
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  
+
   int i;
   for (i = 0; i < n; i++)
     {
@@ -255,17 +255,17 @@ giza_error_bars_vert_float (int n, float *xpts, float *ypts1, float *ypts2, floa
       /* draw the bar */
       cairo_move_to (context, currentX, currentY1);
       cairo_line_to (context, currentX, currentY2);
-      
+
       /* draw the ends */
       cairo_move_to (context, currentX - endWidth, currentY1);
       cairo_line_to (context, currentX + endWidth, currentY1);
-      
+
       cairo_move_to (context, currentX - endWidth, currentY2);
       cairo_line_to (context, currentX + endWidth, currentY2);
     }
-  
+
   _giza_stroke ();
-  
+
   _giza_set_trans (oldTrans);
   if (!Sets.buf)
     {
@@ -288,24 +288,24 @@ giza_error_bars_hori (int n, double *xpts1, double *xpts2, double *ypts, double 
 {
   if (!_giza_check_device_ready ("giza_error_bars_hori"))
     return;
-  
+
   if (n < 1) return;
-  
+
   double endWidth, dummy;
   giza_get_character_size (GIZA_UNITS_WORLD, &dummy, &endWidth);
   endWidth = 0.5 * endWidth * term;
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  
+
   int i;
   for (i = 0; i < n; i++)
     {
       /* draw the bar */
       cairo_move_to (context, xpts1[i], ypts[i]);
       cairo_line_to (context, xpts2[i], ypts[i]);
-      
+
       /* draw the ends */
-      if (term > 0.) 
+      if (term > 0.)
         {
           cairo_move_to (context, xpts1[i], ypts[i] - endWidth);
           cairo_line_to (context, xpts1[i], ypts[i] + endWidth);
@@ -313,16 +313,16 @@ giza_error_bars_hori (int n, double *xpts1, double *xpts2, double *ypts, double 
           cairo_line_to (context, xpts2[i], ypts[i] + endWidth);
         }
     }
-  
+
   _giza_stroke ();
-  
+
   _giza_set_trans (oldTrans);
   if (!Sets.buf)
     {
       giza_flush_device ();
     }
 }
-   
+
 /**
  * Same functionality as giza_error_bars_hori but takes floats.
  */
@@ -333,13 +333,13 @@ giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, float *ypts, floa
     return;
 
   if (n < 1) return;
-  
+
   double endWidth, dummy, currentX1, currentX2, currentY;
   giza_get_character_size (GIZA_UNITS_WORLD, &dummy, &endWidth);
   endWidth = 0.5 * endWidth * term;
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  
+
   int i;
   for (i = 0; i < n; i++)
     {
@@ -350,7 +350,7 @@ giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, float *ypts, floa
       /* draw the bar */
       cairo_move_to (context, currentX1, currentY);
       cairo_line_to (context, currentX2, currentY);
-      
+
       /* draw the ends */
       if (term > 0.)
         {
@@ -360,9 +360,9 @@ giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, float *ypts, floa
           cairo_line_to (context, currentX2, currentY + endWidth);
         }
     }
-  
+
   _giza_stroke ();
-  
+
   _giza_set_trans (oldTrans);
   if (!Sets.buf)
     {
@@ -383,7 +383,7 @@ _giza_error_bar_vert (double x, double y, double error, double term)
   /* draw the bar */
   cairo_move_to (context, x, y);
   cairo_line_to (context, x + error, y);
-  
+
   /* draw the ends */
   if (term > 0.)
     {
@@ -406,9 +406,9 @@ _giza_error_bar_hori (double x, double y, double error, double term)
   /* draw the bar */
   cairo_move_to (context, x, y);
   cairo_line_to (context, x, y + error);
-  
+
   /* draw the end */
-  if (term > 0.) 
+  if (term > 0.)
     {
       cairo_move_to (context, x - endWidth * 0.5, y + error);
       cairo_line_to (context, x + endWidth * 0.5, y + error);

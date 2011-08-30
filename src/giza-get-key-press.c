@@ -44,7 +44,7 @@ giza_get_key_press (double *x, double *y, char *ch)
     return 1;
 
   return _giza_get_key_press (0, 0, 0., 0., x, y, ch);
-} 
+}
 
 /**
  * Interactive giza_get_key_press_float

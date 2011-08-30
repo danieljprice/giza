@@ -32,7 +32,7 @@
 /**
  * Settings: giza_set_viewport
  *
- * Synopsis: Changes the size and position of the viewport, all arguments are in 
+ * Synopsis: Changes the size and position of the viewport, all arguments are in
  * normalised device coordinates. The viewport is the region of the
  * device that can be drawn to.
  *
@@ -54,7 +54,7 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
 
       VP.xmin = GIZA_DEFAULT_VP_MARGIN_HORI;
       VP.xmax = 1. - GIZA_DEFAULT_VP_MARGIN_HORI;
-      VP.ymin = GIZA_DEFAULT_VP_MARGIN_VERT; 
+      VP.ymin = GIZA_DEFAULT_VP_MARGIN_VERT;
       VP.ymax = 1. - GIZA_DEFAULT_VP_MARGIN_VERT;
 
     } else {
@@ -62,7 +62,7 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
       VP.xmin = xleft;
       VP.xmax = xright;
       VP.ymin = ybottom;
-      VP.ymax = ytop;    
+      VP.ymax = ytop;
 
     }
 
@@ -139,8 +139,8 @@ giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
       cairo_user_to_device (context, x2, &ymax);
       /* y direction is done differently, because
          cairo counts 0,0 as the top left of the
-         pixmap in device units, whereas we want it to be the 
-         bottom left, hence ymax->ymin and ymin->ymax 
+         pixmap in device units, whereas we want it to be the
+         bottom left, hence ymax->ymin and ymin->ymax
          (so our "device units" are slightly different
           to those of the cairo device) */
       *y1 = ymax;
@@ -150,7 +150,7 @@ giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
       _giza_warning ("giza_get_viewport", "Invalid units, using normalised device units.");
       break;
     }
-   
+
    /* Now convert to mm/inches */
    switch (units)
    {
@@ -204,15 +204,15 @@ void
 giza_set_viewport_default (void)
 {
   if(!_giza_check_device_ready("giza_set_viewport_default")) return;
-  
+
   double xmin = GIZA_DEFAULT_VP_MARGIN_HORI;
   double xmax = 1. - GIZA_DEFAULT_VP_MARGIN_HORI;
-  double ymin = GIZA_DEFAULT_VP_MARGIN_VERT; 
+  double ymin = GIZA_DEFAULT_VP_MARGIN_VERT;
   double ymax = 1. - GIZA_DEFAULT_VP_MARGIN_VERT;
-  
+
   giza_set_viewport(xmin,xmax,ymin,ymax);
   /* also set window if calling default viewport routine */
-  /*giza_set_window(GIZA_DEFAULT_WINDOW_X1,GIZA_DEFAULT_WINDOW_X2, 
+  /*giza_set_window(GIZA_DEFAULT_WINDOW_X1,GIZA_DEFAULT_WINDOW_X2,
                   GIZA_DEFAULT_WINDOW_Y1,GIZA_DEFAULT_WINDOW_Y2);
   */
 
@@ -229,7 +229,7 @@ giza_set_viewport_inches (double xleftin, double xrightin, double ybottomin, dou
   xright  = xrightin  * 2.54 / Dev.widthCM;
   ybottom = ybottomin * 2.54 / Dev.heightCM;
   ytop    = ytopin    * 2.54 / Dev.heightCM;
-  
+
   giza_set_viewport(xleft,xright,ybottom,ytop);
 
 }

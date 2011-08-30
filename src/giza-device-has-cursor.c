@@ -18,7 +18,7 @@
  * D.Price (5/3/10): changed function name to device_has_cursor
  */
 
-#include <giza.h> 
+#include <giza.h>
 #include "giza-private.h"
 
 /**

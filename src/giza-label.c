@@ -36,7 +36,7 @@ giza_label (char *labelx, char *labely, char *title)
 {
   if (!_giza_check_device_ready ("giza_label"))
     return;
-  
+
   giza_annotate("B",3.5,0.5,0.5,labelx);
   giza_annotate("L",3.0,0.5,0.5,labely);
   giza_annotate("T",2.0,0.5,0.5,title);

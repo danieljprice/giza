@@ -37,7 +37,7 @@
  *  -angle :- The angle to draw the text at, in degrees
  *  -just  :- The horizontal justification of the string. 0. for left-justified, 1. for right-justified
  *  -text  :- The text to be drawn
- *  -xbox  :- 
+ *  -xbox  :-
  *  -ybox  :- Set to the world co-ords of the bounding box
  */
 void
@@ -133,7 +133,7 @@ giza_qtext_float (float x, float y, float angle, float just, char *text, float x
  */
 void
 giza_qtextlen (int units, char *text, double *xlen, double *ylen)
-{ 
+{
   if(!_giza_check_device_ready("giza_qtextlen"))
     {
       *xlen = 0.;
@@ -147,13 +147,13 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
 
   cairo_save (context);
 
-  _giza_set_trans (GIZA_TRANS_IDEN); 
+  _giza_set_trans (GIZA_TRANS_IDEN);
   cairo_move_to (context, 0., 0.);
   _giza_parse_string (text, xlen, ylen, _giza_action_get_size);
 
   /* got text length in device units: convert as necessary
      to desired units */
-  
+
   switch (units)
     {
     case GIZA_UNITS_NORMALIZED:
@@ -173,7 +173,7 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
     case GIZA_UNITS_INCHES:
       *xlen = *xlen * Dev.deviceUnitsPermm/25.4;
       *ylen = *ylen * Dev.deviceUnitsPermm/25.4;
-      break;    
+      break;
     case GIZA_UNITS_WORLD:
       _giza_set_trans (GIZA_TRANS_NORM);
       cairo_user_to_device_distance (context, xlen, ylen);
@@ -184,7 +184,7 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
       *ylen = *ylen / Dev.height;
       break;
     }
-   
+
   cairo_restore (context);
 
   /* restore the original character height (and font matrix) */
@@ -200,7 +200,7 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
  */
 void
 giza_qtextlen_float (int units, char *text, float *xlen, float *ylen)
-{ 
+{
   double xlend = 0., ylend = 0.;
   giza_qtextlen(units, text, &xlend, &ylend);
   *xlen = (float) xlend;

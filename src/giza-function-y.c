@@ -28,7 +28,7 @@
  * Draw a curve defined by x = func(y), where
  * func(y) is a user-supplied routine
  * with a single double argument, e.g.
- * 
+ *
  * double myfunc(double* y)
  *
  */
@@ -68,7 +68,7 @@ giza_function_y (double (*func)(double *y), int n, double ymin, double ymax, int
          }
        giza_set_environment(xmin,xmax,ymin,ymax,0,0);
      }
-  
+
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
@@ -93,7 +93,7 @@ giza_function_y (double (*func)(double *y), int n, double ymin, double ymax, int
  * Draw a curve defined by x = func(y), where
  * func(y) is a user-supplied routine
  * with a single float argument, e.g.
- * 
+ *
  * float myfunc(float* y)
  *
  */
@@ -133,7 +133,7 @@ giza_function_y_float (float (*func)(float *y), int n, float ymin, float ymax, i
          }
        giza_set_environment_float(xmin,xmax,ymin,ymax,0,0);
      }
-  
+
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 

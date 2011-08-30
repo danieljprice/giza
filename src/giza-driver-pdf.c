@@ -71,7 +71,7 @@ _giza_open_device_pdf (int vert)
       Dev.width  = GIZA_DEFAULT_WIDTH;
       Dev.height = GIZA_DEFAULT_HEIGHT;
     }
-  
+
   surface = cairo_pdf_surface_create (fileName, Dev.width, Dev.height);
 
   if (!surface)

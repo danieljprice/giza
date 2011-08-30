@@ -33,7 +33,7 @@
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
 /* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
- * if you want the limit (max/min) macros for int types. 
+ * if you want the limit (max/min) macros for int types.
  */
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
@@ -50,7 +50,7 @@ typedef uint32_t flex_uint32_t;
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
 typedef int flex_int32_t;
-typedef unsigned char flex_uint8_t; 
+typedef unsigned char flex_uint8_t;
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
 #endif /* ! C99 */
@@ -174,7 +174,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #define EOB_ACT_LAST_MATCH 2
 
     #define YY_LESS_LINENO(n)
-    
+
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
 	do \
@@ -236,7 +236,7 @@ struct yy_buffer_state
 
     int yy_bs_lineno; /**< The line count. */
     int yy_bs_column; /**< The column count. */
-    
+
 	/* Whether to try to fill the input buffer when we reach the
 	 * end of it.
 	 */
@@ -808,7 +808,7 @@ extern int yywrap (yyscan_t yyscanner );
 #endif
 
     static void yyunput (int c,char *buf_ptr  ,yyscan_t yyscanner);
-    
+
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int ,yyscan_t yyscanner);
 #endif
@@ -1869,7 +1869,7 @@ static void yy_load_buffer_state  (yyscan_t yyscanner)
     YY_BUFFER_STATE yy_create_buffer  (FILE * file, int  size , yyscan_t yyscanner)
 {
 	YY_BUFFER_STATE b;
-    
+
 	b = (YY_BUFFER_STATE) yyalloc(sizeof( struct yy_buffer_state ) ,yyscanner );
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
@@ -1913,7 +1913,7 @@ static void yy_load_buffer_state  (yyscan_t yyscanner)
 #ifndef __cplusplus
 extern int isatty (int );
 #endif /* __cplusplus */
-    
+
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a yyrestart() or at EOF.
@@ -1939,7 +1939,7 @@ extern int isatty (int );
     }
 
         b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
-    
+
 	errno = oerrno;
 }
 
@@ -2045,9 +2045,9 @@ static void yyensure_buffer_stack (yyscan_t yyscanner)
 								, yyscanner);
 		if ( ! yyg->yy_buffer_stack )
 			YY_FATAL_ERROR( "out of dynamic memory in yyensure_buffer_stack()" );
-								  
+
 		memset(yyg->yy_buffer_stack, 0, num_to_alloc * sizeof(struct yy_buffer_state*));
-				
+
 		yyg->yy_buffer_stack_max = num_to_alloc;
 		yyg->yy_buffer_stack_top = 0;
 		return;
@@ -2076,12 +2076,12 @@ static void yyensure_buffer_stack (yyscan_t yyscanner)
  * @param base the character buffer
  * @param size the size in bytes of the character buffer
  * @param yyscanner The scanner object.
- * @return the newly allocated buffer state object. 
+ * @return the newly allocated buffer state object.
  */
 YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size , yyscan_t yyscanner)
 {
 	YY_BUFFER_STATE b;
-    
+
 	if ( size < 2 ||
 	     base[size-2] != YY_END_OF_BUFFER_CHAR ||
 	     base[size-1] != YY_END_OF_BUFFER_CHAR )
@@ -2117,7 +2117,7 @@ YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size , yyscan_t yyscann
  */
 YY_BUFFER_STATE yy_scan_string (yyconst char * yystr , yyscan_t yyscanner)
 {
-    
+
 	return yy_scan_bytes(yystr,strlen(yystr) ,yyscanner);
 }
 
@@ -2134,7 +2134,7 @@ YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, int  _yybytes_len , yysc
 	char *buf;
 	yy_size_t n;
 	int i;
-    
+
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
 	buf = (char *) yyalloc(n ,yyscanner );
@@ -2202,10 +2202,10 @@ YY_EXTRA_TYPE yyget_extra  (yyscan_t yyscanner)
 int yyget_lineno  (yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-    
+
         if (! YY_CURRENT_BUFFER)
             return 0;
-    
+
     return yylineno;
 }
 
@@ -2215,10 +2215,10 @@ int yyget_lineno  (yyscan_t yyscanner)
 int yyget_column  (yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-    
+
         if (! YY_CURRENT_BUFFER)
             return 0;
-    
+
     return yycolumn;
 }
 
@@ -2279,8 +2279,8 @@ void yyset_lineno (int  line_number , yyscan_t yyscanner)
 
         /* lineno is only valid if an input buffer exists. */
         if (! YY_CURRENT_BUFFER )
-           yy_fatal_error( "yyset_lineno called with no buffer" , yyscanner); 
-    
+           yy_fatal_error( "yyset_lineno called with no buffer" , yyscanner);
+
     yylineno = line_number;
 }
 
@@ -2294,8 +2294,8 @@ void yyset_column (int  column_no , yyscan_t yyscanner)
 
         /* column is only valid if an input buffer exists. */
         if (! YY_CURRENT_BUFFER )
-           yy_fatal_error( "yyset_column called with no buffer" , yyscanner); 
-    
+           yy_fatal_error( "yyset_column called with no buffer" , yyscanner);
+
     yycolumn = column_no;
 }
 
@@ -2378,20 +2378,20 @@ int yylex_init_extra(YY_EXTRA_TYPE yy_user_defined,yyscan_t* ptr_yy_globals )
         errno = EINVAL;
         return 1;
     }
-	
+
     *ptr_yy_globals = (yyscan_t) yyalloc ( sizeof( struct yyguts_t ), &dummy_yyguts );
-	
+
     if (*ptr_yy_globals == NULL){
         errno = ENOMEM;
         return 1;
     }
-    
+
     /* By setting to 0xAA, we expose bugs in
     yy_init_globals. Leave at 0x00 for releases. */
     memset(*ptr_yy_globals,0x00,sizeof(struct yyguts_t));
-    
+
     yyset_extra (yy_user_defined, *ptr_yy_globals);
-    
+
     return yy_init_globals ( *ptr_yy_globals );
 }
 
@@ -2524,7 +2524,7 @@ _giza_get_chunk (char *text)
   yyscan_t scanner;
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
- 
+
   while(!stop)
     {
       token = yylex(scanner);
@@ -2545,7 +2545,7 @@ _giza_get_chunk (char *text)
 	    break;
         }
 
-	if (openb < 1) 
+	if (openb < 1)
           {
             yylex_destroy (scanner);
             return length;
@@ -2577,7 +2577,7 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
   /* initialise the scanner */
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
- 
+
   while(!stop)
     {
       token = yylex(scanner);
@@ -2596,7 +2596,7 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
 
           /* if end of string, do nothing */
           if (posInText >= lenstr)
-            { 
+            {
               stop = 1;
               break;
             }
@@ -2605,7 +2605,7 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
           chunkLength = _giza_get_chunk (text + posInText);
           strncpy (processed, text + posInText, chunkLength);
           processed[chunkLength] = '\0';
-          
+
           /* Perform the action on this chunk */
           _giza_start_super ();
           _giza_parse_string (processed, width, height, action);
@@ -2627,7 +2627,7 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
 
           /* if end of string, do nothing */
           if (posInText >= lenstr)
-            { 
+            {
               stop = 1;
               break;
             }
@@ -2691,7 +2691,7 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
 
           /* if end of string, do nothing */
           if (posInText >= lenstr)
-            { 
+            {
               stop = 1;
               break;
             }
@@ -2734,7 +2734,7 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
 
           /* if end of string, do nothing */
           if (posInText >= lenstr)
-            { 
+            {
               stop = 1;
               break;
             }
@@ -2746,15 +2746,15 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
           /* extract the symbol number from in front of the \m */
           int number;
           sscanf(text+posInText,"%i",&number);
-          
-          /* 
-           * get the length of the string containing the number 
+
+          /*
+           * get the length of the string containing the number
            * so we know how many characters we have processed
            */
           char temp[4];
           sprintf(temp,"%i",number);
           chunkLength = strlen(temp);
-          
+
           /* either draw the symbol or increment the width */
           if (*width < 0.) {
              double xp, yp;
@@ -2766,7 +2766,7 @@ _giza_parse_string (char *text, double *width, double *height, void (*action)(co
              /* return width if action is _giza_action_get_size */
              *width = *width + 1.25*markerHeight;
           }
-          
+
 
           /* restart the scanner at the new position! */
           yylex_destroy (scanner);
@@ -2808,148 +2808,148 @@ _giza_add_token_to_string (char *string, yyscan_t scanner, int token)
      case GIZA_TOKEN_TIMES:
        strcat (string, "×");
        break;
-     case GIZA_TOKEN_ALPHA: 
+     case GIZA_TOKEN_ALPHA:
        strcat (string, "α");
        break;
-     case GIZA_TOKEN_BETA: 
+     case GIZA_TOKEN_BETA:
        strcat (string, "β");
        break;
-     case GIZA_TOKEN_GAMMA: 
+     case GIZA_TOKEN_GAMMA:
        strcat (string, "γ");
        break;
-     case GIZA_TOKEN_DELTA: 
+     case GIZA_TOKEN_DELTA:
        strcat (string, "δ");
        break;
-     case GIZA_TOKEN_EPSILON: 
+     case GIZA_TOKEN_EPSILON:
        strcat (string, "ε");
        break;
-     case GIZA_TOKEN_ZETA: 
+     case GIZA_TOKEN_ZETA:
        strcat (string, "ζ");
        break;
-     case GIZA_TOKEN_ETA: 
+     case GIZA_TOKEN_ETA:
        strcat (string, "η");
        break;
-     case GIZA_TOKEN_THETA: 
+     case GIZA_TOKEN_THETA:
        strcat (string, "θ");
        break;
-     case GIZA_TOKEN_IOTA: 
+     case GIZA_TOKEN_IOTA:
        strcat (string, "ι");
        break;
-     case GIZA_TOKEN_KAPPA: 
+     case GIZA_TOKEN_KAPPA:
        strcat (string, "κ");
        break;
-     case GIZA_TOKEN_LAMBDA: 
+     case GIZA_TOKEN_LAMBDA:
        strcat (string, "λ");
        break;
-     case GIZA_TOKEN_MU: 
+     case GIZA_TOKEN_MU:
        strcat (string, "μ");
        break;
-     case GIZA_TOKEN_NU: 
+     case GIZA_TOKEN_NU:
        strcat (string, "ν");
        break;
-     case GIZA_TOKEN_XI: 
+     case GIZA_TOKEN_XI:
        strcat (string, "ξ");
        break;
-     case GIZA_TOKEN_OMICRON: 
+     case GIZA_TOKEN_OMICRON:
        strcat (string, "ο");
        break;
-     case GIZA_TOKEN_PI: 
+     case GIZA_TOKEN_PI:
        strcat (string, "π");
        break;
-     case GIZA_TOKEN_RHO: 
+     case GIZA_TOKEN_RHO:
        strcat (string, "ρ");
        break;
-     case GIZA_TOKEN_SIGMA: 
+     case GIZA_TOKEN_SIGMA:
        strcat (string, "σ");
        break;
-     case GIZA_TOKEN_TAU: 
+     case GIZA_TOKEN_TAU:
        strcat (string, "τ");
        break;
-     case GIZA_TOKEN_UPSILON: 
+     case GIZA_TOKEN_UPSILON:
        strcat (string, "υ");
        break;
-     case GIZA_TOKEN_PHI: 
+     case GIZA_TOKEN_PHI:
        strcat (string, "φ");
        break;
-     case GIZA_TOKEN_CHI: 
+     case GIZA_TOKEN_CHI:
        strcat (string, "χ");
        break;
-     case GIZA_TOKEN_PSI: 
+     case GIZA_TOKEN_PSI:
        strcat (string, "ψ");
        break;
-     case GIZA_TOKEN_OMEGA: 
+     case GIZA_TOKEN_OMEGA:
        strcat (string, "ω");
        break;
-     case GIZA_TOKEN_BIGALPHA: 
+     case GIZA_TOKEN_BIGALPHA:
        strcat (string, "Α");
        break;
-     case GIZA_TOKEN_BIGBETA: 
+     case GIZA_TOKEN_BIGBETA:
        strcat (string, "Β");
        break;
-     case GIZA_TOKEN_BIGGAMMA: 
+     case GIZA_TOKEN_BIGGAMMA:
        strcat (string, "Γ");
        break;
-     case GIZA_TOKEN_BIGDELTA: 
+     case GIZA_TOKEN_BIGDELTA:
        strcat (string, "Δ");
        break;
-     case GIZA_TOKEN_BIGEPSILON: 
+     case GIZA_TOKEN_BIGEPSILON:
        strcat (string, "Ε");
        break;
-     case GIZA_TOKEN_BIGZETA: 
+     case GIZA_TOKEN_BIGZETA:
        strcat (string, "Ζ");
        break;
-     case GIZA_TOKEN_BIGETA: 
+     case GIZA_TOKEN_BIGETA:
        strcat (string, "Η");
        break;
-     case GIZA_TOKEN_BIGTHETA: 
+     case GIZA_TOKEN_BIGTHETA:
        strcat (string, "Θ");
        break;
-     case GIZA_TOKEN_BIGIOTA: 
+     case GIZA_TOKEN_BIGIOTA:
        strcat (string, "Ι");
        break;
-     case GIZA_TOKEN_BIGKAPPA: 
+     case GIZA_TOKEN_BIGKAPPA:
        strcat (string, "Κ");
        break;
-     case GIZA_TOKEN_BIGLAMBDA: 
+     case GIZA_TOKEN_BIGLAMBDA:
        strcat (string, "Λ");
        break;
-     case GIZA_TOKEN_BIGMU: 
+     case GIZA_TOKEN_BIGMU:
        strcat (string, "Μ");
        break;
-     case GIZA_TOKEN_BIGNU: 
+     case GIZA_TOKEN_BIGNU:
        strcat (string, "Ν");
        break;
-     case GIZA_TOKEN_BIGXI: 
+     case GIZA_TOKEN_BIGXI:
        strcat (string, "Ξ");
        break;
-     case GIZA_TOKEN_BIGOMICRON: 
+     case GIZA_TOKEN_BIGOMICRON:
        strcat (string, "Ο");
        break;
-     case GIZA_TOKEN_BIGPI: 
+     case GIZA_TOKEN_BIGPI:
        strcat (string, "Π");
        break;
-     case GIZA_TOKEN_BIGRHO: 
+     case GIZA_TOKEN_BIGRHO:
        strcat (string, "Ρ");
        break;
-     case GIZA_TOKEN_BIGSIGMA: 
+     case GIZA_TOKEN_BIGSIGMA:
        strcat (string, "Σ");
        break;
-     case GIZA_TOKEN_BIGTAU: 
+     case GIZA_TOKEN_BIGTAU:
        strcat (string, "Τ");
        break;
-     case GIZA_TOKEN_BIGUPSILON: 
+     case GIZA_TOKEN_BIGUPSILON:
        strcat (string, "Υ");
        break;
-     case GIZA_TOKEN_BIGPHI: 
+     case GIZA_TOKEN_BIGPHI:
        strcat (string, "Φ");
        break;
-     case GIZA_TOKEN_BIGCHI: 
+     case GIZA_TOKEN_BIGCHI:
        strcat (string, "Χ");
        break;
-     case GIZA_TOKEN_BIGPSI: 
+     case GIZA_TOKEN_BIGPSI:
        strcat (string, "Ψ");
        break;
-     case GIZA_TOKEN_BIGOMEGA: 
+     case GIZA_TOKEN_BIGOMEGA:
        strcat (string, "Ω");
        break;
      case GIZA_TOKEN_INTEGRAL:

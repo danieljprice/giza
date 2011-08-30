@@ -49,7 +49,7 @@ struct GIZA_XWindow
   GC gc;
   XImage *ximage;
   Colormap colormap;
-  
+
   unsigned char *virtualscreen;
   int videoaccesstype;
 
@@ -93,12 +93,12 @@ _giza_open_device_xw (void)
     {
       Dev.width = GIZA_DEFAULT_WIDTH;
       Dev.height = GIZA_DEFAULT_HEIGHT;
-    }    
+    }
   else
     {
       Dev.width = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;
       Dev.height = (int) (Dev.deviceUnitsPermm * 10. * Dev.heightCM) + 1;
-    }  
+    }
 
   /* set the XLib stuff */
   XW.width = Dev.width + 2 * GIZA_XW_MARGIN;
@@ -132,7 +132,7 @@ _giza_open_device_xw (void)
     {
        _giza_error("_giza_open_device_xw","XW depth = 1: no colour possible");
     }
-  else 
+  else
     {
        /*printf("giza_xw_debug: XW colour depth = %d\n",XW.depth);*/
     }
@@ -166,7 +166,7 @@ _giza_open_device_xw (void)
    /* register interest in the delete window message */
   Atom wmDeleteMessage = XInternAtom(XW.display, "WM_DELETE_WINDOW", 1);
   XSetWMProtocols(XW.display, XW.window, &wmDeleteMessage, 1);
- 
+
   /* create the pixmap */
   XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
@@ -180,7 +180,7 @@ _giza_open_device_xw (void)
       _giza_error ("_giza_open_device_xw", "Could not create surface");
       return 5;
     }
-  
+
   Dev.defaultBackgroundAlpha = 1.;
 
   return 0;
@@ -210,7 +210,7 @@ _giza_flush_device_xw (void)
  * If prompting is on the old page is displayed until
  * a key is pressed or a mouse is clicked inside the X window.
  * Otherwise the old page is immediately lost.
- * 
+ *
  */
 void
 _giza_change_page_xw (void)
@@ -268,10 +268,10 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 
   _giza_init_band (mode);
   while (1)  {
-   
+
     /* wait for key press/expose */
     XNextEvent(XW.display, &event);
-    
+
     /* always return x, y values for safety */
     *x = 0;
     *y = 0;
@@ -290,16 +290,16 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 	char buffer[10];
 	KeySym key;
 	int nret;
-      
+
 	/* get the ascii of the pressed key */
 	nret = XLookupString((XKeyEvent *)&event, buffer,
 			     (int) (sizeof(buffer)/sizeof(char)), &key, NULL);
-	
+
 	/* ignore irrelevant keys */
 	if(nret==1 && (key < XK_Shift_L || key > XK_Hyper_R)) {
 	  *x = event.xkey.x ;/*- GIZA_XW_MARGIN; */
 	  *y = event.xkey.y ;/*- GIZA_XW_MARGIN; */
-	  
+
 	  if(key)
 	    *ch = buffer[0];
 
@@ -307,7 +307,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
           _giza_flush_xw_event_queue(&event);
 	  return;
 	};
-      
+
 	break;
       }
     case ConfigureNotify: /* check if the window has been resized */
@@ -335,9 +335,9 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
     default:
       break;
     }
-    
+
   }
-  
+
 /*
  * Note: we never get to here (return is after ButtonPress)
   _giza_destroy_band (mode);
@@ -355,11 +355,11 @@ _giza_flush_xw_event_queue (XEvent *event)
    * Discard un-handled ButtonPress, KeyPress and MotionNotify events
    * without blocking.
    */
-  while(XCheckWindowEvent(XW.display, XW.window, 
+  while(XCheckWindowEvent(XW.display, XW.window,
        (long) (ButtonPressMask | KeyPressMask | PointerMotionMask), event));
 
 
-  /* Flush all remaining events from the X event queue 
+  /* Flush all remaining events from the X event queue
   while (XPending(XW.display)) {
      printf("removing pending XW event \n");
      XNextEvent(XW.display, event);
@@ -374,7 +374,7 @@ static void
 _giza_expose_xw (XEvent *event)
 {
   XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, event->xexpose.x,
-	     event->xexpose.y, (unsigned) event->xexpose.width, 
+	     event->xexpose.y, (unsigned) event->xexpose.width,
 	     (unsigned) event->xexpose.height, event->xexpose.x,
 	     event->xexpose.y);
 
@@ -393,7 +393,7 @@ _giza_change_size_xw (int width, int height)
 
   XW.width  = width;
   XW.height = height;
-  
+
   cairo_xlib_surface_set_size(surface,width,height);
 }
 
@@ -425,7 +425,7 @@ _giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanc, double
 
   *x = (double) ix;
   *y = (double) iy;
-  
+
   cairo_device_to_user (context, x, y);
   _giza_set_trans (oldTrans);
 }
@@ -439,7 +439,7 @@ _giza_init_band_xw (void)
       /* Set up box so it can draw the box... */
       Band.onscreen = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
       Band.box = cairo_create (Band.onscreen);
-      
+
       /* use grey for band */
       cairo_set_source_rgba (Band.box, 0.5, 0.5, 0.5, 1.0);
 

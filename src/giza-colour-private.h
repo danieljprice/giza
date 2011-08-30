@@ -35,7 +35,7 @@ void _giza_init_colour_index (void);
 void _giza_init_colour_index_pgplot (void);
 void _giza_init_colour_table (void);
 void _giza_free_colour_table (void);
-void _giza_hls_to_rgb (double hue, double lightness, double saturation, 
+void _giza_hls_to_rgb (double hue, double lightness, double saturation,
                        double *red, double *green, double *blue);
 
 int _giza_colour_index_min;

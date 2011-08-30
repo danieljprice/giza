@@ -49,7 +49,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
   cairo_matrix_t mat;
 
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
-                     affine[4], affine[5]); 
+                     affine[4], affine[5]);
 
   double dscale = scale;
   /* Find the scaling factor */
@@ -69,10 +69,10 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 		}
 	    }
 	}
-      if (fabs (dscale) < GIZA_ZERO_DOUBLE) { return; } 
+      if (fabs (dscale) < GIZA_ZERO_DOUBLE) { return; }
       double dx2 = affine[0]*affine[0] + affine[1]*affine[1];
       double dy2 = affine[2]*affine[2] + affine[3]*affine[3];
-      if (dx2 < dy2) 
+      if (dx2 < dy2)
         {
           dscale = sqrt(dx2)/dscale;
         } else {
@@ -90,7 +90,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
       for (i = i1; i <= i2; i++)
 	{
 	  if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
-          {	  
+          {
              x = (double) i + 0.5;
              y = (double) j + 0.5;
 
@@ -124,7 +124,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 
   if (!oldBuf)
     giza_end_buffer ();
-  
+
   if (!Sets.buf) giza_flush_device ();
 }
 
@@ -154,7 +154,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
   cairo_matrix_t mat;
 
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
-                     affine[4], affine[5]); 
+                     affine[4], affine[5]);
 
  /* Find the scaling factor */
   double dscale = (double) scale;
@@ -177,7 +177,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
       if (fabs (dscale) < GIZA_ZERO_DOUBLE) { return; }
       float dx2 = affine[0]*affine[0] + affine[1]*affine[1];
       float dy2 = affine[2]*affine[2] + affine[3]*affine[3];
-      if (dx2 < dy2) 
+      if (dx2 < dy2)
         {
           dscale = sqrt(dx2)/dscale;
         } else {
@@ -195,7 +195,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
       for (i = i1; i <= i2; i++)
 	{
 	  if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
-          {	  
+          {
              x = (double) i + 0.5;
              y = (double) j + 0.5;
  	     cairo_matrix_transform_point (&mat, &x, &y);
@@ -228,6 +228,6 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
 
   if (!oldBuf)
     giza_end_buffer ();
-  
+
   if (!Sets.buf) giza_flush_device ();
 }

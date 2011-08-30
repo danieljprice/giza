@@ -80,7 +80,7 @@ giza_line_float (int n, float *xpts, float *ypts)
   if (!_giza_check_device_ready ("giza_line_float"))
     return;
 
-  if (n < 2) 
+  if (n < 2)
     return;
 
   int oldTrans = _giza_get_trans ();

@@ -31,14 +31,14 @@
  * Synopsis: Writes text with a position relative to the view-port.
  *
  * Input:
- *  -side          :- Must contain a character 'B','L','T' 
- *                    or 'R' specifying the bottom, left, 
- *                    top or right margin respectively. The 
+ *  -side          :- Must contain a character 'B','L','T'
+ *                    or 'R' specifying the bottom, left,
+ *                    top or right margin respectively. The
  *                    position of the text will be relative
  *                    to the specified side.
- *  -displacement   :- The displacement of the text from the 
+ *  -displacement   :- The displacement of the text from the
  *                    edge of the view-port specified in
- *                    side, measured out of the view-port in 
+ *                    side, measured out of the view-port in
  *                    units of character height.
  *  -coord         :- The location of the text along the edge
  *                    of the view port specified in side,
@@ -46,7 +46,7 @@
  *  -justification :- Specifies the justification of the text.
  *                    0.0 means the left most edge of the string
  *                    will be aligned with coord, 1.0 means the
- *                    right most edge of the string will be 
+ *                    right most edge of the string will be
  *                    aligned with coord etc.
  *  -string        :- The text that will be displayed.
  */

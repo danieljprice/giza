@@ -100,7 +100,7 @@ _giza_flush_device_eps (void)
 
 /**
  * Closes the eps device
- */ 
+ */
 void
 _giza_close_device_eps (void)
 {

@@ -35,7 +35,7 @@
  * input:
  *  -mantissa :- The mantissa of the number
  *  -power    :- The power of the number
- *  -form     :- Determine which form to use, see below 
+ *  -form     :- Determine which form to use, see below
  *  -string   :- Gets set to the string
  *
  * Forms:
@@ -177,7 +177,7 @@ giza_format_number_log (double power, char *str)
 
 /**
  * 'Cleans up' the exponential part of a string representation of a float.
- * Removes unnecessary '+' and '0' and converts E to \times10^{. 
+ * Removes unnecessary '+' and '0' and converts E to \times10^{.
  */
 /*static void */
 /*_giza_tidy_expo (char *from, int n, char *to) */

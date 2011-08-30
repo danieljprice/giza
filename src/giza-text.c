@@ -61,7 +61,7 @@ _giza_start_super (void)
 
   x = height * sin (Sets.fontAngle);
   y = -height * cos (Sets.fontAngle);
-  
+
   cairo_rel_move_to (context, x, y);
 
   /* DJP: we scale the character height relative to it's current size
@@ -87,7 +87,7 @@ _giza_stop_super (void)
 
   x = -height * sin (Sets.fontAngle);
   y = height * cos (Sets.fontAngle);
-  
+
   cairo_rel_move_to (context, x, y);
   _giza_set_trans (oldTrans);
 }
@@ -106,7 +106,7 @@ _giza_start_sub (void)
 
   x = height * sin (Sets.fontAngle);
   y = -height * cos (Sets.fontAngle);
-  
+
   cairo_rel_move_to (context, x, y);
 
   _giza_scale_character_size (GIZA_SCALE_SUBS);
@@ -129,7 +129,7 @@ _giza_stop_sub (void)
 
   x = -height * sin (Sets.fontAngle);
   y = height * cos (Sets.fontAngle);
-  
+
   cairo_rel_move_to (context, x, y);
   _giza_set_trans (oldTrans);
 }

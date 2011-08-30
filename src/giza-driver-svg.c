@@ -95,7 +95,7 @@ _giza_flush_device_svg (void)
 
 /**
  * Closes the svg device
- */ 
+ */
 void
 _giza_close_device_svg (void)
 {

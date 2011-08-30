@@ -54,7 +54,7 @@ giza_function_t (double (*funcx)(double *t), double (*funcy)(double *t),
   dt = (tmax - tmin)/((double) n);
   xpt0 = funcx(&tmin);
   ypt0 = funcy(&tmin);
-  
+
   if (flag==0)  /* Find min/max in x,y automatically */
      {          /* and call giza_environment */
        double xmin = xpt0;
@@ -95,7 +95,7 @@ giza_function_t (double (*funcx)(double *t), double (*funcy)(double *t),
          }
        giza_set_environment(xmin,xmax,ymin,ymax,0,0);
      }
-  
+
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
@@ -143,7 +143,7 @@ giza_function_t_float (float (*funcx)(float *t), float (*funcy)(float *t),
   dt = (tmax - tmin)/((float) n);
   xpt0 = funcx(&tmin);
   ypt0 = funcy(&tmin);
-  
+
   if (flag==0)  /* Find min/max in x,y automatically */
      {          /* and call giza_environment */
        float xmin = xpt0;
@@ -184,7 +184,7 @@ giza_function_t_float (float (*funcx)(float *t), float (*funcy)(float *t),
          }
        giza_set_environment_float(xmin,xmax,ymin,ymax,0,0);
      }
-  
+
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 

@@ -50,7 +50,7 @@
 static void _giza_set_prefix (char *prefix);
 static int id = 0;
 
-/* 
+/*
  * NOTE: Should clean up surfaces etc if device open was not successful.
  * Opens a device for drawing to.
  */
@@ -83,14 +83,14 @@ static int id = 0;
 int
 giza_open_device (char *newDeviceName, char *newPrefix)
 {
-  
+
   if (id != 0) {
      _giza_warning("giza_open_device", "previous device was not closed");
      giza_close_device();
   }
   id += 1;
 
-  /* Some general initialisation */  
+  /* Some general initialisation */
   Dev.pgNum = 0;
   Dev.type = GIZA_DEVICE_IV;
   Dev.defaultBackgroundAlpha = 1.;
@@ -158,7 +158,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
       return -1;
     }
 
-  /* DJP: set the size in cm: note that this may not be 
+  /* DJP: set the size in cm: note that this may not be
    *      identical to that specified in open_device_size
    *      because the actual device size must be a whole number
    *      of pixels
@@ -183,7 +183,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   /*  _giza_set_defaults (); */
   _giza_init_arrow_style ();
   _giza_init_line_style ();
-  
+
   char *pgmode = getenv("GIZA_PGPLOT_STRICT");
   if (pgmode) {
      _giza_init_colour_index_pgplot ();
@@ -197,7 +197,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   _giza_init_window (); /* call init_window BEFORE set_viewport */
   giza_set_viewport_default ();
   giza_set_line_width (1);
-  
+
   /*printf("debug: init font \n");*/
   _giza_init_character_height ();
   _giza_init_font ();
@@ -269,12 +269,12 @@ giza_flush_device (void)
       break;
 #endif
     default:
-      if (!surface) 
+      if (!surface)
         {
           _giza_error ("giza_flush_device", "No device open, cannot flush");
           return;
         } else {
-          cairo_surface_flush(surface);        
+          cairo_surface_flush(surface);
         }
       return;
     }
@@ -323,10 +323,10 @@ giza_change_page (void)
   if (!_giza_check_device_ready ("giza_change_page"))
     return;
 
-  /* save a whole bunch of settings 
+  /* save a whole bunch of settings
     (line style, width, colour index etc.) */
   giza_save();
-  
+
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
@@ -401,7 +401,7 @@ giza_close_device (void)
 
   /* destroy the cairo context */
   if (context) cairo_destroy(context);
-  
+
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
@@ -442,7 +442,7 @@ giza_close_device (void)
   _giza_free_font ();
   _giza_free_colour_table ();
   Dev.type = GIZA_DEVICE_IV;
- 
+
   return;
 }
 
@@ -471,9 +471,9 @@ giza_query_device (char *querytype, char *returnval)
 
   if (!strcmp(querytype,"type"))
      {
-       if (!_giza_int_to_device(Dev.type,returnval)) 
-         { 
-           ierr = 1; 
+       if (!_giza_int_to_device(Dev.type,returnval))
+         {
+           ierr = 1;
          }
      }
   /* Query whether or not device has cursor */
@@ -485,7 +485,7 @@ giza_query_device (char *querytype, char *returnval)
         }
       else
         {
-          strncpy(returnval,"NO",sizeof(returnval));   
+          strncpy(returnval,"NO",sizeof(returnval));
         }
     }
   /* Query whether or not device is hard copy or not */
@@ -497,7 +497,7 @@ giza_query_device (char *querytype, char *returnval)
         }
       else
         {
-          strncpy(returnval,"YES",sizeof(returnval));   
+          strncpy(returnval,"YES",sizeof(returnval));
         }
     }
    /*  else if (!strcmp(querytype,"file")) */
@@ -609,7 +609,7 @@ _giza_device_to_int (char *newDeviceName)
   if (!strcmp (devName, "/null"))
     newDevice = GIZA_DEVICE_NULL;
 #ifdef _GIZA_HAS_XW
-  else if (!strcmp (devName, "/xw") 
+  else if (!strcmp (devName, "/xw")
         || !strcmp (devName, "/xwin"))
     newDevice = GIZA_DEVICE_XW;
 #endif
@@ -619,8 +619,8 @@ _giza_device_to_int (char *newDeviceName)
     newDevice = GIZA_DEVICE_SVG;
   else if (!strcmp (devName, "/pdf"))
     newDevice = GIZA_DEVICE_PDF;
-  else if (!strcmp (devName, "/ps") 
-        || !strcmp (devName, "/cps") 
+  else if (!strcmp (devName, "/ps")
+        || !strcmp (devName, "/cps")
         || !strcmp (devName, "/postscript"))
     newDevice = GIZA_DEVICE_PS;
   else if (!strcmp (devName, "/vpdf"))
@@ -645,7 +645,7 @@ _giza_device_to_int (char *newDeviceName)
 int
 _giza_int_to_device (int numDevice, char *DeviceName)
 {
- 
+
  int ierr;
  ierr = 0;
  switch (numDevice)
@@ -693,7 +693,7 @@ _giza_int_to_device (int numDevice, char *DeviceName)
 /**
  * Prints a list of currently available devices to stdout
  */
-void 
+void
 giza_print_device_list (void)
 {
    _giza_display_devices();
@@ -749,7 +749,7 @@ _giza_init_norm (void)
   switch (Dev.type)
     {
 #ifdef _GIZA_HAS_XW
-    /* 
+    /*
      *  X-Windows device is different because it has additional margins around the giza window
      *  (this should in principle be for *all* interactive devices...)
      */
@@ -881,20 +881,20 @@ void _giza_trim(char *str) {
  */
 void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension)
 {
-  
-  /* this stuff is instead of using strcasestr 
+
+  /* this stuff is instead of using strcasestr
    * (giza should not use non-standard extensions)
    */
   char lprefix[strlen(prefix)];
   char lextens[strlen(extension)];
   _giza_lowercase(prefix,lprefix);
   _giza_lowercase(extension,lextens);
-  
+
   char *prefixtrim = prefix;
   char *ext = extension;
   _giza_trim(prefixtrim);
   _giza_trim(ext);
-  
+
   /*printf(" got prefix = \"%s\" extension=\"%s\" \n",prefixtrim,ext);*/
 
   if (!strstr(lprefix,lextens)) {
@@ -907,7 +907,7 @@ void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, cha
   } else {
   /* Do not add the device extension if the prefix already contains it  */
      if (pgNum == 0) {
-        sprintf (filename, "%s", prefixtrim);    
+        sprintf (filename, "%s", prefixtrim);
      } else {
         /*
          * Here we need a number, but it should come BEFORE the device extension

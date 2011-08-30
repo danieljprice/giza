@@ -49,7 +49,7 @@ giza_polygon (int n, double *xpts, double *ypts)
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_move_to (context, xpts[0], ypts[0]);
- 
+
   int i;
   for (i = 1; i < n; i++)
     {
@@ -86,7 +86,7 @@ giza_polygon_float (int n, float *xpts, float *ypts)
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_move_to (context, (double) xpts[n-1],(double) ypts[n-1]);
- 
+
   int i;
   for (i = 0; i < n; i++)
     {

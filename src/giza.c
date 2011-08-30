@@ -130,7 +130,7 @@ _giza_has_drawn (void)
   return drawn;
 }
 
-int 
+int
 _giza_nint (double x)
 {
   if (x < 0)

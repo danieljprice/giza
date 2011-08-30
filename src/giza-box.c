@@ -42,15 +42,15 @@ static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
  *
  * Input:
  *  -xopts :- String of options for the x-axis.
- *            The options may be in any order. See 
+ *            The options may be in any order. See
  *            below for
  *            details
- *  -xtick :- The distance, in world coordinates, 
- *            between major ticks on the x-axis. 
- *            If 0.0 the interval is chosen 
+ *  -xtick :- The distance, in world coordinates,
+ *            between major ticks on the x-axis.
+ *            If 0.0 the interval is chosen
  *            by giza_box.
- *  -nxsub :- The number of minor ticks to be placed 
- *            between each major tick. If 0 the 
+ *  -nxsub :- The number of minor ticks to be placed
+ *            between each major tick. If 0 the
  *            number is chosen by giza_box.
  *  -yopts :- Similar to xopts but for the y-axis.
  *  -ytick :- Similar to xtick but for the y-axis.
@@ -63,7 +63,7 @@ static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
  *  -T :- Draw major ticks.
  *  -S :- Draw minor ticks.
  *  -N :- Label the axis.
- *  -V :- Orient numeric y labels vertically (only 
+ *  -V :- Orient numeric y labels vertically (only
  *        applies to left and right axis).
  */
 void

@@ -43,7 +43,7 @@ _giza_warning (char *source, char *message)
 void
 _giza_message (char *message)
 {
-   fprintf (stdout, "%%giza: %s\n", message); 
+   fprintf (stdout, "%%giza: %s\n", message);
 }
 
 /**
@@ -79,13 +79,13 @@ _giza_prompt_for_device (void)
       if (p != NULL)
         {
           size_t last = strlen(input) - 1;
-          if (input[last] == '\n') 
+          if (input[last] == '\n')
              {
                if (last == 0)
                  {
                    devType = _giza_default_device ();
                    break;
-                 } 
+                 }
                else
                  {
                    input[last] = '\0';
@@ -135,7 +135,7 @@ _giza_display_devices (void)
 
 void
 _giza_newpage_prompt (void)
-{ 
+{
   char input[2];
   printf (" Press RETURN for next page: ");
   /*
