@@ -97,7 +97,7 @@ giza_annotate (char *side, double displacment, double coord,
       y = Win.ymax;
 
       /* shift the position of the text away from the view port by displacement */
-      y = y + ych * displacment;
+      y = y + ych * (displacment - 0.5);
     }
   /* if drawing along the left */
   else if (strchr (side, 'L') || strchr (side, 'l'))
