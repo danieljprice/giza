@@ -1711,12 +1711,13 @@ contains
     implicit none
     character(len=*), intent(in) :: string
     character(kind=c_char), dimension(len(string)+1) :: array
-    integer :: i
+    integer :: i, ilen
 
-    do i=1, len_trim(string) ! pass the trimmed string
+    ilen = len_trim(string) ! use the trimmed string length
+    do i=1, ilen
       array(i)=string(i:i)
     end do
-    array(len(string)+1)=achar(0)
+    array(ilen+1)=achar(0)
 
   end function cstring
 
