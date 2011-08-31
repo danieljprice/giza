@@ -761,11 +761,11 @@ end subroutine PGOLIN
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 integer function PGOPEN (DEVICE)
- use giza, only:giza_open_device
+ use giza, only:giza_open_device,giza_set_colour_palette,giza_colour_palette_pgplot
  implicit none
  character*(*), intent(in) :: DEVICE
 
- pgopen = giza_open_device(device,'GIZA')
+ pgopen = giza_open_device(device,'giza')
  
  !--PGPLOT gets pgopen = id on success
  !  and <= 0 for errors
@@ -774,6 +774,7 @@ integer function PGOPEN (DEVICE)
  else
     pgopen = 1
  endif
+ call giza_set_colour_palette(giza_colour_palette_pgplot)
 
 end function PGOPEN
 

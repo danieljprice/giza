@@ -32,7 +32,6 @@ typedef struct
 
 void _giza_set_range_from_colour_table (int cimin, int cimax);
 void _giza_init_colour_index (void);
-void _giza_init_colour_index_pgplot (void);
 void _giza_init_colour_table (void);
 void _giza_free_colour_table (void);
 void _giza_hls_to_rgb (double hue, double lightness, double saturation,

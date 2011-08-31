@@ -70,6 +70,8 @@ void giza_set_colour_index_range (int cimin, int cimax);
 void giza_get_colour_index_range (int *cimin, int *cimax);
 /*void giza_set_range_as_colour_table (int *cimin, int *cimax)*/
 
+void giza_set_colour_palette(int palette);
+
 void giza_set_colour_representation (int ci, double red, double green,
 				     double blue);
 void giza_set_colour_representation_float (int ci, float red, float green,

@@ -44,6 +44,7 @@ module giza
       giza_get_colour_index, &
       giza_set_colour_index_range, &
       giza_get_colour_index_range, &
+      giza_set_colour_palette, &
       giza_set_colour_representation, &
       giza_set_colour_representation_alpha, &
       giza_get_colour_representation, &
@@ -139,6 +140,8 @@ module giza
   integer, parameter, public :: giza_units_world = GIZA_UNITS_WORLD
   integer, parameter, public :: giza_colour_index_min = GIZA_COLOUR_INDEX_MIN
   integer, parameter, public :: giza_colour_index_max = GIZA_COLOUR_INDEX_MAX
+  integer, parameter, public :: giza_colour_palette_default = GIZA_COLOUR_PALETTE_DEFAULT
+  integer, parameter, public :: giza_colour_palette_pgplot = GIZA_COLOUR_PALETTE_PGPLOT
 private
 
 !---------------------------------------------------------
@@ -350,6 +353,14 @@ private
       implicit none
       integer(kind=c_int),intent(out) :: ci
     end subroutine giza_get_colour_index
+ end interface
+
+ interface giza_set_colour_palette
+    subroutine giza_set_colour_palette(palette) bind(C)
+      import
+      implicit none
+      integer(kind=c_int), value, intent(in) :: palette
+    end subroutine giza_set_colour_palette
  end interface
 
  interface giza_set_colour_index_range

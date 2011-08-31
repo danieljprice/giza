@@ -123,7 +123,7 @@ endif
 SOURCE= giza-annotate.c giza-arrow-style.c giza-arrow.c giza-band-style.c \
 	giza-band.c giza-box.c giza-buffering.c giza-character-size.c \
 	giza-circle.c giza-clipping.c giza-colour-index.c giza-colour-table.c \
-	giza-contour.c giza-cursor-routines.c giza-device-has-cursor.c \
+	giza-colour-palette.c giza-contour.c giza-cursor-routines.c giza-device-has-cursor.c \
 	giza-draw-background.c giza-draw.c giza-driver-eps.c giza-driver-null.c \
 	giza-driver-pdf.c giza-driver-png.c giza-driver-ps.c giza-driver-svg.c \
 	giza-driver-xw.c giza-drivers.c giza-environment.c giza-error-bars.c \
