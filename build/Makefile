@@ -78,7 +78,6 @@ KNOWN_SYSTEM=no
   CC= gcc
   CFLAGS= -fPIC -Wall -Wextra -O3
   SHAREDLIBFLAGS= -dynamic
-  SHAREDEXT=.dylib
   DEBUGFLAG= -Wall -Wextra -g -O0
   RANLIB= ranlib
   LIBTOOL= libtool
@@ -96,9 +95,10 @@ GIZALIB=$(LIBDIR)/libgiza.a
 PGPLOTLIB=$(LIBDIR)/libpgplot.a
 CPGPLOTLIB=$(LIBDIR)/libcpgplot.a
 
-SHARED_LIB_GIZA=$(LIBDIR)/libgiza$(SHAREDEXT)
-SHARED_LIB_PGPLOT=$(LIBDIR)/libpgplot$(SHAREDEXT)
-SHARED_LIB_CPGPLOT=$(LIBDIR)/libcpgplot$(SHAREDEXT)
+SHREXT=${shell test .$$module = .yes && echo .so || echo .dylib}
+SHARED_LIB_GIZA=$(LIBDIR)/libgiza$(SHREXT)
+SHARED_LIB_PGPLOT=$(LIBDIR)/libpgplot$(SHREXT)
+SHARED_LIB_CPGPLOT=$(LIBDIR)/libcpgplot$(SHREXT)
 
 #
 # Debug flags
