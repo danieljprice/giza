@@ -51,18 +51,18 @@ CFLAGS= -fPIC -Wall -Wextra -O3
 endif
 
 #
-# Change the following lines if giza can't find x11 or giza
-#
-X11LIBS= -L/usr/X11R6/lib -lX11
-CAIROLIBS= -L/usr/X11R6/lib -lcairo
-INCFLAGS= -I/usr/X11R6/include -I/usr/include -I/usr/include/cairo -I$(INCDIR) -I$(SRCDIR)
-
-LDFLAGS= $(X11LIBS) $(CAIROLIBS) -lm
-
-#
 # The prefix for the installed files
 #
 PREFIX=/usr/local
+
+#
+# Change the following lines if giza can't find x11 or giza
+#
+X11LIBS= -L/usr/X11R6/lib -lX11
+CAIROLIBS= -L/usr/X11R6/lib -L$(PREFIX)/lib -lcairo
+INCFLAGS= -I/usr/X11R6/include -I/usr/include -I$(PREFIX)/include -I$(INCDIR) -I$(SRCDIR)
+
+LDFLAGS= $(X11LIBS) $(CAIROLIBS) -lm
 
 #
 # For creating the tarball
@@ -102,10 +102,6 @@ STATIC_LIB_GIZA=$(GIZALIB)$(LIBEXT)
 STATIC_LIB_PGPLOT=$(PGPLOTLIB)$(LIBEXT)
 STATIC_LIB_CPGPLOT=$(CPGPLOTLIB)$(LIBEXT)
 
-SHARED_LIB_GIZA=$(GIZALIB)$(SHREXT)
-SHARED_LIB_PGPLOT=$(PGPLOTLIB)$(SHREXT)
-SHARED_LIB_CPGPLOT=$(CPGPLOTLIB)$(SHREXT)
-
 ifeq ($(OSTYPE), Darwin)
    SHREXT=.dylib
    SHARED_LIB_GIZA_VERSION=$(GIZALIB).$(VERSION)$(SHREXT)
@@ -113,6 +109,11 @@ else
    SHREXT=.so
    SHARED_LIB_GIZA_VERSION=$(GIZALIB)$(SHREXT).$(VERSION)
 endif
+
+SHARED_LIB_GIZA=$(GIZALIB)$(SHREXT)
+SHARED_LIB_PGPLOT=$(PGPLOTLIB)$(SHREXT)
+SHARED_LIB_CPGPLOT=$(CPGPLOTLIB)$(SHREXT)
+
 #
 # Debug flags
 #
