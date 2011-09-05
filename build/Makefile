@@ -70,7 +70,7 @@ PREFIX=/usr/local
 DISTDIR=giza-$(VERSION)
 
 KNOWN_SYSTEM=no
-OSTYPE=`uname`
+OSTYPE=${shell uname}
 #
 # Settings for specific compilers
 #
@@ -106,7 +106,7 @@ SHARED_LIB_GIZA=$(GIZALIB)$(SHREXT)
 SHARED_LIB_PGPLOT=$(PGPLOTLIB)$(SHREXT)
 SHARED_LIB_CPGPLOT=$(CPGPLOTLIB)$(SHREXT)
 
-ifeq ($(OSTYPE),Darwin)
+ifeq ($(OSTYPE), Darwin)
    SHREXT=.dylib
    SHARED_LIB_GIZA_VERSION=$(GIZALIB).$(VERSION)$(SHREXT)
 else
