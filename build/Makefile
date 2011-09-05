@@ -60,7 +60,7 @@ PREFIX=/usr/local
 #
 X11LIBS= -L/usr/X11R6/lib -lX11
 CAIROLIBS= -L/usr/X11R6/lib -L$(PREFIX)/lib -lcairo
-INCFLAGS= -I/usr/X11R6/include -I/usr/include -I$(PREFIX)/include -I$(INCDIR) -I$(SRCDIR)
+INCFLAGS= -I/usr/X11R6/include -I/usr/include -I/usr/include/cairo -I$(PREFIX)/include -I$(INCDIR) -I$(SRCDIR)
 
 LDFLAGS= $(X11LIBS) $(CAIROLIBS) -lm
 
