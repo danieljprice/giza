@@ -70,6 +70,7 @@ PREFIX=/usr/local
 DISTDIR=giza-$(VERSION)
 
 KNOWN_SYSTEM=no
+OSTYPE=`uname`
 #
 # Settings for specific compilers
 #
@@ -77,10 +78,10 @@ KNOWN_SYSTEM=no
   # using gcc
   CC= gcc
   CFLAGS= -fPIC -Wall -Wextra -O3
-  SHAREDLIBFLAGS= -dynamic
+  SHAREDLIBFLAGS= -shared
   DEBUGFLAG= -Wall -Wextra -g -O0
   RANLIB= ranlib
-  LIBTOOL= libtool
+  LIBTOOL= $(CC) 
   FC= gfortran
   KNOWN_SYSTEM=yes
 #endif
@@ -91,15 +92,27 @@ KNOWN_SYSTEM=no
 #
 FLIBS= -L/usr/local/lib/x86_64/ -lgfortran
 
-GIZALIB=$(LIBDIR)/libgiza.a
-PGPLOTLIB=$(LIBDIR)/libpgplot.a
-CPGPLOTLIB=$(LIBDIR)/libcpgplot.a
+LIBEXT=.a
 
-SHREXT=${shell test .$$module = .yes && echo .so || echo .dylib}
-SHARED_LIB_GIZA=$(LIBDIR)/libgiza$(SHREXT)
-SHARED_LIB_PGPLOT=$(LIBDIR)/libpgplot$(SHREXT)
-SHARED_LIB_CPGPLOT=$(LIBDIR)/libcpgplot$(SHREXT)
+GIZALIB=$(LIBDIR)/libgiza
+PGPLOTLIB=$(LIBDIR)/libpgplot
+CPGPLOTLIB=$(LIBDIR)/libcpgplot
 
+STATIC_LIB_GIZA=$(GIZALIB)$(LIBEXT)
+STATIC_LIB_PGPLOT=$(PGPLOTLIB)$(LIBEXT)
+STATIC_LIB_CPGPLOT=$(CPGPLOTLIB)$(LIBEXT)
+
+SHARED_LIB_GIZA=$(GIZALIB)$(SHREXT)
+SHARED_LIB_PGPLOT=$(PGPLOTLIB)$(SHREXT)
+SHARED_LIB_CPGPLOT=$(CPGPLOTLIB)$(SHREXT)
+
+ifeq ($(OSTYPE),Darwin)
+   SHREXT=.dylib
+   SHARED_LIB_GIZA_VERSION=$(GIZALIB).$(VERSION)$(SHREXT)
+else
+   SHREXT=.so
+   SHARED_LIB_GIZA_VERSION=$(GIZALIB)$(SHREXT).$(VERSION)
+endif
 #
 # Debug flags
 #
@@ -161,19 +174,19 @@ all: giza pgplot
 
 giza: libgiza $(SHARED_LIB_GIZA)
 
-libgiza: $(GIZALIB)
+libgiza: $(STATIC_LIB_GIZA)
 	cp $(SRCDIR)/giza.h $(INCDIR)/
 	cp $(SRCDIR)/giza-shared.h $(INCDIR)/
 	@echo ""
 	@echo "Finished building giza"
 	@echo ""
 
-pgplot: $(PGPLOTLIB) $(SHARED_LIB_PGPLOT)
+pgplot: $(STATIC_LIB_PGPLOT) $(SHARED_LIB_PGPLOT)
 	@echo ""
 	@echo "Finished building libpgplot"
 	@echo ""
 
-cpgplot: $(CPGPLOTLIB) $(SHARED_LIB_CPGPLOT)
+cpgplot: $(STATIC_LIB_CPGPLOT) $(SHARED_LIB_CPGPLOT)
 	cp $(SRCDIR)/cpgplot.h $(INCDIR)/
 	@echo ""
 	@echo "Finished building libcpgplot"
@@ -182,15 +195,15 @@ cpgplot: $(CPGPLOTLIB) $(SHARED_LIB_CPGPLOT)
 #
 #--static libraries
 #
-$(GIZALIB): checksystem $(INCDIR)/giza-version.h $(OBJECTS)
+$(STATIC_LIB_GIZA): checksystem $(INCDIR)/giza-version.h $(OBJECTS)
 	ar ru $@ $(OBJECTS)
 	$(RANLIB) $@
 
-$(PGPLOTLIB): $(INCDIR)/giza-version.h $(OBJECTS) giza-fortran.o giza-pgplot.o
+$(STATIC_LIB_PGPLOT): $(INCDIR)/giza-version.h $(OBJECTS) giza-fortran.o giza-pgplot.o
 	ar ru $@ $(OBJECTS) giza-fortran.o giza-pgplot.o
 	$(RANLIB) $@
 
-$(CPGPLOTLIB): $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
+$(STATIC_LIB_CPGPLOT): $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
 	ar ru $@ $(OBJECTS) giza-cpgplot.o
 	$(RANLIB) $@
 
@@ -198,8 +211,8 @@ $(CPGPLOTLIB): $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
 #--dynamic libraries
 #
 $(SHARED_LIB_GIZA): $(INCDIR)/giza-version.h $(OBJECTS)
-	$(LIBTOOL) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_GIZA).$(VERSION) $(OBJECTS) $(LDFLAGS)
-	ln -sf $(SHARED_LIB_GIZA).$(VERSION) $(SHARED_LIB_GIZA)
+	$(LIBTOOL) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_GIZA_VERSION) $(OBJECTS) $(LDFLAGS)
+	ln -sf $(SHARED_LIB_GIZA_VERSION) $(SHARED_LIB_GIZA)
 
 $(SHARED_LIB_PGPLOT): $(INCDIR)/giza-version.h $(OBJECTS) giza-fortran.o giza-pgplot.o
 	$(LIBTOOL) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_PGPLOT) $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS) $(FLIBS)
