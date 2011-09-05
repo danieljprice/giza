@@ -436,6 +436,7 @@ giza_close_device (void)
   _giza_free_font ();
   _giza_free_colour_table ();
   Dev.type = GIZA_DEVICE_IV;
+  id = id - 1;
 
   return;
 }
