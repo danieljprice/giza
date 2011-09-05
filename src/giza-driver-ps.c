@@ -20,6 +20,7 @@
 
 #include "giza-private.h"
 #include "giza-io-private.h"
+#include "giza-drivers-private.h"
 #include "giza-driver-ps-private.h"
 #include <giza.h>
 #include <stdio.h>
@@ -56,7 +57,7 @@ _giza_open_device_ps (int vert)
   int lenext = strlen(GIZA_DEVICE_EXTENSION);
   int length = strlen (Dev.prefix) + lenext;
   char fileName[length + 1];
-  sprintf (fileName, "%s%s", Dev.prefix, GIZA_DEVICE_EXTENSION);
+  _giza_get_filename_for_device(fileName,Dev.prefix,0,GIZA_DEVICE_EXTENSION);
 
   Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
   Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
