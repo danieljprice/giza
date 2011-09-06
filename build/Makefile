@@ -59,7 +59,7 @@ PREFIX=/usr/local
 # Change the following lines if giza can't find x11 or giza
 #
 X11LIBS= -L/usr/X11R6/lib -lX11
-CAIROLIBS= -L/usr/X11R6/lib -L$(PREFIX)/lib -lcairo
+CAIROLIBS= -L/usr/X11R6/lib -lcairo
 INCFLAGS= -I/usr/X11R6/include -I/usr/include -I/usr/include/cairo -I$(PREFIX)/include -I$(INCDIR) -I$(SRCDIR)
 
 LDFLAGS= $(X11LIBS) $(CAIROLIBS) -lm
@@ -85,6 +85,13 @@ OSTYPE=${shell uname}
   FC= gfortran
   KNOWN_SYSTEM=yes
 #endif
+
+ifeq ($(FC),gfortran)
+  GFORTRAN_VERSION=${shell gfortran -dumpversion}
+  GFORTRAN_VMAJOR:=${shell echo $(GFORTRAN_VERSION) | cut -f1 -d.}
+  GFORTRAN_VMINOR:=${shell echo $(GFORTRAN_VERSION) | cut -f2 -d.}
+  GFORTRAN_GT_4_3:=$(shell [ $(GFORTRAN_VMAJOR) -gt 4 -o \( $(GFORTRAN_VMAJOR) -eq 4 -a $(GFORTRAN_VMINOR) -ge 3 \) ] && echo true)
+endif
 
 #
 #--libpgplot needs to be linked against the
@@ -230,6 +237,10 @@ $(INCDIR)/giza-version.h:
 	@echo "#define GIZA_VERSION_MINOR $(MINORV)" >> $@
 	@echo "#define GIZA_VERSION_MICRO $(MICROV)" >> $@
 	@echo "#define GIZA_VERSION_STRING \"$(VERSION)\"" >> $@
+#
+#--other dependencies
+#
+giza-fortran.o: checkflibs
 
 install: checksystem giza
 	cp -r $(LIBDIR) $(PREFIX)/
@@ -256,18 +267,26 @@ distclean: clean
 	rm -fr ../$(DISTDIR)
 	rm -f ../$(DISTDIR).tar.gz
 
+checkflibs:
+    ifeq ($(FC),gfortran)
+        ifeq ($(GFORTRAN_GT_4_3),true)
+	   @echo "compiling with gfortran v$(GFORTRAN_VERSION) (OK)"
+        else
+	   ${error gfortran $(GFORTRAN_VERSION) is too old to compile giza-fortran/libpgplot: please upgrade your gfortran}
+        endif
+    endif
 
 checksystem:
     ifeq ($(KNOWN_SYSTEM), yes)
-	  @echo ""
-	  @echo "Compiling giza-$(VERSION) for $(SYSTEM) system..........."
-	  @echo ""
+	@echo ""
+	@echo "Compiling giza-$(VERSION) for $(SYSTEM) system..........."
+	@echo ""
     else
-	  @echo ""
-	  @echo " Makefile for giza by James Wetter and Daniel Price "
-	  @echo ""
-	  @echo " make: ERROR: value of SYSTEM=$(SYSTEM) not recognised..."
-	  @echo " => set the environment variable SYSTEM to one listed "
-	  @echo "    in build/Makefile and try again"
-	  @echo ""
+	@echo ""
+	@echo " Makefile for giza by James Wetter and Daniel Price "
+	@echo ""
+	@echo " make: ERROR: value of SYSTEM=$(SYSTEM) not recognised..."
+	@echo " => set the environment variable SYSTEM to one listed "
+	@echo "    in build/Makefile and try again"
+	@echo ""
     endif
