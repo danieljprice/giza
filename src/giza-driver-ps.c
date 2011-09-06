@@ -82,7 +82,9 @@ _giza_open_device_ps (int vert)
     }
 
   surface = cairo_ps_surface_create (fileName, Dev.width, Dev.height);
-
+  cairo_ps_surface_dsc_comment (surface, "%%Title: giza postscript plot");
+  cairo_ps_surface_dsc_comment (surface, "%%Copyright: Copyright (C) 2010-2011 Daniel Price and James Wetter");
+  
   if (!surface)
     {
       _giza_error ("_giza_open_device_ps", "Could not create cairo PS surface");
