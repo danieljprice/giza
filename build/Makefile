@@ -87,9 +87,9 @@ OSTYPE=${shell uname}
 #endif
 
 ifeq ($(FC),gfortran)
-  GFORTRAN_VERSION=${shell gfortran -dumpversion}
-  GFORTRAN_VMAJOR:=${shell echo $(GFORTRAN_VERSION) | cut -f1 -d.}
-  GFORTRAN_VMINOR:=${shell echo $(GFORTRAN_VERSION) | cut -f2 -d.}
+  GFORTRAN_VERSION=${shell gfortran -dumpversion | head -1}
+  GFORTRAN_VMAJOR:=${shell echo "$(GFORTRAN_VERSION)" | cut -f1 -d. | sed 's/[a-z,A-Z,(,), ]//g'}
+  GFORTRAN_VMINOR:=${shell echo "$(GFORTRAN_VERSION)" | cut -f2 -d.}
   GFORTRAN_GT_4_3:=$(shell [ $(GFORTRAN_VMAJOR) -gt 4 -o \( $(GFORTRAN_VMAJOR) -eq 4 -a $(GFORTRAN_VMINOR) -ge 3 \) ] && echo true)
 endif
 
