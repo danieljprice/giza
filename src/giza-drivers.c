@@ -184,19 +184,23 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();
+  /*printf("debug: init font \n");*/
+
   giza_draw_background ();
   _giza_init_colour_table ();
   _giza_set_trans (GIZA_TRANS_IDEN);
   _giza_init_norm ();
+  
+  /* font and character height initialisations
+     need to come before set_viewport_default */
+  _giza_init_character_height ();
+  _giza_init_font ();
+
   _giza_init_window (); /* call init_window BEFORE set_viewport */
   giza_set_viewport_default ();
   giza_set_line_width (1);
 
-  /*printf("debug: init font \n");*/
-  _giza_init_character_height ();
-  _giza_init_font ();
   /*
-  printf("debug: init char height \n");
   printf("debug: init fill \n");
   */
   _giza_init_fill ();

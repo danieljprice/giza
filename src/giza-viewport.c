@@ -26,9 +26,6 @@
 #include <giza.h>
 #include <stdio.h>
 
-#define GIZA_DEFAULT_VP_MARGIN_VERT 0.08
-#define GIZA_DEFAULT_VP_MARGIN_HORI 0.08
-
 /**
  * Settings: giza_set_viewport
  *
@@ -52,10 +49,7 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
       printf("giza_viewport: xmin %f xmax %f ymin %f ymax %f \n",xleft,xright,ybottom,ytop);
       _giza_warning ("giza_set_viewport", "Invalid arguments, using default viewport");
 
-      VP.xmin = GIZA_DEFAULT_VP_MARGIN_HORI;
-      VP.xmax = 1. - GIZA_DEFAULT_VP_MARGIN_HORI;
-      VP.ymin = GIZA_DEFAULT_VP_MARGIN_VERT;
-      VP.ymax = 1. - GIZA_DEFAULT_VP_MARGIN_VERT;
+      _giza_get_default_viewport(&VP.xmin,&VP.xmax,&VP.ymin,&VP.ymax);
 
     } else {
 
@@ -205,16 +199,28 @@ giza_set_viewport_default (void)
 {
   if(!_giza_check_device_ready("giza_set_viewport_default")) return;
 
-  double xmin = GIZA_DEFAULT_VP_MARGIN_HORI;
-  double xmax = 1. - GIZA_DEFAULT_VP_MARGIN_HORI;
-  double ymin = GIZA_DEFAULT_VP_MARGIN_VERT;
-  double ymax = 1. - GIZA_DEFAULT_VP_MARGIN_VERT;
-
+  double xmin, xmax, ymin, ymax;
+  _giza_get_default_viewport(&xmin,&xmax,&ymin,&ymax);
   giza_set_viewport(xmin,xmax,ymin,ymax);
   /* also set window if calling default viewport routine */
   /*giza_set_window(GIZA_DEFAULT_WINDOW_X1,GIZA_DEFAULT_WINDOW_X2,
                   GIZA_DEFAULT_WINDOW_Y1,GIZA_DEFAULT_WINDOW_Y2);
   */
+
+}
+
+/**
+ * Internal routine returning the default viewport size
+ */
+void
+_giza_get_default_viewport (double *xmin, double *xmax, double *ymin, double *ymax)
+{
+  double xch, ych;
+  giza_get_character_size(GIZA_UNITS_NORMALIZED, &xch, &ych);
+  *xmin = 4.*xch;
+  *xmax = *xmin + (1. - 8.*xch);
+  *ymin = 4.*xch;
+  *ymax = *ymin + (1. - 8.*xch);
 
 }
 

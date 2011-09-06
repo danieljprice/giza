@@ -23,3 +23,6 @@ struct GIZA_Viewport
   double ymin;
   double ymax;
 } VP;
+
+void _giza_get_default_viewport (double *xmin, double *xmax, 
+                                 double *ymin, double *ymax);
