@@ -158,14 +158,6 @@ giza_open_device (char *newDeviceName, char *newPrefix)
       return -1;
     }
 
-  /* DJP: set the size in cm: note that this may not be
-   *      identical to that specified in open_device_size
-   *      because the actual device size must be a whole number
-   *      of pixels
-   */
-  Dev.widthCM  = 0.1 * Dev.width / Dev.deviceUnitsPermm;
-  Dev.heightCM = 0.1 * Dev.height / Dev.deviceUnitsPermm;
-
   /* check that the surface was created */
   if (success)
     return -1;
@@ -223,14 +215,21 @@ giza_open_device (char *newDeviceName, char *newPrefix)
  *  -newDeviceName :- Specifies the type of device to be opened.
  *                    See below for details.
  *  -newPrefix     :- Specifies the default prefix to be used for file names.
- *  -width         :- Width for the newly opened device in cms.
- *  -height        :- Height for the newly opened device in cms.
+ *  -width         :- Width for the newly opened device
+ *  -height        :- Height for the newly opened device
+ *  -units         :- Units in which the width/height of the device are specified
+ *
+ * Units:
+ *  -GIZA_UNITS_DEVICE     :- device coords (i.e. pixels on bitmap devices, points on vector devices)
+ *  -GIZA_UNITS_PIXELS     :- pixels
+ *  -GIZA_UNITS_MM         :- mm
+ *  -GIZA_UNITS_INCHES     :- inches
+ *  Other values cause an error message and are treated as GIZA_UNITS_DEVICE
  */
 int
-giza_open_device_size (char *newDeviceName, char *newPrefix, double width, double height)
+giza_open_device_size (char *newDeviceName, char *newPrefix, double width, double height, int units)
 {
-  Dev.widthCM = width;
-  Dev.heightCM = height;
+  giza_set_paper_size(units,width,height);
   _giza_set_sizeSpecified ();
   return giza_open_device (newDeviceName, newPrefix);
 }
@@ -241,9 +240,9 @@ giza_open_device_size (char *newDeviceName, char *newPrefix, double width, doubl
  * Synopsis: Same functionality as giza_open_device_size but takes floats
  */
 int
-giza_open_device_size_float (char *newDeviceName, char *newPrefix, float width, float height)
+giza_open_device_size_float (char *newDeviceName, char *newPrefix, float width, float height, int units)
 {
-  return giza_open_device_size (newDeviceName, newPrefix, (double) width, (double) height);
+  return giza_open_device_size (newDeviceName, newPrefix, (double) width, (double) height, units);
 }
 
 /**
@@ -308,8 +307,9 @@ void
 giza_change_page (void)
 {
   if (!_giza_has_drawn ()) {
-    /*int width  = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;
-    int height = (int) (Dev.deviceUnitsPermm * 10. * Dev.heightCM) + 1;
+    /* allow resizing of the device if nothing has been drawn
+    int width, height;
+    _giza_get_specified_size(&width, &height);
     _giza_resize_device(width, height);
     _giza_change_page_xw();
     */

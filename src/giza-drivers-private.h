@@ -42,3 +42,4 @@ void _giza_free_device_list (char *deviceList);
 void _giza_lowercase(char *string, char *lowerstring);
 void _giza_trim(char *str);
 void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension);
+void _giza_get_specified_size(int *width, int *height);

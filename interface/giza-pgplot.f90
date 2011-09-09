@@ -762,9 +762,12 @@ end subroutine PGOLIN
 !------------------------------------------------------------------------
 integer function PGOPEN (DEVICE)
  use giza, only:giza_open_device,giza_set_colour_palette,giza_colour_palette_pgplot
+! use giza, only:giza_open_device_size,giza_units_mm,giza_units_inches
  implicit none
  character*(*), intent(in) :: DEVICE
 
+! print*,'giza units mm = ',giza_units_mm
+! pgopen = giza_open_device_size(device,'giza',11.0,8.5,giza_units_inches)
  pgopen = giza_open_device(device,'giza')
  
  !--PGPLOT gets pgopen = id on success
@@ -805,13 +808,11 @@ end subroutine PGPANL
 ! Status: IMPLEMENTED (NOT WORKING)
 !------------------------------------------------------------------------
 subroutine PGPAP (WIDTH, ASPECT)
- use giza, only:giza_set_paper_size
+ use giza, only:giza_set_paper_size, giza_units_inches
  implicit none
  real, intent(in) :: WIDTH, ASPECT
- real :: widthCM
 
- widthCM = width * 2.54  ! convert to cm
- call giza_set_paper_size(widthCM,aspect)
+ call giza_set_paper_size(giza_units_inches,WIDTH,WIDTH*ASPECT)
 
 end subroutine PGPAP
 

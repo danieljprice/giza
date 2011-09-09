@@ -61,8 +61,7 @@ _giza_open_device_eps (int vert)
   /* set all device specific settings */
   if (_giza_sizeSpecified() )
     {
-      Dev.width  = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;
-      Dev.height = (int) (Dev.deviceUnitsPermm * 10. * Dev.heightCM) + 1;
+      _giza_get_specified_size(&Dev.width, &Dev.height);
     }
   else if (vert)
     {

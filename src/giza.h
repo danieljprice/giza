@@ -118,9 +118,9 @@ void giza_get_current_point_float (float *xpt, float *ypt);
 void giza_print_device_list (void);
 int giza_open_device (char *newDeviceName, char *newPrefix);
 int giza_open_device_size (char *newDeviceName, char *newPrefix, double width,
-			   double height);
+			   double height, int units);
 int giza_open_device_size_float (char *newDeviceName, char *newPrefix,
-				 float width, float height);
+				 float width, float height, int units);
 void giza_flush_device (void);
 void giza_change_page (void);
 void giza_close_device (void);
@@ -213,8 +213,8 @@ void giza_mark_points_ordered_float (int maxpts, int *npts, float xpts[maxpts],
 void giza_move (double xpt, double ypt);
 void giza_move_float (float xpt, float ypt);
 
-void giza_set_paper_size (double width, double aspect);
-void giza_set_paper_size_float (float width, float aspect);
+void giza_set_paper_size (int units, double width, double height);
+void giza_set_paper_size_float (int units, float width, float height);
 void giza_get_paper_size (int units, double *width, double *height);
 void giza_get_paper_size_float (int units, float *width, float *height);
 

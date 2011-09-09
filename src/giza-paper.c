@@ -21,33 +21,93 @@
 #include "giza-private.h"
 #include "giza-io-private.h"
 #include <giza.h>
+static double paperwidth,paperheight;
+static int paperunits;
 
 /**
  * Set the paper size (physical size of the view surface)
+ *  in a variety of units
  *
  * Input:
- *  -width  :- Width of the device surface in cm
- *  -aspect :- Aspect ratio of the device surface
+ *  -width  :- Width of the device surface
+ *  -height :- Aspect ratio of the device surface
+ *  -units  :- Units in which the width/height are given
  *
  */
 void
-giza_set_paper_size (double width, double aspect)
+giza_set_paper_size (int units, double width, double height)
 {
-/*  if (!_giza_check_device_ready ("giza_set_paper_size")) */
-/*    return; */
+  /* do not convert the paper size here to device units
+   * as this routine is called by giza BEFORE the device
+   * is actually open. The routine giza_get_specified_size
+   * does the conversion to device units AFTER the device
+   * has been opened and the conversion factors are known. 
+   */
+  paperwidth  = width;
+  paperheight = height;
+  paperunits  = units;
+  if (paperwidth <= 0.)
+    {
+      _giza_error("giza_set_paper_size","width <= 0");
+      paperwidth = 1.;
+    }
+  if (paperheight <= 0.)
+    {
+      _giza_error("giza_set_paper_size","height <= 0");
+      paperheight = 1.;
+    }
 
-  Dev.widthCM = width;
-  Dev.heightCM = width * aspect;
   _giza_set_sizeSpecified ();
   /*giza_flush_device (); */
 }
-
+/**
+ * Same as giza_get_paper_size but takes floats
+ */
 void
-giza_set_paper_size_float (float width, float aspect)
+giza_set_paper_size_float (int units, float width, float height)
 {
-  giza_set_paper_size ((double) width, (double) aspect);
+  giza_set_paper_size(units, (double) width, (double) height);
 }
 
+/**
+ * Internal routine returning the specified paper size
+ *  in device units. This is called AFTER the device has been opened.
+ *
+ * Output:
+ *  -width  :- Width of the specified surface size in device units
+ *  -height :- Height of the specified surface size in device units
+ *
+ */
+void _giza_get_specified_size(int *width, int *height)
+{
+  switch(paperunits)
+     {
+     case GIZA_UNITS_MM:
+       *width  = _giza_nint(paperwidth  * Dev.deviceUnitsPermm);
+       *height = _giza_nint(paperheight * Dev.deviceUnitsPermm);
+       break;
+     case GIZA_UNITS_INCHES:
+       *width  = _giza_nint(paperwidth  * Dev.deviceUnitsPermm * 25.4);
+       *height = _giza_nint(paperheight * Dev.deviceUnitsPermm * 25.4);
+       break;
+     case GIZA_UNITS_PIXELS:
+       *width  = _giza_nint(paperwidth  * Dev.deviceUnitsPerPixel);
+       *height = _giza_nint(paperheight * Dev.deviceUnitsPerPixel);
+       break;
+     case GIZA_UNITS_DEVICE:
+       *width  = _giza_nint(paperwidth);
+       *height = _giza_nint(paperheight);
+       break;
+     default:
+       *width  = _giza_nint(paperwidth  * Dev.deviceUnitsPermm * 10.);
+       *height = _giza_nint(paperheight * Dev.deviceUnitsPermm * 10.);
+       break;
+     }
+   /*
+      printf("size was %f x %f in units %i, actual size = %i x %i \n",
+            paperwidth,paperheight,paperunits,*width,*height);
+    */
+}
 
 /**
  * Query the paper size (physical size of the view surface)
@@ -69,7 +129,7 @@ giza_set_paper_size_float (float width, float aspect)
 void
 giza_get_paper_size (int units, double *width, double *height)
 {
-  if (!_giza_check_device_ready ("giza_set_paper_size"))
+  if (!_giza_check_device_ready ("giza_get_paper_size"))
     {
       *width  = 1.;
       *height = 1.;

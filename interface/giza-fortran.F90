@@ -547,18 +547,22 @@ private
  end interface
 
  interface giza_open_device_size_c
-    integer(kind=c_int) function giza_open_device_size_c (dev,prefix,width,height) bind(C,name="giza_open_device_size")
+    integer(kind=c_int) function giza_open_device_size_c (dev,prefix,width,height,units) &
+                        bind(C,name="giza_open_device_size")
       import
       implicit none
       character(kind=c_char),dimension(*),intent(in) :: dev,prefix
       real(kind=c_double),intent(in),value    :: height,width
+      integer(kind=c_int),intent(in),value    :: units
     end function giza_open_device_size_c
 
-    integer(kind=c_int) function giza_open_device_size_float_c(dev,prefix,width,height) bind(C,name="giza_open_device_size_float")
+    integer(kind=c_int) function giza_open_device_size_float_c(dev,prefix,width,height,units) &
+                        bind(C,name="giza_open_device_size_float")
       import
       implicit none
       character(kind=c_char),dimension(*),intent(in) :: dev,prefix
       real(kind=c_float),intent(in),value     :: height,width
+      integer(kind=c_int),intent(in),value    :: units
     end function giza_open_device_size_float_c
  end interface
  
@@ -1016,16 +1020,18 @@ private
  end interface
 
  interface giza_set_paper_size
-    subroutine giza_set_paper_size(width,aspect) bind(C)
+    subroutine giza_set_paper_size(units,width,aspect) bind(C)
       import
       implicit none
-      real(kind=c_double),intent(in),value :: width,aspect
+      integer(kind=c_int), intent(in),value :: units
+      real(kind=c_double), intent(in),value :: width,aspect
     end subroutine giza_set_paper_size
 
-    subroutine giza_set_paper_size_float(width,aspect) bind(C)
+    subroutine giza_set_paper_size_float(units,width,aspect) bind(C)
       import
       implicit none
-      real(kind=c_float),intent(in),value :: width,aspect
+      integer(kind=c_int),intent(in),value :: units
+      real(kind=c_float), intent(in),value :: width,aspect
     end subroutine giza_set_paper_size_float
  end interface
 
@@ -1544,12 +1550,13 @@ contains
     giza_intern_open_device = giza_open_device_c(cstring(dev),cstring(prefix))
   end function giza_intern_open_device
 
-  integer function giza_intern_open_device_size(dev,prefix,width,height)
+  integer function giza_intern_open_device_size(dev,prefix,width,height,units)
     implicit none
     character(len=*),intent(in) :: dev,prefix
     real,intent(in)             :: width,height
+    integer, intent(in)         :: units
     
-    giza_intern_open_device_size = giza_open_device_size_c(cstring(dev),cstring(prefix),width,height)
+    giza_intern_open_device_size = giza_open_device_size_c(cstring(dev),cstring(prefix),width,height,units)
   
   end function giza_intern_open_device_size
 

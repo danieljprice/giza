@@ -37,8 +37,6 @@ struct GIZA_Device
   int type;
   int width;
   int height;
-  double widthCM;
-  double heightCM;
   double deviceUnitsPermm;
   double deviceUnitsPerPixel;
   int isInteractive;

@@ -89,15 +89,14 @@ _giza_open_device_xw (void)
   Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
 
   /* set all device specific settings */
-  if (!_giza_sizeSpecified ())
+  if (_giza_sizeSpecified ())
     {
-      Dev.width = GIZA_DEFAULT_WIDTH;
-      Dev.height = GIZA_DEFAULT_HEIGHT;
+      _giza_get_specified_size(&Dev.width, &Dev.height);
     }
   else
     {
-      Dev.width = (int) (Dev.deviceUnitsPermm * 10. * Dev.widthCM) + 1;
-      Dev.height = (int) (Dev.deviceUnitsPermm * 10. * Dev.heightCM) + 1;
+      Dev.width = GIZA_DEFAULT_WIDTH;
+      Dev.height = GIZA_DEFAULT_HEIGHT;
     }
 
   /* set the XLib stuff */
