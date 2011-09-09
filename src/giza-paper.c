@@ -20,6 +20,7 @@
 
 #include "giza-private.h"
 #include "giza-io-private.h"
+#include "giza-drivers-private.h"
 #include <giza.h>
 static double paperwidth,paperheight;
 static int paperunits;
