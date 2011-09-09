@@ -231,10 +231,15 @@ void
 giza_set_viewport_inches (double xleftin, double xrightin, double ybottomin, double ytopin)
 {
   double xleft,xright,ybottom,ytop;
-  xleft   = xleftin   * 2.54 / Dev.widthCM;
-  xright  = xrightin  * 2.54 / Dev.widthCM;
-  ybottom = ybottomin * 2.54 / Dev.heightCM;
-  ytop    = ytopin    * 2.54 / Dev.heightCM;
+  double widthmm, heightmm;
+  
+  widthmm  = Dev.width  / Dev.deviceUnitsPermm;
+  heightmm = Dev.height / Dev.deviceUnitsPermm;
+  
+  xleft   = xleftin   * 25.4 / widthmm;
+  xright  = xrightin  * 25.4 / widthmm;
+  ybottom = ybottomin * 25.4 / heightmm;
+  ytop    = ytopin    * 25.4 / heightmm;
 
   giza_set_viewport(xleft,xright,ybottom,ytop);
 
