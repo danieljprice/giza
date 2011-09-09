@@ -71,36 +71,36 @@ giza_get_paper_size (int units, double *width, double *height)
 {
   if (!_giza_check_device_ready ("giza_set_paper_size"))
     {
-      *width = 0.;
-      *height = 0.;
+      *width  = 1.;
+      *height = 1.;
       return;
     }
 
   switch(units)
      {
      case GIZA_UNITS_MM:
-       *width  = 10.*Dev.widthCM;
-       *height = 10.*Dev.heightCM;
+       *width  = ((double) Dev.width ) / Dev.deviceUnitsPermm;
+       *height = ((double) Dev.height) / Dev.deviceUnitsPermm;
        break;
      case GIZA_UNITS_INCHES:
-       *width  = Dev.widthCM * 2.54;
-       *height = Dev.heightCM * 2.54;
+       *width  = (((double) Dev.width ) / Dev.deviceUnitsPermm) / 25.4;
+       *height = (((double) Dev.height) / Dev.deviceUnitsPermm) / 25.4;
        break;
      case GIZA_UNITS_NORMALIZED:
        *width  = 1.;
        *height = 1.;
        break;
      case GIZA_UNITS_PIXELS:
-       *width  = Dev.width  / Dev.deviceUnitsPerPixel;
-       *height = Dev.height / Dev.deviceUnitsPerPixel;
+       *width  = ((double) Dev.width ) / Dev.deviceUnitsPerPixel;
+       *height = ((double) Dev.height) / Dev.deviceUnitsPerPixel;
        break;
      case GIZA_UNITS_DEVICE:
-       *width  = Dev.width;
-       *height = Dev.height;
+       *width  = (double) Dev.width;
+       *height = (double) Dev.height;
        break;
      default:
-       *width  = Dev.widthCM;
-       *height = Dev.heightCM;
+       *width  = 0.1 * ((double) Dev.width ) / Dev.deviceUnitsPermm;
+       *height = 0.1 * ((double) Dev.height) / Dev.deviceUnitsPermm;
        break;
      }
 }
@@ -110,6 +110,6 @@ giza_get_paper_size_float (int units, float *width, float *height)
 {
   double dwidth, dheight;
   giza_get_paper_size (units, &dwidth, &dheight);
-  *width = (float) dwidth;
+  *width  = (float) dwidth;
   *height = (float) dheight;
 }
