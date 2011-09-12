@@ -132,16 +132,49 @@ module giza
 #include "giza-shared.h"
   character(len=1),parameter :: giza_left_click_f = GIZA_LEFT_CLICK
   character(len=*), parameter, public :: giza_version_string = GIZA_VERSION_STRING
-  integer, parameter, public :: giza_units_mm = GIZA_UNITS_MM
-  integer, parameter, public :: giza_units_inches = GIZA_UNITS_INCHES
+!
+!--the following can be generated automatically using the get-fortran-params.pl script
+!
+  integer, parameter, public :: giza_ls_solid = GIZA_LS_SOLID
+  integer, parameter, public :: giza_ls_short_dash = GIZA_LS_SHORT_DASH
+  integer, parameter, public :: giza_ls_long_dash = GIZA_LS_LONG_DASH
+  integer, parameter, public :: giza_ls_dot = GIZA_LS_DOT
+  integer, parameter, public :: giza_ls_dash_dot = GIZA_LS_DASH_DOT
+  integer, parameter, public :: giza_ls_dash_dot_dot_dot = GIZA_LS_DASH_DOT_DOT_DOT
+  integer, parameter, public :: giza_number_format_auto = GIZA_NUMBER_FORMAT_AUTO
+  integer, parameter, public :: giza_number_format_dec = GIZA_NUMBER_FORMAT_DEC
+  integer, parameter, public :: giza_number_format_exp = GIZA_NUMBER_FORMAT_EXP
   integer, parameter, public :: giza_units_normalized = GIZA_UNITS_NORMALIZED
-  integer, parameter, public :: giza_units_device = GIZA_UNITS_DEVICE
+  integer, parameter, public :: giza_units_inches = GIZA_UNITS_INCHES
+  integer, parameter, public :: giza_units_mm = GIZA_UNITS_MM
   integer, parameter, public :: giza_units_pixels = GIZA_UNITS_PIXELS
   integer, parameter, public :: giza_units_world = GIZA_UNITS_WORLD
+  integer, parameter, public :: giza_units_device = GIZA_UNITS_DEVICE
+  integer, parameter, public :: giza_band_none = GIZA_BAND_NONE
+  integer, parameter, public :: giza_band_line = GIZA_BAND_LINE
+  integer, parameter, public :: giza_band_rectangle = GIZA_BAND_RECTANGLE
+  integer, parameter, public :: giza_band_horzlines = GIZA_BAND_HORZLINES
+  integer, parameter, public :: giza_band_vertlines = GIZA_BAND_VERTLINES
+  integer, parameter, public :: giza_band_horzline = GIZA_BAND_HORZLINE
+  integer, parameter, public :: giza_band_vertline = GIZA_BAND_VERTLINE
+  integer, parameter, public :: giza_band_crosshair = GIZA_BAND_CROSSHAIR
+  integer, parameter, public :: giza_band_circle = GIZA_BAND_CIRCLE
+  integer, parameter, public :: giza_background_colour = GIZA_BACKGROUND_COLOUR
+  integer, parameter, public :: giza_background_color = GIZA_BACKGROUND_COLOR
+  integer, parameter, public :: giza_foreground_colour = GIZA_FOREGROUND_COLOUR
+  integer, parameter, public :: giza_foreground_color = GIZA_FOREGROUND_COLOR
   integer, parameter, public :: giza_colour_index_min = GIZA_COLOUR_INDEX_MIN
   integer, parameter, public :: giza_colour_index_max = GIZA_COLOUR_INDEX_MAX
   integer, parameter, public :: giza_colour_palette_default = GIZA_COLOUR_PALETTE_DEFAULT
+  integer, parameter, public :: giza_color_palette_default = GIZA_COLOR_PALETTE_DEFAULT
   integer, parameter, public :: giza_colour_palette_pgplot = GIZA_COLOUR_PALETTE_PGPLOT
+  integer, parameter, public :: giza_color_palette_pgplot = GIZA_COLOR_PALETTE_PGPLOT
+  integer, parameter, public :: giza_fill_solid = GIZA_FILL_SOLID
+  integer, parameter, public :: giza_fill_hollow = GIZA_FILL_HOLLOW
+  integer, parameter, public :: giza_fill_hatch = GIZA_FILL_HATCH
+  integer, parameter, public :: giza_fill_crosshatch = GIZA_FILL_CROSSHATCH
+  integer, parameter, public :: giza_max_fill_styles = GIZA_MAX_FILL_STYLES
+
 private
 
 !---------------------------------------------------------
