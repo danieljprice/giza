@@ -219,8 +219,8 @@ _giza_get_default_viewport (double *xmin, double *xmax, double *ymin, double *ym
   giza_get_character_size(GIZA_UNITS_NORMALIZED, &xch, &ych);
   *xmin = 4.*xch;
   *xmax = *xmin + (1. - 8.*xch);
-  *ymin = 4.*xch;
-  *ymax = *ymin + (1. - 8.*xch);
+  *ymin = 4.*ych;
+  *ymax = *ymin + (1. - 8.*ych);
 
 }
 
