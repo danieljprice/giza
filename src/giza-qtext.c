@@ -52,6 +52,9 @@ giza_qtext (double x, double y, double angle, double just, char *text, double xb
   double ch;
   giza_get_character_height (&ch);
 
+  /* make sure font extents are known */
+  cairo_font_extents (context, &Sets.fontExtents);
+
   cairo_save (context);
 
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -144,6 +147,9 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
   /* save the character height (can be changed during superscript/subscripting) */
   double ch;
   giza_get_character_height (&ch);
+
+  /* make sure font extents are known */
+  cairo_font_extents (context, &Sets.fontExtents);
 
   cairo_save (context);
 

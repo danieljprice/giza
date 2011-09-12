@@ -75,6 +75,9 @@ giza_box (const char *xopt, double xtick, int nxsub,
 
   _giza_expand_clipping ();
 
+    /* make sure font extents are known */
+  cairo_font_extents (context, &Sets.fontExtents);
+
   int oldBuf = Sets.buf;
 
   /* Table of log10() values for log axis ticks */

@@ -50,7 +50,13 @@ giza_set_character_height (double ch)
 
   chDevice = ch * Dev.height * .027;
   cairo_set_font_size (context, chDevice);
-  cairo_font_extents (context, &Sets.fontExtents);
+  /* Optimisation: DO NOT query the font extents
+   * every time the character height is changed
+   * as this call is very slow. Instead, query
+   * the font extents only from the routines
+   * that actually need to use them
+   */
+  /*cairo_font_extents (context, &Sets.fontExtents);*/
   _giza_ch = ch;
 
   _giza_set_trans (oldTrans);
@@ -121,6 +127,9 @@ giza_get_character_size (int units, double *heightx, double *heighty)
     return;
 
   int oldTrans = _giza_get_trans ();
+
+  /* make sure font extents are known */
+  cairo_font_extents (context, &Sets.fontExtents);
 
   *heighty = Sets.fontExtents.ascent;
   *heightx = *heighty;

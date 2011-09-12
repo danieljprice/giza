@@ -632,6 +632,8 @@ _giza_drawchar (const char *str, double x, double y)
 void
 _giza_get_markerheight (double *mheight)
 {
+  /* make sure font extents are known */
+  cairo_font_extents (context, &Sets.fontExtents);
   *mheight = Sets.fontExtents.max_x_advance * 0.2;
   return;
 }
