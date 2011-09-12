@@ -1534,12 +1534,29 @@ end subroutine PGSLCT
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSLS (LS)
- use giza, only:giza_set_line_style
+ use giza, only:giza_set_line_style,giza_ls_solid,giza_ls_short_dash, &
+                giza_ls_long_dash, giza_ls_dot, giza_ls_dash_dot, &
+                giza_ls_dash_dot_dot_dot
  implicit none
  integer, intent(in) :: LS
  
- call giza_set_line_style(LS)
- 
+ select case(LS)
+ case(1)
+    call giza_set_line_style(giza_ls_solid) 
+ case(2)
+    call giza_set_line_style(giza_ls_short_dash)
+ case(3)
+    call giza_set_line_style(giza_ls_dash_dot)
+ case(4)
+    call giza_set_line_style(giza_ls_dot)
+ case(5)
+    call giza_set_line_style(giza_ls_dash_dot_dot_dot) 
+ case(6) ! extension: we allow extra line styles beyond PGPLOT
+    call giza_set_line_style(giza_ls_long_dash)
+ case default
+    call giza_set_line_style(giza_ls_solid)
+ end select
+
 end subroutine PGSLS
 
 !------------------------------------------------------------------------

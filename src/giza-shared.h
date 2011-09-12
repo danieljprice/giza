@@ -3,8 +3,8 @@
 #define GIZA_LEFT_CLICK 'A'
 
 #define GIZA_LS_SOLID      1
-#define GIZA_LS_LONG_DASH  2
-#define GIZA_LS_SHORT_DASH 3
+#define GIZA_LS_SHORT_DASH 2
+#define GIZA_LS_LONG_DASH  3
 #define GIZA_LS_DOT        4
 #define GIZA_LS_DASH_DOT   5
 #define GIZA_LS_DASH_DOT_DOT_DOT 6
