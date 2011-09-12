@@ -81,11 +81,8 @@ giza_annotate (char *side, double displacment, double coord,
       /* find the position on the x axis to place text */
       x = Win.xmin + (Win.xmax - Win.xmin) * coord;
 
-      /* find the x axis */
-      y = Win.ymin;
-
-      /* shift the position of the text away from the view port by displacement */
-      y = y - (ych * displacment);
+      /* shift the position of the text away from the viewport by displacement */
+      y = Win.ymin - (ych * displacment);
     }
   /* if drawing along the top */
   else if (strchr (side, 'T') || strchr (side, 't'))
@@ -93,11 +90,8 @@ giza_annotate (char *side, double displacment, double coord,
       /* find the position on the x axis to place text */
       x = Win.xmin + (Win.xmax - Win.xmin) * coord;
 
-      /* find the x axis */
-      y = Win.ymax;
-
-      /* shift the position of the text away from the view port by displacement */
-      y = y + ych * (displacment - 0.5);
+      /* shift the position of the text away from the viewport by displacement */
+      y = Win.ymax + ych * (displacment - 0.5);
     }
   /* if drawing along the left */
   else if (strchr (side, 'L') || strchr (side, 'l'))
@@ -118,11 +112,8 @@ giza_annotate (char *side, double displacment, double coord,
 	  /* find the position on the y axis to place text */
 	  y = Win.ymin + (Win.ymax - Win.ymin) * coord;
 
-	  /* find the y axis */
-	  x = Win.xmin;
-
-	  /* shift the position of the text away from the view port by displacement */
-	  x = x - (xch * displacment);
+	  /* shift the position of the text away from the viewport by displacement */
+	  x = Win.xmin - (xch * displacment);
 
 	  /* set the angle */
 	  angle = 90;
@@ -147,11 +138,8 @@ giza_annotate (char *side, double displacment, double coord,
 	  /* find the position on the y axis to place text */
 	  y = Win.ymin + (Win.ymax - Win.ymin) * coord;
 
-	  /* find the y axis */
-	  x = Win.xmax;
-
 	  /* shift the position of the text away from the view port by displacement */
-	  x = x + (xch * displacment);
+	  x = Win.xmax + (xch * displacment);
 
 	  /* set the angle */
 	  angle = 90;
