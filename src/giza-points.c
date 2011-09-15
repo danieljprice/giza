@@ -50,7 +50,7 @@ static void _giza_end_draw_symbols   (int oldTrans, int oldLineStyle, int oldLin
 static void _giza_draw_symbol (double xd, double yd, int symbol);
 
 /* Stores the height of the markers */
-double markerHeight;
+static double markerHeight;
 
 /**
  * Drawing: giza_points
