@@ -706,6 +706,8 @@ void
 _giza_init_device_list (char **deviceList)
 {
   *deviceList = malloc (500 * sizeof(char)); /* be CAREFUL here to make sure the string is big enough */
+
+  *deviceList[0] = '\0';
 #ifdef _GIZA_HAS_XW
   strcat (*deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
 #endif
