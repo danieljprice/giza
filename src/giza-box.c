@@ -104,7 +104,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   int nMinTicksy;
   double majTickL, subTickL, currentTickL;
   char tmp[100];
-  int i, i1, i2, j, jmax;
+  int i, i1, i2, j, jmax, jtmp;
 
   /* set x-options */
   for (i = 0; xopt[i]; i++)
@@ -305,7 +305,14 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	    {
 	      if (xoptl)
 		{
-		  sprintf (tmp, "10^{%i}", _giza_nint (xval));
+                  jtmp = _giza_nint(xval);
+                  if (jtmp == 1) {
+                     sprintf (tmp, "10");
+                  } else if (jtmp == 0) {
+                     sprintf (tmp, "1");
+                  } else {
+		     sprintf (tmp, "10^{%i}", jtmp);
+                  }
 		}
 	      else
 		{
@@ -450,7 +457,14 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	    {
 	      if (yoptl)
 		{
-		  sprintf (tmp, "10^{%i}", _giza_nint (yval));
+                  jtmp = _giza_nint(yval);
+                  if (jtmp == 1) {
+                     sprintf (tmp, "10");
+                  } else if (jtmp == 0) {
+                     sprintf (tmp, "1");
+                  } else {
+		     sprintf (tmp, "10^{%i}", jtmp);
+                  }
 		}
 	      else
 		{
