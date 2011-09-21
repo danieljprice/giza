@@ -24,7 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *_giza_fontFam;
+static char *_giza_fontFam;
+static cairo_font_face_t *_giza_fontFace;
 
 /**
  * Settings: giza_set_font
@@ -110,7 +111,16 @@ _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight
    _giza_fontFam = realloc (_giza_fontFam, (strlen (font) + 1) * sizeof (char));
    strcpy (_giza_fontFam, font);
 
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+   /* do the font face creation explicitly rather than
+    * using select_font_face. This is so that memory
+    * associated with the font face can be explicitly freed
+    */
+   _giza_fontFace = cairo_toy_font_face_create(font, slant, weight);
+   cairo_set_font_face(context, _giza_fontFace);   
+#else
    cairo_select_font_face (context, font, slant, weight);
+#endif
 
 /*   cairo_matrix_t mat;
    cairo_matrix_init_identity(&mat);
@@ -176,5 +186,9 @@ _giza_init_font (void)
 void
 _giza_free_font (void)
 {
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+   /* free memory associated with the font face */
+  cairo_font_face_destroy(_giza_fontFace);
+#endif
   free (_giza_fontFam);
 }
