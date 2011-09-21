@@ -30,19 +30,21 @@
  *           This is equivalent to using giza_set_colour_representation 
  *           for each index in turn.
  *
- * Note: giza_render is not affected by this setting
+ * Note: 
+ *   giza_render is not affected by this setting
  *
  * Input:
  *  -palette  :- choice of colour palette
  *
  * Available palette options:
- *  -0 or GIZA_COLOUR_PALETTE_DEFAULT : default giza palette
- *  -1 or GIZA_COLOUR_PALETTE_PGPLOT  : default PGPLOT palette
+ *  -0 or GIZA_COLOUR_PALETTE_DEFAULT :- default giza palette
+ *  -1 or GIZA_COLOUR_PALETTE_PGPLOT  :- default PGPLOT palette
  *
  * See Also: giza_set_colour_index, giza_set_colour_table
  *
  */
-void giza_set_colour_palette(int palette)
+void 
+giza_set_colour_palette (int palette)
 {
   int nlinecolours;
 

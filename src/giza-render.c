@@ -486,7 +486,6 @@ giza_draw_pixels (int sizex, int sizey, const int idata[sizey][sizex], int i1, i
  *
  * See Also: giza_draw_pixels
  */
-
 void
 giza_draw_pixels_float (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
 	    int j1, int j2, float xmin, float xmax, float ymin, float ymax)

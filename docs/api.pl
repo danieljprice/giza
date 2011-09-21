@@ -63,14 +63,14 @@ sub processComment
       push @tmp, $1;
 
       # the items
-      while ($_[1] =~ m/\s*\*\s*\-(\S*)\s*:\-\s*(\S.*)$/)
+      while ($_[1] =~ m/\s*\*\s*\-(.*)\s*:\-\s*(\S.*)$/)
       {
 	push @tmp, $1;
 	push @tmp, $2;
 	shift;
 
 	# Items over more than one line.
-	while ($_[1] !~ m/^\s*\*\s*\-\S*\s*:\-\s*\S.*$/ && $_[1] !~ m/^\s*\*\s*$/ && $_[1] =~ m/^\s*\*/)
+	while ($_[1] !~ m/^\s*\*\s*\-.*\s*:\-\s*\S.*$/ && $_[1] !~ m/^\s*\*\s*$/ && $_[1] =~ m/^\s*\*/)
 	{
 	  $_[1] =~ m/^\s*\*\s*(\S.*)$/;
 	  push (@tmp, pop (@tmp) . ' ' . $1);
@@ -224,7 +224,7 @@ $fh->print (
 
   <div id=\"content\">
   <h1>API Reference Manual</h1>
-  <p>Here we provided a function by function reference for giza.</p>
+  <p>Here we provided a function by function reference for the low-level C API to giza.</p>
   <h1>Index</h1>
   <dl class=\"toc\">");
 # Then the index

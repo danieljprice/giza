@@ -25,9 +25,9 @@
 #include <stdlib.h>
 #include <giza.h>
 
-giza_ctab _giza_colour_table;
-giza_ctab _giza_saved_colour_tables[GIZA_CTAB_SAVE_MAX];
-int _giza_save_ctab_ncalls;
+const giza_ctab _giza_colour_table;
+const giza_ctab _giza_saved_colour_tables[GIZA_CTAB_SAVE_MAX];
+const int _giza_save_ctab_ncalls;
 
 /**
  * Settings: giza_set_colour_table
@@ -248,9 +248,14 @@ _giza_free_colour_table (void)
 }
 
 /**
- * Saves the current colour table
+ * Settings: giza_save_colour_table
+ *
+ * Synopsis: Saves the current colour table
+ *
+ * See Also: giza_restore_colour_table
  */
-void giza_save_colour_table (void)
+void 
+giza_save_colour_table (void)
 {
   _giza_save_ctab_ncalls += 1;
   if (_giza_save_ctab_ncalls > GIZA_CTAB_SAVE_MAX) {
@@ -264,9 +269,14 @@ void giza_save_colour_table (void)
 }
 
 /**
- * Restores the colour table from a previously saved one
+ * Settings: giza_restore_colour_table
+ *
+ * Synopsis: Restores the colour table from a previously saved one
+ *
+ * See Also: giza_save_colour_table
  */
-void giza_restore_colour_table (void)
+void 
+giza_restore_colour_table (void)
 {
   _giza_save_ctab_ncalls -= 1;
   if (_giza_save_ctab_ncalls < 0) {
