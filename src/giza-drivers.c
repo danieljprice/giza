@@ -185,8 +185,8 @@ giza_open_device (char *newDeviceName, char *newPrefix)
   
   /* font and character height initialisations
      need to come before set_viewport_default */
-  _giza_init_character_height ();
   _giza_init_font ();
+  _giza_init_character_height ();
 
   _giza_init_window (); /* call init_window BEFORE set_viewport */
   giza_set_viewport_default ();
