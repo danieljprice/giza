@@ -23,7 +23,7 @@
 #include "giza-transforms-private.h"
 #include <giza.h>
 
-static double _giza_ch,chDevice;
+static double _giza_ch;
 
 /**
  * Settings: giza_set_character_height
@@ -48,15 +48,10 @@ giza_set_character_height (double ch)
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  chDevice = ch * Dev.height * .027;
+  double chDevice = ch * Dev.height * .027;
   cairo_set_font_size (context, chDevice);
-  /* Optimisation: DO NOT query the font extents
-   * every time the character height is changed
-   * as this call is very slow. Instead, query
-   * the font extents only from the routines
-   * that actually need to use them
-   */
-  /*cairo_font_extents (context, &Sets.fontExtents);*/
+  /* query font extents and store this */
+  cairo_font_extents (context, &Sets.fontExtents);
   _giza_ch = ch;
 
   _giza_set_trans (oldTrans);
@@ -127,9 +122,6 @@ giza_get_character_size (int units, double *heightx, double *heighty)
     return;
 
   int oldTrans = _giza_get_trans ();
-
-  /* make sure font extents are known */
-  cairo_font_extents (context, &Sets.fontExtents);
 
   *heighty = Sets.fontExtents.ascent;
   *heightx = *heighty;
