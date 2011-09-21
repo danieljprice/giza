@@ -26,8 +26,8 @@
 #include <giza.h>
 #include <math.h>
 
-double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][4];
-int _giza_ci;
+static double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][4];
+static int _giza_ci;
 
 /**
  * Settings: giza_set_colour_index
