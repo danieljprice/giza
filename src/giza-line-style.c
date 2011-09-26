@@ -120,7 +120,7 @@ _giza_set_line_style (int ls, cairo_t *ct)
       _giza_dashes[7] = Dev.deviceUnitsPermm * lw; /* space */
       break;
     default:
-      _giza_warning ("giza_set_line_style", "Invalid line stlye, line style not set");
+      _giza_warning ("giza_set_line_style", "Invalid line style, line style not set");
       return;
     }
 
