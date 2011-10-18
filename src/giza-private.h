@@ -77,3 +77,5 @@ void _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t w
 double _giza_set_in_range (double val, double val1, double val2);
 void _giza_get_markerheight (double *mheight);
 void _giza_draw_symbol_device (double xd, double yd, int symbol);
+void _giza_set_alpha (double alpha);
+void _giza_get_alpha (double *alpha);

@@ -46,6 +46,9 @@ static void _giza_error_bar_hori (double x, double y, double error, double term)
  *  -4 :- -y
  *  -5 :- +x and -x
  *  -6 :- +y and -y
+ *  -7 :- -y but instead of drawing bars use a semi-transparent shaded region
+ *  -8 :- +y using a semi-transparent shaded region
+ *  -9 :- +y and -y using a semi-transparent shaded region
  */
 void
 giza_error_bars (int dir, int n, double *xpts, double *ypts, double *error, double term)
@@ -85,21 +88,85 @@ giza_error_bars (int dir, int n, double *xpts, double *ypts, double *error, doub
       giza_error_bars (2, n, xpts, ypts, error, term);
       giza_error_bars (4, n, xpts, ypts, error, term);
       return;
+    case 7:
+    case 8:
+    case 9:
+      vert = 1;
+      sign = 0;
+      break;
     default:
       _giza_warning ("giza_error_bars", "Invalid dir, skipping error bars");
       return;
     }
 
   int i;
-  for (i = 0; i < n; i++)
+  if (dir >= 7) 
+/*
+ *  Semi-transparent shading of error region
+ */
     {
-      if (vert)
-	_giza_error_bar_vert (xpts[i], ypts[i], error[i] * sign, term);
-      else
-	_giza_error_bar_hori (xpts[i], ypts[i], error[i] * sign, term);
-    }
+      double a;
+      _giza_get_alpha(&a);
+      _giza_set_alpha(0.15);
 
-  _giza_stroke ();
+      if (dir == 7 || dir == 9) {
+         cairo_move_to (context, xpts[0], ypts[0] + error[0]);
+         for (i = 0; i < n; i++)
+           {
+             /* draw line along top of error bars */
+             cairo_line_to (context, xpts[i], ypts[i] + error[i]);
+           }
+
+         /*
+          * For +y shaded error region only, close path
+          * by tracing along original data line 
+          */
+         if (dir == 7) {
+            for (i = n-1; i >= 0; i--)
+              {
+                cairo_line_to (context, xpts[i], ypts[i]);
+              }
+         }
+      }
+      
+      if (dir == 8 || dir == 9) {
+         cairo_move_to (context, xpts[n-1], ypts[n-1] - error[n-1]);
+         for (i = n-1; i >= 0; i--)
+           {
+             /* draw line along bottom of error bars */
+             cairo_line_to (context, xpts[i], ypts[i] - error[i]);
+           }
+
+         /*
+          * For -y shaded error region only, close path
+          * by tracing along original data line 
+          */
+         if (dir == 8) {
+            for (i = 0; i < n; i++)
+              {
+                cairo_line_to (context, xpts[i], ypts[i]);
+              }
+         }
+      }
+      cairo_close_path(context);
+      cairo_fill(context);
+      _giza_stroke ();
+      _giza_set_alpha(a);
+    }
+  else
+/*                          ___
+ *  Normal error bar style _|_  or |-|
+ */
+    {
+      for (i = 0; i < n; i++)
+        {
+          if (vert)
+	    _giza_error_bar_vert (xpts[i], ypts[i], error[i] * sign, term);
+          else
+	    _giza_error_bar_hori (xpts[i], ypts[i], error[i] * sign, term);
+        }
+      _giza_stroke ();
+    }
 
   _giza_set_trans (oldTrans);
   if (!Sets.buf)
@@ -151,21 +218,85 @@ giza_error_bars_float (int dir, int n, float *xpts, float *ypts, float *error, f
       giza_error_bars_float (2, n, xpts, ypts, error, term);
       giza_error_bars_float (4, n, xpts, ypts, error, term);
       return;
+    case 7:
+    case 8:
+    case 9:
+      vert = 1;
+      sign = 0;
+      break;
     default:
       _giza_warning ("giza_error_bars", "Invalid dir, skipping error bars");
       return;
     }
 
   int i;
-  for (i = 0; i < n; i++)
+  if (dir >= 7) 
+/*
+ *  Semi-transparent shading of error region
+ */
     {
-      if (vert)
-	_giza_error_bar_vert ( (double) xpts[i], (double) ypts[i], (double) error[i] * sign, (double) term);
-      else
-	_giza_error_bar_hori ( (double) xpts[i], (double) ypts[i], (double) error[i] * sign, (double) term);
-    }
+      double a;
+      _giza_get_alpha(&a);
+      _giza_set_alpha(0.15);
 
-  _giza_stroke ();
+      if (dir == 7 || dir == 9) {
+         cairo_move_to (context, xpts[0], ypts[0] + error[0]);
+         for (i = 0; i < n; i++)
+           {
+             /* draw line along top of error bars */
+             cairo_line_to (context, xpts[i], ypts[i] + error[i]);
+           }
+
+         /*
+          * For +y shaded error region only, close path
+          * by tracing along original data line 
+          */
+         if (dir == 7) {
+            for (i = n-1; i >= 0; i--)
+              {
+                cairo_line_to (context, xpts[i], ypts[i]);
+              }
+         }
+      }
+      
+      if (dir == 8 || dir == 9) {
+         cairo_move_to (context, xpts[n-1], ypts[n-1] - error[n-1]);
+         for (i = n-1; i >= 0; i--)
+           {
+             /* draw line along bottom of error bars */
+             cairo_line_to (context, xpts[i], ypts[i] - error[i]);
+           }
+
+         /*
+          * For -y shaded error region only, close path
+          * by tracing along original data line 
+          */
+         if (dir == 8) {
+            for (i = 0; i < n; i++)
+              {
+                cairo_line_to (context, xpts[i], ypts[i]);
+              }
+         }
+      }
+      cairo_close_path(context);
+      cairo_fill(context);
+      _giza_stroke ();
+      _giza_set_alpha(a);
+    }
+  else
+/*                          ___
+ *  Normal error bar style _|_  or |-|
+ */
+    {
+      for (i = 0; i < n; i++)
+        {
+          if (vert)
+	    _giza_error_bar_vert ( (double) xpts[i], (double) ypts[i], (double) error[i] * sign, (double) term);
+          else
+	    _giza_error_bar_hori ( (double) xpts[i], (double) ypts[i], (double) error[i] * sign, (double) term);
+        }
+      _giza_stroke ();
+    }
 
   _giza_set_trans (oldTrans);
   if (!Sets.buf)

@@ -510,3 +510,25 @@ double _giza_set_in_range (double val, double val1, double val2)
   else
     return val;
 }
+
+/**
+ * Internal routine to temporarily set alpha to a particular value
+ * Note that this only affects the current colour index
+ * and should be RESET to 1.0 after finishing
+ */
+void _giza_set_alpha (double alpha)
+{
+  int ci;
+  double r,g,b,a;
+  giza_get_colour_index(&ci);
+  giza_get_colour_representation_alpha(ci,&r,&g,&b,&a);
+  giza_set_colour_representation_alpha(ci,r,g,b,alpha);
+}
+
+void _giza_get_alpha (double *alpha)
+{
+  int ci;
+  double r,g,b;
+  giza_get_colour_index(&ci);
+  giza_get_colour_representation_alpha(ci,&r,&g,&b,alpha);
+}
