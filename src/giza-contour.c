@@ -29,8 +29,8 @@
 
 
 void
-giza_contour (int sizex, int sizey, double data[sizey][sizex], int i1,
-	      int i2, int j1, int j2, int ncont, const double cont[ncont],
+giza_contour (int sizex, int sizey, double** data, int i1,
+	      int i2, int j1, int j2, int ncont, const double* cont,
 	      const double *affine)
 {
 #define xsect(p1,p2) (h[p2]*xh[p1]-h[p1]*xh[p2])/(h[p2]-h[p1])
@@ -221,8 +221,8 @@ giza_contour (int sizex, int sizey, double data[sizey][sizex], int i1,
 }
 
 void
-giza_contour_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
-	      int i2, int j1, int j2, int ncont, const float cont[ncont], const float *affine)
+giza_contour_float (int sizex, int sizey, const float** data, int i1,
+	      int i2, int j1, int j2, int ncont, const float* cont, const float *affine)
 {
   double ddata[sizey][sizex];
   double dcont[ncont];

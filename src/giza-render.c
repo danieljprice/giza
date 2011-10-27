@@ -46,7 +46,7 @@
  *  -affine        :- The affine transformation matrix that will be applied to the data.
  */
 void
-giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int i2,
+giza_render (int sizex, int sizey, const double** data, int i1, int i2,
 	    int j1, int j2, double valMin, double valMax, double *affine)
 {
    _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0);
@@ -59,7 +59,7 @@ giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int 
  *
  */
 void
-giza_render_transparent (int sizex, int sizey, const double data[sizey][sizex], int i1, int i2,
+giza_render_transparent (int sizex, int sizey, const double** data, int i1, int i2,
 	    int j1, int j2, double valMin, double valMax, double *affine)
 {
    _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,1);
@@ -70,7 +70,7 @@ giza_render_transparent (int sizex, int sizey, const double data[sizey][sizex], 
  *  to which giza_render, giza_render_transparent, etc. are the static API interfaces
  */
 void
-_giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int i2,
+_giza_render (int sizex, int sizey, const double** data, int i1, int i2,
 	    int j1, int j2, double valMin, double valMax, double *affine, int transparent)
 {
   if (!_giza_check_device_ready ("giza_render"))
@@ -167,7 +167,7 @@ _giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int
  * See Also: giza_render
  */
 void
-giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
+giza_render_float (int sizex, int sizey, const float** data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
 		  float *affine)
 {
@@ -182,7 +182,7 @@ giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
  * See Also: giza_render_transparent
  */
 void
-giza_render_transparent_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
+giza_render_transparent_float (int sizex, int sizey, const float** data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
 		  float *affine)
 {
@@ -194,7 +194,7 @@ giza_render_transparent_float (int sizex, int sizey, const float data[sizey][siz
  *  c.f. _giza_render
  */
 void
-_giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
+_giza_render_float (int sizex, int sizey, const float** data, int i1,
 		    int i2, int j1, int j2, float valMin, float valMax,
 		    float *affine, int transparent)
 {
@@ -288,7 +288,7 @@ _giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1
  * See Also: giza_render
  */
 void
-giza_render_gray (int sizex, int sizey, const double data[sizey][sizex], int i1,
+giza_render_gray (int sizex, int sizey, const double** data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
 		  double *affine)
 {
@@ -306,7 +306,7 @@ giza_render_gray (int sizex, int sizey, const double data[sizey][sizex], int i1,
  * See Also: giza_render_gray, giza_render
  */
 void
-giza_render_gray_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
+giza_render_gray_float (int sizex, int sizey, const float** data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
 		  float *affine)
 {
@@ -403,7 +403,7 @@ _giza_colour_pixel_index (unsigned char *array, int pixNum, int ci)
  *  -ymax        :- world coordinate corresponding to top of pixel array
  */
 void
-giza_draw_pixels (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
+giza_draw_pixels (int sizex, int sizey, const int** idata, int i1, int i2,
 	    int j1, int j2, double xmin, double xmax, double ymin, double ymax)
 {
   if (!_giza_check_device_ready ("giza_render_pixels"))
@@ -487,7 +487,7 @@ giza_draw_pixels (int sizex, int sizey, const int idata[sizey][sizex], int i1, i
  * See Also: giza_draw_pixels
  */
 void
-giza_draw_pixels_float (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
+giza_draw_pixels_float (int sizex, int sizey, const int** idata, int i1, int i2,
 	    int j1, int j2, float xmin, float xmax, float ymin, float ymax)
 {
   if (!_giza_check_device_ready ("giza_render_pixels_float"))

@@ -106,11 +106,11 @@ void giza_rgb_from_table (double pos, double *red, double *green,
 void giza_rgb_from_table_float (double pos, float *red, float *green,
 				float *blue);
 
-void giza_contour (int sizex, int sizey, double data[sizey][sizex],
+void giza_contour (int sizex, int sizey, double** data,
 		   int i1, int i2, int j1, int j2, int ncont,
-		   const double cont[ncont], const double *affine);
-void giza_contour_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
-	      int i2, int j1, int j2, int ncont, const float cont[ncont], const float *affine);
+		   const double* cont, const double *affine);
+void giza_contour_float (int sizex, int sizey, const float** data, int i1,
+	      int i2, int j1, int j2, int ncont, const float* cont, const float *affine);
 
 void giza_get_current_point (double *xpt, double *ypt);
 void giza_get_current_point_float (float *xpt, float *ypt);
@@ -197,18 +197,18 @@ void giza_get_line_width_float (float *lw);
 void giza_set_line_cap (int lc);
 void giza_get_line_cap (int *lc);
 
-void giza_mark_line (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts]);
-void giza_mark_line_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts]);
-void giza_mark_line_ordered (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts]);
-void giza_mark_line_ordered_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts]);
-void giza_mark_points (int maxpts, int *npts, double xpts[maxpts],
-                       double ypts[maxpts], int symbol);
-void giza_mark_points_float (int maxpts, int *npts, float xpts[maxpts],
-                             float ypts[maxpts], int symbol);
-void giza_mark_points_ordered (int maxpts, int *npts, double xpts[maxpts],
-                               double ypts[maxpts], int symbol);
-void giza_mark_points_ordered_float (int maxpts, int *npts, float xpts[maxpts],
-                                     float ypts[maxpts], int symbol);
+void giza_mark_line (int maxpts, int *npts, double* xpts, double* ypts);
+void giza_mark_line_float (int maxpts, int *npts, float* xpts, float* ypts);
+void giza_mark_line_ordered (int maxpts, int *npts, double* xpts, double* ypts);
+void giza_mark_line_ordered_float (int maxpts, int *npts, float* xpts, float* ypts);
+void giza_mark_points (int maxpts, int *npts, double* xpts,
+                       double* ypts, int symbol);
+void giza_mark_points_float (int maxpts, int *npts, float* xpts,
+                             float* ypts, int symbol);
+void giza_mark_points_ordered (int maxpts, int *npts, double* xpts,
+                               double* ypts, int symbol);
+void giza_mark_points_ordered_float (int maxpts, int *npts, float* xpts,
+                                     float* ypts, int symbol);
 
 void giza_move (double xpt, double ypt);
 void giza_move_float (float xpt, float ypt);
@@ -218,8 +218,8 @@ void giza_set_paper_size_float (int units, float width, float height);
 void giza_get_paper_size (int units, double *width, double *height);
 void giza_get_paper_size_float (int units, float *width, float *height);
 
-void giza_points (int n, double x[n], double y[n], int symbol);
-void giza_points_float (int n, float x[n], float y[n], int symbol);
+void giza_points (int n, double* x, double* y, int symbol);
+void giza_points_float (int n, float* x, float* y, int symbol);
 void giza_single_point (double x, double y, int symbol);
 void giza_single_point_float (float x, float y, int symbol);
 
@@ -245,28 +245,28 @@ void giza_qtextlen_float (int units, char *text, float *xlen, float *ylen);
 void giza_rectangle (double x1, double x2, double y1, double y2);
 void giza_rectangle_float (float x1, float x2, float y1, float y2);
 
-void giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1,
+void giza_render (int sizex, int sizey, const double** data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
 		  double *affine);
-void giza_render_float (int sizex, int sizey, const float data[sizey][sizex],
+void giza_render_float (int sizex, int sizey, const float** data,
 			int i1, int i2, int j1, int j2, float valMin,
 			float valMax, float *affine);
-void giza_render_transparent (int sizex, int sizey, const double data[sizey][sizex], int i1,
+void giza_render_transparent (int sizex, int sizey, const double** data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
 		  double *affine);
-void giza_render_transparent_float (int sizex, int sizey, const float data[sizey][sizex],
+void giza_render_transparent_float (int sizex, int sizey, const float** data,
 			int i1, int i2, int j1, int j2, float valMin,
 			float valMax, float *affine);
 
-void giza_render_gray (int sizex, int sizey, const double data[sizey][sizex], int i1,
+void giza_render_gray (int sizex, int sizey, const double** data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
 		  double *affine);
-void giza_render_gray_float (int sizex, int sizey, const float data[sizey][sizex],
+void giza_render_gray_float (int sizex, int sizey, const float** data,
 			int i1, int i2, int j1, int j2, float valMin,
 			float valMax, float *affine);
-void giza_draw_pixels (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
+void giza_draw_pixels (int sizex, int sizey, const int** idata, int i1, int i2,
 	    int j1, int j2, double xmin, double xmax, double ymin, double ymax);
-void giza_draw_pixels_float (int sizex, int sizey, const int idata[sizey][sizex], int i1, int i2,
+void giza_draw_pixels_float (int sizex, int sizey, const int** idata, int i1, int i2,
 	    int j1, int j2, float xmin, float xmax, float ymin, float ymax);
 
 double giza_round (double x, int *nsub);
@@ -282,11 +282,11 @@ void giza_set_text_background (int colourIndex);
 void giza_get_text_background (int *colourIndex);
 
 void
-giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
+giza_vector (int n, int m, double** horizontal, double** vertical,
 	     int i1, int i2, int j1, int j2, double scale, int position,
 	     double affine[6], double blank);
 void
-giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
+giza_vector_float (int n, int m, float** horizontal, float** vertical,
 		   int i1, int i2, int j1, int j2, float scale, int position,
 		   float affine[6], float blank);
 

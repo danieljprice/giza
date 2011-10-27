@@ -24,7 +24,7 @@
 #include <math.h>
 
 void
-giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
+giza_vector (int n, int m, double** horizontal, double** vertical,
 	     int i1, int i2, int j1, int j2, double scale, int position,
 	     double affine[6], double blank)
 {
@@ -129,7 +129,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 }
 
 void
-giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
+giza_vector_float (int n, int m, float** horizontal, float** vertical,
 	     int i1, int i2, int j1, int j2, float scale, int position,
 	     float affine[6], float blank)
 {
