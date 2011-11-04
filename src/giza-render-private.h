@@ -20,8 +20,8 @@
 
 static void _giza_colour_pixel (unsigned char *array, int pixNum, double pos);
 static void _giza_colour_pixel_transparent (unsigned char *array, int pixNum, double pos);
-void _giza_render (int sizex, int sizey, const double** data, int i1, int i2,
+void _giza_render (int sizex, int sizey, const double data[sizey][sizex], int i1, int i2,
 	           int j1, int j2, double valMin, double valMax, double *affine, int transparent);
-void _giza_render_float (int sizex, int sizey, const float** data, int i1,
+void _giza_render_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
 		   int i2, int j1, int j2, float valMin, float valMax,
 		   float *affine, int transparent);

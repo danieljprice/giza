@@ -75,7 +75,7 @@ static double markerHeight;
  *
  */
 void
-giza_points (int n, double* x, double* y, int symbol)
+giza_points (int n, double x[n], double y[n], int symbol)
 {
   if (!_giza_check_device_ready ("giza_points"))
     return;
@@ -121,7 +121,7 @@ giza_points (int n, double* x, double* y, int symbol)
  * See Also: giza_points
  */
 void
-giza_points_float (int n, float* x, float* y, int symbol)
+giza_points_float (int n, float x[n], float y[n], int symbol)
 {
   if (!_giza_check_device_ready ("giza_points"))
     return;

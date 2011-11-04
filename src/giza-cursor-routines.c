@@ -36,7 +36,7 @@
  *
  */
 void
-_giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
+_giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts],
                         int symbol, int ordered, int mode)
 {
   if(!_giza_check_device_ready ("_giza_mark_with_cursor")) /* should be done in parent routines anyway */
@@ -163,7 +163,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
  * See Also: _giza_mark_with_cursor
  */
 void
-_giza_mark_with_cursor_float (int maxpts, int *npts, float* xpts, float* ypts,
+_giza_mark_with_cursor_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts],
                               int symbol, int ordered, int mode)
 {
    double xptsd[maxpts], yptsd[maxpts];
@@ -202,7 +202,7 @@ _giza_mark_with_cursor_float (int maxpts, int *npts, float* xpts, float* ypts,
  * See Also: giza_points
  */
 void
-giza_mark_points (int maxpts, int *npts, double* xpts, double* ypts, int symbol)
+giza_mark_points (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts], int symbol)
 {
   if(!_giza_check_device_ready ("giza_mark_points"))
     return;
@@ -218,7 +218,7 @@ giza_mark_points (int maxpts, int *npts, double* xpts, double* ypts, int symbol)
  * See Also: giza_mark_points
  */
 void
-giza_mark_points_float (int maxpts, int *npts, float* xpts, float* ypts, int symbol)
+giza_mark_points_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts], int symbol)
 {
    if(!_giza_check_device_ready ("giza_mark_points_float"))
      return;
@@ -246,7 +246,7 @@ giza_mark_points_float (int maxpts, int *npts, float* xpts, float* ypts, int sym
  * See Also: giza_points
  */
 void
-giza_mark_points_ordered (int maxpts, int *npts, double* xpts, double* ypts, int symbol)
+giza_mark_points_ordered (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts], int symbol)
 {
   if(!_giza_check_device_ready ("giza_mark_points_ordered"))
     return;
@@ -262,7 +262,7 @@ giza_mark_points_ordered (int maxpts, int *npts, double* xpts, double* ypts, int
  * See Also: giza_mark_points
  */
 void
-giza_mark_points_ordered_float (int maxpts, int *npts, float* xpts, float* ypts, int symbol)
+giza_mark_points_ordered_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts], int symbol)
 {
    if(!_giza_check_device_ready ("giza_mark_points_ordered_float"))
      return;
@@ -286,7 +286,7 @@ giza_mark_points_ordered_float (int maxpts, int *npts, float* xpts, float* ypts,
  * See Also: giza_mark_points
  */
 void
-giza_mark_line (int maxpts, int *npts, double* xpts, double* ypts)
+giza_mark_line (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts])
 {
   if(!_giza_check_device_ready ("giza_mark_line"))
     return;
@@ -302,7 +302,7 @@ giza_mark_line (int maxpts, int *npts, double* xpts, double* ypts)
  * See Also: giza_mark_line, giza_mark_points, giza_mark_line_ordered
  */
 void
-giza_mark_line_float (int maxpts, int *npts, float* xpts, float* ypts)
+giza_mark_line_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts])
 {
    if(!_giza_check_device_ready ("giza_mark_line_float"))
      return;
@@ -329,7 +329,7 @@ giza_mark_line_float (int maxpts, int *npts, float* xpts, float* ypts)
  * See Also: giza_mark_line, giza_mark_points
  */
 void
-giza_mark_line_ordered (int maxpts, int *npts, double* xpts, double* ypts)
+giza_mark_line_ordered (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts])
 {
   if(!_giza_check_device_ready ("giza_mark_line_ordered"))
     return;
@@ -345,7 +345,7 @@ giza_mark_line_ordered (int maxpts, int *npts, double* xpts, double* ypts)
  * See Also: giza_mark_points
  */
 void
-giza_mark_line_ordered_float (int maxpts, int *npts, float* xpts, float* ypts)
+giza_mark_line_ordered_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts])
 {
    if(!_giza_check_device_ready ("giza_mark_line_ordered_float"))
      return;
