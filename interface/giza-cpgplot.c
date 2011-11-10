@@ -358,18 +358,6 @@ void cpgetxt(void)
 }
 
 /***************************************************************
- * cpgfunt -- function defined by x = f(t), y = g(t)
- ***************************************************************/
-
-/***************************************************************
- * cpgfunx -- function defined by y = f(x)
- ***************************************************************/
-
-/***************************************************************
- * cpgfuny -- function defined by x = f(y)
- ***************************************************************/
-
-/***************************************************************
  * cpggray -- gray-scale map of a 2D data array
  * Status: IMPLEMENTED
  ***************************************************************/
@@ -413,12 +401,14 @@ void cpgiden(void)
 
 /***************************************************************
  * cpgimag -- color image from a 2D data array
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgimag(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float a1, float a2, const float *tr)
 {
-
+  float affine[6];
+  convert_tr_to_affine(tr,affine);
+  giza_render_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,a1,a2,affine);
 }
 
 /***************************************************************
