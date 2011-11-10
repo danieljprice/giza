@@ -31,15 +31,15 @@
 #define GIZA_DEFAULT_PREFIX "giza"
 
 int _giza_get_key_press (int mode, int moveCurs, double xanc, double yanc, double *x, double *y, char *ch);
-void _giza_split_device_string (char *deviceString, char **devType);
-int _giza_device_to_int (char *newDeviceName);
+void _giza_split_device_string (const char *deviceString, char **devType);
+int _giza_device_to_int (const char *newDeviceName);
 int _giza_int_to_device (int numDevice, char *DeviceName);
 void _giza_init_norm (void);
 void _giza_expand_clipping (void);
 void _giza_restore_clipping (void);
 void _giza_init_device_list (char **deviceList);
 void _giza_free_device_list (char *deviceList);
-void _giza_lowercase(char *string, char *lowerstring);
+void _giza_lowercase(const char *string, char *lowerstring);
 void _giza_trim(char *str);
 void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension);
 void _giza_get_specified_size(int *width, int *height);

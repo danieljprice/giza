@@ -22,7 +22,7 @@
 #define GIZA_SCALE_SUBS   0.65
 #define GIZA_LOWER_SUBS   0.2
 
-void _giza_parse_string (char *text, double *width, double *height, void(*action)(const char *, double *, double *));
+void _giza_parse_string (const char *text, double *width, double *height, void(*action)(const char *, double *, double *));
 void _giza_get_text_width (double *width, char *text);
 void _giza_set_default_font (void);
 void _giza_scale_character_size (double scalefac);
