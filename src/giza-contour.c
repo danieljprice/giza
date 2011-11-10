@@ -29,7 +29,7 @@
 
 
 void
-giza_contour (int sizex, int sizey, double* data, int i1,
+giza_contour (int sizex, int sizey, const double* data, int i1,
 	      int i2, int j1, int j2, int ncont, const double* cont,
 	      const double *affine)
 {

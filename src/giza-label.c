@@ -32,7 +32,7 @@
  *  -title  :- The title of the plot
  */
 void
-giza_label (char *labelx, char *labely, char *title)
+giza_label (const char *labelx, const char *labely, const char *title)
 {
   if (!_giza_check_device_ready ("giza_label"))
     return;

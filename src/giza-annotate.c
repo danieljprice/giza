@@ -28,7 +28,7 @@
 /**
  * Text: giza_annotate
  *
- * Synopsis: Writes text with a position relative to the view-port.
+ * Synopsis: Writes text with a position relative to the viewport.
  *
  * Input:
  *  -side          :- Must contain a character 'B','L','T'
@@ -51,8 +51,8 @@
  *  -string        :- The text that will be displayed.
  */
 void
-giza_annotate (char *side, double displacment, double coord,
-	      double justification, char *string)
+giza_annotate (const char *side, double displacment, double coord,
+	      double justification, const char *string)
 {
   if (!_giza_check_device_ready ("giza_annotate"))
     {
@@ -169,8 +169,8 @@ giza_annotate (char *side, double displacment, double coord,
  * See Also: giza_annotate
  */
 void
-giza_annotate_float (char *side, float displacment, float coord,
-		    float justification, char *string)
+giza_annotate_float (const char *side, float displacment, float coord,
+		    float justification, const char *string)
 {
   giza_annotate (side, (double) displacment, (double) coord,
 		(double) justification, string);

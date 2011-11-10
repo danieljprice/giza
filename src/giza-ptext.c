@@ -39,7 +39,7 @@
  *  -text  :- The text to be drawn.
  */
 void
-giza_ptext (double x, double y, double angle, double just, char *text)
+giza_ptext (double x, double y, double angle, double just, const char *text)
 {
   if (!_giza_check_device_ready ("giza_ptext"))
     {
@@ -105,7 +105,7 @@ giza_ptext (double x, double y, double angle, double just, char *text)
  * See Also: giza_ptext
  */
 void
-giza_ptext_float (float x, float y, float angle, float just, char *text)
+giza_ptext_float (float x, float y, float angle, float just, const char *text)
 {
   giza_ptext ((double) x, (double) y, (double) angle, (double) just, text);
 }
@@ -121,7 +121,7 @@ giza_ptext_float (float x, float y, float angle, float just, char *text)
  *  -text :- The text to be drawn.
  */
 void
-giza_text (double x, double y, char *text)
+giza_text (double x, double y, const char *text)
 {
   giza_ptext (x, y, 0.0, 0.0, text);
 }
@@ -134,7 +134,7 @@ giza_text (double x, double y, char *text)
  * See Also: giza_text
  */
 void
-giza_text_float (float x, float y, char *text)
+giza_text_float (float x, float y, const char *text)
 {
   giza_ptext ((double) x, (double) y, 0.0, 0.0, text);
 }

@@ -41,7 +41,7 @@
  *  -ybox  :- Set to the world co-ords of the bounding box
  */
 void
-giza_qtext (double x, double y, double angle, double just, char *text, double xbox[4], double ybox[4])
+giza_qtext (double x, double y, double angle, double just, const char *text, double xbox[4], double ybox[4])
 {
   if (!_giza_check_device_ready ("giza_qtext"))
     {
@@ -102,7 +102,7 @@ giza_qtext (double x, double y, double angle, double just, char *text, double xb
  * See Also: giza_qtext
  */
 void
-giza_qtext_float (float x, float y, float angle, float just, char *text, float xbox[4], float ybox[4])
+giza_qtext_float (float x, float y, float angle, float just, const char *text, float xbox[4], float ybox[4])
 {
   double xboxd[4], yboxd[4];
 
@@ -132,7 +132,7 @@ giza_qtext_float (float x, float y, float angle, float just, char *text, float x
  *   -ylen   :- The length of the text in the y-direction
  */
 void
-giza_qtextlen (int units, char *text, double *xlen, double *ylen)
+giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
 {
   if(!_giza_check_device_ready("giza_qtextlen"))
     {
@@ -199,7 +199,7 @@ giza_qtextlen (int units, char *text, double *xlen, double *ylen)
  * See Also: giza_qtextlen
  */
 void
-giza_qtextlen_float (int units, char *text, float *xlen, float *ylen)
+giza_qtextlen_float (int units, const char *text, float *xlen, float *ylen)
 {
   double xlend = 0., ylend = 0.;
   giza_qtextlen(units, text, &xlend, &ylend);

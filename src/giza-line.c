@@ -38,7 +38,7 @@
  * The arrays xpts and ypts must have at least n elements.
  */
 void
-giza_line (int n, double *xpts, double *ypts)
+giza_line (int n, const double *xpts, const double *ypts)
 {
   if (!_giza_check_device_ready ("giza_line"))
     return;
@@ -75,7 +75,7 @@ giza_line (int n, double *xpts, double *ypts)
  * See Also: giza_line
  */
 void
-giza_line_float (int n, float *xpts, float *ypts)
+giza_line_float (int n, const float *xpts, const float *ypts)
 {
   if (!_giza_check_device_ready ("giza_line_float"))
     return;

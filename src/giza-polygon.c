@@ -38,7 +38,7 @@
  * See Also: giza_set_fill
  */
 void
-giza_polygon (int n, double *xpts, double *ypts)
+giza_polygon (int n, const double *xpts, const double *ypts)
 {
   if (!_giza_check_device_ready ("giza_polygon"))
     return;
@@ -75,7 +75,7 @@ giza_polygon (int n, double *xpts, double *ypts)
  * See Also: giza_polygon
  */
 void
-giza_polygon_float (int n, float *xpts, float *ypts)
+giza_polygon_float (int n, const float *xpts, const float *ypts)
 {
   if (!_giza_check_device_ready ("giza_polygon"))
     return;

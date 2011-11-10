@@ -110,7 +110,7 @@
 #define GIZA_LOWER_SUBS   0.2
 
 void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
-int _giza_get_chunk (char *text);
+int _giza_get_chunk (const char *text);
 
 %}
 
@@ -273,7 +273,7 @@ ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\
  * Parses brackets in text, returns the length of the string contained in outermost brackets
  */
 int
-_giza_get_chunk (char *text)
+_giza_get_chunk (const char *text)
 {
   int openb = 0;
   int length = 0;
@@ -319,7 +319,7 @@ _giza_get_chunk (char *text)
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
  */
 void
-_giza_parse_string (char *text, double *width, double *height, void (*action)(const char *, double *, double *))
+_giza_parse_string (const char *text, double *width, double *height, void (*action)(const char *, double *, double *))
 {
   yyscan_t scanner;
   int stop = 0, token, chunkLength, oldTrans;

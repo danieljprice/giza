@@ -29,6 +29,7 @@
 #include "giza-private.h"
 #include "cpgplot.h"
 #include <string.h>
+#include <stdlib.h>
 int pgfont;
 
 /***************************************************************

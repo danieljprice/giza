@@ -29,10 +29,10 @@ void giza_get_arrow_style (int *fillStyle, double *angle, double *cutback);
 void giza_get_arrow_style_float (int *fillStyle, float *angle,
 				 float *cutback);
 
-void giza_annotate (char *side, double displacment, double coord,
-		    double justification, char *string);
-void giza_annotate_float (char *side, float displacment, float coord,
-			  float justification, char *string);
+void giza_annotate (const char *side, double displacment, double coord,
+		    double justification, const char *string);
+void giza_annotate_float (const char *side, float displacment, float coord,
+			  float justification, const char *string);
 
 int giza_band (int mode, int moveCursm, double xanc, double yanc, double *x,
 	       double *y, char *ch);
@@ -106,7 +106,7 @@ void giza_rgb_from_table (double pos, double *red, double *green,
 void giza_rgb_from_table_float (double pos, float *red, float *green,
 				float *blue);
 
-void giza_contour (int sizex, int sizey, double* data,
+void giza_contour (int sizex, int sizey, const double* data,
 		   int i1, int i2, int j1, int j2, int ncont,
 		   const double* cont, const double *affine);
 void giza_contour_float (int sizex, int sizey, const float* data, int i1,
@@ -116,15 +116,15 @@ void giza_get_current_point (double *xpt, double *ypt);
 void giza_get_current_point_float (float *xpt, float *ypt);
 
 void giza_print_device_list (void);
-int giza_open_device (char *newDeviceName, char *newPrefix);
-int giza_open_device_size (char *newDeviceName, char *newPrefix, double width,
+int giza_open_device (const char *newDeviceName, const char *newPrefix);
+int giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width,
 			   double height, int units);
-int giza_open_device_size_float (char *newDeviceName, char *newPrefix,
+int giza_open_device_size_float (const char *newDeviceName, const char *newPrefix,
 				 float width, float height, int units);
 void giza_flush_device (void);
 void giza_change_page (void);
 void giza_close_device (void);
-int giza_query_device (char *querytype, char *returnval);
+int giza_query_device (const char *querytype, char *returnval);
 int giza_device_has_cursor (void);
 int giza_get_key_press (double *x, double *y, char *ch);
 int giza_get_key_press_float (float *x, float *y, char *ch);
@@ -139,18 +139,18 @@ void giza_set_environment (double xmin, double xmax, double ymin, double ymax,
 void giza_set_environment_float (float xmin, float xmax, float ymin,
 				 float ymax, int just, int axis);
 
-void giza_error_bars (int dir, int n, double *xpts, double *ypts,
-		      double *error, double term);
-void giza_error_bars_float (int dir, int n, float *xpts, float *ypts,
-			    float *error, float term);
-void giza_error_bars_vert (int n, double *xpts, double *ypts, double *ypts2,
+void giza_error_bars (int dir, int n, const double *xpts, const double *ypts,
+		      const double *error, double term);
+void giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts,
+			    const float *error, float term);
+void giza_error_bars_vert (int n, const double *xpts, const double *ypts, const double *ypts2,
 			   double term);
-void giza_error_bars_vert_float (int n, float *xpts, float *ypts,
-				 float *ypts2, float term);
-void giza_error_bars_hori (int n, double *xpts1, double *xpts2,
-                                  double *ypts, double term);
-void giza_error_bars_hori_float (int n, float *xpts1, float *xpts2,
-                                 float *ypts, float term);
+void giza_error_bars_vert_float (int n, const float *xpts, const float *ypts,
+				 const float *ypts2, float term);
+void giza_error_bars_hori (int n, const double *xpts1, const double *xpts2,
+                                  const double *ypts, double term);
+void giza_error_bars_hori_float (int n, const float *xpts1, const float *xpts2,
+                                  const float *ypts, float term);
 
 
 void giza_set_fill (int fs);
@@ -181,10 +181,10 @@ void giza_set_hatching_style_float (float angle, float spacing, float phase);
 void giza_get_hatching_style (double *angle, double *spacing, double *phase);
 void giza_get_hatching_style_float (float *angle, float *spacing, float *phase);
 
-void giza_label (char *labelx, char *labely, char *title);
+void giza_label (const char *labelx, const char *labely, const char *title);
 
-void giza_line (int n, double *xpts, double *ypts);
-void giza_line_float (int n, float *xpts, float *ypts);
+void giza_line (int n, const double *xpts, const double *ypts);
+void giza_line_float (int n, const float *xpts, const float *ypts);
 
 void giza_set_line_style (int ls);
 void giza_get_line_style (int *ls);
@@ -218,52 +218,52 @@ void giza_set_paper_size_float (int units, float width, float height);
 void giza_get_paper_size (int units, double *width, double *height);
 void giza_get_paper_size_float (int units, float *width, float *height);
 
-void giza_points (int n, double* x, double* y, int symbol);
-void giza_points_float (int n, float* x, float* y, int symbol);
+void giza_points (int n, const double* x, const double* y, int symbol);
+void giza_points_float (int n, const float* x, const float* y, int symbol);
 void giza_single_point (double x, double y, int symbol);
 void giza_single_point_float (float x, float y, int symbol);
 
-void giza_polygon (int n, double *xpts, double *ypts);
-void giza_polygon_float (int n, float *xpts, float *ypts);
+void giza_polygon (int n, const double *xpts, const double *ypts);
+void giza_polygon_float (int n, const float *xpts, const float *ypts);
 void giza_print_id (void);
 
 void giza_start_prompting (void);
 void giza_stop_prompting (void);
 
-void giza_text (double x, double y, char *text);
-void giza_text_float (float x, float y, char *text);
-void giza_ptext (double x, double y, double angle, double just, char *text);
-void giza_ptext_float (float x, float y, float angle, float just, char *text);
+void giza_text (double x, double y, const char *text);
+void giza_text_float (float x, float y, const char *text);
+void giza_ptext (double x, double y, double angle, double just, const char *text);
+void giza_ptext_float (float x, float y, float angle, float just, const char *text);
 
-void giza_qtext (double x, double y, double angle, double just, char *text,
+void giza_qtext (double x, double y, double angle, double just, const char *text,
 		 double xbox[4], double ybox[4]);
-void giza_qtext_float (float x, float y, float angle, float just, char *text,
+void giza_qtext_float (float x, float y, float angle, float just, const char *text,
 		       float xbox[4], float ybox[4]);
-void giza_qtextlen (int units, char *text, double *xlen, double *ylen);
-void giza_qtextlen_float (int units, char *text, float *xlen, float *ylen);
+void giza_qtextlen (int units, const char *text, double *xlen, double *ylen);
+void giza_qtextlen_float (int units, const char *text, float *xlen, float *ylen);
 
 void giza_rectangle (double x1, double x2, double y1, double y2);
 void giza_rectangle_float (float x1, float x2, float y1, float y2);
 
 void giza_render (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  double *affine);
+		  const double *affine);
 void giza_render_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, float *affine);
+			float valMax, const float *affine);
 void giza_render_transparent (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  double *affine);
+		  const double *affine);
 void giza_render_transparent_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, float *affine);
+			float valMax, const float *affine);
 
 void giza_render_gray (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  double *affine);
+		  const double *affine);
 void giza_render_gray_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, float *affine);
+			float valMax, const float *affine);
 void giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
 	    int j1, int j2, double xmin, double xmax, double ymin, double ymax);
 void giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int i2,
@@ -282,13 +282,13 @@ void giza_set_text_background (int colourIndex);
 void giza_get_text_background (int *colourIndex);
 
 void
-giza_vector (int n, int m, double* horizontal, double* vertical,
+giza_vector (int n, int m, const double* horizontal, const double* vertical,
 	     int i1, int i2, int j1, int j2, double scale, int position,
-	     double affine[6], double blank);
+	     const double* affine, double blank);
 void
-giza_vector_float (int n, int m, float* horizontal, float* vertical,
+giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
 		   int i1, int i2, int j1, int j2, float scale, int position,
-		   float affine[6], float blank);
+		   const float* affine, float blank);
 
 
 void giza_set_viewport (double xleft, double xright, double ybottom,

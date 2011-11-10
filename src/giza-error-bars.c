@@ -51,7 +51,7 @@ static void _giza_error_bar_hori (double x, double y, double error, double term)
  *  -9 :- +y and -y using a semi-transparent shaded region
  */
 void
-giza_error_bars (int dir, int n, double *xpts, double *ypts, double *error, double term)
+giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const double *error, double term)
 {
   if (!_giza_check_device_ready ("giza_error_bars"))
     return;
@@ -181,7 +181,7 @@ giza_error_bars (int dir, int n, double *xpts, double *ypts, double *error, doub
  * Synopsis: Same as giza_error_bars but takes floats.
  */
 void
-giza_error_bars_float (int dir, int n, float *xpts, float *ypts, float *error, float term)
+giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts, const float *error, float term)
 {
   if (!_giza_check_device_ready ("giza_error_bars"))
     return;
@@ -318,7 +318,7 @@ giza_error_bars_float (int dir, int n, float *xpts, float *ypts, float *error, f
  *  -term   :- length of the terminals, as a multiple of default length (T <= 0.0 means no terminals drawn)
  */
 void
-giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double term)
+giza_error_bars_vert (int n, const double *xpts, const double *ypts1, const double *ypts2, double term)
 {
   if (!_giza_check_device_ready ("giza_error_bars_vert"))
     return;
@@ -363,7 +363,7 @@ giza_error_bars_vert (int n, double *xpts, double *ypts1, double *ypts2, double 
  * Synopsis: Same functionality as giza_error_bars_vert but takes floats.
  */
 void
-giza_error_bars_vert_float (int n, float *xpts, float *ypts1, float *ypts2, float term)
+giza_error_bars_vert_float (int n, const float *xpts, const float *ypts1, const float *ypts2, float term)
 {
   if (!_giza_check_device_ready ("giza_error_bars_vert_float"))
     return;
@@ -415,7 +415,7 @@ giza_error_bars_vert_float (int n, float *xpts, float *ypts1, float *ypts2, floa
  *  -term   :- length of the terminals, as a multiple of default length (T <= 0.0 means no terminals drawn)
  */
 void
-giza_error_bars_hori (int n, double *xpts1, double *xpts2, double *ypts, double term)
+giza_error_bars_hori (int n, const double *xpts1, const double *xpts2, const double *ypts, double term)
 {
   if (!_giza_check_device_ready ("giza_error_bars_hori"))
     return;
@@ -458,7 +458,7 @@ giza_error_bars_hori (int n, double *xpts1, double *xpts2, double *ypts, double 
  * Same functionality as giza_error_bars_hori but takes floats.
  */
 void
-giza_error_bars_hori_float (int n, float *xpts1, float *xpts2, float *ypts, float term)
+giza_error_bars_hori_float (int n, const float *xpts1, const float *xpts2, const float *ypts, float term)
 {
   if (!_giza_check_device_ready ("giza_error_bars_hori_float"))
     return;

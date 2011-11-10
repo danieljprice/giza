@@ -47,7 +47,7 @@
  */
 void
 giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, double *affine)
+	    int j1, int j2, double valMin, double valMax, const double *affine)
 {
    _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0);
 }
@@ -60,7 +60,7 @@ giza_render (int sizex, int sizey, const double* data, int i1, int i2,
  */
 void
 giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, double *affine)
+	    int j1, int j2, double valMin, double valMax, const double *affine)
 {
    _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,1);
 }
@@ -71,7 +71,7 @@ giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i
  */
 void
 _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, double *affine, int transparent)
+	    int j1, int j2, double valMin, double valMax, const double *affine, int transparent)
 {
   if (!_giza_check_device_ready ("giza_render"))
     return;
@@ -169,7 +169,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 void
 giza_render_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  float *affine)
+		  const float *affine)
 {
   _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,0);
 }
@@ -184,7 +184,7 @@ giza_render_float (int sizex, int sizey, const float* data, int i1,
 void
 giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  float *affine)
+		  const float *affine)
 {
   _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,1);
 }
@@ -196,7 +196,7 @@ giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
 void
 _giza_render_float (int sizex, int sizey, const float* data, int i1,
 		    int i2, int j1, int j2, float valMin, float valMax,
-		    float *affine, int transparent)
+		    const float *affine, int transparent)
 {
   if (!_giza_check_device_ready ("giza_render_float"))
     return;
@@ -290,7 +290,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
 void
 giza_render_gray (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  double *affine)
+		  const double *affine)
 {
   giza_save_colour_table();
   giza_set_colour_table_gray ();
@@ -308,7 +308,7 @@ giza_render_gray (int sizex, int sizey, const double* data, int i1,
 void
 giza_render_gray_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  float *affine)
+		  const float *affine)
 {
   giza_save_colour_table();
   giza_set_colour_table_gray();

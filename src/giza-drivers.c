@@ -47,7 +47,7 @@
 
 #define GIZA_DEFAULT_MARGIN 0
 
-static void _giza_set_prefix (char *prefix);
+static void _giza_set_prefix (const char *prefix);
 static int id = 0;
 
 /*
@@ -81,7 +81,7 @@ static int id = 0;
  *  -/vps :- Landscape Postscript
  */
 int
-giza_open_device (char *newDeviceName, char *newPrefix)
+giza_open_device (const char *newDeviceName, const char *newPrefix)
 {
 
   if (id != 0) {
@@ -227,7 +227,7 @@ giza_open_device (char *newDeviceName, char *newPrefix)
  *  Other values cause an error message and are treated as GIZA_UNITS_DEVICE
  */
 int
-giza_open_device_size (char *newDeviceName, char *newPrefix, double width, double height, int units)
+giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
 {
   giza_set_paper_size(units,width,height);
   _giza_set_sizeSpecified ();
@@ -240,7 +240,7 @@ giza_open_device_size (char *newDeviceName, char *newPrefix, double width, doubl
  * Synopsis: Same functionality as giza_open_device_size but takes floats
  */
 int
-giza_open_device_size_float (char *newDeviceName, char *newPrefix, float width, float height, int units)
+giza_open_device_size_float (const char *newDeviceName, const char *newPrefix, float width, float height, int units)
 {
   return giza_open_device_size (newDeviceName, newPrefix, (double) width, (double) height, units);
 }
@@ -452,6 +452,8 @@ giza_close_device (void)
  *
  * Input:
  *  -querytype :- a string containing the query type
+ *
+ * Output:
  *  -returnval :- string with result of query
  *
  * The following query types are possible:
@@ -461,7 +463,7 @@ giza_close_device (void)
  *
  */
 int
-giza_query_device (char *querytype, char *returnval)
+giza_query_device (const char *querytype, char *returnval)
 {
   int ierr;
   ierr = 0;
@@ -559,7 +561,7 @@ _giza_get_key_press (int mode, int moveCurs, double xanch, double yanch, double 
  * and overwrites the prefix
  */
 void
-_giza_split_device_string (char *deviceString, char **devType)
+_giza_split_device_string (const char *deviceString, char **devType)
 {
   if (deviceString == NULL)
     return;
@@ -591,7 +593,7 @@ _giza_split_device_string (char *deviceString, char **devType)
  * An internal function that converts a device string to its integer representation
  */
 int
-_giza_device_to_int (char *newDeviceName)
+_giza_device_to_int (const char *newDeviceName)
 {
   int newDevice;
 
@@ -812,7 +814,7 @@ _giza_expand_clipping (void)
  * Allocates the array for Dev.prefix and sets it to prefix
  */
 static void
-_giza_set_prefix (char *prefix)
+_giza_set_prefix (const char *prefix)
 {
   strncpy (Dev.prefix, prefix, sizeof(Dev.prefix));
 }
@@ -847,7 +849,7 @@ _giza_init_band (int mode)
 /**
  * Internal utility to convert a string to lowercase
  */
-void _giza_lowercase(char *string, char *lowerstring)
+void _giza_lowercase(const char *string, char *lowerstring)
 {
    int  i = 0;
 
