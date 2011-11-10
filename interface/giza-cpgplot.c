@@ -177,7 +177,7 @@ void cpgclos(void)
 
 /***************************************************************
  * cpgconb -- contour map of a 2D data array, with blanking
- * Status: NOT IMPLEMENTED
+ * Status: PARTIALLY IMPLEMENTED
  ***************************************************************/
 void cpgconb(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr, \
@@ -185,8 +185,8 @@ void cpgconb(const float *a, int idim, int jdim, int i1, int i2, \
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-/*  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);
-*/
+  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);
+
 }
 
 /***************************************************************
@@ -201,7 +201,7 @@ void cpgconf(const float *a, int idim, int jdim, int i1, int i2, \
 
 /***************************************************************
  * cpgconl -- label contour map of a 2D data array
- * Status: NOT IMPLEMENTED
+ * Status: PARTIALLY IMPLEMENTED
  ***************************************************************/
 void cpgconl(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float c, const float *tr, const char *label, \
@@ -209,32 +209,35 @@ void cpgconl(const float *a, int idim, int jdim, int i1, int i2, \
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-/*  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);*/
+  float cc[1];
+  int nc = 1;
+  cc[0] = c;
+  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,cc,affine);
 
 }
 
 /***************************************************************
  * cpgcons -- contour map of a 2D data array (fast algorithm)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgcons(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr)
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-/*  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);*/
+  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);
 }
 
 /***************************************************************
  * cpgcont -- contour map of a 2D data array (contour-following)
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgcont(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr)
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-/*  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);*/
+  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);
 }
 
 /***************************************************************
@@ -368,12 +371,14 @@ void cpgetxt(void)
 
 /***************************************************************
  * cpggray -- gray-scale map of a 2D data array
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpggray(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float fg, float bg, const float *tr)
 {
-
+  float affine[6];
+  convert_tr_to_affine(tr,affine);
+  giza_render_gray_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,affine);
 }
 
 /***************************************************************
@@ -554,19 +559,18 @@ void cpgpanl(int nxc, int nyc)
 void cpgpap(float width, float aspect)
 {
  
- float widthCM = width * 2.54;  /* convert to cm */
- giza_set_paper_size_float(widthCM,aspect);
+ giza_set_paper_size_float(GIZA_UNITS_INCHES,width,width*aspect);
 
 }
 
 /***************************************************************
  * cpgpixl -- draw pixels
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgpixl(const int *ia, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float x1, float x2, float y1, float y2)
 {
-
+  giza_draw_pixels_float(idim,jdim,ia,i1-1,i2-1,j1-1,j2-1,x1,x2,y1,y2);
 }
 
 /***************************************************************
@@ -780,7 +784,7 @@ void cpgqlw(int *lw)
  ***************************************************************/
 void cpgqndt(int *n)
 {
-
+   *n = 1; 
 }
 
 /***************************************************************
@@ -1128,13 +1132,15 @@ void cpgupdt(void)
 
 /***************************************************************
  * cpgvect -- vector map of a 2D data array, with blanking
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgvect(const float *a, const float *b, int idim, int jdim, \
  int i1, int i2, int j1, int j2, float c, int nc, \
  const float *tr, float blank)
 {
-
+  float affine[6];
+  convert_tr_to_affine(tr,affine);
+  giza_vector_float(idim,jdim,a,b,i1-1,i2-1,j1-1,j2-1,c,nc,affine,blank);
 }
 
 /***************************************************************
