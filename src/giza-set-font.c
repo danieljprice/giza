@@ -80,7 +80,7 @@ giza_set_font_italic (char *font)
 }
 
 /**
- * Settings: giza_set_font_italic
+ * Settings: giza_set_font_bold_italic
  *
  * Synopsis: Sets the current font to the family specified in font, otherwise it is unchanged.
  *
