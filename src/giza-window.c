@@ -125,8 +125,8 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
     }
 
   /* set xrange and yrange */
-  double yrange = y2 - y1;
-  double xrange = x2 - x1;
+  double yrange = abs(y2 - y1);
+  double xrange = abs(x2 - x1);
   double scale, scalex, scaley, newWidth, newHeight;
 
   /* Scale is Device units per World coords. */

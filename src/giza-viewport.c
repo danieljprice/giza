@@ -42,9 +42,11 @@
 void
 giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
 {
+  double xmin, xmax, ymin, ymax;
   if (!_giza_check_device_ready ("giza_set_viewport"))
     return;
-  if (xleft >= xright || ybottom >= ytop)
+
+  if (xleft == xright || ybottom == ytop)
     {
       printf("giza_viewport: xmin %f xmax %f ymin %f ymax %f \n",xleft,xright,ybottom,ytop);
       _giza_warning ("giza_set_viewport", "Invalid arguments, using default viewport");
@@ -53,16 +55,34 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
 
     } else {
 
-      VP.xmin = xleft;
-      VP.xmax = xright;
-      VP.ymin = ybottom;
-      VP.ymax = ytop;
+      if (xleft > xright)
+        {
+          xmin = xright;
+          xmax = xleft;
+        } else {
+          xmin = xleft;
+          xmax = xright;
+        }
+
+      if (ybottom > ytop)
+        {
+          ymin = ytop;
+          ymax = ybottom;
+        } else {
+          ymin = ybottom;
+          ymax = ytop;
+        }
+
+      VP.xmin = xmin;
+      VP.xmax = xmax;
+      VP.ymin = ymin;
+      VP.ymax = ymax;
 
     }
 
   _giza_set_trans (GIZA_TRANS_NORM);
   cairo_reset_clip (context);
-  cairo_rectangle (context, xleft, ybottom, xright - xleft, ytop - ybottom);
+  cairo_rectangle (context, xmin, ymin, xmax - xmin, ymax - ymin);
 
   int clip;
   giza_get_clipping(&clip);
