@@ -29,8 +29,8 @@
 
 
 void
-giza_contour (int sizex, int sizey, double data[sizey][sizex], int i1,
-	      int i2, int j1, int j2, int ncont, const double cont[ncont],
+giza_contour (int sizex, int sizey, double* data, int i1,
+	      int i2, int j1, int j2, int ncont, const double* cont,
 	      const double *affine)
 {
 #define xsect(p1,p2) (h[p2]*xh[p1]-h[p1]*xh[p2])/(h[p2]-h[p1])
@@ -78,13 +78,13 @@ giza_contour (int sizex, int sizey, double data[sizey][sizex], int i1,
       for (i = i1; i < i2; i++)
 	{
 	  /* find the minimum value at the corners of a 1x1 box */
-	  temp1 = MIN (data[j][i], data[j + 1][i]);
-	  temp2 = MIN (data[j][i + 1], data[j + 1][i + 1]);
+	  temp1 = MIN (data[j*sizex+i], data[(j + 1)*sizex+i]);
+	  temp2 = MIN (data[j*sizex+(i + 1)], data[(j + 1)*sizex+(i + 1)]);
 	  dmin = MIN (temp1, temp2);
 
 	  /* find the max value at the corners of the 1x1 box */
-	  temp1 = MAX (data[j][i], data[j + 1][i]);
-	  temp2 = MAX (data[j][i + 1], data[j + 1][i + 1]);
+	  temp1 = MAX (data[j*sizex+i], data[(j + 1)*sizex+i]);
+	  temp2 = MAX (data[j*sizex+(i + 1)], data[(j + 1)*sizex+(i + 1)]);
 	  dmax = MAX (temp1, temp2);
 
 	  /* Check it is in the range of a contour */
@@ -104,7 +104,7 @@ giza_contour (int sizex, int sizey, double data[sizey][sizex], int i1,
 		  /* as well as their device co-ords */
 		  if (m > 0)
 		    {
-		      h[m] = data[j + jm[m - 1]][i + im[m - 1]] - cont[k];
+		      h[m] = data[(j + jm[m - 1])*sizex+(i + im[m - 1])] - cont[k];
 		      xh[m] = i + im[m - 1] + 0.5;
 		      yh[m] = j + jm[m - 1] + 0.5;
 		    }
@@ -221,17 +221,17 @@ giza_contour (int sizex, int sizey, double data[sizey][sizex], int i1,
 }
 
 void
-giza_contour_float (int sizex, int sizey, const float data[sizey][sizex], int i1,
-	      int i2, int j1, int j2, int ncont, const float cont[ncont], const float *affine)
+giza_contour_float (int sizex, int sizey, const float* data, int i1,
+	      int i2, int j1, int j2, int ncont, const float* cont, const float *affine)
 {
-  double ddata[sizey][sizex];
+  double ddata[sizey*sizex];
   double dcont[ncont];
   double daffine[6];
   int i, j;
 
   for (j=j1; j<=j2; j++) {
       for (i=i1; i<=i2; i++) {
-          ddata[j][i] = (double) data[j][i];
+          ddata[j*sizex+i] = (double) data[j*sizey+i];
       }
   }
 

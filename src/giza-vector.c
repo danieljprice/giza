@@ -24,7 +24,7 @@
 #include <math.h>
 
 void
-giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
+giza_vector (int n, int m, double* horizontal, double* vertical,
 	     int i1, int i2, int j1, int j2, double scale, int position,
 	     double affine[6], double blank)
 {
@@ -59,11 +59,11 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 	{
 	  for (i = i1; i <= i2; i++)
 	    {
-	      if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
+	      if (!(_giza_equal(horizontal[j*n+i],blank) && _giza_equal(vertical[j*n+i],blank)))
 		{
 		  double tmp =
-		    sqrt (horizontal[j][i] * horizontal[j][i] +
-			  vertical[j][i] * vertical[j][i]);
+		    sqrt (horizontal[j*n+i] * horizontal[j*n+i] +
+			  vertical[j*n+i] * vertical[j*n+i]);
 		  if (tmp > dscale)
 		    dscale = tmp;
 		}
@@ -89,7 +89,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
     {
       for (i = i1; i <= i2; i++)
 	{
-	  if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
+	  if (!(_giza_equal(horizontal[j*n+i],blank) && _giza_equal(vertical[j*n+i],blank)))
           {
              x = (double) i + 0.5;
              y = (double) j + 0.5;
@@ -98,22 +98,22 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 	       {
 	         x2 = x;
 	         y2 = y;
-	         x1 = x2 - horizontal[j][i] * dscale;
-	         y1 = y2 - vertical[j][i] * dscale;
+	         x1 = x2 - horizontal[j*n+i] * dscale;
+	         y1 = y2 - vertical[j*n+i] * dscale;
 	       }
 	     else if (_giza_equal(position,0.))
 	       {
-	         x2 = x + 0.5 * horizontal[j][i] * dscale;
-	         y2 = y + 0.5 * vertical[j][i] * dscale;
-	         x1 = x2 - horizontal[j][i] * dscale;
-	         y1 = y2 - vertical[j][i] * dscale;
+	         x2 = x + 0.5 * horizontal[j*n+i] * dscale;
+	         y2 = y + 0.5 * vertical[j*n+i] * dscale;
+	         x1 = x2 - horizontal[j*n+i] * dscale;
+	         y1 = y2 - vertical[j*n+i] * dscale;
 	       }
 	     else
 	       {
 	         x1 = x;
 	         y1 = y;
-	         x2 = x1 + horizontal[j][i] * dscale;
-	         y2 = y1 + vertical[j][i] * dscale;
+	         x2 = x1 + horizontal[j*n+i] * dscale;
+	         y2 = y1 + vertical[j*n+i] * dscale;
 	       }
 	     cairo_matrix_transform_point (&mat, &x1, &y1);
 	     cairo_matrix_transform_point (&mat, &x2, &y2);
@@ -129,7 +129,7 @@ giza_vector (int n, int m, double horizontal[m][n], double vertical[m][n],
 }
 
 void
-giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
+giza_vector_float (int n, int m, float* horizontal, float* vertical,
 	     int i1, int i2, int j1, int j2, float scale, int position,
 	     float affine[6], float blank)
 {
@@ -164,11 +164,11 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
 	{
 	  for (i = i1; i <= i2; i++)
 	    {
-	      if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
+	      if (!(_giza_equal(horizontal[j*n+i],blank) && _giza_equal(vertical[j*n+i],blank)))
 		{
 		  double tmp =
-		    sqrt (horizontal[j][i] * horizontal[j][i] +
-			  vertical[j][i] * vertical[j][i]);
+		    sqrt (horizontal[j*n+i] * horizontal[j*n+i] +
+			  vertical[j*n+i] * vertical[j*n+i]);
 		  if (tmp > dscale)
 		    dscale = tmp;
 		}
@@ -194,7 +194,7 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
     {
       for (i = i1; i <= i2; i++)
 	{
-	  if (!(_giza_equal(horizontal[j][i],blank) && _giza_equal(vertical[j][i],blank)))
+	  if (!(_giza_equal(horizontal[j*n+i],blank) && _giza_equal(vertical[j*n+i],blank)))
           {
              x = (double) i + 0.5;
              y = (double) j + 0.5;
@@ -204,22 +204,22 @@ giza_vector_float (int n, int m, float horizontal[m][n], float vertical[m][n],
 	       {
 	         x2 = x;
 	         y2 = y;
-	         x1 = x2 - horizontal[j][i] * dscale;
-	         y1 = y2 - vertical[j][i] * dscale;
+	         x1 = x2 - horizontal[j*n+i] * dscale;
+	         y1 = y2 - vertical[j*n+i] * dscale;
 	       }
 	     else if (_giza_equal(position,0.))
 	       {
-	         x2 = x + 0.5 * horizontal[j][i] * dscale;
-	         y2 = y + 0.5 * vertical[j][i] * dscale;
-	         x1 = x2 - horizontal[j][i] * dscale;
-	         y1 = y2 - vertical[j][i] * dscale;
+	         x2 = x + 0.5 * horizontal[j*n+i] * dscale;
+	         y2 = y + 0.5 * vertical[j*n+i] * dscale;
+	         x1 = x2 - horizontal[j*n+i] * dscale;
+	         y1 = y2 - vertical[j*n+i] * dscale;
 	       }
 	     else
 	       {
 	         x1 = x;
 	         y1 = y;
-	         x2 = x1 + horizontal[j][i] * dscale;
-	         y2 = y1 + vertical[j][i] * dscale;
+	         x2 = x1 + horizontal[j*n+i] * dscale;
+	         y2 = y1 + vertical[j*n+i] * dscale;
 	       }
   	       giza_arrow (x1, y1, x2, y2);
           }
