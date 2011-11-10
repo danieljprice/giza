@@ -24,6 +24,7 @@
 #include "giza-transforms-private.h"
 #include "giza-viewport-private.h"
 #include <giza.h>
+#include <math.h>
 
 /**
  * Settings: giza_set_window
@@ -125,8 +126,8 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
     }
 
   /* set xrange and yrange */
-  double yrange = abs(y2 - y1);
-  double xrange = abs(x2 - x1);
+  double yrange = fabs(y2 - y1);
+  double xrange = fabs(x2 - x1);
   double scale, scalex, scaley, newWidth, newHeight;
 
   /* Scale is Device units per World coords. */
