@@ -26,7 +26,7 @@
 void
 giza_vector (int n, int m, const double* horizontal, const double* vertical,
 	     int i1, int i2, int j1, int j2, double scale, int position,
-	     double affine[6], double blank)
+	     const double* affine, double blank)
 {
   if (!_giza_check_device_ready ("giza_vector"))
     return;
@@ -131,7 +131,7 @@ giza_vector (int n, int m, const double* horizontal, const double* vertical,
 void
 giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
 	     int i1, int i2, int j1, int j2, float scale, int position,
-	     float affine[6], float blank)
+	     const float* affine, float blank)
 {
   if (!_giza_check_device_ready ("giza_vector"))
     return;
