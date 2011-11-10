@@ -47,7 +47,7 @@ ifndef CC
 CC= gcc
 endif
 ifndef CFLAGS
-CFLAGS= -fPIC -Wall -Wextra -O3
+CFLAGS= -fPIC -Wall -Wextra -O3 -g
 endif
 
 #
@@ -77,7 +77,7 @@ OSTYPE=${shell uname}
 #ifeq ($(SYSTEM),linux)
   # using gcc
   CC= gcc
-  CFLAGS= -fPIC -Wall -Wextra -O3
+  CFLAGS= -fPIC -Wall -Wextra -O3 -g
   SHAREDLIBFLAGS= -shared
   DEBUGFLAG= -Wall -Wextra -g -O0
   RANLIB= ranlib
@@ -183,8 +183,6 @@ all: giza pgplot
 giza: libgiza $(SHARED_LIB_GIZA)
 
 libgiza: $(STATIC_LIB_GIZA)
-	cp $(SRCDIR)/giza.h $(INCDIR)/
-	cp $(SRCDIR)/giza-shared.h $(INCDIR)/
 	@echo ""
 	@echo "Finished building giza"
 	@echo ""
@@ -195,7 +193,6 @@ pgplot: $(STATIC_LIB_PGPLOT) $(SHARED_LIB_PGPLOT)
 	@echo ""
 
 cpgplot: $(STATIC_LIB_CPGPLOT) $(SHARED_LIB_CPGPLOT)
-	cp $(SRCDIR)/cpgplot.h $(INCDIR)/
 	@echo ""
 	@echo "Finished building libcpgplot"
 	@echo ""
@@ -261,7 +258,7 @@ dist: distclean
 	rm -rf ../$(DISTDIR)
 
 clean:
-	rm -f $(LIBDIR)/* *.o $(INCDIR)/* ../*.tar.gz
+	rm -f $(LIBDIR)/* *.o $(INCDIR)/giza-version.h ../*.tar.gz
 
 distclean: clean
 	rm -fr ../$(DISTDIR)
