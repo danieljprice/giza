@@ -231,7 +231,7 @@ giza_contour_float (int sizex, int sizey, const float* data, int i1,
 
   for (j=j1; j<=j2; j++) {
       for (i=i1; i<=i2; i++) {
-          ddata[j*sizex+i] = (double) data[j*sizey+i];
+          ddata[j*sizex+i] = (double) data[j*sizex+i];
       }
   }
 
