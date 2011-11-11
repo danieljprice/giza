@@ -493,18 +493,20 @@ private
  end interface
 
  interface giza_set_colour_table
-    subroutine giza_set_colour_table(controlPoints,red,green,blue,n) bind(C)
+    subroutine giza_set_colour_table(controlPoints,red,green,blue,n,cont,bright) bind(C)
       import
       implicit none
       integer(kind=c_int),intent(in),value        :: n
       real(kind=c_double),intent(in),dimension(n) :: controlPoints,red,green,blue
+      real(kind=c_double),intent(in),value        :: cont,bright
     end subroutine giza_set_colour_table
     
-    subroutine giza_set_colour_table_float(controlPoints,red,green,blue,n) bind(C)
+    subroutine giza_set_colour_table_float(controlPoints,red,green,blue,n,cont,bright) bind(C)
       import
       implicit none
       integer(kind=c_int),intent(in),value       :: n
       real(kind=c_float),intent(in),dimension(n) :: controlPoints,red,green,blue
+      real(kind=c_float),intent(in),value        :: cont,bright
     end subroutine giza_set_colour_table_float
  end interface
 

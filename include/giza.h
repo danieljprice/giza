@@ -95,9 +95,9 @@ void giza_set_colour_representation_hls_float (int ci, float hue, float lightnes
                                                float saturation);
 
 int giza_set_colour_table (const double *controlPoints, const double *red, const double *green,
-			   const double *blue, int n);
+			   const double *blue, int n, double contrast, double brightness);
 int giza_set_colour_table_float (const float *controlPoints, const float *red,
-				 const float *green, const float *blue, int n);
+				 const float *green, const float *blue, int n, float contrast, float brightness);
 int giza_set_colour_table_gray (void);
 void giza_save_colour_table (void);
 void giza_restore_colour_table (void);
