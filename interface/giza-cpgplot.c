@@ -248,7 +248,7 @@ void cpgcont(const float *a, int idim, int jdim, int i1, int i2, \
 void cpgctab(const float *l, const float *r, const float *g, \
  const float *b, int nc, float contra, float bright)
 {
-   giza_set_colour_table_float(l,r,g,b,nc);
+   giza_set_colour_table_float(l,r,g,b,nc,contra,bright);
 }
 
 /***************************************************************

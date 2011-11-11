@@ -336,7 +336,7 @@ subroutine PGCTAB(L, R, G, B, NC, CONTRA, BRIGHT)
  integer, intent(in) :: NC
  real,    intent(in) :: L(NC), R(NC), G(NC), B(NC), CONTRA, BRIGHT
 
- call giza_set_colour_table(L, R, G, B, NC)
+ call giza_set_colour_table(L, R, G, B, NC, CONTRA, BRIGHT)
 
 end subroutine PGCTAB
 
