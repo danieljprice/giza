@@ -144,7 +144,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 
   /* paint the pixmap to the primary surface */
   cairo_set_source_surface (context, pixmap, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_REPEAT);
+  /*cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_REPEAT);*/
   cairo_paint (context);
 
   /* clean up and restore settings */
@@ -267,7 +267,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
 						width, height, stride);
 
   cairo_set_source_surface (context, pixmap, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_REPEAT);
+  /*cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_REPEAT);*/
   cairo_paint (context);
 
   _giza_set_trans (oldTrans);
