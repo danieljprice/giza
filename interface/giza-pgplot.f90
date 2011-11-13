@@ -607,8 +607,6 @@ subroutine PGIMAG (A, IDIM, JDIM, I1, I2, J1, J2, A1, A2, TR)
  real                :: affine(6)
 
  call convert_tr_to_affine(tr,affine)
- print*,'tr = ',tr
- print*,'affine = ',affine
  call giza_render(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,a1,a2,affine)
 
 end subroutine PGIMAG
