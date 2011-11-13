@@ -69,8 +69,8 @@ int units_giza(int pgplotunits)
 void convert_tr_to_affine(const float *tr, float *affine)
 {
   affine[0] = tr[1];
-  affine[1] = tr[2];
-  affine[2] = tr[4];
+  affine[1] = tr[4];
+  affine[2] = tr[2];
   affine[3] = tr[5];
   affine[4] = tr[0] + 0.5f*(tr[1]);
   affine[5] = tr[3] + 0.5f*(tr[5]);
