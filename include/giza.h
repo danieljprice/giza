@@ -247,27 +247,27 @@ void giza_rectangle_float (float x1, float x2, float y1, float y2);
 
 void giza_render (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  const double *affine);
+		  int extend, const double *affine);
 void giza_render_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, const float *affine);
+			float valMax, int extend, const float *affine);
 void giza_render_transparent (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  const double *affine);
+		  int extend, const double *affine);
 void giza_render_transparent_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, const float *affine);
+			float valMax, int extend, const float *affine);
 
 void giza_render_gray (int sizex, int sizey, const double* data, int i1,
-		  int i2, int j1, int j2, double valMin, double valMax,
+		  int i2, int j1, int j2, double valMin, double valMax, int extend,
 		  const double *affine);
 void giza_render_gray_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, const float *affine);
+			float valMax, int extend, const float *affine);
 void giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, double xmin, double xmax, double ymin, double ymax);
+	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend);
 void giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, float xmin, float xmax, float ymin, float ymax);
+	    int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend);
 
 double giza_round (double x, int *nsub);
 float giza_round_float (float x, int *nsub);
@@ -289,7 +289,6 @@ void
 giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
 		   int i1, int i2, int j1, int j2, float scale, int position,
 		   const float* affine, float blank);
-
 
 void giza_set_viewport (double xleft, double xright, double ybottom,
 			double ytop);

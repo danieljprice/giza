@@ -43,13 +43,20 @@
  *                    on the colour ramp (The ramp is set by giza_set_colour_ramp
  *  -valMax        :- The value in data that gets assigned the colour corresponding to one
  *                    on the colour ramp
+ *  -extend        :- Option for how to deal with image at edges
  *  -affine        :- The affine transformation matrix that will be applied to the data.
+ *
+ * Allowed extend settings:
+ *  -0 or GIZA_EXTEND_NONE    :- no padding
+ *  -1 or GIZA_EXTEND_REPEAT  :- periodic tiling
+ *  -2 or GIZA_EXTEND_REFLECT :- reflective boundary
+ *  -3 or GIZA_EXTEND_PAD     :- pad by extending last few pixels
  */
 void
 giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, const double *affine)
+	    int j1, int j2, double valMin, double valMax, int extend, const double *affine)
 {
-   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0);
+   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0,extend);
 }
 
 /**
@@ -60,9 +67,9 @@ giza_render (int sizex, int sizey, const double* data, int i1, int i2,
  */
 void
 giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, const double *affine)
+	    int j1, int j2, double valMin, double valMax, int extend, const double *affine)
 {
-   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,1);
+   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,1,extend);
 }
 
 /**
@@ -71,7 +78,7 @@ giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i
  */
 void
 _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, const double *affine, int transparent)
+	    int j1, int j2, double valMin, double valMax, const double *affine, int transparent, int extend)
 {
   if (!_giza_check_device_ready ("giza_render"))
     return;
@@ -92,6 +99,9 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
   double pos;
+
+  cairo_extend_t cairoextendtype;
+  _giza_get_extend(extend,&cairoextendtype);
 
   /* apply the transformation */
   int oldCi;
@@ -144,7 +154,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 
   /* paint the pixmap to the primary surface */
   cairo_set_source_surface (context, pixmap, 0, 0);
-  /*cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_REPEAT);*/
+  cairo_pattern_set_extend (cairo_get_source (context), cairoextendtype);
   cairo_paint (context);
 
   /* clean up and restore settings */
@@ -169,9 +179,9 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 void
 giza_render_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  const float *affine)
+		  int extend, const float *affine)
 {
-  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,0);
+  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,0,extend);
 }
 
 /**
@@ -184,9 +194,9 @@ giza_render_float (int sizex, int sizey, const float* data, int i1,
 void
 giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  const float *affine)
+		  int extend, const float *affine)
 {
-  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,1);
+  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,1,extend);
 }
 
 /**
@@ -196,7 +206,7 @@ giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
 void
 _giza_render_float (int sizex, int sizey, const float* data, int i1,
 		    int i2, int j1, int j2, float valMin, float valMax,
-		    const float *affine, int transparent)
+		    const float *affine, int transparent, int extend)
 {
   if (!_giza_check_device_ready ("giza_render_float"))
     return;
@@ -219,6 +229,9 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
   double pos;
+
+  cairo_extend_t cairoextendtype;
+  _giza_get_extend(extend,&cairoextendtype);
 
   int oldCi;
   giza_get_colour_index (&oldCi);
@@ -267,7 +280,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
 						width, height, stride);
 
   cairo_set_source_surface (context, pixmap, 0, 0);
-  /*cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_REPEAT);*/
+  cairo_pattern_set_extend (cairo_get_source (context), cairoextendtype);
   cairo_paint (context);
 
   _giza_set_trans (oldTrans);
@@ -290,11 +303,11 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
 void
 giza_render_gray (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  const double *affine)
+		  int extend, const double *affine)
 {
   giza_save_colour_table();
   giza_set_colour_table_gray ();
-  giza_render (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, affine);
+  giza_render (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, extend, affine);
   giza_restore_colour_table();
 }
 
@@ -308,11 +321,11 @@ giza_render_gray (int sizex, int sizey, const double* data, int i1,
 void
 giza_render_gray_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  const float *affine)
+		  int extend, const float *affine)
 {
   giza_save_colour_table();
   giza_set_colour_table_gray();
-  giza_render_float (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, affine);
+  giza_render_float (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, extend, affine);
   giza_restore_colour_table();
 }
 
@@ -401,10 +414,13 @@ _giza_colour_pixel_index (unsigned char *array, int pixNum, int ci)
  *  -xmax        :- world coordinate corresponding to right of pixel array
  *  -ymin        :- world coordinate corresponding to bottom of pixel array
  *  -ymax        :- world coordinate corresponding to top of pixel array
+ *  -extend      :- Option for how to deal with image at edges (see giza_render)
+ *
+ * See Also: giza_render, giza_draw_pixels_float
  */
 void
 giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, double xmin, double xmax, double ymin, double ymax)
+	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend)
 {
   if (!_giza_check_device_ready ("giza_render_pixels"))
     return;
@@ -424,6 +440,9 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   cairo_surface_t *pixmap;
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
+  
+  cairo_extend_t cairoextendtype;
+  _giza_get_extend(extend,&cairoextendtype);
 
   /* apply the transformation */
   int oldCi;
@@ -464,7 +483,7 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
 
   /* paint the pixmap to the primary surface */
   cairo_set_source_surface (context, pixmap, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (context), CAIRO_EXTEND_PAD);
+  cairo_pattern_set_extend (cairo_get_source (context), cairoextendtype);
   cairo_paint (context);
 
   /* clean up and restore settings */
@@ -488,12 +507,37 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
  */
 void
 giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, float xmin, float xmax, float ymin, float ymax)
+	    int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend)
 {
   if (!_giza_check_device_ready ("giza_render_pixels_float"))
     return;
 
   giza_draw_pixels (sizex, sizey, idata, i1, i2,
-	    j1, j2, (double) xmin, (double) xmax, (double) ymin, (double) ymax);
+	    j1, j2, (double) xmin, (double) xmax, (double) ymin, (double) ymax, extend);
 
+}
+
+/**
+ * Internal routine to translate giza's integer value of extend to cairo's cairo_extend_t
+ */
+void
+_giza_get_extend (int extend, cairo_extend_t *cairoextend)
+{
+
+  switch (extend)
+    {
+    case GIZA_EXTEND_PAD:
+       *cairoextend = CAIRO_EXTEND_PAD;
+       break;
+    case GIZA_EXTEND_REFLECT:
+       *cairoextend = CAIRO_EXTEND_REFLECT;
+       break;
+    case GIZA_EXTEND_REPEAT:
+       *cairoextend = CAIRO_EXTEND_REPEAT;
+       break;
+    default:
+       *cairoextend = CAIRO_EXTEND_NONE;
+       break;
+    }
+  return;
 }

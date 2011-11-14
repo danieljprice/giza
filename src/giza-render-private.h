@@ -21,7 +21,8 @@
 static void _giza_colour_pixel (unsigned char *array, int pixNum, double pos);
 static void _giza_colour_pixel_transparent (unsigned char *array, int pixNum, double pos);
 void _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	           int j1, int j2, double valMin, double valMax, const double *affine, int transparent);
+	           int j1, int j2, double valMin, double valMax, const double *affine, int transparent, int extend);
 void _giza_render_float (int sizex, int sizey, const float* data, int i1,
 		   int i2, int j1, int j2, float valMin, float valMax,
-		   const float *affine, int transparent);
+		   const float *affine, int transparent, int extend);
+void _giza_get_extend (int extend, cairo_extend_t *cairoextend);
