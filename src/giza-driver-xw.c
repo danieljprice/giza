@@ -145,8 +145,6 @@ _giza_open_device_xw (void)
       return 3;
     }
 
-  XW.gc = XDefaultGCOfScreen(DefaultScreenOfDisplay(XW.display));
-
   /* create the window */
   XW.window = XCreateSimpleWindow (XW.display,
 				   DefaultRootWindow (XW.display),/* make our new window a child of the entire XW.display */
@@ -168,6 +166,11 @@ _giza_open_device_xw (void)
 
   /* create the pixmap */
   XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
+
+  /* Create graphics context */
+  XW.gc = XDefaultGCOfScreen(DefaultScreenOfDisplay(XW.display));
+  /*XW.gc = XCreateGC (XW.display, XW.pixmap, (unsigned long) (GCLineWidth | GCJoinStyle | GCFillRule |
+                     GCGraphicsExposures | GCForeground | GCCapStyle), 0);*/
 
   /* create Xlib surface in cairo */
   surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
@@ -246,6 +249,7 @@ _giza_close_device_xw (void)
 {
   cairo_surface_destroy (surface);
   XFreePixmap (XW.display, XW.pixmap);
+  /*XFreeGC(XW.gc);*/
   XCloseDisplay (XW.display);
 }
 
