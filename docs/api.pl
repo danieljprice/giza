@@ -224,11 +224,13 @@ $fh->print (
 
   <div id=\"content\">
   <h1>API Reference Manual</h1>
-  <p>Here we provided a function by function reference for the low-level C API to giza.</p>
+  <p>Here we provided a function by function reference for the low-level C API to giza. 
+  <br/>Please note that the giza API is <strong>not yet stable</strong>.
+  From version 1.0 we will aim to keep backwards compatibility, but in the 0.x series, changes to the API may be made arbitrarily.</p>
   <h1>Index</h1>
   <dl class=\"toc\">");
 # Then the index
-$fh->print ("<dt><a href=\"#Device_managment\">Device Managment</a></dt>\n");
+$fh->print ("<dt><a href=\"#Device_management\">Device Management</a></dt>\n");
 foreach (@IDevice)
 {
   $fh->print ("<dd><a href=\"#$_\">$_</a></dd>\n");
