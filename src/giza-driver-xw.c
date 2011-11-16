@@ -70,6 +70,7 @@ struct GIZA_XWindow
 static void _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int *y, char *ch);
 static void _giza_expose_xw (XEvent *event);
 static void _giza_flush_xw_event_queue (XEvent *event);
+static int _giza_errors_xw (Display *display, XErrorEvent *error);
 
 /**
  * Opens an XWindow device for drawing to.
@@ -164,6 +165,9 @@ _giza_open_device_xw (void)
   Atom wmDeleteMessage = XInternAtom(XW.display, "WM_DELETE_WINDOW", 1);
   XSetWMProtocols(XW.display, XW.window, &wmDeleteMessage, 1);
 
+  /* register the routine to handle non-fatal X errors */
+  XSetErrorHandler( _giza_errors_xw );
+
   /* create the pixmap */
   XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
@@ -252,6 +256,16 @@ _giza_close_device_xw (void)
   /*XFreeGC(XW.gc);*/
   XCloseDisplay (XW.display);
 }
+
+static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
+{
+  char text[82];
+  int length = (int) sizeof(text);
+  XGetErrorText(display,xwerror->error_code,text,length);
+  _giza_warning("giza_xw",text);
+  return 0;
+}
+
 
 /**
  * Loops indefinitely, redrawing and resizing the window as necessary until a key is pressed.
