@@ -173,8 +173,7 @@ _giza_open_device_xw (void)
 
   /* Create graphics context */
   XW.gc = XDefaultGCOfScreen(DefaultScreenOfDisplay(XW.display));
-  /*XW.gc = XCreateGC (XW.display, XW.pixmap, (unsigned long) (GCLineWidth | GCJoinStyle | GCFillRule |
-                     GCGraphicsExposures | GCForeground | GCCapStyle), 0);*/
+  /*XW.gc = XCreateGC (XW.display, XW.pixmap, 0, 0);*/
 
   /* create Xlib surface in cairo */
   surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
@@ -200,7 +199,6 @@ _giza_flush_device_xw (void)
 {
   /* flush the offscreen surface */
   cairo_surface_flush (surface);
-
   /* move the offscreen surface to the onscreen one */
   XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, 0, 0, (unsigned) XW.width, (unsigned) XW.height, 0, 0);
 
@@ -253,7 +251,7 @@ _giza_close_device_xw (void)
 {
   cairo_surface_destroy (surface);
   XFreePixmap (XW.display, XW.pixmap);
-  /*XFreeGC(XW.gc);*/
+  /*XFreeGC(XW.display,XW.gc);*/
   XCloseDisplay (XW.display);
 }
 
@@ -262,7 +260,7 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
   char text[82];
   int length = (int) sizeof(text);
   XGetErrorText(display,xwerror->error_code,text,length);
-  _giza_warning("giza_xw",text);
+  _giza_error("giza_xw",text);
   return 0;
 }
 
