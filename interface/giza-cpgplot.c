@@ -1154,12 +1154,12 @@ void cpgvstd(void)
 
 /***************************************************************
  * cpgwedg -- annotate an image plot with a wedge
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgwedg(const char *side, float disp, float width, \
  float fg, float bg, const char *label)
 {
-
+  giza_colour_bar_float(side,disp,width,fg,bg,label);
 }
 
 /***************************************************************

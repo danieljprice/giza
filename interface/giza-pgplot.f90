@@ -1715,12 +1715,15 @@ end subroutine PGVSTD
 
 !------------------------------------------------------------------------
 ! Module: PGWEDG -- annotate an image plot with a wedge
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGWEDG(SIDE, DISP, WIDTH, FG, BG, LABEL)
+ use giza, only:giza_colour_bar
  implicit none
  character *(*), intent(in) :: SIDE,LABEL
  real,           intent(in) :: DISP, WIDTH, FG, BG
+
+ call giza_colour_bar(SIDE, DISP, WIDTH, FG, BG, LABEL)
 
 end subroutine PGWEDG
 

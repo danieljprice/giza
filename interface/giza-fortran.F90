@@ -40,6 +40,7 @@ module giza
       giza_get_character_size, &
       giza_set_clipping, &
       giza_get_clipping, &
+      giza_colour_bar, &
       giza_set_colour_index, &
       giza_get_colour_index, &
       giza_set_colour_index_range, &
@@ -374,6 +375,26 @@ private
       implicit none
       integer(kind=c_int),intent(out) :: clip
     end subroutine giza_get_clipping
+ end interface
+
+ interface giza_colour_bar
+    module procedure giza_intern_colour_bar_f2c
+ end interface
+
+ interface giza_colour_bar_c
+    subroutine giza_colour_bar_c(side,disp,width,valmin,valmax,label) bind(C,name="giza_colour_bar")
+      import
+      implicit none
+      character(kind=c_char), dimension(*), intent(in) :: side, label
+      real(kind=c_double), value, intent(in) :: disp,width,valmin,valmax
+    end subroutine giza_colour_bar_c
+
+    subroutine giza_colour_bar_float_c(side,disp,width,valmin,valmax,label) bind(C,name="giza_colour_bar_float")
+      import
+      implicit none
+      character(kind=c_char), dimension(*), intent(in) :: side, label
+      real(kind=c_float), value, intent(in) :: disp,width,valmin,valmax
+    end subroutine giza_colour_bar_float_c
  end interface
 
  interface giza_set_colour_index
@@ -1581,6 +1602,15 @@ contains
 
     call giza_box_c(cstring(xopt),xtick,nxsub,cstring(yopt),ytick,nysub)
   end subroutine giza_intern_box_f2c
+
+  subroutine giza_intern_colour_bar_f2c(side,disp,width,valmin,valmax,label)
+    implicit none
+    character(len=*), intent(in) :: side,label
+    real, intent(in) :: disp,width,valmin,valmax
+    
+    call giza_colour_bar_c(cstring(side),disp,width,valmin,valmax,cstring(label))
+    
+  end subroutine giza_intern_colour_bar_f2c
 
   integer function  giza_intern_open_device(dev,prefix)
     implicit none

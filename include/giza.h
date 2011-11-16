@@ -64,6 +64,11 @@ void giza_get_character_size_float (int units, float *xch, float *ych);
 void giza_set_clipping (int clip);
 void giza_get_clipping (int *clip);
 
+void giza_colour_bar (const char *side, double disp, double width, 
+                      double valMin, double valMax, const char *label);
+void giza_colour_bar_float (const char *side, float disp, float width, 
+                            float valMin, float valMax, const char *label);
+
 void giza_set_colour_index (int ci);
 void giza_get_colour_index (int *ci);
 void giza_set_colour_index_range (int cimin, int cimax);
