@@ -56,8 +56,8 @@ giza_colour_bar (const char *side, double disp, double width,
   affine[1] = 0.0;
   affine[2] = 0.0;
   affine[3] = 1.0;
-  affine[4] = 0.5;
-  affine[5] = 0.5;
+  affine[4] = 0.0;
+  affine[5] = 0.0;
 
   /* fill an array with values from valMin to valMax */
   int npixwedg = 400;
