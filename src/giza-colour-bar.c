@@ -20,6 +20,7 @@
 
 #include "giza-private.h"
 #include <giza.h>
+#include <string.h>
 
 /**
  * Drawing: giza_colour_bar
@@ -171,6 +172,10 @@ giza_colour_bar (const char *side, double disp, double width,
     }
 
   giza_annotate(side,2.8,1.0,1.0,label);
+
+  /* reset window and viewport */
+  giza_set_viewport(vptxmin,vptxmax,vptymin,vptymax);
+  giza_set_window(xmin,xmax,ymin,ymax);
 
   if (!Sets.buf) giza_flush_device ();
 }
