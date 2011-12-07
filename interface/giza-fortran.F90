@@ -573,13 +573,15 @@ private
     subroutine giza_rgb_from_table(pos,r,g,b) bind(C)
       import
       implicit none
-      real(kind=c_double),intent(out) :: pos,r,g,b
+      real(kind=c_double),intent(in),value :: pos
+      real(kind=c_double),intent(out) :: r,g,b
     end subroutine giza_rgb_from_table
 
     subroutine giza_rgb_from_table_float(pos,r,g,b) bind(C)
       import
       implicit none
-      real(kind=c_float),intent(out) :: pos,r,g,b
+      real(kind=c_float),intent(in),value :: pos
+      real(kind=c_float),intent(out) :: r,g,b
     end subroutine giza_rgb_from_table_float
  end interface
 

@@ -108,7 +108,7 @@ void giza_save_colour_table (void);
 void giza_restore_colour_table (void);
 void giza_rgb_from_table (double pos, double *red, double *green,
 			  double *blue);
-void giza_rgb_from_table_float (double pos, float *red, float *green,
+void giza_rgb_from_table_float (float pos, float *red, float *green,
 				float *blue);
 
 void giza_contour (int sizex, int sizey, const double* data,

@@ -233,11 +233,11 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
  * See Also: giza_rgb_from_table, giza_set_colour_table
  */
 void
-giza_rgb_from_table_float (double pos, float *red, float *green, float *blue)
+giza_rgb_from_table_float (float pos, float *red, float *green, float *blue)
 {
   double dred, dgreen, dblue;
 
-  giza_rgb_from_table (pos, &dred, &dgreen, &dblue);
+  giza_rgb_from_table ((double) pos, &dred, &dgreen, &dblue);
 
   *red   = (float) dred;
   *green = (float) dgreen;
