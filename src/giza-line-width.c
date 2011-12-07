@@ -42,11 +42,7 @@ giza_set_line_width (double lw)
       return;
     }
 
-  if (lw <= GIZA_SMALLEST_LW)
-    {
-      _giza_warning ("giza_set_line_width", "Invalid line width, line width not set ");
-      return;
-    }
+  if (lw <= GIZA_SMALLEST_LW) { lw = GIZA_SMALLEST_LW; }
 
   _giza_lw = lw;
 
