@@ -258,7 +258,7 @@ dist: distclean
 	rm -rf ../$(DISTDIR)
 
 clean:
-	rm -f $(LIBDIR)/* *.o *.mod $(INCDIR)/giza-version.h ../*.tar.gz
+	rm -f $(LIBDIR)/libgiza* $(LIBDIR)/libpgplot* *.o *.mod $(INCDIR)/giza-version.h ../*.tar.gz
 
 distclean: clean
 	rm -fr ../$(DISTDIR)
