@@ -1619,13 +1619,16 @@ end subroutine PGSWIN
 
 !------------------------------------------------------------------------
 ! Module: PGTBOX -- draw frame and write (DD) HH MM SS.S labelling
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGTBOX (XOPT, XTICK, NXSUB, YOPT, YTICK, NYSUB)
+ use giza, only:giza_box_time
  implicit none
  real,      intent(in) :: XTICK, YTICK
  integer,   intent(in) :: NXSUB, NYSUB
  character, intent(in) :: XOPT*(*), YOPT*(*)
+
+ call giza_box_time(XOPT, XTICK, NXSUB, YOPT, YTICK, NYSUB)
 
 end subroutine PGTBOX
 

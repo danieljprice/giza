@@ -31,6 +31,7 @@ module giza
       giza_annotate, &
       giza_band, &
       giza_box, &
+      giza_box_time, &
       giza_begin_buffer, &
       giza_end_buffer, &
       giza_flush_buffer, &
@@ -269,6 +270,10 @@ private
  interface giza_box
     module procedure giza_intern_box_f2c
  end interface
+
+ interface giza_box_time
+    module procedure giza_intern_box_time_f2c
+ end interface
  
  interface giza_box_c
     subroutine giza_box_float_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box_float")
@@ -287,7 +292,25 @@ private
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
     end subroutine giza_box_c
  end interface
- 
+
+ interface giza_box_time_c
+    subroutine giza_box_time_float_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box_time_float")
+      import
+      implicit none
+      character(kind=c_char),dimension(*), intent(in) :: xopt,yopt
+      real(kind=c_float), value, intent(in)    :: xtick,ytick
+      integer(kind=c_int), value, intent(in)   :: nxsub,nysub
+    end subroutine giza_box_time_float_c
+    
+    subroutine giza_box_time_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box_time")
+      import
+      implicit none
+      character(kind=c_char),dimension(*), intent(in) :: xopt,yopt
+      real(kind=c_double), value, intent(in)   :: xtick,ytick
+      integer(kind=c_int), value, intent(in)   :: nxsub,nysub
+    end subroutine giza_box_time_c
+ end interface
+
  interface giza_begin_buffer
     subroutine giza_begin_buffer() bind(C)
     end subroutine giza_begin_buffer
@@ -1604,6 +1627,15 @@ contains
 
     call giza_box_c(cstring(xopt),xtick,nxsub,cstring(yopt),ytick,nysub)
   end subroutine giza_intern_box_f2c
+
+  subroutine giza_intern_box_time_f2c(xopt,xtick,nxsub,yopt,ytick,nysub)
+    implicit none
+    character(len=*),intent(in) :: xopt,yopt
+    real,intent(in)             :: xtick,ytick
+    integer,intent(in)          :: nxsub,nysub
+
+    call giza_box_time_c(cstring(xopt),xtick,nxsub,cstring(yopt),ytick,nysub)
+  end subroutine giza_intern_box_time_f2c
 
   subroutine giza_intern_colour_bar_f2c(side,disp,width,valmin,valmax,label)
     implicit none

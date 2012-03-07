@@ -153,14 +153,14 @@ endif
 # The source files
 #
 SOURCE= giza-annotate.c giza-arrow-style.c giza-arrow.c giza-band-style.c \
-	giza-band.c giza-box.c giza-buffering.c giza-character-size.c \
-	giza-circle.c giza-clipping.c giza-colour-bar.c giza-colour-index.c \
-	giza-colour-palette.c giza-colour-table.c giza-contour.c \
-	giza-cursor-routines.c giza-device-has-cursor.c giza-draw-background.c \
-	giza-draw.c giza-driver-eps.c giza-driver-null.c giza-driver-pdf.c \
-	giza-driver-png.c giza-driver-ps.c giza-driver-svg.c giza-driver-xw.c \
-	giza-drivers.c giza-environment.c giza-error-bars.c giza-fill.c \
-	giza-format-number.c giza-function-t.c giza-function-x.c \
+	giza-band.c giza-box-time.c giza-box.c giza-buffering.c \
+	giza-character-size.c giza-circle.c giza-clipping.c giza-colour-bar.c \
+	giza-colour-index.c giza-colour-palette.c giza-colour-table.c \
+	giza-contour.c giza-cursor-routines.c giza-device-has-cursor.c \
+	giza-draw-background.c giza-draw.c giza-driver-eps.c giza-driver-null.c \
+	giza-driver-pdf.c giza-driver-png.c giza-driver-ps.c giza-driver-svg.c \
+	giza-driver-xw.c giza-drivers.c giza-environment.c giza-error-bars.c \
+	giza-fill.c giza-format-number.c giza-function-t.c giza-function-x.c \
 	giza-function-y.c giza-get-key-press.c giza-get-surface-size.c \
 	giza-io.c giza-label.c giza-line-cap.c giza-line-style.c \
 	giza-line-width.c giza-line.c giza-move.c giza-paper.c giza-points.c \

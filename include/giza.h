@@ -51,6 +51,10 @@ void giza_box (const char *xopt, double xtick, int nxsub,
 	       const char *yopt, double ytick, int nysub);
 void giza_box_float (const char *xopt, float xtick, int nxsub,
 		     const char *yopt, float ytick, int nysub);
+void giza_box_time (const char *xopt, double xtick, int nxsub,
+	       const char *yopt, double ytick, int nysub);
+void giza_box_time_float (const char *xopt, float xtick, int nxsub,
+		     const char *yopt, float ytick, int nysub);
 
 void giza_begin_buffer (void);
 void giza_end_buffer (void);
