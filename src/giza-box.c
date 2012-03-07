@@ -16,8 +16,6 @@
  * Contact: wetter.j@gmail.com
  *          daniel.price@monash.edu
  *
- * DJP (21/4/10): added _giza_get_sigfigs utility to fix bug in this
- *                for exponentials
  */
 
 #include "giza-private.h"
