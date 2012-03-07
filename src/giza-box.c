@@ -33,19 +33,16 @@
 
 static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
 				  int *i1, int *i2);
-/*static int _giza_get_sigfigs (const double xmin, const double xmax, */
-/*			      const double xinterval); */
 
 /**
  * Drawing: giza_box
  *
- * Synopsis: Annotates the view port with labelled axis/frame
+ * Synopsis: Annotates the viewport with labelled axis/frame
  *
  * Input:
  *  -xopts :- String of options for the x-axis.
  *            The options may be in any order. See
- *            below for
- *            details
+ *            below for details
  *  -xtick :- The distance, in world coordinates,
  *            between major ticks on the x-axis.
  *            If 0.0 the interval is chosen
@@ -702,34 +699,3 @@ giza_round_float (float x, int *nsub)
   result = (float) giza_round((double) x, nsub);
   return result;
 }
-/**
- * Finds the required number of significant figures to distinguish
- * between the tick intervals (DJP)
- */
-/*static int
-_giza_get_sigfigs (const double xmin, const double xmax,
-		   const double xinterval)
-{
-  double max = fabs (xmax), min = fabs (xmin);
-  int nsigfig;
-  if (max > min)
-    {
-      nsigfig = fabs (log10 (max)) + 1;
-    }
-  else
-    {
-      nsigfig = fabs (log10 (min)) + 1;
-    }
-  nsigfig = nsigfig + fabs (log10 (xinterval)) + 1;
-*/
-
-  /* DJP: this is a workaround for the fact that
-   * the sigfigs calculation does not work at all
-   * for exponentials: just use a maximum
-   */
-/*
-  if (nsigfig > 12 || nsigfig < 2)
-    nsigfig = 12;
-  return nsigfig;
-}
-*/
