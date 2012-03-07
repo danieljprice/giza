@@ -70,7 +70,7 @@ void
 giza_box (const char *xopt, double xtick, int nxsub,
 	  const char *yopt, double ytick, int nysub)
 {
-  if (!_giza_check_device_ready ("giza_plot_box"))
+  if (!_giza_check_device_ready ("giza_box"))
     return;
 
   _giza_expand_clipping ();
