@@ -12,8 +12,9 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2012 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
@@ -36,10 +37,16 @@
  *  -axis :- Options for drawing axis, ticks etc.
  *
  * Axis:
+ *  --4 :- draw box and major tick marks only
+ *  --3 :- draw box and tick marks (major and minor) only
  *  --2 :- no axis, no box, no labels
  *  --1 :- draw the box only
  *  -0  :- draw a box and label it with world coords
- *  -1  :- same as 0 but draw the axis aswell (not yet implimented)
+ *  -1  :- same as 0 but also draw the axis
+ *  -2  :- same as 1 but also draw grid lines at major intervals
+ *  -10  :- draw box and label X-axis logarithmically
+ *  -20  :- draw box and label Y-axis logarithmically
+ *  -30  :- draw box and label X- and Y-axis logarithmically
  *
  */
 void
@@ -51,25 +58,51 @@ giza_set_environment (double xmin, double xmax, double ymin, double ymax, int ju
   giza_change_page ();
   giza_set_viewport_default ();
 
-  char opts[7];
+  char opts[8], yopts[8];
 
   switch(axis)
     {
+    case -4:
+      strcpy (opts, "BCT");
+      strcpy (yopts, "BCT");
+      break;
+    case -3:
+      strcpy (opts, "BCST");
+      strcpy (yopts, "BCST");
+      break;
     case -2:
       strcpy (opts, "");
+      strcpy (yopts,"");
       break;
     case -1:
       strcpy (opts, "BC");
-      break;
-    case 0:
-      strcpy (opts, "BCTSN");
+      strcpy (yopts,"BC");
       break;
     case 1:
       strcpy (opts, "ABCTSN");
+      strcpy (yopts,"ABCTSN");
+      break;
+    case 2:
+      strcpy (opts, "ABCTSNG");
+      strcpy (yopts,"ABCTSNG");
+      break;
+    case 10:
+      strcpy (opts, "BCTSNL");
+      strcpy (yopts,"BCTSN");
+      break;
+    case 20:
+      strcpy (opts, "BCTSN");
+      strcpy (yopts,"BCTSNL");
+      break;
+    case 30:
+      strcpy (opts, "BCTSNL");
+      strcpy (yopts,"BCTSNL");
       break;
     default:
       _giza_warning ("giza_set_environment", "Invalid axis option, setting to 0");
+    case 0:
       strcpy (opts, "BCTSN");
+      strcpy (yopts,"BCTSN");
       break;
     }
 
@@ -78,7 +111,7 @@ giza_set_environment (double xmin, double xmax, double ymin, double ymax, int ju
   else
     giza_set_window (xmin, xmax, ymin, ymax);
 
-  giza_box (opts, 0., 0, opts, 0., 0);
+  giza_box (opts, 0., 0, yopts, 0., 0);
 }
 
 /**

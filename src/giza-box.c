@@ -12,8 +12,9 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2012 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  * DJP (21/4/10): added _giza_get_sigfigs utility to fix bug in this
  *                for exponentials
@@ -65,6 +66,7 @@ static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
  *  -N :- Label the axis.
  *  -V :- Orient numeric y labels vertically (only
  *        applies to left and right axis).
+ *  -G :- Draw grid lines at major intervals.
  */
 void
 giza_box (const char *xopt, double xtick, int nxsub,
@@ -89,10 +91,10 @@ giza_box (const char *xopt, double xtick, int nxsub,
   giza_begin_buffer ();
 
   int xopta = 0, xoptb = 0, xoptc = 0, xoptt = 0, xopts = 0, xoptn =
-    0, xoptm = 0, xoptl = 0;
+    0, xoptm = 0, xoptl = 0, xoptg = 0;
 
   int yopta = 0, yoptb = 0, yoptc = 0, yoptt = 0, yopts = 0, yoptn =
-    0, yoptm = 0, yoptv = 0, yoptl = 0;
+    0, yoptm = 0, yoptv = 0, yoptl = 0, yoptg = 0;
 
   double xintervalMaj, xintervalMin, xval, xratio;
   double yintervalMaj, yintervalMin, yval, yratio;
@@ -142,6 +144,10 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	case ('L'):
 	  xoptl = 1;
 	  break;
+	case ('g'):
+	case ('G'):
+	  xoptg = 1;
+	  break;
 	default:
 	  break;
 	}
@@ -190,6 +196,10 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	case ('L'):
 	  yoptl = 1;
 	  break;
+	case ('g'):
+	case ('G'):
+	  yoptg = 1;
+	  break;
 	default:
 	  break;
 	}
@@ -237,14 +247,14 @@ giza_box (const char *xopt, double xtick, int nxsub,
   xintervalMin = xintervalMaj / (double) nMinTicksx;
 
   /* Draw X ticks */
-  if (xoptt || xopts)
+  if (xoptt || xopts || xoptg)
     {
       _giza_tick_intervals (Win.xmin, Win.xmax, xintervalMin, &i1, &i2);
       jmax = 0;
       if (xoptl)
 	jmax = 8;
 
-      if (xopta || xoptb || xoptc)
+      if (xopta || xoptb || xoptc || xoptg)
 	{
 	  for (i = i1; i <= i2; i++)
 	    {
@@ -268,10 +278,16 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		      cairo_move_to (context, xval, Win.ymin);
 		      cairo_line_to (context, xval, Win.ymin + currentTickL);
 		    }
-		  /* axis */
-		  if (xopta)
+		  /* grid */
+		  if (xoptg)
 		    {
-		      cairo_move_to (context, xval, 0.);
+		      cairo_move_to (context, xval, Win.ymin);
+		      cairo_line_to (context, xval, Win.ymax);
+		    }
+		  /* axis */
+		  else if (xopta)
+		    {
+		      cairo_move_to (context, xval, -currentTickL);
 		      cairo_line_to (context, xval, currentTickL);
 		    }
 		  /* top */
@@ -391,14 +407,14 @@ giza_box (const char *xopt, double xtick, int nxsub,
   yintervalMin = yintervalMaj / (double) nMinTicksy;
 
   /* Draw y ticks */
-  if (yoptt || yopts)
+  if (yoptt || yopts || yoptg)
     {
       _giza_tick_intervals (Win.ymin, Win.ymax, yintervalMin, &i1, &i2);
       jmax = 0;
       if (yoptl)
 	jmax = 8;
 
-      if (yopta || yoptb || yoptc)
+      if (yopta || yoptb || yoptc || yoptg)
 	{
 	  for (i = i1; i <= i2; i++)
 	    {
@@ -420,10 +436,16 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		      cairo_move_to (context, Win.xmin, yval);
 		      cairo_line_to (context, Win.xmin + currentTickL, yval);
 		    }
-		  /* axis */
-		  if (yopta)
+		  /* grid */
+		  if (yoptg)
 		    {
-		      cairo_move_to (context, 0., yval);
+		      cairo_move_to (context, Win.xmin, yval);
+		      cairo_line_to (context, Win.xmax, yval);
+		    }
+		  /* axis */
+		  else if (yopta)
+		    {
+		      cairo_move_to (context, -currentTickL, yval);
 		      cairo_line_to (context, currentTickL, yval);
 		    }
 		  /* right */
