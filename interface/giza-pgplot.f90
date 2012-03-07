@@ -1082,7 +1082,7 @@ end subroutine PGQID
 
 !------------------------------------------------------------------------
 ! Module: PGQINF -- inquire PGPLOT general information
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQINF (ITEM, VALUE, LENGTH)
  use giza, only:giza_query_device,giza_version_string
@@ -1097,21 +1097,21 @@ subroutine PGQINF (ITEM, VALUE, LENGTH)
  case('VERSION','version')
     value = 'giza-'//trim(giza_version_string)
  case('STATE','state')
-    print*,' WARNING: query for STATE not yet implemented in giza'
+    call giza_query_device('state',value)
  case('USER','user')
-    print*,' WARNING: query for USER not yet implemented in giza'
+    call giza_query_device('user',value)
  case('NOW','now')
     call date_and_time(datestring,timestring)
     value = datestring(7:8)//'-'//datestring(5:6)//'-'//datestring(1:4)// &
             ' '//timestring(1:2)//':'//timestring(3:4)
-  case('DEVICE','device')
-    print*,' WARNING: query for DEVICE not yet implemented in giza'
+ case('DEVICE','device')
+    call giza_query_device('device',value)
  case('FILE','file')
-    print*,' WARNING: query for FILE not yet implemented in giza'
+    call giza_query_device('file',value)
  case('TYPE','type')
     call giza_query_device('type',value)
  case('DEV/TYPE','dev/type')
-    print*,' WARNING: query for DEV/TYPE not yet implemented in giza'
+    call giza_query_device('dev/type',value)
  case('HARDCOPY','hardcopy')
     call giza_query_device('hardcopy',value)
  case('TERMINAL','terminal')
@@ -1119,11 +1119,6 @@ subroutine PGQINF (ITEM, VALUE, LENGTH)
     value = 'NO'
  case('CURSOR','cursor')
     call giza_query_device('cursor',value)
-!     if (plot_qcur()) then
-!        value = 'YES'
-!     else
-!        value = 'NO'
-!     endif
  case('SCROLL','scroll')
     !--no scroll capability in any current giza devices
     value = 'NO'

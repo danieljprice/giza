@@ -63,6 +63,15 @@ _giza_set_deviceOpen (void)
 }
 
 /**
+ * Queries whether or not device is open (no warnings)
+ */
+int
+_giza_get_deviceOpen (void)
+{
+  return deviceOpen;
+}
+
+/**
  * Sets the private variable deviceOpen to zero.
  */
 void

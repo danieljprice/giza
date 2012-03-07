@@ -60,6 +60,7 @@ struct GIZA_Settings
 
 int _giza_check_device_ready (char *source);
 void _giza_set_deviceOpen (void);
+int _giza_get_deviceOpen (void);
 void _giza_reset_deviceOpen (void);
 
 int _giza_sizeSpecified (void);

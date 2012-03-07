@@ -12,7 +12,7 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
+ * Copyright (C) 2010-2012 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
  *          daniel.price@monash.edu
  *
@@ -44,6 +44,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <unistd.h>
 
 #define GIZA_DEFAULT_MARGIN 0
 
@@ -457,9 +458,14 @@ giza_close_device (void)
  *  -returnval :- string with result of query
  *
  * The following query types are possible:
+ *  "state"    :- returns whether or not a device is open (returns "OPEN" or "CLOSED")
+ *  "device"   :- returns device name for current device (e.g. giza.png)
  *  "type"     :- returns device type of the current device (e.g. /png,/xw)
- *  "cursor"   :- returns whether or not device has a cursor ("YES" or "NO")
- *  "hardcopy" :- returns whether device is a hardcopy device ("YES" or "NO")
+ *  "dev/type" :- returns device name and type for current device (e.g. giza.png/png)
+ *  "file"     :- returns filename if device is non-interactive
+ *  "user"     :- returns current username
+ *  "cursor"   :- returns whether or not device has a cursor (returns "YES" or "NO")
+ *  "hardcopy" :- returns whether device is a hardcopy device (returns "YES" or "NO")
  *
  */
 int
@@ -467,6 +473,7 @@ giza_query_device (const char *querytype, char *returnval)
 {
   int ierr;
   ierr = 0;
+  char devType[12];
 
   /* Query device type */
 
@@ -501,7 +508,47 @@ giza_query_device (const char *querytype, char *returnval)
           strncpy(returnval,"YES",sizeof(returnval));
         }
     }
-   /*  else if (!strcmp(querytype,"file")) */
+  /* Query whether or not device is open or not */
+  else if (!strcmp(querytype,"state"))
+    {
+       if (_giza_get_deviceOpen())
+         {
+            strncpy(returnval,"OPEN",sizeof(returnval));         
+         }
+       else
+         {
+            strncpy(returnval,"CLOSED",sizeof(returnval));
+         }    
+    }
+  /* Query current user */
+  else if (!strcmp(querytype,"user"))
+    {
+       strncpy(returnval,getlogin(),sizeof(returnval));
+    }
+  /* Query current device name */
+  else if (!strcmp(querytype,"device"))
+    {
+       strncpy(returnval,Dev.prefix,sizeof(returnval));
+    }
+  /* Query current device/type */
+  else if (!strcmp(querytype,"dev/type"))
+    {
+       strncpy(returnval,Dev.prefix,sizeof(returnval));
+       if (!_giza_int_to_device(Dev.type,devType))
+         {
+           ierr = 1;
+           strncat(returnval,devType,4*sizeof(char));
+         }
+    }
+  /* Query current filename (as entered by user) */
+  else if (!strcmp(querytype,"file"))
+    {
+       if (!Dev.isInteractive)
+         {
+           strncpy(returnval,Dev.prefix,sizeof(returnval));
+         }
+    }
+
   return ierr;
 }
 
