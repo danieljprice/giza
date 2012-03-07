@@ -48,7 +48,7 @@ static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
  *  -nxsub :- The number of minor ticks to be placed
  *            between each major tick. If 0 the
  *            number is chosen by giza_box.
- *  -yopt  :- Similar to xdraw_minticks but for the y-axis.
+ *  -yopt  :- Similar to xopt but for the y-axis.
  *  -ytick :- Similar to xtick but for the y-axis.
  *  -nysub :- Similar to nxsub but for the y-axis.
  *
