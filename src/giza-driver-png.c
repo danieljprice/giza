@@ -85,22 +85,10 @@ _giza_change_page_png (void)
   /* Destroy old context */
   cairo_destroy (context);
 
-  /* File name */
-  int lenext = strlen(GIZA_DEVICE_EXTENSION);
-  int length = strlen (Dev.prefix) + lenext + 5;
-  char fileName[length + 1];
-  sprintf (fileName, "%s_%04d%s", Dev.prefix, Dev.pgNum, GIZA_DEVICE_EXTENSION);
+  /* Write current surface to png file and destroy the cairo surface */
+  _giza_close_device_png();
 
-  /* Save to file */
-  cairo_surface_write_to_png (surface, fileName);
-
-  /* Print the message */
-  char tmp[length + 10];
-  sprintf(tmp, "%s created", fileName);
-  _giza_message (tmp);
-
-  /* Destroy the old surface and create a new one */
-  cairo_surface_destroy (surface);
+  /* Create a new surface */
   surface =
     cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width,
 				Dev.height);
