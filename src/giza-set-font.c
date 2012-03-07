@@ -12,8 +12,9 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter. All rights reserved.
+ * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
+ *          daniel.price@monash.edu
  *
  */
 
@@ -23,9 +24,20 @@
 #include <giza.h>
 #include <stdlib.h>
 #include <string.h>
-
+#if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
+#ifdef GIZA_HAS_FT_FONT
+#ifdef CAIRO_HAS_FT_FONT
+#include <cairo/cairo-ft.h>
+static FT_Library ft_library;
+static FT_Face    ft_face;
+static const cairo_user_data_key_t key;
+static int got_ftlibrary = 0;
+#endif
+#endif
+#endif
 static char *_giza_fontFam;
 static cairo_font_face_t *_giza_fontFace;
+static int got_ftfont = 0;
 
 /**
  * Settings: giza_set_font
@@ -112,13 +124,54 @@ _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight
    strcpy (_giza_fontFam, font);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
-   /* do the font face creation explicitly rather than
+#ifdef GIZA_HAS_FT_FONT
+   if (!got_ftlibrary)
+     {
+        got_ftlibrary = !FT_Init_FreeType( &ft_library );
+     }
+   if (!got_ftlibrary)
+     {
+       _giza_error("giza_set_font","error initialising freetype library");
+       got_ftfont = 0;
+     }
+     else 
+     {
+       /* destroy any previously created face */
+       if (got_ftfont) { FT_Done_Face (ft_face); }
+
+       /* create new freetype font face */
+       got_ftfont = !FT_New_Face(ft_library,font,0,&ft_face);
+     }
+
+   if (got_ftfont) 
+     {
+       /* create the font face */
+       _giza_fontFace = cairo_ft_font_face_create_for_ft_face(ft_face,0);
+       
+       /* tie the lifetime of the cairo font object to the FT_Done_Face call
+        * (as per the cairo documentation) */
+       cairo_font_face_set_user_data (_giza_fontFace, &key,
+                           ft_face, (cairo_destroy_func_t) FT_Done_Face);
+       
+       /* set this as the current font face */
+       cairo_set_font_face(context,_giza_fontFace);
+     }
+#endif
+   /* If cairo version is new enough,
+    * do the font face creation explicitly rather than
     * using select_font_face. This is so that memory
     * associated with the font face can be explicitly freed
     */
-   _giza_fontFace = cairo_toy_font_face_create(font, slant, weight);
-   cairo_set_font_face(context, _giza_fontFace);   
+   if (!got_ftfont) 
+     {
+       _giza_fontFace = cairo_toy_font_face_create(font, slant, weight);
+       cairo_set_font_face(context, _giza_fontFace);
+     }
 #else
+   /*
+    * For older versions of cairo, we must use
+    * cairo_select_font_face
+    */
    cairo_select_font_face (context, font, slant, weight);
 #endif
 
@@ -168,7 +221,7 @@ giza_get_font (char *font, int n)
 void
 _giza_init_font (void)
 {
-  char *tmp = getenv("GIZA_FONT");
+  char *tmp = getenv ("GIZA_FONT");
   if(!tmp)
     {
       tmp = "Times";
@@ -188,7 +241,19 @@ _giza_free_font (void)
 {
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 8, 0)
    /* free memory associated with the font face */
-  cairo_font_face_destroy(_giza_fontFace);
+  cairo_font_face_destroy (_giza_fontFace);
+#ifdef GIZA_HAS_FT_FONT
+  if (got_ftfont)
+    {
+      FT_Done_Face (ft_face);
+      got_ftfont = 0;
+    }
+  if (got_ftlibrary)
+    {
+      FT_Done_FreeType (ft_library);
+      got_ftlibrary = 0;
+    }
+#endif
 #endif
   free (_giza_fontFam);
 }

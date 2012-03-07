@@ -20,6 +20,11 @@
 
 #include <giza-shared.h>
 
+/* do not allow use of freetype if cairo does not have it */
+#ifndef CAIRO_HAS_FT_FONT
+#undef GIZA_HAS_FT_FONT
+#endif
+
 void giza_arrow (double x1, double y1, double x2, double y2);
 void giza_arrow_float (float x1, float y1, float x2, float y2);
 

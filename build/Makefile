@@ -65,6 +65,17 @@ INCFLAGS= -I/usr/X11R6/include -I/usr/include -I/usr/include/cairo -I$(PREFIX)/i
 LDFLAGS= $(X11LIBS) $(CAIROLIBS) -lm
 
 #
+#--if compiling with Freetype (experimental at this stage)
+#
+ifeq ($(USE_FREETYPE),yes)
+FT_INCLUDE=-I/usr/X11R6/include/freetype2
+FT_LIBS= -lfreetype
+INCFLACS+= $(FT_INCLUDE)
+LDFLAGS+= $(FT_LIBS)
+CPPFLAGS+= -DGIZA_HAS_FT_FONT
+endif
+
+#
 # For creating the tarball
 #
 DISTDIR=giza-$(VERSION)
