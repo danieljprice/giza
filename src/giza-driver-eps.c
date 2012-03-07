@@ -117,8 +117,8 @@ _giza_change_page_eps (void)
   cairo_surface_destroy (surface);
 
   /* name the new eps */
-  int length;
-  length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
+  int lenext = strlen (GIZA_DEVICE_EXTENSION);
+  int length = strlen (Dev.prefix) + lenext + 5;
   char fileName[length + 1];
   _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum + 1,GIZA_DEVICE_EXTENSION);
 
