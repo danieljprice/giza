@@ -46,7 +46,7 @@ double _giza_dashes[8];
 void
 giza_set_line_style (int ls)
 {
-  if (!_giza_check_device_ready ("giza_set_fill"))
+  if (!_giza_check_device_ready ("giza_set_line_style"))
     return;
 
   _giza_set_line_style (ls, context);
@@ -80,21 +80,18 @@ _giza_set_line_style (int ls, cairo_t *ct)
 
   switch (ls)
     {
-    case GIZA_LS_SOLID:
-      _giza_n= 0;
-      break;
     case GIZA_LS_LONG_DASH:
-      _giza_n= 2;
+      _giza_n = 2;
       _giza_dashes[0] = longDash;
       _giza_dashes[1] = 0.33 * longDash;
       break;
     case GIZA_LS_SHORT_DASH:
-      _giza_n= 2;
+      _giza_n = 2;
       _giza_dashes[0] = shortDash;
       _giza_dashes[1] = 0.5 * shortDash;
       break;
     case GIZA_LS_DOT:
-      _giza_n= 2;
+      _giza_n = 2;
       giza_get_line_width (&lw);
       _giza_dashes[0] = Dev.deviceUnitsPermm * 0.25 * lw;
       _giza_dashes[1] = Dev.deviceUnitsPermm * lw;
@@ -120,8 +117,10 @@ _giza_set_line_style (int ls, cairo_t *ct)
       _giza_dashes[7] = Dev.deviceUnitsPermm * lw; /* space */
       break;
     default:
-      _giza_warning ("giza_set_line_style", "Invalid line style, line style not set");
-      return;
+      _giza_warning ("giza_set_line_style", "Invalid line style, using solid");
+    case GIZA_LS_SOLID:
+      _giza_n= 0;
+      break;
     }
 
   _giza_set_cairo_dashes (ct);
