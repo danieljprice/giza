@@ -12,7 +12,7 @@
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010-2011 James Wetter and Daniel Price. All rights reserved.
+ * Copyright (C) 2010-2012 James Wetter and Daniel Price. All rights reserved.
  * Contact: wetter.j@gmail.com
  *          daniel.price@monash.edu
  *
@@ -172,8 +172,10 @@ _giza_open_device_xw (void)
   XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
 
   /* Create graphics context */
-  XW.gc = XDefaultGCOfScreen(DefaultScreenOfDisplay(XW.display));
+/* XW.gc = XDefaultGCOfScreen(DefaultScreenOfDisplay(XW.display)); */
   /*XW.gc = XCreateGC (XW.display, XW.pixmap, 0, 0);*/
+  /* version below works on older X11 distros */
+  XW.gc = XDefaultGC (XW.display, XW.screennum);
 
   /* create Xlib surface in cairo */
   surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
