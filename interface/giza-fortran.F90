@@ -54,11 +54,13 @@ module giza
       giza_get_current_point, &
       giza_rgb_from_table, &
       giza_print_device_list, &
+      giza_open, &
       giza_open_device, &
       giza_open_device_size, &
       giza_flush_device, &
       giza_change_page, &
       giza_close_device, &
+      giza_close, &
       giza_get_key_press, &
       giza_device_has_cursor, &
       giza_draw, &
@@ -1191,6 +1193,10 @@ private
     end subroutine giza_text_float_c
  end interface
 
+ interface giza_open
+    module procedure giza_open_func, giza_open_sub
+ end interface giza_open
+
  interface giza_ptext
     module procedure giza_intern_ptext_f2c    
     module procedure giza_intern_ptext_float_f2c
@@ -1614,6 +1620,72 @@ contains
     
     giza_intern_open_device = giza_open_device_c(cstring(dev),cstring(prefix))
   end function giza_intern_open_device
+
+  integer function giza_open_func(dev,prefix,width,height,units)
+    implicit none
+    character(len=*),intent(in), optional  :: dev
+    character(len=*), intent(in), optional :: prefix
+    real,intent(in), optional     :: width,height
+    integer, intent(in), optional :: units
+    
+    character(len=40) :: fdev
+    if (present(dev)) then
+       fdev = dev
+    else
+       fdev = '?'
+    endif
+    
+    if (present(units) .and. present(width) .and. present(height)) then    
+       if (present(prefix)) then
+          giza_open_func = giza_open_device_size_c(cstring(fdev),cstring(prefix),width,height,units)
+       else
+          giza_open_func = giza_open_device_size_c(cstring(fdev),cstring('giza'),width,height,units)
+       endif
+    else
+       if (present(prefix)) then
+          giza_open_func = giza_open_device_c(cstring(fdev),cstring(prefix))
+       else
+          giza_open_func = giza_open_device_c(cstring(fdev),cstring('giza'))
+       endif
+    endif
+  
+  end function giza_open_func
+
+  subroutine giza_open_sub(dev,prefix,width,height,units)
+    implicit none
+    character(len=*),intent(in), optional  :: dev
+    character(len=*), intent(in), optional :: prefix
+    real,intent(in), optional     :: width,height
+    integer, intent(in), optional :: units
+    integer :: giza_open
+    
+    character(len=40) :: fdev
+    if (present(dev)) then
+       fdev = dev
+    else
+       fdev = '?'
+    endif
+    
+    if (present(units) .and. present(width) .and. present(height)) then    
+       if (present(prefix)) then
+          giza_open = giza_open_device_size_c(cstring(fdev),cstring(prefix),width,height,units)
+       else
+          giza_open = giza_open_device_size_c(cstring(fdev),cstring('giza'),width,height,units)
+       endif
+    else
+       if (present(prefix)) then
+          giza_open = giza_open_device_c(cstring(fdev),cstring(prefix))
+       else
+          giza_open = giza_open_device_c(cstring(fdev),cstring('giza'))
+       endif
+    endif
+  
+  end subroutine giza_open_sub
+  
+  subroutine giza_close
+     call giza_close_device()
+  end subroutine giza_close
+
 
   integer function giza_intern_open_device_size(dev,prefix,width,height,units)
     implicit none
