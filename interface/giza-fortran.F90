@@ -25,6 +25,7 @@ module giza
  use, intrinsic :: iso_c_binding, only:c_double,c_float,c_char,c_int
  implicit none
  public  :: &
+      giza_plot, &
       giza_arrow, &
       giza_set_arrow_style, &
       giza_get_arrow_style, &
@@ -1217,7 +1218,7 @@ private
  end interface
 
  interface giza_open
-    module procedure giza_open_func, giza_open_sub
+    module procedure giza_open_sub
  end interface giza_open
 
  interface giza_ptext
@@ -1653,42 +1654,13 @@ contains
     giza_intern_open_device = giza_open_device_c(cstring(dev),cstring(prefix))
   end function giza_intern_open_device
 
-  integer function giza_open_func(dev,prefix,width,height,units)
+  subroutine giza_open_sub(dev,prefix,width,height,units,error)
     implicit none
     character(len=*),intent(in), optional  :: dev
     character(len=*), intent(in), optional :: prefix
     real,intent(in), optional     :: width,height
     integer, intent(in), optional :: units
-    
-    character(len=40) :: fdev
-    if (present(dev)) then
-       fdev = dev
-    else
-       fdev = '?'
-    endif
-    
-    if (present(units) .and. present(width) .and. present(height)) then    
-       if (present(prefix)) then
-          giza_open_func = giza_open_device_size_c(cstring(fdev),cstring(prefix),width,height,units)
-       else
-          giza_open_func = giza_open_device_size_c(cstring(fdev),cstring('giza'),width,height,units)
-       endif
-    else
-       if (present(prefix)) then
-          giza_open_func = giza_open_device_c(cstring(fdev),cstring(prefix))
-       else
-          giza_open_func = giza_open_device_c(cstring(fdev),cstring('giza'))
-       endif
-    endif
-  
-  end function giza_open_func
-
-  subroutine giza_open_sub(dev,prefix,width,height,units)
-    implicit none
-    character(len=*),intent(in), optional  :: dev
-    character(len=*), intent(in), optional :: prefix
-    real,intent(in), optional     :: width,height
-    integer, intent(in), optional :: units
+    integer, intent(out), optional :: error
     integer :: giza_open
     
     character(len=40) :: fdev
@@ -1710,6 +1682,9 @@ contains
        else
           giza_open = giza_open_device_c(cstring(fdev),cstring('giza'))
        endif
+    endif
+    if (present(error)) then
+       error = giza_open
     endif
   
   end subroutine giza_open_sub
@@ -1927,5 +1902,225 @@ contains
     enddo
 
    end function fstring
+
+!---------------------------------------------------------------------------
+!---------------------------------------------------------------------------
+!              HIGH LEVEL FORTRAN INTERFACE
+!---------------------------------------------------------------------------
+!---------------------------------------------------------------------------
+
+subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
+                     xmin,xmax,ymin,ymax,imgmin,imgmax,affine,&
+                     vptxmin,vptxmax,vptymin,vptymax, &
+                     xlabel,ylabel,title,font,&
+                     ls,lw,ci,ch,symbol,just,axis,extend,printid)
+ implicit none
+ real, intent(in), dimension(:), optional :: y,x
+ real, intent(in), dimension(:,:), optional :: img
+ integer, intent(in), optional :: units
+ real, intent(in), optional :: width,height
+ character(len=*), intent(in), optional :: dev,prefix
+ real, intent(in), optional :: xmin,xmax,ymin,ymax,imgmin,imgmax
+ real, intent(in), optional :: vptxmin,vptxmax,vptymin,vptymax
+ character(len=*), intent(in), optional :: xlabel,ylabel,title
+ character(len=*), intent(in), optional :: font
+ integer, intent(in), optional :: ls,ci,symbol,axis,just,extend
+ real, intent(in), optional :: lw,ch
+ real, dimension(6), intent(in), optional :: affine
+ logical, intent(in), optional :: printid
+ integer :: iunits,n,nx,ny,i,iaxis,ijust,iextend
+ real :: xmini,xmaxi,ymini,ymaxi,valmin,valmax
+ real, dimension(6) :: affinei
+ character(len=20) :: devi
+ character(len=40) :: xlabeli,ylabeli,titlei
+ real, dimension(:), allocatable :: arrtmp
+
+!
+!--open giza device
+!
+ if (present(dev)) then
+    devi = dev
+ else
+    devi = '?'
+ endif
+ if (present(width) .and. present(height)) then
+    if (present(units)) then
+       iunits = units
+    else
+       iunits = giza_units_pixels
+    endif
+    if (present(prefix)) then
+       call giza_open(dev=devi,prefix=prefix,width=width,height=height,units=iunits)
+    else
+       call giza_open(dev=devi,width=width,height=height,units=iunits)
+    endif
+ else
+    if (present(prefix)) then
+       call giza_open(dev=devi,prefix=prefix)    
+    else
+       call giza_open(dev=devi)
+    endif
+ endif
+
+!
+!--max/min limits for plot window
+!
+ if (present(xmin)) then
+    xmini = xmin
+ else
+    if (present(x)) then
+       xmini = minval(x)
+    else
+       xmini = 0.
+    endif
+ endif
+ if (present(xmax)) then    
+    xmaxi = xmax
+ else
+    if (present(x)) then
+       xmaxi = maxval(x)
+    else
+       xmaxi = 1.
+    endif
+ endif
+ if (present(ymin)) then
+    ymini = ymin
+ else
+    if (present(y)) then
+       ymini = minval(y)
+    else
+       ymini = 0.
+    endif
+ endif
+ if (present(ymax)) then
+    ymaxi = ymax
+ else
+    if (present(y)) then
+       ymaxi = maxval(y)
+    else
+       ymaxi = 1.
+    endif
+ endif
+ !--plot labels
+ if (present(title)) then
+    titlei = title
+ else
+    titlei = ''
+ endif
+ if (present(xlabel)) then
+    xlabeli = xlabel
+ else
+    xlabeli = ''
+ endif
+ if (present(ylabel)) then
+    ylabeli = ylabel
+ else
+    ylabeli = ''
+ endif
+ if (present(font)) then
+    call giza_set_font(font)
+ endif
+ if (present(ch)) then
+    call giza_set_character_height(ch)
+ endif
+ if (present(just)) then
+    ijust = just
+ else
+    ijust = 0
+ endif
+ if (present(axis)) then
+    iaxis = axis
+ else
+    iaxis = 0
+ endif
+ 
+ if (present(vptxmin) .and. present(vptxmax) .and. present(vptymin) .and. present(vptymax)) then
+    call giza_set_viewport(vptxmin,vptxmax,vptymin,vptymax)
+    if (ijust.eq.1) then
+       call giza_set_window(xmini,xmaxi,ymini,ymaxi)
+    else
+       call giza_set_window_equal_scale(xmini,xmaxi,ymini,ymaxi)
+    endif
+    call giza_label(xlabeli,ylabeli,titlei)
+ else
+    call giza_set_environment(xmini,xmaxi,ymini,ymaxi,ijust,iaxis)
+    call giza_label(xlabeli,ylabeli,titlei)
+ endif
+ if (present(printid)) then
+    if (printid) call giza_print_id()
+ endif
+
+ if (present(ls)) then
+    call giza_set_line_style(ls)
+ endif
+ if (present(lw)) then
+    call giza_set_line_width(lw)
+ endif
+ if (present(ci)) then
+    call giza_set_colour_index(ci)
+ endif
+ 
+ if (present(x) .and. present(y)) then
+    n = min(size(x),size(y))
+    if (present(symbol)) then
+       call giza_points(n,x,y,symbol)    
+    else
+       call giza_line(n,x,y)
+    endif
+ elseif (present(x) .and. size(x).gt.1) then
+    n = size(x)
+    allocate(arrtmp(n))
+    do i=1,n
+       arrtmp(i) = (i-1)/(real(n-1))
+    enddo
+    if (present(symbol)) then
+       call giza_points(n,x,arrtmp,symbol)    
+    else
+       call giza_line(n,x,arrtmp)
+    endif
+    deallocate(arrtmp)
+ elseif (present(y) .and. size(y).gt.1) then
+    n = size(y)
+    allocate(arrtmp(n))
+    do i=1,n
+       arrtmp(i) = (i-1)/(real(n-1))
+    enddo
+    if (present(symbol)) then
+       call giza_points(n,arrtmp,y,symbol)    
+    else
+       call giza_line(n,arrtmp,y)
+    endif
+    deallocate(arrtmp)
+ endif
+ 
+ if (present(img)) then
+    nx = size(img(:,1))
+    ny = size(img(1,:))
+    if (present(imgmin)) then
+       valmin = imgmin
+    else
+       valmin = minval(img)
+    endif
+    if (present(imgmax)) then
+       valmax = imgmax
+    else
+       valmax = maxval(img)
+    endif
+    if (present(affine)) then
+       affinei = affine
+    else
+       affinei = (/1.,0.,0.,1.,0.,0./)
+    endif
+    if (present(extend)) then
+       iextend = extend
+    else
+       iextend = giza_extend_none
+    endif
+    call giza_render(nx,ny,img,1,nx,1,ny,valmin,valmax,iextend,affinei)
+ endif
+ 
+ call giza_close()
+ 
+end subroutine giza_plot
 
 end module giza
