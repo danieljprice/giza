@@ -1930,6 +1930,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  logical, intent(in), optional :: printid
  integer :: iunits,n,nx,ny,i,iaxis,ijust,iextend
  real :: xmini,xmaxi,ymini,ymaxi,valmin,valmax
+ real :: vptxmini,vptxmaxi,vptymini,vptymaxi
  real, dimension(6) :: affinei
  character(len=20) :: devi
  character(len=40) :: xlabeli,ylabeli,titlei
@@ -2033,14 +2034,23 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  else
     iaxis = 0
  endif
- 
- if (present(vptxmin) .and. present(vptxmax) .and. present(vptymin) .and. present(vptymax)) then
-    call giza_set_viewport(vptxmin,vptxmax,vptymin,vptymax)
+
+ if (present(vptxmin) .or. present(vptxmax) .or. present(vptymin) .or. present(vptymax)) then
+    call giza_set_viewport_default()
+    call giza_get_viewport(giza_units_normalized,vptxmini,vptxmaxi,vptymini,vptymaxi)
+
+    if (present(vptxmin)) vptxmini = vptxmin
+    if (present(vptxmax)) vptxmaxi = vptxmax
+    if (present(vptymin)) vptymini = vptymin
+    if (present(vptymax)) vptymaxi = vptymax
+
+    call giza_set_viewport(vptxmini,vptxmaxi,vptymini,vptymaxi)
     if (ijust.eq.1) then
        call giza_set_window(xmini,xmaxi,ymini,ymaxi)
     else
        call giza_set_window_equal_scale(xmini,xmaxi,ymini,ymaxi)
     endif
+    call giza_box("BCTSN",0.,0,"BCTSN",0.,0)
     call giza_label(xlabeli,ylabeli,titlei)
  else
     call giza_set_environment(xmini,xmaxi,ymini,ymaxi,ijust,iaxis)
