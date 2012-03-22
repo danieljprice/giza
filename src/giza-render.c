@@ -56,7 +56,7 @@ void
 giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 	    int j1, int j2, double valMin, double valMax, int extend, const double *affine)
 {
-   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0,extend);
+   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0,extend,data);
 }
 
 /**
@@ -69,7 +69,20 @@ void
 giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i2,
 	    int j1, int j2, double valMin, double valMax, int extend, const double *affine)
 {
-   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,1,extend);
+   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,1,extend,data);
+}
+
+/**
+ * Drawing: giza_render_alpha
+ *
+ * Synopsis: Same as giza_render, but uses additional array specifying transparency of each pixel
+ *
+ */
+void
+giza_render_alpha (int sizex, int sizey, const double* data, const double* alpha, int i1, int i2,
+	    int j1, int j2, double valMin, double valMax, int extend, const double *affine)
+{
+   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,2,extend,alpha);
 }
 
 /**
@@ -78,7 +91,8 @@ giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i
  */
 void
 _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, const double *affine, int transparent, int extend)
+	    int j1, int j2, double valMin, double valMax, const double *affine, 
+            int transparent, int extend, const double* datalpha)
 {
   if (!_giza_check_device_ready ("giza_render"))
     return;
@@ -98,7 +112,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   cairo_surface_t *pixmap;
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
-  double pos;
+  double pos, alpha;
 
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
@@ -124,7 +138,19 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   int i, j;
   pixnum = 0;
   /* transparent if-statement is outside loop as optimisation */
-  if (transparent) {
+  if (transparent==2) {
+    /* render each pixel, using transparent routine */
+    for (j = j1; j <= j2; j++)
+      {
+        for (i = i1; i <= i2; i++)
+	  {
+            pos = (data[j*sizex+i] - valMin) / (valMax - valMin);
+            alpha = datalpha[j*sizex + i];
+	    _giza_colour_pixel_alpha (pixdata, pixnum, pos, alpha);
+	    pixnum = pixnum + 1;
+	  }
+      }
+  } else if (transparent==1) {
     /* render each pixel, using transparent routine */
     for (j = j1; j <= j2; j++)
       {
@@ -181,7 +207,7 @@ giza_render_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
 		  int extend, const float *affine)
 {
-  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,0,extend);
+  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,0,extend,data);
 }
 
 /**
@@ -196,9 +222,22 @@ giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
 		  int extend, const float *affine)
 {
-  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,1,extend);
+  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,1,extend,data);
 }
 
+/**
+ * Drawing: giza_render_alpha_float
+ *
+ * Synopsis: Same as giza_render_alpha but takes floats
+ *
+ * See Also: giza_render_alpha
+ */
+void
+giza_render_alpha_float (int sizex, int sizey, const float* data, const float* alpha, int i1, int i2,
+	    int j1, int j2, float valMin, float valMax, int extend, const float *affine)
+{
+   _giza_render_float (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,2,extend,alpha);
+}
 /**
  *  _giza_render_float is the internal routine with the most general (and changeable) interface
  *  c.f. _giza_render
@@ -206,7 +245,7 @@ giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
 void
 _giza_render_float (int sizex, int sizey, const float* data, int i1,
 		    int i2, int j1, int j2, float valMin, float valMax,
-		    const float *affine, int transparent, int extend)
+		    const float *affine, int transparent, int extend, const float* datalpha)
 {
   if (!_giza_check_device_ready ("giza_render_float"))
     return;
@@ -228,7 +267,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   cairo_surface_t *pixmap;
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
-  double pos;
+  double pos,alpha;
 
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
@@ -252,7 +291,19 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   int i, j;
   pixnum = 0;
   /* transparent if-statement is outside loop as optimisation */
-  if (transparent) {
+  if (transparent==2) {
+    /* render each pixel, using transparent routine */
+    for (j = j1; j <= j2; j++)
+      {
+        for (i = i1; i <= i2; i++)
+	  {
+            pos = (double) (data[j*sizex+i] - valMin) / (valMax - valMin);
+            alpha = (double) datalpha[j*sizex + i];
+	    _giza_colour_pixel_alpha (pixdata, pixnum, pos, alpha);
+	    pixnum = pixnum + 1;
+	  }
+      }
+  } else if (transparent==1) {
     /* render each pixel, using transparent routine */
     for (j = j1; j <= j2; j++)
       {
@@ -351,13 +402,7 @@ _giza_colour_pixel (unsigned char *array, int pixNum, double pos)
 }
 
 /**
- * Sets the rgb for a given pixel, given position in the colour table.
- * This version sets the pixels to be transparent if pos <= 0
- *
- * Input:
- *  -array  :- the array in which to store the colour.
- *  -pixnum :- the pixel to be coloured.
- *  -pos    :- the fraction along the colour table to get the colour from
+ * As in _giza_colour_pixel, but sets the pixels to be transparent if pos <= 0
  */
 static void
 _giza_colour_pixel_transparent (unsigned char *array, int pixNum, double pos)
@@ -370,6 +415,22 @@ _giza_colour_pixel_transparent (unsigned char *array, int pixNum, double pos)
   } else {
      array[pixNum * 4 + 3] = 255.;
   }
+  /* set the red, green, and blue */
+  array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
+  array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
+  array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
+}
+
+/**
+ * As in _giza_colour_pixel, but takes an additional alpha parameter
+ */
+static void
+_giza_colour_pixel_alpha (unsigned char *array, int pixNum, double pos, double alpha)
+{
+  double r, g, b;
+  giza_rgb_from_table (pos, &r, &g, &b);
+  /* set the alpha */
+  array[pixNum * 4 + 3] = (unsigned char) (alpha * 255.);
   /* set the red, green, and blue */
   array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
   array[pixNum * 4 + 1] = (unsigned char) (g * 255.);

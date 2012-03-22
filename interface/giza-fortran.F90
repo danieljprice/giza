@@ -1307,6 +1307,23 @@ private
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_render_float
 
+    subroutine giza_render_alpha(sizex,sizey,data,alpha,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      real(kind=c_double),intent(in) :: data(sizex,sizey), alpha(sizex,sizey)
+      real(kind=c_double),intent(in),value :: valMin,valMax
+      real(kind=c_double),intent(in) :: affine(6)
+    end subroutine giza_render_alpha
+    
+    subroutine giza_render_alpha_float(sizex,sizey,data,alpha,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      real(kind=c_float),intent(in) :: data(sizex,sizey), alpha(sizex,sizey)
+      real(kind=c_float),intent(in),value :: valMin,valMax
+      real(kind=c_float),intent(in) :: affine(6)
+    end subroutine giza_render_alpha_float
  end interface
 
  interface giza_render_transparent
