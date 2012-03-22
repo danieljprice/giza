@@ -2109,7 +2109,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     if (present(affine)) then
        affinei = affine
     else
-       affinei = (/1.,0.,0.,1.,0.,0./)
+       affinei = (/1./real(nx),0.,0.,1./real(ny),0.,0./)
     endif
     if (present(extend)) then
        iextend = extend
