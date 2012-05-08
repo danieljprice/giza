@@ -1,6 +1,7 @@
 #include <cairo/cairo.h>
 #include <cairo/cairo-xlib.h>
 #include <X11/Xutil.h>
+#include <stdio.h>
 
 struct XWstuff
 {
@@ -10,8 +11,6 @@ struct XWstuff
   Screen *screenptr;
   int screennum;
   Visual *visual;
-  GC gc;
-  Colormap colormap;
 
   int width;
   int height;
@@ -24,7 +23,6 @@ cairo_surface_t *surface;
 void
 test_openclose_cairo_xw (void)
 {
-  printf("open\n");
   /* basic Xwindow initialisation */
   XW.width = 500;
   XW.height = 200;
@@ -44,13 +42,13 @@ test_openclose_cairo_xw (void)
   context = cairo_create (surface);
   cairo_set_source_surface(context,surface,0,0);
   cairo_paint (context);
-  
-  /* clean up */
-  if (context) cairo_destroy(context);
+  cairo_destroy(context);
   cairo_surface_destroy (surface);
-  printf("close\n");
+
+  /* clean up */
+  printf("start CloseDisplay\n");
   XCloseDisplay (XW.display);
-  printf("closeXW\n");
+  printf("  end CloseDisplay\n");
 }
 
 
