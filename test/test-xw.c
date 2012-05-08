@@ -1,4 +1,4 @@
-
+#include <giza.h>
 
 int main() {
  int ierr;
