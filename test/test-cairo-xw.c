@@ -54,6 +54,7 @@ test_openclose_cairo_xw (void)
 
 int main(void) {
 
+  printf("libcairo v%s \n",CAIRO_VERSION_STRING);
   test_openclose_cairo_xw();
   test_openclose_cairo_xw();
  
