@@ -9,5 +9,8 @@ test-giza-xw: test-xw.o
 test-cairo-xw: test-cairo-xw.o
 	$(CC) -o $@ $< $(CAIROFLAGS)
 
+test-png: test-png.o
+	$(CC) -o $@ $< $(LDFLAGS)
+
 clean:
 	rm -f *.o
