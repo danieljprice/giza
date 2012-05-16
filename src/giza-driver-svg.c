@@ -98,6 +98,10 @@ _giza_flush_device_svg (void)
 void
 _giza_close_device_svg (void)
 {
+  cairo_surface_finish (surface);
+  cairo_status_t status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+     _giza_error("giza_close_device_svg",cairo_status_to_string(status));
   cairo_surface_destroy (surface);
 }
 
@@ -109,7 +113,7 @@ _giza_change_page_svg (void)
 {
   /* Close the old svg */
   cairo_destroy (context);
-  cairo_surface_destroy (surface);
+  _giza_close_device_svg();
 
   /* name the new svg */
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
@@ -122,14 +126,14 @@ _giza_change_page_svg (void)
 
   if (!surface)
     {
-      _giza_error ("_giza_change_page_svg", "Could not create cairo svg surface");
+      _giza_error ("giza_change_page_svg", "Could not create cairo svg surface");
       return;
     }
 
   context = cairo_create (surface);
   if (!context)
     {
-      _giza_error ("_giza_change_page_svg", "Could not create cairo context");
+      _giza_error ("giza_change_page_svg", "Could not create cairo context");
       return;
     }
 }

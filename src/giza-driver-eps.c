@@ -78,7 +78,7 @@ _giza_open_device_eps (int vert)
 
   if (!surface)
     {
-      _giza_error ("_giza_open_device_eps", "Could not create cairo PS surface");
+      _giza_error ("giza_open_device_eps", "Could not create cairo eps surface");
       return -1;
     }
 
@@ -103,6 +103,10 @@ _giza_flush_device_eps (void)
 void
 _giza_close_device_eps (void)
 {
+  cairo_surface_finish (surface);
+  cairo_status_t status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+     _giza_error("giza_close_device_eps",cairo_status_to_string(status));
   cairo_surface_destroy (surface);
 }
 
@@ -114,7 +118,7 @@ _giza_change_page_eps (void)
 {
   /* Close the old eps */
   cairo_destroy (context);
-  cairo_surface_destroy (surface);
+  _giza_close_device_eps();
 
   /* name the new eps */
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
@@ -127,7 +131,7 @@ _giza_change_page_eps (void)
 
   if (!surface)
     {
-      _giza_error ("_giza_change_page_eps", "Could not create cairo PS surface");
+      _giza_error ("giza_change_page_eps", "Could not create cairo eps surface");
       return;
     }
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
@@ -137,7 +141,7 @@ _giza_change_page_eps (void)
   context = cairo_create (surface);
   if (!context)
     {
-      _giza_error ("_giza_change_page_eps", "Could not create cairo context");
+      _giza_error ("giza_change_page_eps", "Could not create cairo context");
       return;
     }
 }

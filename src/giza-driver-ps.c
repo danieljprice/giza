@@ -86,7 +86,7 @@ _giza_open_device_ps (int vert)
   
   if (!surface)
     {
-      _giza_error ("_giza_open_device_ps", "Could not create cairo PS surface");
+      _giza_error ("giza_open_device_ps", "Could not create cairo PS surface");
       return -1;
     }
   return 0;
@@ -118,5 +118,9 @@ _giza_change_page_ps (void)
 void
 _giza_close_device_ps (void)
 {
+  cairo_surface_finish (surface);
+  cairo_status_t status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+     _giza_error("giza_close_device_ps",cairo_status_to_string(status));
   cairo_surface_destroy (surface);
 }

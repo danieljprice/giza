@@ -76,7 +76,7 @@ _giza_open_device_pdf (int vert)
 
   if (!surface)
     {
-      _giza_error ("_giza_open_device_pdf", "Could not create cairo surface");
+      _giza_error ("giza_open_device_pdf", "Could not create cairo surface");
       return -1;
     }
   return 0;
@@ -108,5 +108,9 @@ _giza_change_page_pdf (void)
 void
 _giza_close_device_pdf (void)
 {
+  cairo_surface_finish (surface);
+  cairo_status_t status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+     _giza_error("giza_close_device_pdf",cairo_status_to_string(status));
   cairo_surface_destroy (surface);
 }
