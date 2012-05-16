@@ -8,5 +8,6 @@ use Text::Wrap;
 
 $Text::Wrap::columns=80;
 $Text::Wrap::separator=" \\\n";
-print wrap('PHEADERS= ','          ',@ARGV);
+#print wrap('PHEADERS= ','          ',@ARGV);
+print wrap('SOURCE= ','        ',@ARGV);
 print "\n";
