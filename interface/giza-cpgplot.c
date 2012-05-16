@@ -59,7 +59,7 @@ int units_giza(int pgplotunits)
   case 4:
      units = GIZA_UNITS_WORLD;
      break;
-  default: /* giza will give an error */
+  default: /* will give an error in giza */
      units = pgplotunits;
      break;
   }
