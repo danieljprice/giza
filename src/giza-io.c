@@ -29,7 +29,7 @@
  * If warnings are switched on displays a warning message to stderr
  */
 void
-_giza_warning (char *source, char *message)
+_giza_warning (const char *source, const char *message)
 {
   if (_giza_get_warnings ())
     {
@@ -41,7 +41,7 @@ _giza_warning (char *source, char *message)
  * Prints a message to stdout
  */
 void
-_giza_message (char *message)
+_giza_message (const char *message)
 {
    fprintf (stdout, "%%giza: %s\n", message);
 }
@@ -50,7 +50,7 @@ _giza_message (char *message)
  * Prints the error to stderr.
  */
 void
-_giza_error (char *source, char *message)
+_giza_error (const char *source, const char *message)
 {
   fprintf (stderr, "%%giza - ERROR - %s: %s\n", source, message);
 }
