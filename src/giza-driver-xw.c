@@ -250,7 +250,7 @@ _giza_init_norm_xw (void)
 /**
  * This routine closes the X window device and cleans up associated memory.
  *
- * If propting is turned on this will not occur until a key is pressed
+ * If prompting is turned on this will not occur until a key is pressed
  * or a mouse is clicked inside the X window.
  */
 void
