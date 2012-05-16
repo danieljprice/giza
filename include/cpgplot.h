@@ -6,8 +6,8 @@ extern "C" {
 #endif
 
 /*
- * this is the giza version of cpgplot.h, pulled
- * from the online pgplot documentation
+ * this is the giza version of cpgplot.h,
+ * constructed from the online pgplot documentation
  */
 
 typedef int Logical;
