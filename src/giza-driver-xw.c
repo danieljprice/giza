@@ -223,6 +223,11 @@ _giza_change_page_xw (void)
 {
   /* create a new pixmap */
   cairo_destroy(context);
+  cairo_surface_finish (surface);
+  cairo_status_t status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+     _giza_error("giza_change_page_xw",cairo_status_to_string(status));
+
   cairo_surface_destroy (surface);
   XFreePixmap (XW.display, XW.pixmap);
   XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
@@ -251,6 +256,11 @@ _giza_init_norm_xw (void)
 void
 _giza_close_device_xw (void)
 {
+  cairo_surface_finish (surface);
+  cairo_status_t status = cairo_surface_status (surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+     _giza_error("giza_close_device_xw",cairo_status_to_string(status));
+
   cairo_surface_destroy (surface);
   XFreePixmap (XW.display, XW.pixmap);
   /*XFreeGC(XW.display,XW.gc);*/
