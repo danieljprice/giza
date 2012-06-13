@@ -136,13 +136,18 @@ module giza
       giza_set_window, &
       giza_set_window_equal_scale, &
       giza_get_window, &
-      giza_left_click_f, &
       giza_format_number, &
       giza_query_device
 
 #include "giza-shared.h"
-  character(len=1),parameter :: giza_left_click_f = GIZA_LEFT_CLICK
-  character(len=*), parameter, public :: giza_version_string = GIZA_VERSION_STRING
+  character(len=1),parameter, public :: giza_left_click_f = GIZA_LEFT_CLICK
+  character(len=1),parameter, public :: giza_right_click_f = GIZA_RIGHT_CLICK
+  character(len=1),parameter, public :: giza_middle_click_f = GIZA_MIDDLE_CLICK
+  character(len=1),parameter, public :: giza_scroll_up_f = achar(GIZA_SCROLL_UP)
+  character(len=1),parameter, public :: giza_scroll_down_f = achar(GIZA_SCROLL_DOWN)
+  character(len=1),parameter, public :: giza_scroll_left_f = achar(GIZA_SCROLL_LEFT)
+  character(len=1),parameter, public :: giza_scroll_right_f = achar(GIZA_SCROLL_RIGHT)
+  character(len=*),parameter, public :: giza_version_string = GIZA_VERSION_STRING
 !
 !--the following can be generated automatically using the get-fortran-params.pl script
 !

@@ -349,7 +349,32 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
       {
         *x = event.xbutton.x ;/*- GIZA_XW_MARGIN; */
 	*y = event.xbutton.y ;/*- GIZA_XW_MARGIN; */
-	*ch = GIZA_LEFT_CLICK;
+        switch(event.xbutton.button) {
+        case Button1:
+           *ch = GIZA_LEFT_CLICK;
+           break;
+        case Button2:
+           *ch = GIZA_RIGHT_CLICK;
+           break;        
+        case Button3:
+           *ch = GIZA_MIDDLE_CLICK;
+           break;        
+        case 4: /* use integers in case ButtonN not defined for N>6 */
+           *ch = GIZA_SCROLL_UP;
+           break;        
+        case 5:
+           *ch = GIZA_SCROLL_DOWN;
+           break;        
+        case 6:
+           *ch = GIZA_SCROLL_LEFT;
+           break;        
+        case 7:
+           *ch = GIZA_SCROLL_RIGHT;
+           break;        
+        default:
+           *ch = GIZA_OTHER_CLICK;
+           break;
+        }
         _giza_destroy_band (mode);
         _giza_flush_xw_event_queue(&event);
 	return;
