@@ -28,10 +28,9 @@
 #include "giza-cursor-private.h"
 #include <giza.h>
 #include <string.h>
-#define GIZA_MARK_ORDERED 1
 #define GIZA_MARK_UNORDERED 0
-
-
+#define GIZA_MARK_ORDERED 1
+#define GIZA_MARK_UNORDERED_CHAR 2
 
 /**
  *  _giza_mark_with_cursor
@@ -42,7 +41,7 @@
  */
 void
 _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
-                        int symbol, int ordered, int mode)
+                        int symbol, int ordered, int mode, char *ch)
 {
   if(!_giza_check_device_ready ("_giza_mark_with_cursor")) /* should be done in parent routines anyway */
     return;
@@ -53,37 +52,45 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
       return;
     }
 
-  double x, y, xanc, yanc;
+  double x, y, xanc[1], yanc[1];
   double xmin,xmax,ymin,ymax;
   giza_get_window(&xmin,&xmax,&ymin,&ymax);
 
   if (*npts > 0)
     {
-      xanc = xpts[*npts-1];
-      yanc = ypts[*npts-1];
-      /* plot previously drawn line segments/points */
-      if (mode == GIZA_BAND_LINE)
+      xanc[0] = xpts[*npts-1];
+      yanc[0] = ypts[*npts-1];
+      /* plot previously drawn points (done inside get_key_press for line mode) */
+      if (mode != GIZA_BAND_LINE)
         {
-          giza_line(*npts,xpts,ypts);
-        } else {
           giza_points(*npts,xpts,ypts,symbol);
         }
     } else {
       /* PGPLOT default is to put the cursor
          at the centre of the current viewport */
-      xanc = 0.5*(xmin + xmax);
-      yanc = 0.5*(ymin + ymax);
+      xanc[0] = 0.5*(xmin + xmax);
+      yanc[0] = 0.5*(ymin + ymax);
     }
-  char ch[2] = "A";
+
   int err = 0;
   int moveCurs = 0;
-  int modein = 0;
+  int modein;
+  if (*npts > 0) {
+     modein = mode;
+  } else {
+     modein = 0;
+  }
+  cairo_set_source_rgba(context,0.6,0.6,0.6,1.0);
 
   while(err == 0) {
-     err = _giza_get_key_press (modein, moveCurs, xanc, yanc, &x, &y, ch);
+     if (*npts > 0) {
+        err = _giza_get_key_press (modein, moveCurs, *npts, xpts, ypts, &x, &y, ch);
+     } else {
+        err = _giza_get_key_press (modein, moveCurs, 1, xanc, yanc, &x, &y, ch);     
+     }
      modein = mode;
 
-     if (!strcmp(ch,"A") || !strcmp(ch,"a")) /* || !strcmp(ch,GIZA_LEFT_CLICK)) */
+     if (ch[0]==GIZA_LEFT_CLICK || ch[0]=='A' || ch[0]=='a')
        {
          if (*npts < maxpts-1)
            {
@@ -92,15 +99,16 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
              ypts[*npts-1] = y;
              if (mode == GIZA_BAND_LINE && *npts > 1)
                {
-                 giza_move(xpts[*npts-2],ypts[*npts-2]);
+                 /*giza_move(xpts[*npts-2],ypts[*npts-2]);
                  giza_draw(xpts[*npts-1],ypts[*npts-1]);
+                */
                } else {
                  giza_single_point(x,y,symbol);
                }
            } else {
              _giza_message("reached array limits, cannot add more points");
            }
-       } else if (!strcmp(ch,"D") || !strcmp(ch,"d") || *ch == 8 ) {
+       } else if (ch[0]==GIZA_MIDDLE_CLICK || ch[0]=='D' || ch[0]=='d' || *ch == 8 ) {
 
          if (*npts > 0)
            {
@@ -111,16 +119,13 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
              giza_set_colour_index(GIZA_BACKGROUND_COLOUR);
              giza_get_line_width(&lw);
              giza_set_line_width(2.*lw);
-             if (mode == GIZA_BAND_LINE && *npts > 1)
+             if (mode != GIZA_BAND_LINE && *npts > 1)
                {
-                 giza_move(xpts[*npts-1],ypts[*npts-1]);
-                 giza_draw(xpts[*npts-2],ypts[*npts-2]);
-               } else {
                  giza_single_point(xpts[*npts-1],ypts[*npts-1],17);
                }
              giza_set_colour_index(GIZA_FOREGROUND_COLOUR);
              giza_set_line_width(lw);
-
+             
              *npts -= 1;
              if (*npts > 0)
                {
@@ -137,8 +142,9 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
              _giza_message("no points left to delete");
            }
 
-       } else if (!strcmp(ch,"X") || !strcmp(ch,"x") || *ch == 13) {
+       } else if (ch[0]==GIZA_RIGHT_CLICK || ch[0]=='X' || ch[0]=='x' || *ch == 13) {
 
+         giza_set_colour_index(GIZA_FOREGROUND_COLOUR);
          return;
 
        } else if (!strcmp(ch,"q") || *ch == 27 ) {
@@ -148,15 +154,18 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
 
        } else {
 
-         /*printf("char = %i %s\n",*ch,ch); */
-         _giza_message("unknown command, use (a)dd (d)elete/backspace, e(x)it or (q)uit/Esc");
-
+         if (ordered == GIZA_MARK_UNORDERED_CHAR) {
+            return;
+         } else {
+           /*printf("char = %i %s\n",*ch,ch); */
+           _giza_message("unknown command, use (a)dd (d)elete/backspace, e(x)it or (q)uit/Esc");
+         }
        }
 
-     xanc = x;
-     yanc = y;
-
+     xanc[0] = x;
+     yanc[0] = y;
   }
+  giza_set_colour_index(GIZA_FOREGROUND_COLOUR);
 
 }
 
@@ -169,7 +178,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
  */
 void
 _giza_mark_with_cursor_float (int maxpts, int *npts, float* xpts, float* ypts,
-                              int symbol, int ordered, int mode)
+                              int symbol, int ordered, int mode, char *ch)
 {
    double xptsd[maxpts], yptsd[maxpts];
    int i;
@@ -179,7 +188,7 @@ _giza_mark_with_cursor_float (int maxpts, int *npts, float* xpts, float* ypts,
         yptsd[i] = (double) ypts[i];
      }
 
-   _giza_mark_with_cursor (maxpts, npts, xptsd, yptsd, symbol, ordered, mode);
+   _giza_mark_with_cursor (maxpts, npts, xptsd, yptsd, symbol, ordered, mode, ch);
 
    for (i = 0; i < *npts; i++)
      {
@@ -212,7 +221,8 @@ giza_mark_points (int maxpts, int *npts, double* xpts, double* ypts, int symbol)
   if(!_giza_check_device_ready ("giza_mark_points"))
     return;
 
-  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_UNORDERED, GIZA_BAND_NONE);
+  char ch[2] = " ";
+  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_UNORDERED, GIZA_BAND_NONE, ch);
 }
 
 /**
@@ -228,7 +238,8 @@ giza_mark_points_float (int maxpts, int *npts, float* xpts, float* ypts, int sym
    if(!_giza_check_device_ready ("giza_mark_points_float"))
      return;
 
-   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_UNORDERED, GIZA_BAND_NONE);
+  char ch[2] = " ";
+   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_UNORDERED, GIZA_BAND_NONE, ch);
 }
 
 /**
@@ -256,7 +267,8 @@ giza_mark_points_ordered (int maxpts, int *npts, double* xpts, double* ypts, int
   if(!_giza_check_device_ready ("giza_mark_points_ordered"))
     return;
 
-  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_ORDERED, GIZA_BAND_NONE);
+  char ch[2] = " ";
+  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_ORDERED, GIZA_BAND_NONE, ch);
 }
 
 /**
@@ -272,7 +284,8 @@ giza_mark_points_ordered_float (int maxpts, int *npts, float* xpts, float* ypts,
    if(!_giza_check_device_ready ("giza_mark_points_ordered_float"))
      return;
 
-   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_ORDERED, GIZA_BAND_NONE);
+   char ch[2] = " ";
+   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, symbol, GIZA_MARK_ORDERED, GIZA_BAND_NONE, ch);
 }
 
 /**
@@ -296,7 +309,8 @@ giza_mark_line (int maxpts, int *npts, double* xpts, double* ypts)
   if(!_giza_check_device_ready ("giza_mark_line"))
     return;
 
-  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, 1, GIZA_MARK_UNORDERED, GIZA_BAND_LINE);
+  char ch[2] = " ";
+  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, 1, GIZA_MARK_UNORDERED, GIZA_BAND_LINE, ch);
 }
 
 /**
@@ -312,7 +326,8 @@ giza_mark_line_float (int maxpts, int *npts, float* xpts, float* ypts)
    if(!_giza_check_device_ready ("giza_mark_line_float"))
      return;
 
-   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, 1, GIZA_MARK_UNORDERED, GIZA_BAND_LINE);
+   char ch[2] = " ";
+   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, 1, GIZA_MARK_UNORDERED, GIZA_BAND_LINE, ch);
 }
 
 /**
@@ -339,7 +354,8 @@ giza_mark_line_ordered (int maxpts, int *npts, double* xpts, double* ypts)
   if(!_giza_check_device_ready ("giza_mark_line_ordered"))
     return;
 
-  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, 1, GIZA_MARK_ORDERED, GIZA_BAND_LINE);
+  char ch[2] = " ";
+  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, 1, GIZA_MARK_ORDERED, GIZA_BAND_LINE, ch);
 }
 
 /**
@@ -355,5 +371,38 @@ giza_mark_line_ordered_float (int maxpts, int *npts, float* xpts, float* ypts)
    if(!_giza_check_device_ready ("giza_mark_line_ordered_float"))
      return;
 
-   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, 1, GIZA_MARK_ORDERED, GIZA_BAND_LINE);
+   char ch[2] = " ";
+   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, 1, GIZA_MARK_ORDERED, GIZA_BAND_LINE, ch);
+}
+
+/**
+ * Interactive: giza_mark_line_char
+ *
+ * Synopsis: Same functionality as giza_mark_line, but also returns last character pressed
+ *
+ * See Also: giza_mark_line
+ */
+void
+giza_mark_line_char (int maxpts, int *npts, double* xpts, double* ypts, char *ch)
+{
+  if(!_giza_check_device_ready ("giza_mark_line"))
+    return;
+
+  _giza_mark_with_cursor (maxpts, npts, xpts, ypts, 1, GIZA_MARK_UNORDERED_CHAR, GIZA_BAND_LINE, ch);
+}
+
+/**
+ * Interactive: giza_mark_points_float
+ *
+ * Synopsis: Same functionality as giza_mark_line, but takes floats
+ *
+ * See Also: giza_mark_line, giza_mark_points, giza_mark_line_ordered
+ */
+void
+giza_mark_line_char_float (int maxpts, int *npts, float* xpts, float* ypts, char *ch)
+{
+   if(!_giza_check_device_ready ("giza_mark_line_float"))
+     return;
+
+   _giza_mark_with_cursor_float (maxpts, npts, xpts, ypts, 1, GIZA_MARK_UNORDERED_CHAR, GIZA_BAND_LINE, ch);
 }
