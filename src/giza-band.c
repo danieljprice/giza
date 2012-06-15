@@ -180,6 +180,10 @@ _giza_refresh_band (int mode, int x1, int y1, int x2, int y2)
         cairo_stroke (Band.box);
 	break;
       case 8: /* Circle */
+        cairo_set_source_rgba(Band.box,1.,1.,1.,0.2);
+        cairo_arc (Band.box, x1, y1, sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)), 0., 2 * M_PI);
+        cairo_fill(Band.box);
+        cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
         cairo_arc (Band.box, x1, y1, sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)), 0., 2 * M_PI);
         cairo_stroke (Band.box);
 	break;
