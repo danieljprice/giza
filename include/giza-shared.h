@@ -1,8 +1,9 @@
 #include "giza-version.h"
 
 #define GIZA_LEFT_CLICK 'A'
-#define GIZA_RIGHT_CLICK 'X'
 #define GIZA_MIDDLE_CLICK 'D'
+#define GIZA_RIGHT_CLICK 'X'
+#define GIZA_SHIFT_CLICK 15
 #define GIZA_SCROLL_UP 21
 #define GIZA_SCROLL_DOWN 4
 #define GIZA_SCROLL_LEFT 12

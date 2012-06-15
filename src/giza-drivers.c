@@ -577,7 +577,7 @@ giza_query_device (const char *querytype, char *returnval)
  *  -0 :- No band is drawn.
  */
 int
-_giza_get_key_press (int mode, int moveCurs, double xanch, double yanch, double *x, double *y, char *ch)
+_giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, const double *yanch, double *x, double *y, char *ch)
 {
   if (!_giza_check_device_ready ("_giza_get_key_press"))
     return 1;
@@ -596,7 +596,7 @@ _giza_get_key_press (int mode, int moveCurs, double xanch, double yanch, double 
       break;
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
-      _giza_get_key_press_xw (mode, moveCurs, xanch, yanch, x, y, ch);
+      _giza_get_key_press_xw (mode, moveCurs, nanc, xanch, yanch, x, y, ch);
       return 0;
       break;
 #endif

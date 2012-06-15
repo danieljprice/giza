@@ -143,6 +143,7 @@ module giza
   character(len=1),parameter, public :: giza_left_click_f = GIZA_LEFT_CLICK
   character(len=1),parameter, public :: giza_right_click_f = GIZA_RIGHT_CLICK
   character(len=1),parameter, public :: giza_middle_click_f = GIZA_MIDDLE_CLICK
+  character(len=1),parameter, public :: giza_shift_click_f = achar(GIZA_SHIFT_CLICK)
   character(len=1),parameter, public :: giza_scroll_up_f = achar(GIZA_SCROLL_UP)
   character(len=1),parameter, public :: giza_scroll_down_f = achar(GIZA_SCROLL_DOWN)
   character(len=1),parameter, public :: giza_scroll_left_f = achar(GIZA_SCROLL_LEFT)
@@ -1018,6 +1019,26 @@ private
       real(kind=c_float), dimension(*), intent(inout) :: xpts
       real(kind=c_float), dimension(*), intent(inout) :: ypts
     end subroutine giza_mark_line_float
+
+    subroutine giza_mark_line_char(maxpts,npts,xpts,ypts,ch) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: maxpts
+      integer(kind=c_int),intent(inout) :: npts
+      real(kind=c_double), dimension(*), intent(inout) :: xpts
+      real(kind=c_double), dimension(*), intent(inout) :: ypts
+      character(kind=c_char),intent(out)   :: ch
+    end subroutine giza_mark_line_char
+    
+    subroutine giza_mark_line_char_float(maxpts,npts,xpts,ypts,ch) bind(C)
+      import
+      implicit none
+      integer(kind=c_int),intent(in),value :: maxpts
+      integer(kind=c_int),intent(inout) :: npts
+      real(kind=c_float), dimension(*), intent(inout) :: xpts
+      real(kind=c_float), dimension(*), intent(inout) :: ypts
+      character(kind=c_char),intent(out)   :: ch
+    end subroutine giza_mark_line_char_float
  end interface
 
  interface giza_mark_line_ordered

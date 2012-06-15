@@ -34,6 +34,6 @@ struct GIZA_Band
 } Band;
 
 int _giza_init_band (int mode);
-void _giza_refresh_band (int mode, int x1, int y1, int x2, int y2);
+void _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2, int y2);
 void _giza_destroy_band (int mode);
 void _giza_init_band_style (void);

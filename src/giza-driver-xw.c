@@ -71,7 +71,7 @@ struct GIZA_XWindow
 #define GIZA_DEVICE_INTERACTIVE 1
 #define GIZA_XW_MARGIN 20
 
-static void _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int *y, char *ch);
+static void _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const int *anchory, int *x, int *y, char *ch);
 static void _giza_expose_xw (XEvent *event);
 static void _giza_flush_xw_event_queue (XEvent *event);
 static int _giza_errors_xw (Display *display, XErrorEvent *error);
@@ -286,12 +286,12 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
  * Returns the x and y position of the cursor (in device coords) and the key pressed.
  */
 static void
-_giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int *y, char *ch)
+_giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const int *anchory, int *x, int *y, char *ch)
 {
   /* move the cursor to the given position */
   if (moveCurs)
     {
-      XWarpPointer (XW.display, None, XW.window, 0, 0, 0, 0, anchorx, anchory);
+      XWarpPointer (XW.display, None, XW.window, 0, 0, 0, 0, anchorx[nanc-1], anchory[nanc-1]);
     }
 
   XEvent event;
@@ -351,13 +351,17 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
 	*y = event.xbutton.y ;/*- GIZA_XW_MARGIN; */
         switch(event.xbutton.button) {
         case Button1:
-           *ch = GIZA_LEFT_CLICK;
+           if (event.xbutton.state==1) {
+             *ch = GIZA_SHIFT_CLICK;
+           } else {
+             *ch = GIZA_LEFT_CLICK;
+           }
            break;
         case Button2:
-           *ch = GIZA_RIGHT_CLICK;
+           *ch = GIZA_MIDDLE_CLICK;
            break;        
         case Button3:
-           *ch = GIZA_MIDDLE_CLICK;
+           *ch = GIZA_RIGHT_CLICK;
            break;        
         case 4: /* use integers in case ButtonN not defined for N>6 */
            *ch = GIZA_SCROLL_UP;
@@ -385,7 +389,7 @@ _giza_xevent_loop (int mode, int moveCurs, int anchorx, int anchory, int *x, int
         while(XCheckWindowEvent(XW.display, XW.window,
                               (long)(PointerMotionMask), &event) == True);
 
-        _giza_refresh_band (mode, anchorx, anchory, event.xmotion.x, event.xmotion.y);
+        _giza_refresh_band (mode, nanc, anchorx, anchory, event.xmotion.x, event.xmotion.y);
         _giza_flush_xw_event_queue(&event);
       }
     default:
@@ -469,15 +473,24 @@ _giza_expand_clipping_xw (void)
  * Loops until a key is pressed. At this point the position in world coords of the cursor is returned, along with the key pressed.
  */
 void
-_giza_get_key_press_xw (int mode, int moveCurs, double xanc, double yanc, double *x, double *y, char *ch)
+_giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, const double *yanc, 
+                        double *x, double *y, char *ch)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_user_to_device (context, &xanc, &yanc);
+  double xanci,yanci;
 
-  int ix,iy;
-  int ixanc = (int) xanc, iyanc = (int) yanc;
-  _giza_xevent_loop (mode, moveCurs, ixanc, iyanc, &ix, &iy, ch);
+  int i,ix,iy;
+  int ixanc[nanc];
+  int iyanc[nanc];
+  for (i = 0; i < nanc; i++) {
+      xanci = xanc[i];
+      yanci = yanc[i];
+      cairo_user_to_device(context, &xanci, &yanci);
+      ixanc[i] = (int) xanci;
+      iyanc[i] = (int) yanci;
+  }
+  _giza_xevent_loop (mode, moveCurs, nanc, ixanc, iyanc, &ix, &iy, ch);
 
   *x = (double) ix;
   *y = (double) iy;

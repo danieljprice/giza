@@ -74,8 +74,10 @@ giza_band (int mode, int moveCurs, double xanc, double yanc, double *x, double *
       _giza_error("giza_band","Invalid band mode selected");
       return 2;
     }
-
-  return _giza_get_key_press (mode, moveCurs, xanc, yanc, x, y, ch);
+  double xanca[1],yanca[1];
+  xanca[0] = xanc;
+  yanca[0] = yanc;
+  return _giza_get_key_press (mode, moveCurs, 1, xanca, yanca, x, y, ch);
 }
 
 /**
@@ -102,9 +104,10 @@ giza_band_float (int mode, int moveCurs, float xanc, float yanc, float *x, float
  * Draws over the old band and draws the new one.
  */
 void
-_giza_refresh_band (int mode, int x1, int y1, int x2, int y2)
+_giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2, int y2)
 {
   if (mode <= 0 || mode > GIZA_MAX_BAND_MODES) return;
+  if (nanc <= 0) return;
 
   /* Draw over the old band */
   cairo_paint (Band.restore);
@@ -131,13 +134,33 @@ _giza_refresh_band (int mode, int x1, int y1, int x2, int y2)
   cairo_clip (Band.box);
   cairo_clip (Band.restore);
  */
+  int x1 = xanc[nanc-1];
+  int y1 = yanc[nanc-1];
+  int i,j;
+ 
   switch (mode)
     {
       case 1: /* Straight line */
        /* Draw the band */
-	cairo_move_to (Band.box, x1, y1);
-	cairo_line_to (Band.box, x2, y2);
-	cairo_stroke (Band.box);
+        for (j=0;j<=1;j++) {
+           if (j==0) {
+              cairo_set_source_rgba (Band.box,1.,1.,1.,0.2);
+           } else {
+              cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);           
+           }
+	   cairo_move_to (Band.box, xanc[0], yanc[0]);
+           for (i=1;i<=nanc-1;i++) {
+	      cairo_line_to (Band.box, xanc[i], yanc[i]);
+           }
+	   /*cairo_move_to (Band.box, x1, y1);*/
+	   cairo_line_to (Band.box, x2, y2);
+           if (j==0) {
+              cairo_close_path (Band.box);
+              cairo_fill (Band.box);
+           } else {
+              cairo_stroke (Band.box);
+           }
+        }
 	break;
       case 2: /* empty rectangle */
         /* Draw the band */

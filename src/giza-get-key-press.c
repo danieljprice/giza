@@ -48,7 +48,10 @@ giza_get_key_press (double *x, double *y, char *ch)
   if (!_giza_check_device_ready ("giza_get_key_press"))
     return 1;
 
-  return _giza_get_key_press (0, 0, 0., 0., x, y, ch);
+  double xanc[1], yanc[1];
+  xanc[0] = 0.;
+  yanc[0] = 0.;
+  return _giza_get_key_press (0, 0, 1, xanc, yanc, x, y, ch);
 }
 
 /**
@@ -65,7 +68,10 @@ giza_get_key_press_float (float *x, float *y,char *ch)
   double dx;
   double dy;
 
-  success = _giza_get_key_press (0, 0, 0., 0., &dx, &dy, ch);
+  double xanc[1], yanc[1];
+  xanc[0] = 0.;
+  yanc[0] = 0.;
+  success = _giza_get_key_press (0, 0, 1, xanc, yanc, &dx, &dy, ch);
   *x = (float) dx;
   *y = (float) dy;
 

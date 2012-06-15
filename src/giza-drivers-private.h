@@ -35,7 +35,7 @@
 
 #define GIZA_DEFAULT_PREFIX "giza"
 
-int _giza_get_key_press (int mode, int moveCurs, double xanc, double yanc, double *x, double *y, char *ch);
+int _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanc, const double *yanc, double *x, double *y, char *ch);
 void _giza_split_device_string (const char *deviceString, char **devType);
 int _giza_device_to_int (const char *newDeviceName);
 int _giza_int_to_device (int numDevice, char *DeviceName);
