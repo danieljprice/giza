@@ -26,6 +26,7 @@
 #include "giza-transforms-private.h"
 #include "giza-fill-private.h"
 #include <giza.h>
+#include <math.h>
 
 /**
  * Drawing: giza_rectangle
@@ -72,4 +73,65 @@ void
 giza_rectangle_float (float x1, float x2, float y1, float y2)
 {
   giza_rectangle ((double) x1, (double) x2, (double) y1, (double) y2);
+}
+
+/**
+ * Drawing: giza_rectangle_rounded
+ *
+ * Synopsis: Draws a rectangle with rounded corners ((x1, y1) (x2, y1) (x2, y2) (x1, y2)), 
+ *  using the current fill set by giza_set_fill.
+ *
+ * Inputs:
+ *   -x1  :- the x-coordinate of two of the points
+ *   -x2  :- the x-coordinate of the other two points
+ *   -y1  :- the y-coordinate of two of the points
+ *   -y2  :- the y-coordinate of the other two points
+ *   -radius :- radius of curvature for the corners
+ *
+ * See Also: giza_rectangle, giza_set_fill, giza_polygon
+ */
+void
+giza_rectangle_rounded (double x1, double x2, double y1, double y2, double radius)
+{
+  int oldTrans = _giza_get_trans ();
+
+  _giza_set_trans (GIZA_TRANS_WORLD);
+
+  double width = x2 - x1;
+  double height = y2 - y1;
+  double x = x1;
+  double y = y1;
+   
+  if (radius > 0.5*height) radius = 0.5*height;
+  if (radius > 0.5*width) radius = 0.5*width;
+  
+  /* Adapted from: http://www.mono-project.com/Mono.Cairo_Cookbook */
+  cairo_move_to (context, x, y + radius);
+  cairo_arc (context,x + radius, y + radius, radius, M_PI, -0.5*M_PI);
+  cairo_line_to (context,x + width - radius, y);
+  cairo_arc (context,x + width - radius, y + radius, radius, -0.5*M_PI, 0.);
+  cairo_line_to	(context,x + width, y + height - radius);
+  cairo_arc (context,x + width - radius, y + height - radius, radius, 0., 0.5*M_PI);
+  cairo_line_to (context,x + radius, y + height);
+  cairo_arc (context,x + radius, y + height - radius, radius, 0.5*M_PI, M_PI);
+  cairo_close_path (context);
+
+  _giza_fill ();
+
+  _giza_set_trans (oldTrans);
+
+  if (!Sets.buf) giza_flush_device ();
+}
+
+/**
+ * Drawing: giza_rectangle_rounded_float
+ *
+ * Synopsis: Same functionality as giza_rectangle_rounded but takes floats
+ *
+ * See Also: giza_rectangle_rounded
+ */
+void
+giza_rectangle_rounded_float (float x1, float x2, float y1, float y2, float radius)
+{
+  giza_rectangle_rounded ((double) x1, (double) x2, (double) y1, (double) y2, (double) radius);
 }

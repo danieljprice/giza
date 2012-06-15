@@ -1430,6 +1430,18 @@ private
       implicit none
       real(kind=c_float),intent(in),value :: x1,x2,y1,y2
     end subroutine giza_rectangle_float
+
+    subroutine giza_rectangle_rounded(x1,x2,y1,y2,r) bind(C)
+      import
+      implicit none
+      real(kind=c_double),intent(in),value :: x1,x2,y1,y2,r
+    end subroutine giza_rectangle_rounded
+
+    subroutine giza_rectangle_rounded_float(x1,x2,y1,y2,r) bind(C)
+      import
+      implicit none
+      real(kind=c_float),intent(in),value :: x1,x2,y1,y2,r
+    end subroutine giza_rectangle_rounded_float
  end interface giza_rectangle
 
  interface giza_restore
