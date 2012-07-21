@@ -60,7 +60,7 @@ endif
 PREFIX=/usr/local
 
 #
-# Change the following lines if giza can't find x11 or giza
+# Change the following lines if giza can't find x11 or cairo
 #
 X11DIR=/usr/X11R6/
 #X11DIR=/opt/local/
