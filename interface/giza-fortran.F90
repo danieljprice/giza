@@ -820,7 +820,13 @@ private
       implicit none
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_double),intent(in),value :: xmin,xmax
-      real(kind=c_double),external :: func
+      abstract interface
+       function func(x) bind(c)
+         import
+         real(c_double), intent(in) :: x
+         real(c_double) :: func
+       end function
+      end interface
     end subroutine giza_function_x
 
     subroutine giza_function_x_float(func,n,xmin,xmax,flag) bind(C)
@@ -828,17 +834,29 @@ private
       implicit none
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_float), intent(in),value :: xmin,xmax
-      real(kind=c_float),external :: func
+      abstract interface
+       function func(x) bind(c)
+         import
+         real(c_float), intent(in) :: x
+         real(c_float) :: func
+       end function
+      end interface
     end subroutine giza_function_x_float
  end interface
- 
+
  interface giza_function_y
     subroutine giza_function_y(func,n,ymin,ymax,flag) bind(C)
       import
       implicit none
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_double),intent(in),value :: ymin,ymax
-      real(kind=c_double),external :: func
+      abstract interface
+       function func(x) bind(c)
+         import
+         real(c_double), intent(in) :: x
+         real(c_double) :: func
+       end function
+      end interface
     end subroutine giza_function_y
 
     subroutine giza_function_y_float(func,n,ymin,ymax,flag) bind(C)
@@ -846,7 +864,13 @@ private
       implicit none
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_float), intent(in),value :: ymin,ymax
-      real(kind=c_float),external :: func
+      abstract interface
+       function func(x) bind(c)
+         import
+         real(c_float), intent(in) :: x
+         real(c_float) :: func
+       end function
+      end interface
     end subroutine giza_function_y_float
  end interface
 
@@ -856,7 +880,18 @@ private
       implicit none
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_double),intent(in),value :: tmin,tmax
-      real(kind=c_double),external :: funcx,funcy
+      abstract interface
+       function funcx(x) bind(c)
+         import
+         real(c_double), intent(in) :: x
+         real(c_double) :: funcx
+       end function
+       function funcy(x) bind(c)
+         import
+         real(c_double), intent(in) :: x
+         real(c_double) :: funcy
+       end function
+      end interface
     end subroutine giza_function_t
 
     subroutine giza_function_t_float(funcx,funcy,n,tmin,tmax,flag) bind(C)
@@ -864,7 +899,19 @@ private
       implicit none
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_float), intent(in),value :: tmin,tmax
-      real(kind=c_float),external :: funcx,funcy
+!      real(kind=c_float),external :: funcx,funcy
+      abstract interface
+       function funcx(x) bind(c)
+         import
+         real(c_float), intent(in) :: x
+         real(c_float) :: funcx
+       end function
+       function funcy(x) bind(c)
+         import
+         real(c_float), intent(in) :: x
+         real(c_float) :: funcy
+       end function
+      end interface
     end subroutine giza_function_t_float
  end interface
 
@@ -929,12 +976,12 @@ private
       real(kind=c_float),intent(in),dimension(n) :: xpts,ypts
     end subroutine giza_line_float
 
-    subroutine giza_plot_line(n,xpts,ypts) bind(C)
+    subroutine giza_line(n,xpts,ypts) bind(C)
       import
       implicit none
       integer(kind=c_int),value,intent(in)        :: n
       real(kind=c_double),intent(in),dimension(n) :: xpts,ypts
-    end subroutine giza_plot_line
+    end subroutine giza_line
  end interface
  
  interface giza_set_line_width
@@ -1924,7 +1971,6 @@ contains
     string = fstring(stringc)
   
   end subroutine giza_query_device_f2c
-
 
   !---------------------------------------------------------------------------
   !
