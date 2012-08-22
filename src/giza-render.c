@@ -271,7 +271,13 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   cairo_surface_t *pixmap;
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
-  double pos,alpha;
+  double pos,alpha,ddval;
+  double dvalMin = (double) valMin;
+  if (valMax - valMin > 0.) {
+     ddval = 1./((double) valMax - dvalMin);
+  } else {
+     ddval = 0.;
+  }
 
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
@@ -301,7 +307,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (double) (data[j*sizex+i] - valMin) / (valMax - valMin);
+            pos = (((double) data[j*sizex+i]) - dvalMin)*ddval;
             alpha = (double) datalpha[j*sizex + i];
 	    _giza_colour_pixel_alpha (pixdata, pixnum, pos, alpha);
 	    pixnum = pixnum + 1;
@@ -313,7 +319,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (double) (data[j*sizex+i] - valMin) / (valMax - valMin);
+            pos = (((double) data[j*sizex+i]) - dvalMin)*ddval;
 	    _giza_colour_pixel_transparent (pixdata, pixnum, pos);
 	    pixnum = pixnum + 1;
 	  }
@@ -324,7 +330,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (double) (data[j*sizex+i] - valMin) / (valMax - valMin);
+            pos = (((double) data[j*sizex+i]) - dvalMin)*ddval;
 	    _giza_colour_pixel (pixdata, pixnum, pos);
 	    pixnum = pixnum + 1;
 	  }
