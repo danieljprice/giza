@@ -30,6 +30,7 @@
 #ifdef _GIZA_HAS_EPS
 #include <giza.h>
 #include <string.h>
+#include <stdio.h>
 #include <cairo/cairo-ps.h>
 
 #define GIZA_DEFAULT_WIDTH 612
@@ -124,10 +125,21 @@ _giza_change_page_eps (void)
   cairo_destroy (context);
   _giza_close_device_eps();
 
-  /* name the new eps */
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
   int length = strlen (Dev.prefix) + lenext + 5;
   char fileName[length + 1];
+
+  /* rename the first file from giza.eps to giza_0000.eps if part of a sequence */
+  if (Dev.pgNum == 0) {
+     char fileNameold[length + 1];
+     /* retrieve the name of the original file and what revised name should be */
+     _giza_get_filename_for_device(fileNameold,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,1);
+     _giza_get_filename_for_device(fileName,   Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,0);
+     /* rename the file */
+     rename(fileNameold,fileName);
+  }
+
+  /* name the new eps */
   _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum + 1,GIZA_DEVICE_EXTENSION,0);
 
   /* Open it */
