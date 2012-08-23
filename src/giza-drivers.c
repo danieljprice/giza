@@ -622,8 +622,17 @@ _giza_split_device_string (const char *deviceString, char **devType)
   /* An invalid string */
   if (*devType == NULL)
     {
-      *devType = deviceString;
-      return;
+      /* look for file extension (.blah) at end of filename 
+       * no need to check details of this as will not be
+       * recognised as a device if not valid hardcopy file extension
+       * and this is only done if / not present
+       */
+      *devType = strrchr (deviceString, (int) '.');
+      if (*devType == NULL)
+         {
+           *devType = deviceString;
+           return;
+         }
     }
 
   /* Set the name */
@@ -685,7 +694,25 @@ _giza_device_to_int (const char *newDeviceName)
 #endif
   else
     {
-      newDevice = GIZA_DEVICE_IV;
+/*
+ * For hardcopy devices, allow the user to just
+ * specify the device extension if no /dev is present
+ */
+      if (!strcmp (devName, ".png"))
+        newDevice = GIZA_DEVICE_PNG;
+      else if (!strcmp (devName, ".svg"))
+        newDevice = GIZA_DEVICE_SVG;
+      else if (!strcmp (devName, ".pdf"))
+        newDevice = GIZA_DEVICE_PDF;
+      else if (!strcmp (devName, ".ps"))
+        newDevice = GIZA_DEVICE_PS;
+#ifdef _GIZA_HAS_EPS
+      else if (!strcmp (devName, ".eps"))
+        newDevice = GIZA_DEVICE_EPS;
+#endif
+      else {
+         newDevice = GIZA_DEVICE_IV;
+      }
     }
 
   return newDevice;
