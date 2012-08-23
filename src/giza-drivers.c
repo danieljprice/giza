@@ -413,7 +413,7 @@ giza_close_device (void)
       break;
 #endif
     case GIZA_DEVICE_PNG:
-      _giza_close_device_png ();
+      _giza_close_device_png (1);
       break;
     case GIZA_DEVICE_SVG:
       _giza_close_device_svg ();
@@ -960,7 +960,8 @@ void _giza_trim(char *str) {
  * Internal utility to construct device filenames
  * given the prefix, the device extension and page number
  */
-void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension)
+void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension,
+                                    int lastpage)
 {
 
   /* this stuff is instead of using strcasestr
@@ -980,14 +981,14 @@ void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, cha
 
   if (!strstr(lprefix,lextens)) {
   /* Add the device extension if prefix string does not already contain it */
-     if (pgNum == 0) {
+     if (pgNum == 0 && lastpage != 0) {
         sprintf (filename, "%s%s", prefixtrim, ext);
      } else {
         sprintf (filename, "%s_%04d%s", prefixtrim, pgNum, ext);
      }
   } else {
   /* Do not add the device extension if the prefix already contains it  */
-     if (pgNum == 0) {
+     if (pgNum == 0 && lastpage != 0) {
         sprintf (filename, "%s", prefixtrim);
      } else {
         /*

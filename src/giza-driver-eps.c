@@ -55,7 +55,7 @@ _giza_open_device_eps (int vert)
   int length;
   length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
   char fileName[length + 1];
-  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION);
+  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,1);
 
   Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
   Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
@@ -128,7 +128,7 @@ _giza_change_page_eps (void)
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
   int length = strlen (Dev.prefix) + lenext + 5;
   char fileName[length + 1];
-  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum + 1,GIZA_DEVICE_EXTENSION);
+  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum + 1,GIZA_DEVICE_EXTENSION,0);
 
   /* Open it */
   surface = cairo_ps_surface_create (fileName, Dev.width, Dev.height);

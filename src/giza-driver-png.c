@@ -91,12 +91,10 @@ _giza_change_page_png (void)
   cairo_destroy (context);
 
   /* Write current surface to png file and destroy the cairo surface */
-  _giza_close_device_png();
+  _giza_close_device_png(0);
 
   /* Create a new surface */
-  surface =
-    cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width,
-				Dev.height);
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width, Dev.height);
 
   if (!surface)
     {
@@ -121,12 +119,12 @@ _giza_change_page_png (void)
  * to a file prefixed with the current page number.
  */
 void
-_giza_close_device_png (void)
+_giza_close_device_png (int last)
 {
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
   int length = strlen (Dev.prefix) + lenext + 5;
   char fileName[length + 1];
-  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION);
+  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,last);
 
   cairo_surface_write_to_png (surface, fileName);
 
