@@ -4,8 +4,17 @@ PREFIX=/opt/local
 CFLAGS=-I${PREFIX}/include -I../include/
 CAIROFLAGS= -L${PREFIX}/lib -lX11 -lcairo
 LDFLAGS=-L../lib/ -lgiza
+FC=gfortran
+FFLAGS=-O0 -Wall -I../include/
+VPATH=../interface/
 
-all: test-giza-xw test-cairo-xw test-png test-pdf
+%.o : %.f90
+	$(FC) $(FFLAGS) -c $< -o $@
+
+%.o : %.F90
+	$(FC) $(FFLAGS) -c $< -o $@
+
+all: test-giza-xw test-cairo-xw test-png test-pdf test-fortran
 
 test-giza-xw: test-xw.o
 	$(CC) -o $@ $< $(LDFLAGS)
@@ -19,5 +28,9 @@ test-png: test-png.o
 test-pdf: test-pdf.o
 	$(CC) -o $@ $< $(LDFLAGS)
 
+OBJ=giza-fortran.o test-fortran.o
+test-fortran: $(OBJ)
+	$(FC) $(FFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+
 clean:
-	rm -f *.o test-giza-xw test-cairo-xw test-png test-pdf
+	rm -f *.o test-giza-xw test-cairo-xw test-png test-pdf test-fortran
