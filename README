@@ -1,0 +1,145 @@
+-----------------------------------
+Changes in 0.7.4 compared to 0.7.3
+-----------------------------------
+
+danielprice(36)
+      bug fix with gfortran4.6 and giza_open interface
+      work on giza_plot continues; handles and renders 2D array
+      giza_units_normalised added
+      optional viewport arguments to giza_plot handled correctly
+      added giza_render_alpha routines for brightness-corrected rendering
+      defined GIZA_FOREGROUND and GIZA_BACKGROUND
+      added tests for the xw bug
+      added Makefile for tests
+      test reports cairo version
+      updated xw test
+      added png test
+      better error handling on closing vector surfaces (picks up cairo bug in Lion)
+      makefile compiles several tests
+      use surface_finish and checks for errors when closing xlib surface
+      giza-io routines declare const char* not just char; avoids compiler warnings
+      typo fixed
+      file headers updated and unified across all files
+      updated comments in cpgplot.h
+      fixed comment so does not get deleted by header script
+      uses X11DIR to specify libX11 location in Makefile
+      minor change to script
+      version number bumped
+      xw driver returns key bindings for right/middle clicks and scroll events
+      circle cursor uses filled, partially transparent circle similar to rectangle selection
+      improvements to cursor routines: mark_with_cursor handled by get_key_press routine,
+       allows polygon selection to be redrawn on the fly
+      added giza_rectangle_rounded routine for plotting rectangles with rounded corners
+      BUG FIX with giza_function_x/y/t interfaces with gfortran v4.7; also giza_plot_line now giza_line in Fortran interface
+      minor change to comment
+      better handling of valMin=valMax in giza_render_float
+      can specify hardcopy devices just using the filename e.g. crap.png instead of having to type crap.png/png
+      test Makefile compiles a fortran example
+      png device names first file differently depending on whether or not it is part of a sequence
+      uses _0000 numbering if part of sequence for eps and svg devices (by renaming file when changing page)
+      commented out X-windows error-handling routine to avoid compilation problems in Ubuntu
+
+-----------------------------------
+Changes in 0.7.3 compared to 0.7.2
+-----------------------------------
+
+danielprice (35):
+      BUG FIX with default viewport on first page (character height not initialised correctly), affects giza_environment
+      minor cleanups
+      full range of box/env options implemented (grid lines, log axes)
+      minor cleanup, commented-out stuff removed
+      improved readability of giza_box; variables better named; docs added for M and L options
+      obsolete comment removed
+      bug fix with .png.png naming in png device; change page now calls close_device_png to avoid repeated code
+      PGQINF fully implemented; additional queries added to giza_query_device
+      fixed icc warnings for eps driver
+      minor fix to documentation
+      freetype font loading added (experimental, not compiled by default)
+      high level giza_open/giza_close interfaces added to Fortran interface
+      routines/interfaces added for pgtbox/giza_box_time (currently just calls giza_box with options unchanged)
+      X11 driver no longer uses XDefaultGCOfScreen so should work on older systems
+      bug fix with gfortran4.6 and giza_open interface
+      work on giza_plot continues; handles and renders 2D array
+      giza_units_normalised added
+      optional viewport arguments to giza_plot handled correctly
+      added giza_render_alpha routines for brightness-corrected rendering
+      defined GIZA_FOREGROUND and GIZA_BACKGROUND
+      added tests for the xw bug
+      added Makefile for tests
+      test reports cairo version
+      updated xw test
+      added png test
+      better error handling on closing vector surfaces (picks up cairo bug in Lion)
+      makefile compiles several tests
+      use surface_finish and checks for errors when closing xlib surface
+      giza-io routines declare const char* not just char; avoids compiler warnings
+      typo fixed
+      file headers updated and unified across all files
+      updated comments in cpgplot.h
+      fixed comment so does not get deleted by header script
+      uses X11DIR to specify libX11 location in Makefile
+
+-----------------------------------
+Changes in 0.7.2 compared to 0.7.1
+-----------------------------------
+
+danielprice (34):
+      bug fix in default viewport causing labels with giza_label to be clipped
+      giza-annotate code shortened (unnecessary extra lines removed)
+      bug fix with chopped labels in giza_label
+      updated list of fortran params automatically
+      changed order of long/short dashes; line styles in libpgplot now always match pgplot
+      test added for memory leaks in X11
+      bug fix with log labelling of 1 and 10
+      valgrind bug fix with init_device_list using uninitialised string
+      basic test of multiple open/close calls added
+      markerHeight declared static
+      bug fix with array overflow in giza_contour
+      colour index variables declared static
+      uses explicit font face creation/destruction to avoid memory leaks (cairo >=1.8 only)
+      bug fixes with generation of api documentation
+      mistaken const declarations removed; replaced with static
+      implemented semi-transparent error bar plotting
+      [PATCH contributed by Daniel Kelson] Arrays now passed as C pointers, not fixed size; fixes cpgplot interface issues; tested against splash and works fine
+      updated cpgplot interface to include imaging routines; now similar to libpgplot in implementation level
+      [PATCH contributed by Daniel Kelson] viewport and window now handle xmin>xmax and ymin>ymax correctly
+      added const to all array input variables; consistent with cpgplot interface
+      public header files now live in the include directory rather than being copied around
+
+-----------------------------------
+Changes in 0.7.1 compared to 0.7.0
+-----------------------------------
+
+danielprice (31):
+      updated include paths
+      better flush of xevents
+      silenced spurious warnings in giza-points and giza-polygon
+      uses libtool instead of c compiler to build shared library
+      more warnings silenced
+      handles failure to call close_device; also bug fix with _giza_lowercase
+      handles failure to call close_device; also bug fix with _giza_lowercase
+      bug fix with whitespace in device names
+      whitespace removed from strings in when passed through giza-fortran interface
+      better linewidth conversion between pgplot and giza in libpgplot
+      implemented option to give exact pgplot colour table
+      better placement of text above viewport in giza-annotate
+      spurious whitespace at end of lines removed (script)
+      bug fix with len_trim in f2c string conversion
+      added giza_colour_palette routines; libpgplot uses PGPLOT colour palette by default
+      shared lib extension determined automatically
+      build more portable on os/x vs linux
+      still working on dylib vs .so; works on both now
+      minor changes to Makefile structure
+      id decreased again when device close (fixes spurious warnings)
+      all drivers call get_filename_for_device; avoids trim/case issues
+      added $PREFIX/include to include line
+      checks gfortran version number and gives error if gfortran is too old to compile fortran interface
+      gfortran version checks work with old gfortran (v4.1.2) and give error
+      standard viewport (as used by giza_environment) now leaves boundary of 4 character heights on each size rather than a fixed fraction
+      added comments to postscript header
+      set_viewport_inches uses Dev.width not Dev.widthCM (safer)
+      paper size queries use Dev.width not Dev.widthCM (safer)
+      rejigged the way the paper size is set; can now be set in different units; set_paper_size calls redone; Dev.widthCM and Dev.heightCM removed; less confusing all round
+      header included for internal routine
+      bumped version number
+
