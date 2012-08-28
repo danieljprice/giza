@@ -74,7 +74,7 @@ struct GIZA_XWindow
 static void _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const int *anchory, int *x, int *y, char *ch);
 static void _giza_expose_xw (XEvent *event);
 static void _giza_flush_xw_event_queue (XEvent *event);
-static int _giza_errors_xw (Display *display, XErrorEvent *error);
+/*static int _giza_errors_xw (Display *display, XErrorEvent *error);*/
 
 /**
  * Opens an XWindow device for drawing to.
@@ -170,7 +170,7 @@ _giza_open_device_xw (void)
   XSetWMProtocols(XW.display, XW.window, &wmDeleteMessage, 1);
 
   /* register the routine to handle non-fatal X errors */
-  XSetErrorHandler( _giza_errors_xw );
+  /*XSetErrorHandler( _giza_errors_xw );*/
 
   /* create the pixmap */
   XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
@@ -271,6 +271,7 @@ _giza_close_device_xw (void)
   XCloseDisplay (XW.display);
 }
 
+/*
 static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
 {
   char text[82];
@@ -279,7 +280,7 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
   _giza_error("giza_xw",text);
   return 0;
 }
-
+*/
 
 /**
  * Loops indefinitely, redrawing and resizing the window as necessary until a key is pressed.
