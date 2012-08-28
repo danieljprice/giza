@@ -1,6 +1,5 @@
 #--------------------------------------------------------------------
 #  giza - a scientific plotting library built on cairo
-#
 #  Copyright (c) 2010      James Wetter and Daniel Price
 #  Copyright (c) 2010-2012 Daniel Price
 #
@@ -271,6 +270,7 @@ dist: distclean
 	cp -r ../test ../$(DISTDIR)
 	cp ../Makefile ../$(DISTDIR)
 	cp ../INSTALL ../$(DISTDIR)
+	cp ../README ../$(DISTDIR)
 	tar czvf ../$(DISTDIR).tar.gz ../$(DISTDIR)
 	rm -rf ../$(DISTDIR)
 
