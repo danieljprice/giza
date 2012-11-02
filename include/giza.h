@@ -94,6 +94,11 @@ void giza_set_colour_representation (int ci, double red, double green,
 				     double blue);
 void giza_set_colour_representation_float (int ci, float red, float green,
 					   float blue);
+void giza_set_colour_representation_rgb (int ci, int red, int green, int blue);
+void giza_set_colour_representation_rgba (int ci, int red, int green,
+				     int blue, double alpha);
+void giza_set_colour_representation_rgba_float (int ci, int red, int green,
+					   int blue, float alpha);
 void giza_set_colour_representation_alpha (int ci, double red, double green,
 					   double blue, double alpha);
 void giza_set_colour_representation_alpha_float (int ci, float red,

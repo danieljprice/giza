@@ -207,15 +207,74 @@ giza_set_colour_representation_hls_float (int ci, float hue, float lightness, fl
 }
 
 /**
+ * Settings: giza_set_colour_representation_rgb
+ *
+ * Synopsis: Same as giza_set_colour_representation but accepts integer 0->255 instead of double 0->1
+ *
+ * Input:
+ *   -ci   :- Which colour index to set.
+ *   -red  :- The red component of the colour (between 0 and 255).
+ *   -green  :- The green component of the colour (between 0 and 255).
+ *   -blue  :- The blue component of the colour (between 0 and 255).
+ *
+ * See Also: giza_set_colour_representation, giza_set_colour_representation_rgba
+ */
+void
+giza_set_colour_representation_rgb (int ci, int red, int green, int blue)
+{
+  if (!_giza_check_device_ready ("giza_set_colour_representation_rgb"))
+    return;
+
+  giza_set_colour_representation_rgba (ci, red, green, blue, 1.);
+}
+
+/**
+ * Settings: giza_set_colour_representation_rgba
+ *
+ * Synopsis: Same as giza_set_colour_representation_alpha but accepts 0->255 instead of 0->1
+ *
+ * Input:
+ *   -ci   :- Which colour index to set.
+ *   -red  :- The red component of the colour (between 0 and 255).
+ *   -green  :- The green component of the colour (between 0 and 255).
+ *   -blue  :- The blue component of the colour (between 0 and 255).
+ *   -alpha :- The alpha component of the colour (between 0 and 1)
+ *
+ * See Also: giza_set_colour_representation_alpha, giza_set_colour_representation_rgb
+ */
+void
+giza_set_colour_representation_rgba (int ci, int red, int green, int blue, double alpha)
+{
+  if (!_giza_check_device_ready ("giza_set_colour_representation_rgba"))
+    return;
+
+  giza_set_colour_representation_alpha (ci, ((double) red)/255., ((double) green)/255., ((double) blue)/255., alpha);
+}
+
+/**
+ * Settings: giza_set_colour_representation_rgba_float
+ *
+ * Synopsis: Same functionality as giza_set_colour_representation_rgba but takes floats
+ *
+ * See Also: giza_set_colour_representation_rgba, giza_set_colour_representation_alpha
+ */
+void
+giza_set_colour_representation_rgba_float (int ci, int red, int green, int blue, float alpha)
+{
+  giza_set_colour_representation_rgba (ci, red, green, blue, (double) alpha);
+}
+
+
+/**
  * Settings: giza_get_colour_representation
  *
  * Synopsis: Query the RGB at a given colour index.
  *
  * Input:
  *  -ci    :- The index to enquire about
- *  -red   :- Gets set to the red value at ci
- *  -green :- Gets set to the green value at ci
- *  -blue  :- Gets set to the blue value at ci
+ *  -red   :- Gets set to the red value at ci (range 0->1)
+ *  -green :- Gets set to the green value at ci (range 0->1)
+ *  -blue  :- Gets set to the blue value at ci (range 0->1)
  */
 void
 giza_get_colour_representation (int ci, double *red, double *green,
