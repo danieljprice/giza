@@ -56,6 +56,7 @@ endif
 #
 # The prefix for the installed files
 #
+DESTDIR=
 PREFIX=/usr/local
 
 #
@@ -194,7 +195,7 @@ OBJECTS= $(SOURCE:.c=.o)
 
 .PHONY: libgiza giza pgplot cpgplot
 
-all: giza pgplot
+all: giza pgplot cpgplot
 
 giza: libgiza $(SHARED_LIB_GIZA)
 
@@ -255,9 +256,37 @@ $(INCDIR)/giza-version.h:
 #
 giza-fortran.o: checkflibs
 
-install: checksystem giza
-	cp -r $(LIBDIR) $(PREFIX)/
-	cp -r $(INCDIR) $(PREFIX)/
+install: installpgplot destdircheck checksystem giza
+
+installgiza: destdircheck checksystem giza
+	cp $(STATIC_LIB_GIZA) $(DESTDIR)$(PREFIX)/lib/
+	cp $(SHARED_LIB_GIZA) $(DESTDIR)$(PREFIX)/lib/
+	cp $(INCDIR)/giza-shared.h  $(DESTDIR)$(PREFIX)/include/
+	cp $(INCDIR)/giza-version.h $(DESTDIR)$(PREFIX)/include/
+	cp $(INCDIR)/giza.h         $(DESTDIR)$(PREFIX)/include/
+
+installpgplot: installgiza pgplot cpgplot
+	cp $(STATIC_LIB_PGPLOT)  $(DESTDIR)$(PREFIX)/lib/
+	cp $(SHARED_LIB_PGPLOT)  $(DESTDIR)$(PREFIX)/lib/
+	cp $(STATIC_LIB_CPGPLOT) $(DESTDIR)$(PREFIX)/lib/
+	cp $(SHARED_LIB_CPGPLOT) $(DESTDIR)$(PREFIX)/lib/
+	cp $(INCDIR)/cpgplot.h $(DESTDIR)$(PREFIX)/include/
+
+distclean: destdircheck
+	@rm -f $(DESTDIR)$(PREFIX)/lib/$(STATIC_LIB_GIZA)
+	@rm -f $(DESTDIR)$(PREFIX)/lib/$(SHARED_LIB_GIZA)
+	@rm -f $(DESTDIR)$(PREFIX)/lib/$(STATIC_LIB_PGPLOT)
+	@rm -f $(DESTDIR)$(PREFIX)/lib/$(SHARED_LIB_PGPLOT)
+	@rm -f $(DESTDIR)$(PREFIX)/lib/$(STATIC_LIB_CPGPLOT)
+	@rm -f $(DESTDIR)$(PREFIX)/lib/$(SHARED_LIB_CPGPLOT)
+	@rm -f $(DESTDIR)$(PREFIX)/include/giza-shared.h
+	@rm -f $(DESTDIR)$(PREFIX)/include/giza-version.h
+	@rm -f $(DESTDIR)$(PREFIX)/include/giza.h
+
+destdircheck:
+	@if test -d $(DESTDIR)$(PREFIX)/lib; then echo $(DESTDIR)$(PREFIX)/lib exists and is a directory; else \
+        echo; echo "*** ERROR in make install ***"; echo "$(DESTDIR)$(PREFIX)/lib is not a valid directory"; echo;\
+        $(MAKE) err; fi;
 
 dist: distclean
 	mkdir ../$(DISTDIR)
@@ -275,9 +304,9 @@ dist: distclean
 	rm -rf ../$(DISTDIR)
 
 clean:
-	rm -f $(LIBDIR)/libgiza* $(LIBDIR)/libpgplot* *.o *.mod $(INCDIR)/giza-version.h ../*.tar.gz
+	rm -f $(LIBDIR)/libgiza* $(LIBDIR)/libpgplot* $(LIBDIR)/libcpgplot* *.o *.mod $(INCDIR)/giza-version.h ../*.tar.gz
 
-distclean: clean
+cleandist: clean
 	rm -fr ../$(DISTDIR)
 	rm -f ../$(DISTDIR).tar.gz
 
