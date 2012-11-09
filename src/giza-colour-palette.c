@@ -47,6 +47,8 @@
  *  -1 or GIZA_COLOUR_PALETTE_PGPLOT  :- default PGPLOT palette
  *  -2 to 4 :- various experimental line palettes
  *  -5 :- colourblind safe palette from http://jfly.iam.u-tokyo.ac.jp/color/
+ *  -6 :- optimum palette from http://web.media.mit.edu/~wad/color/palette.html
+ *  -7 :- graph-a-licious
  * See Also: giza_set_colour_index, giza_set_colour_table
  *
  */
@@ -89,7 +91,7 @@ giza_set_colour_palette (int palette)
        giza_set_colour_representation (15,0.667,0.667,0.667);
        nlinecolours = 16;
        break;
-    case 2:
+    case 2: /* Terry, with modifications */
        giza_set_colour_representation (2, 1., 0., 0.);   /* red */
        giza_set_colour_representation (3, 0., 0.25, 1.); /* blue */
        giza_set_colour_representation (4, 0.5, 0., 0.5); /* purple */
@@ -101,15 +103,18 @@ giza_set_colour_palette (int palette)
        giza_set_colour_representation_rgb (10, 249, 223, 11); /* desert sun */
        nlinecolours = 11;
        break;
-    case 3:
+    case 3: /* adapted from palettes cheer up emo kid and grandma's pillow on colorlovers.com */
        giza_set_colour_representation_rgb (2, 85, 98, 112); /* mighty slate */
        giza_set_colour_representation_rgb (3, 78, 205, 196); /* pacifica */
-       giza_set_colour_representation_rgb (4, 199, 244, 100);  /* apple chic */
+       giza_set_colour_representation_rgb (4, 100, 122, 50);  /* dark apple chic */
        giza_set_colour_representation_rgb (5, 255, 107, 107); /* cheery pink */
        giza_set_colour_representation_rgb (6, 196, 77, 88); /* grandma's pillow */
-       nlinecolours = 7;
+       giza_set_colour_representation_rgb (7, 192, 157, 93); /* regretful */
+       giza_set_colour_representation_rgb (8, 239, 169, 133); /* vintage peach */
+       giza_set_colour_representation_rgb (9, 221, 133, 239); /* pinkish */
+       nlinecolours = 10;
        break;
-    case 4:
+    case 4: /* adapted from aboriginal and outback from colourlovers.com */
        giza_set_colour_representation_rgb (2, 196, 14, 14); /* vegas */
        giza_set_colour_representation_rgb (3, 32, 133, 133); /* eucalyptus */
        giza_set_colour_representation_rgb (4, 207, 62, 156);  /* parrot */
@@ -127,6 +132,34 @@ giza_set_colour_palette (int palette)
        giza_set_colour_representation (6, 0., 0.45, 0.7); /* blue */
        giza_set_colour_representation (7, 0.8, 0.4, 0.); /* vermilion */
        giza_set_colour_representation (8, 0.8, 0.6, 0.7); /* reddish purple */
+       nlinecolours = 9;
+       break;
+    case 6: /* modified version of http://web.media.mit.edu/~wad/color/palette.html */
+       giza_set_colour_representation_rgb(2, 193, 15, 15); /* red */
+       giza_set_colour_representation_rgb(3, 42, 75, 215); /* blue */
+       giza_set_colour_representation_rgb(4, 29, 105, 20); /* green */
+       giza_set_colour_representation_rgb(5, 129, 74, 25); /* brown */
+       giza_set_colour_representation_rgb(6, 129, 38, 192); /* purple */
+       giza_set_colour_representation_rgb(7, 160, 160, 160); /* light grey */
+       giza_set_colour_representation_rgb(8, 129, 197, 122); /* light green */
+       giza_set_colour_representation_rgb(9, 157, 175, 255); /* light blue */
+       giza_set_colour_representation_rgb(10, 41, 208, 208); /* cyan */
+       giza_set_colour_representation_rgb(11, 255, 146, 51); /* orange */
+       giza_set_colour_representation_rgb(12, 255, 238, 51); /* yellow */
+       giza_set_colour_representation_rgb(13, 233, 222, 187); /* tan */
+       giza_set_colour_representation_rgb(14, 255, 205, 243); /* pink */
+       giza_set_colour_representation_rgb(15, 87, 87, 87); /* Dark grey */
+       nlinecolours = 16;
+       break;
+    case 7: /* graph-a-licious from colourlovers.com */
+       giza_set_colour_representation_rgb (2, 209, 4, 21); /* red red */
+       giza_set_colour_representation_rgb (3, 113, 49, 159); /* poiple */
+       giza_set_colour_representation_rgb (4, 12, 34, 100);  /* ink11 */
+       giza_set_colour_representation_rgb (5, 113, 145, 38); /* flower power FGR */
+       giza_set_colour_representation_rgb (6, 255, 207, 38); /* flower power yel */
+       /* added by DJP */
+       giza_set_colour_representation_rgb (7, 255, 146, 51); /* orange */
+       giza_set_colour_representation_rgb (8, 139, 94, 45); /* brown */
        nlinecolours = 9;
        break;
     default:
