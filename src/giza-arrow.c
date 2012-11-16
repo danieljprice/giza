@@ -62,7 +62,7 @@ giza_arrow (double x1, double y1, double x2, double y2)
   _giza_set_trans (GIZA_TRANS_IDEN);
 
   double xpts[4], ypts[4], dx, dy, chx, chy, dxUnit, dyUnit, magnitude;
-  double dxPerp, dyPerp;
+  double dxPerp, dyPerp, sinangle, cosangle;
 
   /* set dx and dy to the change in the x and y direction respectively */
   dx = x2 - x1;
@@ -70,8 +70,8 @@ giza_arrow (double x1, double y1, double x2, double y2)
 
   /* Get the character size in device coords and scale a little */
   giza_get_character_size (GIZA_UNITS_DEVICE, &chx, &chy);
-  chx = 0.5 * chx;
-  chy = 0.5 * chy;
+  chx = 1.0 * chx;
+  chy = 1.0 * chy;
 
   if (chx > 0)
     {
@@ -118,17 +118,28 @@ giza_arrow (double x1, double y1, double x2, double y2)
 	  /* The point */
 	  xpts[0] = x2;
 	  ypts[0] = y2;
-          /* 'above' the unit vector */
-          xpts[1] = x2 - (dxUnit + dxPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
-	  ypts[1] = y2 - (dyUnit + dyPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chy;
+
+          /* 'above' the unit vector 
+           * Note that we want the hypoteneuse of the arrow head
+           * to always have same length regardless of the angle:
+           *      |\
+           *    b | \ r
+           *      |  \ 
+           * -----|   \
+           * hence we use sin(angle) = b/r, with r=1 to get b.
+           */
+          sinangle = sin (0.5 * Arrow.angle * GIZA_DEG_TO_RAD);
+          cosangle = cos (0.5 * Arrow.angle * GIZA_DEG_TO_RAD);
+          xpts[1] = x2 - (dxUnit* cosangle + dxPerp * sinangle) * chx;
+	  ypts[1] = y2 - (dyUnit* cosangle + dyPerp * sinangle) * chy;
 
           /* on the unit vector, the cutback */
-	  xpts[2] = x2 - (1. - Arrow.cutback) * chx * dxUnit;
-	  ypts[2] = y2 - (1. - Arrow.cutback) * chy * dyUnit;
+	  xpts[2] = x2 - (1. - Arrow.cutback) * chx * dxUnit * cosangle;
+	  ypts[2] = y2 - (1. - Arrow.cutback) * chy * dyUnit * cosangle;
 
 	  /* 'below' the unit vector */
-	  xpts[3] = x2 - (dxUnit - dxPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
-	  ypts[3] = y2 - (dyUnit - dyPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chy;
+	  xpts[3] = x2 - (dxUnit* cosangle - dxPerp * sinangle) * chx ;
+	  ypts[3] = y2 - (dyUnit* cosangle - dyPerp * sinangle) * chy;
 
 	  /* draw the head */
 	  cairo_move_to (context, xpts[0], ypts[0]);
