@@ -177,7 +177,6 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
 
   /* some final initialisation */
   _giza_set_deviceOpen ();
-  /*  _giza_set_defaults (); */
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();
@@ -204,7 +203,7 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
   _giza_init_band_style ();
   _giza_init_save ();
   giza_set_clipping(1);
-
+  _giza_stroke();
   /*
   printf("debug: device opened \n");
   */
