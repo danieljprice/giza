@@ -150,12 +150,14 @@ _giza_open_device_xw (void)
       return 3;
     }
 
+  unsigned long white = WhitePixel(XW.display, XW.screennum);
+
   /* create the window */
   XW.window = XCreateSimpleWindow (XW.display,
 				   DefaultRootWindow (XW.display),/* make our new window a child of the entire XW.display */
 				   50, 50,	/* origin */
 				   XW.width, XW.height, /* size */
-				   0, 0, 0);
+				   0, 0, white);
   if (!XW.window)
     {
       _giza_error ("_giza_open_device", "Could not create X window");
@@ -299,10 +301,13 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
   XSelectInput (XW.display, XW.window, ExposureMask | KeyPressMask | StructureNotifyMask | ButtonPressMask | PointerMotionMask);
 
   _giza_init_band (mode);
-  while (1)  {
 
-    /* wait for key press/expose */
-    XNextEvent(XW.display, &event);
+ while(1) {
+
+    /* wait for key press/expose (avoid using XNextEvent as breaks older systems) */
+    XWindowEvent(XW.display, XW.window,
+       (long) (ExposureMask | KeyPressMask | StructureNotifyMask | ButtonPressMask | PointerMotionMask), &event);
+    /*XNextEvent(XW.display, &event);*/
 
     /* always return x, y values for safety */
     *x = 0;
