@@ -43,6 +43,7 @@
 #include "giza-fill-private.h"
 #include "giza-line-style-private.h"
 #include "giza-band-private.h"
+#include "giza-stroke-private.h"
 #include <giza.h>
 #include <stdlib.h>
 #include <stdio.h>
