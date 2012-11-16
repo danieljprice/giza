@@ -39,4 +39,4 @@ test-fortran: $(OBJ)
 	$(FC) $(FFLAGS) -o $@ $(OBJ) $(LDFLAGS)
 
 clean:
-	rm -f *.o test-giza-xw test-cairo-xw test-png test-pdf test-fortran
+	rm -f *.o *.mod test-giza-xw test-cairo-xw test-png test-pdf test-fortran

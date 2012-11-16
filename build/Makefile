@@ -272,7 +272,7 @@ installpgplot: installgiza pgplot cpgplot
 	cp $(SHARED_LIB_CPGPLOT) $(DESTDIR)$(PREFIX)/lib/
 	cp $(INCDIR)/cpgplot.h $(DESTDIR)$(PREFIX)/include/
 
-distclean: destdircheck
+distclean: destdircheck clean
 	@rm -f $(DESTDIR)$(PREFIX)/lib/$(STATIC_LIB_GIZA)
 	@rm -f $(DESTDIR)$(PREFIX)/lib/$(SHARED_LIB_GIZA)
 	@rm -f $(DESTDIR)$(PREFIX)/lib/$(STATIC_LIB_PGPLOT)
@@ -303,8 +303,11 @@ dist: distclean
 	tar czvf ../$(DISTDIR).tar.gz ../$(DISTDIR)
 	rm -rf ../$(DISTDIR)
 
-clean:
+clean: cleantest
 	rm -f $(LIBDIR)/libgiza* $(LIBDIR)/libpgplot* $(LIBDIR)/libcpgplot* *.o *.mod $(INCDIR)/giza-version.h ../*.tar.gz
+
+cleantest:
+	cd ../test; $(MAKE) clean
 
 cleandist: clean
 	rm -fr ../$(DISTDIR)
