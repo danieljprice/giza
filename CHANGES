@@ -1,4 +1,28 @@
 -----------------------------------
+Changes in 0.7.5 compared to 0.7.4
+-----------------------------------
+
+danielprice (18):
+      README included in distribution
+      README added to repository
+      routines added to set colour representation in rgb
+      various line palettes added; can be selected with GIZA_PALETTE environment variable
+      build respects DESTDIR conventions
+      BUG FIX with log axis labelling if interval < 10
+      new colour palette options added
+      giza_stroke called after device opened; avoids black page bug if no box/window/viewport called prior to drawing
+      BUG FIX with arrow heads becoming small in certain directions
+      giza arrow uses semi-angle instead of full angle, as in PGPLOT (pgdemo1)
+      added box/more arrow tests
+      XW driver no longer uses XNextEvent to prevent compile problems on Ubuntu; also initial window call uses WhitePixel as defined by Xlib
+      LICENSE file renamed to COPYING
+      CHANGES file added; README now contains small blurb
+      updated INSTALL instructions
+      added AUTHORS file
+      compiler warning fixed
+      compiler warnings with strncpy fixed (clang)
+
+-----------------------------------
 Changes in 0.7.4 compared to 0.7.3
 -----------------------------------
 
