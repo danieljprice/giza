@@ -39,7 +39,7 @@
  * Input:
  *  -x1 :- The world x-coord of the tail of the arrow.
  *  -y1 :- The world y-coord of the tail of the arrow.
- *  -x2 :- The world x-coord of the tail of the arrow.
+ *  -x2 :- The world x-coord of the head of the arrow.
  *  -y2 :- The world y-coord of the head of the arrow.
  *
  * See Also: giza_set_arrow_style
@@ -64,56 +64,71 @@ giza_arrow (double x1, double y1, double x2, double y2)
   double xpts[4], ypts[4], dx, dy, chx, chy, dxUnit, dyUnit, magnitude;
   double dxPerp, dyPerp;
 
-  /* set dx and dy to the change in the x and y direction respectivly */
+  /* set dx and dy to the change in the x and y direction respectively */
   dx = x2 - x1;
   dy = y2 - y1;
 
   /* Get the character size in device coords and scale a little */
   giza_get_character_size (GIZA_UNITS_DEVICE, &chx, &chy);
   chx = 0.5 * chx;
+  chy = 0.5 * chy;
 
   if (chx > 0)
     {
-      if (!_giza_equal(dx,0.) || !_giza_equal(dy,0.))
+      if (!(_giza_equal(dx,0.) && _giza_equal(dy,0.)))
 	{
 	  /* find a unit vector in the direction of the arrow */
 	  magnitude = sqrt (dx * dx + dy * dy);
 	  dxUnit = dx / magnitude;
 	  dyUnit = dy / magnitude;
 
-	  /* find a prependicular unit vector */
+	  /* find a perpendicular unit vector */
 	  if (_giza_equal(dxUnit,0.))
 	    {
-	      dxPerp = 1;
-	      dyPerp = 0;
+	      dxPerp = 1.;
+	      dyPerp = 0.;
 	    }
 	  else if (_giza_equal(dyUnit,0.))
 	    {
-	      dxPerp = 0;
-	      dyPerp = 1;
+	      dxPerp = 0.;
+	      dyPerp = 1.;
 	    }
 	  else
 	    {
-	      dxPerp = 1;
+	      dxPerp = 1.;
 	      dyPerp = -dxUnit / dyUnit;
-	      magnitude = dxPerp * dxPerp + dyPerp * dyPerp;
+	      magnitude = sqrt(dxPerp * dxPerp + dyPerp * dyPerp);
 	      dxPerp = dxPerp / magnitude;
 	      dyPerp = dyPerp / magnitude;
 	    }
+	  
+	  if (magnitude > 0)
+	    {
+	      dx = dx/magnitude;
+	      dy = dy/magnitude;
+	    }
+	  else
+	    {
+	      dx = 1.;
+	      dy = 0.;
+	      magnitude = 1.0;
+	    }
 
-	  /* Calculate where the verticies of the arrow head are */
+	  /* Calculate where the vertices of the arrow head are */
 	  /* The point */
 	  xpts[0] = x2;
 	  ypts[0] = y2;
-	  /* 'above' the unit vector */
-	  xpts[1] = x2 - (dxUnit + dxPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
-	  ypts[1] = y2 - (dyUnit + dyPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
-	  /* on the unit vector, the cutback */
-	  xpts[2] = x2 - (1 - Arrow.cutback) * chx * dxUnit;
-	  ypts[2] = y2 - (1 - Arrow.cutback) * chx * dyUnit;
+          /* 'above' the unit vector */
+          xpts[1] = x2 - (dxUnit + dxPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
+	  ypts[1] = y2 - (dyUnit + dyPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chy;
+
+          /* on the unit vector, the cutback */
+	  xpts[2] = x2 - (1. - Arrow.cutback) * chx * dxUnit;
+	  ypts[2] = y2 - (1. - Arrow.cutback) * chy * dyUnit;
+
 	  /* 'below' the unit vector */
 	  xpts[3] = x2 - (dxUnit - dxPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
-	  ypts[3] = y2 - (dyUnit - dyPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chx;
+	  ypts[3] = y2 - (dyUnit - dyPerp * tan (Arrow.angle * GIZA_DEG_TO_RAD)) * chy;
 
 	  /* draw the head */
 	  cairo_move_to (context, xpts[0], ypts[0]);
