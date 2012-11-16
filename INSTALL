@@ -1,8 +1,10 @@
-Not much work has been put into portability yet, so good luck!
+Type: 
 
-You will need a c compiler, cairo and X11 development packages. If they are 
-ready to go running "make SYSTEM=linux" should build giza using gcc,
-and "make install SYSTEM=linux" should install on a linux system.
+$ make
 
-If you need to change library paths for cairo of Xlib have a look
+You will need a C compiler, cairo and X11 development packages. If they are 
+ready to go the above should build giza using gcc,
+and "make install" should install on a linux or Mac OS/X system.
+
+If you need to change library paths for cairo or Xlib have a look
 at build/Makefile.
