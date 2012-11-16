@@ -493,11 +493,11 @@ giza_query_device (const char *querytype, char *returnval)
     {
       if (Dev.isInteractive)
         {
-          strncpy(returnval,"YES",sizeof(returnval));
+          strncpy(returnval,"YES",sizeof(returnval)-1);
         }
       else
         {
-          strncpy(returnval,"NO",sizeof(returnval));
+          strncpy(returnval,"NO",sizeof(returnval)-1);
         }
     }
   /* Query whether or not device is hard copy or not */
@@ -505,11 +505,11 @@ giza_query_device (const char *querytype, char *returnval)
     {
       if (Dev.isInteractive)
         {
-          strncpy(returnval,"NO",sizeof(returnval));
+          strncpy(returnval,"NO",sizeof(returnval)-1);
         }
       else
         {
-          strncpy(returnval,"YES",sizeof(returnval));
+          strncpy(returnval,"YES",sizeof(returnval)-1);
         }
     }
   /* Query whether or not device is open or not */
@@ -517,27 +517,27 @@ giza_query_device (const char *querytype, char *returnval)
     {
        if (_giza_get_deviceOpen())
          {
-            strncpy(returnval,"OPEN",sizeof(returnval));         
+            strncpy(returnval,"OPEN",sizeof(returnval)-1);         
          }
        else
          {
-            strncpy(returnval,"CLOSED",sizeof(returnval));
+            strncpy(returnval,"CLOSED",sizeof(returnval)-1);
          }    
     }
   /* Query current user */
   else if (!strcmp(querytype,"user"))
     {
-       strncpy(returnval,getlogin(),sizeof(returnval));
+       strncpy(returnval,getlogin(),sizeof(returnval)-1);
     }
   /* Query current device name */
   else if (!strcmp(querytype,"device"))
     {
-       strncpy(returnval,Dev.prefix,sizeof(returnval));
+       strncpy(returnval,Dev.prefix,sizeof(returnval)-1);
     }
   /* Query current device/type */
   else if (!strcmp(querytype,"dev/type"))
     {
-       strncpy(returnval,Dev.prefix,sizeof(returnval));
+       strncpy(returnval,Dev.prefix,sizeof(returnval)-1);
        if (!_giza_int_to_device(Dev.type,devType))
          {
            ierr = 1;
@@ -549,10 +549,10 @@ giza_query_device (const char *querytype, char *returnval)
     {
        if (!Dev.isInteractive)
          {
-           strncpy(returnval,Dev.prefix,sizeof(returnval));
+           strncpy(returnval,Dev.prefix,sizeof(returnval)-1);
          }
     }
-
+  returnval[sizeof(returnval)-1] = '\0'; /* make sure string is null-terminated */
   return ierr;
 }
 
@@ -730,42 +730,43 @@ _giza_int_to_device (int numDevice, char *DeviceName)
  switch (numDevice)
     {
     case GIZA_DEVICE_NULL:
-      strncpy(DeviceName,"/null",sizeof(DeviceName));
+      strncpy(DeviceName,"/null",sizeof(DeviceName)-1);
       break;
     case GIZA_DEVICE_PDF:
-      strncpy(DeviceName,"/pdf",sizeof(DeviceName));
+      strncpy(DeviceName,"/pdf",sizeof(DeviceName)-1);
       break;
     case GIZA_DEVICE_VPDF:
-      strncpy(DeviceName,"/vpdf",sizeof(DeviceName));
+      strncpy(DeviceName,"/vpdf",sizeof(DeviceName)-1);
       break;
     case GIZA_DEVICE_PNG:
-      strncpy(DeviceName,"/png",sizeof(DeviceName));
+      strncpy(DeviceName,"/png",sizeof(DeviceName)-1);
       break;
     case GIZA_DEVICE_SVG:
-      strncpy(DeviceName,"/svg",sizeof(DeviceName));
+      strncpy(DeviceName,"/svg",sizeof(DeviceName)-1);
       break;
     case GIZA_DEVICE_PS:
-      strncpy(DeviceName,"/ps",sizeof(DeviceName));
+      strncpy(DeviceName,"/ps",sizeof(DeviceName)-1);
       break;
     case GIZA_DEVICE_VPS:
-      strncpy(DeviceName,"/vps",sizeof(DeviceName));
+      strncpy(DeviceName,"/vps",sizeof(DeviceName)-1);
       break;
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
-      strncpy(DeviceName,"/xw",sizeof(DeviceName));
+      strncpy(DeviceName,"/xw",sizeof(DeviceName)-1);
       break;
 #endif
 #ifdef _GIZA_HAS_EPS
     case GIZA_DEVICE_EPS:
-      strncpy(DeviceName,"/eps",sizeof(DeviceName));
+      strncpy(DeviceName,"/eps",sizeof(DeviceName)-1);
       break;
 #endif
     default:
     /* Do not print an error here as this is an internal routine:
        Instead, make sure the error is handled in the calling routine */
-      strncpy(DeviceName," ",sizeof(DeviceName));
+      strncpy(DeviceName," ",sizeof(DeviceName)-1);
       ierr = 1;
     }
+    DeviceName[sizeof(DeviceName)-1] = '\0'; /* make sure string is null-terminated */
     return ierr;
 }
 
