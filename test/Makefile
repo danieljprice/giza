@@ -14,7 +14,13 @@ VPATH=../interface/
 %.o : %.F90
 	$(FC) $(FFLAGS) -c $< -o $@
 
-all: test-giza-xw test-cairo-xw test-png test-pdf test-fortran
+all: test-arrow test-box test-giza-xw test-cairo-xw test-png test-pdf test-fortran
+
+test-arrow: test-arrow.o
+	$(CC) -o $@ $< $(LDFLAGS)
+
+text-box: test-box.o
+	$(CC) -o $@ $< $(LDFLAGS)
 
 test-giza-xw: test-xw.o
 	$(CC) -o $@ $< $(LDFLAGS)
@@ -28,7 +34,7 @@ test-png: test-png.o
 test-pdf: test-pdf.o
 	$(CC) -o $@ $< $(LDFLAGS)
 
-OBJ=giza-fortran.o test-fortran.o
+OBJ=giza-fortran.o test-img.o
 test-fortran: $(OBJ)
 	$(FC) $(FFLAGS) -o $@ $(OBJ) $(LDFLAGS)
 

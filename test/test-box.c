@@ -27,7 +27,18 @@
 int
 main ()
 {
-  giza_open_device ("?", "box!");
+  giza_open_device ("/xw", "box!");
+
+  giza_set_window (0., 1., 0., 1.);
+  giza_box ("BCTLN", 0., 0, "BCTN", 0., 0);
+
+  giza_change_page ();
+
+  giza_set_window (0., 0.5, 0., 0.5);
+  giza_box ("BCLTN", 0., 0, "BCTN", 0., 0);
+
+  giza_change_page ();
+
   giza_set_window (-5., 5., 0., 1.);
   giza_box ("BCTLN", 0., 0, "BCTN", 0., 0);
 
