@@ -204,7 +204,7 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
   _giza_init_band_style ();
   _giza_init_save ();
   giza_set_clipping(1);
-  _giza_stroke();
+  /*_giza_stroke();*/
   /*
   printf("debug: device opened \n");
   */
