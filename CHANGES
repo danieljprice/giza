@@ -1,4 +1,14 @@
 -----------------------------------
+Changes in 0.7.6 compared to 0.7.5
+-----------------------------------
+
+danielprice (4):
+      better clean targets for Makefiles
+      bug fix with box being drawn randomly due to giza_stroke call
+      fortran interface compiles with ifort+debugging; thanks to Andy McLeod
+      minor fixes to install target; should now work with Macports
+
+-----------------------------------
 Changes in 0.7.5 compared to 0.7.4
 -----------------------------------
 
