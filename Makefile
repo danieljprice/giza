@@ -24,11 +24,14 @@
 #
 #--------------------------------------------------------------------
 
-.PHONY: giza
+.PHONY: giza install
 giza:
 	@cd build; ${MAKE} ${MAKECMDGOALS}
 
 %:
+	@cd build; ${MAKE} ${MAKECMDGOALS}
+
+install:
 	@cd build; ${MAKE} ${MAKECMDGOALS}
 
 clean:

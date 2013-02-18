@@ -30,7 +30,7 @@
 #
 GIZAV=0
 MINORV=7
-MICROV=5
+MICROV=6
 VERSION=$(GIZAV).$(MINORV).$(MICROV)
 
 
@@ -255,6 +255,8 @@ $(INCDIR)/giza-version.h:
 #--other dependencies
 #
 giza-fortran.o: checkflibs
+
+.PHONY: install installgiza installpgplot dist clean
 
 install: installpgplot destdircheck checksystem giza
 
