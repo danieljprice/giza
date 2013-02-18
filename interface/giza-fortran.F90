@@ -1724,10 +1724,15 @@ contains
 
   subroutine giza_intern_annotate_f2c(side,displacement,coord,justification,text)
     implicit none
-    character(len=*),intent(in) :: side,text
-    real,intent(in)             :: displacement,coord,justification
+    character(len=*),intent(in)    :: side,text
+    real,intent(in)                :: displacement,coord,justification
+    real(kind=c_double)            :: displacement_c,coord_c,justification_c
 
-    call giza_annotate_c(cstring(side),displacement,coord,justification,cstring(text))
+    displacement_c = displacement
+    coord_c = coord
+    justification_c = justification
+
+    call giza_annotate_c(cstring(side),displacement_c,coord_c,justification_c,cstring(text))
   end subroutine giza_intern_annotate_f2c
 
   subroutine giza_intern_box_f2c(xopt,xtick,nxsub,yopt,ytick,nysub)
@@ -1735,8 +1740,13 @@ contains
     character(len=*),intent(in) :: xopt,yopt
     real,intent(in)             :: xtick,ytick
     integer,intent(in)          :: nxsub,nysub
+    real(kind=c_double)         :: xtick_c,ytick_c
+    integer(kind=c_int)         :: nxsub_c,nysub_c
 
-    call giza_box_c(cstring(xopt),xtick,nxsub,cstring(yopt),ytick,nysub)
+    xtick_c = xtick; ytick_c = ytick
+    nxsub_c = nxsub; nysub_c = nysub
+
+    call giza_box_c(cstring(xopt),xtick_c,nxsub_c,cstring(yopt),ytick_c,nysub_c)
   end subroutine giza_intern_box_f2c
 
   subroutine giza_intern_box_time_f2c(xopt,xtick,nxsub,yopt,ytick,nysub)
@@ -1744,16 +1754,27 @@ contains
     character(len=*),intent(in) :: xopt,yopt
     real,intent(in)             :: xtick,ytick
     integer,intent(in)          :: nxsub,nysub
+    real(kind=c_double)         :: xtick_c,ytick_c
+    integer(kind=c_int)         :: nxsub_c,nysub_c
 
-    call giza_box_time_c(cstring(xopt),xtick,nxsub,cstring(yopt),ytick,nysub)
+    xtick_c = xtick; ytick_c = ytick
+    nxsub_c = nxsub; nysub_c = nysub
+
+    call giza_box_time_c(cstring(xopt),xtick_c,nxsub_c,cstring(yopt),ytick_c,nysub_c)
   end subroutine giza_intern_box_time_f2c
 
   subroutine giza_intern_colour_bar_f2c(side,disp,width,valmin,valmax,label)
     implicit none
     character(len=*), intent(in) :: side,label
     real, intent(in) :: disp,width,valmin,valmax
+    real(kind=c_double) :: disp_c,width_c,valmin_c,valmax_c
     
-    call giza_colour_bar_c(cstring(side),disp,width,valmin,valmax,cstring(label))
+    disp_c = disp
+    width_c = width
+    valmin_c = valmin
+    valmax_c = valmax
+    
+    call giza_colour_bar_c(cstring(side),disp_c,width_c,valmin_c,valmax_c,cstring(label))
     
   end subroutine giza_intern_colour_bar_f2c
 
@@ -1862,7 +1883,7 @@ contains
     real(kind=c_float),intent(in) :: x,y
     character(len=*),intent(in)    :: text
     
-    call giza_text_c(x,y,cstring(text))
+    call giza_text_float_c(x,y,cstring(text))
   end subroutine giza_intern_text_float_f2c
 
   subroutine giza_intern_ptext_f2c(x,y,angle,just,text)
@@ -1878,7 +1899,7 @@ contains
     real(kind=c_float),intent(in) :: x,y,angle,just
     character(len=*),intent(in)    :: text
     
-    call giza_ptext_c(x,y,angle,just,cstring(text))
+    call giza_ptext_float_c(x,y,angle,just,cstring(text))
   end subroutine giza_intern_ptext_float_f2c
 
   subroutine giza_intern_qtext_f2c(x,y,angle,just,text,xbox,ybox)
@@ -1896,7 +1917,7 @@ contains
     real(kind=c_float),intent(out):: xbox(4),ybox(4)
     character(len=*),intent(in)   :: text
     
-    call giza_qtext_c(x,y,angle,just,cstring(text),xbox,ybox)
+    call giza_qtext_float_c(x,y,angle,just,cstring(text),xbox,ybox)
   end subroutine giza_intern_qtext_float_f2c
 
   subroutine giza_intern_qtextlen_f2c(units,text,xlen,ylen)
@@ -2037,13 +2058,17 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  real, intent(in), optional :: lw,ch
  real, dimension(6), intent(in), optional :: affine
  logical, intent(in), optional :: printid
- integer :: iunits,n,nx,ny,i,iaxis,ijust,iextend
- real :: xmini,xmaxi,ymini,ymaxi,valmin,valmax
- real :: vptxmini,vptxmaxi,vptymini,vptymaxi
- real, dimension(6) :: affinei
+ integer :: iunits,nx,ny,i,iaxis,ijust
+ real(kind=c_double) :: xmini,xmaxi,ymini,ymaxi,valmin,valmax
+ real(kind=c_double) :: vptxmini,vptxmaxi,vptymini,vptymaxi
+ real(kind=c_double), dimension(6) :: affinei
  character(len=20) :: devi
  character(len=40) :: xlabeli,ylabeli,titlei
- real, dimension(:), allocatable :: arrtmp
+ real(kind=c_double), dimension(:), allocatable :: arrtmp
+ 
+ real(kind=c_double)  :: lw_c, ch_c
+ integer(kind=c_int)  :: n, nx_c, ny_c
+ integer(kind=c_int)  :: symbol_c, iextend
 
 !
 !--open giza device
@@ -2131,7 +2156,8 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     call giza_set_font(font)
  endif
  if (present(ch)) then
-    call giza_set_character_height(ch)
+    ch_c = ch
+    call giza_set_character_height(ch_c)
  endif
  if (present(just)) then
     ijust = just
@@ -2173,7 +2199,8 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     call giza_set_line_style(ls)
  endif
  if (present(lw)) then
-    call giza_set_line_width(lw)
+    lw_c = lw
+    call giza_set_line_width(lw_c)
  endif
  if (present(ci)) then
     call giza_set_colour_index(ci)
@@ -2182,9 +2209,10 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  if (present(x) .and. present(y)) then
     n = min(size(x),size(y))
     if (present(symbol)) then
-       call giza_points(n,x,y,symbol)    
+       symbol_c = symbol
+       call giza_points(n,real(x,kind=c_double),real(y,kind=c_double),symbol_c)    
     else
-       call giza_line(n,x,y)
+       call giza_line(n,real(x,kind=c_double),real(y,kind=c_double))
     endif
  elseif (present(x) .and. size(x).gt.1) then
     n = size(x)
@@ -2193,9 +2221,10 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
        arrtmp(i) = (i-1)/(real(n-1))
     enddo
     if (present(symbol)) then
-       call giza_points(n,x,arrtmp,symbol)    
+       symbol_c = symbol
+       call giza_points(n,real(x,kind=c_double),arrtmp,symbol_c)
     else
-       call giza_line(n,x,arrtmp)
+       call giza_line(n,real(x,kind=c_double),arrtmp)
     endif
     deallocate(arrtmp)
  elseif (present(y) .and. size(y).gt.1) then
@@ -2205,9 +2234,10 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
        arrtmp(i) = (i-1)/(real(n-1))
     enddo
     if (present(symbol)) then
-       call giza_points(n,arrtmp,y,symbol)    
+       symbol_c = symbol
+       call giza_points(n,arrtmp,real(y,kind=c_double),symbol_c)
     else
-       call giza_line(n,arrtmp,y)
+       call giza_line(n,arrtmp,real(y,kind=c_double))
     endif
     deallocate(arrtmp)
  endif
@@ -2235,7 +2265,9 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     else
        iextend = giza_extend_none
     endif
-    call giza_render(nx,ny,img,1,nx,1,ny,valmin,valmax,iextend,affinei)
+    nx_c = nx; ny_c = ny
+    call giza_render(nx_c,ny_c,real(img,kind=c_double),int(1,kind=c_int),&
+                     &nx_c,int(1,kind=c_int),ny_c,valmin,valmax,iextend,affinei)
  endif
  
  call giza_close()
