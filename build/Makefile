@@ -103,13 +103,6 @@ OSTYPE=${shell uname}
   KNOWN_SYSTEM=yes
 #endif
 
-ifeq ($(FC),gfortran)
-  GFORTRAN_VERSION=${shell gfortran -dumpversion | head -1}
-  GFORTRAN_VMAJOR:=${shell echo "$(GFORTRAN_VERSION)" | cut -f1 -d. | sed 's/[a-z,A-Z,(,), ]//g'}
-  GFORTRAN_VMINOR:=${shell echo "$(GFORTRAN_VERSION)" | cut -f2 -d.}
-  GFORTRAN_GT_4_3:=$(shell [ $(GFORTRAN_VMAJOR) -gt 4 -o \( $(GFORTRAN_VMAJOR) -eq 4 -a $(GFORTRAN_VMINOR) -ge 3 \) ] && echo true)
-endif
-
 #
 #--libpgplot needs to be linked against the
 #  library from the Fortran compiler used
@@ -254,8 +247,6 @@ $(INCDIR)/giza-version.h:
 #
 #--other dependencies
 #
-giza-fortran.o: checkflibs
-
 .PHONY: install installgiza installpgplot dist clean
 
 install: installpgplot destdircheck checksystem giza
@@ -314,15 +305,6 @@ cleantest:
 cleandist: clean
 	rm -fr ../$(DISTDIR)
 	rm -f ../$(DISTDIR).tar.gz
-
-checkflibs:
-    ifeq ($(FC),gfortran)
-        ifeq ($(GFORTRAN_GT_4_3),true)
-	   @echo "compiling with gfortran v$(GFORTRAN_VERSION) (OK)"
-        else
-	   ${error gfortran $(GFORTRAN_VERSION) is too old to compile giza-fortran/libpgplot: please upgrade your gfortran}
-        endif
-    endif
 
 checksystem:
     ifeq ($(KNOWN_SYSTEM), yes)
