@@ -42,7 +42,8 @@ void giza_annotate (const char *side, double displacment, double coord,
 		    double justification, const char *string);
 void giza_annotate_float (const char *side, float displacment, float coord,
 			  float justification, const char *string);
-
+void giza_begin_autolog(void);
+void giza_end_autolog(void);
 int giza_band (int mode, int moveCursm, double xanc, double yanc, double *x,
 	       double *y, char *ch);
 int giza_band_float (int mode, int moveCurs, float xanc, float yanc, float *x,

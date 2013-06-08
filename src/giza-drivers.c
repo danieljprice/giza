@@ -103,6 +103,7 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
   int success = -1;
   giza_set_text_background (-1);
   giza_start_prompting ();
+  _giza_init();
 
   if (newPrefix)
     {
@@ -286,7 +287,7 @@ giza_flush_device (void)
 /**
  * Device: giza_resize_device
  *
- * Synopsis: Flushes the currently open device.
+ * Synopsis: resizes the currently open device.
  */
 void
 _giza_resize_device (int width, int height)
@@ -296,6 +297,10 @@ _giza_resize_device (int width, int height)
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_change_size_xw (width + 40, height + 40);
+      _giza_init_norm ();
+      double ch;
+      giza_get_character_height(&ch);
+      giza_set_character_height(ch);
       break;
 #endif
     }
@@ -311,13 +316,26 @@ _giza_resize_device (int width, int height)
 void
 giza_change_page (void)
 {
+    /* allow resizing of the device if nothing has been drawn */
+
+/*   if (_giza_sizeSpecified ())
+     {
+       int width,height;
+       _giza_get_specified_size(&width, &height);
+       if (width != Dev.width || height != Dev.height) {
+          printf("RESIZING %i %i \n",width,height);
+          _giza_resize_device(width, height);
+          _giza_change_page_xw();
+       } else {
+          printf("SAME SIZE %i %i \n",Dev.width,Dev.height);       
+       }
+     } else {
+       printf("NO RESIZING %i %i \n",Dev.width,Dev.height);
+     }
+*/
+
   if (!_giza_has_drawn ()) {
-    /* allow resizing of the device if nothing has been drawn
-    int width, height;
-    _giza_get_specified_size(&width, &height);
-    _giza_resize_device(width, height);
-    _giza_change_page_xw();
-    */
+
     /* if nothing has changed, safe to redraw/reset the background colour */
     giza_draw_background ();
     return;

@@ -60,6 +60,7 @@ struct GIZA_Settings
   cairo_font_extents_t fontExtents;
   double fontAngle;
   int buf;
+  int autolog;
 } Sets;
 
 int _giza_check_device_ready (char *source);
@@ -84,3 +85,6 @@ void _giza_get_markerheight (double *mheight);
 void _giza_draw_symbol_device (double xd, double yd, int symbol);
 void _giza_set_alpha (double alpha);
 void _giza_get_alpha (double *alpha);
+void _giza_get_log_file (char *string, int len);
+void _giza_write_log_file (cairo_surface_t *surface);
+void _giza_init(void);

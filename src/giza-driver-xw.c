@@ -210,10 +210,11 @@ _giza_flush_device_xw (void)
   /* move the offscreen surface to the onscreen one */
   XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, 0, 0, (unsigned) XW.width, (unsigned) XW.height, 0, 0);
 
-  if (!XFlush (XW.display))
+/*  if (!XFlush (XW.display))
     {
       _giza_warning ("_giza_flush_device_xw", "Could not flush X window");
     }
+*/
 }
 
 /**
@@ -227,6 +228,9 @@ _giza_flush_device_xw (void)
 void
 _giza_change_page_xw (void)
 {
+  /* interactive logging feature */
+  if (Sets.autolog) _giza_write_log_file(surface);
+  
   /* create a new pixmap */
   cairo_destroy(context);
   cairo_surface_finish (surface);
@@ -444,7 +448,7 @@ _giza_expose_xw (XEvent *event)
 	     (unsigned) event->xexpose.height, event->xexpose.x,
 	     event->xexpose.y);
 
-  XFlush(XW.display);
+/*  XFlush(XW.display); */
 }
 
 /**
@@ -459,6 +463,8 @@ _giza_change_size_xw (int width, int height)
 
   XW.width  = width;
   XW.height = height;
+  
+  XResizeWindow(XW.display, XW.window,(unsigned) XW.width,(unsigned) XW.height);
 
   cairo_xlib_surface_set_size(surface,width,height);
 }

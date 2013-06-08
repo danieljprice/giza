@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <giza.h>
+#include <time.h>
 
 /**
  * If warnings are switched on displays a warning message to stderr
@@ -157,4 +158,66 @@ int
 _giza_default_device (void)
 {
   return GIZA_DEVICE_XW;
+}
+
+/**
+ * constructs file name for log file
+ * using current date and time
+ */
+void
+_giza_get_log_file (char *string, int len)
+{
+   time_t now;
+   time(&now);
+   struct tm tstruct = *localtime(&now);
+   strftime(string,len,"giza-%Y-%m-%d-%H:%M:%S.png",&tstruct);
+}
+
+/**
+ * writes current cairo surface to png file
+ * with a filename based on the current date and time
+ */
+void
+_giza_write_log_file (cairo_surface_t *surface)
+{
+   char msg[80];
+   char string[80];
+   _giza_get_log_file(string,sizeof(string));
+   sprintf(msg,"writing %s",string);
+   _giza_message(msg);
+   cairo_status_t status;
+   status = cairo_surface_write_to_png(surface,string);
+   if (status != CAIRO_STATUS_SUCCESS)
+      _giza_error("log file",cairo_status_to_string(status));
+}
+
+/**
+ * Settings: giza_begin_autolog
+ *
+ * Synopsis: Turns on automatic logging of interactive devices
+ *  This writes a png file every time the page is
+ *  changed in an interactive device, with a name
+ *  based on the current date/time (giza-%Y-%M-%D-%H:%M:%S.png).
+ *  Logging can also be turned on by setting the GIZA_LOG
+ *  environment variable.
+ *
+ * See Also: giza_end_autolog
+ */
+void giza_begin_autolog (void)
+{
+  if(!_giza_check_device_ready ("giza_start_autolog")) return;
+  Sets.autolog = 1;
+}
+
+/**
+ * Settings: giza_end_autolog
+ *
+ * Synopsis: Turns off automatic logging feature.
+ *
+ * See Also: giza_begin_autolog
+ */
+void giza_end_autolog (void)
+{
+  if(!_giza_check_device_ready ("giza_end_autolog")) return;
+  Sets.autolog = 0;
 }

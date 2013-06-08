@@ -25,6 +25,7 @@
 #include "giza-io-private.h"
 #include <math.h>
 #include "giza-private.h"
+#include <stdlib.h>
 
 /* Indicates if a device is open and ready to be drawn to. */
 static int deviceOpen = 0;
@@ -162,3 +163,14 @@ _giza_equal(double x1, double x2)
   }
 }
 
+void _giza_init(void)
+{
+   Sets.fontAngle = 0.0;
+   Sets.buf = 0;
+   Sets.autolog = 0;
+   char *tmp = getenv ("GIZA_LOG");
+   if(tmp)
+     {
+       Sets.autolog = 1;
+     }
+}
