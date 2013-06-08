@@ -148,14 +148,18 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
 
   /* Find the position of the new viewport relative to the centre of the old */
   /* Find the width of the new vp in normalised device coords */
-  newWidth = scale * xrange / Dev.width;
-  VP.xmin = (VP.xmax + VP.xmin - newWidth) * 0.5;
-  VP.xmax = VP.xmin + newWidth;
+  if (Dev.width > 0) {
+     newWidth = scale * xrange / Dev.width;
+     VP.xmin = (VP.xmax + VP.xmin - newWidth) * 0.5;
+     VP.xmax = VP.xmin + newWidth;
+  }
 
   /* Find the height of the new vp */
-  newHeight = scale * yrange / Dev.height;
-  VP.ymin = (VP.ymax + VP.ymin - newHeight) * 0.5;
-  VP.ymax = VP.ymin + newHeight;
+  if (Dev.height > 0) {
+     newHeight = scale * yrange / Dev.height;
+     VP.ymin = (VP.ymax + VP.ymin - newHeight) * 0.5;
+     VP.ymax = VP.ymin + newHeight;
+  }
 
   /* Set the window and vp */
   giza_set_window (x1, x2, y1, y2);
