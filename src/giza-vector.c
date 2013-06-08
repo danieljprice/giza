@@ -98,6 +98,7 @@ giza_vector (int n, int m, const double* horizontal, const double* vertical,
           {
              x = (double) i + 0.5;
              y = (double) j + 0.5;
+ 	     cairo_matrix_transform_point (&mat, &x, &y);
 
 	     if (position < 0)
 	       {
@@ -120,8 +121,6 @@ giza_vector (int n, int m, const double* horizontal, const double* vertical,
 	         x2 = x1 + horizontal[j*n+i] * dscale;
 	         y2 = y1 + vertical[j*n+i] * dscale;
 	       }
-	     cairo_matrix_transform_point (&mat, &x1, &y1);
-	     cairo_matrix_transform_point (&mat, &x2, &y2);
 	     giza_arrow (x1, y1, x2, y2);
 	 }
        }
