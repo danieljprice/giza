@@ -107,7 +107,7 @@ OSTYPE=${shell uname}
 #--libpgplot needs to be linked against the
 #  library from the Fortran compiler used
 #
-FLIBS= -L/usr/local/lib/x86_64/ -lgfortran
+FLIBS= -L/usr/local/gfortran/lib/ -lgfortran
 
 LIBEXT=.a
 
