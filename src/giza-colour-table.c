@@ -219,10 +219,9 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
 	}
     }
 
-   /* this should never happen */
+   /* this should never happen (but DOES if pos is NaN or otherwise ill-defined) */
    if (*red < 0.)
      {
-      _giza_error("giza_rgb_from_table","Internal error, colour not set");
       *red = 0.;
       *green = 0.;
       *blue = 0.;
