@@ -166,14 +166,16 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
     }
 
   /* check that the surface was created */
-  if (success)
-    return -1;
-
+  if (success) {
+     id = id - 1;
+     return -1;
+  }
   /* bind the created surface to our context */
   context = cairo_create (surface);
   if (!context)
     {
       _giza_error ("giza_open_device", "Could not create cairo surface.");
+      giza_close_device();
       return -1;
     }
 

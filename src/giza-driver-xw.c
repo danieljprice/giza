@@ -191,6 +191,7 @@ _giza_open_device_xw (void)
   if (!surface)
     {
       _giza_error ("_giza_open_device_xw", "Could not create surface");
+      XFreePixmap (XW.display, XW.pixmap);
       return 5;
     }
 
