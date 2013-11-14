@@ -99,7 +99,7 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
 /**
  * Device: giza_open_device_size
  *
- * Synopsis: Similar to giza_open_device, but allows one to specify the size of the device in centimeters
+ * Synopsis: Similar to giza_open_device, but allows one to specify the size of the device
  *
  * Input:
  *  -newDeviceName :- Specifies the type of device to be opened.
@@ -121,16 +121,9 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
 int
 giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
 {
-  if (id != 0) {
-     /*_giza_warning("giza_open_device", "previous device was not closed");*/
-     /*giza_close_device()*/;
-  }
-
   _giza_device_id += 1;
   id = _giza_get_internal_id(_giza_device_id);
   
-  /*printf("OPENING dev ID = %i w = %f x %f in units %i\n",id,width,height,units);*/
-
   /* Some general initialisation */
   Dev[id].pgNum = 0;
   Dev[id].type = GIZA_DEVICE_IV;
@@ -223,7 +216,6 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();
-  /*printf("debug: init font \n");*/
 
   giza_draw_background ();
   _giza_init_colour_table ();
@@ -240,9 +232,6 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   giza_set_viewport_default ();
   giza_set_line_width (1);
 
-  /*
-  printf("debug: init fill \n");
-  */
   _giza_init_fill ();
   _giza_init_band_style ();
   _giza_init_save ();
@@ -1073,8 +1062,6 @@ void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, cha
   char *ext = extension;
   _giza_trim(prefixtrim);
   _giza_trim(ext);
-
-  /*printf(" got prefix = \"%s\" extension=\"%s\" \n",prefixtrim,ext);*/
 
   if (!strstr(lprefix,lextens)) {
   /* Add the device extension if prefix string does not already contain it */
