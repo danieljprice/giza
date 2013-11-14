@@ -28,12 +28,13 @@
 #define GIZA_ZERO_FLOAT 2.e-30
 #define GIZA_ZERO_DOUBLE 3.e-300
 #define GIZA_DEG_TO_RAD 0.0174532925
+#define GIZA_MAX_DEVICES 128
 
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) < (Y) ? (Y) : (X))
 
 /* Structures: */
-/* Store variables relating to the current view-port */
+/* Store variables relating to the current viewport */
 
 /* Store variables relating to the current device */
 struct GIZA_Device
@@ -48,11 +49,11 @@ struct GIZA_Device
   int pgNum;
   int CurrentTrans;
   double defaultBackgroundAlpha;
-} Dev;
+  cairo_t *context;
+  cairo_surface_t *surface;
+} Dev[GIZA_MAX_DEVICES];
 
-cairo_t *context;
-cairo_surface_t *surface;
-
+int id;
 
 /* Store the current settings of giza */
 struct GIZA_Settings

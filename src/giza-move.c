@@ -46,7 +46,7 @@ giza_move (double xpt, double ypt)
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_move_to (context, xpt, ypt);
+  cairo_move_to (Dev[id].context, xpt, ypt);
   _giza_set_trans (oldTrans);
 }
 
@@ -86,7 +86,7 @@ giza_get_current_point (double *xpt, double *ypt)
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_get_current_point (context, xpt, ypt);
+  cairo_get_current_point (Dev[id].context, xpt, ypt);
   _giza_set_trans (oldTrans);
 }
 

@@ -52,34 +52,34 @@ int
 _giza_open_device_pdf (int vert)
 {
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
-  int length = strlen (Dev.prefix) + lenext;
+  int length = strlen (Dev[id].prefix) + lenext;
   char fileName[length + 1];
-  _giza_get_filename_for_device(fileName,Dev.prefix,0,GIZA_DEVICE_EXTENSION,1);
+  _giza_get_filename_for_device(fileName,Dev[id].prefix,0,GIZA_DEVICE_EXTENSION,1);
 
-  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
-  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
-  Dev.defaultBackgroundAlpha = 0.;
+  Dev[id].deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev[id].deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev[id].isInteractive       = GIZA_DEVICE_INTERACTIVE;
+  Dev[id].defaultBackgroundAlpha = 0.;
 
   /* set all device specific settings */
   if (_giza_sizeSpecified ())
     {
-      _giza_get_specified_size(&Dev.width, &Dev.height);
+      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
     }
   else if (vert)
     {
-      Dev.height = GIZA_DEFAULT_WIDTH;
-      Dev.width  = GIZA_DEFAULT_HEIGHT;
+      Dev[id].height = GIZA_DEFAULT_WIDTH;
+      Dev[id].width  = GIZA_DEFAULT_HEIGHT;
     }
   else
     {
-      Dev.width  = GIZA_DEFAULT_WIDTH;
-      Dev.height = GIZA_DEFAULT_HEIGHT;
+      Dev[id].width  = GIZA_DEFAULT_WIDTH;
+      Dev[id].height = GIZA_DEFAULT_HEIGHT;
     }
 
-  surface = cairo_pdf_surface_create (fileName, Dev.width, Dev.height);
+  Dev[id].surface = cairo_pdf_surface_create (fileName, Dev[id].width, Dev[id].height);
 
-  if (!surface)
+  if (!Dev[id].surface)
     {
       _giza_error ("giza_open_device_pdf", "Could not create cairo surface");
       return -1;
@@ -93,7 +93,7 @@ _giza_open_device_pdf (int vert)
 void
 _giza_flush_device_pdf (void)
 {
-  cairo_surface_flush (surface);
+  cairo_surface_flush (Dev[id].surface);
 }
 
 /**
@@ -102,7 +102,7 @@ _giza_flush_device_pdf (void)
 void
 _giza_change_page_pdf (void)
 {
-  cairo_show_page (context);
+  cairo_show_page (Dev[id].context);
 }
 
 /**
@@ -113,9 +113,9 @@ _giza_change_page_pdf (void)
 void
 _giza_close_device_pdf (void)
 {
-  cairo_surface_finish (surface);
-  cairo_status_t status = cairo_surface_status (surface);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
   if (status != CAIRO_STATUS_SUCCESS)
      _giza_error("giza_close_device_pdf",cairo_status_to_string(status));
-  cairo_surface_destroy (surface);
+  cairo_surface_destroy (Dev[id].surface);
 }

@@ -45,7 +45,7 @@ giza_circle (double x, double y, double r)
 
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  cairo_arc (context, x, y, r, 0., 2 * M_PI);
+  cairo_arc (Dev[id].context, x, y, r, 0., 2 * M_PI);
 
   _giza_fill ();
 

@@ -46,7 +46,7 @@ giza_draw (double xpt, double ypt)
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_line_to (context, xpt, ypt);
+  cairo_line_to (Dev[id].context, xpt, ypt);
   _giza_stroke ();
 
   if (!Sets.buf)

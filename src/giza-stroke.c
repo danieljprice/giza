@@ -44,6 +44,6 @@ _giza_stroke (void)
   giza_get_line_style (&ls);
   giza_set_line_style (ls);
 
-  cairo_stroke (context);
+  cairo_stroke (Dev[id].context);
   _giza_set_trans (oldTrans);
 }

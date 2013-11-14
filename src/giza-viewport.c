@@ -85,13 +85,13 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
     }
 
   _giza_set_trans (GIZA_TRANS_NORM);
-  cairo_reset_clip (context);
-  cairo_rectangle (context, VP.xmin, VP.ymin, VP.xmax - VP.xmin, VP.ymax - VP.ymin);
+  cairo_reset_clip (Dev[id].context);
+  cairo_rectangle (Dev[id].context, VP.xmin, VP.ymin, VP.xmax - VP.xmin, VP.ymax - VP.ymin);
 
   int clip;
   giza_get_clipping(&clip);
   if (clip)
-    cairo_clip (context);
+    cairo_clip (Dev[id].context);
 
   giza_set_window(Win.xmin,Win.xmax,Win.ymin,Win.ymax);
 
@@ -153,8 +153,8 @@ giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
     case GIZA_UNITS_DEVICE:
     case GIZA_UNITS_PIXELS:
       _giza_set_trans (GIZA_TRANS_NORM);
-      cairo_user_to_device (context, x1, &ymin);
-      cairo_user_to_device (context, x2, &ymax);
+      cairo_user_to_device (Dev[id].context, x1, &ymin);
+      cairo_user_to_device (Dev[id].context, x2, &ymax);
       /* y direction is done differently, because
          cairo counts 0,0 as the top left of the
          pixmap in device units, whereas we want it to be the
@@ -173,22 +173,22 @@ giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
    switch (units)
    {
    case GIZA_UNITS_PIXELS:
-      *x1 = *x1 / Dev.deviceUnitsPerPixel;
-      *x2 = *x2 / Dev.deviceUnitsPerPixel;
-      *y1 = *y1 / Dev.deviceUnitsPerPixel;
-      *y2 = *y2 / Dev.deviceUnitsPerPixel;
+      *x1 = *x1 / Dev[id].deviceUnitsPerPixel;
+      *x2 = *x2 / Dev[id].deviceUnitsPerPixel;
+      *y1 = *y1 / Dev[id].deviceUnitsPerPixel;
+      *y2 = *y2 / Dev[id].deviceUnitsPerPixel;
       break;
    case GIZA_UNITS_MM:
-      *x1 = *x1 / Dev.deviceUnitsPermm;
-      *x2 = *x2 / Dev.deviceUnitsPermm;
-      *y1 = *y1 / Dev.deviceUnitsPermm;
-      *y2 = *y2 / Dev.deviceUnitsPermm;
+      *x1 = *x1 / Dev[id].deviceUnitsPermm;
+      *x2 = *x2 / Dev[id].deviceUnitsPermm;
+      *y1 = *y1 / Dev[id].deviceUnitsPermm;
+      *y2 = *y2 / Dev[id].deviceUnitsPermm;
       break;
    case GIZA_UNITS_INCHES:
-      *x1 = *x1 / Dev.deviceUnitsPermm / 25.4;
-      *x2 = *x2 / Dev.deviceUnitsPermm / 25.4;
-      *y1 = *y1 / Dev.deviceUnitsPermm / 25.4;
-      *y2 = *y2 / Dev.deviceUnitsPermm / 25.4;
+      *x1 = *x1 / Dev[id].deviceUnitsPermm / 25.4;
+      *x2 = *x2 / Dev[id].deviceUnitsPermm / 25.4;
+      *y1 = *y1 / Dev[id].deviceUnitsPermm / 25.4;
+      *y2 = *y2 / Dev[id].deviceUnitsPermm / 25.4;
       break;
    default:
      break;
@@ -257,8 +257,8 @@ giza_set_viewport_inches (double xleftin, double xrightin, double ybottomin, dou
   double xleft,xright,ybottom,ytop;
   double widthmm, heightmm;
   
-  widthmm  = Dev.width  / Dev.deviceUnitsPermm;
-  heightmm = Dev.height / Dev.deviceUnitsPermm;
+  widthmm  = Dev[id].width  / Dev[id].deviceUnitsPermm;
+  heightmm = Dev[id].height / Dev[id].deviceUnitsPermm;
   
   xleft   = xleftin   * 25.4 / widthmm;
   xright  = xrightin  * 25.4 / widthmm;

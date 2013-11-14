@@ -80,7 +80,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
   } else {
      modein = 0;
   }
-  cairo_set_source_rgba(context,0.6,0.6,0.6,1.0);
+  cairo_set_source_rgba(Dev[id].context,0.6,0.6,0.6,1.0);
 
   while(err == 0) {
      if (*npts > 0) {

@@ -127,17 +127,17 @@ _giza_fill (void)
         }
       lw = 1.5;
       angle = -pi*_giza_hatch_angle/180.;
-      cairo_save(context);
+      cairo_save(Dev[id].context);
       /* clip plotting to within the fill area
        * but do not (yet) destroy the fill area */
-      cairo_clip_preserve(context);
+      cairo_clip_preserve(Dev[id].context);
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 4, 0)
-      cairo_clip_extents(context, &xmin,&ymin,&xmax,&ymax);
+      cairo_clip_extents(Dev[id].context, &xmin,&ymin,&xmax,&ymax);
 #else
       xmin = 0.;
-      xmax = Dev.width;
+      xmax = Dev[id].width;
       ymin = 0.;
-      ymax = Dev.height;
+      ymax = Dev[id].height;
 #endif
       dx = xmax - xmin;
       dy = ymax - ymin;
@@ -150,17 +150,17 @@ _giza_fill (void)
       ymin = y0 - 0.5*dr;
       ymax = y0 + 0.5*dr;
 
-      cairo_identity_matrix(context);
+      cairo_identity_matrix(Dev[id].context);
       /* fill with a transparent background */
       giza_get_colour_representation_alpha(GIZA_BACKGROUND_COLOUR,&ri,&gi,&bi,&alphai);
-      cairo_set_source_rgba(context, ri, gi, bi, 0.);
-      cairo_fill(context);
+      cairo_set_source_rgba(Dev[id].context, ri, gi, bi, 0.);
+      cairo_fill(Dev[id].context);
 
       /* draw lines making the pattern with current colour index */
       giza_get_colour_index(&ci);
       giza_get_colour_representation_alpha(ci,&ri,&gi,&bi,&alphai);
-      cairo_set_source_rgba(context, ri, gi, bi, alphai);
-      cairo_set_line_width(context, lw);
+      cairo_set_source_rgba(Dev[id].context, ri, gi, bi, alphai);
+      cairo_set_line_width(Dev[id].context, lw);
 
       xoffset = hatch_size*_giza_hatch_phase;
       nlines = (int) (xmax - xmin)/hatch_size + 1;
@@ -172,12 +172,12 @@ _giza_fill (void)
              x = xmin + (i-1)*hatch_size + xoffset;
              y = ymin;
              _giza_rotate_pos(&x,&y,angle,x0,y0);
-             cairo_move_to(context, x, y);
+             cairo_move_to(Dev[id].context, x, y);
 
              x = xmin + (i-1)*hatch_size + xoffset;
              y = ymax;
              _giza_rotate_pos(&x,&y,angle,x0,y0);
-             cairo_line_to(context, x, y);
+             cairo_line_to(Dev[id].context, x, y);
             }
         }
 
@@ -187,19 +187,19 @@ _giza_fill (void)
           x = xmin + xoffset;
           y = ymin + (i-1)*hatch_size;
           _giza_rotate_pos(&x,&y,angle,x0,y0);
-          cairo_move_to(context, x, y);
+          cairo_move_to(Dev[id].context, x, y);
 
           x = xmax + xoffset;
           y = ymin + (i-1)*hatch_size;
           _giza_rotate_pos(&x,&y,angle,x0,y0);
-          cairo_line_to(context, x, y);
+          cairo_line_to(Dev[id].context, x, y);
         }
 
-      cairo_stroke(context);
-      cairo_restore(context);
+      cairo_stroke(Dev[id].context);
+      cairo_restore(Dev[id].context);
       break;
     case GIZA_FILL_SOLID:
-      cairo_fill (context);
+      cairo_fill (Dev[id].context);
       break;
     case GIZA_FILL_HOLLOW:
       _giza_stroke ();

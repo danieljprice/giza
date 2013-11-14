@@ -76,12 +76,12 @@ giza_function_y (double (*func)(double *y), int n, double ymin, double ymax, int
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  cairo_move_to(context,xpt0,ymin);
+  cairo_move_to(Dev[id].context,xpt0,ymin);
   for (i = 1; i <= n; i++)
      {
         ypt = ymin + i*dy;
         xpt = func(&ypt);
-        cairo_line_to(context,xpt,ypt);
+        cairo_line_to(Dev[id].context,xpt,ypt);
      }
 
   _giza_stroke ();
@@ -141,12 +141,12 @@ giza_function_y_float (float (*func)(float *y), int n, float ymin, float ymax, i
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  cairo_move_to(context,(double) xpt0,(double) ymin);
+  cairo_move_to(Dev[id].context,(double) xpt0,(double) ymin);
   for (i = 1; i <= n; i++)
      {
         ypt = ymin + i*dy;
         xpt = func(&ypt);
-        cairo_line_to(context,(double) xpt,(double) ypt);
+        cairo_line_to(Dev[id].context,(double) xpt,(double) ypt);
      }
 
   _giza_stroke ();

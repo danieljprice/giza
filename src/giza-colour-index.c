@@ -57,7 +57,7 @@ giza_set_colour_index (int ci)
 
   _giza_ci = ci;
 
-  cairo_set_source_rgba (context, colourIndex[ci][0],
+  cairo_set_source_rgba (Dev[id].context, colourIndex[ci][0],
 			 colourIndex[ci][1], colourIndex[ci][2],
 			 colourIndex[ci][3]);
 
@@ -148,7 +148,7 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
    */
   if (ci == _giza_ci)
      {
-       cairo_set_source_rgba (context, colourIndex[ci][0],
+       cairo_set_source_rgba (Dev[id].context, colourIndex[ci][0],
 			 colourIndex[ci][1], colourIndex[ci][2],
 			 colourIndex[ci][3]);
      }
@@ -399,7 +399,7 @@ _giza_init_colour_index (void)
   giza_set_colour_palette(GIZA_COLOUR_PALETTE_DEFAULT);
 
   /* All alpha default to 1 */
-  colourIndex[0][3] = Dev.defaultBackgroundAlpha;
+  colourIndex[0][3] = Dev[id].defaultBackgroundAlpha;
   int i;
   for (i = GIZA_COLOUR_INDEX_MIN + 1; i <= GIZA_COLOUR_INDEX_MAX; ++i)
     {

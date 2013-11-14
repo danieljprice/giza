@@ -55,12 +55,12 @@ giza_ptext (double x, double y, double angle, double just, const char *text)
   double ch;
   giza_get_character_height (&ch);
 
-  cairo_save (context);
+  cairo_save (Dev[id].context);
 
   _giza_expand_clipping ();
 
   /* change x and y to device coords */
-  /*cairo_user_to_device (context, &x, &y); */
+  /*cairo_user_to_device (Dev[id].context, &x, &y); */
 
   double xbox[4], ybox[4];
   giza_qtext (x, y, angle, just, text, xbox, ybox);
@@ -77,19 +77,19 @@ giza_ptext (double x, double y, double angle, double just, const char *text)
 
   /* change the current trans to world coords */
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_move_to (context, xbox[0], ybox[0]);
+  cairo_move_to (Dev[id].context, xbox[0], ybox[0]);
 
   /* Set the rotation matrix */
   double theta = -angle * GIZA_DEG_TO_RAD;
   Sets.fontAngle = theta;
   cairo_matrix_t mat;
-  cairo_get_font_matrix (context, &mat);
+  cairo_get_font_matrix (Dev[id].context, &mat);
   cairo_matrix_rotate (&mat, theta);
-  cairo_set_font_matrix (context, &mat);
+  cairo_set_font_matrix (Dev[id].context, &mat);
 
   _giza_parse_string (text, xbox, ybox, _giza_action_print);
 
-  cairo_restore (context);
+  cairo_restore (Dev[id].context);
 
   _giza_stroke ();
 

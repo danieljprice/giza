@@ -128,7 +128,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
 		     affine[4], affine[5]);
-  cairo_transform (context, &mat);
+  cairo_transform (Dev[id].context, &mat);
 
   /* allocate data for the pixmap */
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
@@ -183,9 +183,9 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 						width, height, stride);
 
   /* paint the pixmap to the primary surface */
-  cairo_set_source_surface (context, pixmap, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (context), cairoextendtype);
-  cairo_paint (context);
+  cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
+  cairo_pattern_set_extend (cairo_get_source (Dev[id].context), cairoextendtype);
+  cairo_paint (Dev[id].context);
 
   /* clean up and restore settings */
   _giza_set_trans (oldTrans);
@@ -289,7 +289,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   cairo_matrix_init (&mat, (double) affine[0], (double) affine[1],
 		     (double) affine[2], (double) affine[3],
 		     (double) affine[4], (double) affine[5]);
-  cairo_transform (context, &mat);
+  cairo_transform (Dev[id].context, &mat);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
   stride = cairo_format_stride_for_width (format, width);
@@ -340,9 +340,9 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   pixmap = cairo_image_surface_create_for_data (pixdata, format,
 						width, height, stride);
 
-  cairo_set_source_surface (context, pixmap, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (context), cairoextendtype);
-  cairo_paint (context);
+  cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
+  cairo_pattern_set_extend (cairo_get_source (Dev[id].context), cairoextendtype);
+  cairo_paint (Dev[id].context);
 
   _giza_set_trans (oldTrans);
   giza_set_colour_index (oldCi);
@@ -525,7 +525,7 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   double dypix = (ymax - ymin)/((double) height);
   cairo_matrix_init (&mat, dxpix, 0.,0., dypix,
 		     xmin, ymin);
-  cairo_transform (context, &mat);
+  cairo_transform (Dev[id].context, &mat);
 
   /* allocate data for the pixmap */
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
@@ -553,9 +553,9 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
 						width, height, stride);
 
   /* paint the pixmap to the primary surface */
-  cairo_set_source_surface (context, pixmap, 0, 0);
-  cairo_pattern_set_extend (cairo_get_source (context), cairoextendtype);
-  cairo_paint (context);
+  cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
+  cairo_pattern_set_extend (cairo_get_source (Dev[id].context), cairoextendtype);
+  cairo_paint (Dev[id].context);
 
   /* clean up and restore settings */
   _giza_set_trans (oldTrans);

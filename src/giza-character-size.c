@@ -52,10 +52,10 @@ giza_set_character_height (double ch)
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  double chDevice = ch * Dev.height * .027;
-  cairo_set_font_size (context, chDevice);
+  double chDevice = ch * Dev[id].height * .027;
+  cairo_set_font_size (Dev[id].context, chDevice);
   /* query font extents and store this */
-  cairo_font_extents (context, &Sets.fontExtents);
+  cairo_font_extents (Dev[id].context, &Sets.fontExtents);
   _giza_ch = ch;
 
   _giza_set_trans (oldTrans);
@@ -134,7 +134,7 @@ giza_get_character_size (int units, double *heightx, double *heighty)
     {
     case GIZA_UNITS_NORMALIZED:
       _giza_set_trans (GIZA_TRANS_NORM);
-      cairo_device_to_user_distance (context, heightx, heighty);
+      cairo_device_to_user_distance (Dev[id].context, heightx, heighty);
       *heighty = -*heighty;
       break;
     case GIZA_UNITS_MM:
@@ -142,17 +142,17 @@ giza_get_character_size (int units, double *heightx, double *heighty)
     case GIZA_UNITS_PIXELS:
     case GIZA_UNITS_DEVICE:
       _giza_set_trans (GIZA_TRANS_IDEN);
-      cairo_device_to_user_distance (context, heightx, heighty);
+      cairo_device_to_user_distance (Dev[id].context, heightx, heighty);
       break;
     case GIZA_UNITS_WORLD:
       _giza_set_trans (GIZA_TRANS_WORLD);
-      cairo_device_to_user_distance (context, heightx, heighty);
+      cairo_device_to_user_distance (Dev[id].context, heightx, heighty);
       *heighty = -*heighty;
       break;
     default:
       _giza_warning ("giza_get_character_size", "Invalid units, using normalised device units.");
       _giza_set_trans (GIZA_TRANS_NORM);
-      cairo_device_to_user_distance (context, heightx, heighty);
+      cairo_device_to_user_distance (Dev[id].context, heightx, heighty);
       *heighty = -*heighty;
       break;
     }
@@ -161,16 +161,16 @@ giza_get_character_size (int units, double *heightx, double *heighty)
    switch (units)
    {
    case GIZA_UNITS_PIXELS:
-      *heightx = *heightx * Dev.deviceUnitsPerPixel;
-      *heighty = *heighty * Dev.deviceUnitsPerPixel;
+      *heightx = *heightx * Dev[id].deviceUnitsPerPixel;
+      *heighty = *heighty * Dev[id].deviceUnitsPerPixel;
       break;
    case GIZA_UNITS_MM:
-      *heightx = *heightx * Dev.deviceUnitsPermm;
-      *heighty = *heighty * Dev.deviceUnitsPermm;
+      *heightx = *heightx * Dev[id].deviceUnitsPermm;
+      *heighty = *heighty * Dev[id].deviceUnitsPermm;
       break;
    case GIZA_UNITS_INCHES:
-      *heightx = *heightx * Dev.deviceUnitsPermm/25.4;
-      *heighty = *heighty * Dev.deviceUnitsPermm/25.4;
+      *heightx = *heightx * Dev[id].deviceUnitsPermm/25.4;
+      *heighty = *heighty * Dev[id].deviceUnitsPermm/25.4;
       break;
    default:
      break;
@@ -228,13 +228,13 @@ _giza_scale_character_size (double scalefac)
   _giza_set_trans (GIZA_TRANS_IDEN);
 
   cairo_matrix_t mat;
-  cairo_get_font_matrix (context, &mat);
+  cairo_get_font_matrix (Dev[id].context, &mat);
 
 /*  _giza_ch = scalefac * _giza_ch; */
 
   cairo_matrix_scale (&mat, scalefac, scalefac);
-  cairo_set_font_matrix (context, &mat);
-  cairo_font_extents (context, &Sets.fontExtents);
+  cairo_set_font_matrix (Dev[id].context, &mat);
+  cairo_font_extents (Dev[id].context, &Sets.fontExtents);
 
   _giza_set_trans (oldTrans);
 

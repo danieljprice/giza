@@ -49,11 +49,11 @@ giza_rectangle (double x1, double x2, double y1, double y2)
 
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  cairo_move_to (context, x1, y1);
-  cairo_line_to (context, x2, y1);
-  cairo_line_to (context, x2, y2);
-  cairo_line_to (context, x1, y2);
-  cairo_line_to (context, x1, y1);
+  cairo_move_to (Dev[id].context, x1, y1);
+  cairo_line_to (Dev[id].context, x2, y1);
+  cairo_line_to (Dev[id].context, x2, y2);
+  cairo_line_to (Dev[id].context, x1, y2);
+  cairo_line_to (Dev[id].context, x1, y1);
 
   _giza_fill ();
 
@@ -106,15 +106,15 @@ giza_rectangle_rounded (double x1, double x2, double y1, double y2, double radiu
   if (radius > 0.5*width) radius = 0.5*width;
   
   /* Adapted from: http://www.mono-project.com/Mono.Cairo_Cookbook */
-  cairo_move_to (context, x, y + radius);
-  cairo_arc (context,x + radius, y + radius, radius, M_PI, -0.5*M_PI);
-  cairo_line_to (context,x + width - radius, y);
-  cairo_arc (context,x + width - radius, y + radius, radius, -0.5*M_PI, 0.);
-  cairo_line_to	(context,x + width, y + height - radius);
-  cairo_arc (context,x + width - radius, y + height - radius, radius, 0., 0.5*M_PI);
-  cairo_line_to (context,x + radius, y + height);
-  cairo_arc (context,x + radius, y + height - radius, radius, 0.5*M_PI, M_PI);
-  cairo_close_path (context);
+  cairo_move_to (Dev[id].context, x, y + radius);
+  cairo_arc (Dev[id].context,x + radius, y + radius, radius, M_PI, -0.5*M_PI);
+  cairo_line_to (Dev[id].context,x + width - radius, y);
+  cairo_arc (Dev[id].context,x + width - radius, y + radius, radius, -0.5*M_PI, 0.);
+  cairo_line_to	(Dev[id].context,x + width, y + height - radius);
+  cairo_arc (Dev[id].context,x + width - radius, y + height - radius, radius, 0., 0.5*M_PI);
+  cairo_line_to (Dev[id].context,x + radius, y + height);
+  cairo_arc (Dev[id].context,x + radius, y + height - radius, radius, 0.5*M_PI, M_PI);
+  cairo_close_path (Dev[id].context);
 
   _giza_fill ();
 

@@ -56,22 +56,22 @@ giza_qtext (double x, double y, double angle, double just, const char *text, dou
   double ch;
   giza_get_character_height (&ch);
 
-  cairo_save (context);
+  cairo_save (Dev[id].context);
 
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_user_to_device (context, &x, &y);
+  cairo_user_to_device (Dev[id].context, &x, &y);
 
   /* Set the rotation matrix */
   /*double theta = -angle * GIZA_DEG_TO_RAD; */
   /*Sets.fontAngle = theta; */
   /*cairo_matrix_t mat; */
-  /*cairo_get_font_matrix (context, &mat); */
+  /*cairo_get_font_matrix (Dev[id].context, &mat); */
   /*cairo_matrix_rotate (&mat, theta); */
-  /*cairo_set_font_matrix (context, &mat); */
+  /*cairo_set_font_matrix (Dev[id].context, &mat); */
 
   double width = 0., height = 0.;
   _giza_set_trans (GIZA_TRANS_IDEN);
-  cairo_move_to (context, 0., 0.);
+  cairo_move_to (Dev[id].context, 0., 0.);
   _giza_parse_string (text, &width, &height, _giza_action_get_size);
 
   double cosangle = cos(angle * GIZA_DEG_TO_RAD);
@@ -87,12 +87,12 @@ giza_qtext (double x, double y, double angle, double just, const char *text, dou
   ybox[2] = ybox[3] - height * cosangle;
 
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_device_to_user (context, &xbox[0], &ybox[0]);
-  cairo_device_to_user (context, &xbox[1], &ybox[1]);
-  cairo_device_to_user (context, &xbox[2], &ybox[2]);
-  cairo_device_to_user (context, &xbox[3], &ybox[3]);
+  cairo_device_to_user (Dev[id].context, &xbox[0], &ybox[0]);
+  cairo_device_to_user (Dev[id].context, &xbox[1], &ybox[1]);
+  cairo_device_to_user (Dev[id].context, &xbox[2], &ybox[2]);
+  cairo_device_to_user (Dev[id].context, &xbox[3], &ybox[3]);
 
-  cairo_restore (context);
+  cairo_restore (Dev[id].context);
 
   /* restore the original character height (and font matrix) */
   giza_set_character_height (ch);
@@ -149,10 +149,10 @@ giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
   double ch;
   giza_get_character_height (&ch);
 
-  cairo_save (context);
+  cairo_save (Dev[id].context);
 
   _giza_set_trans (GIZA_TRANS_IDEN);
-  cairo_move_to (context, 0., 0.);
+  cairo_move_to (Dev[id].context, 0., 0.);
   _giza_parse_string (text, xlen, ylen, _giza_action_get_size);
 
   /* got text length in device units: convert as necessary
@@ -161,35 +161,35 @@ giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
   switch (units)
     {
     case GIZA_UNITS_NORMALIZED:
-      *xlen = *xlen / Dev.width;
-      *ylen = *ylen / Dev.height;
+      *xlen = *xlen / Dev[id].width;
+      *ylen = *ylen / Dev[id].height;
       break;
     case GIZA_UNITS_PIXELS:
-      *xlen = *xlen * Dev.deviceUnitsPerPixel;
-      *ylen = *ylen * Dev.deviceUnitsPerPixel;
+      *xlen = *xlen * Dev[id].deviceUnitsPerPixel;
+      *ylen = *ylen * Dev[id].deviceUnitsPerPixel;
       break;
     case GIZA_UNITS_DEVICE:
       break;
     case GIZA_UNITS_MM:
-      *xlen = *xlen * Dev.deviceUnitsPermm;
-      *ylen = *ylen * Dev.deviceUnitsPermm;
+      *xlen = *xlen * Dev[id].deviceUnitsPermm;
+      *ylen = *ylen * Dev[id].deviceUnitsPermm;
       break;
     case GIZA_UNITS_INCHES:
-      *xlen = *xlen * Dev.deviceUnitsPermm/25.4;
-      *ylen = *ylen * Dev.deviceUnitsPermm/25.4;
+      *xlen = *xlen * Dev[id].deviceUnitsPermm/25.4;
+      *ylen = *ylen * Dev[id].deviceUnitsPermm/25.4;
       break;
     case GIZA_UNITS_WORLD:
       _giza_set_trans (GIZA_TRANS_NORM);
-      cairo_user_to_device_distance (context, xlen, ylen);
+      cairo_user_to_device_distance (Dev[id].context, xlen, ylen);
       break;
     default:
       _giza_warning ("giza_get_viewport", "Invalid units, using normalised device units.");
-      *xlen = *xlen / Dev.width;
-      *ylen = *ylen / Dev.height;
+      *xlen = *xlen / Dev[id].width;
+      *ylen = *ylen / Dev[id].height;
       break;
     }
 
-  cairo_restore (context);
+  cairo_restore (Dev[id].context);
 
   /* restore the original character height (and font matrix) */
   giza_set_character_height (ch);

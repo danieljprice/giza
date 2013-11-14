@@ -54,7 +54,7 @@ giza_set_line_style (int ls)
   if (!_giza_check_device_ready ("giza_set_line_style"))
     return;
 
-  _giza_set_line_style (ls, context);
+  _giza_set_line_style (ls, Dev[id].context);
   _giza_line_style = ls;
 }
 
@@ -98,28 +98,28 @@ _giza_set_line_style (int ls, cairo_t *ct)
     case GIZA_LS_DOT:
       _giza_n = 2;
       giza_get_line_width (&lw);
-      _giza_dashes[0] = Dev.deviceUnitsPermm * 0.25 * lw;
-      _giza_dashes[1] = Dev.deviceUnitsPermm * lw;
+      _giza_dashes[0] = Dev[id].deviceUnitsPermm * 0.25 * lw;
+      _giza_dashes[1] = Dev[id].deviceUnitsPermm * lw;
       break;
     case GIZA_LS_DASH_DOT:
       _giza_n = 4;
       giza_get_line_width (&lw);
       _giza_dashes[0] = longDash; /* dash */
-      _giza_dashes[1] = Dev.deviceUnitsPermm * lw; /* space */
-      _giza_dashes[2] = Dev.deviceUnitsPermm * 0.25 * lw; /* dot */
-      _giza_dashes[3] = Dev.deviceUnitsPermm * lw; /* space */
+      _giza_dashes[1] = Dev[id].deviceUnitsPermm * lw; /* space */
+      _giza_dashes[2] = Dev[id].deviceUnitsPermm * 0.25 * lw; /* dot */
+      _giza_dashes[3] = Dev[id].deviceUnitsPermm * lw; /* space */
       break;
     case GIZA_LS_DASH_DOT_DOT_DOT:
       _giza_n = 8;
       giza_get_line_width (&lw);
       _giza_dashes[0] = longDash; /* dash */
-      _giza_dashes[1] = Dev.deviceUnitsPermm * lw; /* space */
-      _giza_dashes[2] = Dev.deviceUnitsPermm * 0.25 * lw; /* dot */
-      _giza_dashes[3] = Dev.deviceUnitsPermm * lw; /* space */
-      _giza_dashes[4] = Dev.deviceUnitsPermm * 0.25 * lw; /* dot */
-      _giza_dashes[5] = Dev.deviceUnitsPermm * lw; /* space */
-      _giza_dashes[6] = Dev.deviceUnitsPermm * 0.25 * lw; /* dot */
-      _giza_dashes[7] = Dev.deviceUnitsPermm * lw; /* space */
+      _giza_dashes[1] = Dev[id].deviceUnitsPermm * lw; /* space */
+      _giza_dashes[2] = Dev[id].deviceUnitsPermm * 0.25 * lw; /* dot */
+      _giza_dashes[3] = Dev[id].deviceUnitsPermm * lw; /* space */
+      _giza_dashes[4] = Dev[id].deviceUnitsPermm * 0.25 * lw; /* dot */
+      _giza_dashes[5] = Dev[id].deviceUnitsPermm * lw; /* space */
+      _giza_dashes[6] = Dev[id].deviceUnitsPermm * 0.25 * lw; /* dot */
+      _giza_dashes[7] = Dev[id].deviceUnitsPermm * lw; /* space */
       break;
     default:
       _giza_warning ("giza_set_line_style", "Invalid line style, using solid");

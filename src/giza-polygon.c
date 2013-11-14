@@ -52,15 +52,15 @@ giza_polygon (int n, const double *xpts, const double *ypts)
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_move_to (context, xpts[0], ypts[0]);
+  cairo_move_to (Dev[id].context, xpts[0], ypts[0]);
 
   int i;
   for (i = 1; i < n; i++)
     {
-      cairo_line_to(context,xpts[i],ypts[i]);
+      cairo_line_to(Dev[id].context,xpts[i],ypts[i]);
     }
 
-  cairo_close_path(context);
+  cairo_close_path(Dev[id].context);
   _giza_fill ();
   _giza_stroke ();
   if (!Sets.buf)
@@ -89,15 +89,15 @@ giza_polygon_float (int n, const float *xpts, const float *ypts)
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
-  cairo_move_to (context, (double) xpts[n-1],(double) ypts[n-1]);
+  cairo_move_to (Dev[id].context, (double) xpts[n-1],(double) ypts[n-1]);
 
   int i;
   for (i = 0; i < n; i++)
     {
-      cairo_line_to(context,(double) xpts[i],(double) ypts[i]);
+      cairo_line_to(Dev[id].context,(double) xpts[i],(double) ypts[i]);
     }
 
-  cairo_close_path(context);
+  cairo_close_path(Dev[id].context);
   _giza_fill ();
   _giza_stroke ();
   if (!Sets.buf)

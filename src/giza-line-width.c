@@ -52,11 +52,11 @@ giza_set_line_width (double lw)
   _giza_lw = lw;
 
   /* adjust the line width so it is uniform across devices and 1 is a good size */
-  double lwDevice = lw * Dev.deviceUnitsPermm * 0.25;
+  double lwDevice = lw * Dev[id].deviceUnitsPermm * 0.25;
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans(GIZA_TRANS_IDEN);
-  cairo_set_line_width (context, lwDevice);
+  cairo_set_line_width (Dev[id].context, lwDevice);
   _giza_set_trans (oldTrans);
 }
 

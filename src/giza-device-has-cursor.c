@@ -37,5 +37,5 @@
 int
 giza_device_has_cursor (void)
 {
-  return Dev.isInteractive;
+  return Dev[id].isInteractive;
 }

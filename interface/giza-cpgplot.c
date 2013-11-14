@@ -520,12 +520,7 @@ int cpgopen(const char *device)
  /*  PGPLOT gets pgopen = id on success
   *  and <= 0 for errors
   */
- if (pgopen!=0) {
-    pgopen = -1;
- } else {
-    pgopen = 1;
- }
- return pgopen;
+ return pgopen + 1;
 
 }
 
@@ -1026,11 +1021,11 @@ void cpgsitf(int itf)
 
 /***************************************************************
  * cpgslct -- select an open graphics device
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgslct(int id)
 {
-
+  giza_select_device(id-1);
 }
 
 /***************************************************************

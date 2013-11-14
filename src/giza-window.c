@@ -81,8 +81,8 @@ giza_set_window (double x1, double x2, double y1, double y2)
   cairo_matrix_init (&(Win.userCoords), horiScale, 0, 0, vertScale, horiTrans, vertTrans);
   cairo_matrix_multiply(&(Win.userCoords),&(Win.userCoords),&(Win.normCoords));
 
-/*  cairo_transform (context, &(Win.userCoords)); */
-/*  cairo_get_matrix (context, &(Win.userCoords)); */
+/*  cairo_transform (Dev[id].context, &(Win.userCoords)); */
+/*  cairo_get_matrix (Dev[id].context, &(Win.userCoords)); */
 
   _giza_set_trans (oldTrans);
 }
@@ -135,8 +135,8 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
   double scale, scalex, scaley, newWidth, newHeight;
 
   /* Scale is Device units per World coords. */
-  scaley = (VP.ymax - VP.ymin) * Dev.height / yrange;
-  scalex = (VP.xmax - VP.xmin) * Dev.width /  xrange;
+  scaley = (VP.ymax - VP.ymin) * Dev[id].height / yrange;
+  scalex = (VP.xmax - VP.xmin) * Dev[id].width /  xrange;
   if (scaley < scalex)
     {
       scale = scaley;
@@ -148,15 +148,15 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
 
   /* Find the position of the new viewport relative to the centre of the old */
   /* Find the width of the new vp in normalised device coords */
-  if (Dev.width > 0) {
-     newWidth = scale * xrange / Dev.width;
+  if (Dev[id].width > 0) {
+     newWidth = scale * xrange / Dev[id].width;
      VP.xmin = (VP.xmax + VP.xmin - newWidth) * 0.5;
      VP.xmax = VP.xmin + newWidth;
   }
 
   /* Find the height of the new vp */
-  if (Dev.height > 0) {
-     newHeight = scale * yrange / Dev.height;
+  if (Dev[id].height > 0) {
+     newHeight = scale * yrange / Dev[id].height;
      VP.ymin = (VP.ymax + VP.ymin - newHeight) * 0.5;
      VP.ymax = VP.ymin + newHeight;
   }

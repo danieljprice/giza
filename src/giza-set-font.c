@@ -158,7 +158,7 @@ _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight
                            ft_face, (cairo_destroy_func_t) FT_Done_Face);
        
        /* set this as the current font face */
-       cairo_set_font_face(context,_giza_fontFace);
+       cairo_set_font_face(Dev[id].context,_giza_fontFace);
      }
 #endif
    /* If cairo version is new enough,
@@ -169,19 +169,19 @@ _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight
    if (!got_ftfont) 
      {
        _giza_fontFace = cairo_toy_font_face_create(font, slant, weight);
-       cairo_set_font_face(context, _giza_fontFace);
+       cairo_set_font_face(Dev[id].context, _giza_fontFace);
      }
 #else
    /*
     * For older versions of cairo, we must use
     * cairo_select_font_face
     */
-   cairo_select_font_face (context, font, slant, weight);
+   cairo_select_font_face (Dev[id].context, font, slant, weight);
 #endif
 
 /*   cairo_matrix_t mat;
    cairo_matrix_init_identity(&mat);
-   cairo_set_font_matrix (context, &mat);
+   cairo_set_font_matrix (Dev[id].context, &mat);
 */
    double oldCh;
    giza_get_character_height (&oldCh);

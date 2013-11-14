@@ -35,9 +35,9 @@ void _giza_action_get_size (const char *text, double *width, double *height)
 {
   if (strlen(text) <= 0) return;
   double newHeight, dummy;
-  cairo_get_current_point (context, &dummy, &newHeight);
+  cairo_get_current_point (Dev[id].context, &dummy, &newHeight);
   cairo_text_extents_t extents;
-  cairo_text_extents (context, text, &extents);
+  cairo_text_extents (Dev[id].context, text, &extents);
 
   dummy = newHeight;
   *width += extents.x_advance;
@@ -48,7 +48,7 @@ void _giza_action_get_size (const char *text, double *width, double *height)
 void _giza_action_print (const char *text, double *width, double *height)
 {
   if (strlen(text) > 0) {
-     cairo_show_text (context, text);
+     cairo_show_text (Dev[id].context, text);
   }
   *width = -1.;
   *height = -1.;
@@ -67,7 +67,7 @@ _giza_start_super (void)
   x = height * sin (Sets.fontAngle);
   y = -height * cos (Sets.fontAngle);
 
-  cairo_rel_move_to (context, x, y);
+  cairo_rel_move_to (Dev[id].context, x, y);
 
   /* DJP: we scale the character height relative to it's current size
    *    rather than setting the absolute height -- this preserves
@@ -93,7 +93,7 @@ _giza_stop_super (void)
   x = -height * sin (Sets.fontAngle);
   y = height * cos (Sets.fontAngle);
 
-  cairo_rel_move_to (context, x, y);
+  cairo_rel_move_to (Dev[id].context, x, y);
   _giza_set_trans (oldTrans);
 }
 
@@ -112,7 +112,7 @@ _giza_start_sub (void)
   x = height * sin (Sets.fontAngle);
   y = -height * cos (Sets.fontAngle);
 
-  cairo_rel_move_to (context, x, y);
+  cairo_rel_move_to (Dev[id].context, x, y);
 
   _giza_scale_character_size (GIZA_SCALE_SUBS);
   _giza_set_trans (oldTrans);
@@ -135,7 +135,7 @@ _giza_stop_sub (void)
   x = -height * sin (Sets.fontAngle);
   y = height * cos (Sets.fontAngle);
 
-  cairo_rel_move_to (context, x, y);
+  cairo_rel_move_to (Dev[id].context, x, y);
   _giza_set_trans (oldTrans);
 }
 

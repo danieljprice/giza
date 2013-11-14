@@ -44,9 +44,9 @@ giza_get_surface_size (double *x1, double *x2, double *y1, double *y2)
     return;
 
   *x1 = 0.;
-  *x2 = Dev.width;
+  *x2 = Dev[id].width;
   *y1 = 0.;
-  *y2 = Dev.height;
+  *y2 = Dev[id].height;
 }
 
 /**
@@ -63,7 +63,7 @@ giza_get_surface_size_float (float *x1, float *x2, float *y1, float *y2)
     return;
 
   *x1 = 0.;
-  *x2 = (float) Dev.width;
+  *x2 = (float) Dev[id].width;
   *y1 = 0.;
-  *y2 = (float) Dev.height;
+  *y2 = (float) Dev[id].height;
 }

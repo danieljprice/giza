@@ -45,21 +45,21 @@
 int
 _giza_open_device_null (void)
 {
-  Dev.deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.isInteractive    = GIZA_DEVICE_INTERACTIVE;
+  Dev[id].deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
+  Dev[id].isInteractive    = GIZA_DEVICE_INTERACTIVE;
 
   if (_giza_sizeSpecified ())
     {
-      _giza_get_specified_size(&Dev.width, &Dev.height);
+      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
     }
   else
     {
-      Dev.width  = GIZA_DEFAULT_WIDTH;
-      Dev.height = GIZA_DEFAULT_HEIGHT;
+      Dev[id].width  = GIZA_DEFAULT_WIDTH;
+      Dev[id].height = GIZA_DEFAULT_HEIGHT;
     }
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width, Dev.height);
-  if (!surface)
+  Dev[id].surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev[id].width, Dev[id].height);
+  if (!Dev[id].surface)
     {
       _giza_error ("_giza_open_device_null", "Could not create cairo surface");
       return -1;
@@ -70,7 +70,7 @@ _giza_open_device_null (void)
 void
 _giza_flush_device_null (void)
 {
-  cairo_surface_flush (surface);
+  cairo_surface_flush (Dev[id].surface);
 }
 
 /**
@@ -90,5 +90,5 @@ _giza_change_page_null (void)
 void
 _giza_close_device_null (void)
 {
-  cairo_surface_destroy (surface);
+  cairo_surface_destroy (Dev[id].surface);
 }

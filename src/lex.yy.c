@@ -2758,9 +2758,9 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* either draw the symbol or increment the width */
           if (*width < 0.) {
              double xp, yp;
-             cairo_get_current_point(context, &xp, &yp); /* current pen position */
+             cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
              _giza_draw_symbol_device(xp + 0.75*markerHeight, yp - 0.5*markerHeight, number);
-             cairo_move_to(context, xp + 1.25*markerHeight, yp); /* restore pen position */
+             cairo_move_to(Dev[id].context, xp + 1.25*markerHeight, yp); /* restore pen position */
 
           } else {
              /* return width if action is _giza_action_get_size */

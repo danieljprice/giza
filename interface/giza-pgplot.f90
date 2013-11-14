@@ -776,15 +776,8 @@ integer function PGOPEN (DEVICE)
 
 ! print*,'giza units mm = ',giza_units_mm
 ! pgopen = giza_open_device_size(device,'giza',11.0,8.5,giza_units_inches)
- pgopen = giza_open_device(device,'giza')
+ pgopen = giza_open_device(device,'giza') + 1
  
- !--PGPLOT gets pgopen = id on success
- !  and <= 0 for errors
- if (pgopen.ne.0) then
-    pgopen = -1
- else
-    pgopen = 1
- endif
  call giza_set_colour_palette(giza_colour_palette_pgplot)
 
 end function PGOPEN
@@ -1525,11 +1518,15 @@ end subroutine PGSITF
 
 !------------------------------------------------------------------------
 ! Module: PGSLCT -- select an open graphics device
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSLCT(ID)
- implicit none
+ use giza, only:giza_select_device
  integer, intent(in) :: ID
+ integer :: ierr
+
+ ! use id-1 since giza devices run from 0->n-1 instead of 1->n
+ call giza_select_device(ID-1)
 
 end subroutine PGSLCT
 

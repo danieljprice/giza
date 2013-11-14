@@ -54,41 +54,41 @@ int
 _giza_open_device_eps (int vert)
 {
   int length;
-  length = strlen (Dev.prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
+  length = strlen (Dev[id].prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
   char fileName[length + 1];
-  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,1);
+  _giza_get_filename_for_device(fileName,Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,1);
 
-  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
-  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
-  Dev.defaultBackgroundAlpha = 0.;
+  Dev[id].deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev[id].deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev[id].isInteractive       = GIZA_DEVICE_INTERACTIVE;
+  Dev[id].defaultBackgroundAlpha = 0.;
 
   /* set all device specific settings */
   if (_giza_sizeSpecified() )
     {
-      _giza_get_specified_size(&Dev.width, &Dev.height);
+      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
     }
   else if (vert)
     {
-      Dev.height = GIZA_DEFAULT_WIDTH;
-      Dev.width  = GIZA_DEFAULT_HEIGHT;
+      Dev[id].height = GIZA_DEFAULT_WIDTH;
+      Dev[id].width  = GIZA_DEFAULT_HEIGHT;
     }
   else
     {
-      Dev.width  = GIZA_DEFAULT_WIDTH;
-      Dev.height = GIZA_DEFAULT_HEIGHT;
+      Dev[id].width  = GIZA_DEFAULT_WIDTH;
+      Dev[id].height = GIZA_DEFAULT_HEIGHT;
     }
 
-  surface = cairo_ps_surface_create (fileName, Dev.width, Dev.height);
+  Dev[id].surface = cairo_ps_surface_create (fileName, Dev[id].width, Dev[id].height);
 
-  if (!surface)
+  if (!Dev[id].surface)
     {
       _giza_error ("giza_open_device_eps", "Could not create cairo eps surface");
       return -1;
     }
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
-  cairo_ps_surface_set_eps (surface, 1);
+  cairo_ps_surface_set_eps (Dev[id].surface, 1);
 #endif
   return 0;
 }
@@ -99,7 +99,7 @@ _giza_open_device_eps (int vert)
 void
 _giza_flush_device_eps (void)
 {
-  cairo_surface_flush (surface);
+  cairo_surface_flush (Dev[id].surface);
 }
 
 /**
@@ -108,11 +108,11 @@ _giza_flush_device_eps (void)
 void
 _giza_close_device_eps (void)
 {
-  cairo_surface_finish (surface);
-  cairo_status_t status = cairo_surface_status (surface);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
   if (status != CAIRO_STATUS_SUCCESS)
      _giza_error("giza_close_device_eps",cairo_status_to_string(status));
-  cairo_surface_destroy (surface);
+  cairo_surface_destroy (Dev[id].surface);
 }
 
 /**
@@ -122,40 +122,40 @@ void
 _giza_change_page_eps (void)
 {
   /* Close the old eps */
-  cairo_destroy (context);
+  cairo_destroy (Dev[id].context);
   _giza_close_device_eps();
 
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
-  int length = strlen (Dev.prefix) + lenext + 5;
+  int length = strlen (Dev[id].prefix) + lenext + 5;
   char fileName[length + 1];
 
   /* rename the first file from giza.eps to giza_0000.eps if part of a sequence */
-  if (Dev.pgNum == 0) {
+  if (Dev[id].pgNum == 0) {
      char fileNameold[length + 1];
      /* retrieve the name of the original file and what revised name should be */
-     _giza_get_filename_for_device(fileNameold,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,1);
-     _giza_get_filename_for_device(fileName,   Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,0);
+     _giza_get_filename_for_device(fileNameold,Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,1);
+     _giza_get_filename_for_device(fileName,   Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,0);
      /* rename the file */
      rename(fileNameold,fileName);
   }
 
   /* name the new eps */
-  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum + 1,GIZA_DEVICE_EXTENSION,0);
+  _giza_get_filename_for_device(fileName,Dev[id].prefix,Dev[id].pgNum + 1,GIZA_DEVICE_EXTENSION,0);
 
   /* Open it */
-  surface = cairo_ps_surface_create (fileName, Dev.width, Dev.height);
+  Dev[id].surface = cairo_ps_surface_create (fileName, Dev[id].width, Dev[id].height);
 
-  if (!surface)
+  if (!Dev[id].surface)
     {
       _giza_error ("giza_change_page_eps", "Could not create cairo eps surface");
       return;
     }
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
-      cairo_ps_surface_set_eps (surface, 1);
+      cairo_ps_surface_set_eps (Dev[id].surface, 1);
 #endif
 
-  context = cairo_create (surface);
-  if (!context)
+  Dev[id].context = cairo_create (Dev[id].surface);
+  if (!Dev[id].context)
     {
       _giza_error ("giza_change_page_eps", "Could not create cairo context");
       return;

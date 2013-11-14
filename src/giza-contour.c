@@ -68,8 +68,8 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
 		     affine[4], affine[5]);
-  cairo_transform (context, &mat);
-  cairo_get_matrix (context, &mat);
+  cairo_transform (Dev[id].context, &mat);
+  cairo_get_matrix (Dev[id].context, &mat);
   _giza_set_trans (GIZA_TRANS_IDEN);
 
   /* set up the line style */
@@ -205,9 +205,9 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
                   cairo_matrix_transform_point (&mat, &x2, &y2);
                   /*printf ("In index: (x1, y1) = (%f, %f)\n", x1, y1); */
                   /*printf ("In coord: (x1, y1) = (%f, %f)\n", x1, y1); */
-                  cairo_move_to (context, x1, y1);
-		  cairo_line_to (context, x2, y2);
-		  cairo_stroke (context);
+                  cairo_move_to (Dev[id].context, x1, y1);
+		  cairo_line_to (Dev[id].context, x2, y2);
+		  cairo_stroke (Dev[id].context);
 		}
 	    }
 	}

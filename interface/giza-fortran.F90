@@ -67,6 +67,7 @@ module giza
       giza_open, &
       giza_open_device, &
       giza_open_device_size, &
+      giza_select_device, &
       giza_flush_device, &
       giza_change_page, &
       giza_close_device, &
@@ -674,6 +675,13 @@ private
      implicit none
      integer(kind=c_int) :: giza_device_has_cursor_c
     end function giza_device_has_cursor_c
+ end interface
+
+ interface giza_select_device
+    subroutine giza_select_device(devid) bind(C)
+      import
+      integer(kind=c_int),intent(in),value :: devid
+    end subroutine giza_select_device
  end interface
 
  interface giza_flush_device

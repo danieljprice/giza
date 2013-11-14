@@ -55,8 +55,8 @@ giza_arrow (double x1, double y1, double x2, double y2)
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   /* convert the points to device coords */
-  cairo_user_to_device (context, &x1, &y1);
-  cairo_user_to_device (context, &x2, &y2);
+  cairo_user_to_device (Dev[id].context, &x1, &y1);
+  cairo_user_to_device (Dev[id].context, &x2, &y2);
 
   /* Set the current transformation to the idenity */
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -142,23 +142,23 @@ giza_arrow (double x1, double y1, double x2, double y2)
 	  ypts[3] = y2 - (dyUnit* cosangle - dyPerp * sinangle) * chy;
 
 	  /* draw the head */
-	  cairo_move_to (context, xpts[0], ypts[0]);
-	  cairo_line_to (context, xpts[1], ypts[1]);
-	  cairo_line_to (context, xpts[2], ypts[2]);
-	  cairo_line_to (context, xpts[3], ypts[3]);
-	  cairo_line_to (context, xpts[0], ypts[0]);
+	  cairo_move_to (Dev[id].context, xpts[0], ypts[0]);
+	  cairo_line_to (Dev[id].context, xpts[1], ypts[1]);
+	  cairo_line_to (Dev[id].context, xpts[2], ypts[2]);
+	  cairo_line_to (Dev[id].context, xpts[3], ypts[3]);
+	  cairo_line_to (Dev[id].context, xpts[0], ypts[0]);
 
 	  /* fill it in! */
-	  double oldMiter = cairo_get_miter_limit (context);
-	  cairo_set_miter_limit (context, 0.);
+	  double oldMiter = cairo_get_miter_limit (Dev[id].context);
+	  cairo_set_miter_limit (Dev[id].context, 0.);
 	  giza_set_fill (Arrow.fs);
-	  cairo_stroke_preserve (context);
+	  cairo_stroke_preserve (Dev[id].context);
 	  _giza_fill ();
-	  cairo_set_miter_limit (context, oldMiter);
+	  cairo_set_miter_limit (Dev[id].context, oldMiter);
 
 	  /* draw the tail */
-	  cairo_move_to (context, x1, y1);
-	  cairo_line_to (context, xpts[2], ypts[2]);
+	  cairo_move_to (Dev[id].context, x1, y1);
+	  cairo_line_to (Dev[id].context, xpts[2], ypts[2]);
 
 	  _giza_stroke ();
 	}

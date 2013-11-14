@@ -62,7 +62,7 @@ struct GIZA_XWindow
   int depth;
   int pixelsize;
   int screensize;
-} XW;
+} XW[GIZA_MAX_DEVICES];
 
 #define GIZA_DEFAULT_WIDTH 800
 #define GIZA_DEFAULT_HEIGHT 600
@@ -76,12 +76,15 @@ static void _giza_expose_xw (XEvent *event);
 static void _giza_flush_xw_event_queue (XEvent *event);
 /*static int _giza_errors_xw (Display *display, XErrorEvent *error);*/
 
+static int giza_xw_id[GIZA_MAX_DEVICES];
+static int xid = -1;
+
 /**
  * Opens an XWindow device for drawing to.
  *
  * Return values:
  *  -0 :- no error.
- *  -1 :- No connection to he X server could be made.
+ *  -1 :- No connection to the X server could be made.
  *  -3 :- No X visual could be created.
  *  -4 :- No window could be created.
  *  -5 :- No cairo surface could be created.
@@ -89,113 +92,117 @@ static void _giza_flush_xw_event_queue (XEvent *event);
 int
 _giza_open_device_xw (void)
 {
-  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
-  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
+  Dev[id].deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev[id].deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev[id].isInteractive       = GIZA_DEVICE_INTERACTIVE;
 
   /* set all device specific settings */
   if (_giza_sizeSpecified ())
     {
-      _giza_get_specified_size(&Dev.width, &Dev.height);
+      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
     }
   else
     {
-      Dev.width = GIZA_DEFAULT_WIDTH;
-      Dev.height = GIZA_DEFAULT_HEIGHT;
+      Dev[id].width = GIZA_DEFAULT_WIDTH;
+      Dev[id].height = GIZA_DEFAULT_HEIGHT;
     }
 
+  xid += 1;
+  giza_xw_id[id] = xid + 1;
+  printf("OPEN: ID = %i, XID = %i \n",id,xid);
+  
   /* set the XLib stuff */
-  XW.width = Dev.width + 2 * GIZA_XW_MARGIN;
-  XW.height = Dev.height + 2 * GIZA_XW_MARGIN;
+  XW[xid].width = Dev[id].width + 2 * GIZA_XW_MARGIN;
+  XW[xid].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
 
   /* open the connection to the sever and check there was no error */
-  XW.display = XOpenDisplay (NULL);
-  if (!XW.display)
+  XW[xid].display = XOpenDisplay (NULL);
+  if (!XW[xid].display)
     {
       _giza_error ("_giza_open_device_xw", "Connection to the X server could not be made");
       return 1;
     }
 
   /* get an identifier for the screen */
-  XW.screenptr = DefaultScreenOfDisplay(XW.display);
-  XW.screennum = DefaultScreen (XW.display);
+  XW[xid].screenptr = DefaultScreenOfDisplay(XW[xid].display);
+  XW[xid].screennum = DefaultScreen (XW[xid].display);
 
   /* set the depth */
-  XW.depth = DefaultDepth(XW.display,XW.screennum);
+  XW[xid].depth = DefaultDepth(XW[xid].display,XW[xid].screennum);
 
   /* Debugging info */
   /*
-  printf("giza_xw_debug: XW display: %s\n",XDisplayName((char*)XW.display));
+  printf("giza_xw_debug: XW display: %s\n",XDisplayName((char*)XW[xid].display));
   printf("giza_xw_debug: XW monitor resolution: %d x %d\n",
-                          DisplayWidth(XW.display,XW.screennum),
-                          DisplayHeight(XW.display,XW.screennum));
+                          DisplayWidth(XW[xid].display,XW[xid].screennum),
+                          DisplayHeight(XW[xid].display,XW[xid].screennum));
   */
  /* printf("Connection number is %d\n",XW/); */
 
-  if (XW.depth == 1)
+  if (XW[xid].depth == 1)
     {
        _giza_error("_giza_open_device_xw","XW depth = 1: no colour possible");
     }
   else
     {
-       /*printf("giza_xw_debug: XW colour depth = %d\n",XW.depth);*/
+       /*printf("giza_xw_debug: XW colour depth = %d\n",XW[xid].depth);*/
     }
 
   /* create a visual */
-  XW.visual = DefaultVisual (XW.display, XW.screennum);
+  XW[xid].visual = DefaultVisual (XW[xid].display, XW[xid].screennum);
 
-  if (!XW.visual)
+  if (!XW[xid].visual)
     {
       _giza_error ("_giza_open_device_xw", "Could not get X visual");
       return 3;
     }
 
-  unsigned long white = WhitePixel(XW.display, XW.screennum);
+  unsigned long white = WhitePixel(XW[xid].display, XW[xid].screennum);
 
   /* create the window */
-  XW.window = XCreateSimpleWindow (XW.display,
-				   DefaultRootWindow (XW.display),/* make our new window a child of the entire XW.display */
+  XW[xid].window = XCreateSimpleWindow (XW[xid].display,
+				   DefaultRootWindow (XW[xid].display),/* make our new window a child of the entire XW[xid].display */
 				   50, 50,	/* origin */
-				   XW.width, XW.height, /* size */
+				   XW[xid].width, XW[xid].height, /* size */
 				   0, 0, white);
-  if (!XW.window)
+  if (!XW[xid].window)
     {
       _giza_error ("_giza_open_device", "Could not create X window");
       return 4;
     }
 
-  XStoreName (XW.display, XW.window, Dev.prefix);
-  XMapWindow (XW.display, XW.window);
+  XStoreName (XW[xid].display, XW[xid].window, Dev[id].prefix);
+  XMapWindow (XW[xid].display, XW[xid].window);
 
    /* register interest in the delete window message */
-  Atom wmDeleteMessage = XInternAtom(XW.display, "WM_DELETE_WINDOW", 1);
-  XSetWMProtocols(XW.display, XW.window, &wmDeleteMessage, 1);
+  Atom wmDeleteMessage = XInternAtom(XW[xid].display, "WM_DELETE_WINDOW", 1);
+  XSetWMProtocols(XW[xid].display, XW[xid].window, &wmDeleteMessage, 1);
 
   /* register the routine to handle non-fatal X errors */
   /*XSetErrorHandler( _giza_errors_xw );*/
 
   /* create the pixmap */
-  XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
+  XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
 
-  /* Create graphics context */
-/* XW.gc = XDefaultGCOfScreen(DefaultScreenOfDisplay(XW.display)); */
-  /*XW.gc = XCreateGC (XW.display, XW.pixmap, 0, 0);*/
+  /* Create graphics Dev[id].context */
+/* XW[xid].gc = XDefaultGCOfScreen(DefaultScreenOfDisplay(XW[xid].display)); */
+  /*XW[xid].gc = XCreateGC (XW[xid].display, XW[xid].pixmap, 0, 0);*/
   /* version below works on older X11 distros */
-  XW.gc = XDefaultGC (XW.display, XW.screennum);
+  XW[xid].gc = XDefaultGC (XW[xid].display, XW[xid].screennum);
 
   /* create Xlib surface in cairo */
-  surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
+  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);
   /* uncomment below for drawing direct to window
-   surface = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
+   Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].window, XW[xid].visual, XW[xid].width, XW[xid].height);
    */
-  if (!surface)
+  if (!Dev[id].surface)
     {
       _giza_error ("_giza_open_device_xw", "Could not create surface");
-      XFreePixmap (XW.display, XW.pixmap);
+      XFreePixmap (XW[xid].display, XW[xid].pixmap);
       return 5;
     }
 
-  Dev.defaultBackgroundAlpha = 1.;
+  Dev[id].defaultBackgroundAlpha = 1.;
 
   return 0;
 }
@@ -207,11 +214,11 @@ void
 _giza_flush_device_xw (void)
 {
   /* flush the offscreen surface */
-  cairo_surface_flush (surface);
+  cairo_surface_flush (Dev[id].surface);
   /* move the offscreen surface to the onscreen one */
-  XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, 0, 0, (unsigned) XW.width, (unsigned) XW.height, 0, 0);
+  XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, 0, 0, (unsigned) XW[xid].width, (unsigned) XW[xid].height, 0, 0);
 
-/*  if (!XFlush (XW.display))
+/*  if (!XFlush (XW[xid].display))
     {
       _giza_warning ("_giza_flush_device_xw", "Could not flush X window");
     }
@@ -230,22 +237,22 @@ void
 _giza_change_page_xw (void)
 {
   /* interactive logging feature */
-  if (Sets.autolog) _giza_write_log_file(surface);
+  if (Sets.autolog) _giza_write_log_file(Dev[id].surface);
   
   /* create a new pixmap */
-  cairo_destroy(context);
-  cairo_surface_finish (surface);
-  cairo_status_t status = cairo_surface_status (surface);
+  cairo_destroy(Dev[id].context);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
   if (status != CAIRO_STATUS_SUCCESS)
      _giza_error("giza_change_page_xw",cairo_status_to_string(status));
 
-  cairo_surface_destroy (surface);
-  XFreePixmap (XW.display, XW.pixmap);
-  XW.pixmap = XCreatePixmap (XW.display, XW.window, (unsigned) XW.width, (unsigned) XW.height, (unsigned) XW.depth);
+  cairo_surface_destroy (Dev[id].surface);
+  XFreePixmap (XW[xid].display, XW[xid].pixmap);
+  XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
 
   /* recreate the cairo surface */
-  surface = cairo_xlib_surface_create (XW.display, XW.pixmap, XW.visual, XW.width, XW.height);
-  context = cairo_create (surface);
+  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);
+  Dev[id].context = cairo_create (Dev[id].surface);
 }
 
 /**
@@ -254,8 +261,25 @@ _giza_change_page_xw (void)
 void
 _giza_init_norm_xw (void)
 {
-  cairo_matrix_init (&(Win.normCoords),(double) Dev.width, 0, 0, (double) -Dev.height, GIZA_XW_MARGIN,
-		     Dev.height + GIZA_XW_MARGIN);
+  cairo_matrix_init (&(Win.normCoords),(double) Dev[id].width, 0, 0, (double) -Dev[id].height, GIZA_XW_MARGIN,
+		     Dev[id].height + GIZA_XW_MARGIN);
+}
+
+/**
+ * Selects which X-Window the device id refers to
+ */
+int
+_giza_select_xw(int devid)
+{
+  int tmp = giza_xw_id[devid];
+  printf("SELECTING ID = %i, XID = %i \n",devid,tmp-1);
+  if (!tmp) {
+     _giza_error("giza_select_xw","internal error: selected device is not an X-Window");
+     return 1;
+  } else {
+    xid = tmp-1;
+    return 0;
+  }
 }
 
 /**
@@ -267,15 +291,15 @@ _giza_init_norm_xw (void)
 void
 _giza_close_device_xw (void)
 {
-  cairo_surface_finish (surface);
-  cairo_status_t status = cairo_surface_status (surface);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
   if (status != CAIRO_STATUS_SUCCESS)
      _giza_error("giza_close_device_xw",cairo_status_to_string(status));
 
-  cairo_surface_destroy (surface);
-  XFreePixmap (XW.display, XW.pixmap);
-  /*XFreeGC(XW.display,XW.gc);*/
-  XCloseDisplay (XW.display);
+  cairo_surface_destroy (Dev[id].surface);
+  XFreePixmap (XW[xid].display, XW[xid].pixmap);
+  /*XFreeGC(XW[xid].display,XW[xid].gc);*/
+  XCloseDisplay (XW[xid].display);
 }
 
 /*
@@ -299,20 +323,20 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
   /* move the cursor to the given position */
   if (moveCurs)
     {
-      XWarpPointer (XW.display, None, XW.window, 0, 0, 0, 0, anchorx[nanc-1], anchory[nanc-1]);
+      XWarpPointer (XW[xid].display, None, XW[xid].window, 0, 0, 0, 0, anchorx[nanc-1], anchory[nanc-1]);
     }
 
   XEvent event;
-  XSelectInput (XW.display, XW.window, ExposureMask | KeyPressMask | StructureNotifyMask | ButtonPressMask | PointerMotionMask);
+  XSelectInput (XW[xid].display, XW[xid].window, ExposureMask | KeyPressMask | StructureNotifyMask | ButtonPressMask | PointerMotionMask);
 
   _giza_init_band (mode);
 
  while(1) {
 
     /* wait for key press/expose (avoid using XNextEvent as breaks older systems) */
-    XWindowEvent(XW.display, XW.window,
+    XWindowEvent(XW[xid].display, XW[xid].window,
        (long) (ExposureMask | KeyPressMask | StructureNotifyMask | ButtonPressMask | PointerMotionMask), &event);
-    /*XNextEvent(XW.display, &event);*/
+    /*XNextEvent(XW[xid].display, &event);*/
 
     /* always return x, y values for safety */
     *x = 0;
@@ -321,7 +345,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
     switch  (event.type) {
     case ClientMessage: /* catch close window event */
       *ch = 'q';
-      if (!strcmp( XGetAtomName( XW.display, event.xclient.message_type ), "WM_PROTOCOLS" )) {
+      if (!strcmp( XGetAtomName( XW[xid].display, event.xclient.message_type ), "WM_PROTOCOLS" )) {
          return;
       }
     case Expose: /* redraw */
@@ -353,7 +377,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 	break;
       }
     case ConfigureNotify: /* check if the window has been resized */
-      if(event.xconfigure.width != XW.width || event.xconfigure.height != XW.height)
+      if(event.xconfigure.width != XW[xid].width || event.xconfigure.height != XW[xid].height)
 	_giza_change_size_xw (event.xconfigure.width, event.xconfigure.height);
       break;
     case ButtonPress:
@@ -397,7 +421,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
     case MotionNotify:
       {
         /* discard all except the last pointer motion event */
-        while(XCheckWindowEvent(XW.display, XW.window,
+        while(XCheckWindowEvent(XW[xid].display, XW[xid].window,
                               (long)(PointerMotionMask), &event) == True);
 
         _giza_refresh_band (mode, nanc, anchorx, anchory, event.xmotion.x, event.xmotion.y);
@@ -426,14 +450,14 @@ _giza_flush_xw_event_queue (XEvent *event)
    * Discard un-handled ButtonPress, KeyPress and MotionNotify events
    * without blocking.
    */
-  while(XCheckWindowEvent(XW.display, XW.window,
+  while(XCheckWindowEvent(XW[xid].display, XW[xid].window,
        (long) (ButtonPressMask | KeyPressMask | PointerMotionMask), event));
 
 
   /* Flush all remaining events from the X event queue
-  while (XPending(XW.display)) {
+  while (XPending(XW[xid].display)) {
      printf("removing pending XW event \n");
-     XNextEvent(XW.display, event);
+     XNextEvent(XW[xid].display, event);
   }
   */
 }
@@ -444,12 +468,12 @@ _giza_flush_xw_event_queue (XEvent *event)
 static void
 _giza_expose_xw (XEvent *event)
 {
-  XCopyArea (XW.display, XW.pixmap, XW.window, XW.gc, event->xexpose.x,
+  XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, event->xexpose.x,
 	     event->xexpose.y, (unsigned) event->xexpose.width,
 	     (unsigned) event->xexpose.height, event->xexpose.x,
 	     event->xexpose.y);
 
-/*  XFlush(XW.display); */
+/*  XFlush(XW[xid].display); */
 }
 
 /**
@@ -459,15 +483,15 @@ void
 _giza_change_size_xw (int width, int height)
 {
   /* Set the new device size */
-  Dev.width  = width  - 2 * GIZA_XW_MARGIN;
-  Dev.height = height - 2 * GIZA_XW_MARGIN;
+  Dev[id].width  = width  - 2 * GIZA_XW_MARGIN;
+  Dev[id].height = height - 2 * GIZA_XW_MARGIN;
 
-  XW.width  = width;
-  XW.height = height;
+  XW[xid].width  = width;
+  XW[xid].height = height;
   
-  XResizeWindow(XW.display, XW.window,(unsigned) XW.width,(unsigned) XW.height);
+  XResizeWindow(XW[xid].display, XW[xid].window,(unsigned) XW[xid].width,(unsigned) XW[xid].height);
 
-  cairo_xlib_surface_set_size(surface,width,height);
+  cairo_xlib_surface_set_size(Dev[id].surface,width,height);
 }
 
 /**
@@ -477,9 +501,9 @@ void
 _giza_expand_clipping_xw (void)
 {
   _giza_set_trans (GIZA_TRANS_IDEN);
-  cairo_reset_clip (context);
-  cairo_rectangle (context, 0, 0, XW.width, XW.height);
-  cairo_clip (context);
+  cairo_reset_clip (Dev[id].context);
+  cairo_rectangle (Dev[id].context, 0, 0, XW[xid].width, XW[xid].height);
+  cairo_clip (Dev[id].context);
 }
 
 /**
@@ -499,7 +523,7 @@ _giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, co
   for (i = 0; i < nanc; i++) {
       xanci = xanc[i];
       yanci = yanc[i];
-      cairo_user_to_device(context, &xanci, &yanci);
+      cairo_user_to_device(Dev[id].context, &xanci, &yanci);
       ixanc[i] = (int) xanci;
       iyanc[i] = (int) yanci;
   }
@@ -508,7 +532,7 @@ _giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, co
   *x = (double) ix;
   *y = (double) iy;
 
-  cairo_device_to_user (context, x, y);
+  cairo_device_to_user (Dev[id].context, x, y);
   _giza_set_trans (oldTrans);
 }
 
@@ -518,19 +542,19 @@ _giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, co
 int
 _giza_init_band_xw (void)
 {
-      /* Set up box so it can draw the box... */
-      Band.onscreen = cairo_xlib_surface_create (XW.display, XW.window, XW.visual, XW.width, XW.height);
-      Band.box = cairo_create (Band.onscreen);
+  /* Set up box so it can draw the box... */
+  Band.onscreen = cairo_xlib_surface_create (XW[xid].display, XW[xid].window, XW[xid].visual, XW[xid].width, XW[xid].height);
+  Band.box = cairo_create (Band.onscreen);
 
-      /* use grey for band */
-      cairo_set_source_rgba (Band.box, 0.5, 0.5, 0.5, 1.0);
+  /* use grey for band */
+  cairo_set_source_rgba (Band.box, 0.5, 0.5, 0.5, 1.0);
 
-      /* Set up restore to remove box */
-      Band.restore = cairo_create (Band.onscreen);
-      cairo_set_source_surface (Band.restore, surface, 0, 0);
-      Band.maxHeight = XW.height;
-      Band.maxWidth = XW.width;
-      return 1;
+  /* Set up restore to remove box */
+  Band.restore = cairo_create (Band.onscreen);
+  cairo_set_source_surface (Band.restore, Dev[id].surface, 0, 0);
+  Band.maxHeight = XW[xid].height;
+  Band.maxWidth = XW[xid].width;
+  return 1;
 }
 
 #endif

@@ -88,24 +88,24 @@ void _giza_get_specified_size(int *width, int *height)
   switch(paperunits)
      {
      case GIZA_UNITS_MM:
-       *width  = _giza_nint(paperwidth  * Dev.deviceUnitsPermm);
-       *height = _giza_nint(paperheight * Dev.deviceUnitsPermm);
+       *width  = _giza_nint(paperwidth  * Dev[id].deviceUnitsPermm);
+       *height = _giza_nint(paperheight * Dev[id].deviceUnitsPermm);
        break;
      case GIZA_UNITS_INCHES:
-       *width  = _giza_nint(paperwidth  * Dev.deviceUnitsPermm * 25.4);
-       *height = _giza_nint(paperheight * Dev.deviceUnitsPermm * 25.4);
+       *width  = _giza_nint(paperwidth  * Dev[id].deviceUnitsPermm * 25.4);
+       *height = _giza_nint(paperheight * Dev[id].deviceUnitsPermm * 25.4);
        break;
      case GIZA_UNITS_PIXELS:
-       *width  = _giza_nint(paperwidth  * Dev.deviceUnitsPerPixel);
-       *height = _giza_nint(paperheight * Dev.deviceUnitsPerPixel);
+       *width  = _giza_nint(paperwidth  * Dev[id].deviceUnitsPerPixel);
+       *height = _giza_nint(paperheight * Dev[id].deviceUnitsPerPixel);
        break;
      case GIZA_UNITS_DEVICE:
        *width  = _giza_nint(paperwidth);
        *height = _giza_nint(paperheight);
        break;
      default:
-       *width  = _giza_nint(paperwidth  * Dev.deviceUnitsPermm * 10.);
-       *height = _giza_nint(paperheight * Dev.deviceUnitsPermm * 10.);
+       *width  = _giza_nint(paperwidth  * Dev[id].deviceUnitsPermm * 10.);
+       *height = _giza_nint(paperheight * Dev[id].deviceUnitsPermm * 10.);
        break;
      }
    /*
@@ -144,28 +144,28 @@ giza_get_paper_size (int units, double *width, double *height)
   switch(units)
      {
      case GIZA_UNITS_MM:
-       *width  = ((double) Dev.width ) / Dev.deviceUnitsPermm;
-       *height = ((double) Dev.height) / Dev.deviceUnitsPermm;
+       *width  = ((double) Dev[id].width ) / Dev[id].deviceUnitsPermm;
+       *height = ((double) Dev[id].height) / Dev[id].deviceUnitsPermm;
        break;
      case GIZA_UNITS_INCHES:
-       *width  = (((double) Dev.width ) / Dev.deviceUnitsPermm) / 25.4;
-       *height = (((double) Dev.height) / Dev.deviceUnitsPermm) / 25.4;
+       *width  = (((double) Dev[id].width ) / Dev[id].deviceUnitsPermm) / 25.4;
+       *height = (((double) Dev[id].height) / Dev[id].deviceUnitsPermm) / 25.4;
        break;
      case GIZA_UNITS_NORMALIZED:
        *width  = 1.;
        *height = 1.;
        break;
      case GIZA_UNITS_PIXELS:
-       *width  = ((double) Dev.width ) / Dev.deviceUnitsPerPixel;
-       *height = ((double) Dev.height) / Dev.deviceUnitsPerPixel;
+       *width  = ((double) Dev[id].width ) / Dev[id].deviceUnitsPerPixel;
+       *height = ((double) Dev[id].height) / Dev[id].deviceUnitsPerPixel;
        break;
      case GIZA_UNITS_DEVICE:
-       *width  = (double) Dev.width;
-       *height = (double) Dev.height;
+       *width  = (double) Dev[id].width;
+       *height = (double) Dev[id].height;
        break;
      default:
-       *width  = 0.1 * ((double) Dev.width ) / Dev.deviceUnitsPermm;
-       *height = 0.1 * ((double) Dev.height) / Dev.deviceUnitsPermm;
+       *width  = 0.1 * ((double) Dev[id].width ) / Dev[id].deviceUnitsPermm;
+       *height = 0.1 * ((double) Dev[id].height) / Dev[id].deviceUnitsPermm;
        break;
      }
 }

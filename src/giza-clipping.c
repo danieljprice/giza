@@ -44,7 +44,7 @@ giza_set_clipping (int clip)
   _giza_clip = clip;
   if (!clip)
     {
-      cairo_reset_clip(context);
+      cairo_reset_clip(Dev[id].context);
     }
 }
 

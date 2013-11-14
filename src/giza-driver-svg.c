@@ -52,34 +52,34 @@ int
 _giza_open_device_svg (int vert)
 {
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
-  int length = strlen (Dev.prefix) + lenext + 5;
+  int length = strlen (Dev[id].prefix) + lenext + 5;
   char fileName[length + 1];
-  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,1);
+  _giza_get_filename_for_device(fileName,Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,1);
 
-  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
-  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
-  Dev.defaultBackgroundAlpha = 0.;
+  Dev[id].deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev[id].deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev[id].isInteractive       = GIZA_DEVICE_INTERACTIVE;
+  Dev[id].defaultBackgroundAlpha = 0.;
 
   /* set all device specific settings */
   if (_giza_sizeSpecified() )
     {
-      _giza_get_specified_size(&Dev.width, &Dev.height);
+      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
     }
   else if (vert)
     {
-      Dev.height = GIZA_DEFAULT_WIDTH;
-      Dev.width  = GIZA_DEFAULT_HEIGHT;
+      Dev[id].height = GIZA_DEFAULT_WIDTH;
+      Dev[id].width  = GIZA_DEFAULT_HEIGHT;
     }
   else
     {
-      Dev.width  = GIZA_DEFAULT_WIDTH;
-      Dev.height = GIZA_DEFAULT_HEIGHT;
+      Dev[id].width  = GIZA_DEFAULT_WIDTH;
+      Dev[id].height = GIZA_DEFAULT_HEIGHT;
     }
 
-  surface = cairo_svg_surface_create (fileName, Dev.width, Dev.height);
+  Dev[id].surface = cairo_svg_surface_create (fileName, Dev[id].width, Dev[id].height);
 
-  if (!surface)
+  if (!Dev[id].surface)
     {
       _giza_error ("_giza_open_device_svg", "Could not create cairo svg surface");
       return -1;
@@ -94,7 +94,7 @@ _giza_open_device_svg (int vert)
 void
 _giza_flush_device_svg (void)
 {
-  cairo_surface_flush (surface);
+  cairo_surface_flush (Dev[id].surface);
 }
 
 /**
@@ -103,11 +103,11 @@ _giza_flush_device_svg (void)
 void
 _giza_close_device_svg (void)
 {
-  cairo_surface_finish (surface);
-  cairo_status_t status = cairo_surface_status (surface);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
   if (status != CAIRO_STATUS_SUCCESS)
      _giza_error("giza_close_device_svg",cairo_status_to_string(status));
-  cairo_surface_destroy (surface);
+  cairo_surface_destroy (Dev[id].surface);
 }
 
 /**
@@ -117,37 +117,37 @@ void
 _giza_change_page_svg (void)
 {
   /* Close the old svg */
-  cairo_destroy (context);
+  cairo_destroy (Dev[id].context);
   _giza_close_device_svg();
 
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
-  int length = strlen (Dev.prefix) + lenext + 5;
+  int length = strlen (Dev[id].prefix) + lenext + 5;
   char fileName[length + 1];
 
   /* rename the first file from giza.svg to giza_0000.svg if part of a sequence */
-  if (Dev.pgNum == 0) {
+  if (Dev[id].pgNum == 0) {
      char fileNameold[length + 1];
      /* retrieve the name of the original file and what revised name should be */
-     _giza_get_filename_for_device(fileNameold,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,1);
-     _giza_get_filename_for_device(fileName,   Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,0);
+     _giza_get_filename_for_device(fileNameold,Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,1);
+     _giza_get_filename_for_device(fileName,   Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,0);
      /* rename the file */
      rename(fileNameold,fileName);
   }
 
   /* name the new svg */
-  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum + 1,GIZA_DEVICE_EXTENSION,0);
+  _giza_get_filename_for_device(fileName,Dev[id].prefix,Dev[id].pgNum + 1,GIZA_DEVICE_EXTENSION,0);
 
   /* Open it */
-  surface = cairo_svg_surface_create (fileName, Dev.width, Dev.height);
+  Dev[id].surface = cairo_svg_surface_create (fileName, Dev[id].width, Dev[id].height);
 
-  if (!surface)
+  if (!Dev[id].surface)
     {
       _giza_error ("giza_change_page_svg", "Could not create cairo svg surface");
       return;
     }
 
-  context = cairo_create (surface);
-  if (!context)
+  Dev[id].context = cairo_create (Dev[id].surface);
+  if (!Dev[id].context)
     {
       _giza_error ("giza_change_page_svg", "Could not create cairo context");
       return;

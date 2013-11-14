@@ -96,7 +96,7 @@ giza_points (int n, const double* x, const double* y, int symbol)
       _giza_set_trans (GIZA_TRANS_WORLD);
       xd = x[i];
       yd = y[i];
-      cairo_user_to_device (context, &xd, &yd);
+      cairo_user_to_device (Dev[id].context, &xd, &yd);
       _giza_set_trans (GIZA_TRANS_IDEN);
 
       /* draw the symbol */
@@ -143,7 +143,7 @@ giza_points_float (int n, const float* x, const float* y, int symbol)
 
       /* convert world coords to device coords */
       _giza_set_trans (GIZA_TRANS_WORLD);
-      cairo_user_to_device (context, &xd, &yd);
+      cairo_user_to_device (Dev[id].context, &xd, &yd);
       _giza_set_trans (GIZA_TRANS_IDEN);
 
       /* draw the symbol */
@@ -402,8 +402,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 static void
 _giza_point (double x, double y)
 {
-  cairo_arc (context, x, y, 1.0, 0., 2.* M_PI);
-  cairo_fill (context);
+  cairo_arc (Dev[id].context, x, y, 1.0, 0., 2.* M_PI);
+  cairo_fill (Dev[id].context);
   _giza_stroke();
 }
 
@@ -413,9 +413,9 @@ _giza_point (double x, double y)
 static void
 _giza_rect (double x, double y, int fill)
 {
-  cairo_rectangle (context, x - markerHeight * 0.5, y - markerHeight * 0.5, markerHeight,
+  cairo_rectangle (Dev[id].context, x - markerHeight * 0.5, y - markerHeight * 0.5, markerHeight,
 		   markerHeight);
-  if (fill) { cairo_fill(context); }
+  if (fill) { cairo_fill(Dev[id].context); }
 
 }
 
@@ -425,10 +425,10 @@ _giza_rect (double x, double y, int fill)
 static void
 _giza_plus (double x, double y)
 {
-  cairo_move_to (context, x - markerHeight * 0.5, y);
-  cairo_line_to (context, x + markerHeight * 0.5, y);
-  cairo_move_to (context, x, y - markerHeight * 0.5);
-  cairo_line_to (context, x, y + markerHeight * 0.5);
+  cairo_move_to (Dev[id].context, x - markerHeight * 0.5, y);
+  cairo_line_to (Dev[id].context, x + markerHeight * 0.5, y);
+  cairo_move_to (Dev[id].context, x, y - markerHeight * 0.5);
+  cairo_line_to (Dev[id].context, x, y + markerHeight * 0.5);
   _giza_stroke ();
 }
 
@@ -438,8 +438,8 @@ _giza_plus (double x, double y)
 static void
 _giza_circle (double x, double y)
 {
-  cairo_move_to(context, x + markerHeight*0.5, y);
-  cairo_arc (context, x, y, markerHeight * 0.5, 0., 2. * M_PI);
+  cairo_move_to(Dev[id].context, x + markerHeight*0.5, y);
+  cairo_arc (Dev[id].context, x, y, markerHeight * 0.5, 0., 2. * M_PI);
   _giza_stroke ();
 }
 
@@ -449,9 +449,9 @@ _giza_circle (double x, double y)
 static void
 _giza_circle_size (double x, double y, double size, int fill)
 {
-  cairo_move_to(context, x + size*markerHeight*0.5, y);
-  cairo_arc (context, x, y, size * markerHeight * 0.5, 0., 2. * M_PI);
-  if (fill) { cairo_fill(context); }
+  cairo_move_to(Dev[id].context, x + size*markerHeight*0.5, y);
+  cairo_arc (Dev[id].context, x, y, size * markerHeight * 0.5, 0., 2. * M_PI);
+  if (fill) { cairo_fill(Dev[id].context); }
   _giza_stroke ();
 }
 
@@ -461,11 +461,11 @@ _giza_circle_size (double x, double y, double size, int fill)
 static void
 _giza_triangle(double x, double y, int fill)
 {
-  cairo_move_to (context, x - markerHeight * 0.5, y - markerHeight * 0.5);
-  cairo_line_to (context, x + markerHeight * 0.5, y - markerHeight * 0.5);
-  cairo_line_to (context, x, y + markerHeight * 0.5);
-  cairo_close_path (context);
-  if (fill) { cairo_fill(context); }
+  cairo_move_to (Dev[id].context, x - markerHeight * 0.5, y - markerHeight * 0.5);
+  cairo_line_to (Dev[id].context, x + markerHeight * 0.5, y - markerHeight * 0.5);
+  cairo_line_to (Dev[id].context, x, y + markerHeight * 0.5);
+  cairo_close_path (Dev[id].context);
+  if (fill) { cairo_fill(Dev[id].context); }
   _giza_stroke ();
 }
 
@@ -475,12 +475,12 @@ _giza_triangle(double x, double y, int fill)
 static void
 _giza_diamond(double x, double y, int fill)
 {
-  cairo_move_to (context, x - markerHeight*0.5, y );
-  cairo_line_to (context, x, y + markerHeight * 0.625  );
-  cairo_line_to (context, x + markerHeight*0.5, y );
-  cairo_line_to (context, x, y - markerHeight * 0.625);
-  cairo_close_path (context);
-  if (fill) { cairo_fill(context); }
+  cairo_move_to (Dev[id].context, x - markerHeight*0.5, y );
+  cairo_line_to (Dev[id].context, x, y + markerHeight * 0.625  );
+  cairo_line_to (Dev[id].context, x + markerHeight*0.5, y );
+  cairo_line_to (Dev[id].context, x, y - markerHeight * 0.625);
+  cairo_close_path (Dev[id].context);
+  if (fill) { cairo_fill(Dev[id].context); }
   _giza_stroke ();
 }
 
@@ -491,12 +491,12 @@ _giza_diamond(double x, double y, int fill)
 static void
 _giza_cross (double x, double y)
 {
-  cairo_move_to (context, x, y);
+  cairo_move_to (Dev[id].context, x, y);
   double dx = 1./sqrt(2.)*markerHeight;
-  cairo_rel_move_to (context, -dx * 0.5, -dx * 0.5);
-  cairo_rel_line_to (context, dx, dx);
-  cairo_rel_move_to (context, -dx, 0);
-  cairo_rel_line_to (context, dx, -dx);
+  cairo_rel_move_to (Dev[id].context, -dx * 0.5, -dx * 0.5);
+  cairo_rel_line_to (Dev[id].context, dx, dx);
+  cairo_rel_move_to (Dev[id].context, -dx, 0);
+  cairo_rel_line_to (Dev[id].context, dx, -dx);
   _giza_stroke ();
 }
 
@@ -510,11 +510,11 @@ _giza_arrow (double x, double y, double angle)
   double headlength = 0.25*markerHeight;
   double r = 0.5*markerHeight;
   double cosa = cos(angle); double sina = sin(angle);
-  cairo_move_to (context, x - r*cosa, y - r*sina);
-  cairo_line_to (context, x + r*cosa, y + r*sina);
-  cairo_rel_line_to (context, - headlength*cosa + headwidth*sina, headwidth*cosa - headlength*sina);
-  cairo_move_to (context, x + r*cosa, y + r*sina);
-  cairo_rel_line_to (context, - headlength*cosa - headwidth*sina, -headwidth*cosa - headlength*sina);
+  cairo_move_to (Dev[id].context, x - r*cosa, y - r*sina);
+  cairo_line_to (Dev[id].context, x + r*cosa, y + r*sina);
+  cairo_rel_line_to (Dev[id].context, - headlength*cosa + headwidth*sina, headwidth*cosa - headlength*sina);
+  cairo_move_to (Dev[id].context, x + r*cosa, y + r*sina);
+  cairo_rel_line_to (Dev[id].context, - headlength*cosa - headwidth*sina, -headwidth*cosa - headlength*sina);
   _giza_stroke ();
 }
 
@@ -532,7 +532,7 @@ _giza_polygon (double x, double y, int nsides, int fill)
  double alpha = (0.5 + 1./((double) nsides))* M_PI;
  double cosalpha = cos(alpha);
  double sinalpha = sin(alpha);
- cairo_move_to (context, x + r * cosalpha, y + r * sinalpha);
+ cairo_move_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
 
  /* Define other vertexes */
  double alpha_step = 2. * M_PI / ((double) nsides);
@@ -542,10 +542,10 @@ _giza_polygon (double x, double y, int nsides, int fill)
   alpha += alpha_step;
   cosalpha = cos(alpha);
   sinalpha = sin(alpha);
-  cairo_line_to (context, x + r * cosalpha, y + r * sinalpha);
+  cairo_line_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
  }
- cairo_close_path(context);
- if (fill) { cairo_fill(context); }
+ cairo_close_path(Dev[id].context);
+ if (fill) { cairo_fill(Dev[id].context); }
  _giza_stroke ();
 
 }
@@ -564,7 +564,7 @@ _giza_star (double x, double y, int npoints, double ratio, int fill)
  double alpha = (0.5 + 1./npoints)* M_PI;
  double cosalpha = cos(alpha);
  double sinalpha = sin(alpha);
- cairo_move_to (context, x + r * cosalpha, y + r * sinalpha);
+ cairo_move_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
 
  /* Define other vertexes */
  double alpha_step = 2 * M_PI / npoints;
@@ -574,18 +574,18 @@ _giza_star (double x, double y, int npoints, double ratio, int fill)
   alpha += 0.5*alpha_step;
   cosalpha = cos(alpha);
   sinalpha = sin(alpha);
-  cairo_line_to (context, x + ri * cosalpha, y + ri * sinalpha);
+  cairo_line_to (Dev[id].context, x + ri * cosalpha, y + ri * sinalpha);
   alpha += 0.5*alpha_step;
   cosalpha = cos(alpha);
   sinalpha = sin(alpha);
-  cairo_line_to (context, x + r * cosalpha, y + r * sinalpha);
+  cairo_line_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
  }
  alpha += 0.5*alpha_step;
  cosalpha = cos(alpha);
  sinalpha = sin(alpha);
- cairo_line_to (context, x + ri * cosalpha, y + ri * sinalpha);
- cairo_close_path(context);
- if (fill) { cairo_fill(context); }
+ cairo_line_to (Dev[id].context, x + ri * cosalpha, y + ri * sinalpha);
+ cairo_close_path(Dev[id].context);
+ if (fill) { cairo_fill(Dev[id].context); }
   _giza_stroke ();
 
 }
@@ -619,14 +619,14 @@ static void
 _giza_drawchar (const char *str, double x, double y)
 {
   cairo_text_extents_t extents;
-  cairo_text_extents (context, str, &extents);
+  cairo_text_extents (Dev[id].context, str, &extents);
   /*
    * use information about the glyph to centre
    * the character on the x, y position
    */
-  cairo_move_to (context, x - 0.5*extents.width  - extents.x_bearing,
+  cairo_move_to (Dev[id].context, x - 0.5*extents.width  - extents.x_bearing,
                           y - 0.5*extents.height - extents.y_bearing);
-  cairo_show_text (context, str);
+  cairo_show_text (Dev[id].context, str);
 }
 
 void

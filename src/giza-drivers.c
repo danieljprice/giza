@@ -54,7 +54,6 @@
 #define GIZA_DEFAULT_MARGIN 0
 
 static void _giza_set_prefix (const char *prefix);
-static int id = 0;
 
 /*
  * NOTE: Should clean up surfaces etc if device open was not successful.
@@ -91,15 +90,16 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
 {
 
   if (id != 0) {
-     _giza_warning("giza_open_device", "previous device was not closed");
-     giza_close_device();
+     /*_giza_warning("giza_open_device", "previous device was not closed");*/
+     /*giza_close_device()*/;
   }
   id += 1;
+  printf("OPENING dev ID = %i \n",id);
 
   /* Some general initialisation */
-  Dev.pgNum = 0;
-  Dev.type = GIZA_DEVICE_IV;
-  Dev.defaultBackgroundAlpha = 1.;
+  Dev[id].pgNum = 0;
+  Dev[id].type = GIZA_DEVICE_IV;
+  Dev[id].defaultBackgroundAlpha = 1.;
   int success = -1;
   giza_set_text_background (-1);
   giza_start_prompting ();
@@ -117,16 +117,16 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
   /* Determine which type of device to open */
   char firstchar = newDeviceName[0];
   if (firstchar == '?')
-    Dev.type = _giza_prompt_for_device ();
+    Dev[id].type = _giza_prompt_for_device ();
   else
     {
       char *devTypeStr;
       _giza_split_device_string (newDeviceName, &devTypeStr);
-      Dev.type = _giza_device_to_int (devTypeStr);
+      Dev[id].type = _giza_device_to_int (devTypeStr);
     }
 
   /* Determine which driver is required */
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
@@ -170,9 +170,9 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
      id = id - 1;
      return -1;
   }
-  /* bind the created surface to our context */
-  context = cairo_create (surface);
-  if (!context)
+  /* bind the created surface to our Dev[id].context */
+  Dev[id].context = cairo_create (Dev[id].surface);
+  if (!Dev[id].context)
     {
       _giza_error ("giza_open_device", "Could not create cairo surface.");
       giza_close_device();
@@ -211,7 +211,7 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
   /*
   printf("debug: device opened \n");
   */
-  return Dev.pgNum;
+  return id;
 }
 
 /**
@@ -254,6 +254,34 @@ giza_open_device_size_float (const char *newDeviceName, const char *newPrefix, f
 }
 
 /**
+ * Device: giza_select_device
+ *
+ * Synopsis: Select between the currently open devices
+ *
+ * Input:
+ *  -devid :- device id, as returned by giza_open_device
+ */
+void
+giza_select_device (int devid)
+{
+  if (id >= 0 && id < GIZA_MAX_DEVICES) {
+    /* need to check if device is open */
+    id = devid;
+    /* Determine which driver is required */
+    switch (Dev[id].type)
+      {
+#ifdef _GIZA_HAS_XW
+      case GIZA_DEVICE_XW:
+        _giza_select_xw (id);
+        break;
+#endif
+      }
+  } else {
+    _giza_error ("giza_select_device", "Invalid device selected");
+  }
+}
+
+/**
  * Device: giza_flush_device
  *
  * Synopsis: Flushes the currently open device.
@@ -266,7 +294,7 @@ giza_flush_device (void)
 
   _giza_set_drawn ();
 
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
@@ -274,12 +302,12 @@ giza_flush_device (void)
       break;
 #endif
     default:
-      if (!surface)
+      if (!Dev[id].surface)
         {
           _giza_error ("giza_flush_device", "No device open, cannot flush");
           return;
         } else {
-          cairo_surface_flush(surface);
+          cairo_surface_flush(Dev[id].surface);
         }
       return;
     }
@@ -294,7 +322,7 @@ giza_flush_device (void)
 void
 _giza_resize_device (int width, int height)
 {
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
@@ -324,15 +352,15 @@ giza_change_page (void)
      {
        int width,height;
        _giza_get_specified_size(&width, &height);
-       if (width != Dev.width || height != Dev.height) {
+       if (width != Dev[id].width || height != Dev[id].height) {
           printf("RESIZING %i %i \n",width,height);
           _giza_resize_device(width, height);
           _giza_change_page_xw();
        } else {
-          printf("SAME SIZE %i %i \n",Dev.width,Dev.height);       
+          printf("SAME SIZE %i %i \n",Dev[id].width,Dev[id].height);       
        }
      } else {
-       printf("NO RESIZING %i %i \n",Dev.width,Dev.height);
+       printf("NO RESIZING %i %i \n",Dev[id].width,Dev[id].height);
      }
 */
 
@@ -350,7 +378,7 @@ giza_change_page (void)
     (line style, width, colour index etc.) */
   giza_save();
 
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
@@ -385,12 +413,12 @@ giza_change_page (void)
       return;
     }
 
-  if (_giza_get_prompting () && Dev.isInteractive)
+  if (_giza_get_prompting () && Dev[id].isInteractive)
     {
       _giza_newpage_prompt();
     }
 
-  Dev.pgNum++;
+  Dev[id].pgNum++;
 
   /* Reset stuff */
   giza_set_viewport (VP.xmin,VP.xmax, VP.ymin, VP.ymax);
@@ -417,15 +445,15 @@ giza_close_device (void)
   if (!_giza_check_device_ready ("giza_close_device"))
     return;
 
-  if (_giza_get_prompting () && Dev.isInteractive)
+  if (_giza_get_prompting () && Dev[id].isInteractive)
     {
       _giza_newpage_prompt();
     }
 
   /* destroy the cairo context */
-  if (context) cairo_destroy(context);
+  if (Dev[id].context) cairo_destroy(Dev[id].context);
 
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
@@ -464,7 +492,7 @@ giza_close_device (void)
   /* Destroy the font */
   _giza_free_font ();
   _giza_free_colour_table ();
-  Dev.type = GIZA_DEVICE_IV;
+  Dev[id].type = GIZA_DEVICE_IV;
   id = id - 1;
 
   return;
@@ -503,7 +531,7 @@ giza_query_device (const char *querytype, char *returnval)
 
   if (!strcmp(querytype,"type"))
      {
-       if (!_giza_int_to_device(Dev.type,returnval))
+       if (!_giza_int_to_device(Dev[id].type,returnval))
          {
            ierr = 1;
          }
@@ -511,7 +539,7 @@ giza_query_device (const char *querytype, char *returnval)
   /* Query whether or not device has cursor */
   else if (!strcmp(querytype,"cursor"))
     {
-      if (Dev.isInteractive)
+      if (Dev[id].isInteractive)
         {
           strncpy(returnval,"YES",sizeof(returnval)-1);
         }
@@ -523,7 +551,7 @@ giza_query_device (const char *querytype, char *returnval)
   /* Query whether or not device is hard copy or not */
   else if (!strcmp(querytype,"hardcopy"))
     {
-      if (Dev.isInteractive)
+      if (Dev[id].isInteractive)
         {
           strncpy(returnval,"NO",sizeof(returnval)-1);
         }
@@ -552,13 +580,13 @@ giza_query_device (const char *querytype, char *returnval)
   /* Query current device name */
   else if (!strcmp(querytype,"device"))
     {
-       strncpy(returnval,Dev.prefix,sizeof(returnval)-1);
+       strncpy(returnval,Dev[id].prefix,sizeof(returnval)-1);
     }
   /* Query current device/type */
   else if (!strcmp(querytype,"dev/type"))
     {
-       strncpy(returnval,Dev.prefix,sizeof(returnval)-1);
-       if (!_giza_int_to_device(Dev.type,devType))
+       strncpy(returnval,Dev[id].prefix,sizeof(returnval)-1);
+       if (!_giza_int_to_device(Dev[id].type,devType))
          {
            ierr = 1;
            strncat(returnval,devType,4*sizeof(char));
@@ -567,9 +595,9 @@ giza_query_device (const char *querytype, char *returnval)
   /* Query current filename (as entered by user) */
   else if (!strcmp(querytype,"file"))
     {
-       if (!Dev.isInteractive)
+       if (!Dev[id].isInteractive)
          {
-           strncpy(returnval,Dev.prefix,sizeof(returnval)-1);
+           strncpy(returnval,Dev[id].prefix,sizeof(returnval)-1);
          }
     }
   returnval[sizeof(returnval)-1] = '\0'; /* make sure string is null-terminated */
@@ -602,7 +630,7 @@ _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, cons
   if (!_giza_check_device_ready ("_giza_get_key_press"))
     return 1;
 
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
     case GIZA_DEVICE_NULL:
     case GIZA_DEVICE_PDF:
@@ -848,7 +876,7 @@ _giza_init_norm (void)
 
   double xx,yy,x0,y0;
 
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
     /*
@@ -874,10 +902,10 @@ _giza_init_norm (void)
      *      to normalised device coords to avoid clipping at the edge
      */
 
-      xx = (double) Dev.width - 2.*GIZA_DEFAULT_MARGIN;
-      yy = 2.*GIZA_DEFAULT_MARGIN - (double) Dev.height;
+      xx = (double) Dev[id].width - 2.*GIZA_DEFAULT_MARGIN;
+      yy = 2.*GIZA_DEFAULT_MARGIN - (double) Dev[id].height;
       x0 = GIZA_DEFAULT_MARGIN;
-      y0 = (double) Dev.height - GIZA_DEFAULT_MARGIN;
+      y0 = (double) Dev[id].height - GIZA_DEFAULT_MARGIN;
       cairo_matrix_init (&(Win.normCoords), xx, 0, 0, yy, x0, y0);
       _giza_set_trans (GIZA_TRANS_NORM);
       break;
@@ -893,7 +921,7 @@ _giza_expand_clipping (void)
 {
     if (!_giza_check_device_ready ("_giza_expand_clipping"))
     return;
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
@@ -902,20 +930,20 @@ _giza_expand_clipping (void)
 #endif
     default:
       _giza_set_trans (GIZA_TRANS_IDEN);
-      cairo_reset_clip (context);
-      cairo_rectangle (context, 0, 0, Dev.width, Dev.height);
-      cairo_clip (context);
+      cairo_reset_clip (Dev[id].context);
+      cairo_rectangle (Dev[id].context, 0, 0, Dev[id].width, Dev[id].height);
+      cairo_clip (Dev[id].context);
       break;
     }
 }
 
 /**
- * Allocates the array for Dev.prefix and sets it to prefix
+ * Allocates the array for Dev[id].prefix and sets it to prefix
  */
 static void
 _giza_set_prefix (const char *prefix)
 {
-  strncpy (Dev.prefix, prefix, sizeof(Dev.prefix));
+  strncpy (Dev[id].prefix, prefix, sizeof(Dev[id].prefix));
 }
 
 /*
@@ -927,7 +955,7 @@ _giza_init_band (int mode)
   if (mode == 0) return 0;
 
   int success = 1;
-  switch (Dev.type)
+  switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
       case GIZA_DEVICE_XW:
@@ -939,7 +967,7 @@ _giza_init_band (int mode)
 	break;
     }
   _giza_set_line_style (Band.ls, Band.box);
-  double lwDevice = Band.lw * Dev.deviceUnitsPermm * 0.25;
+  double lwDevice = Band.lw * Dev[id].deviceUnitsPermm * 0.25;
   cairo_set_line_width (Band.box, lwDevice);
 
   return success;

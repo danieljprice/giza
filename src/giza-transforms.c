@@ -44,24 +44,24 @@ _giza_set_trans (int trans)
   switch (trans)
     {
     case GIZA_TRANS_IDEN:
-      cairo_identity_matrix (context);
+      cairo_identity_matrix (Dev[id].context);
       break;
     case GIZA_TRANS_NORM:
-      cairo_set_matrix (context, &(Win.normCoords));
+      cairo_set_matrix (Dev[id].context, &(Win.normCoords));
       break;
     case GIZA_TRANS_WORLD:
-      cairo_set_matrix (context, &(Win.userCoords));
+      cairo_set_matrix (Dev[id].context, &(Win.userCoords));
       break;
     case GIZA_TRANS_FONT:
-      cairo_get_font_matrix (context, &mat);
-      cairo_set_matrix (context, &mat);
+      cairo_get_font_matrix (Dev[id].context, &mat);
+      cairo_set_matrix (Dev[id].context, &mat);
       break;
     default:
       _giza_error ("_giza_set_trans", "Internal Error: Invalid Transformation.");
       return;
       break;
     }
-  Dev.CurrentTrans = trans;
+  Dev[id].CurrentTrans = trans;
 }
 
 /**
@@ -77,5 +77,5 @@ _giza_get_trans (void)
   if (!_giza_check_device_ready ("_giza_get_trans"))
     return -1;
 
-  return Dev.CurrentTrans;
+  return Dev[id].CurrentTrans;
 }

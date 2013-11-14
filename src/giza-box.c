@@ -215,7 +215,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   subTickL = 0.;
 
   /* convert to world coords */
-  cairo_device_to_user_distance (context, &subTickL, &majTickL);
+  cairo_device_to_user_distance (Dev[id].context, &subTickL, &majTickL);
   majTickL = -majTickL;
 
   /* set minor tick length as a fraction of the major tick length */
@@ -231,7 +231,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
     {
       xintervalMaj =
 	7. * Sets.fontExtents.max_x_advance / ((VP.xmax - VP.xmin) *
-					       Dev.width);
+					       Dev[id].width);
       if (xintervalMaj > 0.2)
 	xintervalMaj = 0.2;
       if (xintervalMaj < 0.05)
@@ -277,26 +277,26 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		  /* bottom */
 		  if (xdraw_bottom)
 		    {
-		      cairo_move_to (context, xval, Win.ymin);
-		      cairo_line_to (context, xval, Win.ymin + currentTickL);
+		      cairo_move_to (Dev[id].context, xval, Win.ymin);
+		      cairo_line_to (Dev[id].context, xval, Win.ymin + currentTickL);
 		    }
 		  /* grid */
 		  if (xdraw_grid)
 		    {
-		      cairo_move_to (context, xval, Win.ymin);
-		      cairo_line_to (context, xval, Win.ymax);
+		      cairo_move_to (Dev[id].context, xval, Win.ymin);
+		      cairo_line_to (Dev[id].context, xval, Win.ymax);
 		    }
 		  /* axis */
 		  else if (xdraw_axis)
 		    {
-		      cairo_move_to (context, xval, -currentTickL);
-		      cairo_line_to (context, xval, currentTickL);
+		      cairo_move_to (Dev[id].context, xval, -currentTickL);
+		      cairo_line_to (Dev[id].context, xval, currentTickL);
 		    }
 		  /* top */
 		  if (xdraw_top)
 		    {
-		      cairo_move_to (context, xval, Win.ymax);
-		      cairo_line_to (context, xval, Win.ymax - currentTickL);
+		      cairo_move_to (Dev[id].context, xval, Win.ymax);
+		      cairo_line_to (Dev[id].context, xval, Win.ymax - currentTickL);
 		    }
 		}
 	    }
@@ -379,7 +379,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   majTickL = Sets.fontExtents.max_x_advance * 0.33;
   subTickL = 0.;
   /* convert to world coords */
-  cairo_device_to_user_distance (context, &majTickL, &subTickL);
+  cairo_device_to_user_distance (Dev[id].context, &majTickL, &subTickL);
 
   /* set minor tick as a fraction of the major length */
   subTickL = majTickL * 0.5;
@@ -394,7 +394,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
     {
       yintervalMaj =
 	7. * Sets.fontExtents.max_x_advance / ((VP.ymax - VP.ymin) *
-					       Dev.height);
+					       Dev[id].height);
       if (yintervalMaj > 0.2) yintervalMaj = 0.2;
       if (yintervalMaj < 0.05) yintervalMaj = 0.05;
       yintervalMaj = yintervalMaj * (Win.ymax - Win.ymin);
@@ -436,26 +436,26 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		  /* left */
 		  if (ydraw_left)
 		    {
-		      cairo_move_to (context, Win.xmin, yval);
-		      cairo_line_to (context, Win.xmin + currentTickL, yval);
+		      cairo_move_to (Dev[id].context, Win.xmin, yval);
+		      cairo_line_to (Dev[id].context, Win.xmin + currentTickL, yval);
 		    }
 		  /* grid */
 		  if (ydraw_grid)
 		    {
-		      cairo_move_to (context, Win.xmin, yval);
-		      cairo_line_to (context, Win.xmax, yval);
+		      cairo_move_to (Dev[id].context, Win.xmin, yval);
+		      cairo_line_to (Dev[id].context, Win.xmax, yval);
 		    }
 		  /* axis */
 		  else if (ydraw_axis)
 		    {
-		      cairo_move_to (context, -currentTickL, yval);
-		      cairo_line_to (context, currentTickL, yval);
+		      cairo_move_to (Dev[id].context, -currentTickL, yval);
+		      cairo_line_to (Dev[id].context, currentTickL, yval);
 		    }
 		  /* right */
 		  if (ydraw_right)
 		    {
-		      cairo_move_to (context, Win.xmax, yval);
-		      cairo_line_to (context, Win.xmax - currentTickL, yval);
+		      cairo_move_to (Dev[id].context, Win.xmax, yval);
+		      cairo_line_to (Dev[id].context, Win.xmax - currentTickL, yval);
 		    }
 		}
 	    }
@@ -555,43 +555,43 @@ giza_box (const char *xopt, double xtick, int nxsub,
   /* draw the bottom of the box */
   if (xdraw_bottom)
     {
-      cairo_move_to (context, Win.xmin, Win.ymin);
-      cairo_line_to (context, Win.xmax, Win.ymin);
+      cairo_move_to (Dev[id].context, Win.xmin, Win.ymin);
+      cairo_line_to (Dev[id].context, Win.xmax, Win.ymin);
     }
 
   /* draw the right of the box */
   if (ydraw_right)
     {
-      cairo_move_to (context, Win.xmax, Win.ymin);
-      cairo_line_to (context, Win.xmax, Win.ymax);
+      cairo_move_to (Dev[id].context, Win.xmax, Win.ymin);
+      cairo_line_to (Dev[id].context, Win.xmax, Win.ymax);
     }
 
   /* draw the top of the box */
   if (xdraw_top)
     {
-      cairo_move_to (context, Win.xmax, Win.ymax);
-      cairo_line_to (context, Win.xmin, Win.ymax);
+      cairo_move_to (Dev[id].context, Win.xmax, Win.ymax);
+      cairo_line_to (Dev[id].context, Win.xmin, Win.ymax);
     }
 
   /* draw the left of the box */
   if (ydraw_left)
     {
-      cairo_move_to (context, Win.xmin, Win.ymax);
-      cairo_line_to (context, Win.xmin, Win.ymin);
+      cairo_move_to (Dev[id].context, Win.xmin, Win.ymax);
+      cairo_line_to (Dev[id].context, Win.xmin, Win.ymin);
     }
 
   /* draw the x axis */
   if (xdraw_axis)
     {
-      cairo_move_to (context, Win.xmin, 0.);
-      cairo_line_to (context, Win.xmax, 0.);
+      cairo_move_to (Dev[id].context, Win.xmin, 0.);
+      cairo_line_to (Dev[id].context, Win.xmax, 0.);
     }
 
   /* draw the y axis */
   if (ydraw_axis)
     {
-      cairo_move_to (context, 0., Win.ymin);
-      cairo_line_to (context, 0., Win.ymax);
+      cairo_move_to (Dev[id].context, 0., Win.ymin);
+      cairo_line_to (Dev[id].context, 0., Win.ymax);
     }
 
   /* stroke all the paths */

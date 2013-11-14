@@ -75,7 +75,7 @@ giza_print_id (void)
   /* convert this to world coordinates */
   int oldtrans = _giza_get_trans();
   _giza_set_trans(GIZA_TRANS_WORLD);
-  cairo_device_to_user (context, &x, &y);
+  cairo_device_to_user (Dev[id].context, &x, &y);
 
   /* print text at location */
   giza_ptext(x,y,0.,1.,string);

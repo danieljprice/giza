@@ -115,11 +115,11 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
       _giza_set_alpha(0.15);
 
       if (dir == 7 || dir == 9) {
-         cairo_move_to (context, xpts[0], ypts[0] + error[0]);
+         cairo_move_to (Dev[id].context, xpts[0], ypts[0] + error[0]);
          for (i = 0; i < n; i++)
            {
              /* draw line along top of error bars */
-             cairo_line_to (context, xpts[i], ypts[i] + error[i]);
+             cairo_line_to (Dev[id].context, xpts[i], ypts[i] + error[i]);
            }
 
          /*
@@ -129,17 +129,17 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
          if (dir == 7) {
             for (i = n-1; i >= 0; i--)
               {
-                cairo_line_to (context, xpts[i], ypts[i]);
+                cairo_line_to (Dev[id].context, xpts[i], ypts[i]);
               }
          }
       }
       
       if (dir == 8 || dir == 9) {
-         cairo_move_to (context, xpts[n-1], ypts[n-1] - error[n-1]);
+         cairo_move_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
          for (i = n-1; i >= 0; i--)
            {
              /* draw line along bottom of error bars */
-             cairo_line_to (context, xpts[i], ypts[i] - error[i]);
+             cairo_line_to (Dev[id].context, xpts[i], ypts[i] - error[i]);
            }
 
          /*
@@ -149,12 +149,12 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
          if (dir == 8) {
             for (i = 0; i < n; i++)
               {
-                cairo_line_to (context, xpts[i], ypts[i]);
+                cairo_line_to (Dev[id].context, xpts[i], ypts[i]);
               }
          }
       }
-      cairo_close_path(context);
-      cairo_fill(context);
+      cairo_close_path(Dev[id].context);
+      cairo_fill(Dev[id].context);
       _giza_stroke ();
       _giza_set_alpha(a);
     }
@@ -245,11 +245,11 @@ giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts, con
       _giza_set_alpha(0.15);
 
       if (dir == 7 || dir == 9) {
-         cairo_move_to (context, xpts[0], ypts[0] + error[0]);
+         cairo_move_to (Dev[id].context, xpts[0], ypts[0] + error[0]);
          for (i = 0; i < n; i++)
            {
              /* draw line along top of error bars */
-             cairo_line_to (context, xpts[i], ypts[i] + error[i]);
+             cairo_line_to (Dev[id].context, xpts[i], ypts[i] + error[i]);
            }
 
          /*
@@ -259,17 +259,17 @@ giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts, con
          if (dir == 7) {
             for (i = n-1; i >= 0; i--)
               {
-                cairo_line_to (context, xpts[i], ypts[i]);
+                cairo_line_to (Dev[id].context, xpts[i], ypts[i]);
               }
          }
       }
       
       if (dir == 8 || dir == 9) {
-         cairo_move_to (context, xpts[n-1], ypts[n-1] - error[n-1]);
+         cairo_move_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
          for (i = n-1; i >= 0; i--)
            {
              /* draw line along bottom of error bars */
-             cairo_line_to (context, xpts[i], ypts[i] - error[i]);
+             cairo_line_to (Dev[id].context, xpts[i], ypts[i] - error[i]);
            }
 
          /*
@@ -279,12 +279,12 @@ giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts, con
          if (dir == 8) {
             for (i = 0; i < n; i++)
               {
-                cairo_line_to (context, xpts[i], ypts[i]);
+                cairo_line_to (Dev[id].context, xpts[i], ypts[i]);
               }
          }
       }
-      cairo_close_path(context);
-      cairo_fill(context);
+      cairo_close_path(Dev[id].context);
+      cairo_fill(Dev[id].context);
       _giza_stroke ();
       _giza_set_alpha(a);
     }
@@ -340,16 +340,16 @@ giza_error_bars_vert (int n, const double *xpts, const double *ypts1, const doub
   for (i = 0; i < n; i++)
     {
       /* draw the bar */
-      cairo_move_to (context, xpts[i], ypts1[i]);
-      cairo_line_to (context, xpts[i], ypts2[i]);
+      cairo_move_to (Dev[id].context, xpts[i], ypts1[i]);
+      cairo_line_to (Dev[id].context, xpts[i], ypts2[i]);
 
       /* draw the ends */
       if (term > 0.)
         {
-          cairo_move_to (context, xpts[i] - endWidth, ypts1[i]);
-          cairo_line_to (context, xpts[i] + endWidth, ypts1[i]);
-          cairo_move_to (context, xpts[i] - endWidth, ypts2[i]);
-          cairo_line_to (context, xpts[i] + endWidth, ypts2[i]);
+          cairo_move_to (Dev[id].context, xpts[i] - endWidth, ypts1[i]);
+          cairo_line_to (Dev[id].context, xpts[i] + endWidth, ypts1[i]);
+          cairo_move_to (Dev[id].context, xpts[i] - endWidth, ypts2[i]);
+          cairo_line_to (Dev[id].context, xpts[i] + endWidth, ypts2[i]);
         }
     }
 
@@ -389,15 +389,15 @@ giza_error_bars_vert_float (int n, const float *xpts, const float *ypts1, const 
       currentY2 = (double) ypts2[i];
 
       /* draw the bar */
-      cairo_move_to (context, currentX, currentY1);
-      cairo_line_to (context, currentX, currentY2);
+      cairo_move_to (Dev[id].context, currentX, currentY1);
+      cairo_line_to (Dev[id].context, currentX, currentY2);
 
       /* draw the ends */
-      cairo_move_to (context, currentX - endWidth, currentY1);
-      cairo_line_to (context, currentX + endWidth, currentY1);
+      cairo_move_to (Dev[id].context, currentX - endWidth, currentY1);
+      cairo_line_to (Dev[id].context, currentX + endWidth, currentY1);
 
-      cairo_move_to (context, currentX - endWidth, currentY2);
-      cairo_line_to (context, currentX + endWidth, currentY2);
+      cairo_move_to (Dev[id].context, currentX - endWidth, currentY2);
+      cairo_line_to (Dev[id].context, currentX + endWidth, currentY2);
     }
 
   _giza_stroke ();
@@ -437,16 +437,16 @@ giza_error_bars_hori (int n, const double *xpts1, const double *xpts2, const dou
   for (i = 0; i < n; i++)
     {
       /* draw the bar */
-      cairo_move_to (context, xpts1[i], ypts[i]);
-      cairo_line_to (context, xpts2[i], ypts[i]);
+      cairo_move_to (Dev[id].context, xpts1[i], ypts[i]);
+      cairo_line_to (Dev[id].context, xpts2[i], ypts[i]);
 
       /* draw the ends */
       if (term > 0.)
         {
-          cairo_move_to (context, xpts1[i], ypts[i] - endWidth);
-          cairo_line_to (context, xpts1[i], ypts[i] + endWidth);
-          cairo_move_to (context, xpts2[i], ypts[i] - endWidth);
-          cairo_line_to (context, xpts2[i], ypts[i] + endWidth);
+          cairo_move_to (Dev[id].context, xpts1[i], ypts[i] - endWidth);
+          cairo_line_to (Dev[id].context, xpts1[i], ypts[i] + endWidth);
+          cairo_move_to (Dev[id].context, xpts2[i], ypts[i] - endWidth);
+          cairo_line_to (Dev[id].context, xpts2[i], ypts[i] + endWidth);
         }
     }
 
@@ -484,16 +484,16 @@ giza_error_bars_hori_float (int n, const float *xpts1, const float *xpts2, const
       currentY  = (double) ypts[i];
 
       /* draw the bar */
-      cairo_move_to (context, currentX1, currentY);
-      cairo_line_to (context, currentX2, currentY);
+      cairo_move_to (Dev[id].context, currentX1, currentY);
+      cairo_line_to (Dev[id].context, currentX2, currentY);
 
       /* draw the ends */
       if (term > 0.)
         {
-          cairo_move_to (context, currentX1, currentY - endWidth);
-          cairo_line_to (context, currentX1, currentY + endWidth);
-          cairo_move_to (context, currentX2, currentY - endWidth);
-          cairo_line_to (context, currentX2, currentY + endWidth);
+          cairo_move_to (Dev[id].context, currentX1, currentY - endWidth);
+          cairo_line_to (Dev[id].context, currentX1, currentY + endWidth);
+          cairo_move_to (Dev[id].context, currentX2, currentY - endWidth);
+          cairo_line_to (Dev[id].context, currentX2, currentY + endWidth);
         }
     }
 
@@ -517,14 +517,14 @@ _giza_error_bar_vert (double x, double y, double error, double term)
   endWidth = 0.5 * endWidth * term;
 
   /* draw the bar */
-  cairo_move_to (context, x, y);
-  cairo_line_to (context, x + error, y);
+  cairo_move_to (Dev[id].context, x, y);
+  cairo_line_to (Dev[id].context, x + error, y);
 
   /* draw the ends */
   if (term > 0.)
     {
-      cairo_move_to (context, x + error, y - endWidth * 0.5);
-      cairo_line_to (context, x + error, y + endWidth * 0.5);
+      cairo_move_to (Dev[id].context, x + error, y - endWidth * 0.5);
+      cairo_line_to (Dev[id].context, x + error, y + endWidth * 0.5);
     }
 }
 
@@ -540,13 +540,13 @@ _giza_error_bar_hori (double x, double y, double error, double term)
   endWidth = 0.5 * endWidth * term;
 
   /* draw the bar */
-  cairo_move_to (context, x, y);
-  cairo_line_to (context, x, y + error);
+  cairo_move_to (Dev[id].context, x, y);
+  cairo_line_to (Dev[id].context, x, y + error);
 
   /* draw the end */
   if (term > 0.)
     {
-      cairo_move_to (context, x - endWidth * 0.5, y + error);
-      cairo_line_to (context, x + endWidth * 0.5, y + error);
+      cairo_move_to (Dev[id].context, x - endWidth * 0.5, y + error);
+      cairo_line_to (Dev[id].context, x + endWidth * 0.5, y + error);
     }
 }

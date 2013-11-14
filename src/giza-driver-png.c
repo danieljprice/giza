@@ -47,24 +47,24 @@
 int
 _giza_open_device_png (void)
 {
-  Dev.deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
-  Dev.deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
-  Dev.isInteractive       = GIZA_DEVICE_INTERACTIVE;
+  Dev[id].deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
+  Dev[id].deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
+  Dev[id].isInteractive       = GIZA_DEVICE_INTERACTIVE;
 
   if(_giza_sizeSpecified ())
     {
-      _giza_get_specified_size(&Dev.width, &Dev.height);
+      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
     }
   else
     {
-      Dev.width  = GIZA_DEFAULT_WIDTH;
-      Dev.height = GIZA_DEFAULT_HEIGHT;
+      Dev[id].width  = GIZA_DEFAULT_WIDTH;
+      Dev[id].height = GIZA_DEFAULT_HEIGHT;
     }
 
-  surface =
-    cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width,
-				Dev.height);
-  if (!surface)
+  Dev[id].surface =
+    cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev[id].width,
+				Dev[id].height);
+  if (!Dev[id].surface)
     {
       _giza_error ("_giza_open_device_png", "Could not create cairo surface");
       return -1;
@@ -78,7 +78,7 @@ _giza_open_device_png (void)
 void
 _giza_flush_device_png (void)
 {
-  cairo_surface_flush (surface);
+  cairo_surface_flush (Dev[id].surface);
 }
 
 /**
@@ -87,22 +87,22 @@ _giza_flush_device_png (void)
 void
 _giza_change_page_png (void)
 {
-  /* Destroy old context */
-  cairo_destroy (context);
+  /* Destroy old Dev[id].context */
+  cairo_destroy (Dev[id].context);
 
   /* Write current surface to png file and destroy the cairo surface */
   _giza_close_device_png(0);
 
   /* Create a new surface */
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev.width, Dev.height);
+  Dev[id].surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev[id].width, Dev[id].height);
 
-  if (!surface)
+  if (!Dev[id].surface)
     {
       _giza_error ("_giza_change_page_png", "Could not create cairo PNG surface");
       return;
     }
-  context = cairo_create (surface);
-  if (!context)
+  Dev[id].context = cairo_create (Dev[id].surface);
+  if (!Dev[id].context)
     {
       _giza_error ("_giza_change_page_png", "Could not create cairo context");
       return;
@@ -122,16 +122,16 @@ void
 _giza_close_device_png (int last)
 {
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
-  int length = strlen (Dev.prefix) + lenext + 5;
+  int length = strlen (Dev[id].prefix) + lenext + 5;
   char fileName[length + 1];
-  _giza_get_filename_for_device(fileName,Dev.prefix,Dev.pgNum,GIZA_DEVICE_EXTENSION,last);
+  _giza_get_filename_for_device(fileName,Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,last);
 
-  cairo_surface_write_to_png (surface, fileName);
+  cairo_surface_write_to_png (Dev[id].surface, fileName);
 
   char tmp[length + 10];
   sprintf(tmp, "%s created", fileName);
   _giza_message (tmp);
 
-  cairo_surface_destroy (surface);
+  cairo_surface_destroy (Dev[id].surface);
 }
 

@@ -47,17 +47,17 @@ giza_set_line_cap (int lc)
   switch (lc)
     {
     case 0:
-      cairo_set_line_cap (context, CAIRO_LINE_CAP_BUTT);
+      cairo_set_line_cap (Dev[id].context, CAIRO_LINE_CAP_BUTT);
       break;
     case 1:
-      cairo_set_line_cap (context, CAIRO_LINE_CAP_ROUND);
+      cairo_set_line_cap (Dev[id].context, CAIRO_LINE_CAP_ROUND);
       break;
     case 2:
-      cairo_set_line_cap (context, CAIRO_LINE_CAP_SQUARE);
+      cairo_set_line_cap (Dev[id].context, CAIRO_LINE_CAP_SQUARE);
       break;
     default:
       _giza_warning ("giza_set_line_cap", "Invalid line cap, setting to default.");
-      cairo_set_line_cap (context, CAIRO_LINE_CAP_BUTT);
+      cairo_set_line_cap (Dev[id].context, CAIRO_LINE_CAP_BUTT);
       break;
     }
 }
@@ -75,7 +75,7 @@ giza_get_line_cap (int *lc)
 {
   if(!_giza_check_device_ready("giza_get_line_cap")) return;
 
-  switch (cairo_get_line_cap (context))
+  switch (cairo_get_line_cap (Dev[id].context))
     {
     case CAIRO_LINE_CAP_BUTT:
       *lc = 0;

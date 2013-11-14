@@ -41,8 +41,8 @@ giza_draw_background (void)
   int oldCi;
   giza_get_colour_index (&oldCi);
 
-  cairo_save (context);
-  cairo_reset_clip (context);
+  cairo_save (Dev[id].context);
+  cairo_reset_clip (Dev[id].context);
   giza_set_colour_index (0);
   /*
    * Only paint the background colour if it is not transparent
@@ -52,9 +52,9 @@ giza_draw_background (void)
   double r,g,b,a;
   giza_get_colour_representation_alpha(0,&r,&g,&b,&a);
   if (a > 0.) {
-     cairo_paint (context);
+     cairo_paint (Dev[id].context);
   }
-  cairo_restore (context);
+  cairo_restore (Dev[id].context);
 
   giza_set_colour_index (oldCi);
   return;
