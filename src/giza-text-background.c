@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2013 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -63,5 +63,5 @@ giza_get_text_background (int *colourIndex)
 void
 _giza_init_text_background (void)
 {
-  Dev[id].text_background = 0;
+  Dev[id].text_background = -1;
 }
