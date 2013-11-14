@@ -70,8 +70,8 @@ static int _giza_device_id = 0;
  *  -newPrefix     :- Specifies the default prefix to be used for file names.
  *
  * Return value:
- *  -0 :- if no error has occurred
- *  -1 :- if an error occurred
+ *  -<=0 :- an error has occurred
+ *  -1   :- id of current device
  *
  * Available devices:
  *  -?    :- User selects device
@@ -87,6 +87,8 @@ static int _giza_device_id = 0;
  *  For hardcopy devices, the device type can also be recognised
  *  automatically by specifying the filename
  *  e.g: giza_open_device("plot.png","giza")
+ *
+ * See Also: giza_select_device, giza_get_device_id, giza_close_device, giza_query_device
  */
 int
 giza_open_device (const char *newDeviceName, const char *newPrefix)
