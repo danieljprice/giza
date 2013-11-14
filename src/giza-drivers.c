@@ -314,7 +314,6 @@ giza_select_device (int devid)
         id = _giza_get_internal_id(_giza_device_id);
 
       }
-    printf("giza_debug: selecting device %i\n",id);
 
     /*
      * select between currently open windows
@@ -881,23 +880,23 @@ giza_print_device_list (void)
 void
 _giza_init_device_list (char **deviceList)
 {
-  *deviceList = malloc (500 * sizeof(char)); /* be CAREFUL here to make sure the string is big enough */
+  *deviceList = malloc (1000 * sizeof(char)); /* be CAREFUL here to make sure the string is big enough */
 
   *deviceList[0] = '\0';
 #ifdef _GIZA_HAS_XW
   strcat (*deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
 #endif
   strcat (*deviceList, "Non-interactive file formats:\n");
-  strcat (*deviceList, "\t/png\t(Portable network graphics file)\n");
-  strcat (*deviceList, "\t/svg\t(Scalable vector graphics file)\n");
+  strcat (*deviceList, "\t/png or file.png   (Portable network graphics file)\n");
+  strcat (*deviceList, "\t/svg or file.svg   (Scalable vector graphics file)\n");
 #ifdef _GIZA_HAS_EPS
-  strcat (*deviceList, "\t/eps\t(Encapsulated Postscript, one file per page)\n");
+  strcat (*deviceList, "\t/eps or file.eps   (Encapsulated Postscript, one file per page)\n");
 #endif
-  strcat (*deviceList, "\t/pdf\t(Portable document format file)\n");
-  strcat (*deviceList, "\t/vpdf\t(Portable document format file portrait)\n");
-  strcat (*deviceList, "\t/ps\t(Postscript file, multiple pages per file)\n");
-  strcat (*deviceList, "\t/vps\t(Postscript file portrait, multiple pages per file)\n");
-  strcat (*deviceList, "\t/null\t(Null device)\n");
+  strcat (*deviceList, "\t/pdf or file.pdf   (Portable document format file)\n");
+  strcat (*deviceList, "\t/vpdf              (Portable document format file portrait)\n");
+  strcat (*deviceList, "\t/ps  or file.ps    (Postscript file, multiple pages per file)\n");
+  strcat (*deviceList, "\t/vps               (Postscript file portrait, multiple pages per file)\n");
+  strcat (*deviceList, "\t/null              (Null device)\n");
 }
 
 /**
