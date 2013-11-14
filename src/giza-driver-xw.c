@@ -108,7 +108,6 @@ _giza_open_device_xw (double width, double height, int units)
 
   xid += 1;
   giza_xw_id[id] = xid + 1;
-  printf("OPEN: ID = %i, XID = %i \n",id,xid);
   
   /* set the XLib stuff */
   XW[xid].width = Dev[id].width + 2 * GIZA_XW_MARGIN;
