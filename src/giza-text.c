@@ -62,7 +62,7 @@ _giza_start_super (void)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
-  double x , y, height = Sets.fontExtents.ascent * GIZA_RAISE_SUPERS;
+  double x , y, height = Dev[id].fontExtents.ascent * GIZA_RAISE_SUPERS;
 
   x = height * sin (Sets.fontAngle);
   y = -height * cos (Sets.fontAngle);
@@ -88,7 +88,7 @@ _giza_stop_super (void)
   _giza_set_trans (GIZA_TRANS_IDEN);
   _giza_scale_character_size (1. / GIZA_SCALE_SUPERS);
 
-  double x , y, height = Sets.fontExtents.ascent * GIZA_RAISE_SUPERS;
+  double x , y, height = Dev[id].fontExtents.ascent * GIZA_RAISE_SUPERS;
 
   x = -height * sin (Sets.fontAngle);
   y = height * cos (Sets.fontAngle);
@@ -107,7 +107,7 @@ _giza_start_sub (void)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
-  double x , y, height = -Sets.fontExtents.ascent * GIZA_LOWER_SUBS;
+  double x , y, height = -Dev[id].fontExtents.ascent * GIZA_LOWER_SUBS;
 
   x = height * sin (Sets.fontAngle);
   y = -height * cos (Sets.fontAngle);
@@ -130,7 +130,7 @@ _giza_stop_sub (void)
   _giza_set_trans (GIZA_TRANS_IDEN);
   _giza_scale_character_size (1. / GIZA_SCALE_SUBS);
 
-  double x , y, height = -Sets.fontExtents.ascent * GIZA_LOWER_SUBS;
+  double x , y, height = -Dev[id].fontExtents.ascent * GIZA_LOWER_SUBS;
 
   x = -height * sin (Sets.fontAngle);
   y = height * cos (Sets.fontAngle);

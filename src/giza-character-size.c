@@ -55,7 +55,7 @@ giza_set_character_height (double ch)
   double chDevice = ch * Dev[id].height * .027;
   cairo_set_font_size (Dev[id].context, chDevice);
   /* query font extents and store this */
-  cairo_font_extents (Dev[id].context, &Sets.fontExtents);
+  cairo_font_extents (Dev[id].context, &Dev[id].fontExtents);
   _giza_ch = ch;
 
   _giza_set_trans (oldTrans);
@@ -127,7 +127,7 @@ giza_get_character_size (int units, double *heightx, double *heighty)
 
   int oldTrans = _giza_get_trans ();
 
-  *heighty = Sets.fontExtents.ascent;
+  *heighty = Dev[id].fontExtents.ascent;
   *heightx = *heighty;
 
   switch (units)
@@ -234,7 +234,7 @@ _giza_scale_character_size (double scalefac)
 
   cairo_matrix_scale (&mat, scalefac, scalefac);
   cairo_set_font_matrix (Dev[id].context, &mat);
-  cairo_font_extents (Dev[id].context, &Sets.fontExtents);
+  cairo_font_extents (Dev[id].context, &Dev[id].fontExtents);
 
   _giza_set_trans (oldTrans);
 

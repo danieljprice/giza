@@ -213,7 +213,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   /* set major tick length in pixels */
-  majTickL = Sets.fontExtents.max_x_advance * 0.33;
+  majTickL = Dev[id].fontExtents.max_x_advance * 0.33;
   subTickL = 0.;
 
   /* convert to world coords */
@@ -232,7 +232,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   else if (_giza_equal(xtick,0.))
     {
       xintervalMaj =
-	7. * Sets.fontExtents.max_x_advance / 
+	7. * Dev[id].fontExtents.max_x_advance / 
         ((Dev[id].VP.xmax - Dev[id].VP.xmin)*Dev[id].width);
       if (xintervalMaj > 0.2)
 	xintervalMaj = 0.2;
@@ -378,7 +378,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
     }
 
   /* set major tick length in pixels */
-  majTickL = Sets.fontExtents.max_x_advance * 0.33;
+  majTickL = Dev[id].fontExtents.max_x_advance * 0.33;
   subTickL = 0.;
   /* convert to world coords */
   cairo_device_to_user_distance (Dev[id].context, &majTickL, &subTickL);
@@ -395,7 +395,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   else if (_giza_equal(ytick,0.))
     {
       yintervalMaj =
-	7. * Sets.fontExtents.max_x_advance / 
+	7. * Dev[id].fontExtents.max_x_advance / 
         ((Dev[id].VP.ymax - Dev[id].VP.ymin) * Dev[id].height);
       if (yintervalMaj > 0.2) yintervalMaj = 0.2;
       if (yintervalMaj < 0.05) yintervalMaj = 0.05;

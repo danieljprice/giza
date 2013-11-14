@@ -91,9 +91,10 @@ typedef struct
   double lw;
   double ls;
   giza_arrow_t Arrow;
-  /* cairo context and surface */
+  /* cairo objects and settings */
   cairo_t *context;
   cairo_surface_t *surface;
+  cairo_font_extents_t fontExtents;
 } giza_device_t;
 
 giza_device_t Dev[GIZA_MAX_DEVICES];
@@ -103,7 +104,6 @@ int id;
 /* Store the current settings of giza */
 struct GIZA_Settings
 {
-  cairo_font_extents_t fontExtents;
   double fontAngle;
   int autolog;
 } Sets;
