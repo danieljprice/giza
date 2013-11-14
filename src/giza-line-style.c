@@ -28,9 +28,6 @@
 #include "giza-line-style-private.h"
 #include <giza.h>
 
-int _giza_line_style, _giza_n;
-double _giza_dashes[8];
-
 /**
  * Settings: giza_set_line_style
  *
@@ -55,7 +52,7 @@ giza_set_line_style (int ls)
     return;
 
   _giza_set_line_style (ls, Dev[id].context);
-  _giza_line_style = ls;
+  Dev[id].ls = ls;
 }
 
 /**
@@ -71,7 +68,7 @@ giza_get_line_style (int *ls)
 {
   if (!_giza_check_device_ready ("giza_get_line_style"))
     return;
-  *ls = _giza_line_style;
+  *ls = Dev[id].ls;
 }
 
 void
@@ -82,6 +79,9 @@ _giza_set_line_style (int ls, cairo_t *ct)
   giza_get_character_size (GIZA_UNITS_MM, &longDash, &shortDash);
   longDash = 0.85 * longDash;
   shortDash = 0.33 * longDash;
+
+  double _giza_dashes[8];
+  int _giza_n;
 
   switch (ls)
     {
@@ -128,11 +128,11 @@ _giza_set_line_style (int ls, cairo_t *ct)
       break;
     }
 
-  _giza_set_cairo_dashes (ct);
+  _giza_set_cairo_dashes (ct, _giza_dashes, _giza_n);
 }
 
 void
-_giza_set_cairo_dashes (cairo_t *ct)
+_giza_set_cairo_dashes (cairo_t *ct, const double *_giza_dashes, int _giza_n)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -145,5 +145,5 @@ _giza_set_cairo_dashes (cairo_t *ct)
 void
 _giza_init_line_style (void)
 {
-  _giza_line_style = GIZA_LS_SOLID;
+  Dev[id].ls = GIZA_LS_SOLID;
 }

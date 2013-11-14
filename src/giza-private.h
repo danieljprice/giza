@@ -89,6 +89,7 @@ typedef struct
   double hatch_spacing;
   double hatch_phase;
   double lw;
+  double ls;
   giza_arrow_t Arrow;
   /* cairo context and surface */
   cairo_t *context;
