@@ -67,7 +67,10 @@ void
 giza_get_line_style (int *ls)
 {
   if (!_giza_check_device_ready ("giza_get_line_style"))
-    return;
+    {
+      *ls = GIZA_LS_SOLID;
+      return;
+    }
   *ls = Dev[id].ls;
 }
 
