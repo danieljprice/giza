@@ -27,21 +27,17 @@
 /**
  * Settings: giza_version
  *
- * Synopsis: Returns the giza version
+ * Synopsis: Returns the giza version.
+ * Note that version information can also be
+ * obtained using the header variables GIZA_VERSION_STRING,
+ * GIZA_VERSION_MAJOR, GIZA_VERSION_MINOR and GIZA_VERSION_MICRO.
+ * These are available in the Fortran interface also.
  *
  * Output:
  *  -major :- major version number
  *  -minor :- minor version number
  *  -micro :- micro version number
  *
- * Note: version information can also be
- *       obtained using the header variables:
- *       GIZA_VERSION_STRING
- *       GIZA_VERSION_MAJOR,
- *       GIZA_VERSION_MINOR,
- *       GIZA_VERSION_MICRO
- *
- * These are available in the Fortran interface also
  */
 void
 giza_version (int *major, int *minor, int *micro)
