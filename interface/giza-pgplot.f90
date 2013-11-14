@@ -776,7 +776,7 @@ integer function PGOPEN (DEVICE)
 
 ! print*,'giza units mm = ',giza_units_mm
 ! pgopen = giza_open_device_size(device,'giza',11.0,8.5,giza_units_inches)
- pgopen = giza_open_device(device,'giza') + 1
+ pgopen = giza_open_device(device,'giza')
  
  call giza_set_colour_palette(giza_colour_palette_pgplot)
 
@@ -1071,13 +1071,14 @@ end subroutine PGQHS
 
 !------------------------------------------------------------------------
 ! Module: PGQID -- inquire current device identifier
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQID (ID)
+ use giza, only:giza_get_device_id
  implicit none
  integer, intent(out) :: ID
 
- ID = 1
+ call giza_get_device_id(ID)
 
 end subroutine PGQID
 
@@ -1525,8 +1526,7 @@ subroutine PGSLCT(ID)
  integer, intent(in) :: ID
  integer :: ierr
 
- ! use id-1 since giza devices run from 0->n-1 instead of 1->n
- call giza_select_device(ID-1)
+ call giza_select_device(ID)
 
 end subroutine PGSLCT
 

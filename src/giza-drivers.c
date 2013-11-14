@@ -54,6 +54,8 @@
 #define GIZA_DEFAULT_MARGIN 0
 
 static void _giza_set_prefix (const char *prefix);
+static int _giza_get_internal_id(int devid);
+static int _giza_device_id = 0;
 
 /**
  * Device: giza_open_device
@@ -121,9 +123,10 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
      /*giza_close_device()*/;
   }
 
-  id += 1;
+  _giza_device_id += 1;
+  id = _giza_get_internal_id(_giza_device_id);
   
-  printf("OPENING dev ID = %i \n",id);
+  /*printf("OPENING dev ID = %i \n",id);*/
 
   /* Some general initialisation */
   Dev[id].pgNum = 0;
@@ -196,7 +199,8 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
 
   /* check that the surface was created */
   if (success) {
-     id = id - 1;
+     _giza_device_id = _giza_device_id - 1;
+     id = _giza_get_internal_id(_giza_device_id);
      return -1;
   }
   /* bind the created surface to our Dev[id].context */
@@ -239,10 +243,8 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   _giza_init_save ();
   giza_set_clipping(1);
   /*_giza_stroke();*/
-  /*
-  printf("debug: device opened \n");
-  */
-  return id;
+  
+  return _giza_device_id;
 }
 
 /**
@@ -257,19 +259,59 @@ giza_open_device_size_float (const char *newDeviceName, const char *newPrefix, f
 }
 
 /**
+ * For internal book-keeping
+ * To the outside world, the device ids run from 1->Ndevices
+ * whereas within giza the referencing (id) is from 0->Ndevices-1
+ */
+int _giza_get_internal_id(int devid)
+{
+  return devid - 1;
+}
+
+/**
+ * Device: giza_get_device_id
+ *
+ * Synopsis: Returns the id of the currently selected device
+ *
+ * Output:
+ *  -devid, as returned by giza_open_device
+ *
+ * See also: giza_open_device, giza_get_device_id
+ */
+void
+giza_get_device_id (int *devid)
+{
+  *devid = _giza_device_id;
+  return;
+}
+
+/**
  * Device: giza_select_device
  *
  * Synopsis: Select between the currently open devices
  *
  * Input:
  *  -devid :- device id, as returned by giza_open_device
+ *
+ * See also: giza_get_device_id
  */
 void
 giza_select_device (int devid)
 {
-  if (id >= 0 && id < GIZA_MAX_DEVICES) {
+  if (devid > 0 && devid <= GIZA_MAX_DEVICES) {
     /* need to check if device is open */
-    id = devid;
+    int tmpid = _giza_get_internal_id(devid);
+    if (!Dev[tmpid].deviceOpen) 
+      {
+        _giza_error ("giza_select_device", "Invalid/closed device selected");
+
+      } else {
+
+        _giza_device_id = devid;
+        id = _giza_get_internal_id(_giza_device_id);
+
+      }
+    printf("giza_debug: selecting device %i\n",id);
 
     /*
      * select between currently open windows
@@ -404,6 +446,11 @@ giza_change_page (void)
       return;
     }
 
+  if (Dev[id].resize) 
+    {
+      _giza_init_norm();
+    }
+
   if (_giza_get_prompting () && Dev[id].isInteractive && !Dev[id].resize)
     {
       _giza_newpage_prompt();
@@ -484,7 +531,8 @@ giza_close_device (void)
   _giza_free_font ();
   _giza_free_colour_table ();
   Dev[id].type = GIZA_DEVICE_IV;
-  id = id - 1;
+  _giza_device_id = _giza_device_id - 1;
+  id = _giza_get_internal_id(_giza_device_id);
 
   return;
 }

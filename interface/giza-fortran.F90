@@ -67,6 +67,7 @@ module giza
       giza_open, &
       giza_open_device, &
       giza_open_device_size, &
+      giza_get_device_id, &
       giza_select_device, &
       giza_flush_device, &
       giza_change_page, &
@@ -682,6 +683,13 @@ private
       import
       integer(kind=c_int),intent(in),value :: devid
     end subroutine giza_select_device
+ end interface
+
+ interface giza_get_device_id
+    subroutine giza_get_device_id(devid) bind(C)
+      import
+      integer(kind=c_int),intent(out) :: devid
+    end subroutine giza_get_device_id
  end interface
 
  interface giza_flush_device

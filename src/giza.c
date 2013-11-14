@@ -42,7 +42,14 @@
 int
 _giza_check_device_ready (char *source)
 {
-  if (!Dev[id].deviceOpen)
+  if (id < 0 || id >= GIZA_MAX_DEVICES) 
+    {
+
+    _giza_error(source, "No device open.");
+    return 0;
+
+    }
+  else if (!Dev[id].deviceOpen)
     {
       _giza_error (source, "No device open.");
       return 0;

@@ -516,12 +516,7 @@ void cpgolin(int maxpt, int *npt, float *x, float *y, int symbol)
 int cpgopen(const char *device)
 {
   int pgopen = giza_open_device(device,"giza");
- 
- /*  PGPLOT gets pgopen = id on success
-  *  and <= 0 for errors
-  */
- return pgopen + 1;
-
+  return pgopen;
 }
 
 /***************************************************************
@@ -723,11 +718,11 @@ void cpgqhs(float *angle, float *sepn, float* phase)
 
 /***************************************************************
  * cpgqid -- inquire current device identifier
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqid(int *id)
 {
-  *id = 1;
+  giza_get_device_id(id);
 }
 
 /***************************************************************
