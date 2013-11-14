@@ -151,6 +151,9 @@ module giza
   character(len=1),parameter, public :: giza_scroll_left_f = achar(GIZA_SCROLL_LEFT)
   character(len=1),parameter, public :: giza_scroll_right_f = achar(GIZA_SCROLL_RIGHT)
   character(len=*),parameter, public :: giza_version_string = GIZA_VERSION_STRING
+  integer, parameter, public :: giza_version_major = GIZA_VERSION_MAJOR
+  integer, parameter, public :: giza_version_minor = GIZA_VERSION_MINOR
+  integer, parameter, public :: giza_version_micro = GIZA_VERSION_MICRO
 !
 !--the following can be generated automatically using the get-fortran-params.pl script
 !
