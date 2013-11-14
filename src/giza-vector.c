@@ -28,6 +28,26 @@
 #include <giza.h>
 #include <math.h>
 
+/**
+ * Drawing: giza_vector
+ *
+ * Synopsis: Plot of vector data.
+ *
+ * Input:
+ *  -n             :- The dimensions of data in the x-direction
+ *  -m             :- The dimensions of data in the y-direction
+ *  -horizontal    :- The x-component of the data to be plotted
+ *  -vertical      :- The y-component of the data to be plotted
+ *  -i1            :- The inclusive range of data to render in the x dimension.
+ *  -i2            :- The inclusive range of data to render in the x dimension.
+ *  -j1            :- The inclusive range of data to render in the y direction
+ *  -j2            :- The inclusive range of data to render in the y direction
+ *  -scale         :- scaling factor for arrow lengths (0 = automatic)
+ *  -position      :- justification of vector arrow with respect to pixel (0=left, 0.5=centred)
+ *  -affine        :- The affine transformation matrix that will be applied to the data.
+ *
+ * See Also: giza_vector_float, giza_arrow, giza_set_arrow_style
+ */
 void
 giza_vector (int n, int m, const double* horizontal, const double* vertical,
 	     int i1, int i2, int j1, int j2, double scale, int position,
@@ -133,6 +153,14 @@ giza_vector (int n, int m, const double* horizontal, const double* vertical,
   giza_flush_device ();
 }
 
+/**
+ * Drawing: giza_vector_float
+ *
+ * Synopsis: Same as giza_vector but takes floats
+ *
+ * See Also: giza_vector, giza_arrow, giza_set_arrow_style
+ *
+ */
 void
 giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
 	     int i1, int i2, int j1, int j2, float scale, int position,
