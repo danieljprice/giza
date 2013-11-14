@@ -106,6 +106,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   double majTickL, subTickL, currentTickL;
   char tmp[100];
   int i, i1, i2, j, jmax, jtmp;
+  giza_window_t Win = Dev[id].Win;
 
   /* set x-options */
   for (i = 0; xopt[i]; i++)

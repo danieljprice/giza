@@ -47,10 +47,10 @@ _giza_set_trans (int trans)
       cairo_identity_matrix (Dev[id].context);
       break;
     case GIZA_TRANS_NORM:
-      cairo_set_matrix (Dev[id].context, &(Win.normCoords));
+      cairo_set_matrix (Dev[id].context, &(Dev[id].Win.normCoords));
       break;
     case GIZA_TRANS_WORLD:
-      cairo_set_matrix (Dev[id].context, &(Win.userCoords));
+      cairo_set_matrix (Dev[id].context, &(Dev[id].Win.userCoords));
       break;
     case GIZA_TRANS_FONT:
       cairo_get_font_matrix (Dev[id].context, &mat);

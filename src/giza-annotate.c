@@ -79,6 +79,8 @@ giza_annotate (const char *side, double displacment, double coord,
   double xch, ych;
   giza_get_character_size (GIZA_UNITS_WORLD, &xch, &ych);
 
+  giza_window_t Win = Dev[id].Win;
+
   /* check which side to draw on */
   /* if drawing along the bottom */
   if (strchr (side, 'B') || strchr (side, 'b'))

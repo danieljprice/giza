@@ -57,10 +57,12 @@ giza_set_window (double x1, double x2, double y1, double y2)
       y2 = GIZA_DEFAULT_WINDOW_Y2;
     }
 
+  giza_window_t Win;
   Win.xmin = x1;
   Win.xmax = x2;
   Win.ymin = y1;
   Win.ymax = y2;
+  Win.normCoords = Dev[id].Win.normCoords;
 
   /* Transform to normalised device coords */
   int oldTrans = _giza_get_trans ();
@@ -81,8 +83,7 @@ giza_set_window (double x1, double x2, double y1, double y2)
   cairo_matrix_init (&(Win.userCoords), horiScale, 0, 0, vertScale, horiTrans, vertTrans);
   cairo_matrix_multiply(&(Win.userCoords),&(Win.userCoords),&(Win.normCoords));
 
-/*  cairo_transform (Dev[id].context, &(Win.userCoords)); */
-/*  cairo_get_matrix (Dev[id].context, &(Win.userCoords)); */
+  Dev[id].Win = Win;
 
   _giza_set_trans (oldTrans);
 }
@@ -90,7 +91,7 @@ giza_set_window (double x1, double x2, double y1, double y2)
 /**
  * Settings: giza_set_window_float
  *
- * Synopsis: Same functionalityas giza_set_window but uses floats.
+ * Synopsis: Same functionality as giza_set_window but uses floats.
  *
  * See Also: giza_set_window
  */
@@ -195,10 +196,10 @@ giza_get_window (double *x1, double *x2, double *y1, double *y2)
 {
   if(!_giza_check_device_ready("giza_get_window")) return;
 
-  *x1 = Win.xmin;
-  *x2 = Win.xmax;
-  *y1 = Win.ymin;
-  *y2 = Win.ymax;
+  *x1 = Dev[id].Win.xmin;
+  *x2 = Dev[id].Win.xmax;
+  *y1 = Dev[id].Win.ymin;
+  *y2 = Dev[id].Win.ymax;
 }
 
 /**
@@ -211,10 +212,12 @@ giza_get_window_float (float *x1, float *x2, float *y1, float *y2)
 {
   if(!_giza_check_device_ready("giza_get_window_float")) return;
 
-  *x1 = (float) Win.xmin;
-  *x2 = (float) Win.xmax;
-  *y1 = (float) Win.ymin;
-  *y2 = (float) Win.ymax;
+  double x1d, x2d, y1d, y2d;
+  giza_get_window(&x1d,&x2d,&y1d,&y2d);
+  *x1 = (float) x1d;
+  *x2 = (float) x2d;
+  *y1 = (float) y1d;
+  *y2 = (float) y2d;
 }
 
 /**
@@ -226,9 +229,9 @@ _giza_init_window (void)
 {
   if(!_giza_check_device_ready("_giza_init_window")) return;
 
-  Win.xmin = GIZA_DEFAULT_WINDOW_X1;
-  Win.xmax = GIZA_DEFAULT_WINDOW_X2;
-  Win.ymin = GIZA_DEFAULT_WINDOW_Y1;
-  Win.ymax = GIZA_DEFAULT_WINDOW_Y2;
+  Dev[id].Win.xmin = GIZA_DEFAULT_WINDOW_X1;
+  Dev[id].Win.xmax = GIZA_DEFAULT_WINDOW_X2;
+  Dev[id].Win.ymin = GIZA_DEFAULT_WINDOW_Y1;
+  Dev[id].Win.ymax = GIZA_DEFAULT_WINDOW_Y2;
 
 }

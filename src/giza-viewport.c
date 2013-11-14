@@ -93,7 +93,8 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
   if (clip)
     cairo_clip (Dev[id].context);
 
-  giza_set_window(Win.xmin,Win.xmax,Win.ymin,Win.ymax);
+  giza_set_window(Dev[id].Win.xmin,Dev[id].Win.xmax,
+                  Dev[id].Win.ymin,Dev[id].Win.ymax);
 
 }
 
@@ -226,11 +227,6 @@ giza_set_viewport_default (void)
   double xmin, xmax, ymin, ymax;
   _giza_get_default_viewport(&xmin,&xmax,&ymin,&ymax);
   giza_set_viewport(xmin,xmax,ymin,ymax);
-  /* also set window if calling default viewport routine */
-  /*giza_set_window(GIZA_DEFAULT_WINDOW_X1,GIZA_DEFAULT_WINDOW_X2,
-                  GIZA_DEFAULT_WINDOW_Y1,GIZA_DEFAULT_WINDOW_Y2);
-  */
-
 }
 
 /**

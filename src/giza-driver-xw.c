@@ -265,8 +265,8 @@ _giza_change_page_xw (void)
 void
 _giza_init_norm_xw (void)
 {
-  cairo_matrix_init (&(Win.normCoords),(double) Dev[id].width, 0, 0, (double) -Dev[id].height, GIZA_XW_MARGIN,
-		     Dev[id].height + GIZA_XW_MARGIN);
+  cairo_matrix_init (&(Dev[id].Win.normCoords),(double) Dev[id].width, 0, 0, (double) -Dev[id].height,
+                     GIZA_XW_MARGIN, Dev[id].height + GIZA_XW_MARGIN);
 }
 
 /**
@@ -276,7 +276,6 @@ int
 _giza_select_xw(int devid)
 {
   int tmp = giza_xw_id[devid];
-  printf("SELECTING ID = %i, XID = %i \n",devid,tmp-1);
   if (!tmp) {
      _giza_error("giza_select_xw","internal error: selected device is not an X-Window");
      return 1;

@@ -460,7 +460,8 @@ giza_change_page (void)
 
   /* Reset stuff */
   giza_set_viewport (VP.xmin,VP.xmax, VP.ymin, VP.ymax);
-  giza_set_window (Win.xmin, Win.xmax, Win.ymin, Win.ymax);
+  giza_set_window (Dev[id].Win.xmin, Dev[id].Win.xmax,
+                   Dev[id].Win.ymin, Dev[id].Win.ymax);
 
   /* restore the previously saved settings */
   giza_restore();
@@ -945,7 +946,7 @@ _giza_init_norm (void)
       yy = 2.*GIZA_DEFAULT_MARGIN - (double) Dev[id].height;
       x0 = GIZA_DEFAULT_MARGIN;
       y0 = (double) Dev[id].height - GIZA_DEFAULT_MARGIN;
-      cairo_matrix_init (&(Win.normCoords), xx, 0, 0, yy, x0, y0);
+      cairo_matrix_init (&(Dev[id].Win.normCoords), xx, 0, 0, yy, x0, y0);
       _giza_set_trans (GIZA_TRANS_NORM);
       break;
     }

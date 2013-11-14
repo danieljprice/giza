@@ -27,14 +27,4 @@
 #define GIZA_DEFAULT_WINDOW_Y1 0.0
 #define GIZA_DEFAULT_WINDOW_Y2 1.0
 
-struct GIZA_Window
-{
-  double xmin;
-  double xmax;
-  double ymin;
-  double ymax;
-  cairo_matrix_t userCoords;
-  cairo_matrix_t normCoords;
-} Win;
-
 void _giza_init_window (void);

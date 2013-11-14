@@ -34,10 +34,20 @@
 #define MAX(X,Y) ((X) < (Y) ? (Y) : (X))
 
 /* Structures: */
-/* Store variables relating to the current viewport */
+
+/* giza window structure */
+typedef struct
+{
+  double xmin;
+  double xmax;
+  double ymin;
+  double ymax;
+  cairo_matrix_t userCoords;
+  cairo_matrix_t normCoords;
+} giza_window_t;
 
 /* Store variables relating to the current device */
-struct GIZA_Device
+struct giza_device_t
 {
   int type;
   int width;
@@ -50,9 +60,10 @@ struct GIZA_Device
   int CurrentTrans;
   double defaultBackgroundAlpha;
   int deviceOpen;  /* Indicates if a device is open and ready to be drawn to. */
-  int drawn;   /* If anything has been drawn (determines if change page does anything) */
-  int resize;  /* flag that device has been resized */
-  int prompting; /* turn prompting on/off for interactive device */
+  int drawn;       /* Flag if anything has been drawn yet */
+  int resize;      /* Flag that device has been resized */
+  int prompting;   /* Turn prompting on/off for interactive device */
+  giza_window_t Win;
   cairo_t *context;
   cairo_surface_t *surface;
 } Dev[GIZA_MAX_DEVICES];
