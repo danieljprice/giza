@@ -46,8 +46,17 @@ typedef struct
   cairo_matrix_t normCoords;
 } giza_window_t;
 
+/* giza viewport structure */
+typedef struct
+{
+  double xmin;
+  double xmax;
+  double ymin;
+  double ymax;
+} giza_viewport_t;
+
 /* Store variables relating to the current device */
-struct giza_device_t
+typedef struct
 {
   int type;
   int width;
@@ -63,10 +72,13 @@ struct giza_device_t
   int drawn;       /* Flag if anything has been drawn yet */
   int resize;      /* Flag that device has been resized */
   int prompting;   /* Turn prompting on/off for interactive device */
+  giza_viewport_t VP;
   giza_window_t Win;
   cairo_t *context;
   cairo_surface_t *surface;
-} Dev[GIZA_MAX_DEVICES];
+} giza_device_t;
+
+giza_device_t Dev[GIZA_MAX_DEVICES];
 
 int id;
 

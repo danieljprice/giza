@@ -231,8 +231,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
   else if (_giza_equal(xtick,0.))
     {
       xintervalMaj =
-	7. * Sets.fontExtents.max_x_advance / ((VP.xmax - VP.xmin) *
-					       Dev[id].width);
+	7. * Sets.fontExtents.max_x_advance / 
+        ((Dev[id].VP.xmax - Dev[id].VP.xmin)*Dev[id].width);
       if (xintervalMaj > 0.2)
 	xintervalMaj = 0.2;
       if (xintervalMaj < 0.05)
@@ -394,8 +394,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
   else if (_giza_equal(ytick,0.))
     {
       yintervalMaj =
-	7. * Sets.fontExtents.max_x_advance / ((VP.ymax - VP.ymin) *
-					       Dev[id].height);
+	7. * Sets.fontExtents.max_x_advance / 
+        ((Dev[id].VP.ymax - Dev[id].VP.ymin) * Dev[id].height);
       if (yintervalMaj > 0.2) yintervalMaj = 0.2;
       if (yintervalMaj < 0.05) yintervalMaj = 0.05;
       yintervalMaj = yintervalMaj * (Win.ymax - Win.ymin);
@@ -615,7 +615,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
     }
 
   /* Restore clipping */
-  giza_set_viewport (VP.xmin, VP.xmax, VP.ymin, VP.ymax);
+  giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);
 }
 
 /**

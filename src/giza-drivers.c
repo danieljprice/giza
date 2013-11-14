@@ -459,7 +459,8 @@ giza_change_page (void)
   Dev[id].pgNum++;
 
   /* Reset stuff */
-  giza_set_viewport (VP.xmin,VP.xmax, VP.ymin, VP.ymax);
+  giza_set_viewport (Dev[id].VP.xmin,Dev[id].VP.xmax, 
+                     Dev[id].VP.ymin, Dev[id].VP.ymax);
   giza_set_window (Dev[id].Win.xmin, Dev[id].Win.xmax,
                    Dev[id].Win.ymin, Dev[id].Win.ymax);
 

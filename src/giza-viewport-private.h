@@ -21,13 +21,5 @@
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
-struct GIZA_Viewport
-{
-  double xmin;
-  double xmax;
-  double ymin;
-  double ymax;
-} VP;
-
 void _giza_get_default_viewport (double *xmin, double *xmax, 
                                  double *ymin, double *ymax);
