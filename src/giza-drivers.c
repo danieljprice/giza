@@ -216,6 +216,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   /* some final initialisation */
   Dev[id].drawn = 0;
   Dev[id].resize = 0;
+  Dev[id].fontAngle = 0.;
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();

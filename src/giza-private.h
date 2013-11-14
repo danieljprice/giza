@@ -95,6 +95,7 @@ typedef struct
   cairo_t *context;
   cairo_surface_t *surface;
   cairo_font_extents_t fontExtents;
+  double fontAngle;
 } giza_device_t;
 
 giza_device_t Dev[GIZA_MAX_DEVICES];
@@ -104,7 +105,6 @@ int id;
 /* Store the current settings of giza */
 struct GIZA_Settings
 {
-  double fontAngle;
   int autolog;
 } Sets;
 

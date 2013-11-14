@@ -78,7 +78,6 @@ _giza_equal(double x1, double x2)
 
 void _giza_init(void)
 {
-   Sets.fontAngle = 0.0;
    Sets.autolog = 0;
    char *tmp = getenv ("GIZA_LOG");
    if(tmp)

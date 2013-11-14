@@ -64,8 +64,8 @@ _giza_start_super (void)
   _giza_set_trans (GIZA_TRANS_IDEN);
   double x , y, height = Dev[id].fontExtents.ascent * GIZA_RAISE_SUPERS;
 
-  x = height * sin (Sets.fontAngle);
-  y = -height * cos (Sets.fontAngle);
+  x = height * sin (Dev[id].fontAngle);
+  y = -height * cos (Dev[id].fontAngle);
 
   cairo_rel_move_to (Dev[id].context, x, y);
 
@@ -90,8 +90,8 @@ _giza_stop_super (void)
 
   double x , y, height = Dev[id].fontExtents.ascent * GIZA_RAISE_SUPERS;
 
-  x = -height * sin (Sets.fontAngle);
-  y = height * cos (Sets.fontAngle);
+  x = -height * sin (Dev[id].fontAngle);
+  y = height * cos (Dev[id].fontAngle);
 
   cairo_rel_move_to (Dev[id].context, x, y);
   _giza_set_trans (oldTrans);
@@ -109,8 +109,8 @@ _giza_start_sub (void)
   _giza_set_trans (GIZA_TRANS_IDEN);
   double x , y, height = -Dev[id].fontExtents.ascent * GIZA_LOWER_SUBS;
 
-  x = height * sin (Sets.fontAngle);
-  y = -height * cos (Sets.fontAngle);
+  x = height * sin (Dev[id].fontAngle);
+  y = -height * cos (Dev[id].fontAngle);
 
   cairo_rel_move_to (Dev[id].context, x, y);
 
@@ -132,8 +132,8 @@ _giza_stop_sub (void)
 
   double x , y, height = -Dev[id].fontExtents.ascent * GIZA_LOWER_SUBS;
 
-  x = -height * sin (Sets.fontAngle);
-  y = height * cos (Sets.fontAngle);
+  x = -height * sin (Dev[id].fontAngle);
+  y = height * cos (Dev[id].fontAngle);
 
   cairo_rel_move_to (Dev[id].context, x, y);
   _giza_set_trans (oldTrans);

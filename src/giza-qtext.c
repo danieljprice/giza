@@ -63,7 +63,7 @@ giza_qtext (double x, double y, double angle, double just, const char *text, dou
 
   /* Set the rotation matrix */
   /*double theta = -angle * GIZA_DEG_TO_RAD; */
-  /*Sets.fontAngle = theta; */
+  /*Dev[id].fontAngle = theta; */
   /*cairo_matrix_t mat; */
   /*cairo_get_font_matrix (Dev[id].context, &mat); */
   /*cairo_matrix_rotate (&mat, theta); */
