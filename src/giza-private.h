@@ -72,6 +72,7 @@ typedef struct
   int drawn;       /* Flag if anything has been drawn yet */
   int resize;      /* Flag that device has been resized */
   int prompting;   /* Turn prompting on/off for interactive device */
+  int buf;         /* Buffering on/off */
   giza_viewport_t VP;
   giza_window_t Win;
   cairo_t *context;
@@ -87,7 +88,6 @@ struct GIZA_Settings
 {
   cairo_font_extents_t fontExtents;
   double fontAngle;
-  int buf;
   int autolog;
 } Sets;
 

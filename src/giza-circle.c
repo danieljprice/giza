@@ -51,7 +51,7 @@ giza_circle (double x, double y, double r)
 
   _giza_set_trans (oldTrans);
 
-  if (!Sets.buf) giza_flush_device ();
+  giza_flush_device ();
 }
 
 /**
@@ -66,5 +66,5 @@ giza_circle_float (float x, float y, float r)
 {
   giza_circle ((double) x, (double) y, (double) r);
 
-  if (!Sets.buf) giza_flush_device ();
+  giza_flush_device ();
 }

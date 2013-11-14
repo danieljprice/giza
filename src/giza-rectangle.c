@@ -45,6 +45,9 @@
 void
 giza_rectangle (double x1, double x2, double y1, double y2)
 {
+  if (!_giza_check_device_ready ("giza_rectangle"))
+    return;
+
   int oldTrans = _giza_get_trans ();
 
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -59,7 +62,7 @@ giza_rectangle (double x1, double x2, double y1, double y2)
 
   _giza_set_trans (oldTrans);
 
-  if (!Sets.buf) giza_flush_device ();
+  giza_flush_device ();
 }
 
 /**
@@ -93,6 +96,8 @@ giza_rectangle_float (float x1, float x2, float y1, float y2)
 void
 giza_rectangle_rounded (double x1, double x2, double y1, double y2, double radius)
 {
+  if (!_giza_check_device_ready ("giza_rectangle_rounded"))
+    return;
   int oldTrans = _giza_get_trans ();
 
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -120,7 +125,7 @@ giza_rectangle_rounded (double x1, double x2, double y1, double y2, double radiu
 
   _giza_set_trans (oldTrans);
 
-  if (!Sets.buf) giza_flush_device ();
+  giza_flush_device ();
 }
 
 /**

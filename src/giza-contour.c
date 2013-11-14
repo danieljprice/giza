@@ -60,7 +60,8 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
   };
 
   /* start buffering */
-  int oldBuf = Sets.buf;
+  int oldBuf;
+  giza_get_buffering(&oldBuf);
   giza_begin_buffer ();
 
   /* Get the affine matrix ready */
@@ -219,10 +220,8 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
   /* restore buffering and stroke */
   if (!oldBuf)
     giza_end_buffer ();
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+
+  giza_flush_device ();
 }
 
 void

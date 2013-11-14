@@ -37,7 +37,7 @@ void
 giza_begin_buffer (void)
 {
   if (!_giza_check_device_ready ("giza_begin_buffer")) return;
-  Sets.buf = 1;
+  Dev[id].buf = 1;
 }
 
 /**
@@ -51,10 +51,24 @@ void
 giza_end_buffer (void)
 {
   if(!_giza_check_device_ready ("giza_end_buffer")) return;
+  Dev[id].buf = 0;
   giza_flush_device ();
-  Sets.buf = 0;
 }
 
+/**
+ * Settings: giza_get_buffering
+ *
+ * Synopsis: returns whether output is currently buffered on current device
+ *
+ * See Also: giza_begin_buffer, giza_flush_buffer, giza_end_buffer
+ */
+void
+giza_get_buffering (int *buf)
+{
+  *buf = 0;
+  if(!_giza_check_device_ready ("giza_end_buffer")) return;
+  *buf = Dev[id].buf;
+}
 /**
  * Settings: giza_flush_buffer
  *
@@ -69,5 +83,6 @@ void
 giza_flush_buffer (void)
 {
   if(!_giza_check_device_ready ("giza_flush_buffer")) return;
-  giza_flush_device ();
+  giza_end_buffer();
+  giza_begin_buffer();
 }

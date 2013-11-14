@@ -49,10 +49,7 @@ giza_draw (double xpt, double ypt)
   cairo_line_to (Dev[id].context, xpt, ypt);
   _giza_stroke ();
 
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
   _giza_set_trans (oldTrans);
 }
 

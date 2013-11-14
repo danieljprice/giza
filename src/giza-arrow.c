@@ -165,10 +165,7 @@ giza_arrow (double x1, double y1, double x2, double y2)
     }
   _giza_set_trans (oldTrans);
 
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**

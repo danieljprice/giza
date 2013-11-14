@@ -104,10 +104,7 @@ giza_points (int n, const double* x, const double* y, int symbol)
     }
 
   _giza_stroke ();
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 
   /* restore old setting */
   _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
@@ -152,10 +149,7 @@ giza_points_float (int n, const float* x, const float* y, int symbol)
 
   giza_end_buffer ();
   _giza_stroke ();
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 
   /* restore old settings */
   _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
@@ -215,10 +209,7 @@ _giza_draw_symbol_device (double xd, double yd, int symbol)
   _giza_draw_symbol(xd, yd, symbol);
 
   _giza_stroke ();
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 
   /* restore old setting */
   _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);

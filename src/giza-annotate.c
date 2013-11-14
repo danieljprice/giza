@@ -162,10 +162,7 @@ giza_annotate (const char *side, double displacment, double coord,
   giza_ptext (x, y, angle, justification, string);
   _giza_set_trans (oldTrans);
 
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**

@@ -114,10 +114,7 @@ giza_function_t (double (*funcx)(double *t), double (*funcy)(double *t),
 
   _giza_stroke ();
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 
 }
 
@@ -203,9 +200,6 @@ giza_function_t_float (float (*funcx)(float *t), float (*funcy)(float *t),
 
   _giza_stroke ();
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 
 }

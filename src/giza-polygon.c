@@ -63,10 +63,7 @@ giza_polygon (int n, const double *xpts, const double *ypts)
   cairo_close_path(Dev[id].context);
   _giza_fill ();
   _giza_stroke ();
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
   _giza_set_trans (oldTrans);
 
 }
@@ -100,9 +97,6 @@ giza_polygon_float (int n, const float *xpts, const float *ypts)
   cairo_close_path(Dev[id].context);
   _giza_fill ();
   _giza_stroke ();
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
   _giza_set_trans (oldTrans);
 }

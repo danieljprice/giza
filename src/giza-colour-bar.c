@@ -181,7 +181,7 @@ giza_colour_bar (const char *side, double disp, double width,
   giza_set_viewport(vptxmin,vptxmax,vptymin,vptymax);
   giza_set_window(xmin,xmax,ymin,ymax);
 
-  if (!Sets.buf) giza_flush_device ();
+  giza_flush_device ();
 }
 
 /**

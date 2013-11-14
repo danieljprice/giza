@@ -193,10 +193,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   cairo_surface_destroy (pixmap);
   free (pixdata);
 
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -348,10 +345,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   giza_set_colour_index (oldCi);
   cairo_surface_destroy (pixmap);
   free (pixdata);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -563,10 +557,7 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   cairo_surface_destroy (pixmap);
   free (pixdata);
 
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**

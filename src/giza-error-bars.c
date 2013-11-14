@@ -174,10 +174,7 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
     }
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -304,10 +301,7 @@ giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts, con
     }
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -356,10 +350,7 @@ giza_error_bars_vert (int n, const double *xpts, const double *ypts1, const doub
   _giza_stroke ();
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -403,10 +394,7 @@ giza_error_bars_vert_float (int n, const float *xpts, const float *ypts1, const 
   _giza_stroke ();
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -453,10 +441,7 @@ giza_error_bars_hori (int n, const double *xpts1, const double *xpts2, const dou
   _giza_stroke ();
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -500,10 +485,7 @@ giza_error_bars_hori_float (int n, const float *xpts1, const float *xpts2, const
   _giza_stroke ();
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 /**
  * Plots a single vertical error bar at x, y of length error (measured in +ve x direction),

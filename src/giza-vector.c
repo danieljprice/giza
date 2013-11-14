@@ -49,7 +49,7 @@ giza_vector (int n, int m, const double* horizontal, const double* vertical,
       return;
     }
 
-  int i, j, oldBuf;
+  int i, j;
   double x1, x2, y1, y2;
   cairo_matrix_t mat;
 
@@ -85,7 +85,8 @@ giza_vector (int n, int m, const double* horizontal, const double* vertical,
         }
     }
 
-  oldBuf = Sets.buf;
+  int oldBuf;
+  giza_get_buffering(&oldBuf);
   giza_begin_buffer ();
 
  /* Draw the arrows! */
@@ -129,7 +130,7 @@ giza_vector (int n, int m, const double* horizontal, const double* vertical,
   if (!oldBuf)
     giza_end_buffer ();
 
-  if (!Sets.buf) giza_flush_device ();
+  giza_flush_device ();
 }
 
 void
@@ -153,7 +154,7 @@ giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
       return;
     }
 
-  int i, j, oldBuf;
+  int i, j;
   double x1, x2, y1, y2;
   cairo_matrix_t mat;
 
@@ -189,7 +190,8 @@ giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
         }
     }
 
-  oldBuf = Sets.buf;
+  int oldBuf;
+  giza_get_buffering (&oldBuf);
   giza_begin_buffer ();
 
     /* Draw the arrows! */
@@ -233,5 +235,5 @@ giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
   if (!oldBuf)
     giza_end_buffer ();
 
-  if (!Sets.buf) giza_flush_device ();
+  giza_flush_device ();
 }

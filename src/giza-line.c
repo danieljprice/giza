@@ -65,10 +65,7 @@ giza_line (int n, const double *xpts, const double *ypts)
   _giza_stroke ();
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -100,8 +97,5 @@ giza_line_float (int n, const float *xpts, const float *ypts)
 
   _giza_stroke ();
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }

@@ -126,7 +126,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   _giza_device_id += 1;
   id = _giza_get_internal_id(_giza_device_id);
   
-  /*printf("OPENING dev ID = %i \n",id);*/
+  /*printf("OPENING dev ID = %i w = %f x %f in units %i\n",id,width,height,units);*/
 
   /* Some general initialisation */
   Dev[id].pgNum = 0;
@@ -342,23 +342,26 @@ giza_flush_device (void)
     return;
 
   Dev[id].drawn = 1;
-
-  switch (Dev[id].type)
+  
+  if (!Dev[id].buf) /* do not flush if buffering is on */
     {
+     switch (Dev[id].type)
+       {
 #ifdef _GIZA_HAS_XW
-    case GIZA_DEVICE_XW:
-      _giza_flush_device_xw ();
-      break;
+       case GIZA_DEVICE_XW:
+         _giza_flush_device_xw ();
+         break;
 #endif
-    default:
-      if (!Dev[id].surface)
-        {
-          _giza_error ("giza_flush_device", "No device open, cannot flush");
-          return;
-        } else {
-          cairo_surface_flush(Dev[id].surface);
-        }
-      return;
+       default:
+         if (!Dev[id].surface)
+           {
+             _giza_error ("giza_flush_device", "No device open, cannot flush");
+             return;
+           } else {
+             cairo_surface_flush(Dev[id].surface);
+           }
+         return;
+       }
     }
   return;
 }

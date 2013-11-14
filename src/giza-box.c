@@ -79,7 +79,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
 
   _giza_expand_clipping ();
 
-  int oldBuf = Sets.buf;
+  int oldBuf;
+  giza_get_buffering(&oldBuf);
 
   /* Table of log10() values for log axis ticks */
   double logTab[9];
@@ -609,10 +610,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
       giza_end_buffer ();
     }
 
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 
   /* Restore clipping */
   giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);

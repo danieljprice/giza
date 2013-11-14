@@ -87,10 +87,7 @@ giza_function_y (double (*func)(double *y), int n, double ymin, double ymax, int
   _giza_stroke ();
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }
 
 /**
@@ -152,8 +149,5 @@ giza_function_y_float (float (*func)(float *y), int n, float ymin, float ymax, i
   _giza_stroke ();
 
   _giza_set_trans (oldTrans);
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 }

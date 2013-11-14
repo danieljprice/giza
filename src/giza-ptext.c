@@ -93,10 +93,7 @@ giza_ptext (double x, double y, double angle, double just, const char *text)
 
   _giza_stroke ();
 
-  if (!Sets.buf)
-    {
-      giza_flush_device ();
-    }
+  giza_flush_device ();
 
   /* restore the original character height (and font matrix) */
   giza_set_character_height (ch);
