@@ -28,9 +28,6 @@
 #include <giza.h>
 #define GIZA_SMALLEST_LW 1.e-6
 
-double _giza_lw;
-
-
 /**
  * Settings: giza_set_line_width
  *
@@ -49,7 +46,7 @@ giza_set_line_width (double lw)
 
   if (lw <= GIZA_SMALLEST_LW) { lw = GIZA_SMALLEST_LW; }
 
-  _giza_lw = lw;
+  Dev[id].lw = lw;
 
   /* adjust the line width so it is uniform across devices and 1 is a good size */
   double lwDevice = lw * Dev[id].deviceUnitsPermm * 0.25;
@@ -84,9 +81,11 @@ giza_set_line_width_float (float lw)
 void
 giza_get_line_width (double *lw)
 {
-  if (!_giza_check_device_ready ("giza_get_line_width"))
-    return;
-  *lw = _giza_lw;
+  if (!_giza_check_device_ready ("giza_get_line_width")) {
+     *lw = 1;
+     return;
+  }
+  *lw = Dev[id].lw;
 }
 
 /**
@@ -101,5 +100,8 @@ giza_get_line_width_float (float *lw)
 {
   if (!_giza_check_device_ready ("giza_get_line_width_float"))
     return;
-  *lw = (float) _giza_lw;
+
+  double dlw;
+  giza_get_line_width(&dlw);
+  *lw = (float) dlw;
 }
