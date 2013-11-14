@@ -451,7 +451,7 @@ giza_change_page (void)
       _giza_init_norm();
     }
 
-  if (Dev[id].prompting && Dev[id].isInteractive && !Dev[id].resizea)
+  if (Dev[id].prompting && Dev[id].isInteractive && !Dev[id].resize)
     {
       _giza_newpage_prompt();
     }
