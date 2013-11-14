@@ -337,6 +337,7 @@ void giza_set_viewport_inches (double xleftin, double xrightin,
                                double ybottomin, double ytopin);
 void giza_set_viewport_inches_float (float xleftin, float xrightin,
                                      float ybottomin, float ytopin);
+void giza_version (int *major, int *minor, int *micro);
 
 void giza_start_warnings (void);
 void giza_stop_warnings (void);

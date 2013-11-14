@@ -166,7 +166,7 @@ SOURCE= giza-annotate.c giza-arrow-style.c giza-arrow.c giza-band-style.c \
 	giza-polygon.c giza-print-id.c giza-prompting.c giza-ptext.c \
 	giza-qtext.c giza-rectangle.c giza-render.c giza-save.c giza-set-font.c \
 	giza-stroke.c giza-text-background.c giza-text.c giza-transforms.c \
-	giza-vector.c giza-viewport.c giza-warnings.c giza-window.c giza.c \
+	giza-vector.c giza-viewport.c giza-version.c giza-warnings.c giza-window.c giza.c \
 	lex.yy.c
 #
 # Private header files
