@@ -539,7 +539,7 @@ void cpgpanl(int nxc, int nyc)
 
 /***************************************************************
  * cpgpap -- change the size of the view surface
- * Status: IMPLEMENTED (NOT WORKING)
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgpap(float width, float aspect)
 {

@@ -806,7 +806,7 @@ end subroutine PGPANL
 
 !------------------------------------------------------------------------
 ! Module: PGPAP -- change the size of the view surface 
-! Status: IMPLEMENTED (NOT WORKING)
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGPAP (WIDTH, ASPECT)
  use giza, only:giza_set_paper_size, giza_units_inches
