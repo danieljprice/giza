@@ -60,7 +60,6 @@ giza_set_colour_index (int ci)
   cairo_set_source_rgba (Dev[id].context, colourIndex[ci][0],
 			 colourIndex[ci][1], colourIndex[ci][2],
 			 colourIndex[ci][3]);
-
 }
 
 /**
@@ -146,13 +145,14 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
   /* If we are changing the current colour index
      make the change teke effect immediately
    */
-  if (ci == _giza_ci)
-     {
-       cairo_set_source_rgba (Dev[id].context, colourIndex[ci][0],
-			 colourIndex[ci][1], colourIndex[ci][2],
-			 colourIndex[ci][3]);
-     }
-
+  if (ci == _giza_ci) giza_set_colour_index(ci);
+/*  if (ci == 0) {
+     printf("in scr ci = %i rgb = %f %f %f %f drawn = %i \n",ci,red,green,blue,alpha,Dev[id].drawn);
+     giza_draw_background();
+     _giza_stroke();
+     giza_flush_device();
+  }
+*/
 }
 
 /**
