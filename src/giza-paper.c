@@ -43,22 +43,24 @@ giza_set_paper_size (int units, double width, double height)
   if (!_giza_check_device_ready ("giza_set_paper_size"))
     return;
 
-  /* THIS ROUTINE CURRENTLY DOES NOTHING */
-  double paperwidth  = width;
-  double paperheight = height;
-  int paperunits  = units;
-  if (paperwidth <= 0.)
+  if (width <= 0.)
     {
       _giza_error("giza_set_paper_size","width <= 0");
-      paperwidth = 8.;
+      width = 8.;
     }
-  if (paperheight <= 0.)
+  if (height <= 0.)
     {
       _giza_error("giza_set_paper_size","height <= 0");
-      paperheight = 6.;
+      height = 6.;
     }
-   
-  /*_giza_get_specified_size(int *width, int *height)*/
+
+  _giza_get_specified_size(width, height, units,
+                           &Dev[id].width, &Dev[id].height);
+  /*printf(" RESIZING DEVICE WIDTH= %i\n",Dev[id].width);
+  printf(" RESIZING DEVICE %f x %f = %i x %i\n",width, height, Dev[id].width,Dev[id].height);
+  */
+  Dev[id].resize = 1;
+  giza_change_page();
   /*giza_flush_device (); */
 }
 /**
@@ -77,15 +79,16 @@ giza_set_paper_size_float (int units, float width, float height)
  * Input:
  *  -paperwidth  :- desired width in specified units
  *  -paperheight :- desired height in specified units
- *  -paperunits  :- units in which paperwidth/paperheight are specified
+ *  -units  :- units in which paperwidth/paperheight are specified
  * Output:
  *  -width  :- Width of the specified surface size in device units
  *  -height :- Height of the specified surface size in device units
  *
  */
-void _giza_get_specified_size(double paperwidth, double paperheight, int paperunits, int *width, int *height)
+void _giza_get_specified_size(double paperwidth, double paperheight, int units,
+                              int *width, int *height)
 {
-  switch(paperunits)
+  switch(units)
      {
      case GIZA_UNITS_MM:
        *width  = _giza_nint(paperwidth  * Dev[id].deviceUnitsPermm);

@@ -51,6 +51,7 @@ struct GIZA_Device
   double defaultBackgroundAlpha;
   int deviceOpen;  /* Indicates if a device is open and ready to be drawn to. */
   int drawn;   /* If anything has been drawn (determines if change page does anything) */
+  int resize;  /* flag that device has been resized */
   cairo_t *context;
   cairo_surface_t *surface;
 } Dev[GIZA_MAX_DEVICES];

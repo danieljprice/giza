@@ -161,7 +161,7 @@ _giza_open_device_xw (double width, double height, int units)
 
   /* create the window */
   XW[xid].window = XCreateSimpleWindow (XW[xid].display,
-				   DefaultRootWindow (XW[xid].display),/* make our new window a child of the entire XW[xid].display */
+				   DefaultRootWindow (XW[xid].display),/* make our new window a child of the entire display */
 				   50, 50,	/* origin */
 				   XW[xid].width, XW[xid].height, /* size */
 				   0, 0, white);
@@ -184,7 +184,7 @@ _giza_open_device_xw (double width, double height, int units)
   /* create the pixmap */
   XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
 
-  /* Create graphics Dev[id].context */
+  /* Create graphics context */
 /* XW[xid].gc = XDefaultGCOfScreen(DefaultScreenOfDisplay(XW[xid].display)); */
   /*XW[xid].gc = XCreateGC (XW[xid].display, XW[xid].pixmap, 0, 0);*/
   /* version below works on older X11 distros */
@@ -237,7 +237,7 @@ void
 _giza_change_page_xw (void)
 {
   /* interactive logging feature */
-  if (Sets.autolog) _giza_write_log_file(Dev[id].surface);
+  if (Sets.autolog && Dev[id].drawn) _giza_write_log_file(Dev[id].surface);
   
   /* create a new pixmap */
   cairo_destroy(Dev[id].context);
@@ -248,6 +248,16 @@ _giza_change_page_xw (void)
 
   cairo_surface_destroy (Dev[id].surface);
   XFreePixmap (XW[xid].display, XW[xid].pixmap);
+  
+/*  int resize = 0;*/
+  if (Dev[id].resize) {
+     /* Set the new device size */
+     XW[xid].width  = Dev[id].width + 2 * GIZA_XW_MARGIN;
+     XW[xid].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
+
+     XResizeWindow(XW[xid].display, XW[xid].window,(unsigned) XW[xid].width,(unsigned) XW[xid].height);  
+  }
+  
   XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
 
   /* recreate the cairo surface */
@@ -483,6 +493,7 @@ void
 _giza_change_size_xw (int width, int height)
 {
   /* Set the new device size */
+/*
   Dev[id].width  = width  - 2 * GIZA_XW_MARGIN;
   Dev[id].height = height - 2 * GIZA_XW_MARGIN;
 
@@ -492,6 +503,7 @@ _giza_change_size_xw (int width, int height)
   XResizeWindow(XW[xid].display, XW[xid].window,(unsigned) XW[xid].width,(unsigned) XW[xid].height);
 
   cairo_xlib_surface_set_size(Dev[id].surface,width,height);
+*/
 }
 
 /**

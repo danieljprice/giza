@@ -55,10 +55,6 @@
 
 static void _giza_set_prefix (const char *prefix);
 
-/*
- * NOTE: Should clean up surfaces etc if device open was not successful.
- * Opens a device for drawing to.
- */
 /**
  * Device: giza_open_device
  *
@@ -84,6 +80,10 @@ static void _giza_set_prefix (const char *prefix);
  *  -/vpdf :- Landscape Portable Document Format
  *  -/ps  :- PostScript
  *  -/vps :- Landscape Postscript
+ *
+ *  For hardcopy devices, the device type can also be recognised
+ *  automatically by specifying the filename
+ *  e.g: giza_open_device("plot.png","giza")
  */
 int
 giza_open_device (const char *newDeviceName, const char *newPrefix)
@@ -110,6 +110,8 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
  *  -GIZA_UNITS_MM         :- mm
  *  -GIZA_UNITS_INCHES     :- inches
  *  Other values cause an error message and are treated as GIZA_UNITS_DEVICE
+ *
+ * See also: giza_open_device
  */
 int
 giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
@@ -209,6 +211,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   /* some final initialisation */
   Dev[id].deviceOpen = 1;
   Dev[id].drawn = 0;
+  Dev[id].resize = 0;
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();
@@ -267,7 +270,11 @@ giza_select_device (int devid)
   if (id >= 0 && id < GIZA_MAX_DEVICES) {
     /* need to check if device is open */
     id = devid;
-    /* Determine which driver is required */
+
+    /*
+     * select between currently open windows
+     * for interactive devices 
+     */
     switch (Dev[id].type)
       {
 #ifdef _GIZA_HAS_XW
@@ -346,28 +353,13 @@ _giza_resize_device (int width, int height)
 void
 giza_change_page (void)
 {
-    /* allow resizing of the device if nothing has been drawn */
-
-/*   if (Dev[id].sizeSpecified)
-     {
-       int width,height;
-       _giza_get_specified_size(&width, &height);
-       if (width != Dev[id].width || height != Dev[id].height) {
-          printf("RESIZING %i %i \n",width,height);
-          _giza_resize_device(width, height);
-          _giza_change_page_xw();
-       } else {
-          printf("SAME SIZE %i %i \n",Dev[id].width,Dev[id].height);       
-       }
-     } else {
-       printf("NO RESIZING %i %i \n",Dev[id].width,Dev[id].height);
-     }
-*/
-
-  if (!Dev[id].drawn) {
+   /* allow resizing of the device if nothing has been drawn */
+  if (!Dev[id].drawn && !Dev[id].resize) {
 
     /* if nothing has changed, safe to redraw/reset the background colour */
     giza_draw_background ();
+    
+    /* do nothing */
     return;
   }
 
@@ -412,7 +404,7 @@ giza_change_page (void)
       return;
     }
 
-  if (_giza_get_prompting () && Dev[id].isInteractive)
+  if (_giza_get_prompting () && Dev[id].isInteractive && !Dev[id].resize)
     {
       _giza_newpage_prompt();
     }
@@ -427,6 +419,7 @@ giza_change_page (void)
   giza_restore();
 
   Dev[id].drawn = 0;
+  Dev[id].resize = 0;
   giza_draw_background ();
   giza_flush_device ();
   return;
