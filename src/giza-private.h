@@ -90,6 +90,7 @@ typedef struct
   double hatch_phase;
   double lw;
   double ls;
+  double ch;
   giza_arrow_t Arrow;
   /* cairo objects and settings */
   cairo_t *context;

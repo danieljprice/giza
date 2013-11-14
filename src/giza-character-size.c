@@ -27,8 +27,6 @@
 #include "giza-transforms-private.h"
 #include <giza.h>
 
-static double _giza_ch;
-
 /**
  * Settings: giza_set_character_height
  *
@@ -56,7 +54,7 @@ giza_set_character_height (double ch)
   cairo_set_font_size (Dev[id].context, chDevice);
   /* query font extents and store this */
   cairo_font_extents (Dev[id].context, &Dev[id].fontExtents);
-  _giza_ch = ch;
+  Dev[id].ch = ch;
 
   _giza_set_trans (oldTrans);
 
@@ -84,7 +82,13 @@ giza_set_character_height_float (float ch)
 void
 giza_get_character_height (double *ch)
 {
-  *ch = _giza_ch;
+  if (!_giza_check_device_ready ("giza_get_character_height"))
+    {
+      *ch = 1.;
+      return;
+    }
+
+  *ch = Dev[id].ch;
 }
 
 /**
@@ -97,7 +101,9 @@ giza_get_character_height (double *ch)
 void
 giza_get_character_height_float (float *ch)
 {
-  *ch = (float) _giza_ch;
+  double dch;
+  giza_get_character_height(&dch);
+  *ch = (float) dch;
 }
 
 /**
@@ -202,7 +208,7 @@ _giza_init_character_height (void)
 {
   /* Note: do not call giza_set_character_height here
      This is done from giza_init_font */
-  _giza_ch = 1.;
+  Dev[id].ch = 1.;
 }
 
 /**
@@ -230,7 +236,7 @@ _giza_scale_character_size (double scalefac)
   cairo_matrix_t mat;
   cairo_get_font_matrix (Dev[id].context, &mat);
 
-/*  _giza_ch = scalefac * _giza_ch; */
+/* Dev[id].ch = scalefac * Dev[id].ch; */
 
   cairo_matrix_scale (&mat, scalefac, scalefac);
   cairo_set_font_matrix (Dev[id].context, &mat);
