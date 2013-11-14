@@ -24,7 +24,6 @@
 
 #include "giza-private.h"
 #include <giza.h>
-int _giza_clip;
 
 /**
  * Drawing: giza_clip
@@ -41,7 +40,7 @@ giza_set_clipping (int clip)
   if (!_giza_check_device_ready ("giza_set_clipping"))
     return;
 
-  _giza_clip = clip;
+  Dev[id].clip = clip;
   if (!clip)
     {
       cairo_reset_clip(Dev[id].context);
@@ -61,6 +60,6 @@ giza_get_clipping (int *clip)
   if (!_giza_check_device_ready ("giza_get_clipping"))
     return;
 
-  *clip = _giza_clip;
+  *clip = Dev[id].clip;
 
 }

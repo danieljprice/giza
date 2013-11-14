@@ -92,6 +92,7 @@ typedef struct
   double ls;
   double ch;
   int text_background;
+  int clip;
   giza_arrow_t Arrow;
   /* cairo objects and settings */
   cairo_t *context;
