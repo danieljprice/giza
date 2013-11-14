@@ -133,6 +133,7 @@ module giza
       giza_set_viewport, &
       giza_get_viewport, &
       giza_set_viewport_inches, &
+      giza_version, &
       giza_start_warnings, &
       giza_stop_warnings, &
       giza_set_window, &
@@ -1652,6 +1653,13 @@ private
       implicit none
       real(kind=c_double), value, intent(in) :: xleft,xright,ybot,ytop
     end subroutine giza_set_viewport_inches
+ end interface
+ 
+ interface giza_version
+    subroutine giza_version(major,minor,micro) bind(C)
+     import
+     integer(kind=c_int), intent(out) :: major,minor,micro
+    end subroutine giza_version
  end interface
 
  interface giza_start_warnings

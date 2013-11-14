@@ -22,7 +22,6 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
-#include "giza-private.h"
 #include <giza.h>
 
 /**
