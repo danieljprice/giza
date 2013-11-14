@@ -24,7 +24,7 @@
 #ifdef CAIRO_HAS_XLIB_SURFACE
 #define _GIZA_HAS_XW 1
 
-int _giza_open_device_xw (void);
+int _giza_open_device_xw (double width, double height, int units);
 void _giza_init_norm_xw (void);
 void _giza_flush_device_xw (void);
 void _giza_change_page_xw (void);

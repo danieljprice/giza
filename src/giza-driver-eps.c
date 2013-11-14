@@ -51,7 +51,7 @@
  *  vert :- If set to one the created surface is portrait
  */
 int
-_giza_open_device_eps (int vert)
+_giza_open_device_eps (double width, double height, int units, int vert)
 {
   int length;
   length = strlen (Dev[id].prefix) + strlen (GIZA_DEVICE_EXTENSION) + 5;
@@ -64,9 +64,9 @@ _giza_open_device_eps (int vert)
   Dev[id].defaultBackgroundAlpha = 0.;
 
   /* set all device specific settings */
-  if (_giza_sizeSpecified() )
+  if (width > 0. && height > 0. && units > 0)
     {
-      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
+      _giza_get_specified_size(width,height,units,&Dev[id].width, &Dev[id].height);
     }
   else if (vert)
     {

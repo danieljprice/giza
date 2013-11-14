@@ -45,15 +45,15 @@
  *  -Creates the cairo image surface.
  */
 int
-_giza_open_device_png (void)
+_giza_open_device_png (double width, double height, int units)
 {
   Dev[id].deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
   Dev[id].deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
   Dev[id].isInteractive       = GIZA_DEVICE_INTERACTIVE;
 
-  if(_giza_sizeSpecified ())
+  if (width > 0. && height > 0. && units > 0)
     {
-      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
+      _giza_get_specified_size(width,height,units,&Dev[id].width, &Dev[id].height);
     }
   else
     {
@@ -87,7 +87,7 @@ _giza_flush_device_png (void)
 void
 _giza_change_page_png (void)
 {
-  /* Destroy old Dev[id].context */
+  /* Destroy old context */
   cairo_destroy (Dev[id].context);
 
   /* Write current surface to png file and destroy the cairo surface */

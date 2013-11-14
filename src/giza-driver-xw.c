@@ -90,16 +90,16 @@ static int xid = -1;
  *  -5 :- No cairo surface could be created.
  */
 int
-_giza_open_device_xw (void)
+_giza_open_device_xw (double width, double height, int units)
 {
   Dev[id].deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
   Dev[id].deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
   Dev[id].isInteractive       = GIZA_DEVICE_INTERACTIVE;
 
   /* set all device specific settings */
-  if (_giza_sizeSpecified ())
+  if (width > 0. && height > 0. && units > 0)
     {
-      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
+      _giza_get_specified_size(width,height,units,&Dev[id].width, &Dev[id].height);
     }
   else
     {

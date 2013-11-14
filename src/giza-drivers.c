@@ -88,12 +88,39 @@ static void _giza_set_prefix (const char *prefix);
 int
 giza_open_device (const char *newDeviceName, const char *newPrefix)
 {
+  return giza_open_device_size (newDeviceName, newPrefix, 0., 0., 0);
+}
 
+/**
+ * Device: giza_open_device_size
+ *
+ * Synopsis: Similar to giza_open_device, but allows one to specify the size of the device in centimeters
+ *
+ * Input:
+ *  -newDeviceName :- Specifies the type of device to be opened.
+ *                    See below for details.
+ *  -newPrefix     :- Specifies the default prefix to be used for file names.
+ *  -width         :- Width for the newly opened device
+ *  -height        :- Height for the newly opened device
+ *  -units         :- Units in which the width/height of the device are specified
+ *
+ * Units:
+ *  -GIZA_UNITS_DEVICE     :- device coords (i.e. pixels on bitmap devices, points on vector devices)
+ *  -GIZA_UNITS_PIXELS     :- pixels
+ *  -GIZA_UNITS_MM         :- mm
+ *  -GIZA_UNITS_INCHES     :- inches
+ *  Other values cause an error message and are treated as GIZA_UNITS_DEVICE
+ */
+int
+giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
+{
   if (id != 0) {
      /*_giza_warning("giza_open_device", "previous device was not closed");*/
      /*giza_close_device()*/;
   }
+
   id += 1;
+  
   printf("OPENING dev ID = %i \n",id);
 
   /* Some general initialisation */
@@ -130,33 +157,33 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
     {
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
-      success = _giza_open_device_xw ();
+      success = _giza_open_device_xw (width, height, units);
       break;
 #endif
     case GIZA_DEVICE_PNG:
-      success = _giza_open_device_png ();
+      success = _giza_open_device_png (width, height, units);
       break;
     case GIZA_DEVICE_PDF:
-      success = _giza_open_device_pdf (0);
+      success = _giza_open_device_pdf (width, height, units, 0);
       break;
     case GIZA_DEVICE_VPDF:
-      success = _giza_open_device_pdf(1);
+      success = _giza_open_device_pdf(width, height, units, 1);
       break;
     case GIZA_DEVICE_PS:
-      success = _giza_open_device_ps (0);
+      success = _giza_open_device_ps (width, height, units, 0);
       break;
     case GIZA_DEVICE_VPS:
-      success = _giza_open_device_ps (1);
+      success = _giza_open_device_ps (width, height, units, 1);
       break;
     case GIZA_DEVICE_SVG:
-      success = _giza_open_device_svg (0);
+      success = _giza_open_device_svg (width, height, units, 0);
       break;
     case GIZA_DEVICE_NULL:
-      success = _giza_open_device_null ();
+      success = _giza_open_device_null (width, height, units);
       break;
 #ifdef _GIZA_HAS_EPS
     case GIZA_DEVICE_EPS:
-      success = _giza_open_device_eps (0);
+      success = _giza_open_device_eps (width, height, units, 0);
       break;
 #endif
     case GIZA_DEVICE_IV:
@@ -180,7 +207,8 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
     }
 
   /* some final initialisation */
-  _giza_set_deviceOpen ();
+  Dev[id].deviceOpen = 1;
+  Dev[id].drawn = 0;
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();
@@ -212,34 +240,6 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
   printf("debug: device opened \n");
   */
   return id;
-}
-
-/**
- * Device: giza_open_device_size
- *
- * Synopsis: Similar to giza_open_device, but allows one to specify the size of the device in centimeters
- *
- * Input:
- *  -newDeviceName :- Specifies the type of device to be opened.
- *                    See below for details.
- *  -newPrefix     :- Specifies the default prefix to be used for file names.
- *  -width         :- Width for the newly opened device
- *  -height        :- Height for the newly opened device
- *  -units         :- Units in which the width/height of the device are specified
- *
- * Units:
- *  -GIZA_UNITS_DEVICE     :- device coords (i.e. pixels on bitmap devices, points on vector devices)
- *  -GIZA_UNITS_PIXELS     :- pixels
- *  -GIZA_UNITS_MM         :- mm
- *  -GIZA_UNITS_INCHES     :- inches
- *  Other values cause an error message and are treated as GIZA_UNITS_DEVICE
- */
-int
-giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
-{
-  giza_set_paper_size(units,width,height);
-  _giza_set_sizeSpecified ();
-  return giza_open_device (newDeviceName, newPrefix);
 }
 
 /**
@@ -292,7 +292,7 @@ giza_flush_device (void)
   if (!_giza_check_device_ready ("giza_flush_device"))
     return;
 
-  _giza_set_drawn ();
+  Dev[id].drawn = 1;
 
   switch (Dev[id].type)
     {
@@ -348,7 +348,7 @@ giza_change_page (void)
 {
     /* allow resizing of the device if nothing has been drawn */
 
-/*   if (_giza_sizeSpecified ())
+/*   if (Dev[id].sizeSpecified)
      {
        int width,height;
        _giza_get_specified_size(&width, &height);
@@ -364,7 +364,7 @@ giza_change_page (void)
      }
 */
 
-  if (!_giza_has_drawn ()) {
+  if (!Dev[id].drawn) {
 
     /* if nothing has changed, safe to redraw/reset the background colour */
     giza_draw_background ();
@@ -400,8 +400,7 @@ giza_change_page (void)
       _giza_change_page_ps ();
       break;
     case GIZA_DEVICE_NULL:
-      _giza_close_device_null ();
-      _giza_open_device_null ();
+      _giza_change_page_null ();
       break;
 #ifdef _GIZA_HAS_EPS
     case GIZA_DEVICE_EPS:
@@ -427,7 +426,7 @@ giza_change_page (void)
   /* restore the previously saved settings */
   giza_restore();
 
-  _giza_reset_drawn ();
+  Dev[id].drawn = 0;
   giza_draw_background ();
   giza_flush_device ();
   return;
@@ -486,8 +485,7 @@ giza_close_device (void)
        return;
     }
 
-  _giza_reset_deviceOpen ();
-  _giza_reset_sizeSpecified ();
+  Dev[id].deviceOpen = 0;
 
   /* Destroy the font */
   _giza_free_font ();
@@ -563,7 +561,7 @@ giza_query_device (const char *querytype, char *returnval)
   /* Query whether or not device is open or not */
   else if (!strcmp(querytype,"state"))
     {
-       if (_giza_get_deviceOpen())
+       if (Dev[id].deviceOpen)
          {
             strncpy(returnval,"OPEN",sizeof(returnval)-1);         
          }

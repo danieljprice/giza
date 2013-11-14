@@ -26,12 +26,10 @@
 #include "giza-io-private.h"
 #include "giza-drivers-private.h"
 #include <giza.h>
-static double paperwidth,paperheight;
-static int paperunits;
 
 /**
- * Set the paper size (physical size of the view surface)
- *  in a variety of units
+ * Change the paper size (physical size of the view surface)
+ *  in a variety of units, after the device has been opened
  *
  * Input:
  *  -width  :- Width of the device surface
@@ -42,27 +40,25 @@ static int paperunits;
 void
 giza_set_paper_size (int units, double width, double height)
 {
-  /* do not convert the paper size here to device units
-   * as this routine is called by giza BEFORE the device
-   * is actually open. The routine giza_get_specified_size
-   * does the conversion to device units AFTER the device
-   * has been opened and the conversion factors are known. 
-   */
-  paperwidth  = width;
-  paperheight = height;
-  paperunits  = units;
+  if (!_giza_check_device_ready ("giza_set_paper_size"))
+    return;
+
+  /* THIS ROUTINE CURRENTLY DOES NOTHING */
+  double paperwidth  = width;
+  double paperheight = height;
+  int paperunits  = units;
   if (paperwidth <= 0.)
     {
       _giza_error("giza_set_paper_size","width <= 0");
-      paperwidth = 1.;
+      paperwidth = 8.;
     }
   if (paperheight <= 0.)
     {
       _giza_error("giza_set_paper_size","height <= 0");
-      paperheight = 1.;
+      paperheight = 6.;
     }
-
-  _giza_set_sizeSpecified ();
+   
+  /*_giza_get_specified_size(int *width, int *height)*/
   /*giza_flush_device (); */
 }
 /**
@@ -78,12 +74,16 @@ giza_set_paper_size_float (int units, float width, float height)
  * Internal routine returning the specified paper size
  *  in device units. This is called AFTER the device has been opened.
  *
+ * Input:
+ *  -paperwidth  :- desired width in specified units
+ *  -paperheight :- desired height in specified units
+ *  -paperunits  :- units in which paperwidth/paperheight are specified
  * Output:
  *  -width  :- Width of the specified surface size in device units
  *  -height :- Height of the specified surface size in device units
  *
  */
-void _giza_get_specified_size(int *width, int *height)
+void _giza_get_specified_size(double paperwidth, double paperheight, int paperunits, int *width, int *height)
 {
   switch(paperunits)
      {

@@ -49,6 +49,8 @@ struct GIZA_Device
   int pgNum;
   int CurrentTrans;
   double defaultBackgroundAlpha;
+  int deviceOpen;  /* Indicates if a device is open and ready to be drawn to. */
+  int drawn;   /* If anything has been drawn (determines if change page does anything) */
   cairo_t *context;
   cairo_surface_t *surface;
 } Dev[GIZA_MAX_DEVICES];
@@ -65,16 +67,6 @@ struct GIZA_Settings
 } Sets;
 
 int _giza_check_device_ready (char *source);
-void _giza_set_deviceOpen (void);
-int _giza_get_deviceOpen (void);
-void _giza_reset_deviceOpen (void);
-
-int _giza_sizeSpecified (void);
-int _giza_has_drawn (void);
-void _giza_set_sizeSpecified (void);
-void _giza_reset_sizeSpecified (void);
-void _giza_set_drawn (void);
-void _giza_reset_drawn (void);
 void _giza_init_character_height (void);
 void _giza_scale_character_size (double scalefac);
 int _giza_nint (double x);

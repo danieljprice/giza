@@ -27,19 +27,12 @@
 #include "giza-private.h"
 #include <stdlib.h>
 
-/* Indicates if a device is open and ready to be drawn to. */
-static int deviceOpen = 0;
-/* Indicates if the user has specified a size for the device when opening it */
-static int sizeSpecified = 0;
-/* Indicates if the device has been drawn to (determines if change page does anything */
-static int drawn = 0;
-
 /**
- * Checks if a device is open.
+ * Checks if the currently selected device is open.
  *
  * Return value:
- *  -1 if a device is open.
- *  -0 if a device is not open
+ *  -1 if the currently selected device is open.
+ *  -0 if the currently selected device is not open
  * Input:
  *  -source :- A string that should contain the name of
  *     the function calling _giza_check_device_ready so it can
@@ -49,99 +42,12 @@ static int drawn = 0;
 int
 _giza_check_device_ready (char *source)
 {
-  if (!deviceOpen)
+  if (!Dev[id].deviceOpen)
     {
       _giza_error (source, "No device open.");
       return 0;
     }
   return 1;
-}
-
-/**
- * Sets the private variable deviceOpen to one.
- */
-void
-_giza_set_deviceOpen (void)
-{
-  deviceOpen = 1;
-  drawn = 0;
-}
-
-/**
- * Queries whether or not device is open (no warnings)
- */
-int
-_giza_get_deviceOpen (void)
-{
-  return deviceOpen;
-}
-
-/**
- * Sets the private variable deviceOpen to zero.
- */
-void
-_giza_reset_deviceOpen (void)
-{
-  deviceOpen = 0;
-  drawn = 0;
-}
-
-/**
- * Checks if a device size has been specified by the user.
- *
- * Return value:
- *  -1 if it has been specified.
- *  -0 if it has not been specified.
- */
-int
-_giza_sizeSpecified (void)
-{
-  return sizeSpecified;
-}
-
-/**
- * Sets the private variable sizeSpecified to one.
- */
-void
-_giza_set_sizeSpecified (void)
-{
-  sizeSpecified = 1;
-}
-
-/**
- * Sets the private variable sizeSpecified to zero.
- */
-void
-_giza_reset_sizeSpecified (void)
-{
-  sizeSpecified = 0;
-}
-
-/**
- * Set the private variable drawn to 1.
- */
-void
-_giza_set_drawn (void)
-{
-  drawn = 1;
-}
-
-/**
- * Set the private variable drawn to 0.
- */
-void
-_giza_reset_drawn (void)
-{
-  drawn = 0;
-}
-
-/**
- * Checks it something has been drawn to the device
- */
-int
-_giza_has_drawn (void)
-{
-  return drawn;
 }
 
 int

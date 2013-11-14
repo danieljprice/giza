@@ -43,14 +43,14 @@
  *  -Creates the cairo image surface.
  */
 int
-_giza_open_device_null (void)
+_giza_open_device_null (double width, double height, int units)
 {
   Dev[id].deviceUnitsPermm = GIZA_DEVICE_UNITS_PER_MM;
   Dev[id].isInteractive    = GIZA_DEVICE_INTERACTIVE;
 
-  if (_giza_sizeSpecified ())
+  if (width > 0. && height > 0. && units > 0)
     {
-      _giza_get_specified_size(&Dev[id].width, &Dev[id].height);
+      _giza_get_specified_size(width,height,units,&Dev[id].width, &Dev[id].height);
     }
   else
     {
@@ -80,6 +80,28 @@ _giza_flush_device_null (void)
 void
 _giza_change_page_null (void)
 {
+  /* Destroy old context */
+  cairo_destroy (Dev[id].context);
+
+  /* Destroy the cairo surface */
+  _giza_close_device_null();
+
+  /* Create a new surface */
+  Dev[id].surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev[id].width, Dev[id].height);
+
+  if (!Dev[id].surface)
+    {
+      _giza_error ("_giza_change_page_null", "Could not create cairo surface");
+      return;
+    }
+  Dev[id].context = cairo_create (Dev[id].surface);
+  if (!Dev[id].context)
+    {
+      _giza_error ("_giza_change_page_null", "Could not create cairo context");
+      return;
+    }
+  return;
+
   giza_draw_background ();
 }
 

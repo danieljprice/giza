@@ -22,7 +22,7 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
-int _giza_open_device_ps (int vert);
+int _giza_open_device_ps (double width, double height, int units, int vert);
 void _giza_flush_device_ps (void);
 void _giza_change_page_ps (void);
 void _giza_close_device_ps (void);
