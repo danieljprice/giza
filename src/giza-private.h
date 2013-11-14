@@ -73,8 +73,15 @@ typedef struct
   int resize;      /* Flag that device has been resized */
   int prompting;   /* Turn prompting on/off for interactive device */
   int buf;         /* Buffering on/off */
+  /* viewport and window settings for this device */
   giza_viewport_t VP;
   giza_window_t Win;
+  /* graphics settings for this device */
+  int fs;
+  double hatch_angle;
+  double hatch_spacing;
+  double hatch_phase;
+  /* cairo context and surface */
   cairo_t *context;
   cairo_surface_t *surface;
 } giza_device_t;

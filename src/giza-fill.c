@@ -30,11 +30,6 @@
 #include <giza.h>
 #include <math.h>
 
-int _giza_fill_style;
-double _giza_hatch_angle;
-double _giza_hatch_spacing;
-double _giza_hatch_phase;
-
 /**
  * Settings: giza_set_fill
  *
@@ -60,7 +55,7 @@ giza_set_fill (int fs)
       return;
     }
 
-  _giza_fill_style = fs;
+  Dev[id].fs = fs;
 }
 
 /**
@@ -77,16 +72,16 @@ giza_get_fill (int *fs)
   if (!_giza_check_device_ready ("giza_get_fill"))
     return;
 
-  *fs = _giza_fill_style;
+  *fs = Dev[id].fs;
 }
 
 void
 _giza_init_fill (void)
 {
-  _giza_fill_style = GIZA_FILL_SOLID;
-  _giza_hatch_angle = 45.;
-  _giza_hatch_spacing = 1.;
-  _giza_hatch_phase = 0.;
+  Dev[id].fs = GIZA_FILL_SOLID;
+  Dev[id].hatch_angle = 45.;
+  Dev[id].hatch_spacing = 1.;
+  Dev[id].hatch_phase = 0.;
 }
 
 /**
@@ -110,7 +105,7 @@ _giza_fill (void)
   double xmin,xmax,ymin,ymax,x0,y0,x,y,angle;
   int i, nlines;
 
-  switch (_giza_fill_style)
+  switch (Dev[id].fs)
     {
     case GIZA_FILL_CROSSHATCH:
     case GIZA_FILL_HATCH:
@@ -119,14 +114,14 @@ _giza_fill (void)
        * because the hatching needs to be done
        * with the current colour index
        */
-      hatch_size = (int) (8.*_giza_hatch_spacing);
+      hatch_size = (int) (8.*Dev[id].hatch_spacing);
       if (hatch_size <= 0)
         {
           _giza_error("giza_fill","hatch spacing <= 0, ignoring fill attributes");
           return;
         }
       lw = 1.5;
-      angle = -pi*_giza_hatch_angle/180.;
+      angle = -pi*Dev[id].hatch_angle/180.;
       cairo_save(Dev[id].context);
       /* clip plotting to within the fill area
        * but do not (yet) destroy the fill area */
@@ -162,9 +157,9 @@ _giza_fill (void)
       cairo_set_source_rgba(Dev[id].context, ri, gi, bi, alphai);
       cairo_set_line_width(Dev[id].context, lw);
 
-      xoffset = hatch_size*_giza_hatch_phase;
+      xoffset = hatch_size*Dev[id].hatch_phase;
       nlines = (int) (xmax - xmin)/hatch_size + 1;
-      if (_giza_fill_style == GIZA_FILL_CROSSHATCH)
+      if (Dev[id].fs == GIZA_FILL_CROSSHATCH)
         {
           /* draw vertical or / lines */
          for (i = 0; i <= nlines; i++)
@@ -242,9 +237,12 @@ _giza_rotate_pos (double *x, double *y, double angle, double x0, double y0)
 void
 giza_set_hatching_style (double angle, double spacing, double phase)
 {
-  _giza_hatch_angle = angle;
-  _giza_hatch_spacing = spacing;
-  _giza_hatch_phase = phase;
+  if(!_giza_check_device_ready ("giza_set_hatching_style"))
+     return;
+
+  Dev[id].hatch_angle   = angle;
+  Dev[id].hatch_spacing = spacing;
+  Dev[id].hatch_phase   = phase;
 }
 
 /**
@@ -256,10 +254,7 @@ giza_set_hatching_style (double angle, double spacing, double phase)
 void
 giza_set_hatching_style_float (float angle, float spacing, float phase)
 {
-  _giza_hatch_angle = (double) angle;
-  _giza_hatch_spacing = (double) spacing;
-  _giza_hatch_phase = (double) phase;
-/*  printf(" got angle = %f spacing = %f phase = %f \n",_giza_hatch_angle,_giza_hatch_spacing,_giza_hatch_phase); */
+  giza_set_hatching_style((double) angle, (double) spacing, (double) phase);
 }
 
 /**
@@ -278,9 +273,12 @@ giza_set_hatching_style_float (float angle, float spacing, float phase)
 void
 giza_get_hatching_style (double *angle, double *spacing, double *phase)
 {
-  *angle = _giza_hatch_angle;
-  *spacing = _giza_hatch_spacing;
-  *phase = _giza_hatch_phase;
+  if(!_giza_check_device_ready ("giza_get_hatching_style"))
+     return;
+
+  *angle   = Dev[id].hatch_angle;
+  *spacing = Dev[id].hatch_spacing;
+  *phase   = Dev[id].hatch_phase;
 }
 
 /**
@@ -292,7 +290,9 @@ giza_get_hatching_style (double *angle, double *spacing, double *phase)
 void
 giza_get_hatching_style_float (float *angle, float *spacing, float *phase)
 {
-  *angle = (float) _giza_hatch_angle;
-  *spacing = (float) _giza_hatch_spacing;
-  *phase = (float) _giza_hatch_phase;
+  double dangle,dspacing,dphase;
+  giza_get_hatching_style(&dangle, &dspacing, &dphase);
+  *angle   = (float) dangle;
+  *spacing = (float) dspacing;
+  *phase   = (float) dphase;
 }
