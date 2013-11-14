@@ -22,4 +22,4 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
-int _giza_text_background;
+void _giza_init_text_background(void);

@@ -44,6 +44,7 @@
 #include "giza-line-style-private.h"
 #include "giza-band-private.h"
 #include "giza-stroke-private.h"
+#include "giza-text-background-private.h"
 #include <giza.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -231,6 +232,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
      need to come before set_viewport_default */
   _giza_init_character_height (); /* must come BEFORE init_font */
   _giza_init_font ();
+  _giza_init_text_background();
 
   _giza_init_window (); /* call init_window BEFORE set_viewport */
   giza_set_viewport_default ();

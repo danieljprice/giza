@@ -66,11 +66,11 @@ giza_ptext (double x, double y, double angle, double just, const char *text)
   giza_qtext (x, y, angle, just, text, xbox, ybox);
 
   /* Draw the bounding box */
-  if (_giza_text_background >= 0)
+  if (Dev[id].text_background >= 0)
   {
     int oldCi;
     giza_get_colour_index (&oldCi);
-    giza_set_colour_index (_giza_text_background);
+    giza_set_colour_index (Dev[id].text_background);
     giza_polygon (4, xbox, ybox);
     giza_set_colour_index (oldCi);
   }
