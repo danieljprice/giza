@@ -55,6 +55,13 @@ typedef struct
   double ymax;
 } giza_viewport_t;
 
+typedef struct
+{
+  int fs;
+  double angle;
+  double cutback;
+} giza_arrow_t;
+
 /* Store variables relating to the current device */
 typedef struct
 {
@@ -81,6 +88,7 @@ typedef struct
   double hatch_angle;
   double hatch_spacing;
   double hatch_phase;
+  giza_arrow_t Arrow;
   /* cairo context and surface */
   cairo_t *context;
   cairo_surface_t *surface;

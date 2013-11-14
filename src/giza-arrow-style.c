@@ -46,6 +46,9 @@
 void
 giza_set_arrow_style (int fillStyle, double angle, double cutback)
 {
+  if (!_giza_check_device_ready ("giza_set_arrow_style"))
+     return;
+
   if (angle < 0. || angle > 90.)
     {
       _giza_warning ("giza_set_arrow_style", "Invalid angle, angle set to default");
@@ -58,9 +61,9 @@ giza_set_arrow_style (int fillStyle, double angle, double cutback)
       cutback = GIZA_DEFAULT_CUTBACK;
     }
 
-  Arrow.fs = fillStyle;
-  Arrow.angle = angle;
-  Arrow.cutback = cutback;
+  Dev[id].Arrow.fs = fillStyle;
+  Dev[id].Arrow.angle = angle;
+  Dev[id].Arrow.cutback = cutback;
 }
 
 /**
@@ -100,9 +103,9 @@ giza_get_arrow_style (int *fillStyle, double *angle, double *cutback)
       return;
     }
 
-  *fillStyle = Arrow.fs;
-  *angle     = Arrow.angle;
-  *cutback   = Arrow.cutback;
+  *fillStyle = Dev[id].Arrow.fs;
+  *angle     = Dev[id].Arrow.angle;
+  *cutback   = Dev[id].Arrow.cutback;
 }
 
 /**
@@ -128,7 +131,7 @@ giza_get_arrow_style_float (int *fillStyle, float *angle, float *cutback)
 void
 _giza_init_arrow_style (void)
 {
-  Arrow.fs = GIZA_DEFAULT_FILL;
-  Arrow.angle = GIZA_DEFAULT_ANGLE;
-  Arrow.cutback = GIZA_DEFAULT_CUTBACK;
+  Dev[id].Arrow.fs = GIZA_DEFAULT_FILL;
+  Dev[id].Arrow.angle = GIZA_DEFAULT_ANGLE;
+  Dev[id].Arrow.cutback = GIZA_DEFAULT_CUTBACK;
 }

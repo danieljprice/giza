@@ -22,12 +22,4 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
-/* Store arrow head settings */
-struct GIZA_Arrow_Style
-{
-  int fs;
-  double angle;
-  double cutback;
-} Arrow;
-
 void _giza_init_arrow_style (void);

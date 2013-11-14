@@ -63,6 +63,7 @@ giza_arrow (double x1, double y1, double x2, double y2)
 
   double xpts[4], ypts[4], dx, dy, chx, chy, dxUnit, dyUnit, magnitude;
   double dxPerp, dyPerp, sinangle, cosangle;
+  giza_arrow_t Arrow = Dev[id].Arrow;
 
   /* set dx and dy to the change in the x and y direction respectively */
   dx = x2 - x1;
