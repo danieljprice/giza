@@ -27,7 +27,6 @@
 #include "giza-io-private.h"
 #include "giza-drivers-private.h"
 #include "giza-driver-xw-private.h"
-#include "giza-prompting-private.h"
 #include "giza-transforms-private.h"
 #include "giza-character-size-private.h"
 #include "giza-band-private.h"
@@ -227,11 +226,6 @@ _giza_flush_device_xw (void)
 
 /**
  * Advances the X window device to the next page.
- *
- * If prompting is on the old page is displayed until
- * a key is pressed or a mouse is clicked inside the X window.
- * Otherwise the old page is immediately lost.
- *
  */
 void
 _giza_change_page_xw (void)
@@ -294,9 +288,6 @@ _giza_select_xw(int devid)
 
 /**
  * This routine closes the X window device and cleans up associated memory.
- *
- * If prompting is turned on this will not occur until a key is pressed
- * or a mouse is clicked inside the X window.
  */
 void
 _giza_close_device_xw (void)

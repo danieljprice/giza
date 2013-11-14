@@ -132,6 +132,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   Dev[id].pgNum = 0;
   Dev[id].type = GIZA_DEVICE_IV;
   Dev[id].defaultBackgroundAlpha = 1.;
+  Dev[id].deviceOpen = 1;
   int success = -1;
   giza_set_text_background (-1);
   giza_start_prompting ();
@@ -213,7 +214,6 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
     }
 
   /* some final initialisation */
-  Dev[id].deviceOpen = 1;
   Dev[id].drawn = 0;
   Dev[id].resize = 0;
   _giza_init_arrow_style ();
@@ -451,7 +451,7 @@ giza_change_page (void)
       _giza_init_norm();
     }
 
-  if (_giza_get_prompting () && Dev[id].isInteractive && !Dev[id].resize)
+  if (Dev[id].prompting && Dev[id].isInteractive && !Dev[id].resizea)
     {
       _giza_newpage_prompt();
     }
@@ -484,7 +484,7 @@ giza_close_device (void)
   if (!_giza_check_device_ready ("giza_close_device"))
     return;
 
-  if (_giza_get_prompting () && Dev[id].isInteractive)
+  if (Dev[id].prompting && Dev[id].isInteractive)
     {
       _giza_newpage_prompt();
     }
