@@ -203,7 +203,7 @@ while (<>)
 $fh->print (
 "<html>
   <head>
-    <meta http-equiv=\"Conent-Type\" content=\"text/html\"; charset=utf-8\" \>
+    <meta http-equiv=\"Content-Type\" content=\"text/html\"; charset=utf-8\" \>
     <title>giza - API Reference Manual</title>
     <link rel=\"stylesheet\" href=\"../style.css\" type=\"text/css\" \>
   </head>
