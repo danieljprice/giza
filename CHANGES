@@ -1,4 +1,49 @@
 -----------------------------------
+Changes in 0.8.0 compared to 0.7.6
+-----------------------------------
+danielprice (40):
+      gfortran version checking removed (obsolete/no longer necessary)
+      floating exception fixed in giza_set_window_equal_scale if width=height=0
+      newline removed
+      BUG FIX with vector arrows in double precision
+      link for -lgfortran fixed
+      added autolog feature: controlled via begin_autolog/end_autolog routines and GIZA_LOG environment variable
+      silenced warning regarding colour not set if NaNs input to giza-render routines
+      better cleanup on failure to open device; does not require giza_close_device call
+      multiple device support implemented (LOTS of code changed): added giza_select/pgslct routines to switch between de
+      deviceOpen and drawn now specific to each device: removed sizeSpecified and reworked the way devices are opened to
+      implemented resizing of X-window/bitmap devices via giza_paper_size (not perfect yet)
+      numbering of devices now from 1->N externally, from 0->N-1 internally; implemented PGQID/giza_get_device_id
+      start/stop prompting setting now specific to each device, not global
+      typo fixed
+      window settings now specific to each device
+      viewport settings now specific to each device
+      commented out temporary stuff
+      buffering setting is specific to each device
+      fill style and settings specific to each device
+      arrow style settings specific to each device (giza_arrow_t)
+      line width setting specific to each device
+      line style setting specific to each device
+      fontExtents stored specific to each device; not globally
+      fontAngle setting specific to each device
+      character height setting specific to each device
+      get_line_style always returns something even if giza not started
+      text background colour setting specific to each device
+      clip setting specific to each device
+      bug fix with default text background (should be -1 not 0)
+      debugging info removed
+      device help shows filename option (file.png instead of /png)
+      updated docs on return value for giza_open_device
+      debugging/commented out cruft removed
+      added integer parameters giving version number info in Fortran interface
+      added docs for giza_vector
+      added giza version routine to query version info
+      added giza_version routine to Fortran interface
+      bug fix with documentation of giza_version
+      updated status of PGPAP/cpgpap
+      typo fixed in api script
+
+-----------------------------------
 Changes in 0.7.6 compared to 0.7.5
 -----------------------------------
 
