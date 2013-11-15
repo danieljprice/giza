@@ -1,7 +1,7 @@
 -----------------------------------
 Changes in 0.8.0 compared to 0.7.6
 -----------------------------------
-danielprice (40):
+danielprice (42):
       gfortran version checking removed (obsolete/no longer necessary)
       floating exception fixed in giza_set_window_equal_scale if width=height=0
       newline removed
@@ -42,6 +42,8 @@ danielprice (40):
       bug fix with documentation of giza_version
       updated status of PGPAP/cpgpap
       typo fixed in api script
+      updated changelog for 0.8.0
+      extra files included in release tarball
 
 -----------------------------------
 Changes in 0.7.6 compared to 0.7.5
