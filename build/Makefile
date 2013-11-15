@@ -293,6 +293,9 @@ dist: distclean
 	cp ../Makefile ../$(DISTDIR)
 	cp ../INSTALL ../$(DISTDIR)
 	cp ../README ../$(DISTDIR)
+	cp ../CHANGES ../$(DISTDIR)
+	cp ../COPYING ../$(DISTDIR)
+	cp ../AUTHORS ../$(DISTDIR)
 	tar czvf ../$(DISTDIR).tar.gz ../$(DISTDIR)
 	rm -rf ../$(DISTDIR)
 
