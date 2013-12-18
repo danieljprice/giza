@@ -55,7 +55,7 @@
  *  -F :- do not draw the first label (left- or bottom-most)
  *  -O :- omit leading zeros in numbers < 10, i.e. 3 instead of 03
  *
- * See Also: giza_box
+ * See Also: giza_box, giza_box_float, giza_box_time_float
  */
 void
 giza_box_time (const char *xopt, double xtick, int nxsub,
