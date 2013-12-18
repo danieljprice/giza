@@ -2086,7 +2086,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  real, dimension(6), intent(in), optional :: affine
  logical, intent(in), optional :: printid
  integer :: iunits,nx,ny,i,iaxis,ijust
- real(kind=c_double) :: xmini,xmaxi,ymini,ymaxi,valmin,valmax
+ real(kind=c_double) :: xmini,xmaxi,ymini,ymaxi,valmin,valmax,dx,dy
  real(kind=c_double) :: vptxmini,vptxmaxi,vptymini,vptymaxi
  real(kind=c_double), dimension(6) :: affinei
  character(len=20) :: devi
@@ -2285,7 +2285,9 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     if (present(affine)) then
        affinei = affine
     else
-       affinei = (/1./real(nx),0.,0.,1./real(ny),0.,0./)
+       dx = real((xmaxi - xmini)/real(nx))
+       dy = real((ymaxi - ymini)/real(ny))
+       affinei = (/dx,0.d0,0.d0,dy,xmini,ymini/)
     endif
     if (present(extend)) then
        iextend = extend
@@ -2294,7 +2296,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     endif
     nx_c = nx; ny_c = ny
     call giza_render(nx_c,ny_c,real(img,kind=c_double),int(1,kind=c_int),&
-                     &nx_c,int(1,kind=c_int),ny_c,valmin,valmax,iextend,affinei)
+                     nx_c,int(1,kind=c_int),ny_c,valmin,valmax,iextend,affinei)
  endif
  
  call giza_close()
