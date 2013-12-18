@@ -38,5 +38,9 @@ OBJ=giza-fortran.o test-img.o
 test-fortran: $(OBJ)
 	$(FC) $(FFLAGS) -o $@ $(OBJ) $(LDFLAGS)
 
+OBJ1=giza-fortran.o test-2D.o
+test-2D: $(OBJ1)
+	$(FC) $(FFLAGS) -o $@ $(OBJ1) $(LDFLAGS)
+
 clean:
 	rm -f *.o *.mod test-giza-xw test-cairo-xw test-png test-pdf test-fortran
