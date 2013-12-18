@@ -44,7 +44,7 @@
  *  -j1            :- The inclusive range of data to render in the y direction
  *  -j2            :- The inclusive range of data to render in the y direction
  *  -valMin        :- The value in data that gets assign the colour corresponding to zero
- *                    on the colour ramp (The ramp is set by giza_set_colour_ramp
+ *                    on the colour ramp (The ramp is set by giza_set_colour_table)
  *  -valMax        :- The value in data that gets assigned the colour corresponding to one
  *                    on the colour ramp
  *  -extend        :- Option for how to deal with image at edges

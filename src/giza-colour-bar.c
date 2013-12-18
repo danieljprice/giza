@@ -36,12 +36,12 @@
  *  -disp    :- displacement of the bar in character heights from the specified edge
  *  -width   :- width of the colour bar in character heights
  *  -valMin  :- The value in data that gets assigned the colour corresponding to zero on the
- *              colour ramp (The ramp is set by giza_set_colour_ramp)
+ *              colour ramp (The ramp is set by giza_set_colour_table)
  *  -valMax  :- The value in data that gets assigned the colour corresponding to one on the
  *              colour ramp
  *  -label   :- Text label to annotate colour bar with
  *
- * See Also: giza_render, giza_colour_bar_float, giza_set_colour_ramp
+ * See Also: giza_render, giza_colour_bar_float, giza_set_colour_table
  */
 void
 giza_colour_bar (const char *side, double disp, double width, 
