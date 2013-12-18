@@ -1074,17 +1074,17 @@ void cpgsvp(float xleft, float xright, float ybot, float ytop)
  ***************************************************************/
 void cpgswin(float x1, float x2, float y1, float y2)
 {
-  giza_set_window_float(x2, x2, y1, y2);
+  giza_set_window_float(x1, x2, y1, y2);
 }
 
 /***************************************************************
  * cpgtbox -- draw frame and write (dd) hh mm ss.s labelling
- * Status: NOT IMPLEMENTED
+ * Status: PARTIALLY IMPLEMENTED
  ***************************************************************/
 void cpgtbox(const char *xopt, float xtick, int nxsub, \
  const char *yopt, float ytick, int nysub)
 {
-
+  giza_box_time_float(xopt, xtick, nxsub, yopt, ytick, nysub);
 }
 
 /***************************************************************
