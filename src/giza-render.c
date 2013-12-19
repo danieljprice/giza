@@ -55,6 +55,8 @@
  *  -1 or GIZA_EXTEND_REPEAT  :- periodic tiling
  *  -2 or GIZA_EXTEND_REFLECT :- reflective boundary
  *  -3 or GIZA_EXTEND_PAD     :- pad by extending last few pixels
+ *
+ * See Also: giza_set_colour_table
  */
 void
 giza_render (int sizex, int sizey, const double* data, int i1, int i2,
