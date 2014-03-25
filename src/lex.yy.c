@@ -8,7 +8,7 @@
 #define FLEX_SCANNER
 #define YY_FLEX_MAJOR_VERSION 2
 #define YY_FLEX_MINOR_VERSION 5
-#define YY_FLEX_SUBMINOR_VERSION 35
+#define YY_FLEX_SUBMINOR_VERSION 37
 #if YY_FLEX_SUBMINOR_VERSION > 0
 #define FLEX_BETA
 #endif
@@ -33,7 +33,7 @@
 #if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
 
 /* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
- * if you want the limit (max/min) macros for int types.
+ * if you want the limit (max/min) macros for int types. 
  */
 #ifndef __STDC_LIMIT_MACROS
 #define __STDC_LIMIT_MACROS 1
@@ -50,10 +50,9 @@ typedef uint32_t flex_uint32_t;
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
 typedef int flex_int32_t;
-typedef unsigned char flex_uint8_t;
+typedef unsigned char flex_uint8_t; 
 typedef unsigned short int flex_uint16_t;
 typedef unsigned int flex_uint32_t;
-#endif /* ! C99 */
 
 /* Limits of integral types. */
 #ifndef INT8_MIN
@@ -83,6 +82,8 @@ typedef unsigned int flex_uint32_t;
 #ifndef UINT32_MAX
 #define UINT32_MAX             (4294967295U)
 #endif
+
+#endif /* ! C99 */
 
 #endif /* ! FLEXINT_H */
 
@@ -169,12 +170,17 @@ typedef void* yyscan_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
 
     #define YY_LESS_LINENO(n)
-
+    
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
 	do \
@@ -190,11 +196,6 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 	while ( 0 )
 
 #define unput(c) yyunput( c, yyg->yytext_ptr , yyscanner )
-
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
 
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
@@ -213,7 +214,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	int yy_n_chars;
+	yy_size_t yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -236,7 +237,7 @@ struct yy_buffer_state
 
     int yy_bs_lineno; /**< The line count. */
     int yy_bs_column; /**< The column count. */
-
+    
 	/* Whether to try to fill the input buffer when we reach the
 	 * end of it.
 	 */
@@ -292,7 +293,7 @@ static void yy_init_buffer (YY_BUFFER_STATE b,FILE *file ,yyscan_t yyscanner );
 
 YY_BUFFER_STATE yy_scan_buffer (char *base,yy_size_t size ,yyscan_t yyscanner );
 YY_BUFFER_STATE yy_scan_string (yyconst char *yy_str ,yyscan_t yyscanner );
-YY_BUFFER_STATE yy_scan_bytes (yyconst char *bytes,int len ,yyscan_t yyscanner );
+YY_BUFFER_STATE yy_scan_bytes (yyconst char *bytes,yy_size_t len ,yyscan_t yyscanner );
 
 void *yyalloc (yy_size_t ,yyscan_t yyscanner );
 void *yyrealloc (void *,yy_size_t ,yyscan_t yyscanner );
@@ -324,7 +325,7 @@ void yyfree (void * ,yyscan_t yyscanner );
 
 /* Begin user sect3 */
 
-#define yywrap(n) 1
+#define yywrap(yyscanner) 1
 #define YY_SKIP_YYWRAP
 
 typedef unsigned char YY_CHAR;
@@ -604,24 +605,28 @@ static yyconst flex_int16_t yy_chk[422] =
 /* Specify that it is re-entrant and doesn't use ywrap */
 /* Include the header and define tokens */
 #line 9 "giza-scanner.l"
-/* giza - a scientific plotting layer built on cairo
+/* giza - a scientific plotting library built on cairo
  *
- * This file is (or was) part of GIZA, a scientific plotting
- * layer built on cairo.
- * GIZA comes with ABSOLUTELY NO WARRANTY.
- * This is free software; and you are welcome to redistribute
+ * Copyright (c) 2010      James Wetter and Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
+ *
+ * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
- * (see LICENSE file for details) and the provision that
+ * (GPL, see LICENSE file for details) and the provision that
  * this notice remains intact. If you modify this file, please
  * note section 2a) of the GPLv2 states that:
  *
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter and Daniel Price. All rights reserved.
- * Contact: wetter.j@gmail.com
- *          daniel.price@monash.edu
+ * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
+ * See the GPL for specific language governing rights and limitations.
  *
+ * The Original code is the giza plotting library.
+ *
+ * Contributor(s):
+ *      James Wetter <wetter.j@gmail.com>
+ *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 #include "giza-private.h"
 #include "giza-transforms-private.h"
@@ -710,7 +715,7 @@ static yyconst flex_int16_t yy_chk[422] =
 void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
 int _giza_get_chunk (const char *text);
 
-#line 714 "lex.yy.c"
+#line 719 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -739,8 +744,8 @@ struct yyguts_t
     size_t yy_buffer_stack_max; /**< capacity of stack. */
     YY_BUFFER_STATE * yy_buffer_stack; /**< Stack as an array. */
     char yy_hold_char;
-    int yy_n_chars;
-    int yyleng_r;
+    yy_size_t yy_n_chars;
+    yy_size_t yyleng_r;
     char *yy_c_buf_p;
     int yy_init;
     int yy_start;
@@ -787,13 +792,17 @@ FILE *yyget_out (yyscan_t yyscanner );
 
 void yyset_out  (FILE * out_str ,yyscan_t yyscanner );
 
-int yyget_leng (yyscan_t yyscanner );
+yy_size_t yyget_leng (yyscan_t yyscanner );
 
 char *yyget_text (yyscan_t yyscanner );
 
 int yyget_lineno (yyscan_t yyscanner );
 
 void yyset_lineno (int line_number ,yyscan_t yyscanner );
+
+int yyget_column  (yyscan_t yyscanner );
+
+void yyset_column (int column_no ,yyscan_t yyscanner );
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -808,7 +817,7 @@ extern int yywrap (yyscan_t yyscanner );
 #endif
 
     static void yyunput (int c,char *buf_ptr  ,yyscan_t yyscanner);
-
+    
 #ifndef yytext_ptr
 static void yy_flex_strncpy (char *,yyconst char *,int ,yyscan_t yyscanner);
 #endif
@@ -837,7 +846,7 @@ static int input (yyscan_t yyscanner );
 /* This used to be an fputs(), but since the string might contain NUL's,
  * we now use fwrite().
  */
-#define ECHO fwrite( yytext, yyleng, 1, yyout )
+#define ECHO do { if (fwrite( yytext, yyleng, 1, yyout )) {} } while (0)
 #endif
 
 /* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
@@ -848,7 +857,7 @@ static int input (yyscan_t yyscanner );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		int n; \
+		size_t n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -931,10 +940,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 188 "giza-scanner.l"
+#line 192 "giza-scanner.l"
 
 
-#line 938 "lex.yy.c"
+#line 947 "lex.yy.c"
 
 	if ( !yyg->yy_init )
 		{
@@ -1019,341 +1028,341 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 190 "giza-scanner.l"
+#line 194 "giza-scanner.l"
 { return GIZA_TOKEN_SUPER; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 192 "giza-scanner.l"
+#line 196 "giza-scanner.l"
 { return GIZA_TOKEN_SUB; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 194 "giza-scanner.l"
+#line 198 "giza-scanner.l"
 { return GIZA_TOKEN_RAISE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 196 "giza-scanner.l"
+#line 200 "giza-scanner.l"
 { return GIZA_TOKEN_LOWER; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 198 "giza-scanner.l"
+#line 202 "giza-scanner.l"
 { return GIZA_TOKEN_OB; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 200 "giza-scanner.l"
+#line 204 "giza-scanner.l"
 { return GIZA_TOKEN_CB; }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 202 "giza-scanner.l"
+#line 206 "giza-scanner.l"
 { return GIZA_TOKEN_OTHER; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 204 "giza-scanner.l"
+#line 208 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_NORMAL; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 205 "giza-scanner.l"
+#line 209 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_ROMAN; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 206 "giza-scanner.l"
+#line 210 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_ITALIC; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 207 "giza-scanner.l"
+#line 211 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_SCRIPT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 209 "giza-scanner.l"
+#line 213 "giza-scanner.l"
 { return GIZA_TOKEN_TIMES; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 210 "giza-scanner.l"
+#line 214 "giza-scanner.l"
 { return GIZA_TOKEN_INTEGRAL; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 211 "giza-scanner.l"
+#line 215 "giza-scanner.l"
 { return GIZA_TOKEN_NABLA; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 212 "giza-scanner.l"
+#line 216 "giza-scanner.l"
 { return GIZA_TOKEN_ODOT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 213 "giza-scanner.l"
+#line 217 "giza-scanner.l"
 { return GIZA_TOKEN_MARKER; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 215 "giza-scanner.l"
+#line 219 "giza-scanner.l"
 { return GIZA_TOKEN_ALPHA; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 216 "giza-scanner.l"
+#line 220 "giza-scanner.l"
 { return GIZA_TOKEN_BETA; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 217 "giza-scanner.l"
+#line 221 "giza-scanner.l"
 { return GIZA_TOKEN_GAMMA; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 218 "giza-scanner.l"
+#line 222 "giza-scanner.l"
 { return GIZA_TOKEN_DELTA; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 219 "giza-scanner.l"
+#line 223 "giza-scanner.l"
 { return GIZA_TOKEN_EPSILON; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 220 "giza-scanner.l"
+#line 224 "giza-scanner.l"
 { return GIZA_TOKEN_ZETA; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 221 "giza-scanner.l"
+#line 225 "giza-scanner.l"
 { return GIZA_TOKEN_ETA; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 222 "giza-scanner.l"
+#line 226 "giza-scanner.l"
 { return GIZA_TOKEN_THETA; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 223 "giza-scanner.l"
+#line 227 "giza-scanner.l"
 { return GIZA_TOKEN_IOTA; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 224 "giza-scanner.l"
+#line 228 "giza-scanner.l"
 { return GIZA_TOKEN_KAPPA; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 225 "giza-scanner.l"
+#line 229 "giza-scanner.l"
 { return GIZA_TOKEN_LAMBDA; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 226 "giza-scanner.l"
+#line 230 "giza-scanner.l"
 { return GIZA_TOKEN_MU; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 227 "giza-scanner.l"
+#line 231 "giza-scanner.l"
 { return GIZA_TOKEN_NU; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 228 "giza-scanner.l"
+#line 232 "giza-scanner.l"
 { return GIZA_TOKEN_XI; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 229 "giza-scanner.l"
+#line 233 "giza-scanner.l"
 { return GIZA_TOKEN_OMICRON; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 230 "giza-scanner.l"
+#line 234 "giza-scanner.l"
 { return GIZA_TOKEN_PI; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 231 "giza-scanner.l"
+#line 235 "giza-scanner.l"
 { return GIZA_TOKEN_RHO; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 232 "giza-scanner.l"
+#line 236 "giza-scanner.l"
 { return GIZA_TOKEN_SIGMA; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 233 "giza-scanner.l"
+#line 237 "giza-scanner.l"
 { return GIZA_TOKEN_TAU; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 234 "giza-scanner.l"
+#line 238 "giza-scanner.l"
 { return GIZA_TOKEN_UPSILON; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 235 "giza-scanner.l"
+#line 239 "giza-scanner.l"
 { return GIZA_TOKEN_PHI; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 236 "giza-scanner.l"
+#line 240 "giza-scanner.l"
 { return GIZA_TOKEN_CHI; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 237 "giza-scanner.l"
+#line 241 "giza-scanner.l"
 { return GIZA_TOKEN_PSI; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 238 "giza-scanner.l"
+#line 242 "giza-scanner.l"
 { return GIZA_TOKEN_OMEGA; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 240 "giza-scanner.l"
+#line 244 "giza-scanner.l"
 { return GIZA_TOKEN_BIGALPHA; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 241 "giza-scanner.l"
+#line 245 "giza-scanner.l"
 { return GIZA_TOKEN_BIGBETA; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 242 "giza-scanner.l"
+#line 246 "giza-scanner.l"
 { return GIZA_TOKEN_BIGGAMMA; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 243 "giza-scanner.l"
+#line 247 "giza-scanner.l"
 { return GIZA_TOKEN_BIGDELTA; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 244 "giza-scanner.l"
+#line 248 "giza-scanner.l"
 { return GIZA_TOKEN_BIGEPSILON; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 245 "giza-scanner.l"
+#line 249 "giza-scanner.l"
 { return GIZA_TOKEN_BIGZETA; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 246 "giza-scanner.l"
+#line 250 "giza-scanner.l"
 { return GIZA_TOKEN_BIGETA; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 247 "giza-scanner.l"
+#line 251 "giza-scanner.l"
 { return GIZA_TOKEN_BIGTHETA; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 248 "giza-scanner.l"
+#line 252 "giza-scanner.l"
 { return GIZA_TOKEN_BIGIOTA; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 249 "giza-scanner.l"
+#line 253 "giza-scanner.l"
 { return GIZA_TOKEN_BIGKAPPA; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 250 "giza-scanner.l"
+#line 254 "giza-scanner.l"
 { return GIZA_TOKEN_BIGLAMBDA; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 251 "giza-scanner.l"
+#line 255 "giza-scanner.l"
 { return GIZA_TOKEN_BIGMU; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 252 "giza-scanner.l"
+#line 256 "giza-scanner.l"
 { return GIZA_TOKEN_BIGNU; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 253 "giza-scanner.l"
+#line 257 "giza-scanner.l"
 { return GIZA_TOKEN_BIGXI; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 254 "giza-scanner.l"
+#line 258 "giza-scanner.l"
 { return GIZA_TOKEN_BIGOMICRON; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 255 "giza-scanner.l"
+#line 259 "giza-scanner.l"
 { return GIZA_TOKEN_BIGPI; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 256 "giza-scanner.l"
+#line 260 "giza-scanner.l"
 { return GIZA_TOKEN_BIGRHO; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 257 "giza-scanner.l"
+#line 261 "giza-scanner.l"
 { return GIZA_TOKEN_BIGSIGMA; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 258 "giza-scanner.l"
+#line 262 "giza-scanner.l"
 { return GIZA_TOKEN_BIGTAU; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 259 "giza-scanner.l"
+#line 263 "giza-scanner.l"
 { return GIZA_TOKEN_BIGUPSILON; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 260 "giza-scanner.l"
+#line 264 "giza-scanner.l"
 { return GIZA_TOKEN_BIGPHI; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 261 "giza-scanner.l"
+#line 265 "giza-scanner.l"
 { return GIZA_TOKEN_BIGCHI; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 262 "giza-scanner.l"
+#line 266 "giza-scanner.l"
 { return GIZA_TOKEN_BIGPSI; }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 263 "giza-scanner.l"
+#line 267 "giza-scanner.l"
 { return GIZA_TOKEN_BIGOMEGA; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 266 "giza-scanner.l"
+#line 270 "giza-scanner.l"
 { return GIZA_TOKEN_END; }
 	YY_BREAK
 case 65:
 /* rule 65 can match eol */
 YY_RULE_SETUP
-#line 268 "giza-scanner.l"
+#line 272 "giza-scanner.l"
 { return GIZA_TOKEN_ERROR; }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 270 "giza-scanner.l"
+#line 274 "giza-scanner.l"
 ECHO;
 	YY_BREAK
-#line 1357 "lex.yy.c"
+#line 1366 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1538,21 +1547,21 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 	else
 		{
-			int num_to_read =
+			yy_size_t num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
 			{ /* Not enough room in the buffer - grow it. */
 
 			/* just a shorter name for the current buffer */
-			YY_BUFFER_STATE b = YY_CURRENT_BUFFER;
+			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
 
 			int yy_c_buf_p_offset =
 				(int) (yyg->yy_c_buf_p - b->yy_ch_buf);
 
 			if ( b->yy_is_our_buffer )
 				{
-				int new_size = b->yy_buf_size * 2;
+				yy_size_t new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -1583,7 +1592,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			yyg->yy_n_chars, (size_t) num_to_read );
+			yyg->yy_n_chars, num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = yyg->yy_n_chars;
 		}
@@ -1680,6 +1689,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 	yy_is_jam = (yy_current_state == 234);
 
+	(void)yyg;
 	return yy_is_jam ? 0 : yy_current_state;
 }
 
@@ -1696,7 +1706,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
 		{ /* need to shift things up to make room */
 		/* +2 for EOB chars. */
-		register int number_to_move = yyg->yy_n_chars + 2;
+		register yy_size_t number_to_move = yyg->yy_n_chars + 2;
 		register char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
 					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
 		register char *source =
@@ -1746,7 +1756,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 		else
 			{ /* need more input */
-			int offset = yyg->yy_c_buf_p - yyg->yytext_ptr;
+			yy_size_t offset = yyg->yy_c_buf_p - yyg->yytext_ptr;
 			++yyg->yy_c_buf_p;
 
 			switch ( yy_get_next_buffer( yyscanner ) )
@@ -1869,7 +1879,7 @@ static void yy_load_buffer_state  (yyscan_t yyscanner)
     YY_BUFFER_STATE yy_create_buffer  (FILE * file, int  size , yyscan_t yyscanner)
 {
 	YY_BUFFER_STATE b;
-
+    
 	b = (YY_BUFFER_STATE) yyalloc(sizeof( struct yy_buffer_state ) ,yyscanner );
 	if ( ! b )
 		YY_FATAL_ERROR( "out of dynamic memory in yy_create_buffer()" );
@@ -1910,10 +1920,6 @@ static void yy_load_buffer_state  (yyscan_t yyscanner)
 	yyfree((void *) b ,yyscanner );
 }
 
-#ifndef __cplusplus
-extern int isatty (int );
-#endif /* __cplusplus */
-
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
  * such as during a yyrestart() or at EOF.
@@ -1939,7 +1945,7 @@ extern int isatty (int );
     }
 
         b->yy_is_interactive = file ? (isatty( fileno(file) ) > 0) : 0;
-
+    
 	errno = oerrno;
 }
 
@@ -2030,7 +2036,7 @@ void yypop_buffer_state (yyscan_t yyscanner)
  */
 static void yyensure_buffer_stack (yyscan_t yyscanner)
 {
-	int num_to_alloc;
+	yy_size_t num_to_alloc;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
 	if (!yyg->yy_buffer_stack) {
@@ -2045,9 +2051,9 @@ static void yyensure_buffer_stack (yyscan_t yyscanner)
 								, yyscanner);
 		if ( ! yyg->yy_buffer_stack )
 			YY_FATAL_ERROR( "out of dynamic memory in yyensure_buffer_stack()" );
-
+								  
 		memset(yyg->yy_buffer_stack, 0, num_to_alloc * sizeof(struct yy_buffer_state*));
-
+				
 		yyg->yy_buffer_stack_max = num_to_alloc;
 		yyg->yy_buffer_stack_top = 0;
 		return;
@@ -2076,12 +2082,12 @@ static void yyensure_buffer_stack (yyscan_t yyscanner)
  * @param base the character buffer
  * @param size the size in bytes of the character buffer
  * @param yyscanner The scanner object.
- * @return the newly allocated buffer state object.
+ * @return the newly allocated buffer state object. 
  */
 YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size , yyscan_t yyscanner)
 {
 	YY_BUFFER_STATE b;
-
+    
 	if ( size < 2 ||
 	     base[size-2] != YY_END_OF_BUFFER_CHAR ||
 	     base[size-1] != YY_END_OF_BUFFER_CHAR )
@@ -2117,24 +2123,24 @@ YY_BUFFER_STATE yy_scan_buffer  (char * base, yy_size_t  size , yyscan_t yyscann
  */
 YY_BUFFER_STATE yy_scan_string (yyconst char * yystr , yyscan_t yyscanner)
 {
-
+    
 	return yy_scan_bytes(yystr,strlen(yystr) ,yyscanner);
 }
 
 /** Setup the input buffer state to scan the given bytes. The next call to yylex() will
  * scan from a @e copy of @a bytes.
- * @param bytes the byte buffer to scan
- * @param len the number of bytes in the buffer pointed to by @a bytes.
+ * @param yybytes the byte buffer to scan
+ * @param _yybytes_len the number of bytes in the buffer pointed to by @a bytes.
  * @param yyscanner The scanner object.
  * @return the newly allocated buffer state object.
  */
-YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, int  _yybytes_len , yyscan_t yyscanner)
+YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len , yyscan_t yyscanner)
 {
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
 	int i;
-
+    
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
 	buf = (char *) yyalloc(n ,yyscanner );
@@ -2202,10 +2208,10 @@ YY_EXTRA_TYPE yyget_extra  (yyscan_t yyscanner)
 int yyget_lineno  (yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-
+    
         if (! YY_CURRENT_BUFFER)
             return 0;
-
+    
     return yylineno;
 }
 
@@ -2215,10 +2221,10 @@ int yyget_lineno  (yyscan_t yyscanner)
 int yyget_column  (yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-
+    
         if (! YY_CURRENT_BUFFER)
             return 0;
-
+    
     return yycolumn;
 }
 
@@ -2243,7 +2249,7 @@ FILE *yyget_out  (yyscan_t yyscanner)
 /** Get the length of the current token.
  * @param yyscanner The scanner object.
  */
-int yyget_leng  (yyscan_t yyscanner)
+yy_size_t yyget_leng  (yyscan_t yyscanner)
 {
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
     return yyleng;
@@ -2279,8 +2285,8 @@ void yyset_lineno (int  line_number , yyscan_t yyscanner)
 
         /* lineno is only valid if an input buffer exists. */
         if (! YY_CURRENT_BUFFER )
-           yy_fatal_error( "yyset_lineno called with no buffer" , yyscanner);
-
+           YY_FATAL_ERROR( "yyset_lineno called with no buffer" );
+    
     yylineno = line_number;
 }
 
@@ -2294,8 +2300,8 @@ void yyset_column (int  column_no , yyscan_t yyscanner)
 
         /* column is only valid if an input buffer exists. */
         if (! YY_CURRENT_BUFFER )
-           yy_fatal_error( "yyset_column called with no buffer" , yyscanner);
-
+           YY_FATAL_ERROR( "yyset_column called with no buffer" );
+    
     yycolumn = column_no;
 }
 
@@ -2378,20 +2384,20 @@ int yylex_init_extra(YY_EXTRA_TYPE yy_user_defined,yyscan_t* ptr_yy_globals )
         errno = EINVAL;
         return 1;
     }
-
+	
     *ptr_yy_globals = (yyscan_t) yyalloc ( sizeof( struct yyguts_t ), &dummy_yyguts );
-
+	
     if (*ptr_yy_globals == NULL){
         errno = ENOMEM;
         return 1;
     }
-
+    
     /* By setting to 0xAA, we expose bugs in
     yy_init_globals. Leave at 0x00 for releases. */
     memset(*ptr_yy_globals,0x00,sizeof(struct yyguts_t));
-
+    
     yyset_extra (yy_user_defined, *ptr_yy_globals);
-
+    
     return yy_init_globals ( *ptr_yy_globals );
 }
 
@@ -2506,7 +2512,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 270 "giza-scanner.l"
+#line 274 "giza-scanner.l"
 
 
 
@@ -2524,7 +2530,7 @@ _giza_get_chunk (const char *text)
   yyscan_t scanner;
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
-
+ 
   while(!stop)
     {
       token = yylex(scanner);
@@ -2545,7 +2551,7 @@ _giza_get_chunk (const char *text)
 	    break;
         }
 
-	if (openb < 1)
+	if (openb < 1) 
           {
             yylex_destroy (scanner);
             return length;
@@ -2577,7 +2583,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   /* initialise the scanner */
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
-
+ 
   while(!stop)
     {
       token = yylex(scanner);
@@ -2596,7 +2602,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
           /* if end of string, do nothing */
           if (posInText >= lenstr)
-            {
+            { 
               stop = 1;
               break;
             }
@@ -2605,7 +2611,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           chunkLength = _giza_get_chunk (text + posInText);
           strncpy (processed, text + posInText, chunkLength);
           processed[chunkLength] = '\0';
-
+          
           /* Perform the action on this chunk */
           _giza_start_super ();
           _giza_parse_string (processed, width, height, action);
@@ -2627,7 +2633,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
           /* if end of string, do nothing */
           if (posInText >= lenstr)
-            {
+            { 
               stop = 1;
               break;
             }
@@ -2691,7 +2697,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
           /* if end of string, do nothing */
           if (posInText >= lenstr)
-            {
+            { 
               stop = 1;
               break;
             }
@@ -2734,7 +2740,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
           /* if end of string, do nothing */
           if (posInText >= lenstr)
-            {
+            { 
               stop = 1;
               break;
             }
@@ -2746,15 +2752,15 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* extract the symbol number from in front of the \m */
           int number;
           sscanf(text+posInText,"%i",&number);
-
-          /*
-           * get the length of the string containing the number
+          
+          /* 
+           * get the length of the string containing the number 
            * so we know how many characters we have processed
            */
           char temp[4];
           sprintf(temp,"%i",number);
           chunkLength = strlen(temp);
-
+          
           /* either draw the symbol or increment the width */
           if (*width < 0.) {
              double xp, yp;
@@ -2766,7 +2772,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
              /* return width if action is _giza_action_get_size */
              *width = *width + 1.25*markerHeight;
           }
-
+          
 
           /* restart the scanner at the new position! */
           yylex_destroy (scanner);
@@ -2808,148 +2814,148 @@ _giza_add_token_to_string (char *string, yyscan_t scanner, int token)
      case GIZA_TOKEN_TIMES:
        strcat (string, "×");
        break;
-     case GIZA_TOKEN_ALPHA:
+     case GIZA_TOKEN_ALPHA: 
        strcat (string, "α");
        break;
-     case GIZA_TOKEN_BETA:
+     case GIZA_TOKEN_BETA: 
        strcat (string, "β");
        break;
-     case GIZA_TOKEN_GAMMA:
+     case GIZA_TOKEN_GAMMA: 
        strcat (string, "γ");
        break;
-     case GIZA_TOKEN_DELTA:
+     case GIZA_TOKEN_DELTA: 
        strcat (string, "δ");
        break;
-     case GIZA_TOKEN_EPSILON:
+     case GIZA_TOKEN_EPSILON: 
        strcat (string, "ε");
        break;
-     case GIZA_TOKEN_ZETA:
+     case GIZA_TOKEN_ZETA: 
        strcat (string, "ζ");
        break;
-     case GIZA_TOKEN_ETA:
+     case GIZA_TOKEN_ETA: 
        strcat (string, "η");
        break;
-     case GIZA_TOKEN_THETA:
+     case GIZA_TOKEN_THETA: 
        strcat (string, "θ");
        break;
-     case GIZA_TOKEN_IOTA:
+     case GIZA_TOKEN_IOTA: 
        strcat (string, "ι");
        break;
-     case GIZA_TOKEN_KAPPA:
+     case GIZA_TOKEN_KAPPA: 
        strcat (string, "κ");
        break;
-     case GIZA_TOKEN_LAMBDA:
+     case GIZA_TOKEN_LAMBDA: 
        strcat (string, "λ");
        break;
-     case GIZA_TOKEN_MU:
+     case GIZA_TOKEN_MU: 
        strcat (string, "μ");
        break;
-     case GIZA_TOKEN_NU:
+     case GIZA_TOKEN_NU: 
        strcat (string, "ν");
        break;
-     case GIZA_TOKEN_XI:
+     case GIZA_TOKEN_XI: 
        strcat (string, "ξ");
        break;
-     case GIZA_TOKEN_OMICRON:
+     case GIZA_TOKEN_OMICRON: 
        strcat (string, "ο");
        break;
-     case GIZA_TOKEN_PI:
+     case GIZA_TOKEN_PI: 
        strcat (string, "π");
        break;
-     case GIZA_TOKEN_RHO:
+     case GIZA_TOKEN_RHO: 
        strcat (string, "ρ");
        break;
-     case GIZA_TOKEN_SIGMA:
+     case GIZA_TOKEN_SIGMA: 
        strcat (string, "σ");
        break;
-     case GIZA_TOKEN_TAU:
+     case GIZA_TOKEN_TAU: 
        strcat (string, "τ");
        break;
-     case GIZA_TOKEN_UPSILON:
+     case GIZA_TOKEN_UPSILON: 
        strcat (string, "υ");
        break;
-     case GIZA_TOKEN_PHI:
+     case GIZA_TOKEN_PHI: 
        strcat (string, "φ");
        break;
-     case GIZA_TOKEN_CHI:
+     case GIZA_TOKEN_CHI: 
        strcat (string, "χ");
        break;
-     case GIZA_TOKEN_PSI:
+     case GIZA_TOKEN_PSI: 
        strcat (string, "ψ");
        break;
-     case GIZA_TOKEN_OMEGA:
+     case GIZA_TOKEN_OMEGA: 
        strcat (string, "ω");
        break;
-     case GIZA_TOKEN_BIGALPHA:
+     case GIZA_TOKEN_BIGALPHA: 
        strcat (string, "Α");
        break;
-     case GIZA_TOKEN_BIGBETA:
+     case GIZA_TOKEN_BIGBETA: 
        strcat (string, "Β");
        break;
-     case GIZA_TOKEN_BIGGAMMA:
+     case GIZA_TOKEN_BIGGAMMA: 
        strcat (string, "Γ");
        break;
-     case GIZA_TOKEN_BIGDELTA:
+     case GIZA_TOKEN_BIGDELTA: 
        strcat (string, "Δ");
        break;
-     case GIZA_TOKEN_BIGEPSILON:
+     case GIZA_TOKEN_BIGEPSILON: 
        strcat (string, "Ε");
        break;
-     case GIZA_TOKEN_BIGZETA:
+     case GIZA_TOKEN_BIGZETA: 
        strcat (string, "Ζ");
        break;
-     case GIZA_TOKEN_BIGETA:
+     case GIZA_TOKEN_BIGETA: 
        strcat (string, "Η");
        break;
-     case GIZA_TOKEN_BIGTHETA:
+     case GIZA_TOKEN_BIGTHETA: 
        strcat (string, "Θ");
        break;
-     case GIZA_TOKEN_BIGIOTA:
+     case GIZA_TOKEN_BIGIOTA: 
        strcat (string, "Ι");
        break;
-     case GIZA_TOKEN_BIGKAPPA:
+     case GIZA_TOKEN_BIGKAPPA: 
        strcat (string, "Κ");
        break;
-     case GIZA_TOKEN_BIGLAMBDA:
+     case GIZA_TOKEN_BIGLAMBDA: 
        strcat (string, "Λ");
        break;
-     case GIZA_TOKEN_BIGMU:
+     case GIZA_TOKEN_BIGMU: 
        strcat (string, "Μ");
        break;
-     case GIZA_TOKEN_BIGNU:
+     case GIZA_TOKEN_BIGNU: 
        strcat (string, "Ν");
        break;
-     case GIZA_TOKEN_BIGXI:
+     case GIZA_TOKEN_BIGXI: 
        strcat (string, "Ξ");
        break;
-     case GIZA_TOKEN_BIGOMICRON:
+     case GIZA_TOKEN_BIGOMICRON: 
        strcat (string, "Ο");
        break;
-     case GIZA_TOKEN_BIGPI:
+     case GIZA_TOKEN_BIGPI: 
        strcat (string, "Π");
        break;
-     case GIZA_TOKEN_BIGRHO:
+     case GIZA_TOKEN_BIGRHO: 
        strcat (string, "Ρ");
        break;
-     case GIZA_TOKEN_BIGSIGMA:
+     case GIZA_TOKEN_BIGSIGMA: 
        strcat (string, "Σ");
        break;
-     case GIZA_TOKEN_BIGTAU:
+     case GIZA_TOKEN_BIGTAU: 
        strcat (string, "Τ");
        break;
-     case GIZA_TOKEN_BIGUPSILON:
+     case GIZA_TOKEN_BIGUPSILON: 
        strcat (string, "Υ");
        break;
-     case GIZA_TOKEN_BIGPHI:
+     case GIZA_TOKEN_BIGPHI: 
        strcat (string, "Φ");
        break;
-     case GIZA_TOKEN_BIGCHI:
+     case GIZA_TOKEN_BIGCHI: 
        strcat (string, "Χ");
        break;
-     case GIZA_TOKEN_BIGPSI:
+     case GIZA_TOKEN_BIGPSI: 
        strcat (string, "Ψ");
        break;
-     case GIZA_TOKEN_BIGOMEGA:
+     case GIZA_TOKEN_BIGOMEGA: 
        strcat (string, "Ω");
        break;
      case GIZA_TOKEN_INTEGRAL:

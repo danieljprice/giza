@@ -6,24 +6,28 @@
 /* Include the header and define tokens */
 
 %{
-/* giza - a scientific plotting layer built on cairo
+/* giza - a scientific plotting library built on cairo
  *
- * This file is (or was) part of GIZA, a scientific plotting
- * layer built on cairo.
- * GIZA comes with ABSOLUTELY NO WARRANTY.
- * This is free software; and you are welcome to redistribute
+ * Copyright (c) 2010      James Wetter and Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
+ *
+ * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
- * (see LICENSE file for details) and the provision that
+ * (GPL, see LICENSE file for details) and the provision that
  * this notice remains intact. If you modify this file, please
  * note section 2a) of the GPLv2 states that:
  *
  *  a) You must cause the modified files to carry prominent notices
  *     stating that you changed the files and the date of any change.
  *
- * Copyright (C) 2010 James Wetter and Daniel Price. All rights reserved.
- * Contact: wetter.j@gmail.com
- *          daniel.price@monash.edu
+ * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
+ * See the GPL for specific language governing rights and limitations.
  *
+ * The Original code is the giza plotting library.
+ *
+ * Contributor(s):
+ *      James Wetter <wetter.j@gmail.com>
+ *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 #include "giza-private.h"
 #include "giza-transforms-private.h"
@@ -517,9 +521,9 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* either draw the symbol or increment the width */
           if (*width < 0.) {
              double xp, yp;
-             cairo_get_current_point(context, &xp, &yp); /* current pen position */
+             cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
              _giza_draw_symbol_device(xp + 0.75*markerHeight, yp - 0.5*markerHeight, number);
-             cairo_move_to(context, xp + 1.25*markerHeight, yp); /* restore pen position */
+             cairo_move_to(Dev[id].context, xp + 1.25*markerHeight, yp); /* restore pen position */
 
           } else {
              /* return width if action is _giza_action_get_size */
