@@ -29,7 +29,7 @@ program testgizaplot
 !                affine=(/1./real(n),0.,0.,1./real(n),0.,0./),&
 !                vptxmin,vptxmax,vptymin,vptymax,&
                  xlabel='x',ylabel='y',&
-                 title='sin(r)/r')
+                 title='sin(r)/r',extend=giza_extend_pad)
 !                font,&
 !                 ls=giza_ls_solid,lw=2.,ci=2,ch=1.)
 !                symbol=3,
