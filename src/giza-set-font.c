@@ -122,7 +122,12 @@ _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight
    if(!font)
      {
        _giza_warning ("giza_set_font", "No font string passed, font unchanged.");
+       return;
      }
+
+   /* store existing font matrix */
+   cairo_matrix_t mat;
+   cairo_get_font_matrix (Dev[id].context, &mat);
 
    _giza_fontFam = realloc (_giza_fontFam, (strlen (font) + 1) * sizeof (char));
    strcpy (_giza_fontFam, font);
@@ -179,13 +184,13 @@ _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight
    cairo_select_font_face (Dev[id].context, font, slant, weight);
 #endif
 
-/*   cairo_matrix_t mat;
-   cairo_matrix_init_identity(&mat);
-   cairo_set_font_matrix (Dev[id].context, &mat);
-*/
    double oldCh;
    giza_get_character_height (&oldCh);
    giza_set_character_height (oldCh);
+
+   /* restore font matrix */
+   cairo_set_font_matrix (Dev[id].context, &mat);
+
 }
 
 /**

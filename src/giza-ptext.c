@@ -56,6 +56,11 @@ giza_ptext (double x, double y, double angle, double just, const char *text)
   giza_get_character_height (&ch);
 
   cairo_save (Dev[id].context);
+  
+  /* save the font (can be changed by \rm \fn \fc during text write) */
+  int len = GIZA_FONT_LEN;
+  char giza_font[len];
+  giza_get_font(giza_font,len);
 
   _giza_expand_clipping ();
 
@@ -90,6 +95,9 @@ giza_ptext (double x, double y, double angle, double just, const char *text)
   _giza_parse_string (text, xbox, ybox, _giza_action_print);
 
   cairo_restore (Dev[id].context);
+
+  /* restore font */
+  giza_set_font(giza_font);
 
   _giza_stroke ();
 

@@ -58,6 +58,11 @@ giza_qtext (double x, double y, double angle, double just, const char *text, dou
 
   cairo_save (Dev[id].context);
 
+  /* save the font (can be changed by \rm \fn \fc during text write) */
+  int len = GIZA_FONT_LEN;
+  char giza_font[len];
+  giza_get_font(giza_font,len);
+
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_user_to_device (Dev[id].context, &x, &y);
 
@@ -93,6 +98,9 @@ giza_qtext (double x, double y, double angle, double just, const char *text, dou
   cairo_device_to_user (Dev[id].context, &xbox[3], &ybox[3]);
 
   cairo_restore (Dev[id].context);
+
+  /* restore font */
+  giza_set_font(giza_font);
 
   /* restore the original character height (and font matrix) */
   giza_set_character_height (ch);
@@ -151,6 +159,11 @@ giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
 
   cairo_save (Dev[id].context);
 
+  /* save the font (can be changed by \rm \fn \fc during text write) */
+  int len = GIZA_FONT_LEN;
+  char giza_font[len];
+  giza_get_font(giza_font,len);
+
   _giza_set_trans (GIZA_TRANS_IDEN);
   cairo_move_to (Dev[id].context, 0., 0.);
   _giza_parse_string (text, xlen, ylen, _giza_action_get_size);
@@ -190,6 +203,9 @@ giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
     }
 
   cairo_restore (Dev[id].context);
+
+  /* restore font */
+  giza_set_font(giza_font);
 
   /* restore the original character height (and font matrix) */
   giza_set_character_height (ch);

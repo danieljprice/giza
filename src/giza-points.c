@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -202,6 +202,10 @@ _giza_draw_symbol_device (double xd, double yd, int symbol)
   int oldTrans,oldLineStyle,oldLineCap;
   double oldLineWidth,oldCh;
 
+  /* store existing font matrix */
+  cairo_matrix_t mat;
+  cairo_get_font_matrix (Dev[id].context, &mat);
+
   /* initialise symbol drawing */
   _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldLineWidth,&oldCh);
 
@@ -213,6 +217,9 @@ _giza_draw_symbol_device (double xd, double yd, int symbol)
 
   /* restore old setting */
   _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
+
+   /* restore font matrix */
+   cairo_set_font_matrix (Dev[id].context, &mat);
 }
 
 
