@@ -349,8 +349,8 @@ static void yy_fatal_error (yyconst char msg[] ,yyscan_t yyscanner );
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 66
-#define YY_END_OF_BUFFER 67
+#define YY_NUM_RULES 67
+#define YY_END_OF_BUFFER 68
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -358,34 +358,34 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[235] =
+static yyconst flex_int16_t yy_accept[236] =
     {   0,
-        0,    0,   67,    7,    7,    7,    1,    2,    5,    6,
-       66,   66,   66,   66,    0,    0,    0,    0,    0,    0,
+        0,    0,   68,    7,    7,    7,    1,    2,    5,    6,
+       67,   67,   67,   67,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    4,    0,    0,
-        0,    0,    0,    0,   16,    0,    0,    0,    0,    0,
-        0,    3,   12,    0,    7,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,   52,   53,
-        0,    0,   56,    0,    0,    0,    0,    0,    0,    0,
-       54,    0,    0,    0,    0,    0,    0,    0,    0,   10,
-        8,    9,   11,   41,   42,   44,   45,   61,   43,   48,
+        0,    0,    0,    0,   17,    0,    0,    0,    0,    0,
+        0,    3,   13,    0,    7,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,    0,    0,   53,   54,
+        0,    0,   57,    0,    0,    0,    0,    0,    0,    0,
+       55,    0,    0,    0,   12,    0,    0,    0,    0,    0,
+       10,    8,    9,   11,   42,   43,   45,   46,   62,   44,
 
-       49,   50,   51,   55,   63,   57,   58,   59,   60,   64,
-       62,   47,   46,   17,   18,   30,   20,   21,   37,   19,
-       24,   25,   26,   27,   28,   29,   31,   32,   39,   33,
-       34,   35,   36,   40,   38,   23,   22,    0,    0,    0,
+       49,   50,   51,   52,   56,   64,   58,   59,   60,   61,
+       65,   63,   48,   47,   18,   19,   31,   21,   22,   38,
+       20,   25,   26,   27,   28,   29,   30,   32,   33,   40,
+       34,   35,   36,   37,   41,   39,   24,   23,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,   15,    0,    0,    0,    0,
-        0,    0,    0,    0,   13,    0,    0,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,   16,    0,    0,    0,
+        0,    0,    0,    0,    0,   14,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
 
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-       17,    0,    0,   14,    0,   12,    0,    0,    0,    0,
-        0,    0,    0,    0
+        0,   18,    0,    0,   15,    0,   13,    0,    0,    0,
+        0,    0,    0,    0,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -431,67 +431,67 @@ static yyconst flex_int32_t yy_meta[71] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_int16_t yy_base[235] =
+static yyconst flex_int16_t yy_base[236] =
     {   0,
-        0,    0,  350,  351,  351,   68,  351,  351,  351,  351,
-      351,    7,  283,    9,  342,  300,  305,  301,  303,   46,
-      306,  292,  304,  303,  283,  282,  289,   58,  292,   75,
-       55,  284,  289,  292,  285,  290,   88,  289,   78,   85,
-      131,  143,  292,  291,  271,  157,   36,  151,  153,  281,
-      162,  274,  279,  282,  351,   70,   99,  316,  270,  265,
-      274,  271,  263,  279,  267,  259,  262,  264,  351,  351,
-      159,  266,  351,  265,  259,  265,  258,  250,  264,  250,
-      351,  248,  251,  246,  253,  254,  251,  243,  259,  351,
-      351,  351,  351,  351,  351,  351,  351,  351,  351,  351,
+        0,    0,  352,  353,  353,   68,  353,  353,  353,  353,
+      353,    7,  285,    9,  344,  302,  307,  303,  305,   46,
+      308,  294,  306,  305,  285,  284,  291,   58,  294,   75,
+       55,  286,  291,  294,  287,   88,   88,  292,   82,   89,
+      135,   86,  295,  294,  274,  159,   36,  153,  155,  284,
+      164,  277,  282,  285,  353,   74,  103,  319,  273,  268,
+      277,  274,  266,  282,  270,  262,  265,  267,  353,  353,
+      159,  269,  353,  268,  262,  268,  261,  253,  267,  253,
+      353,  251,  254,  249,  353,  256,  257,  254,  246,  262,
+      353,  353,  353,  353,  353,  353,  353,  353,  353,  353,
 
-      351,  351,  351,  351,  351,  351,  351,  351,  351,  351,
-      351,  351,  351,  247,  351,  351,  351,  351,  351,  351,
-      351,  351,  351,  351,  351,  351,  351,  351,  351,  351,
-      351,  351,  351,  351,  351,  351,  351,  239,  238,  241,
-      243,  252,  239,  167,  243,  242,  236,  242,  228,  242,
-      234,  227,  225,  159,  235,  241,  222,  231,  227,  237,
-      222,  234,  228,  231,  221,  351,  213,  222,  229,  221,
-      227,  208,  217,  213,  351,  223,  208,  220,  210,  201,
-      212,  215,  205,  197,  210,  205,  212,  195,  243,  210,
-      209,  198,  207,  206,  202,  204,  187,  202,  201,  190,
+      353,  353,  353,  353,  353,  353,  353,  353,  353,  353,
+      353,  353,  353,  353,  250,  353,  353,  353,  353,  353,
+      353,  353,  353,  353,  353,  353,  353,  353,  353,  353,
+      353,  353,  353,  353,  353,  353,  353,  353,  242,  241,
+      244,  246,  255,  242,  161,  246,  245,  239,  245,  231,
+      245,  237,  230,  228,  163,  238,  244,  225,  234,  230,
+      240,  225,  237,  231,  234,  224,  353,  216,  225,  232,
+      224,  230,  211,  220,  216,  353,  226,  211,  223,  213,
+      204,  215,  218,  208,  200,  213,  208,  215,  203,  246,
+      213,  212,  201,  210,  209,  205,  207,  190,  205,  204,
 
-      199,  198,  187,  196,  195,  191,  193,  192,  175,  190,
-      189,  171,  177,  219,  218,  217,  170,  182,  168,  167,
-      351,  166,  178,  351,  164,  351,  161,  161,  160,   88,
-       78,   55,   33,  351
+      193,  202,  201,  190,  199,  198,  194,  196,  195,  178,
+      193,  192,  174,  180,  222,  221,  220,  173,  185,  171,
+      170,  353,  169,  181,  353,  167,  353,  166,  165,  164,
+      163,  156,   55,   33,  353
     } ;
 
-static yyconst flex_int16_t yy_def[235] =
+static yyconst flex_int16_t yy_def[236] =
     {   0,
-      234,    1,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
+      235,    1,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
 
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
 
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,    0
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,    0
     } ;
 
-static yyconst flex_int16_t yy_nxt[422] =
+static yyconst flex_int16_t yy_nxt[424] =
     {   0,
         4,    5,    4,    4,    4,    4,    4,    5,    5,    5,
         5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
@@ -500,49 +500,49 @@ static yyconst flex_int16_t yy_nxt[422] =
         4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
         4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
         9,    4,   10,    4,   11,   11,   11,   12,   13,   14,
-       15,   55,   55,   57,   57,  143,   16,   17,   18,   19,
-       20,  133,   21,  144,   22,   23,   24,   25,   26,   27,
+       15,   55,   55,   57,   57,  144,   16,   17,   18,   19,
+       20,  134,   21,  145,   22,   23,   24,   25,   26,   27,
        28,   78,   29,   30,   31,   32,   63,   33,   79,   34,
 
-       64,   72,   73,  127,   35,   36,   37,   38,   39,   40,
+       64,   72,   73,  128,   35,   36,   37,   38,   39,   40,
        41,   74,   42,   43,   44,   45,   46,   47,   48,   76,
-       49,   50,   51,   52,   85,   53,  118,   54,   88,   90,
-       77,   86,   89,   91,   55,   55,  109,   92,   93,   94,
-       95,   81,   96,   97,   98,   99,  100,  101,  102,  103,
-       69,   70,  104,   73,  105,  106,  107,  108,  109,  110,
-      111,  112,  113,   55,   55,  188,  189,  114,  115,  116,
-      117,  118,  119,  120,  121,  122,  123,  124,  125,  126,
-      127,  128,  129,  130,  131,  132,  133,  134,  135,  136,
-      137,  138,  139,  142,  145,  128,  147,   90,  149,  163,
+       49,   50,   51,   52,   86,   53,   85,   54,   84,   85,
+       77,   87,   89,   91,  139,  140,   90,   92,   55,   55,
+       91,   93,   94,   95,   96,   81,   97,   98,   99,  100,
+      101,  102,  103,  104,   69,   70,  105,   73,  106,  107,
+      108,  109,  110,  111,  112,  113,  114,   55,   55,  189,
+      190,  115,  116,  117,  118,  119,  120,  121,  122,  123,
+      124,  125,  126,  127,  128,  129,  130,  131,  132,  133,
+      134,  135,  136,  137,  138,  143,  146,  129,  148,  164,
 
-       92,  214,  215,  164,  146,  150,  151,  181,  104,   97,
-      233,  182,  126,  232,  124,  231,  230,  229,  103,  228,
-      166,  175,  224,  227,  226,  121,  131,  225,  134,  224,
-      223,  123,  120,  222,  117,  221,  220,  100,  107,  219,
-      110,  218,  102,   99,  217,   96,   94,  216,  137,  213,
-      212,  211,  210,  209,  208,  166,  207,  206,  205,  122,
-      204,  203,  202,  115,  201,  113,  200,  199,  198,  197,
-      196,  195,  194,  101,  193,  192,  191,   95,  190,  187,
-      186,  185,  184,  132,  183,  130,  129,  119,  180,  179,
-      178,  177,  176,  175,  174,  136,  173,  172,  135,   93,
+      150,  182,   93,  165,  119,  183,  147,  151,  152,  215,
+      216,  110,  105,   98,  127,  234,  233,  125,  232,  231,
+      230,  104,  229,  167,  176,  225,  228,  227,  122,  132,
+      226,  135,  225,  224,  124,  121,  223,  118,  222,  221,
+      101,  108,  220,  111,  219,  103,  100,  218,   97,   95,
+      217,  138,  214,  213,  212,  211,  210,  209,  167,  208,
+      207,  206,  123,  205,  204,  203,  116,  202,  114,  201,
+      200,  199,  198,  197,  196,  195,  102,  194,  193,  192,
+       96,  191,  188,  187,  186,  185,  133,  184,  131,  130,
+      120,  181,  180,  179,  178,  177,  176,  175,  137,  174,
 
-      171,  170,  169,  168,  167,  108,  166,  165,  106,  105,
-       98,  162,  161,  160,  159,  112,  158,  157,  111,  156,
-      155,  154,  153,  116,  152,  148,  125,  141,  140,   87,
-       84,   83,   82,   81,   80,   75,   71,   70,   69,   68,
-       67,   66,   65,   62,   61,   60,   59,   58,   56,  234,
-        3,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
+      173,  136,   94,  172,  171,  170,  169,  168,  109,  167,
+      166,  107,  106,   99,  163,  162,  161,  160,  113,  159,
+      158,  112,  157,  156,  155,  154,  117,  153,  149,  126,
+      142,  141,   88,   83,   82,   81,   80,   75,   71,   70,
+       69,   68,   67,   66,   65,   62,   61,   60,   59,   58,
+       56,  235,    3,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
 
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235
     } ;
 
-static yyconst flex_int16_t yy_chk[422] =
+static yyconst flex_int16_t yy_chk[424] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -552,45 +552,45 @@ static yyconst flex_int16_t yy_chk[422] =
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         6,   12,   12,   14,   14,   47,    6,    6,    6,    6,
-        6,  233,    6,   47,    6,    6,    6,    6,    6,    6,
+        6,  234,    6,   47,    6,    6,    6,    6,    6,    6,
         6,   31,    6,    6,    6,    6,   20,    6,   31,    6,
 
-       20,   28,   28,  232,    6,    6,    6,    6,    6,    6,
+       20,   28,   28,  233,    6,    6,    6,    6,    6,    6,
         6,   28,    6,    6,    6,    6,    6,    6,    6,   30,
-        6,    6,    6,    6,   37,    6,  231,    6,   39,   40,
-       30,   37,   39,   40,   56,   56,  230,   40,   40,   41,
+        6,    6,    6,    6,   37,    6,   40,    6,   36,   36,
+       30,   37,   39,   40,   42,   42,   39,   40,   56,   56,
+       42,   40,   40,   41,   41,   41,   41,   41,   41,   41,
        41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
+       41,   41,   41,   41,   41,   41,   41,   57,   57,  155,
+      155,   41,   41,   41,   41,   41,   41,   41,   41,   41,
        41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
-       41,   41,   41,   57,   57,  154,  154,   41,   41,   41,
-       41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
-       41,   41,   41,   41,   41,   41,   41,   41,   41,   41,
-       41,   42,   42,   46,   48,   48,   49,   42,   51,   71,
+       41,   41,   41,   41,   41,   46,   48,   48,   49,   71,
 
-       49,  188,  188,   71,   48,   51,   51,  144,  229,  228,
-      227,  144,   46,  225,  223,  222,  220,  219,  218,  217,
-      216,  215,  214,  213,  212,  211,  210,  209,  208,  207,
-      206,  205,  204,  203,  202,  201,  200,  199,  198,  197,
-      196,  195,  194,  193,  192,  191,  190,  189,  187,  186,
-      185,  184,  183,  182,  181,  180,  179,  178,  177,  176,
-      174,  173,  172,  171,  170,  169,  168,  167,  165,  164,
-      163,  162,  161,  160,  159,  158,  157,  156,  155,  153,
-      152,  151,  150,  149,  148,  147,  146,  145,  143,  142,
-      141,  140,  139,  138,  114,   89,   88,   87,   86,   85,
+       51,  145,   49,   71,  232,  145,   48,   51,   51,  189,
+      189,  231,  230,  229,   46,  228,  226,  224,  223,  221,
+      220,  219,  218,  217,  216,  215,  214,  213,  212,  211,
+      210,  209,  208,  207,  206,  205,  204,  203,  202,  201,
+      200,  199,  198,  197,  196,  195,  194,  193,  192,  191,
+      190,  188,  187,  186,  185,  184,  183,  182,  181,  180,
+      179,  178,  177,  175,  174,  173,  172,  171,  170,  169,
+      168,  166,  165,  164,  163,  162,  161,  160,  159,  158,
+      157,  156,  154,  153,  152,  151,  150,  149,  148,  147,
+      146,  144,  143,  142,  141,  140,  139,  115,   90,   89,
 
-       84,   83,   82,   80,   79,   78,   77,   76,   75,   74,
-       72,   68,   67,   66,   65,   64,   63,   62,   61,   60,
-       59,   58,   54,   53,   52,   50,   45,   44,   43,   38,
-       36,   35,   34,   33,   32,   29,   27,   26,   25,   24,
-       23,   22,   21,   19,   18,   17,   16,   15,   13,    3,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
+       88,   87,   86,   84,   83,   82,   80,   79,   78,   77,
+       76,   75,   74,   72,   68,   67,   66,   65,   64,   63,
+       62,   61,   60,   59,   58,   54,   53,   52,   50,   45,
+       44,   43,   38,   35,   34,   33,   32,   29,   27,   26,
+       25,   24,   23,   22,   21,   19,   18,   17,   16,   15,
+       13,    3,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
 
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234,  234,  234,  234,  234,  234,  234,  234,  234,  234,
-      234
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235,  235,  235,  235,  235,  235,  235,  235,
+      235,  235,  235
     } ;
 
 /* The intent behind this definition is that it'll catch
@@ -653,6 +653,7 @@ static yyconst flex_int16_t yy_chk[422] =
 #define GIZA_TOKEN_FONT_ROMAN 13
 #define GIZA_TOKEN_FONT_ITALIC 14
 #define GIZA_TOKEN_FONT_SCRIPT 15
+#define GIZA_TOKEN_FONT_BOLD 16
 
 #define GIZA_TOKEN_ALPHA   21
 #define GIZA_TOKEN_BETA    22
@@ -715,7 +716,7 @@ static yyconst flex_int16_t yy_chk[422] =
 void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
 int _giza_get_chunk (const char *text);
 
-#line 719 "lex.yy.c"
+#line 720 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -940,10 +941,10 @@ YY_DECL
 	register int yy_act;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
-#line 192 "giza-scanner.l"
+#line 194 "giza-scanner.l"
 
 
-#line 947 "lex.yy.c"
+#line 948 "lex.yy.c"
 
 	if ( !yyg->yy_init )
 		{
@@ -996,13 +997,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 235 )
+				if ( yy_current_state >= 236 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 351 );
+		while ( yy_base[yy_current_state] != 353 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -1028,341 +1029,346 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 194 "giza-scanner.l"
+#line 196 "giza-scanner.l"
 { return GIZA_TOKEN_SUPER; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 196 "giza-scanner.l"
+#line 198 "giza-scanner.l"
 { return GIZA_TOKEN_SUB; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 198 "giza-scanner.l"
+#line 200 "giza-scanner.l"
 { return GIZA_TOKEN_RAISE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 200 "giza-scanner.l"
+#line 202 "giza-scanner.l"
 { return GIZA_TOKEN_LOWER; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 202 "giza-scanner.l"
+#line 204 "giza-scanner.l"
 { return GIZA_TOKEN_OB; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 204 "giza-scanner.l"
+#line 206 "giza-scanner.l"
 { return GIZA_TOKEN_CB; }
 	YY_BREAK
 case 7:
 /* rule 7 can match eol */
 YY_RULE_SETUP
-#line 206 "giza-scanner.l"
+#line 208 "giza-scanner.l"
 { return GIZA_TOKEN_OTHER; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 208 "giza-scanner.l"
+#line 210 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_NORMAL; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 209 "giza-scanner.l"
+#line 211 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_ROMAN; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 210 "giza-scanner.l"
+#line 212 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_ITALIC; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 211 "giza-scanner.l"
+#line 213 "giza-scanner.l"
 { return GIZA_TOKEN_FONT_SCRIPT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 213 "giza-scanner.l"
-{ return GIZA_TOKEN_TIMES; }
+#line 214 "giza-scanner.l"
+{ return GIZA_TOKEN_FONT_BOLD; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 214 "giza-scanner.l"
-{ return GIZA_TOKEN_INTEGRAL; }
+#line 216 "giza-scanner.l"
+{ return GIZA_TOKEN_TIMES; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 215 "giza-scanner.l"
-{ return GIZA_TOKEN_NABLA; }
+#line 217 "giza-scanner.l"
+{ return GIZA_TOKEN_INTEGRAL; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 216 "giza-scanner.l"
-{ return GIZA_TOKEN_ODOT; }
+#line 218 "giza-scanner.l"
+{ return GIZA_TOKEN_NABLA; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 217 "giza-scanner.l"
-{ return GIZA_TOKEN_MARKER; }
+#line 219 "giza-scanner.l"
+{ return GIZA_TOKEN_ODOT; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 219 "giza-scanner.l"
-{ return GIZA_TOKEN_ALPHA; }
+#line 220 "giza-scanner.l"
+{ return GIZA_TOKEN_MARKER; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 220 "giza-scanner.l"
-{ return GIZA_TOKEN_BETA; }
+#line 222 "giza-scanner.l"
+{ return GIZA_TOKEN_ALPHA; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 221 "giza-scanner.l"
-{ return GIZA_TOKEN_GAMMA; }
+#line 223 "giza-scanner.l"
+{ return GIZA_TOKEN_BETA; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 222 "giza-scanner.l"
-{ return GIZA_TOKEN_DELTA; }
+#line 224 "giza-scanner.l"
+{ return GIZA_TOKEN_GAMMA; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 223 "giza-scanner.l"
-{ return GIZA_TOKEN_EPSILON; }
+#line 225 "giza-scanner.l"
+{ return GIZA_TOKEN_DELTA; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 224 "giza-scanner.l"
-{ return GIZA_TOKEN_ZETA; }
+#line 226 "giza-scanner.l"
+{ return GIZA_TOKEN_EPSILON; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 225 "giza-scanner.l"
-{ return GIZA_TOKEN_ETA; }
+#line 227 "giza-scanner.l"
+{ return GIZA_TOKEN_ZETA; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 226 "giza-scanner.l"
-{ return GIZA_TOKEN_THETA; }
+#line 228 "giza-scanner.l"
+{ return GIZA_TOKEN_ETA; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 227 "giza-scanner.l"
-{ return GIZA_TOKEN_IOTA; }
+#line 229 "giza-scanner.l"
+{ return GIZA_TOKEN_THETA; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 228 "giza-scanner.l"
-{ return GIZA_TOKEN_KAPPA; }
+#line 230 "giza-scanner.l"
+{ return GIZA_TOKEN_IOTA; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 229 "giza-scanner.l"
-{ return GIZA_TOKEN_LAMBDA; }
+#line 231 "giza-scanner.l"
+{ return GIZA_TOKEN_KAPPA; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 230 "giza-scanner.l"
-{ return GIZA_TOKEN_MU; }
+#line 232 "giza-scanner.l"
+{ return GIZA_TOKEN_LAMBDA; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 231 "giza-scanner.l"
-{ return GIZA_TOKEN_NU; }
+#line 233 "giza-scanner.l"
+{ return GIZA_TOKEN_MU; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 232 "giza-scanner.l"
-{ return GIZA_TOKEN_XI; }
+#line 234 "giza-scanner.l"
+{ return GIZA_TOKEN_NU; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 233 "giza-scanner.l"
-{ return GIZA_TOKEN_OMICRON; }
+#line 235 "giza-scanner.l"
+{ return GIZA_TOKEN_XI; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 234 "giza-scanner.l"
-{ return GIZA_TOKEN_PI; }
+#line 236 "giza-scanner.l"
+{ return GIZA_TOKEN_OMICRON; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 235 "giza-scanner.l"
-{ return GIZA_TOKEN_RHO; }
+#line 237 "giza-scanner.l"
+{ return GIZA_TOKEN_PI; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 236 "giza-scanner.l"
-{ return GIZA_TOKEN_SIGMA; }
+#line 238 "giza-scanner.l"
+{ return GIZA_TOKEN_RHO; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 237 "giza-scanner.l"
-{ return GIZA_TOKEN_TAU; }
+#line 239 "giza-scanner.l"
+{ return GIZA_TOKEN_SIGMA; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 238 "giza-scanner.l"
-{ return GIZA_TOKEN_UPSILON; }
+#line 240 "giza-scanner.l"
+{ return GIZA_TOKEN_TAU; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 239 "giza-scanner.l"
-{ return GIZA_TOKEN_PHI; }
+#line 241 "giza-scanner.l"
+{ return GIZA_TOKEN_UPSILON; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 240 "giza-scanner.l"
-{ return GIZA_TOKEN_CHI; }
+#line 242 "giza-scanner.l"
+{ return GIZA_TOKEN_PHI; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 241 "giza-scanner.l"
-{ return GIZA_TOKEN_PSI; }
+#line 243 "giza-scanner.l"
+{ return GIZA_TOKEN_CHI; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 242 "giza-scanner.l"
-{ return GIZA_TOKEN_OMEGA; }
+#line 244 "giza-scanner.l"
+{ return GIZA_TOKEN_PSI; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 244 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGALPHA; }
+#line 245 "giza-scanner.l"
+{ return GIZA_TOKEN_OMEGA; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 245 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGBETA; }
+#line 247 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGALPHA; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 246 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGGAMMA; }
+#line 248 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGBETA; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 247 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGDELTA; }
+#line 249 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGGAMMA; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 248 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGEPSILON; }
+#line 250 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGDELTA; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 249 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGZETA; }
+#line 251 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGEPSILON; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 250 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGETA; }
+#line 252 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGZETA; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 251 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGTHETA; }
+#line 253 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGETA; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 252 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGIOTA; }
+#line 254 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGTHETA; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 253 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGKAPPA; }
+#line 255 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGIOTA; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 254 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGLAMBDA; }
+#line 256 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGKAPPA; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 255 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGMU; }
+#line 257 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGLAMBDA; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 256 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGNU; }
+#line 258 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGMU; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 257 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGXI; }
+#line 259 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGNU; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 258 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGOMICRON; }
+#line 260 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGXI; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 259 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPI; }
+#line 261 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGOMICRON; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 260 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGRHO; }
+#line 262 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPI; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 261 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGSIGMA; }
+#line 263 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGRHO; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 262 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGTAU; }
+#line 264 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGSIGMA; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 263 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGUPSILON; }
+#line 265 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGTAU; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 264 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPHI; }
+#line 266 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGUPSILON; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 265 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGCHI; }
+#line 267 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPHI; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 266 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPSI; }
+#line 268 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGCHI; }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 267 "giza-scanner.l"
+#line 269 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPSI; }
+	YY_BREAK
+case 65:
+YY_RULE_SETUP
+#line 270 "giza-scanner.l"
 { return GIZA_TOKEN_BIGOMEGA; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 270 "giza-scanner.l"
+#line 273 "giza-scanner.l"
 { return GIZA_TOKEN_END; }
 	YY_BREAK
-case 65:
-/* rule 65 can match eol */
+case 66:
+/* rule 66 can match eol */
 YY_RULE_SETUP
-#line 272 "giza-scanner.l"
+#line 275 "giza-scanner.l"
 { return GIZA_TOKEN_ERROR; }
 	YY_BREAK
-case 66:
+case 67:
 YY_RULE_SETUP
-#line 274 "giza-scanner.l"
+#line 277 "giza-scanner.l"
 ECHO;
 	YY_BREAK
-#line 1366 "lex.yy.c"
+#line 1372 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1654,7 +1660,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 235 )
+			if ( yy_current_state >= 236 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
@@ -1683,11 +1689,11 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 235 )
+		if ( yy_current_state >= 236 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 234);
+	yy_is_jam = (yy_current_state == 235);
 
 	(void)yyg;
 	return yy_is_jam ? 0 : yy_current_state;
@@ -2512,7 +2518,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 274 "giza-scanner.l"
+#line 277 "giza-scanner.l"
 
 
 
@@ -2691,6 +2697,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
         case GIZA_TOKEN_FONT_ROMAN:
         case GIZA_TOKEN_FONT_ITALIC:
         case GIZA_TOKEN_FONT_SCRIPT:
+        case GIZA_TOKEN_FONT_BOLD:
           /* Perform action on the text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
@@ -2710,6 +2717,9 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* perform action on this chunk */
           switch (token)
             {
+            case GIZA_TOKEN_FONT_BOLD:
+              _giza_switch_font (5);
+              break;
             case GIZA_TOKEN_FONT_SCRIPT:
               _giza_switch_font (4);
               break;
@@ -2764,13 +2774,17 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* either draw the symbol or increment the width */
           if (*width < 0.) {
              double xp, yp;
+             double sina = sin(Dev[id].fontAngle);
+             double cosa = cos(Dev[id].fontAngle);
+             double dx = 0.75*markerHeight;
+             double dy = -0.5*markerHeight;
              cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
-             _giza_draw_symbol_device(xp + 0.75*markerHeight, yp - 0.5*markerHeight, number);
-             cairo_move_to(Dev[id].context, xp + 1.25*markerHeight, yp); /* restore pen position */
+             _giza_draw_symbol_device(xp + dx*cosa + dy*sina, yp + dx*sina + dy*cosa, number);
+             cairo_move_to(Dev[id].context, xp + 2.*dx*cosa, yp + 2.*dx*sina); /* restore pen position */
 
           } else {
              /* return width if action is _giza_action_get_size */
-             *width = *width + 1.25*markerHeight;
+             *width = *width + 1.5*markerHeight;
           }
           
 

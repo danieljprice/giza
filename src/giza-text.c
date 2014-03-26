@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -146,19 +146,26 @@ _giza_stop_sub (void)
 void
 _giza_switch_font (int fonttype)
 {
+  int len = GIZA_FONT_LEN;
+  char giza_font[len];
   switch(fonttype)
     {
+    case 5:
+      giza_get_font(giza_font,len);
+      giza_set_font_bold(giza_font);
+      break;
     case 4:
-      giza_set_font("cursive");
+      giza_set_font("Cursive");
       break;
     case 3:
-      giza_set_font_italic("times");
+      giza_get_font(giza_font,len);
+      giza_set_font_italic(giza_font);
       break;
     case 2:
-      giza_set_font("times");
+      giza_set_font("Times");
       break;
     case 1:
-      giza_set_font("arial");
+      giza_set_font("Arial");
       break;
     }
 }

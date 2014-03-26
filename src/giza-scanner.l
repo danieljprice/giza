@@ -54,6 +54,7 @@
 #define GIZA_TOKEN_FONT_ROMAN 13
 #define GIZA_TOKEN_FONT_ITALIC 14
 #define GIZA_TOKEN_FONT_SCRIPT 15
+#define GIZA_TOKEN_FONT_BOLD 16
 
 #define GIZA_TOKEN_ALPHA   21
 #define GIZA_TOKEN_BETA    22
@@ -133,6 +134,7 @@ FONT_NORMAL "\\fn"
 FONT_ROMAN "\\fr"|"\\rm"
 FONT_ITALIC "\\fi"|"\\it"
 FONT_SCRIPT "\\fs"|"\\cal"
+FONT_BOLD "\\fb"|"\\bf"
 
 ALPHA    "\\ga"|"\\alpha"
 BETA     "\\gb"|"\\beta"
@@ -186,7 +188,7 @@ BIGOMEGA   "\\gW"|"\\Omega"
 ODOT       "\\odot"|"\\Sun"|"\\(2281)"
 
 OTHER  [\0-\135]|[\138-\172]|[\174]|[\176-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
-PRINT  {FONT_NORMAL}|{FONT_ROMAN}|{FONT_ITALIC}|{FONT_SCRIPT}|{TIMES}|{ODOT}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
+PRINT  {FONT_NORMAL}|{FONT_ROMAN}|{FONT_ITALIC}|{FONT_SCRIPT}|{FONT_BOLD}|{TIMES}|{ODOT}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
 ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
 
 %%
@@ -209,6 +211,7 @@ ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\
 {FONT_ROMAN} { return GIZA_TOKEN_FONT_ROMAN; }
 {FONT_ITALIC} { return GIZA_TOKEN_FONT_ITALIC; }
 {FONT_SCRIPT} { return GIZA_TOKEN_FONT_SCRIPT; }
+{FONT_BOLD} { return GIZA_TOKEN_FONT_BOLD; }
 
 {TIMES} { return GIZA_TOKEN_TIMES; }
 {INTEGRAL} { return GIZA_TOKEN_INTEGRAL; }
@@ -448,6 +451,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
         case GIZA_TOKEN_FONT_ROMAN:
         case GIZA_TOKEN_FONT_ITALIC:
         case GIZA_TOKEN_FONT_SCRIPT:
+        case GIZA_TOKEN_FONT_BOLD:
           /* Perform action on the text so far parsed */
           action (processed, width, height);
           processed[0] = '\0';
@@ -467,6 +471,9 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* perform action on this chunk */
           switch (token)
             {
+            case GIZA_TOKEN_FONT_BOLD:
+              _giza_switch_font (5);
+              break;
             case GIZA_TOKEN_FONT_SCRIPT:
               _giza_switch_font (4);
               break;
@@ -521,13 +528,17 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* either draw the symbol or increment the width */
           if (*width < 0.) {
              double xp, yp;
+             double sina = sin(Dev[id].fontAngle);
+             double cosa = cos(Dev[id].fontAngle);
+             double dx = 0.75*markerHeight;
+             double dy = -0.5*markerHeight;
              cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
-             _giza_draw_symbol_device(xp + 0.75*markerHeight, yp - 0.5*markerHeight, number);
-             cairo_move_to(Dev[id].context, xp + 1.25*markerHeight, yp); /* restore pen position */
+             _giza_draw_symbol_device(xp + dx*cosa + dy*sina, yp + dx*sina + dy*cosa, number);
+             cairo_move_to(Dev[id].context, xp + 2.*dx*cosa, yp + 2.*dx*sina); /* restore pen position */
 
           } else {
              /* return width if action is _giza_action_get_size */
-             *width = *width + 1.25*markerHeight;
+             *width = *width + 1.5*markerHeight;
           }
           
 

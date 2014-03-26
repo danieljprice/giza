@@ -26,6 +26,7 @@
 #define GIZA_RAISE_SUPERS 0.4
 #define GIZA_SCALE_SUBS   0.65
 #define GIZA_LOWER_SUBS   0.2
+#define GIZA_FONT_LEN     24
 
 void _giza_parse_string (const char *text, double *width, double *height, void(*action)(const char *, double *, double *));
 void _giza_get_text_width (double *width, char *text);
