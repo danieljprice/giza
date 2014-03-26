@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 
 #include "giza-private.h"
 #include "giza-io-private.h"
+#include "giza-text-private.h"
 #include <giza.h>
 
 #define GIZA_SAVE_MAX 30
@@ -43,7 +44,7 @@ double hatch_spacing[GIZA_SAVE_MAX];
 double hatch_phase[GIZA_SAVE_MAX];
 double band_lw[GIZA_SAVE_MAX];
 int band_ls[GIZA_SAVE_MAX];
-char font[20];
+char font[GIZA_FONT_LEN];
 
 /**
  * Settings: giza_save
