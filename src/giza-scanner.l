@@ -108,6 +108,11 @@
 
 #define GIZA_TOKEN_ODOT 69
 #define GIZA_TOKEN_MARKER 70
+#define GIZA_TOKEN_BACKSLASH 71
+#define GIZA_TOKEN_UNDERSCORE 72
+#define GIZA_TOKEN_HAT 73
+#define GIZA_TOKEN_CURLYOPEN 74
+#define GIZA_TOKEN_CURLYCLOSE 75
 
 #define GIZA_SCALE_SUPERS 0.65
 #define GIZA_RAISE_SUPERS 0.4
@@ -129,6 +134,12 @@ TIMES    "\\times"|"\\x"
 INTEGRAL "\\int"|"\\(2268)"
 NABLA    "\\nabla"|"\\(2266)"
 MARKER   "\\m"
+
+BACKSLASH "\\\\"
+UNDERSCORE "\\_"
+HAT "\\^"
+CURLYOPEN "\\{"
+CURLYCLOSE "\\}"
 
 FONT_NORMAL "\\fn"
 FONT_ROMAN "\\fr"|"\\rm"
@@ -188,7 +199,7 @@ BIGOMEGA   "\\gW"|"\\Omega"
 ODOT       "\\odot"|"\\Sun"|"\\(2281)"
 
 OTHER  [\0-\135]|[\138-\172]|[\174]|[\176-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
-PRINT  {FONT_NORMAL}|{FONT_ROMAN}|{FONT_ITALIC}|{FONT_SCRIPT}|{FONT_BOLD}|{TIMES}|{ODOT}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
+PRINT  {FONT_NORMAL}|{FONT_ROMAN}|{FONT_ITALIC}|{FONT_SCRIPT}|{FONT_BOLD}|{BACKSLASH}|{UNDERSCORE}|{HAT}|{CURLYOPEN}|{CURLYCLOSE}|{TIMES}|{ODOT}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
 ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
 
 %%
@@ -218,6 +229,11 @@ ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\
 {NABLA} { return GIZA_TOKEN_NABLA; }
 {ODOT} { return GIZA_TOKEN_ODOT; }
 {MARKER} { return GIZA_TOKEN_MARKER; }
+{BACKSLASH} { return GIZA_TOKEN_BACKSLASH; }
+{UNDERSCORE} { return GIZA_TOKEN_UNDERSCORE; }
+{HAT} { return GIZA_TOKEN_HAT; }
+{CURLYOPEN} { return GIZA_TOKEN_CURLYOPEN; }
+{CURLYCLOSE} { return GIZA_TOKEN_CURLYCLOSE; }
 
 {ALPHA}     { return GIZA_TOKEN_ALPHA; }
 {BETA}      { return GIZA_TOKEN_BETA; }
@@ -339,6 +355,8 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
+  int lenfont = GIZA_FONT_LEN;
+  char oldfont[lenfont];
 
   /* initialise the scanner */
   yylex_init (&scanner);
@@ -468,6 +486,9 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           strncpy (processed, text + posInText, chunkLength);
           processed[chunkLength] = '\0';
 
+          /* save font */
+          /*giza_get_font(oldfont,lenfont);*/
+
           /* perform action on this chunk */
           switch (token)
             {
@@ -495,6 +516,9 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           yy_scan_string (text + posInText + chunkLength, scanner);
 
           posInText += chunkLength;
+
+          /* restore font */
+          /*giza_set_font(oldfont);*/
 
           processed[0] = '\0';
           break;
@@ -734,6 +758,21 @@ _giza_add_token_to_string (char *string, yyscan_t scanner, int token)
        break;
      case GIZA_TOKEN_ODOT:
        strcat (string, "⊙");
+       break;
+     case GIZA_TOKEN_BACKSLASH:
+       strcat (string, "\\");
+       break;
+     case GIZA_TOKEN_UNDERSCORE:
+       strcat (string, "_");
+       break;
+     case GIZA_TOKEN_HAT:
+       strcat (string, "^");
+       break;
+     case GIZA_TOKEN_CURLYOPEN:
+       strcat (string, "{");
+       break;
+     case GIZA_TOKEN_CURLYCLOSE:
+       strcat (string, "}");
        break;
      default:
        break;
