@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------
 #  giza - a scientific plotting library built on cairo
 #  Copyright (c) 2010      James Wetter and Daniel Price
-#  Copyright (c) 2010-2012 Daniel Price
+#  Copyright (c) 2010-2014 Daniel Price
 #
 #  This library is free software; and you are welcome to redistribute
 #  it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 #
 GIZAV=0
 MINORV=8
-MICROV=0
+MICROV=1
 VERSION=$(GIZAV).$(MINORV).$(MICROV)
 
 
