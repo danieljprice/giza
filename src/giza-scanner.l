@@ -334,9 +334,55 @@ _giza_get_chunk (const char *text)
           }
     }
    yylex_destroy (scanner);
-   return length; /* DJP: assumes whole string if unclosed open bracket */
+   return length; /* assumes whole string if unclosed open bracket */
 }
 
+/**
+ * Parses remaining text to determine the chunk of text to which the font 
+ * change should apply. In this case the chunk is defined as the text 
+ * remaining until an unmatched close bracket, or the end of the string, 
+ * whichever comes first.
+ */
+int
+_giza_get_chunk_fontchange (const char *text)
+{
+  int openb = 0;
+  int length = 0;
+  int token, stop = 0;
+
+  /* initialise the scanner */
+  yyscan_t scanner;
+  yylex_init (&scanner);
+  yy_scan_string (text, scanner);
+ 
+  while(!stop)
+    {
+      token = yylex(scanner);
+      length += yyget_leng (scanner);
+
+      switch (token)
+        {
+	  case GIZA_TOKEN_OB:
+	    ++openb;
+	    break;
+	  case GIZA_TOKEN_CB:
+	    --openb;
+	    break;
+          case GIZA_TOKEN_END:
+            stop = 1;
+            break;
+	  default:
+	    break;
+        }
+
+        if (openb < 0) {
+           stop = 1;
+        }
+    }
+   yylex_destroy (scanner);
+   if (strlen(text) < length) length = strlen(text);
+   return length; /* assumes whole string if unclosed open bracket */
+}
 
 /**
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
@@ -482,12 +528,12 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
             }
 
           /* Parse the brackets */
-          chunkLength = _giza_get_chunk (text + posInText);
+          chunkLength = _giza_get_chunk_fontchange (text + posInText);
           strncpy (processed, text + posInText, chunkLength);
           processed[chunkLength] = '\0';
-
+          
           /* save font */
-          /*giza_get_font(oldfont,lenfont);*/
+          giza_get_font(oldfont,lenfont);
 
           /* perform action on this chunk */
           switch (token)
@@ -518,7 +564,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           posInText += chunkLength;
 
           /* restore font */
-          /*giza_set_font(oldfont);*/
+          giza_set_font(oldfont);
 
           processed[0] = '\0';
           break;
