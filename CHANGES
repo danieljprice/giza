@@ -1,4 +1,25 @@
 -----------------------------------
+Changes in 0.8.1 compared to 0.8.0
+-----------------------------------
+danielprice (16):
+      updated changelog
+      added cpgtbox interface to giza_box_time; also bug fix with cpgswin
+      interface added for giza_get_device_id in giza.h
+      added test-2D thanks to Jean-Francois Gonzalez
+      affine array does not need to be passed for most rendered images in simple f90 interface
+      updated links in docs
+      bug fix in docs referring to giza_colour_ramp, should be to giza_set_colour_table
+      added link to giza_set_colour_table in docs
+      updated text scanner (uses unicode Sun symbol)
+      minor change to 2D test
+      can use \bf or \fb to get bold face in strings
+      BUG FIX with font changing in rotated strings; also original font now preserved after string is printed
+      version bumped to 0.8.1
+      giza-save uses GIZA_FONT_LEN to be consistent
+      text routines handle escape sequences for backslash (\\), underscore (\_), hat (\^) and curly brackets
+      support for limited scope of font changing commands in strings, i.e. {\bf text} and {\it text}
+
+-----------------------------------
 Changes in 0.8.0 compared to 0.7.6
 -----------------------------------
 danielprice (42):
