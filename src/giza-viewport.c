@@ -57,6 +57,11 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
 
       _giza_get_default_viewport(&Dev[id].VP.xmin,&Dev[id].VP.xmax,&Dev[id].VP.ymin,&Dev[id].VP.ymax);
 
+      xmin = Dev[id].VP.xmin;
+      xmax = Dev[id].VP.xmax;
+      ymin = Dev[id].VP.ymin;
+      ymax = Dev[id].VP.ymax;
+
     } else {
 
       if (xleft > xright)
