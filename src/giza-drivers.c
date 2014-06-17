@@ -767,6 +767,9 @@ _giza_device_to_int (const char *newDeviceName)
     newDevice = GIZA_DEVICE_NULL;
 #ifdef _GIZA_HAS_XW
   else if (!strcmp (devName, "/xw")
+        || !strcmp (devName, "/xs")
+        || !strcmp (devName, "/xserve")
+        || !strcmp (devName, "/xwindow")
         || !strcmp (devName, "/xwin"))
     newDevice = GIZA_DEVICE_XW;
 #endif
