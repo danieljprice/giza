@@ -161,7 +161,7 @@ SOURCE= giza-annotate.c giza-arrow-style.c giza-arrow.c giza-band-style.c \
 	giza-driver-xw.c giza-drivers.c giza-environment.c giza-error-bars.c \
 	giza-fill.c giza-format-number.c giza-function-t.c giza-function-x.c \
 	giza-function-y.c giza-get-key-press.c giza-get-surface-size.c \
-	giza-io.c giza-label.c giza-line-cap.c giza-line-style.c \
+	giza-io.c giza-histogram.c giza-label.c giza-line-cap.c giza-line-style.c \
 	giza-line-width.c giza-line.c giza-move.c giza-paper.c giza-points.c \
 	giza-polygon.c giza-print-id.c giza-prompting.c giza-ptext.c \
 	giza-qtext.c giza-rectangle.c giza-render.c giza-save.c giza-set-font.c \

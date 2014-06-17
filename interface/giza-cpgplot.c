@@ -148,12 +148,12 @@ int cpgbeg(int unit, const char *file, int nxsub, int nysub)
 
 /***************************************************************
  * cpgbin -- histogram of binned data
- * Status: NOT IMPLEMENTED
+ * Status: PARTIALLY IMPLEMENTED
  ***************************************************************/
 void cpgbin(int nbin, const float *x, const float *data, \
  Logical center)
 {
-
+  giza_histogram_binned_float(nbin,x,data,(int) center);
 }
 
 /***************************************************************
@@ -391,12 +391,12 @@ void cpghi2D(const float *data, int nxv, int nyv, int ix1, \
 
 /***************************************************************
  * cpghist -- histogram of unbinned data
- * Status: NOT IMPLEMENTED
+ * Status: PARTIALLY IMPLEMENTED
  ***************************************************************/
 void cpghist(int n, const float *data, float datmin, float datmax, \
  int nbin, int pgflag)
 {
-
+  giza_histogram_float(n,data,datmin,datmax,nbin,pgflag);
 }
 
 /***************************************************************

@@ -188,13 +188,23 @@ end function PGBEG
 
 !------------------------------------------------------------------------
 ! Module: PGBIN -- histogram of binned data
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGBIN (NBIN, X, DATA, CENTER)
+ use giza, only:giza_histogram_binned
  implicit none
  integer, intent(in) :: NBIN
  real,    intent(in) :: X(*), DATA(*)
  logical, intent(in) :: CENTER
+ integer :: iflag
+
+ if (CENTER) then
+    iflag = 1
+ else
+    iflag = 0
+ endif 
+
+ call giza_histogram_binned(NBIN, X, DATA, iflag)
 
 end subroutine PGBIN
 
@@ -579,14 +589,17 @@ end subroutine PGHI2D
 
 !------------------------------------------------------------------------
 ! Module: PGHIST -- histogram of unbinned data
-! Status: NOT IMPLEMENTED
+! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGHIST(N, DATA, DATMIN, DATMAX, NBIN, PGFLAG)
+ use giza, only:giza_histogram
  implicit none
  integer, intent(in) :: N
  real,    intent(in) :: DATA(*)
  real,    intent(in) :: DATMIN, DATMAX
  integer, intent(in) :: NBIN, PGFLAG
+
+ call giza_histogram(N,DATA,DATMIN,DATMAX,NBIN,PGFLAG)
 
 end subroutine PGHIST
 

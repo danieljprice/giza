@@ -208,6 +208,11 @@ void giza_set_hatching_style_float (float angle, float spacing, float phase);
 void giza_get_hatching_style (double *angle, double *spacing, double *phase);
 void giza_get_hatching_style_float (float *angle, float *spacing, float *phase);
 
+void giza_histogram (int n, const double *dat, double min, double max, int nbin, int flag);
+void giza_histogram_float (int n, const float *dat, float min, float max, int nbin, int flag);
+void giza_histogram_binned (int n, const double *x, const double *dat, int centre);
+void giza_histogram_binned_float (int n, const float *x, const float *dat, int centre);
+
 void giza_label (const char *labelx, const char *labely, const char *title);
 
 void giza_line (int n, const double *xpts, const double *ypts);

@@ -88,6 +88,8 @@ module giza
       giza_get_surface_size, &
       giza_set_hatching_style, &
       giza_get_hatching_style, &
+      giza_histogram, &
+      giza_histogram_binned, &
       giza_label, &
       giza_line, &
       giza_set_line_width, &
@@ -909,6 +911,36 @@ private
       real(kind=c_float),intent(out) :: angle,spacing,phase
     end subroutine giza_get_hatching_style_float
  end interface giza_get_hatching_style
+
+ interface giza_histogram
+    subroutine giza_histogram(n,dat,min,max,nbin,flag) bind(C)
+      import
+      integer(kind=c_int),intent(in), value :: n,nbin,flag
+      real(kind=c_double),intent(in) :: dat(*)
+      real(kind=c_double),intent(in), value :: min,max
+    end subroutine giza_histogram
+
+    subroutine giza_histogram_float(n,dat,min,max,nbin,flag) bind(C)
+      import
+      integer(kind=c_int),intent(in), value :: n,nbin,flag
+      real(kind=c_float), intent(in) :: dat(*)
+      real(kind=c_float), intent(in), value :: min,max
+    end subroutine giza_histogram_float
+ end interface
+
+ interface giza_histogram_binned
+    subroutine giza_histogram_binned(nbin,x,dat,centre) bind(C)
+      import
+      integer(kind=c_int),intent(in), value :: nbin,centre
+      real(kind=c_double),intent(in) :: x(*),dat(*)
+    end subroutine giza_histogram_binned
+
+    subroutine giza_histogram_binned_float(nbin,x,dat,centre) bind(C)
+      import
+      integer(kind=c_int),intent(in), value :: nbin,centre
+      real(kind=c_float), intent(in) :: x(*),dat(*)
+    end subroutine giza_histogram_binned_float
+ end interface
 
  interface giza_label
     module procedure giza_intern_label_f2c
