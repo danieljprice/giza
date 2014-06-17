@@ -38,10 +38,10 @@
  * device that can be drawn to.
  *
  * Input:
- *  -xleft    :- The x coordinate of the left edge of the view port
- *  -xright   :- The x coordinate of the right edge of the view port
- *  -ybottom  :- The y coordinate of the bottom edge of the view port
- *  -ytop     :- The y coordinate of the top edge of the view port
+ *  -xleft    :- The x coordinate of the left edge of the viewport
+ *  -xright   :- The x coordinate of the right edge of the viewport
+ *  -ybottom  :- The y coordinate of the bottom edge of the viewport
+ *  -ytop     :- The y coordinate of the top edge of the viewport
  */
 void
 giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
@@ -223,7 +223,12 @@ giza_get_viewport_float (int units, float *x1, float *x2, float *y1, float *y2)
 }
 
 /**
- * Sets the viewport to the default
+ * Settings: giza_set_viewport_default
+ *
+ * Synopsis: Sets the viewport to the default settings
+ *
+ * See Also: giza_set_viewport
+ * 
  */
 void
 giza_set_viewport_default (void)
@@ -251,7 +256,12 @@ _giza_get_default_viewport (double *xmin, double *xmax, double *ymin, double *ym
 }
 
 /**
- * Sets the viewport in inches (this is for PGPLOT-compatibility)
+ * Settings: giza_set_viewport_inches
+ *
+ * Synopsis: Sets the viewport size in inches
+ *
+ * See Also: giza_set_viewport
+ * 
  */
 void
 giza_set_viewport_inches (double xleftin, double xrightin, double ybottomin, double ytopin)
@@ -271,6 +281,14 @@ giza_set_viewport_inches (double xleftin, double xrightin, double ybottomin, dou
 
 }
 
+/**
+ * Settings: giza_set_viewport_inches_float
+ *
+ * Synopsis: Same as giza_set_viewport_inches but takes floats
+ *
+ * See Also: giza_set_viewport_inches
+ * 
+ */
 void
 giza_set_viewport_inches_float (float xleftin, float xrightin, float ybottomin, float ytopin)
 {
