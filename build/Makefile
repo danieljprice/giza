@@ -165,7 +165,7 @@ SOURCE= giza-annotate.c giza-arrow-style.c giza-arrow.c giza-band-style.c \
 	giza-line-width.c giza-line.c giza-move.c giza-paper.c giza-points.c \
 	giza-polygon.c giza-print-id.c giza-prompting.c giza-ptext.c \
 	giza-qtext.c giza-rectangle.c giza-render.c giza-save.c giza-set-font.c \
-	giza-stroke.c giza-text-background.c giza-text.c giza-transforms.c \
+	giza-stroke.c giza-subpanel.c giza-text-background.c giza-text.c giza-transforms.c \
 	giza-vector.c giza-viewport.c giza-version.c giza-warnings.c giza-window.c giza.c \
 	lex.yy.c
 #
@@ -180,7 +180,7 @@ PHEADERS= giza-arrow-style-private.h giza-band-private.h \
 	  giza-drivers-private.h giza-fill-private.h giza-io-private.h \
 	  giza-line-style-private.h giza-private.h giza-prompting-private.h \
 	  giza-render-private.h giza-set-font-private.h giza-stroke-private.h \
-	  giza-text-background-private.h giza-text-private.h \
+	  giza-subpanel-private.h giza-text-background-private.h giza-text-private.h \
 	  giza-transforms-private.h giza-viewport-private.h \
 	  giza-warnings-private.h giza-window-private.h
 

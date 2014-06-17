@@ -170,7 +170,7 @@ end subroutine PGBBUF
 
 !------------------------------------------------------------------------
 ! Module: PGBEG -- open a graphics device
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 integer function PGBEG (UNIT, FILE, NXSUB, NYSUB)
  implicit none
@@ -180,8 +180,8 @@ integer function PGBEG (UNIT, FILE, NXSUB, NYSUB)
  integer, external :: PGOPEN
 
  PGBEG = PGOPEN(FILE)
- if (NXSUB.GT.1 .or. NYSUB.GT.1) then
-    print "(a)",' WARNING: multiple panels in PGBEG call not implemented in giza'
+ if (PGBEG > 0 .and. (NXSUB.GT.1 .or. NYSUB.GT.1)) then
+    call PGSUBP(NXSUB, NYSUB)
  endif
 
 end function PGBEG
@@ -796,11 +796,14 @@ end subroutine PGPAGE
 
 !------------------------------------------------------------------------
 ! Module: PGPANL -- switch to a different panel on the view surface
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGPANL(IX, IY)
+ use giza, only:giza_set_panel
  implicit none
  integer, intent(in) :: IX, IY
+
+ call giza_set_panel(IX, IY)
 
 end subroutine PGPANL
 
@@ -1588,11 +1591,15 @@ end subroutine PGSTBG
 
 !------------------------------------------------------------------------
 ! Module: PGSUBP -- subdivide view surface into panels
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED (NOT WORKING)
 !------------------------------------------------------------------------
 subroutine PGSUBP (NXSUB, NYSUB)
+ use giza, only:giza_subpanel
  implicit none
  integer, intent(in) :: NXSUB, NYSUB
+
+ print*,' sub-panelling ',NXSUB,NYSUB
+ call giza_subpanel(NXSUB, NYSUB)
 
 end subroutine PGSUBP
 

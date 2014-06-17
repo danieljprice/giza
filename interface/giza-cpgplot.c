@@ -135,11 +135,15 @@ void cpgbbuf(void)
 
 /***************************************************************
  * cpgbeg -- open a graphics device
- * Status: PARTIALLY IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 int cpgbeg(int unit, const char *file, int nxsub, int nysub)
 {
-  return cpgopen(file);
+  int id = cpgopen(file);
+  if (id > 0 && (nxsub > 1 || nysub > 1)) {
+     cpgsubp(nxsub, nysub);
+  }
+  return id;
 }
 
 /***************************************************************
@@ -530,11 +534,11 @@ void cpgpage(void)
 
 /***************************************************************
  * cpgpanl -- switch to a different panel on the view surface
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgpanl(int nxc, int nyc)
 {
-
+  giza_set_panel(nxc, nyc);
 }
 
 /***************************************************************
@@ -1052,11 +1056,11 @@ void cpgstbg(int tbci)
 
 /***************************************************************
  * cpgsubp -- subdivide view surface into panels
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsubp(int nxsub, int nysub)
 {
-
+  giza_subpanel(nxsub, nysub);
 }
 
 /***************************************************************

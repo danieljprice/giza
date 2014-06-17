@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -86,7 +86,13 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
 
   _giza_set_trans (GIZA_TRANS_NORM);
   cairo_reset_clip (Dev[id].context);
-  cairo_rectangle (Dev[id].context, xmin, ymin, xmax - xmin, ymax - ymin);
+  
+  double x0 = (Dev[id].ix - 1)*Dev[id].panelwidth;
+  double y0 = (Dev[id].iy - 1)*Dev[id].panelheight;
+  double xfac = Dev[id].panelwidth/Dev[id].width;
+  double yfac = Dev[id].panelheight/Dev[id].height;
+  
+  cairo_rectangle (Dev[id].context, xmin*xfac + x0, ymin*yfac + y0, (xmax - xmin)*xfac, (ymax - ymin)*yfac);
 
   int clip;
   giza_get_clipping(&clip);

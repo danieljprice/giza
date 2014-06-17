@@ -307,6 +307,10 @@ void giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int
 double giza_round (double x, int *nsub);
 float giza_round_float (float x, int *nsub);
 
+void giza_subpanel (int nx, int ny);
+void giza_set_panel (int ix, int iy);
+void giza_get_panel (int *ix, int *iy);
+
 void giza_set_font (char *font);
 void giza_set_font_bold (char *font);
 void giza_set_font_bold_italic (char *font);

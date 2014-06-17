@@ -44,6 +44,7 @@
 #include "giza-line-style-private.h"
 #include "giza-band-private.h"
 #include "giza-stroke-private.h"
+#include "giza-subpanel-private.h"
 #include "giza-text-background-private.h"
 #include <giza.h>
 #include <stdlib.h>
@@ -230,6 +231,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
 
   _giza_init_window (); /* call init_window BEFORE set_viewport */
   giza_set_viewport_default ();
+  _giza_init_subpanel ();
   giza_set_line_width (1);
 
   _giza_init_fill ();
@@ -287,7 +289,7 @@ giza_get_device_id (int *devid)
  * Input:
  *  -devid :- device id, as returned by giza_open_device
  *
- * See also: giza_get_device_id
+ * See also: giza_get_device_id, giza_open_device
  */
 void
 giza_select_device (int devid)
@@ -387,6 +389,8 @@ _giza_resize_device (int width, int height)
  * Synopsis: Advances the currently open device to the next page, and redraws
  * the background. If no other actions have been performed since the device was
  * opened or the last call to giza_change_page the call is ignored.
+ *
+ * See also: giza_subpanel, giza_set_panel
  */
 void
 giza_change_page (void)
@@ -403,6 +407,12 @@ giza_change_page (void)
 
   if (!_giza_check_device_ready ("giza_change_page"))
     return;
+
+  /* If sub-panels are used, just change panel if we are not in the last panel */
+  if (Dev[id].ix < Dev[id].nx || Dev[id].iy < Dev[id].ny) {
+     _giza_advance_panel();
+     return;
+  }
 
   /* save a whole bunch of settings
     (line style, width, colour index etc.) */
@@ -455,8 +465,9 @@ giza_change_page (void)
   Dev[id].pgNum++;
 
   /* Reset stuff */
-  giza_set_viewport (Dev[id].VP.xmin,Dev[id].VP.xmax, 
-                     Dev[id].VP.ymin, Dev[id].VP.ymax);
+  giza_set_panel(1,1); /* also calls set_viewport */
+  /*giza_set_viewport (Dev[id].VP.xmin,Dev[id].VP.xmax, 
+                     Dev[id].VP.ymin, Dev[id].VP.ymax);*/
   giza_set_window (Dev[id].Win.xmin, Dev[id].Win.xmax,
                    Dev[id].Win.ymin, Dev[id].Win.ymax);
 

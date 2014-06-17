@@ -83,6 +83,14 @@ typedef struct
   /* viewport and window settings for this device */
   giza_viewport_t VP;
   giza_window_t Win;
+  /* sub-panel info */
+  int nx;         /* number of sub-panels */
+  int ny;
+  int ix;     /* which panel we are in */
+  int iy;
+  int altpanelorder;
+  double panelwidth;
+  double panelheight;
   /* graphics settings for this device */
   int fs;
   double hatch_angle;
