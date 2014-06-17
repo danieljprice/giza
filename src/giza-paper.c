@@ -56,9 +56,11 @@ giza_set_paper_size (int units, double width, double height)
 
   _giza_get_specified_size(width, height, units,
                            &Dev[id].width, &Dev[id].height);
-  /*printf(" RESIZING DEVICE WIDTH= %i\n",Dev[id].width);
-  printf(" RESIZING DEVICE %f x %f = %i x %i\n",width, height, Dev[id].width,Dev[id].height);
-  */
+  
+  /* reset panel size after paper size change */
+  Dev[id].panelwidth  = Dev[id].width/Dev[id].nx;
+  Dev[id].panelheight = Dev[id].height/Dev[id].ny;
+
   Dev[id].resize = 1;
   giza_change_page();
   /*giza_flush_device (); */

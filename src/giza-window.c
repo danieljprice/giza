@@ -72,13 +72,31 @@ giza_set_window (double x1, double x2, double y1, double y2)
   /* Scaling */
   double dxWin = (Win.xmax - Win.xmin);
   double dyWin = (Win.ymax - Win.ymin);
+  
+  double x0,y0,xfac,yfac;
+  if (Dev[id].ix > 0 && Dev[id].iy > 0) { /* sanity check */
+     x0 = (Dev[id].ix - 1)*Dev[id].panelwidth/Dev[id].width;
+     y0 = (Dev[id].iy - 1)*Dev[id].panelheight/Dev[id].height;
+  } else {
+     x0 = 0.;
+     y0 = 0.;
+  }
+  xfac = Dev[id].panelwidth/Dev[id].width;
+  yfac = Dev[id].panelheight/Dev[id].height;
+  /*printf(" here nx = %i ny = %i ix = %i iy = %i xfac = %f yfac = %f\n",
+         Dev[id].nx,Dev[id].ny,Dev[id].ix,Dev[id].iy,xfac,yfac);*/
+  
+  double vpxmin = Dev[id].VP.xmin*xfac + x0;
+  double vpxmax = Dev[id].VP.xmax*xfac + x0;
+  double vpymin = Dev[id].VP.ymin*yfac + y0;
+  double vpymax = Dev[id].VP.ymax*yfac + y0;
 
-  double horiScale = (Dev[id].VP.xmax - Dev[id].VP.xmin) / dxWin; /* this is safe as we have already */
-  double vertScale = (Dev[id].VP.ymax - Dev[id].VP.ymin) / dyWin; /* checked x1 /= x2 and y1 /= y2   */
+  double horiScale = (vpxmax - vpxmin) / dxWin; /* this is safe as we have already */
+  double vertScale = (vpymax - vpymin) / dyWin; /* checked x1 /= x2 and y1 /= y2   */
 
   /* Translation: */
-  double horiTrans = Dev[id].VP.xmin - Win.xmin * horiScale;
-  double vertTrans = Dev[id].VP.ymin - Win.ymin * vertScale;
+  double horiTrans = vpxmin - Win.xmin * horiScale;
+  double vertTrans = vpymin - Win.ymin * vertScale;
 
   cairo_matrix_init (&(Win.userCoords), horiScale, 0, 0, vertScale, horiTrans, vertTrans);
   cairo_matrix_multiply(&(Win.userCoords),&(Win.userCoords),&(Win.normCoords));
@@ -136,8 +154,8 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
   double scale, scalex, scaley, newWidth, newHeight;
 
   /* Scale is Device units per World coords. */
-  scaley = (Dev[id].VP.ymax - Dev[id].VP.ymin) * Dev[id].height / yrange;
-  scalex = (Dev[id].VP.xmax - Dev[id].VP.xmin) * Dev[id].width /  xrange;
+  scaley = (Dev[id].VP.ymax - Dev[id].VP.ymin) * Dev[id].panelheight / yrange;
+  scalex = (Dev[id].VP.xmax - Dev[id].VP.xmin) * Dev[id].panelwidth /  xrange;
   if (scaley < scalex)
     {
       scale = scaley;
@@ -149,15 +167,15 @@ giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
 
   /* Find the position of the new viewport relative to the centre of the old */
   /* Find the width of the new vp in normalised device coords */
-  if (Dev[id].width > 0) {
-     newWidth = scale * xrange / Dev[id].width;
+  if (Dev[id].panelwidth > 0) {
+     newWidth = scale * xrange / Dev[id].panelwidth;
      Dev[id].VP.xmin = (Dev[id].VP.xmax + Dev[id].VP.xmin - newWidth) * 0.5;
      Dev[id].VP.xmax = Dev[id].VP.xmin + newWidth;
   }
 
   /* Find the height of the new vp */
-  if (Dev[id].height > 0) {
-     newHeight = scale * yrange / Dev[id].height;
+  if (Dev[id].panelheight > 0) {
+     newHeight = scale * yrange / Dev[id].panelheight;
      Dev[id].VP.ymin = (Dev[id].VP.ymax + Dev[id].VP.ymin - newHeight) * 0.5;
      Dev[id].VP.ymax = Dev[id].VP.ymin + newHeight;
   }

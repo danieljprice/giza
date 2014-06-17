@@ -68,8 +68,8 @@ giza_subpanel (int nx, int ny)
   Dev[id].panelheight = Dev[id].height/ny;
 
   /* set current panel */
-  Dev[id].ix = 1;
-  Dev[id].iy = 1;
+  Dev[id].ix = nx;
+  Dev[id].iy = ny;
   
   /* scale character height to panel size */
 

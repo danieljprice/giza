@@ -400,7 +400,7 @@ giza_change_page (void)
   if (Dev[id].nx > 1 || Dev[id].ny > 1) {
      int newpage;
      _giza_advance_panel(&newpage);
-     /*if (!newpage) return;*/
+     if (!newpage) return;
   }
 
    /* allow resizing of the device if nothing has been drawn */
