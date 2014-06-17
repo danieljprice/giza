@@ -23,4 +23,4 @@
  */
 
 void _giza_init_subpanel(void);
-void _giza_advance_panel (void);
+void _giza_advance_panel (int *newpage);

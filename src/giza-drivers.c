@@ -395,6 +395,14 @@ _giza_resize_device (int width, int height)
 void
 giza_change_page (void)
 {
+
+  /* If sub-panels are used, just change panel if we are not in the last panel */
+  if (Dev[id].nx > 1 || Dev[id].ny > 1) {
+     int newpage;
+     _giza_advance_panel(&newpage);
+     /*if (!newpage) return;*/
+  }
+
    /* allow resizing of the device if nothing has been drawn */
   if (!Dev[id].drawn && !Dev[id].resize) {
 
@@ -407,12 +415,6 @@ giza_change_page (void)
 
   if (!_giza_check_device_ready ("giza_change_page"))
     return;
-
-  /* If sub-panels are used, just change panel if we are not in the last panel */
-  if (Dev[id].ix < Dev[id].nx || Dev[id].iy < Dev[id].ny) {
-     _giza_advance_panel();
-     return;
-  }
 
   /* save a whole bunch of settings
     (line style, width, colour index etc.) */

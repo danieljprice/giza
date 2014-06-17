@@ -87,12 +87,12 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
   _giza_set_trans (GIZA_TRANS_NORM);
   cairo_reset_clip (Dev[id].context);
   
-  double x0 = (Dev[id].ix - 1)*Dev[id].panelwidth;
-  double y0 = (Dev[id].iy - 1)*Dev[id].panelheight;
+  double x0 = (Dev[id].ix - 1)*Dev[id].panelwidth/Dev[id].width;
+  double y0 = (Dev[id].iy - 1)*Dev[id].panelheight/Dev[id].height;
   double xfac = Dev[id].panelwidth/Dev[id].width;
   double yfac = Dev[id].panelheight/Dev[id].height;
   
-  cairo_rectangle (Dev[id].context, xmin*xfac + x0, ymin*yfac + y0, (xmax - xmin)*xfac, (ymax - ymin)*yfac);
+  cairo_rectangle (Dev[id].context, xmin*xfac + x0, ymin*yfac + y0, (xmax - xmin)*xfac + x0, (ymax - ymin)*yfac + y0);
 
   int clip;
   giza_get_clipping(&clip);

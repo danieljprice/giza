@@ -51,7 +51,7 @@ giza_subpanel (int nx, int ny)
 
   /* query viewport */
   double vpxmin, vpxmax, vpymin, vpymax;
-  giza_get_viewport(GIZA_UNITS_DEVICE,&vpxmin,&vpxmax,&vpymin,&vpymax);
+  giza_get_viewport(GIZA_UNITS_NORMALISED,&vpxmin,&vpxmax,&vpymin,&vpymax);
 
   if (nx < 0) {
      Dev[id].altpanelorder = 1;
@@ -161,15 +161,16 @@ _giza_init_subpanel ()
  *
  */
 void
-_giza_advance_panel ()
+_giza_advance_panel (int *newpage)
 {
    int ix = Dev[id].ix;
    int iy = Dev[id].iy;
+   *newpage = 0;
    
-   printf("DEBUG: giza_advance_panel: was %i %i \n",ix,iy);
    if (Dev[id].altpanelorder) {
       iy = iy + 1;
       if (iy > Dev[id].ny) {
+         *newpage = 1;
          iy = 1;
          ix = ix + 1;
          if (ix > Dev[id].nx) ix = 1;
@@ -177,12 +178,13 @@ _giza_advance_panel ()
    } else {
       ix = ix + 1;
       if (ix > Dev[id].nx) {
+         *newpage = 1;
          ix = 1;
          iy = iy + 1;
          if (iy > Dev[id].ny) iy = 1;
       }
    }
-   printf("DEBUG: giza_advance_panel: now %i %i \n",ix,iy);
+
    Dev[id].ix = ix;
    Dev[id].iy = iy;
 }
