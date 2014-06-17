@@ -148,7 +148,7 @@ int cpgbeg(int unit, const char *file, int nxsub, int nysub)
 
 /***************************************************************
  * cpgbin -- histogram of binned data
- * Status: PARTIALLY IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgbin(int nbin, const float *x, const float *data, \
  Logical center)
@@ -391,7 +391,7 @@ void cpghi2D(const float *data, int nxv, int nyv, int ix1, \
 
 /***************************************************************
  * cpghist -- histogram of unbinned data
- * Status: PARTIALLY IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpghist(int n, const float *data, float datmin, float datmax, \
  int nbin, int pgflag)

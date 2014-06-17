@@ -188,7 +188,7 @@ end function PGBEG
 
 !------------------------------------------------------------------------
 ! Module: PGBIN -- histogram of binned data
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGBIN (NBIN, X, DATA, CENTER)
  use giza, only:giza_histogram_binned
@@ -589,7 +589,7 @@ end subroutine PGHI2D
 
 !------------------------------------------------------------------------
 ! Module: PGHIST -- histogram of unbinned data
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGHIST(N, DATA, DATMIN, DATMAX, NBIN, PGFLAG)
  use giza, only:giza_histogram

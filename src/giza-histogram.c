@@ -23,6 +23,8 @@
  */
 
 #include "giza-private.h"
+#include "giza-transforms-private.h"
+#include "giza-fill-private.h"
 #include <giza.h>
 
 /**
@@ -67,7 +69,6 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
   
   for (i=0;i<n;i++) 
     {
-      double dati = dat[i];
       ibin = (int) ((dat[i] - min)/bin_width);
       if (ibin >= 0 && ibin < nbin)
         {
@@ -96,6 +97,9 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
       break;
     }
 
+  int oldTrans = _giza_get_trans ();
+  _giza_set_trans (GIZA_TRANS_WORLD);
+
   /* plot the bars of the histogram */
   for (ibin=0;ibin<nbin;ibin++) 
     {
@@ -103,12 +107,19 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
        xmax = xmin + bin_width;
        ymin = 0.;
        ymax = (double) ninbin[ibin];
-
-       giza_rectangle(xmin,xmax,ymin,ymax);
+       
+       /* plot only 3 sides of the rectangle for all except the last */
+       cairo_move_to (Dev[id].context, xmin, ymin);
+       cairo_line_to (Dev[id].context, xmin, ymax);
+       cairo_line_to (Dev[id].context, xmax, ymax);
+       cairo_line_to (Dev[id].context, xmax, ymin);
+       cairo_line_to (Dev[id].context, xmin, ymin);
+       _giza_fill ();
     }
 
   /* restore previous fill style */
   giza_set_fill(oldFill);  
+  _giza_set_trans (oldTrans);
 }
 
 /**
@@ -140,7 +151,7 @@ giza_histogram_float (int n, const float *dat, float min, float max, int nbin, i
  * Synopsis: Plot a histogram of already binned data
  *
  * Input:
- *  -nbin   :- number of bins
+ *  -n      :- number of bins
  *  -x      :- x values of bins
  *  -dat    :- data values for each bin
  *  -center :- if true (1) x values correspond to centre of each bin
@@ -152,8 +163,31 @@ void
 giza_histogram_binned (int n, const double *x, const double *dat, int centre)
 {
   if (!_giza_check_device_ready ("giza_histogram_binned"))
-    return;  
- 
+    return;
+
+  if (n < 2) return;
+
+  int i;
+  double xmin, xmax, ymin, ymax;
+  double offset = (double) centre;
+  double dx;
+
+  /* plot the bars of the histogram */
+  for (i=0;i<n;i++) 
+    {
+       if (i==n-1) {
+         dx = x[i] - x[i-1];
+       } else {
+         dx = x[i+1] - x[i];
+       }
+       xmin = x[i] - 0.5*offset*dx;
+       xmax = xmin + dx;
+       ymin = 0.;
+       ymax = dat[i];
+
+       giza_rectangle(xmin,xmax,ymin,ymax);
+    }
+
 }
 
 /**
@@ -169,5 +203,16 @@ giza_histogram_binned_float (int n, const float *x, const float *dat, int centre
 {
   if (!_giza_check_device_ready ("giza_histogram_binned"))
     return;
- 
+
+  /* convert arrays to double precision */
+  double ddat[n],dx[n];
+  int i;
+  for (i=0;i<n;i++) {
+      ddat[i] = (double) dat[i];
+      dx[i]   = (double) x[i];
+  }
+
+  /* call the usual double precision routine */
+  giza_histogram_binned(n, dx, ddat, centre);
+
 }
