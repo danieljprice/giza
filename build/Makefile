@@ -282,22 +282,8 @@ destdircheck:
         $(MAKE) err; fi;
 
 dist: distclean
-	mkdir ../$(DISTDIR)
-	cp -r ../build ../$(DISTDIR)
-	cp -r ../docs ../$(DISTDIR)
-	cp -r ../include ../$(DISTDIR)
-	cp -r ../interface ../$(DISTDIR)
-	cp -r ../lib ../$(DISTDIR)
-	cp -r ../src ../$(DISTDIR)
-	cp -r ../test ../$(DISTDIR)
-	cp ../Makefile ../$(DISTDIR)
-	cp ../INSTALL ../$(DISTDIR)
-	cp ../README ../$(DISTDIR)
-	cp ../CHANGES ../$(DISTDIR)
-	cp ../COPYING ../$(DISTDIR)
-	cp ../AUTHORS ../$(DISTDIR)
-	tar czvf ../$(DISTDIR).tar.gz ../$(DISTDIR)
-	rm -rf ../$(DISTDIR)
+	@echo "building tarball of ${DISTDIR}"
+	cd ..; git archive master --format=tar.gz --prefix=$(DISTDIR)/ > ${DISTDIR}.tar.gz
 
 clean: cleantest
 	rm -f $(LIBDIR)/libgiza* $(LIBDIR)/libpgplot* $(LIBDIR)/libcpgplot* *.o *.mod $(INCDIR)/giza-version.h ../*.tar.gz

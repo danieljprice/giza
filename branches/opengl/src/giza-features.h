@@ -1,1 +1,0 @@
-#define _OPENGL_

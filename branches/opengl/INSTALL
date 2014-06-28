@@ -1,8 +1,0 @@
-Not much work has been put into portability yet, so good luck!
-
-You will need a c compiler, cairo and X11 development packages. If they are 
-ready to go running "make SYSTEM=linux" should build giza using gcc,
-and "make install SYSTEM=linux" should install on a linux system.
-
-If you need to change library paths for cairo of Xlib have a look
-at build/Makefile.
