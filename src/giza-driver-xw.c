@@ -213,14 +213,15 @@ _giza_flush_device_xw (void)
 {
   /* flush the offscreen surface */
   cairo_surface_flush (Dev[id].surface);
+
   /* move the offscreen surface to the onscreen one */
   XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, 0, 0, (unsigned) XW[xid].width, (unsigned) XW[xid].height, 0, 0);
 
-/*  if (!XFlush (XW[xid].display))
+  if (!XFlush (XW[xid].display))
     {
       _giza_warning ("_giza_flush_device_xw", "Could not flush X window");
     }
-*/
+
 }
 
 /**
