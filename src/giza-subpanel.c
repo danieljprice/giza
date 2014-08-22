@@ -170,18 +170,22 @@ _giza_advance_panel (int *newpage)
    if (Dev[id].altpanelorder) {
       iy = iy + 1;
       if (iy > Dev[id].ny) {
-         *newpage = 1;
          iy = 1;
          ix = ix + 1;
-         if (ix > Dev[id].nx) ix = 1;
+         if (ix > Dev[id].nx) {
+            ix = 1;
+            *newpage = 1;
+         }
       }
    } else {
       ix = ix + 1;
       if (ix > Dev[id].nx) {
-         *newpage = 1;
          ix = 1;
          iy = iy + 1;
-         if (iy > Dev[id].ny) iy = 1;
+         if (iy > Dev[id].ny) {
+            iy = 1;
+            *newpage = 1;
+         }
       }
    }
 
