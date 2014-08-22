@@ -1,4 +1,27 @@
 -----------------------------------
+Changes in 0.9.0 compared to 0.8.1
+-----------------------------------
+danielprice (27):
+      sub-panelling routines implemented
+      can use /xs, /xserve and /xwindow to specify X-windows device
+      added interfaces for histogram routines
+      giza_histogram implemented; compatible with PGHIST
+      implemented giza_histogram_binned; implements PGBIN
+      clipping of plot for sub-panels now works as expected; advance_subpanel returns flag when page changes
+      docs fixed for viewport routines
+      bug fix with uninitialised variables if bad args to giza_viewport
+      sub-panelling now works; various bugs fixed with this
+      deleted obsolete branch
+      comment removed
+      BUG FIX with missing last page on interactive devices if prompting is on
+      BUG FIX with flushing if multiple XW devices used
+      BUG FIX with panel changing if more than one row
+      BUG FIX with clipping and positioning of panels if more than one row
+      character size scaled according to panel height not page height
+      better margins in PGENV/giza_environment
+      version 0.9.0
+
+-----------------------------------
 Changes in 0.8.1 compared to 0.8.0
 -----------------------------------
 danielprice (16):
