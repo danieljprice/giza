@@ -1604,7 +1604,7 @@ end subroutine PGSTBG
 
 !------------------------------------------------------------------------
 ! Module: PGSUBP -- subdivide view surface into panels
-! Status: IMPLEMENTED (NOT WORKING)
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSUBP (NXSUB, NYSUB)
  use giza, only:giza_subpanel
