@@ -1611,7 +1611,6 @@ subroutine PGSUBP (NXSUB, NYSUB)
  implicit none
  integer, intent(in) :: NXSUB, NYSUB
 
- print*,' sub-panelling ',NXSUB,NYSUB
  call giza_subpanel(NXSUB, NYSUB)
 
 end subroutine PGSUBP
