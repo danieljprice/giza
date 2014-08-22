@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -211,6 +211,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
     }
 
   /* some final initialisation */
+  _giza_init_subpanel ();
   Dev[id].drawn = 0;
   Dev[id].resize = 0;
   Dev[id].fontAngle = 0.;
@@ -231,7 +232,6 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
 
   _giza_init_window (); /* call init_window BEFORE set_viewport */
   giza_set_viewport_default ();
-  _giza_init_subpanel ();
   giza_set_line_width (1);
 
   _giza_init_fill ();

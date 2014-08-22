@@ -71,8 +71,6 @@ giza_subpanel (int nx, int ny)
   Dev[id].ix = nx;
   Dev[id].iy = ny;
   
-  /* scale character height to panel size */
-
   /* set viewport */
   giza_set_viewport(vpxmin,vpxmax,vpymin,vpymax);
 }

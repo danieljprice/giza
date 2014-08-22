@@ -50,7 +50,8 @@ giza_set_character_height (double ch)
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  double chDevice = ch * Dev[id].height * .027;
+  double chDevice = ch * Dev[id].panelheight * .027;
+  /*double chDevice = ch * Dev[id].height * .027;*/
   cairo_set_font_size (Dev[id].context, chDevice);
   /* query font extents and store this */
   cairo_font_extents (Dev[id].context, &Dev[id].fontExtents);
