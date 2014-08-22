@@ -497,6 +497,7 @@ giza_close_device (void)
 
   if (Dev[id].prompting && Dev[id].isInteractive)
     {
+      cairo_surface_finish (Dev[id].surface);
       _giza_newpage_prompt();
     }
 
