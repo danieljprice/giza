@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -76,7 +76,7 @@ giza_set_window (double x1, double x2, double y1, double y2)
   double x0,y0,xfac,yfac;
   if (Dev[id].ix > 0 && Dev[id].iy > 0) { /* sanity check */
      x0 = (Dev[id].ix - 1)*Dev[id].panelwidth/Dev[id].width;
-     y0 = (Dev[id].iy - 1)*Dev[id].panelheight/Dev[id].height;
+     y0 = (Dev[id].ny - Dev[id].iy)*Dev[id].panelheight/Dev[id].height;
   } else {
      x0 = 0.;
      y0 = 0.;
