@@ -151,6 +151,11 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
               {
                 cairo_line_to (Dev[id].context, xpts[i], ypts[i]);
               }
+         } else {
+          /*
+           * Otherwise, close path by tracing back to original point
+           */
+           cairo_line_to(Dev[id].context, xpts[0], ypts[0] + error[0]);
          }
       }
       cairo_close_path(Dev[id].context);
@@ -278,6 +283,11 @@ giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts, con
               {
                 cairo_line_to (Dev[id].context, xpts[i], ypts[i]);
               }
+         } else {
+          /*
+           * Otherwise, close path by tracing back to original point
+           */
+           cairo_line_to(Dev[id].context, xpts[0], ypts[0] + error[0]);
          }
       }
       cairo_close_path(Dev[id].context);
