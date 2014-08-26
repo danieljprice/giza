@@ -731,7 +731,7 @@ end subroutine PGMTXT
 
 !------------------------------------------------------------------------
 ! Module: PGNCUR -- mark a set of points using the cursor
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGNCUR (MAXPT, NPT, X, Y, SYMBOL)
  use giza, only:giza_mark_points_ordered

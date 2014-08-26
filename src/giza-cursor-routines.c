@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -66,7 +66,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
           giza_points(*npts,xpts,ypts,symbol);
         }
     } else {
-      /* PGPLOT default is to put the cursor
+      /* default is to put the cursor
          at the centre of the current viewport */
       xanc[0] = 0.5*(xmin + xmax);
       yanc[0] = 0.5*(ymin + ymax);
@@ -95,8 +95,29 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
          if (*npts < maxpts-1)
            {
              *npts += 1;
-             xpts[*npts-1] = x;
-             ypts[*npts-1] = y;
+             if (ordered == GIZA_MARK_ORDERED) {
+                /* put points in order */
+                int i = 0;
+                if (*npts == 1) {
+                   xpts[i] = x;
+                   ypts[i] = y;
+                } else {
+                   while (x > xpts[i] && i < (*npts-1)) {
+                      i++;
+                   }
+                   /* shuffle */
+                   int j;
+                   for (j=(*npts-1);j > i;j--) {
+                      xpts[j] = xpts[j-1];
+                      ypts[j] = ypts[j-1];
+                   }
+                   xpts[i] = x;
+                   ypts[i] = y;
+                }
+             } else {
+                xpts[*npts-1] = x;
+                ypts[*npts-1] = y;
+             }
              if (mode == GIZA_BAND_LINE && *npts > 1)
                {
                  /*giza_move(xpts[*npts-2],ypts[*npts-2]);

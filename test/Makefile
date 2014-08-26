@@ -7,6 +7,7 @@ LDFLAGS=-L../lib/ -lgiza
 FC=gfortran
 FFLAGS=-O0 -Wall -I../include/
 VPATH=../interface/
+PGFLAGS=-L$(PGPLOT_DIR) -lpgplot -L/${PREFIX}/lib -lX11 -lpng
 
 %.o : %.f90
 	$(FC) $(FFLAGS) -c $< -o $@
@@ -41,6 +42,9 @@ test-fortran: $(OBJ)
 OBJ1=giza-fortran.o test-2D.o
 test-2D: $(OBJ1)
 	$(FC) $(FFLAGS) -o $@ $(OBJ1) $(LDFLAGS)
+
+test-pgncur: test-pgncur.o
+	$(FC) $(FFLAGS) -o $@ test-pgncur.o $(PGFLAGS)
 
 clean:
 	rm -f *.o *.mod test-giza-xw test-cairo-xw test-png test-pdf test-fortran
