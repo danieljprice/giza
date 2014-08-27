@@ -107,7 +107,7 @@ OSTYPE=${shell uname}
 #--libpgplot needs to be linked against the
 #  library from the Fortran compiler used
 #
-FLIBS= -L/usr/local/gfortran/lib/ -lgfortran
+FLIBS= -L${PREFIX}/gfortran/lib/ -lgfortran
 
 LIBEXT=.a
 
@@ -188,7 +188,7 @@ OBJECTS= $(SOURCE:.c=.o)
 
 .PHONY: libgiza giza pgplot cpgplot
 
-all: giza pgplot cpgplot
+default: giza pgplot cpgplot
 
 giza: libgiza $(SHARED_LIB_GIZA)
 

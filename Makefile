@@ -2,7 +2,7 @@
 #  giza - a scientific plotting library built on cairo
 #
 #  Copyright (c) 2010      James Wetter and Daniel Price
-#  Copyright (c) 2010-2013 Daniel Price
+#  Copyright (c) 2010-2014 Daniel Price
 #
 #  This library is free software; and you are welcome to redistribute
 #  it under the terms of the GNU General Public License
