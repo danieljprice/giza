@@ -1,4 +1,15 @@
 -----------------------------------
+Changes in 0.9.1 compared to 0.9.0
+-----------------------------------
+danielprice (6):
+      updated docs for fortran interface
+      bug fix with shaded error bar plotting (causing shading of outside not inside)
+      implemented sorting in mark_cursor/PGNCUR
+      minor changes to build: default target is default, not all to avoid macports issue
+      added test for pgaxis routines
+      version 0.9.1
+
+-----------------------------------
 Changes in 0.9.0 compared to 0.8.1
 -----------------------------------
 danielprice (27):
