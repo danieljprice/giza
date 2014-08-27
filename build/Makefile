@@ -190,6 +190,8 @@ OBJECTS= $(SOURCE:.c=.o)
 
 default: giza pgplot cpgplot
 
+all: giza
+
 giza: libgiza $(SHARED_LIB_GIZA)
 
 libgiza: $(STATIC_LIB_GIZA)
