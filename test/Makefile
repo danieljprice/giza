@@ -46,5 +46,8 @@ test-2D: $(OBJ1)
 test-pgncur: test-pgncur.o
 	$(FC) $(FFLAGS) -o $@ test-pgncur.o $(PGFLAGS)
 
+test-pgaxis: test-pgaxis.o
+	$(FC) $(FFLAGS) -o $@ test-pgaxis.o $(PGFLAGS)
+
 clean:
 	rm -f *.o *.mod test-giza-xw test-cairo-xw test-png test-pdf test-fortran
