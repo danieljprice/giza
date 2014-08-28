@@ -257,7 +257,7 @@ installgiza: destdircheck checksystem giza giza-fortran.o
 	cp $(INCDIR)/giza-shared.h  $(DESTDIR)$(PREFIX)/include/
 	cp $(INCDIR)/giza-version.h $(DESTDIR)$(PREFIX)/include/
 	cp $(INCDIR)/giza.h         $(DESTDIR)$(PREFIX)/include/
-	cp $(INTERFACEDIR)/giza.mod $(DESTDIR)$(PREFIX)/include/
+	cp giza.mod                 $(DESTDIR)$(PREFIX)/include/
 
 installpgplot: installgiza pgplot cpgplot
 	cp $(STATIC_LIB_PGPLOT)  $(DESTDIR)$(PREFIX)/lib/
