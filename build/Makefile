@@ -188,9 +188,7 @@ OBJECTS= $(SOURCE:.c=.o)
 
 .PHONY: libgiza giza pgplot cpgplot
 
-default: giza pgplot cpgplot
-
-all: giza
+all: giza pgplot cpgplot
 
 giza: libgiza $(SHARED_LIB_GIZA)
 
@@ -253,12 +251,13 @@ $(INCDIR)/giza-version.h:
 
 install: installpgplot destdircheck checksystem giza
 
-installgiza: destdircheck checksystem giza
+installgiza: destdircheck checksystem giza giza-fortran.o
 	cp $(STATIC_LIB_GIZA) $(DESTDIR)$(PREFIX)/lib/
 	cp $(SHARED_LIB_GIZA) $(DESTDIR)$(PREFIX)/lib/
 	cp $(INCDIR)/giza-shared.h  $(DESTDIR)$(PREFIX)/include/
 	cp $(INCDIR)/giza-version.h $(DESTDIR)$(PREFIX)/include/
 	cp $(INCDIR)/giza.h         $(DESTDIR)$(PREFIX)/include/
+	cp $(INTERFACEDIR)/giza.mod $(DESTDIR)$(PREFIX)/include/
 
 installpgplot: installgiza pgplot cpgplot
 	cp $(STATIC_LIB_PGPLOT)  $(DESTDIR)$(PREFIX)/lib/
@@ -277,6 +276,7 @@ distclean: destdircheck clean
 	@rm -f $(DESTDIR)$(PREFIX)/include/giza-shared.h
 	@rm -f $(DESTDIR)$(PREFIX)/include/giza-version.h
 	@rm -f $(DESTDIR)$(PREFIX)/include/giza.h
+	@rm -f $(DESTDIR)$(PREFIX)/include/giza.mod
 
 destdircheck:
 	@if test -d $(DESTDIR)$(PREFIX)/lib; then echo $(DESTDIR)$(PREFIX)/lib exists and is a directory; else \
