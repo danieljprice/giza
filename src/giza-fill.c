@@ -99,7 +99,7 @@ _giza_fill (void)
   double ri,gi,bi,alphai;
   int ci;
   int hatch_size;
-  int lw;
+  double lw;
   double xoffset,dx,dy,dr;
   double pi = 3.1415926536;
   double xmin,xmax,ymin,ymax,x0,y0,x,y,angle;
