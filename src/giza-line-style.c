@@ -80,23 +80,26 @@ _giza_set_line_style (int ls, cairo_t *ct)
   double longDash, shortDash, lw;
 
   giza_get_character_size (GIZA_UNITS_MM, &longDash, &shortDash);
-  longDash = 0.85 * longDash;
-  shortDash = 0.33 * longDash;
+  longDash = 0.5 * longDash;
+  shortDash = 0.5 * longDash;
 
   double _giza_dashes[8];
   int _giza_n;
+  double _giza_dash_offset = 0.;
 
   switch (ls)
     {
     case GIZA_LS_LONG_DASH:
       _giza_n = 2;
       _giza_dashes[0] = longDash;
-      _giza_dashes[1] = 0.33 * longDash;
+      _giza_dashes[1] = 0.5 * shortDash;
+      _giza_dash_offset = 0.375 * longDash;
       break;
     case GIZA_LS_SHORT_DASH:
       _giza_n = 2;
       _giza_dashes[0] = shortDash;
       _giza_dashes[1] = 0.5 * shortDash;
+      _giza_dash_offset = 0.5 * shortDash;
       break;
     case GIZA_LS_DOT:
       _giza_n = 2;
@@ -111,6 +114,7 @@ _giza_set_line_style (int ls, cairo_t *ct)
       _giza_dashes[1] = Dev[id].deviceUnitsPermm * lw; /* space */
       _giza_dashes[2] = Dev[id].deviceUnitsPermm * 0.25 * lw; /* dot */
       _giza_dashes[3] = Dev[id].deviceUnitsPermm * lw; /* space */
+      _giza_dash_offset = 0.5 * longDash;
       break;
     case GIZA_LS_DASH_DOT_DOT_DOT:
       _giza_n = 8;
@@ -123,6 +127,7 @@ _giza_set_line_style (int ls, cairo_t *ct)
       _giza_dashes[5] = Dev[id].deviceUnitsPermm * lw; /* space */
       _giza_dashes[6] = Dev[id].deviceUnitsPermm * 0.25 * lw; /* dot */
       _giza_dashes[7] = Dev[id].deviceUnitsPermm * lw; /* space */
+      _giza_dash_offset = 0.75 * longDash;
       break;
     default:
       _giza_warning ("giza_set_line_style", "Invalid line style, using solid");
@@ -131,16 +136,16 @@ _giza_set_line_style (int ls, cairo_t *ct)
       break;
     }
 
-  _giza_set_cairo_dashes (ct, _giza_dashes, _giza_n);
+  _giza_set_cairo_dashes (ct, _giza_dashes, _giza_n, _giza_dash_offset);
 }
 
 void
-_giza_set_cairo_dashes (cairo_t *ct, const double *_giza_dashes, int _giza_n)
+_giza_set_cairo_dashes (cairo_t *ct, const double *_giza_dashes, int _giza_n, double _giza_dash_offset)
 {
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
 
-  cairo_set_dash (ct, _giza_dashes, _giza_n, 0.);
+  cairo_set_dash (ct, _giza_dashes, _giza_n, _giza_dash_offset);
 
   _giza_set_trans (oldTrans);
 }

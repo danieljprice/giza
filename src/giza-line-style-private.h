@@ -23,6 +23,6 @@
  */
 
 
-void _giza_set_cairo_dashes (cairo_t *ct, const double *_giza_dashes, int _giza_n);
+void _giza_set_cairo_dashes (cairo_t *ct, const double *_giza_dashes, int _giza_n, double _giza_dash_offset);
 void _giza_init_line_style (void);
 void _giza_set_line_style (int ls, cairo_t *ct);
