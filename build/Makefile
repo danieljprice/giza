@@ -103,12 +103,6 @@ OSTYPE=${shell uname}
   KNOWN_SYSTEM=yes
 #endif
 
-#
-#--libpgplot needs to be linked against the
-#  library from the Fortran compiler used
-#
-FLIBS= -L${PREFIX}/gfortran/lib/ -lgfortran
-
 LIBEXT=.a
 
 GIZALIB=$(LIBDIR)/libgiza
@@ -230,7 +224,7 @@ $(SHARED_LIB_GIZA): $(INCDIR)/giza-version.h $(OBJECTS)
 	ln -sf $(SHARED_LIB_GIZA_VERSION) $(SHARED_LIB_GIZA)
 
 $(SHARED_LIB_PGPLOT): $(INCDIR)/giza-version.h $(OBJECTS) giza-fortran.o giza-pgplot.o
-	$(LIBTOOL) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_PGPLOT) $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS) $(FLIBS)
+	$(FC) $(SHAREDLIBFLAGS) -o $(SHARED_LIB_PGPLOT) $(OBJECTS) giza-fortran.o giza-pgplot.o $(LDFLAGS)
 
 $(SHARED_LIB_CPGPLOT):  $(INCDIR)/giza-version.h $(OBJECTS) giza-cpgplot.o
 	$(LIBTOOL) $(SHAREDLIBFLAGS) -o $@ $(OBJECTS) giza-cpgplot.o $(LDFLAGS)
