@@ -17,6 +17,8 @@ PGFLAGS=-L$(PGPLOT_DIR) -lpgplot -L/${PREFIX}/lib -lX11 -lpng
 
 all: test-arrow test-box test-giza-xw test-cairo-xw test-png test-pdf test-svg test-fortran test-2D
 
+testpg: test-pgncur test-pgaxis
+
 test-arrow: test-arrow.o
 	$(CC) -o $@ $< $(LDFLAGS)
 
