@@ -15,7 +15,7 @@ PGFLAGS=-L$(PGPLOT_DIR) -lpgplot -L/${PREFIX}/lib -lX11 -lpng
 %.o : %.F90
 	$(FC) $(FFLAGS) -c $< -o $@
 
-all: test-arrow test-box test-giza-xw test-cairo-xw test-png test-pdf test-fortran
+all: test-arrow test-box test-giza-xw test-cairo-xw test-png test-pdf test-fortran test-2D
 
 test-arrow: test-arrow.o
 	$(CC) -o $@ $< $(LDFLAGS)
@@ -50,4 +50,6 @@ test-pgaxis: test-pgaxis.o
 	$(FC) $(FFLAGS) -o $@ test-pgaxis.o $(PGFLAGS)
 
 clean:
-	rm -f *.o *.mod test-giza-xw test-cairo-xw test-png test-pdf test-fortran
+	rm -f *.o *.mod giza*.png test-arrow test-box test-giza-xw \
+                        test-cairo-xw test-png test-pdf test-fortran \
+                        test-2D test-pgncur test-pgaxis

@@ -22,7 +22,7 @@ program testgizaplot
      enddo
   enddo
 
-  call giza_plot(img=arr,dev='test-2D.png',just=1,&
+  call giza_plot(img=arr,dev='giza-test-2D.png',just=1,&
 !                width,height,units,just=1,axis=1,&
                  xmin=-10.,xmax=10.,ymin=-10.,ymax=10., &
 !                imgmin=,imgmax,&
