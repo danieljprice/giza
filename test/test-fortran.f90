@@ -20,7 +20,7 @@ program testgizaplot
 ! call giza_plot(yplot,ylabel='sin(x)',xlabel='x',&
 !                title='test',ls=giza_ls_dot,ci=2,lw=5.,ch=2.,symbol=3,&
 !                font='arial',printid=.true.,just=1)
- call giza_plot(img=arr,dev='crap.png')
+ call giza_plot(img=arr,dev='giza-test.png')
 
  !call giza_plot(xplot,yplot,dev='/png',xmin=0.5,xmax=1.0)
 

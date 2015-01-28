@@ -3,7 +3,7 @@ CC=gcc
 PREFIX=/opt/local
 CFLAGS=-I${PREFIX}/include -I../include/
 CAIROFLAGS= -L${PREFIX}/lib -lX11 -lcairo
-LDFLAGS=-L../lib/ -lgiza
+LDFLAGS=-L../lib/ -lgiza -lm
 FC=gfortran
 FFLAGS=-O0 -Wall -I../include/
 VPATH=../interface/
@@ -35,7 +35,7 @@ test-png: test-png.o
 test-pdf: test-pdf.o
 	$(CC) -o $@ $< $(LDFLAGS)
 
-OBJ=giza-fortran.o test-img.o
+OBJ=giza-fortran.o test-fortran.o
 test-fortran: $(OBJ)
 	$(FC) $(FFLAGS) -o $@ $(OBJ) $(LDFLAGS)
 
