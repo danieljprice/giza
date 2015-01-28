@@ -41,7 +41,7 @@ main ()
   giza_open_device ("?", "arrows");
   giza_start_warnings ();
   giza_set_window(0.,1.,0.,10.);
-/*  giza_box ("BCTN", 0., 0, "BCTN", 0., 0);*/
+  giza_box ("BCTN", 0., 0, "BCTN", 0., 0);
   giza_arrow (0.475, 0.475, 0.5, 0.5);
   giza_arrow (0.5, 0., 0.5, 0.25);
   giza_arrow (0., 0.5, 0.25, 0.5);
