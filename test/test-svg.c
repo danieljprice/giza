@@ -27,7 +27,7 @@ static double sinx(double *x);
 
 int main() {
  int ierr, i;
- ierr = giza_open_device("/pdf","test");
+ ierr = giza_open_device("/svg","test");
  for (i=1;i<=10;i++) {
      giza_set_environment(0.,1.,-1.,1.,0,0);
      giza_label("x","y","title");
