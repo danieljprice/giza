@@ -28,7 +28,7 @@ static double sinx(double *x);
 int main() {
  int ierr, i;
  ierr = giza_open_device("/png","test");
- for (i=1;i<10;i++) {
+ for (i=1;i<=10;i++) {
      giza_set_environment(0.,1.,-1.,1.,0,0);
      giza_label("x","y","title");
      giza_function_x(sinx,100,0.,1.,1);
