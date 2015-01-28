@@ -23,7 +23,7 @@ test-arrow: test-arrow.o
 text-box: test-box.o
 	$(CC) -o $@ $< $(LDFLAGS)
 
-test-giza-xw: test-xw.o
+test-giza-xw: test-giza-xw.o
 	$(CC) -o $@ $< $(LDFLAGS)
 
 test-cairo-xw: test-cairo-xw.o
