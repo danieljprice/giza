@@ -52,6 +52,12 @@ endif
 ifndef CFLAGS
 CFLAGS= -fPIC -Wall -Wextra -O3 -g
 endif
+ifndef FC
+FC= gfortran
+endif
+ifndef FFLAGS
+FFLAGS= -fPIC -Wall -Wextra -O3
+endif
 
 #
 # The prefix for the installed files
@@ -100,6 +106,7 @@ OSTYPE=${shell uname}
   RANLIB= ranlib
   LIBTOOL= $(CC) 
   FC= gfortran
+  FFLAGS= -fPIC -Wall -Wextra -O3
   KNOWN_SYSTEM=yes
 #endif
 
