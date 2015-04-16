@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2015 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ _giza_error (const char *source, const char *message)
 int
 _giza_prompt_for_device (void)
 {
-  char input[20];
+  char input[GIZA_MAX_DEVSTRING + 5]; /* allow enough for prefix + 5 char extension */
   int count = 0;
   int devType = GIZA_DEVICE_IV;
   /*int err;*/
@@ -81,7 +81,7 @@ _giza_prompt_for_device (void)
        *  Use fgets here instead of scanf so that we can accept a
        *  newline character as the default input
        */
-      char *p = fgets(input,20,stdin);
+      char *p = fgets(input,sizeof(input),stdin);
       if (p != NULL)
         {
           size_t last = strlen(input) - 1;

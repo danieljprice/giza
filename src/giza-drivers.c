@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2014 Daniel Price
+ * Copyright (c) 2010-2015 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -147,7 +147,9 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   /* Determine which type of device to open */
   char firstchar = newDeviceName[0];
   if (firstchar == '?')
+    {
     Dev[id].type = _giza_prompt_for_device ();
+    }
   else
     {
       char *devTypeStr;
@@ -997,6 +999,10 @@ _giza_expand_clipping (void)
 static void
 _giza_set_prefix (const char *prefix)
 {
+  if (strlen(prefix) > sizeof(Dev[id].prefix))
+     {
+        _giza_error("giza_set_prefix","device name exceeds maximum string length");
+     }
   strncpy (Dev[id].prefix, prefix, sizeof(Dev[id].prefix));
 }
 

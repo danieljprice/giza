@@ -29,6 +29,7 @@
 #define GIZA_ZERO_DOUBLE 3.e-300
 #define GIZA_DEG_TO_RAD 0.0174532925
 #define GIZA_MAX_DEVICES 128
+#define GIZA_MAX_DEVSTRING 256
 
 #define MIN(X,Y) ((X) < (Y) ? (X) : (Y))
 #define MAX(X,Y) ((X) < (Y) ? (Y) : (X))
@@ -71,7 +72,7 @@ typedef struct
   double deviceUnitsPermm;
   double deviceUnitsPerPixel;
   int isInteractive;
-  char prefix[30];
+  char prefix[GIZA_MAX_DEVSTRING];
   int pgNum;
   int CurrentTrans;
   double defaultBackgroundAlpha;
