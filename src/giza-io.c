@@ -81,7 +81,7 @@ _giza_prompt_for_device (void)
        *  Use fgets here instead of scanf so that we can accept a
        *  newline character as the default input
        */
-      char *p = fgets(input,sizeof(input),stdin);
+      char *p = fgets(input,sizeof(input)-1,stdin);
       if (p != NULL)
         {
           size_t last = strlen(input) - 1;
@@ -118,6 +118,10 @@ _giza_prompt_for_device (void)
 	      break;
 	    }
         }
+      /* flush stdin here so we don't get repeated entries into fgets */
+      int ch;
+      while (((ch = fgetc(stdin)) != '\n') && (ch != EOF)) /* void */;
+
       count++;
     }
   while (count>0); /*(count < 3); */
