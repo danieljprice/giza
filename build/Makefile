@@ -72,7 +72,7 @@ X11DIR=/usr/X11R6/
 #X11DIR=/opt/local/
 X11LIBS= -L${X11DIR}/lib -lX11
 CAIROLIBS= -L${X11DIR}/lib -lcairo
-INCFLAGS= -I/${X11DIR}/include -I${X11DIR}/include/cairo -I$(PREFIX)/include -I$(INCDIR) -I$(SRCDIR)
+INCFLAGS= -I/${X11DIR}/include -I${X11DIR}/include/cairo -I$(PREFIX)/include -I$(PREFIX)/include/cairo -I$(INCDIR) -I$(SRCDIR)
 
 LDFLAGS= $(X11LIBS) $(CAIROLIBS) -lm
 
