@@ -119,9 +119,11 @@ _giza_prompt_for_device (void)
 	    }
         }
       /* flush stdin here so we don't get repeated entries into fgets */
+      fflush(stdin);
+/*
       int ch;
-      while (((ch = fgetc(stdin)) != '\n') && (ch != EOF)) /* void */;
-
+      while (((ch = getchar()) != EOF) && (ch != '\n'));
+*/
       count++;
     }
   while (count>0); /*(count < 3); */
