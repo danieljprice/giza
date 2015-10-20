@@ -42,7 +42,7 @@ INCDIR=../include
 INTERFACEDIR=../interface
 VPATH=$(SRCDIR) $(INTERFACEDIR)
 SHELL=/bin/bash
-
+OSTYPE=${shell uname -s}
 #
 # Some basic defaults
 #
@@ -68,11 +68,15 @@ PREFIX=/usr/local
 #
 # Change the following lines if giza can't find x11 or cairo
 #
-X11DIR=/usr/X11R6/
-#X11DIR=/opt/local/
+ifeq ($(OSTYPE), Darwin)
+   #X11DIR=/opt/local/
+   X11DIR=/usr/X11
+else
+   X11DIR=/usr/X11R6
+endif
 X11LIBS= -L${X11DIR}/lib -lX11
 CAIROLIBS= -L${X11DIR}/lib -lcairo
-INCFLAGS= -I/${X11DIR}/include -I${X11DIR}/include/cairo -I$(PREFIX)/include -I$(PREFIX)/include/cairo -I$(INCDIR) -I$(SRCDIR)
+INCFLAGS= -I${X11DIR}/include -I${X11DIR}/include/cairo -I$(PREFIX)/include -I$(PREFIX)/include/cairo -I$(INCDIR) -I$(SRCDIR)
 
 LDFLAGS= $(X11LIBS) $(CAIROLIBS) -lm
 
@@ -93,7 +97,6 @@ endif
 DISTDIR=giza-$(VERSION)
 
 KNOWN_SYSTEM=no
-OSTYPE=${shell uname}
 #
 # Settings for specific compilers
 #
