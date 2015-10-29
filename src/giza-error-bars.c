@@ -108,7 +108,7 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
   if (dir >= 7) 
 /*
  *  Semi-transparent shading of error region
- */
+ */     
     {
       double a;
       _giza_get_alpha(&a);
@@ -132,6 +132,11 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
                 cairo_line_to (Dev[id].context, xpts[i], ypts[i]);
               }
          }
+	 else
+	   {	      
+	      /* trace from top line to bottom one */
+	      cairo_line_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
+	   }	 
       }
       
       if (dir == 8 || dir == 9) {
