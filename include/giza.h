@@ -277,6 +277,9 @@ void giza_qtextlen_float (int units, const char *text, float *xlen, float *ylen)
 void giza_rectangle (double x1, double x2, double y1, double y2);
 void giza_rectangle_float (float x1, float x2, float y1, float y2);
 
+void giza_rectangle_rounded (double x1, double x2, double y1, double y2, double radius);
+void giza_rectangle_rounded_float (float x1, float x2, float y1, float y2, float radius);
+
 void giza_render (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
 		  int extend, const double *affine);
