@@ -22,7 +22,7 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
-struct GIZA_Band
+typedef struct
 {
   cairo_surface_t *onscreen;
   cairo_t *box;
@@ -31,7 +31,9 @@ struct GIZA_Band
   int ls;
   int maxWidth;
   int maxHeight;
-} Band;
+} giza_band_t;
+
+extern giza_band_t Band;
 
 int _giza_init_band (int mode);
 void _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2, int y2);

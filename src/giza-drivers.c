@@ -59,6 +59,12 @@ static void _giza_set_prefix (const char *prefix);
 static int _giza_get_internal_id(int devid);
 static int _giza_device_id = 0;
 
+/* global settings */
+giza_settings_t Sets;
+int id;
+/* per-device settings */
+giza_device_t Dev[GIZA_MAX_DEVICES];
+
 /**
  * Device: giza_open_device
  *

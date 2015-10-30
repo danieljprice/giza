@@ -110,15 +110,16 @@ typedef struct
   double fontAngle;
 } giza_device_t;
 
-giza_device_t Dev[GIZA_MAX_DEVICES];
+extern giza_device_t Dev[GIZA_MAX_DEVICES];
+extern int id;
 
-int id;
-
-/* Store the current settings of giza */
-struct GIZA_Settings
+/* Struct containing global settings for giza */
+typedef struct
 {
   int autolog;
-} Sets;
+} giza_settings_t;
+
+extern giza_settings_t Sets;
 
 int _giza_check_device_ready (char *source);
 void _giza_init_character_height (void);

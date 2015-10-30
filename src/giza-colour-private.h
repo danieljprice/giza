@@ -41,5 +41,5 @@ void _giza_free_colour_table (void);
 void _giza_hls_to_rgb (double hue, double lightness, double saturation,
                        double *red, double *green, double *blue);
 
-int _giza_colour_index_min;
-int _giza_colour_index_max;
+extern int _giza_colour_index_min;
+extern int _giza_colour_index_max;
