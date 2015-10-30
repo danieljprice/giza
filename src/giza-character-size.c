@@ -62,7 +62,7 @@ giza_set_character_height (double ch)
 }
 
 /**
- * Settings: giza_set_character_height
+ * Settings: giza_set_character_height_float
  *
  * Synopsis: Same functionality as giza_set_character_height but takes a float
  */
