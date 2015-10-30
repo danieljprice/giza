@@ -1,0 +1,2873 @@
+2015-04-27 21:55  danielprice
+
+	* /README: updated readme
+
+2015-04-27 21:53  danielprice
+
+	* /CHANGES: Changelog updated for 0.9.3
+
+2015-04-17 02:00  danielprice
+
+	* /build/Makefile: version bumped to 0.9.3
+
+2015-04-17 02:00  danielprice
+
+	* /build/Makefile: add -I$(PREFIX)/include/cairo to include flags
+
+2015-04-17 02:00  danielprice
+
+	* /src/giza-io.c: flushing achieved with fflush instead of getchar
+	  to avoid unnecessary hangs
+
+2015-04-16 02:33  danielprice
+
+	* /src/giza-io.c: flush stdin after giza prompt to avoid repeated
+	  device tries
+
+2015-04-16 02:33  danielprice
+
+	* /src/giza-drivers.c, /src/giza-io.c, /src/giza-private.h: BUG FIX
+	  with long device names; string length increased to 256 chars;
+	  added error checks for strings too long (thanks to Hugh Williams)
+
+2015-04-16 02:33  danielprice
+
+	* /src/giza-driver-png.c: better error handling in png device
+	  (thanks to Hugh Williams)
+
+2015-01-28 23:09  danielprice
+
+	* /test/Makefile: added testpg target to compile pgplot tests
+	  (thanks to Joachim Frieben)
+
+2015-01-28 23:09  danielprice
+
+	* /test/Makefile, /test/test-pdf.c, /test/test-svg.c: added
+	  separate test-svg; test-pdf now outputs pdf
+
+2015-01-28 23:09  danielprice
+
+	* /test/test-png.c: test-png spits out sensible number of files
+
+2015-01-28 23:09  danielprice
+
+	* /test/test-png.c: test-png spits out sensible number of files
+
+2015-01-28 23:09  danielprice
+
+	* /test/test-arrow.c: test-arrow now works as expected (thanks to
+	  Joachim Frieben)
+
+2015-01-28 23:09  danielprice
+
+	* /test/Makefile, /test/test-2D.f90: added test-2D to default tests
+
+2015-01-28 23:09  danielprice
+
+	* /test/Makefile, /test/test-giza-xw.c, /test/test-xw.c: renamed
+	  test-xw.c->test-giza-xw.c (thanks to Joachim Frieben)
+
+2015-01-28 23:09  danielprice
+
+	* /test/Makefile, /test/test-fortran.f90: fixed build of
+	  test-fortran
+
+2015-01-28 23:09  danielprice
+
+	* /build/Makefile: added FFLAGS setting and -fPIC to Makefile
+
+2015-01-05 06:38  danielprice
+
+	* /CHANGES: updated ChangeLog for 0.9.2
+
+2015-01-04 22:25  danielprice
+
+	* /build/Makefile: 0.9.2
+
+2015-01-04 22:11  danielprice
+
+	* /build/Makefile: use $(FC) instead of $(LIBTOOL) to compile
+	  shared Fortran library (thanks to Sean Farley)
+
+2014-11-11 23:37  danielprice
+
+	* /src/giza-line-style-private.h, /src/giza-line-style.c:
+	  fine-tuning of line styles; added offset to patterns to give
+	  better legend
+
+2014-11-06 03:10  danielprice
+
+	* /src/giza-fill.c: bug fix with typedef of line width in giza fill
+	  (thanks to W. Dehnen)
+
+2014-08-28 00:20  danielprice
+
+	* /build/Makefile: bug fix with giza.mod in install target
+
+2014-08-28 00:20  danielprice
+
+	* /build/Makefile: reverted build targets; also install giza.mod
+	  into include dir by default
+
+2014-08-27 23:42  danielprice
+
+	* /build/Makefile: workaround for macports issue with all target
+
+2014-08-27 23:35  danielprice
+
+	* /CHANGES, /build/Makefile: version 0.9.1
+
+2014-08-27 23:29  danielprice
+
+	* /test/Makefile, /test/test-pgaxis.f90: added test for pgaxis
+	  routines
+
+2014-08-27 23:29  danielprice
+
+	* /Makefile, /build/Makefile: minor changes to build: default
+	  target is default, not all to avoid macports issue
+
+2014-08-26 12:01  danielprice
+
+	* /interface/giza-pgplot.f90, /src/giza-cursor-routines.c,
+	  /test/Makefile, /test/test-pgncur.f90: implemented sorting in
+	  mark_cursor/PGNCUR
+
+2014-08-26 12:01  danielprice
+
+	* /src/giza-error-bars.c: bug fix with shaded error bar plotting
+	  (causing shading of outside not inside)
+
+2014-08-22 11:06  danielprice
+
+	* /interface/giza-pgplot.f90: updated docs for fortran interface
+
+2014-08-22 11:06  danielprice
+
+	* /CHANGES: 0.9.0
+
+2014-08-22 10:42  danielprice
+
+	* /build/Makefile: version 0.9.0
+
+2014-08-22 10:42  danielprice
+
+	* /src/giza-viewport.c: better margins in PGENV/giza_environment
+
+2014-08-22 07:53  danielprice
+
+	* /src/giza-character-size.c, /src/giza-drivers.c,
+	  /src/giza-subpanel.c: character size scaled according to panel
+	  height not page height
+
+2014-08-22 07:44  danielprice
+
+	* /src/giza-viewport.c, /src/giza-window.c: BUG FIX with clipping
+	  and positioning of panels if more than one row
+
+2014-08-22 07:44  danielprice
+
+	* /src/giza-subpanel.c: BUG FIX with panel changing if more than
+	  one row
+
+2014-08-22 07:44  danielprice
+
+	* /src/giza-driver-xw.c: BUG FIX with flushing if multiple XW
+	  devices used
+
+2014-08-22 04:17  danielprice
+
+	* /src/giza-drivers.c: BUG FIX with missing last page on
+	  interactive devices if prompting is on
+
+2014-08-22 03:00  danielprice
+
+	* /interface/giza-pgplot.f90: comment removed
+
+2014-06-28 04:47  danielprice
+
+	* /branches/opengl/INSTALL, /branches/opengl/LICENSE,
+	  /branches/opengl/Makefile, /branches/opengl/build/Makefile,
+	  /branches/opengl/docs/api.pl,
+	  /branches/opengl/docs/pgplot_status.pl,
+	  /branches/opengl/include/.gitignore,
+	  /branches/opengl/interface/Makefile,
+	  /branches/opengl/interface/giza-fortran.F90,
+	  /branches/opengl/interface/giza-pgplot.f90,
+	  /branches/opengl/interface/pgplot-stubs.f90,
+	  /branches/opengl/lib/.gitignore,
+	  /branches/opengl/src/giza-annotate.c,
+	  /branches/opengl/src/giza-arrow-style-private.h,
+	  /branches/opengl/src/giza-arrow-style.c,
+	  /branches/opengl/src/giza-arrow.c,
+	  /branches/opengl/src/giza-band-private.h,
+	  /branches/opengl/src/giza-band-style.c,
+	  /branches/opengl/src/giza-band.c,
+	  /branches/opengl/src/giza-box.c,
+	  /branches/opengl/src/giza-buffering.c,
+	  /branches/opengl/src/giza-character-size-private.h,
+	  /branches/opengl/src/giza-character-size.c,
+	  /branches/opengl/src/giza-circle.c,
+	  /branches/opengl/src/giza-colour-index-private.h,
+	  /branches/opengl/src/giza-colour-index.c,
+	  /branches/opengl/src/giza-colour-table-private.h,
+	  /branches/opengl/src/giza-colour-table.c,
+	  /branches/opengl/src/giza-contour.c,
+	  /branches/opengl/src/giza-device-has-cursor.c,
+	  /branches/opengl/src/giza-draw.c,
+	  /branches/opengl/src/giza-driver-eps-private.h,
+	  /branches/opengl/src/giza-driver-eps.c,
+	  /branches/opengl/src/giza-driver-null-private.h,
+	  /branches/opengl/src/giza-driver-null.c,
+	  /branches/opengl/src/giza-driver-pdf-private.h,
+	  /branches/opengl/src/giza-driver-pdf.c,
+	  /branches/opengl/src/giza-driver-png-private.h,
+	  /branches/opengl/src/giza-driver-png.c,
+	  /branches/opengl/src/giza-driver-ps-private.h,
+	  /branches/opengl/src/giza-driver-ps.c,
+	  /branches/opengl/src/giza-driver-xw-private.h,
+	  /branches/opengl/src/giza-driver-xw.c,
+	  /branches/opengl/src/giza-drivers-private.h,
+	  /branches/opengl/src/giza-drivers.c,
+	  /branches/opengl/src/giza-environment.c,
+	  /branches/opengl/src/giza-error-bars.c,
+	  /branches/opengl/src/giza-features.h,
+	  /branches/opengl/src/giza-fill-private.h,
+	  /branches/opengl/src/giza-fill.c,
+	  /branches/opengl/src/giza-format-number.c,
+	  /branches/opengl/src/giza-function-t.c,
+	  /branches/opengl/src/giza-function-x.c,
+	  /branches/opengl/src/giza-function-y.c,
+	  /branches/opengl/src/giza-get-key-press.c,
+	  /branches/opengl/src/giza-get-surface-size.c,
+	  /branches/opengl/src/giza-gl-interactive.c,
+	  /branches/opengl/src/giza-gl-private.h,
+	  /branches/opengl/src/giza-gl.h,
+	  /branches/opengl/src/giza-io-private.h,
+	  /branches/opengl/src/giza-io.c,
+	  /branches/opengl/src/giza-label.c,
+	  /branches/opengl/src/giza-line-cap.c,
+	  /branches/opengl/src/giza-line-style-private.h,
+	  /branches/opengl/src/giza-line-style.c,
+	  /branches/opengl/src/giza-line-width.c,
+	  /branches/opengl/src/giza-line.c,
+	  /branches/opengl/src/giza-move.c,
+	  /branches/opengl/src/giza-paper.c,
+	  /branches/opengl/src/giza-points.c,
+	  /branches/opengl/src/giza-polygon.c,
+	  /branches/opengl/src/giza-private.h,
+	  /branches/opengl/src/giza-prompting-private.h,
+	  /branches/opengl/src/giza-prompting.c,
+	  /branches/opengl/src/giza-ptext.c,
+	  /branches/opengl/src/giza-qtext.c,
+	  /branches/opengl/src/giza-rectangle.c,
+	  /branches/opengl/src/giza-render.c,
+	  /branches/opengl/src/giza-save.c,
+	  /branches/opengl/src/giza-scanner.l,
+	  /branches/opengl/src/giza-set-font-private.h,
+	  /branches/opengl/src/giza-set-font.c,
+	  /branches/opengl/src/giza-shared-cpp.h,
+	  /branches/opengl/src/giza-stroke-private.h,
+	  /branches/opengl/src/giza-stroke.c,
+	  /branches/opengl/src/giza-text-background-private.h,
+	  /branches/opengl/src/giza-text-background.c,
+	  /branches/opengl/src/giza-text-private.h,
+	  /branches/opengl/src/giza-text.c,
+	  /branches/opengl/src/giza-transforms-private.h,
+	  /branches/opengl/src/giza-transforms.c,
+	  /branches/opengl/src/giza-vector.c,
+	  /branches/opengl/src/giza-viewport-private.h,
+	  /branches/opengl/src/giza-viewport.c,
+	  /branches/opengl/src/giza-warnings-private.h,
+	  /branches/opengl/src/giza-warnings.c,
+	  /branches/opengl/src/giza-window-private.h,
+	  /branches/opengl/src/giza-window.c, /branches/opengl/src/giza.c,
+	  /branches/opengl/src/giza.h, /branches/opengl/src/lex.yy.c,
+	  /branches/opengl/test/test-arrow.c,
+	  /branches/opengl/test/test-band.c,
+	  /branches/opengl/test/test-box.c,
+	  /branches/opengl/test/test-change-page.c,
+	  /branches/opengl/test/test-circle.c,
+	  /branches/opengl/test/test-colour-index.c,
+	  /branches/opengl/test/test-contour.c,
+	  /branches/opengl/test/test-environment.c,
+	  /branches/opengl/test/test-error-bars.c,
+	  /branches/opengl/test/test-format-number.c,
+	  /branches/opengl/test/test-gl.c,
+	  /branches/opengl/test/test-line-cap.c,
+	  /branches/opengl/test/test-line-style.c,
+	  /branches/opengl/test/test-points.c,
+	  /branches/opengl/test/test-qtext.c,
+	  /branches/opengl/test/test-rectangle.c,
+	  /branches/opengl/test/test-render.c,
+	  /branches/opengl/test/test-set-line-width.c,
+	  /branches/opengl/test/test-vector.c,
+	  /branches/opengl/test/test-window.c, /build/Makefile: deleted
+	  obsolete branch
+
+2014-06-17 23:30  danielprice
+
+	* /src/giza-drivers.c, /src/giza-paper.c, /src/giza-subpanel.c,
+	  /src/giza-window.c: sub-panelling now works; various bugs fixed
+	  with this
+
+2014-06-17 23:30  danielprice
+
+	* /src/giza-viewport.c: bug fix with uninitialised variables if bad
+	  args to giza_viewport
+
+2014-06-17 23:30  danielprice
+
+	* /src/giza-viewport.c: docs fixed for viewport routines
+
+2014-06-17 23:30  danielprice
+
+	* /src/giza-drivers.c, /src/giza-subpanel-private.h,
+	  /src/giza-subpanel.c, /src/giza-viewport.c: clipping of plot for
+	  sub-panels now works as expected; advance_subpanel returns flag
+	  when page changes
+
+2014-06-17 23:30  danielprice
+
+	* /interface/giza-cpgplot.c, /interface/giza-pgplot.f90,
+	  /src/giza-histogram.c: implemented giza_histogram_binned;
+	  implements PGBIN
+
+2014-06-17 23:29  danielprice
+
+	* /src/giza-histogram.c: giza_histogram implemented; compatible
+	  with PGHIST
+
+2014-06-17 23:29  danielprice
+
+	* /build/Makefile, /include/giza.h, /interface/giza-cpgplot.c,
+	  /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-histogram.c: added interfaces for histogram routines
+
+2014-06-17 23:29  danielprice
+
+	* /src/giza-drivers.c: can use /xs, /xserve and /xwindow to specify
+	  X-windows device
+
+2014-06-17 23:29  danielprice
+
+	* /build/Makefile, /include/giza.h, /interface/giza-cpgplot.c,
+	  /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-drivers.c, /src/giza-private.h,
+	  /src/giza-subpanel-private.h, /src/giza-subpanel.c,
+	  /src/giza-viewport.c: sub-panelling routines implemented (not yet
+	  working)
+
+2014-03-31 22:29  danielprice
+
+	* /CHANGES, /README: updated changelog
+
+2014-03-27 03:56  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: support for limited scope of
+	  font changing commands in strings, i.e. {\bf text} and {\it text}
+
+2014-03-26 22:10  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: text routines handle escape
+	  sequences for backslash (\\), underscore (\_), hat (\^) and curly
+	  brackets
+
+2014-03-26 22:10  danielprice
+
+	* /src/giza-save.c: giza-save uses GIZA_FONT_LEN to be consistent
+
+2014-03-26 21:22  danielprice
+
+	* /build/Makefile: version bumped to 0.8.1
+
+2014-03-26 21:22  danielprice
+
+	* /src/giza-points.c, /src/giza-ptext.c, /src/giza-qtext.c,
+	  /src/giza-set-font.c: BUG FIX with font changing in rotated
+	  strings; also original font now preserved after string is printed
+
+2014-03-26 21:22  danielprice
+
+	* /src/giza-scanner.l, /src/giza-text-private.h, /src/giza-text.c,
+	  /src/lex.yy.c: can use \bf or \fb to get bold face in strings
+
+2014-03-25 03:52  danielprice
+
+	* /test/test-2D.f90: minor change to 2D test
+
+2014-03-25 03:52  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: updated text scanner (uses
+	  unicode Sun symbol)
+
+2013-12-19 00:04  danielprice
+
+	* /src/giza-render.c: added link to giza_set_colour_table in docs
+
+2013-12-18 23:56  danielprice
+
+	* /src/giza-colour-bar.c, /src/giza-render.c: bug fix in docs
+	  referring to giza_colour_ramp, should be to giza_set_colour_table
+
+2013-12-18 22:52  danielprice
+
+	* /src/giza-box-time.c: updated links in docs
+
+2013-12-18 22:52  danielprice
+
+	* /interface/giza-fortran.F90: affine array does not need to be
+	  passed for most rendered images in simple f90 interface
+
+2013-12-18 22:52  danielprice
+
+	* /test/Makefile, /test/test-2D.f90: added test-2D thanks to
+	  Jean-Francois Gonzalez
+
+2013-12-18 22:52  danielprice
+
+	* /include/giza.h: interface added for giza_get_device_id in giza.h
+
+2013-12-18 22:52  danielprice
+
+	* /interface/giza-cpgplot.c: added cpgtbox interface to
+	  giza_box_time; also bug fix with cpgswin
+
+2013-11-15 01:21  danielprice
+
+	* /CHANGES: updated changelog
+
+2013-11-15 01:19  danielprice
+
+	* /AUTHORS, /build/Makefile: extra files included in release
+	  tarball
+
+2013-11-15 01:13  danielprice
+
+	* /CHANGES: updated changelog for 0.8.0
+
+2013-11-15 00:32  danielprice
+
+	* /docs/api.pl: typo fixed in api script
+
+2013-11-14 23:57  danielprice
+
+	* /interface/giza-cpgplot.c, /interface/giza-pgplot.f90: updated
+	  status of PGPAP/cpgpap
+
+2013-11-14 23:57  danielprice
+
+	* /src/giza-version.c: bug fix with documentation of giza_version
+
+2013-11-14 23:45  danielprice
+
+	* /interface/giza-fortran.F90, /src/giza-version.c: added
+	  giza_version routine to Fortran interface
+
+2013-11-14 23:45  danielprice
+
+	* /build/Makefile, /include/giza.h, /src/giza-version.c: added giza
+	  version routine to query version info
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-vector.c: added docs for giza_vector
+
+2013-11-14 23:45  danielprice
+
+	* /interface/giza-fortran.F90: added integer parameters giving
+	  version number info in Fortran interface
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-drivers.c: debugging/commented out cruft removed
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-drivers.c: updated docs on return value for
+	  giza_open_device
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-drivers.c: device help shows filename option (file.png
+	  instead of /png)
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-driver-xw.c: debugging info removed
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-text-background.c: bug fix with default text background
+	  (should be -1 not 0)
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-clipping.c, /src/giza-private.h: clip setting specific
+	  to each device
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-drivers.c, /src/giza-private.h, /src/giza-ptext.c,
+	  /src/giza-text-background-private.h, /src/giza-text-background.c:
+	  text background colour setting specific to each device
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-line-style.c: get_line_style always returns something
+	  even if giza not started
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-character-size.c, /src/giza-private.h: character height
+	  setting specific to each device
+
+2013-11-14 23:45  danielprice
+
+	* /src/giza-drivers.c, /src/giza-private.h, /src/giza-ptext.c,
+	  /src/giza-qtext.c, /src/giza-text.c, /src/giza.c: fontAngle
+	  setting specific to each device
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-box.c, /src/giza-character-size.c, /src/giza-points.c,
+	  /src/giza-private.h, /src/giza-text.c: fontExtents stored
+	  specific to each device; not globally
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-line-style-private.h, /src/giza-line-style.c,
+	  /src/giza-private.h: line style setting specific to each device
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-line-width.c, /src/giza-private.h: line width setting
+	  specific to each device
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-arrow-style-private.h, /src/giza-arrow-style.c,
+	  /src/giza-arrow.c, /src/giza-private.h: arrow style settings
+	  specific to each device (giza_arrow_t)
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-fill.c, /src/giza-private.h: fill style and settings
+	  specific to each device
+
+2013-11-14 23:44  danielprice
+
+	* /include/giza.h, /src/giza-annotate.c, /src/giza-arrow.c,
+	  /src/giza-box.c, /src/giza-buffering.c, /src/giza-circle.c,
+	  /src/giza-colour-bar.c, /src/giza-contour.c, /src/giza-draw.c,
+	  /src/giza-drivers.c, /src/giza-error-bars.c,
+	  /src/giza-function-t.c, /src/giza-function-x.c,
+	  /src/giza-function-y.c, /src/giza-line.c, /src/giza-points.c,
+	  /src/giza-polygon.c, /src/giza-private.h, /src/giza-ptext.c,
+	  /src/giza-rectangle.c, /src/giza-render.c, /src/giza-vector.c,
+	  /src/giza.c: buffering setting is specific to each device
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-colour-index.c: commented out temporary stuff
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-box.c, /src/giza-drivers.c, /src/giza-private.h,
+	  /src/giza-viewport-private.h, /src/giza-viewport.c,
+	  /src/giza-window.c: viewport settings now specific to each device
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-annotate.c, /src/giza-box.c, /src/giza-driver-xw.c,
+	  /src/giza-drivers.c, /src/giza-private.h, /src/giza-transforms.c,
+	  /src/giza-viewport.c, /src/giza-window-private.h,
+	  /src/giza-window.c: window settings now specific to each device
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-drivers.c: typo fixed
+
+2013-11-14 23:44  danielprice
+
+	* /src/giza-driver-xw.c, /src/giza-drivers.c, /src/giza-private.h,
+	  /src/giza-prompting-private.h, /src/giza-prompting.c: start/stop
+	  prompting setting now specific to each device, not global
+
+2013-11-14 23:43  danielprice
+
+	* /interface/giza-cpgplot.c, /interface/giza-fortran.F90,
+	  /interface/giza-pgplot.f90, /src/giza-drivers.c, /src/giza.c:
+	  numbering of devices now from 1->N externally, from 0->N-1
+	  internally; implemented PGQID/giza_get_device_id
+
+2013-11-14 23:43  danielprice
+
+	* /src/giza-driver-xw.c, /src/giza-drivers.c, /src/giza-paper.c,
+	  /src/giza-private.h: implemented resizing of X-window/bitmap
+	  devices via giza_paper_size (not perfect yet)
+
+2013-11-14 23:43  danielprice
+
+	* /src/giza-driver-eps-private.h, /src/giza-driver-eps.c,
+	  /src/giza-driver-null-private.h, /src/giza-driver-null.c,
+	  /src/giza-driver-pdf-private.h, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png-private.h, /src/giza-driver-png.c,
+	  /src/giza-driver-ps-private.h, /src/giza-driver-ps.c,
+	  /src/giza-driver-svg-private.h, /src/giza-driver-svg.c,
+	  /src/giza-driver-xw-private.h, /src/giza-driver-xw.c,
+	  /src/giza-drivers-private.h, /src/giza-drivers.c,
+	  /src/giza-paper.c, /src/giza-private.h, /src/giza.c: deviceOpen
+	  and drawn now specific to each device: removed sizeSpecified and
+	  reworked the way devices are opened to handle this
+	  (giza_open_device now calls giza_open_device_size rather than
+	  vice-versa)
+
+2013-11-14 23:43  danielprice
+
+	* /build/Makefile, /include/giza.h, /interface/giza-cpgplot.c,
+	  /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-arrow.c, /src/giza-box.c, /src/giza-character-size.c,
+	  /src/giza-circle.c, /src/giza-clipping.c,
+	  /src/giza-colour-index.c, /src/giza-contour.c,
+	  /src/giza-cursor-routines.c, /src/giza-device-has-cursor.c,
+	  /src/giza-draw-background.c, /src/giza-draw.c,
+	  /src/giza-driver-eps.c, /src/giza-driver-null.c,
+	  /src/giza-driver-pdf.c, /src/giza-driver-png.c,
+	  /src/giza-driver-ps.c, /src/giza-driver-svg.c,
+	  /src/giza-driver-xw-private.h, /src/giza-driver-xw.c,
+	  /src/giza-drivers.c, /src/giza-error-bars.c, /src/giza-fill.c,
+	  /src/giza-function-t.c, /src/giza-function-x.c,
+	  /src/giza-function-y.c, /src/giza-get-surface-size.c,
+	  /src/giza-line-cap.c, /src/giza-line-style.c,
+	  /src/giza-line-width.c, /src/giza-line.c, /src/giza-move.c,
+	  /src/giza-paper.c, /src/giza-points.c, /src/giza-polygon.c,
+	  /src/giza-print-id.c, /src/giza-private.h, /src/giza-ptext.c,
+	  /src/giza-qtext.c, /src/giza-rectangle.c, /src/giza-render.c,
+	  /src/giza-set-font.c, /src/giza-stroke.c, /src/giza-text.c,
+	  /src/giza-transforms.c, /src/giza-viewport.c, /src/giza-window.c,
+	  /src/lex.yy.c: multiple device support implemented (LOTS of code
+	  changed): added giza_select/pgslct routines to switch between
+	  devices
+
+2013-08-23 12:43  danielprice
+
+	* /src/giza-driver-xw.c, /src/giza-drivers.c: better cleanup on
+	  failure to open device; does not require giza_close_device call
+
+2013-06-18 11:50  danielprice
+
+	* /src/giza-colour-table.c: silenced warning regarding colour not
+	  set if NaNs input to giza-render routines
+
+2013-06-08 17:48  danielprice
+
+	* /include/giza.h, /src/giza-driver-xw.c, /src/giza-drivers.c,
+	  /src/giza-io.c, /src/giza-private.h, /src/giza.c: added autolog
+	  feature: controlled via begin_autolog/end_autolog routines and
+	  GIZA_LOG environment variable
+
+2013-06-08 17:45  danielprice
+
+	* /build/Makefile: link for -lgfortran fixed
+
+2013-06-08 17:44  danielprice
+
+	* /src/giza-vector.c: BUG FIX with vector arrows in double
+	  precision
+
+2013-06-08 17:43  danielprice
+
+	* /interface/giza-fortran.F90: newline removed
+
+2013-06-08 17:42  danielprice
+
+	* /src/giza-window.c: floating exception fixed in
+	  giza_set_window_equal_scale if width=height=0
+
+2013-02-20 05:09  danielprice
+
+	* /build/Makefile: gfortran version checking removed (obsolete/no
+	  longer necessary)
+
+2013-02-18 22:45  danielprice
+
+	* /CHANGES, /Makefile, /README: dates/changelog updated for 0.7.6
+
+2013-02-18 22:40  danielprice
+
+	* /Makefile, /build/Makefile: minor fixes to install target; should
+	  now work with Macports
+
+2013-02-18 22:39  danielprice
+
+	* /interface/giza-fortran.F90: [PATCH] fortran interface compiles
+	  with ifort+debugging; thanks to Andy McLeod
+
+2012-11-22 01:10  danielprice
+
+	* /src/giza-drivers.c: bug fix with box being drawn randomly due to
+	  giza_stroke call
+
+2012-11-16 02:30  danielprice
+
+	* /build/Makefile, /test/Makefile: better clean targets for
+	  Makefiles
+
+2012-11-16 02:22  danielprice
+
+	* /CHANGES: updated CHANGES for 0.7.5
+
+2012-11-16 02:14  danielprice
+
+	* /src/giza-drivers.c: compiler warnings with strncpy fixed (clang)
+
+2012-11-16 02:14  danielprice
+
+	* /build/Makefile: version number bumped to 0.7.5
+
+2012-11-16 02:14  danielprice
+
+	* /src/giza-drivers.c: compiler warning fixed
+
+2012-11-16 02:13  danielprice
+
+	* /AUTHORS: added AUTHORS file
+
+2012-11-16 02:13  danielprice
+
+	* /INSTALL: updated INSTALL instructions
+
+2012-11-16 02:13  danielprice
+
+	* /CHANGES, /README: CHANGES file added; README now contains small
+	  blurb
+
+2012-11-16 02:12  danielprice
+
+	* /COPYING, /LICENSE: LICENSE file renamed to COPYING
+
+2012-11-16 02:11  danielprice
+
+	* /src/giza-driver-xw.c: XW driver no longer uses XNextEvent to
+	  prevent compile problems on Ubuntu; also initial window call uses
+	  WhitePixel as defined by Xlib
+
+2012-11-16 02:11  danielprice
+
+	* /test/Makefile, /test/test-arrow.c, /test/test-box.c: added
+	  box/more arrow tests
+
+2012-11-16 02:11  danielprice
+
+	* /src/giza-arrow.c: giza arrow uses semi-angle instead of full
+	  angle, as in PGPLOT (pgdemo1)
+
+2012-11-16 02:10  danielprice
+
+	* /src/giza-arrow.c: BUG FIX with arrow heads becoming small in
+	  certain directions
+
+2012-11-16 02:10  danielprice
+
+	* /src/giza-drivers.c: giza_stroke called after device opened;
+	  avoids black page bug if no box/window/viewport called prior to
+	  drawing
+
+2012-11-09 02:02  danielprice
+
+	* /src/giza-colour-palette.c: new colour palette options added
+
+2012-11-09 02:00  danielprice
+
+	* /src/giza-box.c: BUG FIX with log axis labelling if interval < 10
+
+2012-11-02 04:07  danielprice
+
+	* /build/Makefile: build respects DESTDIR conventions
+
+2012-11-02 04:06  danielprice
+
+	* /src/giza-colour-palette.c: various line palettes added; can be
+	  selected with GIZA_PALETTE environment variable
+
+2012-11-02 04:06  danielprice
+
+	* /include/giza.h, /src/giza-colour-index.c: routines added to set
+	  colour representation in rgb
+
+2012-08-28 07:37  danielprice
+
+	* /README: README added to repository
+
+2012-08-28 07:36  danielprice
+
+	* /build/Makefile: README included in distribution
+
+2012-08-28 07:26  danielprice
+
+	* /src/giza-driver-xw.c: commented out X-windows error-handling
+	  routine to avoid compilation problems in Ubuntu
+
+2012-08-23 12:22  danielprice
+
+	* /src/giza-driver-eps.c, /src/giza-driver-svg.c: uses _0000
+	  numbering if part of sequence for eps and svg devices (by
+	  renaming file when changing page)
+
+2012-08-23 11:40  danielprice
+
+	* /src/giza-driver-eps.c, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png-private.h, /src/giza-driver-png.c,
+	  /src/giza-driver-ps.c, /src/giza-driver-svg.c,
+	  /src/giza-drivers-private.h, /src/giza-drivers.c: png device
+	  names first file differently depending on whether or not it is
+	  part of a sequence
+
+2012-08-23 06:54  danielprice
+
+	* /test/Makefile, /test/test-fortran.f90: test Makefile compiles a
+	  fortran example
+
+2012-08-23 06:54  danielprice
+
+	* /src/giza-drivers.c: can specify hardcopy devices just using the
+	  filename e.g. crap.png instead of having to type crap.png/png
+
+2012-08-22 06:06  danielprice
+
+	* /src/giza-render.c: better handling of valMin=valMax in
+	  giza_render_float
+
+2012-07-21 11:00  danielprice
+
+	* /build/Makefile: minor change to comment
+
+2012-07-21 11:00  danielprice
+
+	* /interface/giza-fortran.F90: BUG FIX with giza_function_x/y/t
+	  interfaces with gfortran v4.7; also giza_plot_line now giza_line
+	  in Fortran interface
+
+2012-06-15 09:38  danielprice
+
+	* /build/Makefile: bumped version to 0.7.4 in Makefile
+
+2012-06-15 07:04  danielprice
+
+	* /interface/giza-fortran.F90, /src/giza-rectangle.c: added
+	  giza_rectangle_rounded routine for plotting rectangles with
+	  rounded corners
+
+2012-06-15 06:55  danielprice
+
+	* /src/giza-cursor-routines.c: improvements to cursor routines:
+	  mark_with_cursor handled by get_key_press routine, allows polygon
+	  selection to be redrawn on the fly like giza_band; get_key_press
+	  takes array of anchor points instead of just one; get_key_press
+	  handles and returns shift-click event; added mark_line_char
+	  routines which return last character pressed, like giza_band
+
+2012-06-15 06:52  danielprice
+
+	* /include/giza-shared.h, /interface/giza-fortran.F90,
+	  /src/giza-band-private.h, /src/giza-band.c,
+	  /src/giza-cursor-private.h, /src/giza-driver-xw-private.h,
+	  /src/giza-driver-xw.c, /src/giza-drivers-private.h,
+	  /src/giza-drivers.c, /src/giza-get-key-press.c: improvements to
+	  cursor routines: mark_with_cursor handled by get_key_press
+	  routine, allows polygon selection to be redrawn on the fly like
+	  giza_band; get_key_press takes array of anchor points instead of
+	  just one; get_key_press handles and returns shift-click event;
+	  added mark_line_char routines which return last character
+	  pressed, like giza_band
+
+2012-06-15 06:51  danielprice
+
+	* /src/giza-band.c: circle cursor uses filled, partially
+	  transparent circle similar to rectangle selection
+
+2012-06-13 10:25  danielprice
+
+	* /include/giza-shared.h, /interface/giza-fortran.F90,
+	  /src/giza-driver-xw.c: xw driver returns key bindings for
+	  right/middle clicks and scroll events
+
+2012-05-16 07:39  danielprice
+
+	* /Makefile, /build/Makefile: version number bumped
+
+2012-05-16 07:37  danielprice
+
+	* /docs/get-source-files.pl: minor change to script
+
+2012-05-16 06:51  danielprice
+
+	* /build/Makefile: uses X11DIR to specify libX11 location in
+	  Makefile
+
+2012-05-16 06:01  danielprice
+
+	* /interface/giza-cpgplot.c: fixed comment so does not get deleted
+	  by header script
+
+2012-05-16 06:01  danielprice
+
+	* /include/cpgplot.h: updated comments in cpgplot.h
+
+2012-05-16 06:00  danielprice
+
+	* /include/giza.h, /interface/giza-cpgplot.c,
+	  /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-annotate.c, /src/giza-arrow-style-private.h,
+	  /src/giza-arrow-style.c, /src/giza-arrow.c,
+	  /src/giza-band-private.h, /src/giza-band-style.c,
+	  /src/giza-band.c, /src/giza-box-time.c, /src/giza-box.c,
+	  /src/giza-buffering.c, /src/giza-character-size-private.h,
+	  /src/giza-character-size.c, /src/giza-circle.c,
+	  /src/giza-clipping.c, /src/giza-colour-bar.c,
+	  /src/giza-colour-index.c, /src/giza-colour-palette.c,
+	  /src/giza-colour-private.h, /src/giza-colour-table.c,
+	  /src/giza-contour.c, /src/giza-cursor-private.h,
+	  /src/giza-cursor-routines.c, /src/giza-device-has-cursor.c,
+	  /src/giza-draw-background.c, /src/giza-draw.c,
+	  /src/giza-driver-eps-private.h, /src/giza-driver-eps.c,
+	  /src/giza-driver-null-private.h, /src/giza-driver-null.c,
+	  /src/giza-driver-pdf-private.h, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png-private.h, /src/giza-driver-png.c,
+	  /src/giza-driver-ps-private.h, /src/giza-driver-ps.c,
+	  /src/giza-driver-svg-private.h, /src/giza-driver-svg.c,
+	  /src/giza-driver-xw-private.h, /src/giza-driver-xw.c,
+	  /src/giza-drivers-private.h, /src/giza-drivers.c,
+	  /src/giza-environment.c, /src/giza-error-bars.c,
+	  /src/giza-fill-private.h, /src/giza-fill.c,
+	  /src/giza-format-number.c, /src/giza-function-t.c,
+	  /src/giza-function-x.c, /src/giza-function-y.c,
+	  /src/giza-get-key-press.c, /src/giza-get-surface-size.c,
+	  /src/giza-io-private.h, /src/giza-io.c, /src/giza-label.c,
+	  /src/giza-line-cap.c, /src/giza-line-style-private.h,
+	  /src/giza-line-style.c, /src/giza-line-width.c, /src/giza-line.c,
+	  /src/giza-move.c, /src/giza-paper.c, /src/giza-points.c,
+	  /src/giza-polygon.c, /src/giza-print-id.c, /src/giza-private.h,
+	  /src/giza-prompting-private.h, /src/giza-prompting.c,
+	  /src/giza-ptext.c, /src/giza-qtext.c, /src/giza-rectangle.c,
+	  /src/giza-render-private.h, /src/giza-render.c, /src/giza-save.c,
+	  /src/giza-set-font-private.h, /src/giza-set-font.c,
+	  /src/giza-stroke-private.h, /src/giza-stroke.c,
+	  /src/giza-text-background-private.h, /src/giza-text-background.c,
+	  /src/giza-text-private.h, /src/giza-text.c,
+	  /src/giza-transforms-private.h, /src/giza-transforms.c,
+	  /src/giza-vector.c, /src/giza-viewport-private.h,
+	  /src/giza-viewport.c, /src/giza-warnings-private.h,
+	  /src/giza-warnings.c, /src/giza-window-private.h,
+	  /src/giza-window.c, /src/giza.c, /test/test-XOpenDisplay.c,
+	  /test/test-arrow.c, /test/test-band.c, /test/test-box.c,
+	  /test/test-cairo-xw.c, /test/test-change-page.c,
+	  /test/test-circle.c, /test/test-colour-index.c,
+	  /test/test-contour.c, /test/test-environment.c,
+	  /test/test-error-bars.c, /test/test-format-number.c,
+	  /test/test-line-cap.c, /test/test-line-style.c,
+	  /test/test-openclose.c, /test/test-pdf.c, /test/test-png.c,
+	  /test/test-points.c, /test/test-qtext.c, /test/test-rectangle.c,
+	  /test/test-render.c, /test/test-set-line-width.c,
+	  /test/test-vector.c, /test/test-window.c, /test/test-xw.c: file
+	  headers updated and unified across all files
+
+2012-05-16 05:56  danielprice
+
+	* /src/giza-driver-xw.c: typo fixed
+
+2012-05-16 05:56  danielprice
+
+	* /src/giza-io-private.h, /src/giza-io.c: giza-io routines declare
+	  const char* not just char; avoids compiler warnings
+
+2012-05-16 05:56  danielprice
+
+	* /src/giza-driver-xw.c: use surface_finish and checks for errors
+	  when closing xlib surface
+
+2012-05-16 05:56  danielprice
+
+	* /test/Makefile: makefile compiles several tests
+
+2012-05-16 05:55  danielprice
+
+	* /src/giza-driver-eps.c, /src/giza-driver-pdf.c,
+	  /src/giza-driver-ps.c, /src/giza-driver-svg.c: better error
+	  handling on closing vector surfaces (picks up cairo bug in Lion)
+
+2012-05-14 23:55  danielprice
+
+	* /test/Makefile, /test/test-png.c: added png test
+
+2012-05-08 06:23  danielprice
+
+	* /test/Makefile, /test/test-xw.c: updated xw test
+
+2012-05-08 05:54  danielprice
+
+	* /test/test-cairo-xw.c: test reports cairo version
+
+2012-05-08 05:35  danielprice
+
+	* /test/Makefile, /test/test-cairo-xw.c: added Makefile for tests
+
+2012-05-08 05:20  danielprice
+
+	* /test/test-cairo-xw.c, /test/test-xw.c: added tests for the xw
+	  bug
+
+2012-03-22 11:43  danielprice
+
+	* /include/giza-shared.h: defined GIZA_FOREGROUND and
+	  GIZA_BACKGROUND
+
+2012-03-22 11:42  danielprice
+
+	* /include/giza.h, /interface/giza-fortran.F90,
+	  /src/giza-render-private.h, /src/giza-render.c: added
+	  giza_render_alpha routines for brightness-corrected rendering
+
+2012-03-22 11:42  danielprice
+
+	* /interface/giza-fortran.F90: optional viewport arguments to
+	  giza_plot handled correctly
+
+2012-03-22 11:41  danielprice
+
+	* /include/giza-shared.h: giza_units_normalised added
+
+2012-03-22 11:41  danielprice
+
+	* /interface/giza-fortran.F90, /test/test-fortran.f90: work on
+	  giza_plot continues; handles and renders 2D array
+
+2012-03-09 01:51  danielprice
+
+	* /interface/giza-fortran.F90: bug fix with gfortran4.6 and
+	  giza_open interface
+
+2012-03-07 05:14  danielprice
+
+	* /src/giza-driver-xw.c: X11 driver no longer uses
+	  XDefaultGCOfScreen so should work on older systems
+
+2012-03-07 05:14  danielprice
+
+	* /build/Makefile, /include/giza.h, /interface/giza-fortran.F90,
+	  /interface/giza-pgplot.f90, /src/giza-box-time.c:
+	  routines/interfaces added for pgtbox/giza_box_time (currently
+	  just calls giza_box with options unchanged)
+
+2012-03-07 05:14  danielprice
+
+	* /interface/giza-fortran.F90: high level giza_open/giza_close
+	  interfaces added to Fortran interface
+
+2012-03-07 05:14  danielprice
+
+	* /build/Makefile, /include/giza.h, /src/giza-set-font.c: freetype
+	  font loading added (experimental, not compiled by default)
+
+2012-03-07 05:14  danielprice
+
+	* /src/giza-box.c: minor fix to warning
+
+2012-03-07 05:14  danielprice
+
+	* /src/giza-box.c: minor fix to documentation
+
+2012-03-07 05:13  danielprice
+
+	* /src/giza-driver-eps.c: fixed icc warnings for eps driver
+
+2012-03-07 05:13  danielprice
+
+	* /interface/giza-pgplot.f90, /src/giza-drivers.c,
+	  /src/giza-private.h, /src/giza.c: PGQINF fully implemented;
+	  additional queries added to giza_query_device
+
+2012-03-07 05:13  danielprice
+
+	* /src/giza-driver-png.c: bug fix with .png.png naming in png
+	  device; change page now calls close_device_png to avoid repeated
+	  code
+
+2012-03-07 05:13  danielprice
+
+	* /src/giza-box.c: obsolete comment removed
+
+2012-03-07 05:13  danielprice
+
+	* /src/giza-box.c: improved readability of giza_box; variables
+	  better named; docs added for M and L options
+
+2012-03-07 05:13  danielprice
+
+	* /src/giza-box.c: minor cleanup, commented-out stuff removed
+
+2012-03-07 05:13  danielprice
+
+	* /src/giza-box.c, /src/giza-environment.c: full range of box/env
+	  options implemented (grid lines, log axes)
+
+2012-03-07 05:12  danielprice
+
+	* /src/giza-line-style.c: minor cleanups
+
+2012-03-07 05:12  danielprice
+
+	* /src/giza-drivers.c: BUG FIX with default viewport on first page
+	  (character height not initialised correctly), affects
+	  giza_environment
+
+2011-12-14 04:35  danielprice
+
+	* /build/Makefile: make clean does not destroy cairo libraries if
+	  installed to giza/lib
+
+2011-12-09 02:17  danielprice
+
+	* /interface/giza-fortran.F90: giza_set_colour_representation_alpha
+	  now folded into generic giza_set_colour_representation interface
+	  in Fortran
+
+2011-12-07 11:14  danielprice
+
+	* /src/giza-colour-bar.c: bug fix with viewport/window not being
+	  reset properly in giza_colour_bar/pgwedg
+
+2011-12-07 03:31  terrencetricco
+
+	* /src/giza-colour-bar.c: Colour bar affine fix
+
+2011-12-07 01:43  danielprice
+
+	* /include/giza.h, /interface/giza-fortran.F90,
+	  /src/giza-colour-table.c: bug fix with giza_rgb_from_table_float
+
+2011-12-07 01:43  danielprice
+
+	* /src/giza-line-width.c: silenced warning if line width too small
+	  (now just silently sets the lw to the smallest possible)
+
+2011-11-16 21:25  danielprice
+
+	* /build/Makefile, /include/giza.h, /interface/giza-cpgplot.c,
+	  /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-colour-bar.c: implemented giza_colour_bar/PGWEDG
+
+2011-11-16 21:24  danielprice
+
+	* /docs/api.pl: added comments to api web page
+
+2011-11-16 11:40  danielprice
+
+	* /src/giza-driver-xw.c: x errors are errors, not warnings
+
+2011-11-16 10:30  danielprice
+
+	* /src/giza-driver-xw.c: added routine to handle X11 protocol
+	  errors nicely (issues a giza warning)
+
+2011-11-16 00:04  danielprice
+
+	* /src/giza-driver-xw.c: added code (commented out) for better GC
+	  create/free in xw driver
+
+2011-11-14 23:30  danielprice
+
+	* /src/giza-driver-svg.c: icc warnings silenced in svg driver
+
+2011-11-14 02:16  danielprice
+
+	* /docs/get-fortran-params.pl: fixed script with new location for
+	  giza-shared.h
+
+2011-11-14 02:16  danielprice
+
+	* /include/giza-shared.h, /include/giza.h,
+	  /interface/giza-cpgplot.c, /interface/giza-fortran.F90,
+	  /interface/giza-pgplot.f90, /src/giza-render-private.h,
+	  /src/giza-render.c: added extend parameter to image rendering
+	  routines to set the padding type around the image
+
+2011-11-13 22:43  danielprice
+
+	* /src/giza-render.c: image padding set back to default instead of
+	  repeat in giza_render (fixes pgdemo4)
+
+2011-11-13 22:43  danielprice
+
+	* /interface/giza-pgplot.f90: debugging statements removed
+
+2011-11-13 22:39  danielprice
+
+	* /interface/giza-cpgplot.c, /interface/giza-pgplot.f90: bug fix
+	  with translation of tr->affine in pgplot interfaces if shear
+	  present (fixes pgdemo4)
+
+2011-11-11 06:21  danielprice
+
+	* /interface/giza-cpgplot.c, /interface/giza-pgplot.f90: updated
+	  PGCTAB calls to giza_set_colour_table to handle
+	  contrast/brightness
+
+2011-11-11 05:54  danielprice
+
+	* /include/giza.h, /interface/giza-fortran.F90,
+	  /src/giza-colour-table.c: added contrast and brightness arguments
+	  to giza_set_colour_table; implemented ability to invert colour
+	  table (not yet full support for brightness and contrast)
+
+2011-11-10 21:48  danielprice
+
+	* /src/giza-contour.c: BUG FIX with indexing in contour_float
+
+2011-11-10 21:47  danielprice
+
+	* /build/Makefile: clean removes .mod files from Fortran build
+
+2011-11-10 21:47  danielprice
+
+	* /test/test-box.c, /test/test-circle.c, /test/test-environment.c,
+	  /test/test-error-bars.c, /test/test-line-cap.c,
+	  /test/test-line-style.c, /test/test-points.c,
+	  /test/test-set-line-width.c: permissions fixed
+
+2011-11-10 05:26  danielprice
+
+	* /build/Makefile: 0.7.2
+
+2011-11-10 05:14  danielprice
+
+	* /build/Makefile, /include/cpgplot.h, /include/giza-shared.h,
+	  /include/giza.h, /interface/cpgplot.h, /src/giza-shared.h,
+	  /src/giza.h: public header files now live in the include
+	  directory rather than being copied around
+
+2011-11-10 04:46  danielprice
+
+	* /src/giza-set-font.c: minor fix in api documentation
+
+2011-11-10 03:46  danielprice
+
+	* /src/giza-viewport.c, /src/giza-window.c: compiler warnings
+	  fixed/uses fabs instead of abs
+
+2011-11-10 03:40  danielprice
+
+	* /src/giza-vector.c: bug fix with giza-vector in previous commit
+
+2011-11-10 03:38  danielprice
+
+	* /src/lex.yy.c: added const to all array input variables;
+	  consistent with cpgplot interface
+
+2011-11-10 03:37  danielprice
+
+	* /src/giza-drivers-private.h, /src/giza-render-private.h,
+	  /src/giza-text-private.h: added const to all array input
+	  variables; consistent with cpgplot interface
+
+2011-11-10 03:37  danielprice
+
+	* /interface/giza-cpgplot.c, /src/giza-annotate.c,
+	  /src/giza-contour.c, /src/giza-drivers.c, /src/giza-error-bars.c,
+	  /src/giza-label.c, /src/giza-line.c, /src/giza-points.c,
+	  /src/giza-polygon.c, /src/giza-ptext.c, /src/giza-qtext.c,
+	  /src/giza-render.c, /src/giza-scanner.l, /src/giza-vector.c,
+	  /src/giza.h: added const to all array input variables; consistent
+	  with cpgplot interface
+
+2011-11-10 01:47  danielprice
+
+	* /src/giza-viewport.c, /src/giza-window.c: [PATCH contributed by
+	  Daniel Kelson] viewport and window now handle xmin>xmax and
+	  ymin>ymax correctly
+
+2011-11-10 01:17  danielprice
+
+	* /interface/giza-cpgplot.c: added cpgimag interface
+
+2011-11-10 01:09  danielprice
+
+	* /interface/giza-cpgplot.c: updated cpgplot interface to include
+	  imaging routines; now similar to libpgplot in implementation
+	  level
+
+2011-11-10 01:09  danielprice
+
+	* /src/giza-contour.c, /src/giza-cursor-routines.c,
+	  /src/giza-points.c, /src/giza-render-private.h,
+	  /src/giza-render.c, /src/giza-vector.c, /src/giza.h: [PATCH
+	  contributed by Daniel Kelson] Arrays now passed as C pointers,
+	  not fixed size; fixes cpgplot interface issues; tested against
+	  splash and works fine
+
+2011-11-04 01:06  danielprice
+
+	* /src/giza-contour.c, /src/giza-cursor-routines.c,
+	  /src/giza-points.c, /src/giza-render-private.h,
+	  /src/giza-render.c, /src/giza-vector.c, /src/giza.h: reverted to
+	  v258 to avoid seg faults
+
+2011-10-27 06:05  terrencetricco
+
+	* /src/giza-contour.c, /src/giza-cursor-routines.c,
+	  /src/giza-points.c, /src/giza-render-private.h,
+	  /src/giza-render.c, /src/giza-vector.c, /src/giza.h: Function
+	  calls now pass pointers to arrays
+
+2011-10-18 22:32  danielprice
+
+	* /src/giza-colour-index.c, /src/giza-error-bars.c,
+	  /src/giza-private.h: implemented semi-transparent error bar
+	  plotting
+
+2011-09-26 03:31  danielprice
+
+	* /src/giza-line-style.c: typo in warning message fixed
+
+2011-09-21 07:41  danielprice
+
+	* /src/giza-box.c, /src/giza-character-size.c, /src/giza-points.c,
+	  /src/giza-ptext.c, /src/giza-qtext.c: bug fix (regression) with
+	  character height queries (font extents call now back in set
+	  character height where it belongs)
+
+2011-09-21 06:15  danielprice
+
+	* /src/giza-colour-table.c: mistaken const declarations removed;
+	  replaced with static
+
+2011-09-21 06:15  danielprice
+
+	* /src/giza-colour-table.c: mistaken const declarations removed
+
+2011-09-21 00:16  danielprice
+
+	* /docs/api.pl, /src/giza-colour-palette.c,
+	  /src/giza-colour-table.c, /src/giza-render.c: bug fixes with
+	  generation of api documentation
+
+2011-09-21 00:15  danielprice
+
+	* /src/giza-set-font.c: uses explicit font face
+	  creation/destruction to avoid memory leaks (cairo >=1.8 only)
+
+2011-09-21 00:15  danielprice
+
+	* /src/giza-drivers.c: character height initialises after font
+	  (does not really matter, but better this way)
+
+2011-09-21 00:15  danielprice
+
+	* /src/giza-colour-index.c: colour index variables declared static
+
+2011-09-21 00:14  danielprice
+
+	* /docs/get-fortran-params.pl: minor edit to fortran-params script
+
+2011-09-21 00:14  danielprice
+
+	* /src/giza-contour.c: bug fix with array overflow in giza_contour
+
+2011-09-15 06:46  danielprice
+
+	* /src/giza-points.c: markerHeight declared static
+
+2011-09-15 05:02  danielprice
+
+	* /test/test-openclose.c: basic test of multiple open/close calls
+	  added
+
+2011-09-15 05:02  danielprice
+
+	* /src/giza-drivers.c: valgrind bug fix with init_device_list using
+	  uninitialised string
+
+2011-09-15 05:02  danielprice
+
+	* /src/giza-box.c: bug fix with log labelling of 1 and 10
+
+2011-09-14 12:19  danielprice
+
+	* /test/test-XOpenDisplay.c: test added for memory leaks in X11
+
+2011-09-12 23:02  danielprice
+
+	* /interface/giza-pgplot.f90, /src/giza-shared.h: changed order of
+	  long/short dashes; line styles in libpgplot now always match
+	  pgplot
+
+2011-09-12 23:01  danielprice
+
+	* /docs/get-fortran-params.pl, /interface/giza-fortran.F90: updated
+	  list of fortran params automatically
+
+2011-09-12 22:09  danielprice
+
+	* /src/giza-label.c: bug fix with chopped labels in giza_label
+
+2011-09-12 22:05  danielprice
+
+	* /src/giza-annotate.c: giza-annotate code shortened (unnecessary
+	  extra lines removed)
+
+2011-09-12 22:01  danielprice
+
+	* /src/giza-viewport.c: bug fix in default viewport causing labels
+	  with giza_label to be clipped
+
+2011-09-12 11:35  danielprice
+
+	* /src/giza-box.c, /src/giza-character-size.c, /src/giza-points.c,
+	  /src/giza-ptext.c, /src/giza-qtext.c: [optimisation] do not query
+	  the font extents every time the character size is set; instead do
+	  this only in the routines that need to use Sets.font information
+
+2011-09-12 02:03  danielprice
+
+	* /build/Makefile: bumped version number
+
+2011-09-09 05:08  danielprice
+
+	* /src/giza-paper.c: header included for internal routine
+
+2011-09-09 02:14  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-driver-eps.c, /src/giza-driver-null.c,
+	  /src/giza-driver-pdf.c, /src/giza-driver-png.c,
+	  /src/giza-driver-ps.c, /src/giza-driver-svg.c,
+	  /src/giza-driver-xw.c, /src/giza-drivers-private.h,
+	  /src/giza-drivers.c, /src/giza-paper.c, /src/giza-private.h,
+	  /src/giza.h: rejigged the way the paper size is set; can now be
+	  set in different units; set_paper_size calls redone; Dev.widthCM
+	  and Dev.heightCM removed; less confusing all round
+
+2011-09-09 02:14  danielprice
+
+	* /src/giza-paper.c: paper size queries use Dev.width not
+	  Dev.widthCM (safer)
+
+2011-09-09 02:13  danielprice
+
+	* /src/giza-viewport.c: set_viewport_inches uses Dev.width not
+	  Dev.widthCM (safer)
+
+2011-09-06 23:34  danielprice
+
+	* /src/giza-driver-ps.c: added comments to postscript header
+
+2011-09-06 23:34  danielprice
+
+	* /src/giza-drivers.c, /src/giza-viewport-private.h,
+	  /src/giza-viewport.c: standard viewport (as used by
+	  giza_environment) now leaves boundary of 4 character heights on
+	  each size rather than a fixed fraction
+
+2011-09-06 11:34  danielprice
+
+	* /build/Makefile: gfortran version checks work with old gfortran
+	  (v4.1.2) and give error
+
+2011-09-06 11:16  danielprice
+
+	* /build/Makefile: checks gfortran version number and gives error
+	  if gfortran is too old to compile fortran interface
+
+2011-09-05 22:01  danielprice
+
+	* /build/Makefile: added $PREFIX/include to include line
+
+2011-09-05 22:01  danielprice
+
+	* /src/giza-driver-pdf.c, /src/giza-driver-ps.c: all drivers call
+	  get_filename_for_device; avoids trim/case issues
+
+2011-09-05 13:23  danielprice
+
+	* /src/giza-drivers.c: id decreased again when device close (fixes
+	  spurious warnings)
+
+2011-09-05 13:23  danielprice
+
+	* /build/Makefile: minor changes to Makefile structure
+
+2011-09-05 13:05  danielprice
+
+	* /build/Makefile: still working on dylib vs .so; works on both now
+
+2011-09-05 12:59  danielprice
+
+	* /build/Makefile: build more portable on os/x vs linux
+
+2011-09-05 12:17  danielprice
+
+	* /build/Makefile: shared lib extension determined automatically
+
+2011-08-31 11:08  danielprice
+
+	* /build/Makefile, /interface/giza-fortran.F90,
+	  /interface/giza-pgplot.f90, /src/giza-colour-index.c,
+	  /src/giza-colour-palette.c, /src/giza-colour-private.h,
+	  /src/giza-drivers.c, /src/giza-shared.h, /src/giza.h: added
+	  giza_colour_palette routines; libpgplot uses PGPLOT colour
+	  palette by default
+
+2011-08-31 05:28  danielprice
+
+	* /interface/giza-fortran.F90: bug fix with len_trim in f2c string
+	  conversion
+
+2011-08-30 22:28  danielprice
+
+	* /src/giza-annotate.c, /src/giza-arrow.c, /src/giza-band.c,
+	  /src/giza-box.c, /src/giza-character-size.c, /src/giza-circle.c,
+	  /src/giza-clipping.c, /src/giza-colour-index.c,
+	  /src/giza-colour-private.h, /src/giza-colour-table.c,
+	  /src/giza-contour.c, /src/giza-cursor-routines.c,
+	  /src/giza-device-has-cursor.c, /src/giza-driver-eps.c,
+	  /src/giza-driver-null.c, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png.c, /src/giza-driver-svg.c,
+	  /src/giza-driver-xw.c, /src/giza-drivers.c,
+	  /src/giza-environment.c, /src/giza-error-bars.c,
+	  /src/giza-fill.c, /src/giza-format-number.c,
+	  /src/giza-function-t.c, /src/giza-function-x.c,
+	  /src/giza-function-y.c, /src/giza-get-key-press.c,
+	  /src/giza-get-surface-size.c, /src/giza-io.c, /src/giza-label.c,
+	  /src/giza-line-style.c, /src/giza-line-width.c, /src/giza-line.c,
+	  /src/giza-points.c, /src/giza-polygon.c, /src/giza-print-id.c,
+	  /src/giza-prompting.c, /src/giza-qtext.c, /src/giza-render.c,
+	  /src/giza-set-font.c, /src/giza-stroke.c, /src/giza-text.c,
+	  /src/giza-vector.c, /src/giza-viewport.c, /src/giza-warnings.c,
+	  /src/giza-window.c, /src/giza.c, /src/giza.h, /src/lex.yy.c:
+	  spurious whitespace at end of lines removed (script)
+
+2011-08-30 22:20  danielprice
+
+	* /src/giza-annotate.c: better placement of text above viewport in
+	  giza-annotate
+
+2011-08-30 22:10  danielprice
+
+	* /src/giza-colour-index.c, /src/giza-colour-private.h,
+	  /src/giza-drivers.c: implemented option to give exact pgplot
+	  colour table
+
+2011-08-30 07:10  danielprice
+
+	* /interface/giza-pgplot.f90: better linewidth conversion between
+	  pgplot and giza in libpgplot
+
+2011-08-30 07:09  danielprice
+
+	* /interface/giza-fortran.F90: whitespace removed from strings in
+	  when passed through giza-fortran interface
+
+2011-08-30 07:09  danielprice
+
+	* /src/giza-drivers-private.h, /src/giza-drivers.c: bug fix with
+	  whitespace in device names
+
+2011-08-30 05:24  danielprice
+
+	* /src/giza-drivers.c: handles failure to call close_device; also
+	  bug fix with _giza_lowercase
+
+2011-08-30 05:23  danielprice
+
+	* /src/giza-drivers.c: handles failure to call close_device; also
+	  bug fix with _giza_lowercase
+
+2011-08-30 04:43  danielprice
+
+	* /src/giza-error-bars.c: more warnings silenced
+
+2011-08-30 04:43  danielprice
+
+	* /build/Makefile: uses libtool instead of c compiler to build
+	  shared library
+
+2011-08-30 04:42  danielprice
+
+	* /src/giza-points.c, /src/giza-polygon.c: silenced spurious
+	  warnings in giza-points and giza-polygon
+
+2011-08-30 04:42  danielprice
+
+	* /src/giza-driver-xw.c: better flush of xevents
+
+2011-08-29 13:03  danielprice
+
+	* /build/Makefile: updated include paths
+
+2011-08-26 13:12  danielprice
+
+	* /interface/giza-fortran.F90: debugging stuff removed
+
+2011-08-26 12:39  danielprice
+
+	* /build/Makefile: minor fix in build
+
+2011-08-26 12:39  danielprice
+
+	* /src/giza-paper.c: compiler warnings fixed
+
+2011-08-26 12:39  danielprice
+
+	* /src/giza-colour-index.c: compiler warnings fixed
+
+2011-08-26 12:38  danielprice
+
+	* /src/giza-arrow-style.c: compiler warnings fixed in arrow style
+
+2011-08-26 12:38  danielprice
+
+	* /build/Makefile: .PHONY targets added
+
+2011-08-26 09:23  danielprice
+
+	* /build/Makefile: minor tweaks to build
+
+2011-08-26 07:39  danielprice
+
+	* /build/Makefile: makefile compatible with new splash build
+
+2011-08-26 07:39  danielprice
+
+	* /build/Makefile: minor fixes to build
+
+2011-08-26 07:38  danielprice
+
+	* /interface/pgplot-stubs.f90: removed obsolete pgplot-stubs file
+
+2011-08-26 07:38  danielprice
+
+	* /.gitignore: updated .gitignore to ignore built libraries
+
+2011-08-26 07:38  danielprice
+
+	* /docs/get-source-files.pl: script for getting list of source
+	  files for Makefile
+
+2011-08-26 07:37  danielprice
+
+	* /interface/cpgplot.h: minor formatting changes
+
+2011-08-26 07:37  danielprice
+
+	* /build/Makefile, /interface/Makefile,
+	  /interface/giza-fortran.F90, /src/giza-format-number.c,
+	  /src/giza-shared-cpp.h, /src/giza-shared.h, /src/giza-version.h,
+	  /src/giza.h: giza-version.h now created automatically at compile
+	  time; removed separate interface/Makefile (subsumed into main
+	  Makefile)
+
+2011-08-26 07:36  danielprice
+
+	* /src/giza-points.c: bug fix with polygon and stars in symbol
+	  plotting
+
+2011-08-23 12:24  danielprice
+
+	* /src/giza-points.c, /src/giza-private.h, /src/giza-scanner.l,
+	  /src/giza-text.c, /src/lex.yy.c: implemented markers in character
+	  strings (e.g. \m8)
+
+2011-08-22 22:07  danielprice
+
+	* /interface/giza-cpgplot.c: finished adding cpgplot functions --
+	  imaging routines not yet implemented
+
+2011-08-22 22:07  danielprice
+
+	* /interface/giza-pgplot.f90: bug fix in pgqvsz
+
+2011-08-17 23:35  danielprice
+
+	* /interface/giza-cpgplot.c, /interface/giza-fortran.F90,
+	  /interface/giza-pgplot.f90: more cpgplot stuff;
+	  giza_version_string in fortran module
+
+2011-08-17 23:35  danielprice
+
+	* /interface/giza-cpgplot.c: implemented more cpgplot stuff
+
+2011-08-16 15:04  danielprice
+
+	* /src/giza-driver-svg-private.h, /src/giza-driver-svg.c,
+	  /src/giza-drivers-private.h, /src/giza-drivers.c: svg driver
+	  added
+
+2011-08-16 15:04  danielprice
+
+	* /src/giza-driver-xw-private.h, /src/giza-driver-xw.c: allow
+	  change_size_xw to be called from other routines
+
+2011-08-16 13:55  danielprice
+
+	* /src/giza-draw-background.c: background only painted explicitly
+	  if it is not transparent (to avoid bounding box issues on eps
+	  devices)
+
+2011-08-15 22:27  danielprice
+
+	* /src/giza-drivers.c, /src/giza-viewport.c, /src/giza-window.c:
+	  BUG FIX with initialisation of viewport/window (window now called
+	  from set_viewport; fixes pgdemo2 issue)
+
+2011-08-15 22:26  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: added \odot (but not in
+	  standard font)
+
+2011-08-10 11:43  danielprice
+
+	* /interface/giza-cpgplot.c: whole bunch more cpgplot routines
+	  added
+
+2011-08-09 15:10  danielprice
+
+	* /interface/Makefile, /interface/giza-cpgplot.c: added build for
+	  libcpgplot; few more functions implemented
+
+2011-08-09 15:09  danielprice
+
+	* /interface/giza-cpgplot.c, /src/giza-colour-table.c, /src/giza.h:
+	  pgctab; use const on input variables
+
+2011-08-09 15:09  danielprice
+
+	* /interface/giza-cpgplot.c: implemented the first few cpgplot
+	  functions
+
+2011-08-09 13:53  danielprice
+
+	* /docs/cpgplot_status.pl, /interface/giza-cpgplot.c: documentation
+	  of cpgplot interface added
+
+2011-08-09 13:52  danielprice
+
+	* /interface/giza-pgplot.f90: bug fix with pggray interface +
+	  compile problems
+
+2011-08-09 13:52  danielprice
+
+	* /interface/cpgplot.h, /interface/giza-cpgplot.c: added basic
+	  cpgplot interface (just empty functions at present)
+
+2011-08-05 07:18  danielprice
+
+	* /src/giza-drivers.c: all icc warnings fixed
+
+2011-08-05 07:14  danielprice
+
+	* /src/giza-drivers-private.h, /src/giza-drivers.c: strcasestr
+	  replaced with standard c stuff
+
+2011-08-05 06:45  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: unicode chars direct not
+	  using escape sequences; \odot and \Sun implemented
+
+2011-08-05 03:22  danielprice
+
+	* /src/giza-drivers.c: fixed icc warning (int->char conversion now
+	  explicit)
+
+2011-08-05 02:53  danielprice
+
+	* /src/giza-arrow.c, /src/giza-box.c, /src/giza-colour-index.c,
+	  /src/giza-colour-private.h, /src/giza-colour-table.c,
+	  /src/giza-contour.c, /src/giza-cursor-private.h,
+	  /src/giza-cursor-routines.c, /src/giza-device-has-cursor.c,
+	  /src/giza-driver-pdf.c, /src/giza-driver-png.c,
+	  /src/giza-driver-ps.c, /src/giza-driver-xw.c,
+	  /src/giza-fill-private.h, /src/giza-fill.c,
+	  /src/giza-format-number.c, /src/giza-function-t.c,
+	  /src/giza-function-x.c, /src/giza-function-y.c,
+	  /src/giza-get-surface-size.c, /src/giza-points.c,
+	  /src/giza-private.h, /src/giza-prompting.c,
+	  /src/giza-render-private.h, /src/giza-render.c,
+	  /src/giza-shared-cpp.h, /src/giza-vector.c, /src/giza-warnings.c,
+	  /src/giza-window.c, /src/giza.c, /src/giza.h: fixed (almost) all
+	  icc warnings
+
+2011-08-05 01:04  danielprice
+
+	* /src/giza-driver-xw.c: xw driver catches the close window event
+
+2011-08-02 06:50  danielprice
+
+	* /src/giza-band-style.c, /src/giza-band.c, /src/giza-driver-xw.c:
+	  band now draws transparent box (looks nicer)
+
+2011-07-29 07:35  danielprice
+
+	* /src/giza-drivers.c, /src/giza.h: icc compiler warnings fixed
+
+2011-07-29 06:42  danielprice
+
+	* /src/giza-driver-null.c: bug fix with types in null surface size
+
+2011-07-29 06:41  danielprice
+
+	* /src/giza-driver-xw.c, /src/giza-drivers.c: SEG FAULT FIXED!!!
+	  finally got this show-stopping bug
+
+2011-07-29 06:40  danielprice
+
+	* /src/giza-shared-cpp.h: bug fix in version numbering
+
+2011-07-29 06:00  danielprice
+
+	* /src/giza-io.c, /src/giza-shared-cpp.h, /src/giza-version.h:
+	  added giza version number; prints this with device list along
+	  with cairo version
+
+2011-07-29 04:35  danielprice
+
+	* /interface/giza-fortran.F90: much better string conversion
+	  between c and fortran (standards conforming)
+
+2011-07-28 07:52  danielprice
+
+	* /src/giza-driver-xw.c: band drawn in grey rather than foreground
+	  colour (works on both black and white backgrounds
+
+2011-07-28 07:52  danielprice
+
+	* /src/giza-driver-xw.c: bug fix with uninitialised variable in xw
+	  driver
+
+2011-07-28 07:51  danielprice
+
+	* /src/giza-band.c: bug fix with uninitialised variables in
+	  giza-band
+
+2011-07-28 06:51  danielprice
+
+	* /src/giza-text.c: string.h included for strlen
+
+2011-07-28 06:29  danielprice
+
+	* /src/giza-viewport.c: window initialisation commented (should be
+	  unnecessary)
+
+2011-07-28 06:29  danielprice
+
+	* /src/giza-private.h: revised GIZA_ZERO_FLOAT and GIZA_ZERO_DOUBLE
+	  upwards slightly
+
+2011-07-28 06:28  danielprice
+
+	* /src/giza-window.c: unnecessary checking of dxWin, dyWin removed
+
+2011-07-28 06:28  danielprice
+
+	* /src/giza-driver-xw.c: BUG FIX with uninitialised variable in xw
+	  driver
+
+2011-07-28 06:28  danielprice
+
+	* /src/giza-drivers.c: header changed
+
+2011-07-28 06:28  danielprice
+
+	* /src/giza-viewport.c: setting the default viewport does not reset
+	  the window (because Win not set)
+
+2011-07-28 06:27  danielprice
+
+	* /src/giza-window.c: code cleanup; bug fix with viewport
+	  initialisation before window has been set; window setting now
+	  robust if x1=x2 or y1=y2
+
+2011-07-26 22:55  danielprice
+
+	* /src/giza-text.c: minor checks added to text print (checks
+	  strlen>0)
+
+2011-06-30 05:26  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-character-size.c, /src/giza-driver-eps.c,
+	  /src/giza-driver-null.c, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png.c, /src/giza-driver-ps.c,
+	  /src/giza-driver-xw.c, /src/giza-paper.c, /src/giza-private.h,
+	  /src/giza-qtext.c, /src/giza-shared-cpp.h, /src/giza-viewport.c:
+	  implemented device size query in pixels; this can be different to
+	  points (allows us to specify resolution of vector devices other
+	  than 1 pixel per point)
+
+2011-06-30 05:25  danielprice
+
+	* /interface/giza-fortran.F90, /src/giza-render.c, /src/giza.h:
+	  added giza_render_transparent for rendering with a transparent
+	  minimum
+
+2011-06-30 05:24  danielprice
+
+	* /src/giza-colour-table.c: cleanup of debugging stuff;
+	  allocate/deallocate routines now unnecessary in colour table
+	  stuff
+
+2011-06-30 05:23  danielprice
+
+	* /src/giza-colour-index.c: save/restore colour tables implemented
+	  (could not get working with allocatable array components; so
+	  colour tables now have fixed memory allocation; also more
+	  efficient)
+
+2011-06-30 05:23  danielprice
+
+	* /src/giza-colour-private.h, /src/giza-colour-table.c,
+	  /src/giza-render.c, /src/giza.h: save/restore colour tables
+	  implemented (could not get working with allocatable array
+	  components; so colour tables now have fixed memory allocation;
+	  also more efficient)
+
+2011-06-30 05:22  danielprice
+
+	* /src/giza-colour-index.c, /src/giza-colour-private.h,
+	  /src/giza-colour-table.c, /src/giza-private.h:
+	  giza_set_colour_table routines use giza_set_in_range; now only
+	  one version of this, returns double
+
+2011-06-30 05:21  danielprice
+
+	* /src/giza-colour-table.c: neatened up set_colour_table routines
+	  with reallocate routine
+
+2011-06-30 05:21  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-render.c, /src/giza.h: added giza_render_gray routine;
+	  does work but currently resets colour table
+
+2011-06-30 05:20  danielprice
+
+	* /src/giza-colour-index.c: removed commented bit about redrawing
+	  background (should never be done here)
+
+2011-06-24 12:05  danielprice
+
+	* /src/giza-driver-xw.c: flushing of xevent queue restored
+
+2011-06-24 11:57  danielprice
+
+	* /src/giza-driver-xw.c: debugging stuff removed from xw driver;
+	  also commented out queue flushing
+
+2011-06-20 20:51  danielprice
+
+	* /src/giza-drivers.c: bug fix: background colour changes now take
+	  effect provided nothing has been plotted on the page
+
+2011-06-20 20:51  danielprice
+
+	* /src/giza-drivers.c: documentation added for giza_query_device
+
+2011-06-20 20:50  danielprice
+
+	* /src/giza-line.c: warnings about <2 points in giza_line removed
+
+2011-06-20 20:50  danielprice
+
+	* /src/giza-driver-eps.c, /src/giza-driver-png.c,
+	  /src/giza-drivers-private.h: png and eps devices use new
+	  filename-setting routine
+
+2011-06-20 20:50  danielprice
+
+	* /src/giza-drivers.c: added internal routine for setting filename
+	  on one-file-per-plot devices; also bug fix with page change on
+	  null device
+
+2011-06-20 20:50  danielprice
+
+	* /src/giza-driver-xw.c: added function to purge Xevent queue
+
+2011-06-20 20:50  danielprice
+
+	* /src/giza-set-font.c: initialisation of font matrix (commented
+	  out)
+
+2011-06-20 20:50  danielprice
+
+	* /src/giza-character-size.c: minor comments added
+
+2011-06-08 01:56  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: BUG FIX with
+	  super/subscripting at end of string
+
+2011-06-01 15:15  danielprice
+
+	* /src/giza-scanner.l, /src/giza-text-private.h, /src/lex.yy.c:
+	  compiler warning about pointers fixed
+
+2011-06-01 15:05  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: attempt to see if using
+	  longer string fixes the seg fault problem
+
+2011-06-01 14:56  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: BUG FIX with memory leaks in
+	  get_chunk
+
+2011-06-01 14:30  danielprice
+
+	* /interface/giza-fortran.F90: BUG FIX with cstring conversion
+	  routine with zero-length strings and ifort/icc
+
+2011-06-01 14:28  danielprice
+
+	* /src/giza-viewport.c: set_default_viewport handled slightly
+	  differently; avoids possibility of recursive calls; less repeated
+	  code
+
+2011-06-01 14:27  danielprice
+
+	* /src/giza-private.h: added declarations for some internal
+	  routines
+
+2011-06-01 14:26  danielprice
+
+	* /src/giza-line-style.c: uses GIZA_UNITS_MM instead of 2
+
+2011-05-31 22:07  danielprice
+
+	* /src/giza-driver-xw.c: restored use of X pixmap so banding works
+	  again
+
+2011-05-31 14:04  danielprice
+
+	* /src/giza-character-size.c: unnecessary set_trans call removed
+
+2011-05-31 14:02  danielprice
+
+	* /src/giza-qtext.c: minor cleanups, sin/cos done more efficiently
+
+2011-05-31 13:56  danielprice
+
+	* /src/giza-qtext.c: save/restore on character height in text query
+	  routines
+
+2011-05-31 12:50  danielprice
+
+	* /src/giza-viewport.c: comments added to make things clearer
+
+2011-05-31 12:50  danielprice
+
+	* /src/giza-fill.c: bug fix with fill in old cairo versions
+
+2011-05-31 11:06  danielprice
+
+	* /src/giza-driver-xw.c: temporary amendments to xwin driver to see
+	  if seg fault problem is solved
+
+2011-03-15 21:53  danielprice
+
+	* /src/giza-driver-xw.c: conversion of anchor point to integer is
+	  done explicitly rather than implicitly (do we have to use ints
+	  for this though?)
+
+2011-03-15 21:52  danielprice
+
+	* /src/giza-driver-xw.c: spelling fixed
+
+2011-03-15 21:52  danielprice
+
+	* /src/giza-scanner.l, /src/lex.yy.c: -pedantic warnings fixed; c++
+	  comments->c; moved some declarations
+
+2011-03-15 21:52  danielprice
+
+	* /src/giza-viewport.c: better error handling in giza-viewport; on
+	  error reverts to default viewport settings
+
+2011-03-15 09:45  danielprice
+
+	* /src/giza-annotate.c, /src/giza-arrow-style-private.h,
+	  /src/giza-arrow.c, /src/giza-band.c, /src/giza-box.c,
+	  /src/giza-character-size.c, /src/giza-colour-index.c,
+	  /src/giza-colour-table.c, /src/giza-contour.c,
+	  /src/giza-cursor-routines.c, /src/giza-driver-eps.c,
+	  /src/giza-driver-null.c, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png.c, /src/giza-driver-ps.c,
+	  /src/giza-driver-xw.c, /src/giza-drivers.c,
+	  /src/giza-error-bars.c, /src/giza-fill.c,
+	  /src/giza-format-number.c, /src/giza-function-t.c,
+	  /src/giza-function-x.c, /src/giza-function-y.c, /src/giza-io.c,
+	  /src/giza-line-style.c, /src/giza-line.c, /src/giza-paper.c,
+	  /src/giza-points.c, /src/giza-polygon.c, /src/giza-private.h,
+	  /src/giza-ptext.c, /src/giza-qtext.c, /src/giza-render.c,
+	  /src/giza-set-font.c, /src/giza-vector.c, /src/giza-window.c,
+	  /src/lex.yy.c: converted C++ style comments to C style comments
+	  (so -pedantic works OK)
+
+2011-03-15 09:43  danielprice
+
+	* /interface/Makefile: added -Wextra on interface compilation
+
+2011-03-15 09:43  danielprice
+
+	* /src/giza-box.c: some more minor cleanups to fix icc compiler
+	  warnings
+
+2011-03-15 01:09  danielprice
+
+	* /src/giza-box.c: minor cleanups; removed multiple declarations of
+	  variables
+
+2011-03-14 11:23  danielprice
+
+	* /src/giza-driver-xw.c: MEMORY LEAK fixed; failure to call
+	  cairo_destroy when changing page (valgrind)
+
+2011-03-14 11:23  danielprice
+
+	* /src/giza-colour-table.c: explicitly checks that colours have
+	  been set
+
+2011-03-14 11:22  danielprice
+
+	* /src/giza.h: added const to declarations for arrays
+
+2011-03-09 06:42  danielprice
+
+	* /src/giza-render.c: c style comments
+
+2011-03-09 06:42  danielprice
+
+	* /src/giza-colour-table.c: BUG FIX causing uninitialised variable
+	  problem in valgrind
+
+2011-03-09 06:41  danielprice
+
+	* /src/giza-stroke.c: header file included
+
+2011-03-09 06:41  danielprice
+
+	* /src/giza-text-background.c: giza.h included in header
+
+2011-03-09 06:41  danielprice
+
+	* /src/giza-warnings.c: giza.h included in header
+
+2011-03-09 06:40  danielprice
+
+	* /src/giza.h: added declarations for set_viewport_inches
+
+2011-03-09 06:40  danielprice
+
+	* /src/giza-set-font.c: includes relevant header file
+
+2011-03-09 03:51  danielprice
+
+	* /src/giza-line-width.c: added giza.h in header
+
+2011-03-09 03:51  danielprice
+
+	* /src/giza-line-cap.c: added giza.h in header
+
+2011-03-06 22:27  danielprice
+
+	* /src/giza-drivers.c: BUG FIX with memory overflow in
+	  init_device_list causing seg fault
+
+2011-03-06 22:27  danielprice
+
+	* /src/giza-drivers.c: BUG FIX with memory overflow in
+	  init_device_list causing seg fault
+
+2011-03-06 22:07  danielprice
+
+	* /src/giza-driver-eps.c, /src/giza-driver-pdf.c,
+	  /src/giza-driver-ps.c: default background alpha 0 on eps, ps and
+	  pdf
+
+2011-03-06 22:07  danielprice
+
+	* /src/giza-drivers.c: bug fix with pgNum not pgnum
+
+2011-03-06 22:07  danielprice
+
+	* /src/giza-drivers.c: return Dev.pgnum instead of 0 from
+	  open_device
+
+2011-03-06 22:07  danielprice
+
+	* /src/giza-drivers.c, /src/giza-private.h: giza-prefix is now
+	  fixed length; avoids possible memory leaks from failure to
+	  deallocate
+
+2011-03-06 22:06  danielprice
+
+	* /src/giza-drivers.c: default background alpha is 1 not 0
+
+2011-03-06 22:06  danielprice
+
+	* /src/giza-drivers.c: uses generic code for flush_device except
+	  for xwin device
+
+2011-03-04 07:16  danielprice
+
+	* /src/giza-driver-eps.c: bug fix and uncommented
+	  cairo_surface_flush in eps driver (should use surface not
+	  context)
+
+2011-03-04 07:16  danielprice
+
+	* /src/giza-save.c, /src/giza-set-font.c: BUG FIX with font not
+	  being kept across a change of page: but currently ONLY works to
+	  one level of save/restore
+
+2011-03-04 07:15  danielprice
+
+	* /src/giza-drivers.c: giza_change_page uses giza-save/giza-restore
+	  to save/restore settings
+
+2011-03-02 23:01  danielprice
+
+	* /src/giza-drivers.c: giza_open_device prompts if first letter of
+	  device string is ?
+
+2011-03-02 22:33  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-colour-index.c, /src/giza.h: implemented
+	  set_colour_representation_hls
+
+2011-03-02 11:02  danielprice
+
+	* /src/giza-colour-index.c: checks bounds on scir; avoids stupid
+	  settings
+
+2011-03-02 10:46  danielprice
+
+	* /src/giza-shared-cpp.h: allow 256 + 16 colours (mainly so splash
+	  does not complain)
+
+2011-03-02 10:46  danielprice
+
+	* /src/giza-colour-index-private.h, /src/giza-colour-private.h,
+	  /src/giza-colour-table-private.h: now only giza-colour-private.h
+
+2011-03-02 10:45  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-colour-index.c, /src/giza-colour-table.c,
+	  /src/giza-drivers.c, /src/giza.h: set_colour_table now sets the
+	  colour indices in the range set by set_colour_index_range; also
+	  get routine for this; colour-index and colour-table have shared
+	  header file
+
+2011-03-02 05:39  danielprice
+
+	* /src/giza-io-private.h, /src/giza-prompting.c: private interfaces
+	  declared properly
+
+2011-03-02 05:39  danielprice
+
+	* /src/giza-io.c: unused variable warning fixed (do not care about
+	  return value of fgets)
+
+2011-03-02 00:49  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-colour-index.c, /src/giza-render.c,
+	  /src/giza-shared-cpp.h, /src/giza.h: PGPIXEL/giza_draw_pixels
+	  implemented
+
+2011-03-01 22:23  danielprice
+
+	* /interface/giza-pgplot.f90, /src/giza-print-id.c:
+	  giza-print-id/PGIDEN implemented fully
+
+2011-03-01 22:23  danielprice
+
+	* /src/giza-print-id.c: giza-print-id now working properly
+
+2011-03-01 22:23  danielprice
+
+	* /src/giza-character-size.c: docs fixed for giza-character-size
+
+2011-03-01 22:22  danielprice
+
+	* /src/giza.h: added paper_size function declarations to giza.h
+
+2011-03-01 22:22  danielprice
+
+	* /src/giza-ptext.c: docs for ptext fixed
+
+2011-03-01 21:53  danielprice
+
+	* /src/giza-paper.c: better docs on giza-get-paper-size
+
+2011-03-01 21:53  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-print-id.c: added giza-print-id; replicates PGIDEN
+
+2011-03-01 21:52  danielprice
+
+	* /src/giza.h: giza-qtextlen routines added to giza.h
+
+2011-03-01 03:51  danielprice
+
+	* /interface/giza-pgplot.f90: FINISHED hatch fill implementation;
+	  seems to work perfectly now; no known issues remaining
+
+2011-03-01 03:50  danielprice
+
+	* /src/giza-fill.c: FINISHED hatch fill implementation; seems to
+	  work perfectly now; no known issues remaining
+
+2011-03-01 03:50  danielprice
+
+	* /src/giza-fill.c: hatch fill now explicitly draws lines on
+	  transparent background; rotation partially working
+
+2011-02-27 22:06  danielprice
+
+	* /src/giza-text.c, /src/giza.h: added declarations for
+	  giza_set_font_italic, giza_set_font_bold etc
+
+2011-02-25 11:53  danielprice
+
+	* /src/giza-fill.c: hatch fill completely re-done; now explicitly
+	  draws lines instead of using pre-drawn pattern; no funny effects;
+	  some minor issues with robust handling of all angles remaining
+
+2011-02-25 11:53  danielprice
+
+	* /src/giza-fill.c: implemented hatch fill using larger tiles, with
+	  alpha, still not perfect
+
+2011-02-23 11:24  danielprice
+
+	* /interface/giza-pgplot.f90, /src/giza-text.c: changed definition
+	  of -normal- font to arial; handles greek letters
+
+2011-02-23 11:12  danielprice
+
+	* /src/giza-colour-index.c: initialised colour indices up to 16
+
+2011-02-23 10:50  danielprice
+
+	* /interface/giza-pgplot.f90: PGERAS implemented ->
+	  giza_draw_background
+
+2011-02-23 10:49  danielprice
+
+	* /interface/giza-fortran.F90, /src/giza-colour-index.c,
+	  /src/giza-draw-background.c, /src/giza-driver-eps-private.h,
+	  /src/giza-driver-eps.c, /src/giza-driver-null-private.h,
+	  /src/giza-driver-null.c, /src/giza-driver-pdf-private.h,
+	  /src/giza-driver-pdf.c, /src/giza-driver-png-private.h,
+	  /src/giza-driver-png.c, /src/giza-driver-ps-private.h,
+	  /src/giza-driver-ps.c, /src/giza-driver-xw-private.h,
+	  /src/giza-driver-xw.c, /src/giza-drivers-private.h,
+	  /src/giza-drivers.c, /src/giza.h: giza_draw_background no longer
+	  device specific; also public
+
+2011-02-23 10:48  danielprice
+
+	* /src/giza-band-style.c, /src/giza-save.c, /src/giza.h: added
+	  get_band_style function; band style added to save/restore
+	  functions
+
+2011-02-23 10:47  danielprice
+
+	* /src/giza-save.c: hatching style and text background colour added
+	  to save/restore routines
+
+2011-02-23 10:47  danielprice
+
+	* /interface/giza-fortran.F90: bug fix with set/get hatching
+	  interface
+
+2011-02-23 05:55  danielprice
+
+	* /interface/giza-fortran.F90: hatching style interface routines
+	  added
+
+2011-02-23 05:55  danielprice
+
+	* /interface/giza-pgplot.f90, /src/giza-fill.c, /src/giza.h: added
+	  set_hatching_style and get_hatching_style routines and
+	  interfaces; not yet applied to hatch
+
+2011-02-23 05:54  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-buffering.c, /src/giza.h: added giza_flush_buffer,
+	  replicates PGUPDT
+
+2011-02-22 22:51  danielprice
+
+	* /interface/giza-pgplot.f90: PGQCF implemented, behaves as
+	  expected
+
+2011-02-22 20:31  danielprice
+
+	* /src/giza-scanner.l, /src/giza-text-private.h, /src/giza-text.c,
+	  /src/lex.yy.c: added support for inline font switching; \rm, \it,
+	  \fn, \fi, \fr, \fs; also \x for times
+
+2011-02-22 12:55  danielprice
+
+	* /interface/giza-pgplot.f90: PGSCF now does roughly what it says
+	  on the tin
+
+2011-02-22 12:55  danielprice
+
+	* /src/giza-drivers.c: prompt happens for close_device routine;
+	  fixes bug with windows closing before plot can be viewed
+
+2011-02-22 12:55  danielprice
+
+	* /interface/giza-fortran.F90, /src/giza-private.h,
+	  /src/giza-set-font.c: added set_font_bold, set_font_italic and
+	  set_font_bold_italic routines
+
+2011-02-22 12:10  danielprice
+
+	* /interface/giza-pgplot.f90, /src/giza-fill.c: implemented hatched
+	  fill styles
+
+2011-02-22 12:10  danielprice
+
+	* /src/giza-viewport.c: clipping of viewport turned off if
+	  giza_set_clipping set to false
+
+2011-02-22 02:23  danielprice
+
+	* /src/giza-clipping.c: set/get clipping state routines added
+	  (PGQCLP/PGSCLP)
+
+2011-02-22 02:23  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-drivers.c, /src/giza.h: set/get clipping state routines
+	  added (PGQCLP/PGSCLP)
+
+2011-02-22 01:41  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-move.c, /src/giza.h: added
+	  PGQPOS/giza_get_current_point
+
+2011-02-22 01:17  danielprice
+
+	* /src/giza-cursor-routines.c, /src/giza.h: function definitions
+	  for giza_mark_points etc added to giza.h; also spurious printf
+	  removed
+
+2011-02-22 00:23  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-text-background.c, /src/giza.h: added PGQTBG;
+	  giza_get_text_background
+
+2011-02-22 00:05  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-cursor-routines.c: added interface routines for
+	  mark_points_ordered and mark_line_ordered
+
+2011-02-22 00:05  danielprice
+
+	* /src/giza-shared-cpp.h: bug fix (regression) with definition of
+	  GIZA_LEFT_CLICK: mark_points now works again with new structure
+
+2011-02-21 12:49  danielprice
+
+	* /src/giza-colour-index.c: stuff for setting alpha added
+
+2011-02-21 12:49  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-cursor-routines.c: added basic functionality for
+	  PGLCUR, PGOLIN; mostly working but a few issues remaining
+
+2011-02-21 12:48  danielprice
+
+	* /interface/Makefile: added -Wall in libpgplot build
+
+2011-02-21 12:48  danielprice
+
+	* /src/giza-shared-cpp.h: defined foreground and background colour
+	  indices using GIZA_BACKGROUND_COLOUR etc
+
+2011-02-21 12:47  danielprice
+
+	* /src/giza-points.c: made -ve symbol points slightly bigger
+
+2011-02-19 04:54  danielprice
+
+	* /src/giza-band.c, /src/giza-shared-cpp.h: giza band types defined
+	  in preprocessing
+
+2011-02-19 04:54  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-box.c, /src/giza.h: PGRND implemented; interface to
+	  giza_round; added giza_round_float
+
+2011-02-16 23:20  danielprice
+
+	* /interface/giza-pgplot.f90: PGNUMB interface added
+
+2011-02-16 23:20  danielprice
+
+	* /.gitignore: added .gitignore file
+
+2011-02-16 23:01  danielprice
+
+	* /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /src/giza-error-bars.c: PGERRX implemented; added
+	  giza_error_bars_hori, giza_error_bars_hori_float to match PGERRX
+	  specifications
+
+2011-02-16 11:22  danielprice
+
+	* /src/giza-band.c, /src/giza-drivers.c: giza_band stuff moved to
+	  giza_band routine where possible; implemented all 7 pgplot band
+	  styles plus additional circle band style; better docs for
+	  giza_band
+
+2011-02-16 11:21  danielprice
+
+	* /src/giza-drivers.c: minor amendments to device list (eps vs. ps
+	  differences); neatened code slightly
+
+2011-02-16 11:21  danielprice
+
+	* /src/giza-prompting.c: bug fix with giza-prompting initialisation
+
+2011-02-16 11:20  danielprice
+
+	* /src/giza-driver-xw.c, /src/giza-drivers.c, /src/giza-io.c,
+	  /src/giza-prompting.c: giza_prompting now behaves like PGASK:
+	  uses terminal prompts instead of key press in window
+
+2011-02-16 11:20  danielprice
+
+	* /interface/giza-pgplot.f90: use line missing in PGASK
+
+2011-01-10 21:18  wetterj
+
+	* /branches/opengl/src/giza-features.h,
+	  /branches/opengl/src/giza-gl-interactive.c,
+	  /branches/opengl/src/giza-gl-private.h,
+	  /branches/opengl/src/giza-gl.h, /branches/opengl/test/test-gl.c:
+	  Began to impliment opengl acceleration
+
+2011-01-10 20:59  wetterj
+
+	* /branches/INSTALL, /branches/LICENSE, /branches/Makefile,
+	  /branches/build, /branches/docs, /branches/include,
+	  /branches/interface, /branches/lib, /branches/opengl,
+	  /branches/opengl/INSTALL, /branches/opengl/LICENSE,
+	  /branches/opengl/Makefile, /branches/opengl/build,
+	  /branches/opengl/build/Makefile, /branches/opengl/docs,
+	  /branches/opengl/docs/api.pl,
+	  /branches/opengl/docs/pgplot_status.pl, /branches/opengl/include,
+	  /branches/opengl/include/.gitignore, /branches/opengl/interface,
+	  /branches/opengl/interface/Makefile,
+	  /branches/opengl/interface/giza-fortran.F90,
+	  /branches/opengl/interface/giza-pgplot.f90,
+	  /branches/opengl/interface/pgplot-stubs.f90,
+	  /branches/opengl/lib, /branches/opengl/lib/.gitignore,
+	  /branches/opengl/src, /branches/opengl/src/giza-annotate.c,
+	  /branches/opengl/src/giza-arrow-style-private.h,
+	  /branches/opengl/src/giza-arrow-style.c,
+	  /branches/opengl/src/giza-arrow.c,
+	  /branches/opengl/src/giza-band-private.h,
+	  /branches/opengl/src/giza-band-style.c,
+	  /branches/opengl/src/giza-band.c,
+	  /branches/opengl/src/giza-box.c,
+	  /branches/opengl/src/giza-buffering.c,
+	  /branches/opengl/src/giza-character-size-private.h,
+	  /branches/opengl/src/giza-character-size.c,
+	  /branches/opengl/src/giza-circle.c,
+	  /branches/opengl/src/giza-colour-index-private.h,
+	  /branches/opengl/src/giza-colour-index.c,
+	  /branches/opengl/src/giza-colour-table-private.h,
+	  /branches/opengl/src/giza-colour-table.c,
+	  /branches/opengl/src/giza-contour.c,
+	  /branches/opengl/src/giza-device-has-cursor.c,
+	  /branches/opengl/src/giza-draw.c,
+	  /branches/opengl/src/giza-driver-eps-private.h,
+	  /branches/opengl/src/giza-driver-eps.c,
+	  /branches/opengl/src/giza-driver-null-private.h,
+	  /branches/opengl/src/giza-driver-null.c,
+	  /branches/opengl/src/giza-driver-pdf-private.h,
+	  /branches/opengl/src/giza-driver-pdf.c,
+	  /branches/opengl/src/giza-driver-png-private.h,
+	  /branches/opengl/src/giza-driver-png.c,
+	  /branches/opengl/src/giza-driver-ps-private.h,
+	  /branches/opengl/src/giza-driver-ps.c,
+	  /branches/opengl/src/giza-driver-xw-private.h,
+	  /branches/opengl/src/giza-driver-xw.c,
+	  /branches/opengl/src/giza-drivers-private.h,
+	  /branches/opengl/src/giza-drivers.c,
+	  /branches/opengl/src/giza-environment.c,
+	  /branches/opengl/src/giza-error-bars.c,
+	  /branches/opengl/src/giza-fill-private.h,
+	  /branches/opengl/src/giza-fill.c,
+	  /branches/opengl/src/giza-format-number.c,
+	  /branches/opengl/src/giza-function-t.c,
+	  /branches/opengl/src/giza-function-x.c,
+	  /branches/opengl/src/giza-function-y.c,
+	  /branches/opengl/src/giza-get-key-press.c,
+	  /branches/opengl/src/giza-get-surface-size.c,
+	  /branches/opengl/src/giza-io-private.h,
+	  /branches/opengl/src/giza-io.c,
+	  /branches/opengl/src/giza-label.c,
+	  /branches/opengl/src/giza-line-cap.c,
+	  /branches/opengl/src/giza-line-style-private.h,
+	  /branches/opengl/src/giza-line-style.c,
+	  /branches/opengl/src/giza-line-width.c,
+	  /branches/opengl/src/giza-line.c,
+	  /branches/opengl/src/giza-move.c,
+	  /branches/opengl/src/giza-paper.c,
+	  /branches/opengl/src/giza-points.c,
+	  /branches/opengl/src/giza-polygon.c,
+	  /branches/opengl/src/giza-private.h,
+	  /branches/opengl/src/giza-prompting-private.h,
+	  /branches/opengl/src/giza-prompting.c,
+	  /branches/opengl/src/giza-ptext.c,
+	  /branches/opengl/src/giza-qtext.c,
+	  /branches/opengl/src/giza-rectangle.c,
+	  /branches/opengl/src/giza-render.c,
+	  /branches/opengl/src/giza-save.c,
+	  /branches/opengl/src/giza-scanner.l,
+	  /branches/opengl/src/giza-set-font-private.h,
+	  /branches/opengl/src/giza-set-font.c,
+	  /branches/opengl/src/giza-shared-cpp.h,
+	  /branches/opengl/src/giza-stroke-private.h,
+	  /branches/opengl/src/giza-stroke.c,
+	  /branches/opengl/src/giza-text-background-private.h,
+	  /branches/opengl/src/giza-text-background.c,
+	  /branches/opengl/src/giza-text-private.h,
+	  /branches/opengl/src/giza-text.c,
+	  /branches/opengl/src/giza-transforms-private.h,
+	  /branches/opengl/src/giza-transforms.c,
+	  /branches/opengl/src/giza-vector.c,
+	  /branches/opengl/src/giza-viewport-private.h,
+	  /branches/opengl/src/giza-viewport.c,
+	  /branches/opengl/src/giza-warnings-private.h,
+	  /branches/opengl/src/giza-warnings.c,
+	  /branches/opengl/src/giza-window-private.h,
+	  /branches/opengl/src/giza-window.c, /branches/opengl/src/giza.c,
+	  /branches/opengl/src/giza.h, /branches/opengl/src/lex.yy.c,
+	  /branches/opengl/test, /branches/opengl/test/test-arrow.c,
+	  /branches/opengl/test/test-band.c,
+	  /branches/opengl/test/test-box.c,
+	  /branches/opengl/test/test-change-page.c,
+	  /branches/opengl/test/test-circle.c,
+	  /branches/opengl/test/test-colour-index.c,
+	  /branches/opengl/test/test-contour.c,
+	  /branches/opengl/test/test-environment.c,
+	  /branches/opengl/test/test-error-bars.c,
+	  /branches/opengl/test/test-format-number.c,
+	  /branches/opengl/test/test-line-cap.c,
+	  /branches/opengl/test/test-line-style.c,
+	  /branches/opengl/test/test-points.c,
+	  /branches/opengl/test/test-qtext.c,
+	  /branches/opengl/test/test-rectangle.c,
+	  /branches/opengl/test/test-render.c,
+	  /branches/opengl/test/test-set-line-width.c,
+	  /branches/opengl/test/test-vector.c,
+	  /branches/opengl/test/test-window.c, /branches/src,
+	  /branches/test: Created a branch to work on opengl acceleration
+
+2011-01-10 18:47  wetterj
+
+	* /branches: Creating an open gl branch of giza.
+
+2010-12-21 00:04  wetterj
+
+	* /src/giza-driver-eps.c, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png.c, /src/giza-driver-ps.c,
+	  /src/giza-driver-xw.c, /src/giza-drivers-private.h,
+	  /src/giza-drivers.c, /src/giza-io.c: Fixed bug when drawing
+	  transparent backgrounds, and a bug in displaying avalible devices
+
+2010-12-12 08:38  wetterj
+
+	* /src/giza-arrow-style-private.h, /src/giza-arrow-style.c,
+	  /src/giza-band-private.h, /src/giza-band-style.c,
+	  /src/giza-buffering.c, /src/giza-character-size-private.h,
+	  /src/giza-character-size.c, /src/giza-colour-index-private.h,
+	  /src/giza-colour-index.c, /src/giza-colour-table-private.h,
+	  /src/giza-colour-table.c, /src/giza-device-has-cursor.c,
+	  /src/giza-driver-eps-private.h, /src/giza-driver-eps.c,
+	  /src/giza-driver-null-private.h, /src/giza-driver-null.c,
+	  /src/giza-driver-pdf-private.h, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png-private.h, /src/giza-driver-png.c,
+	  /src/giza-driver-ps-private.h, /src/giza-driver-ps.c,
+	  /src/giza-driver-xw-private.h, /src/giza-driver-xw.c,
+	  /src/giza-drivers-private.h, /src/giza-drivers.c,
+	  /src/giza-environment.c, /src/giza-error-bars.c,
+	  /src/giza-fill-private.h, /src/giza-fill.c,
+	  /src/giza-io-private.h, /src/giza-io.c,
+	  /src/giza-line-style-private.h, /src/giza-line-style.c,
+	  /src/giza-private.h, /src/giza-prompting-private.h,
+	  /src/giza-prompting.c, /src/giza-save.c,
+	  /src/giza-set-font-private.h, /src/giza-set-font.c,
+	  /src/giza-stroke-private.h, /src/giza-stroke.c,
+	  /src/giza-text-private.h, /src/giza-text.c,
+	  /src/giza-transforms-private.h, /src/giza-transforms.c,
+	  /src/giza-viewport.c, /src/giza-warnings-private.h,
+	  /src/giza-warnings.c, /src/giza-window-private.h,
+	  /src/giza-window.c, /src/giza.c, /src/giza.h: Added void to empty
+	  parameter lists in function decliractions and definitions
+
+2010-12-09 07:32  wetterj
+
+	* /src/giza-drivers-private.h, /src/giza-drivers.c, /src/giza-io.c:
+	  Fixed a memory leak caused when printing avalible devices
+
+2010-12-09 00:38  wetterj
+
+	* /src/giza-colour-index.c, /src/giza-driver-xw.c,
+	  /src/giza-drivers.c, /src/giza-private.h: All devices but Xlib
+	  have default background alpha 0
+
+2010-12-08 03:19  wetterj
+
+	* /interface/giza-pgplot.f90: Added an interface to mimic pgask
+
+2010-12-08 02:31  wetterj
+
+	* /interface/giza-fortran.F90, /src/giza-colour-index.c: Fixed some
+	  typos that broke the build on the last commit
+
+2010-12-08 02:22  wetterj
+
+	* /interface/giza-fortran.F90, /src/giza-colour-index.c,
+	  /src/giza.h: Added alpha to colour index functions
+
+2010-12-07 23:51  wetterj
+
+	* /src/giza-format-number.c, /src/giza-ptext.c: Added missing null
+	  character to string returned from giza_format_number
+
+2010-12-06 03:51  wetterj
+
+	* /src/giza-arrow-style-private.h, /src/giza-arrow.c,
+	  /src/giza-band.c, /src/giza-box.c, /src/giza-buffering.c,
+	  /src/giza-circle.c, /src/giza-driver-xw-private.h,
+	  /src/giza-driver-xw.c, /src/giza-drivers.c,
+	  /src/giza-error-bars.c, /src/giza-format-number.c,
+	  /src/giza-get-key-press.c, /src/giza-polygon.c,
+	  /src/giza-rectangle.c, /src/giza-save.c, /src/giza-stroke.c:
+	  Fixed many compiler warnings
+
+2010-12-06 02:46  wetterj
+
+	* /src/giza-driver-eps.c: Fixed bug in change_page for the eps
+	  driver
+
+2010-12-06 02:40  wetterj
+
+	* /src/giza-drivers.c: Device type is now case insensitive
+
+2010-12-06 01:57  danielprice
+
+	* /interface/giza-fortran.F90: added set_text_background to Fortran
+	  interface
+
+2010-12-06 01:19  danielprice
+
+	* /build/Makefile: added warnings to default compilation
+
+2010-12-02 23:45  danielprice
+
+	* /src/giza-driver-eps.c, /src/giza-render.c: updated svn repo with
+	  git stuff
+
+2010-11-29 10:16  wetterj
+
+	* /build/Makefile, /src/giza-driver-eps-private.h,
+	  /src/giza-driver-eps.c, /src/giza-driver-xw-private.h,
+	  /src/giza-driver-xw.c, /src/giza-drivers-private.h,
+	  /src/giza-drivers.c: Added optional EPS driver.XLib driver is now
+	  optional.
+
+2010-11-24 23:55  wetterj
+
+	* /interface/giza-fortran.F90, /src/giza-box.c,
+	  /src/giza-format-number.c, /src/giza-shared-cpp.h, /src/giza.c,
+	  /src/giza.h, /test/test-format-number.c: Changed
+	  giza_format_number to imitate pgplot's pgnumb.
+
+2010-11-22 01:06  wetterj
+
+	* /build/Makefile, /src/giza-drivers.c, /src/giza-ptext.c,
+	  /src/giza-text-background-private.h, /src/giza-text-background.c,
+	  /src/giza.h: Added a function to set text background.
+
+2010-11-22 00:05  wetterj
+
+	* /INSTALL, /LICENSE, /Makefile, /build, /build/Makefile, /docs,
+	  /docs/api.pl, /docs/pgplot_status.pl, /include,
+	  /include/.gitignore, /interface, /interface/Makefile,
+	  /interface/giza-fortran.F90, /interface/giza-pgplot.f90,
+	  /interface/pgplot-stubs.f90, /lib, /lib/.gitignore, /src,
+	  /src/giza-annotate.c, /src/giza-arrow-style-private.h,
+	  /src/giza-arrow-style.c, /src/giza-arrow.c,
+	  /src/giza-band-private.h, /src/giza-band-style.c,
+	  /src/giza-band.c, /src/giza-box.c, /src/giza-buffering.c,
+	  /src/giza-character-size-private.h, /src/giza-character-size.c,
+	  /src/giza-circle.c, /src/giza-colour-index-private.h,
+	  /src/giza-colour-index.c, /src/giza-colour-table-private.h,
+	  /src/giza-colour-table.c, /src/giza-contour.c,
+	  /src/giza-device-has-cursor.c, /src/giza-draw.c,
+	  /src/giza-driver-null-private.h, /src/giza-driver-null.c,
+	  /src/giza-driver-pdf-private.h, /src/giza-driver-pdf.c,
+	  /src/giza-driver-png-private.h, /src/giza-driver-png.c,
+	  /src/giza-driver-ps-private.h, /src/giza-driver-ps.c,
+	  /src/giza-driver-xw-private.h, /src/giza-driver-xw.c,
+	  /src/giza-drivers-private.h, /src/giza-drivers.c,
+	  /src/giza-environment.c, /src/giza-error-bars.c,
+	  /src/giza-fill-private.h, /src/giza-fill.c,
+	  /src/giza-format-number.c, /src/giza-function-t.c,
+	  /src/giza-function-x.c, /src/giza-function-y.c,
+	  /src/giza-get-key-press.c, /src/giza-get-surface-size.c,
+	  /src/giza-io-private.h, /src/giza-io.c, /src/giza-label.c,
+	  /src/giza-line-cap.c, /src/giza-line-style-private.h,
+	  /src/giza-line-style.c, /src/giza-line-width.c, /src/giza-line.c,
+	  /src/giza-move.c, /src/giza-paper.c, /src/giza-points.c,
+	  /src/giza-polygon.c, /src/giza-private.h,
+	  /src/giza-prompting-private.h, /src/giza-prompting.c,
+	  /src/giza-ptext.c, /src/giza-qtext.c, /src/giza-rectangle.c,
+	  /src/giza-render.c, /src/giza-save.c, /src/giza-scanner.l,
+	  /src/giza-set-font-private.h, /src/giza-set-font.c,
+	  /src/giza-shared-cpp.h, /src/giza-stroke-private.h,
+	  /src/giza-stroke.c, /src/giza-text-private.h, /src/giza-text.c,
+	  /src/giza-transforms-private.h, /src/giza-transforms.c,
+	  /src/giza-vector.c, /src/giza-viewport-private.h,
+	  /src/giza-viewport.c, /src/giza-warnings-private.h,
+	  /src/giza-warnings.c, /src/giza-window-private.h,
+	  /src/giza-window.c, /src/giza.c, /src/giza.h, /src/lex.yy.c,
+	  /test, /test/test-arrow.c, /test/test-band.c, /test/test-box.c,
+	  /test/test-change-page.c, /test/test-circle.c,
+	  /test/test-colour-index.c, /test/test-contour.c,
+	  /test/test-environment.c, /test/test-error-bars.c,
+	  /test/test-format-number.c, /test/test-line-cap.c,
+	  /test/test-line-style.c, /test/test-points.c, /test/test-qtext.c,
+	  /test/test-rectangle.c, /test/test-render.c,
+	  /test/test-set-line-width.c, /test/test-vector.c,
+	  /test/test-window.c: Initial import.
+
