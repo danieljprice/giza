@@ -102,7 +102,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(include_HEADERS) \
 	$(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES = cpgplot.pc giza.pc pgplot.pc
+CONFIG_CLEAN_FILES = cpgplot.pc giza.pc pgplot.pc giza-version.h
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -372,8 +372,8 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/cpgplot.pc.in \
-	$(srcdir)/giza.pc.in $(srcdir)/pgplot.pc.in \
-	$(top_srcdir)/build/depcomp
+	$(srcdir)/giza-version.h.in $(srcdir)/giza.pc.in \
+	$(srcdir)/pgplot.pc.in $(top_srcdir)/build/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -383,6 +383,8 @@ AUTOCONF = @AUTOCONF@
 AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
+CAIRO_CFLAGS = @CAIRO_CFLAGS@
+CAIRO_LIBS = @CAIRO_LIBS@
 CC = @CC@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
@@ -402,6 +404,9 @@ EXEEXT = @EXEEXT@
 FC = @FC@
 FCFLAGS = @FCFLAGS@
 FGREP = @FGREP@
+GIZA_VERSION_MAJOR = @GIZA_VERSION_MAJOR@
+GIZA_VERSION_MICRO = @GIZA_VERSION_MICRO@
+GIZA_VERSION_MINOR = @GIZA_VERSION_MINOR@
 GREP = @GREP@
 INSTALL = @INSTALL@
 INSTALL_DATA = @INSTALL_DATA@
@@ -437,12 +442,17 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_URL = @PACKAGE_URL@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
+PKG_CONFIG = @PKG_CONFIG@
+PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
+PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
 VERSION = @VERSION@
+X11_CFLAGS = @X11_CFLAGS@
+X11_LIBS = @X11_LIBS@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -520,14 +530,15 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
        giza-warnings.c giza-window.c giza.c lex.yy.c
 
 
-###libgiza_la_CPPFLAGS = `pkg-config --cflags cairo x11`
-libgiza_la_CPPFLAGS = '-I/usr/X11/include'
+# uncomment these if pkg-config not working
+#X11_LIBS = "-L/usr/X11/lib -L/$(prefix)/lib -lX11"
+#X11_CFLAGS = "-I/usr/X11/include"
+#CAIRO_LIBS = "-lcairo"
+libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS)
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 libpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
-
-###libgiza_la_CAIROFLAGS = `pkg-config --libs cairo x11`
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-       -no-undefined -L/usr/X11/lib -lcairo -lX11
+       -no-undefined $(X11_LIBS) $(CAIRO_LIBS)
 
 libcpgplot_la_SOURCES = giza-cpgplot.c $(libgiza_la_SOURCES)
 libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS)
@@ -574,6 +585,8 @@ cpgplot.pc: $(top_builddir)/config.status $(srcdir)/cpgplot.pc.in
 giza.pc: $(top_builddir)/config.status $(srcdir)/giza.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 pgplot.pc: $(top_builddir)/config.status $(srcdir)/pgplot.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+giza-version.h: $(top_builddir)/config.status $(srcdir)/giza-version.h.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 install-libLTLIBRARIES: $(lib_LTLIBRARIES)

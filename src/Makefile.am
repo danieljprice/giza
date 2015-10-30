@@ -23,17 +23,19 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
        giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
        giza-warnings.c giza-window.c giza.c lex.yy.c
 
-###libgiza_la_CPPFLAGS = `pkg-config --cflags cairo x11`
-libgiza_la_CPPFLAGS = '-I/usr/X11/include'
+# uncomment these if pkg-config not working
+#X11_LIBS = "-L/usr/X11/lib -L/$(prefix)/lib -lX11"
+#X11_CFLAGS = "-I/usr/X11/include"
+#CAIRO_LIBS = "-lcairo"
+
+libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS)
 
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
 libpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
-###libgiza_la_CAIROFLAGS = `pkg-config --libs cairo x11`
-
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-       -no-undefined -L/usr/X11/lib -lcairo -lX11
+       -no-undefined $(X11_LIBS) $(CAIRO_LIBS)
 
 libcpgplot_la_SOURCES = giza-cpgplot.c $(libgiza_la_SOURCES)
 
