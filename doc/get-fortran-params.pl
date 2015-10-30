@@ -5,7 +5,7 @@
 #
 my $var;
 my $val;
-open(FILE,"<../include/giza-shared.h");
+open(FILE,"<../src/giza-shared.h");
 while(<FILE>) {
   if (m/define\s\S*\s*([0-9]*)/ && !m/GIZA_LEFT_CLICK/) {
     ($var, $val) = m/define\s(\S*)\s*([0-9]*)/;

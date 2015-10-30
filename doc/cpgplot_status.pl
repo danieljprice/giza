@@ -5,7 +5,7 @@
 # status of the PGPLOT interface to giza
 # (that can be built as libpgplot)
 #
-open(FILE, "<../interface/giza-cpgplot.c");
+open(FILE, "<../src/giza-cpgplot.c");
 my $module;
 my $desc;
 my $link;

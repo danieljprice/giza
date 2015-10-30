@@ -5,7 +5,7 @@
 # status of the PGPLOT interface to giza
 # (that can be built as libpgplot)
 #
-open(FILE, "<../interface/giza-pgplot.f90");
+open(FILE, "<../src/giza-pgplot.f90");
 my $module;
 my $desc;
 my $status;
