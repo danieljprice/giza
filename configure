@@ -4146,11 +4146,23 @@ GIZA_VERSION_MINOR=9
 
 GIZA_VERSION_MICRO=4
 
-LT_CURRENT=9
+#
+# The following specify the interface version numbers for giza.
+# LT_CURRENT is the current interface number
+# LT_REVISION is the implementation number of the current interface
+# LT_AGE is the difference between the newest and oldest interface implemented
+#
+# Rules are:
+# 1) update LT_REVISION for every public giza release
+# 2) update LT_CURRENT if giza interface updated and set LT_REVISION to 0
+# 3) increment LT_AGE if interface is backwards compatible
+# 4) set LT_AGE to 0 if interface is not backwards compatible
+#
+LT_CURRENT=1
 
-LT_REVISION=3
+LT_REVISION=4
 
-LT_AGE=9
+LT_AGE=1
 
 case `pwd` in
   *\ * | *\	*)
