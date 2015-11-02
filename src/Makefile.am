@@ -1,6 +1,6 @@
 CLEANFILES = *.mod .*pc
 
-lib_LTLIBRARIES = libcpgplot.la libgiza.la libpgplot.la
+lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
 
 libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
        giza-band-style.c giza-band.c giza-box-time.c giza-box.c \
@@ -45,7 +45,7 @@ libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90 $(libgiza_la_SOURCES)
 
 libpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS)
 
-include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza.mod
+include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90 giza.mod
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
