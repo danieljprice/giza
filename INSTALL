@@ -1,7 +1,7 @@
 Type: 
 
 ./configure
-make
+make install
 
 You will need a C compiler, cairo and X11 development packages. If they are 
 ready to go the above should build giza using gcc,
@@ -11,7 +11,7 @@ and "make install" should install under a Linux or Mac operating system.
 To install in a special location (e.g. your userspace), use:
 
 ./configure --prefix=${HOME}
-make
+make install
 
 -----
 If you have X11 or cairo installed in a custom location, or you don't have pkg-config installed,
@@ -19,7 +19,7 @@ specify the location with the following flags:
 
 ./configure X11_CFLAGS='-I/usr/X11/include' X11_LIBS='-L/usr/X11/lib -lX11'
             CAIRO_CFLAGS='-I/usr/X11/include/cairo' CAIRO_LIBS='-L/usr/X11/lib/cairo -lcairo'
-make
+make install
 
 -----
 You can find out more options using ./configure --help
