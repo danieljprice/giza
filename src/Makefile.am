@@ -37,13 +37,13 @@ libpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
        -no-undefined $(X11_LIBS) $(CAIRO_LIBS)
 
-libcpgplot_la_SOURCES = giza-cpgplot.c $(libgiza_la_SOURCES)
+libcpgplot_la_SOURCES = giza-cpgplot.c
 
-libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS)
+libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS) -lgiza
 
-libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90 $(libgiza_la_SOURCES)
+libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
 
-libpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS)
+libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS)
 
 include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90 giza.mod
 
