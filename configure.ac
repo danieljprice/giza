@@ -8,7 +8,7 @@ AC_INIT([giza],
         [http://giza.sf.net])
 AC_CONFIG_AUX_DIR([build])
 AM_INIT_AUTOMAKE([1.11 -Wall -Werror -Wno-extra-portability])
-AM_SILENT_RULES([yes])
+m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 AC_CONFIG_MACRO_DIRS([m4])
 AC_PROG_CC
 AC_PROG_FC
@@ -32,8 +32,14 @@ AC_SUBST(LT_CURRENT, 1)
 AC_SUBST(LT_REVISION, giza_version_micro)
 AC_SUBST(LT_AGE, 1)
 LT_INIT([shared])
-PKG_CHECK_MODULES([CAIRO], [cairo])
-PKG_CHECK_MODULES([X11], [x11])
+#
+# cairo and X11 libraries. Use pkg-config if available but provide fallback options if not (OS/X)
+#
+x11_libs="-L/usr/X11/lib -lX11"
+cairo_libs_osx="-L/usr/X11/lib -lcairo"
+cairo_cflags_osx="-I/usr/X11/include"
+PKG_CHECK_MODULES([CAIRO], [cairo],[],[AC_SUBST(CAIRO_LIBS,$cairo_libs_osx) AC_SUBST(CAIRO_CFLAGS,$cairo_cflags_osx)])
+PKG_CHECK_MODULES([X11], [x11], [], [AC_SUBST(X11_LIBS,$x11_libs)])
 AC_CONFIG_FILES([
  Makefile
  src/Makefile
