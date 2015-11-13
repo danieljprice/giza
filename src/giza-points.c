@@ -377,15 +377,17 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	case 0:
 	  _giza_rect (xd, yd, 0);
 	  break;
-	case -1: /* solid circles of various sizes */
+	case -1: /* single small point */
 	case -2:
-	case -3:
+          _giza_point (xd, yd);
+          break;
+	case -3: /* solid polygons */
 	case -4:
 	case -5:
 	case -6:
 	case -7:
 	case -8:
-          _giza_circle_size (xd, yd, 0.2*fabs(symbol), 1);
+          _giza_polygon (xd, yd, -symbol, 1);
           break;
 	default:
 	  _giza_point (xd, yd);
