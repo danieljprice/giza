@@ -1,3 +1,203 @@
+2015-11-13 05:07  danielprice
+
+	* /src/giza-points.c: patch for negative marker indices; now
+	  matches expected PGPLOT behaviour; contributed by Joachim Frieben
+
+2015-11-03 06:30  danielprice
+
+	* /INSTALL: updated INSTALL instructions
+
+2015-11-03 06:30  danielprice
+
+	* /configure, /configure.ac: added fallback options for cairo and
+	  x11 on OS/X if pkg-config not available
+
+2015-11-03 06:30  danielprice
+
+	* /src/Makefile.am, /src/Makefile.in: libpgplot and libcpgplot link
+	  to libgiza instead of including .o files; faster build (thanks to
+	  Joachim Frieben)
+
+2015-11-02 12:02  danielprice
+
+	* /src/Makefile.am, /src/Makefile.in: build libgiza before
+	  libcpgplot; also copy giza-fortran.F90 to include directory
+
+2015-11-01 22:48  danielprice
+
+	* /configure, /configure.ac: update libtool version info + added
+	  comments
+
+2015-11-01 22:48  danielprice
+
+	* /test/C/test-error-bars-2.c, /test/test-error-bars-2.c:
+	  test-error-bars-2.c -> test/C (thanks to Joachim Frieben)
+
+2015-11-01 22:48  danielprice
+
+	* /INSTALL: updated INSTALL instructions for autotools build
+	  (thanks to Joachim Frieben)
+
+2015-11-01 22:39  danielprice
+
+	* /branches, /docs, /interface, /lib: removed obsolete dirs in svn
+	  (thanks to Joachim Frieben)
+
+2015-11-01 22:38  danielprice
+
+	* /include: removed obsolete include dir (thanks to Joachim
+	  Frieben)
+
+2015-10-30 12:57  lolo-2
+
+	* /src/giza-character-size.c: typo in
+	  giza_set_character_height_float doc string (missing _float)
+
+2015-10-30 11:54  danielprice
+
+	* /Makefile.in, /aclocal.m4, /configure, /configure.ac,
+	  /src/Makefile.am, /src/Makefile.in, /test/C/Makefile.in,
+	  /test/F90/Makefile.in, /test/Makefile.in: updated build to use
+	  pkg-config to find X11 and cairo libs
+
+2015-10-30 11:54  danielprice
+
+	* /configure.ac, /src/giza-version.h.in: added versioning of
+	  giza-version.h to configure stuff
+
+2015-10-30 11:54  danielprice
+
+	* /build/compile, /build/config.guess, /build/config.sub,
+	  /build/depcomp, /build/install-sh, /build/ltmain.sh,
+	  /build/missing, /build/test-driver: added autoconf scripts to
+	  build dir
+
+2015-10-30 11:54  danielprice
+
+	* /Makefile.in, /config.h.in, /configure, /src/Makefile.in,
+	  /test/C/Makefile.in, /test/F90/Makefile.in, /test/Makefile.in:
+	  added autotools-generated files for distribution (thanks to
+	  Joachim Frieben)
+
+2015-10-30 11:53  danielprice
+
+	* /test/Makefile.am: replaced Makefiles with automake and autoconf
+	  scripts (thanks to Joachim Frieben)
+
+2015-10-30 11:53  danielprice
+
+	* /Makefile, /Makefile.am, /aclocal.m4, /build/Makefile,
+	  /configure.ac, /m4, /m4/libtool.m4, /m4/ltoptions.m4,
+	  /m4/ltsugar.m4, /m4/ltversion.m4, /m4/lt~obsolete.m4,
+	  /src/Makefile.am, /test/C/Makefile.am, /test/F90/Makefile.am,
+	  /test/Makefile: replaced Makefiles with automake and autoconf
+	  scripts (thanks to Joachim Frieben)
+
+2015-10-30 11:53  danielprice
+
+	* /src/giza-band-private.h, /src/giza-band.c,
+	  /src/giza-colour-index.c, /src/giza-colour-private.h,
+	  /src/giza-drivers.c, /src/giza-private.h: bug fixes with
+	  variables defined in headers; now uses extern and declared in .c
+	  files
+
+2015-10-30 11:53  danielprice
+
+	* /src/cpgplot.pc.in, /src/giza.pc.in, /src/pgplot.pc.in: added
+	  pkg-config metadata files (thanks to Joachim Frieben)
+
+2015-10-30 11:53  danielprice
+
+	* /CHANGES, /ChangeLog, /NEWS: CHANGES->NEWS and added ChangeLog
+	  (thanks to Joachim Frieben)
+
+2015-10-30 11:53  danielprice
+
+	* /include/.gitignore, /lib/.gitignore: removed include and lib
+	  dirs (thanks to Joachim Frieben)
+
+2015-10-30 11:53  danielprice
+
+	* /doc/cpgplot_status.pl, /doc/get-fortran-params.pl,
+	  /doc/pgplot_status.pl: perl scripts updated to point to ../src
+	  instead of ../interface (thanks to Joachim Frieben)
+
+2015-10-30 11:53  danielprice
+
+	* /include/cpgplot.h, /include/giza-shared.h, /include/giza.h,
+	  /src/cpgplot.h, /src/giza-shared.h, /src/giza.h: include/*.h->src
+	  (thanks to Joachim Frieben)
+
+2015-10-30 11:52  danielprice
+
+	* /interface/giza-cpgplot.c, /interface/giza-fortran.F90,
+	  /interface/giza-pgplot.f90, /src/giza-cpgplot.c,
+	  /src/giza-fortran.F90, /src/giza-pgplot.f90: interface/*->src
+	  (thanks to Joachim Frieben)
+
+2015-10-30 11:52  danielprice
+
+	* /test/test-2D.f90, /test/test-XOpenDisplay.c, /test/test-arrow.c,
+	  /test/test-band.c, /test/test-box.c, /test/test-cairo-xw.c,
+	  /test/test-change-page.c, /test/test-circle.c,
+	  /test/test-colour-index.c, /test/test-contour.c,
+	  /test/test-environment.c, /test/test-error-bars.c,
+	  /test/test-format-number.c, /test/test-fortran.f90,
+	  /test/test-giza-xw.c, /test/test-line-cap.c,
+	  /test/test-line-style.c, /test/test-openclose.c,
+	  /test/test-pdf.c, /test/test-pgaxis.f90, /test/test-pgncur.f90,
+	  /test/test-png.c, /test/test-points.c, /test/test-qtext.c,
+	  /test/test-rectangle.c, /test/test-render.c,
+	  /test/test-set-line-width.c, /test/test-svg.c,
+	  /test/test-vector.c, /test/test-window.c: test->test/C test/F90
+	  (thanks to Joachim Frieben)
+
+2015-10-30 11:52  danielprice
+
+	* /test/C, /test/C/test-XOpenDisplay.c, /test/C/test-arrow.c,
+	  /test/C/test-band.c, /test/C/test-box.c, /test/C/test-cairo-xw.c,
+	  /test/C/test-change-page.c, /test/C/test-circle.c,
+	  /test/C/test-colour-index.c, /test/C/test-contour.c,
+	  /test/C/test-environment.c, /test/C/test-error-bars.c,
+	  /test/C/test-format-number.c, /test/C/test-giza-xw.c,
+	  /test/C/test-line-cap.c, /test/C/test-line-style.c,
+	  /test/C/test-openclose.c, /test/C/test-pdf.c, /test/C/test-png.c,
+	  /test/C/test-points.c, /test/C/test-qtext.c,
+	  /test/C/test-rectangle.c, /test/C/test-render.c,
+	  /test/C/test-set-line-width.c, /test/C/test-svg.c,
+	  /test/C/test-vector.c, /test/C/test-window.c, /test/F90,
+	  /test/F90/test-2D.f90, /test/F90/test-fortran.f90,
+	  /test/F90/test-pgaxis.f90, /test/F90/test-pgncur.f90:
+	  test->test/C test/F90 (thanks to Joachim Frieben)
+
+2015-10-30 11:52  danielprice
+
+	* /doc, /doc/api.pl, /doc/cpgplot_status.pl,
+	  /doc/get-fortran-params.pl, /doc/get-source-files.pl,
+	  /doc/pgplot_status.pl, /docs/api.pl, /docs/cpgplot_status.pl,
+	  /docs/get-fortran-params.pl, /docs/get-source-files.pl,
+	  /docs/pgplot_status.pl: docs->doc (thanks to Joachim Frieben)
+
+2015-10-29 14:42  lolo-2
+
+	* /include/giza.h: added giza_rectangle_rounded and
+	  giza_rectangle_rounded_float functions declarations
+
+2015-10-29 14:21  lolo-2
+
+	* /test/test-error-bars-2.c: added test-error-bars-2.c file for all
+	  direction values (included shaded mode)
+
+2015-10-29 13:52  lolo-2
+
+	* /src/giza-error-bars.c: fix error bars bug in shaded region mode
+	  (dir = 9)
+
+2015-10-20 06:16  danielprice
+
+	* /build/Makefile: (os/x) fixed X11 library path for OS/X El
+	  Capitan
+
 2015-04-27 21:55  danielprice
 
 	* /README: updated readme

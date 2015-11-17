@@ -1,4 +1,37 @@
 -----------------------------------
+Changes in 0.9.4 compared to 0.9.3
+-----------------------------------
+      updated readme
+      (os/x) fixed X11 library path for OS/X El Capitan
+      docs->doc (thanks to Joachim Frieben)
+      test->test/C test/F90 (thanks to Joachim Frieben)
+      test->test/C test/F90 (thanks to Joachim Frieben)
+      interface/*->src (thanks to Joachim Frieben)
+      include/*.h->src (thanks to Joachim Frieben)
+      perl scripts updated to point to ../src instead of ../interface (thanks to Joachim Frieben)
+      removed include and lib dirs (thanks to Joachim Frieben)
+      CHANGES->NEWS and added ChangeLog (thanks to Joachim Frieben)
+      added pkg-config metadata files (thanks to Joachim Frieben)
+      bug fixes with variables defined in headers; now uses extern and declared in .c files
+      replaced Makefiles with automake and autoconf scripts (thanks to Joachim Frieben)
+      replaced Makefiles with automake and autoconf scripts (thanks to Joachim Frieben)
+      added autotools-generated files for distribution (thanks to Joachim Frieben)
+      added autoconf scripts to build dir
+      added versioning of giza-version.h to configure stuff
+      updated build to use pkg-config to find X11 and cairo libs
+      removed obsolete include dir (thanks to Joachim Frieben)
+      removed obsolete dirs in svn (thanks to Joachim Frieben)
+      updated INSTALL instructions for autotools build (thanks to Joachim Frieben)
+      test-error-bars-2.c -> test/C (thanks to Joachim Frieben)
+      update libtool version info + added comments
+      build libgiza before libcpgplot; also copy giza-fortran.F90 to include directory
+      libpgplot and libcpgplot link to libgiza instead of including .o files; faster build (thanks to Joachim Frieben)
+      added fallback options for cairo and x11 on OS/X if pkg-config not available
+      updated INSTALL instructions
+      patch for negative marker indices; now matches expected PGPLOT behaviour; contributed by Joachim Frieben
+      0.9.4
+
+-----------------------------------
 Changes in 0.9.3 compared to 0.9.2
 -----------------------------------
       added FFLAGS setting and -fPIC to Makefile
