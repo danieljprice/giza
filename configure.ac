@@ -10,6 +10,7 @@ AC_CONFIG_AUX_DIR([build])
 AM_INIT_AUTOMAKE([1.11 -Wall -Werror -Wno-extra-portability])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 AC_CONFIG_MACRO_DIRS([m4])
+AM_MAINTAINER_MODE([disable])
 AC_PROG_CC
 AC_PROG_FC
 AC_CONFIG_HEADERS([config.h])
