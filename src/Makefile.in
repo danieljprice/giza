@@ -131,8 +131,8 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" \
-	"$(DESTDIR)$(includedir)"
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(fmoddir)" \
+	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libcpgplot_la_LIBADD =
 am_libcpgplot_la_OBJECTS = libcpgplot_la-giza-cpgplot.lo
@@ -259,7 +259,7 @@ am__can_run_installinfo = \
     n|no|NO) false;; \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
-DATA = $(pkgconfig_DATA)
+DATA = $(fmod_DATA) $(pkgconfig_DATA)
 HEADERS = $(include_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
@@ -416,7 +416,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-CLEANFILES = *.mod .*pc
+CLEANFILES = *.mod *.pc
 lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
 libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
        giza-band-style.c giza-band.c giza-box-time.c giza-box.c \
@@ -449,11 +449,6 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
        giza-driver-png-private.h giza-set-font-private.h giza-window-private.h \
        giza-driver-ps-private.h giza-shared.h giza.h
 
-
-# uncomment these if pkg-config not working
-#X11_LIBS = "-L/usr/X11/lib -L/$(prefix)/lib -lX11"
-#X11_CFLAGS = "-I/usr/X11/include"
-#CAIRO_LIBS = "-lcairo"
 libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS)
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 libpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
@@ -464,9 +459,11 @@ libcpgplot_la_SOURCES = giza-cpgplot.c
 libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS) -lgiza
 libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS)
-include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90 giza.mod
+include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
+fmoddir = $(libdir)/$(FC)/modules
+fmod_DATA = giza.mod
 all: all-am
 
 .SUFFIXES:
@@ -1159,6 +1156,27 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
+install-fmodDATA: $(fmod_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(fmod_DATA)'; test -n "$(fmoddir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(fmoddir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(fmoddir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(fmoddir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(fmoddir)" || exit $$?; \
+	done
+
+uninstall-fmodDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(fmod_DATA)'; test -n "$(fmoddir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(fmoddir)'; $(am__uninstall_files_from_dir)
 install-pkgconfigDATA: $(pkgconfig_DATA)
 	@$(NORMAL_INSTALL)
 	@list='$(pkgconfig_DATA)'; test -n "$(pkgconfigdir)" || list=; \
@@ -1288,7 +1306,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(fmoddir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(includedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -1345,7 +1363,8 @@ info: info-am
 
 info-am:
 
-install-data-am: install-includeHEADERS install-pkgconfigDATA
+install-data-am: install-fmodDATA install-includeHEADERS \
+	install-pkgconfigDATA
 
 install-dvi: install-dvi-am
 
@@ -1391,8 +1410,8 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-includeHEADERS uninstall-libLTLIBRARIES \
-	uninstall-pkgconfigDATA
+uninstall-am: uninstall-fmodDATA uninstall-includeHEADERS \
+	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA
 
 .MAKE: install-am install-strip
 
@@ -1402,15 +1421,16 @@ uninstall-am: uninstall-includeHEADERS uninstall-libLTLIBRARIES \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
-	install-exec-am install-html install-html-am \
+	install-exec-am install-fmodDATA install-html install-html-am \
 	install-includeHEADERS install-info install-info-am \
 	install-libLTLIBRARIES install-man install-pdf install-pdf-am \
 	install-pkgconfigDATA install-ps install-ps-am install-strip \
 	installcheck installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags tags-am uninstall uninstall-am uninstall-includeHEADERS \
-	uninstall-libLTLIBRARIES uninstall-pkgconfigDATA
+	tags tags-am uninstall uninstall-am uninstall-fmodDATA \
+	uninstall-includeHEADERS uninstall-libLTLIBRARIES \
+	uninstall-pkgconfigDATA
 
 .PRECIOUS: Makefile
 

@@ -1,4 +1,4 @@
-CLEANFILES = *.mod .*pc
+CLEANFILES = *.mod *.pc
 
 lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
 
@@ -33,12 +33,6 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
        giza-driver-png-private.h giza-set-font-private.h giza-window-private.h \
        giza-driver-ps-private.h giza-shared.h giza.h
 
-
-# uncomment these if pkg-config not working
-#X11_LIBS = "-L/usr/X11/lib -L/$(prefix)/lib -lX11"
-#X11_CFLAGS = "-I/usr/X11/include"
-#CAIRO_LIBS = "-lcairo"
-
 libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS)
 
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
@@ -56,7 +50,10 @@ libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
 
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS)
 
-include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90 giza.mod
+include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
+
+fmoddir = $(libdir)/$(FC)/modules
+fmod_DATA = giza.mod
