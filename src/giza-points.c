@@ -528,8 +528,8 @@ _giza_polygon (double x, double y, int nsides, int fill)
  /* Define radius */
  double r = 0.5 * markerHeight;
 
- /* Set first vertex so that shape appears flat-bottomed */
- double alpha = (0.5 + 1./((double) nsides))* M_PI;
+ /* Set first vertex above marker position */
+ double alpha = 1.5 * M_PI;
  double cosalpha = cos(alpha);
  double sinalpha = sin(alpha);
  cairo_move_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
