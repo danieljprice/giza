@@ -1,3 +1,5 @@
+.NOTPARALLEL:
+
 CLEANFILES = *.mod *.pc
 
 lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
