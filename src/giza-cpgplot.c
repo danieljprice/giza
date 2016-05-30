@@ -379,10 +379,10 @@ void cpggray(const float *a, int idim, int jdim, int i1, int i2, \
 }
 
 /***************************************************************
- * cpghi2D -- cross-sections through a 2D data array
+ * cpghi2d -- cross-sections through a 2D data array
  * Status: NOT IMPLEMENTED
  ***************************************************************/
-void cpghi2D(const float *data, int nxv, int nyv, int ix1, \
+void cpghi2d(const float *data, int nxv, int nyv, int ix1, \
  int ix2, int iy1, int iy2, const float *x, int ioff, float bias, \
  Logical center, float *ylims)
 {
