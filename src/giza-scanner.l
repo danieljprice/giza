@@ -119,8 +119,8 @@
 #define GIZA_SCALE_SUBS   0.65
 #define GIZA_LOWER_SUBS   0.2
 
-void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
-int _giza_get_chunk (const char *text);
+static void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
+static int _giza_get_chunk (const char *text);
 
 %}
 
@@ -295,7 +295,7 @@ ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\
 /**
  * Parses brackets in text, returns the length of the string contained in outermost brackets
  */
-int
+static int
 _giza_get_chunk (const char *text)
 {
   int openb = 0;
@@ -343,7 +343,7 @@ _giza_get_chunk (const char *text)
  * remaining until an unmatched close bracket, or the end of the string, 
  * whichever comes first.
  */
-int
+static int
 _giza_get_chunk_fontchange (const char *text)
 {
   int openb = 0;
@@ -641,7 +641,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 /**
  * Adds the utf-8 character representation of token to string.
  */
-void
+static void
 _giza_add_token_to_string (char *string, yyscan_t scanner, int token)
 {
   switch (token)
