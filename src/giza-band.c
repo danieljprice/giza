@@ -30,8 +30,8 @@
 #include "math.h"
 #define GIZA_MAX_BAND_MODES 8
 
-/* storage of band settings */
-static giza_band_t Band;
+/* storage of band settings, this is declared extern in the header file */
+giza_band_t Band;
 
 /**
  * Interactive: giza_band

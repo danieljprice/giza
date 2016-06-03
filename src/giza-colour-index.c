@@ -33,8 +33,9 @@
 static double colourIndex[GIZA_COLOUR_INDEX_MAX - GIZA_COLOUR_INDEX_MIN + 1][4];
 static int _giza_ci;
 
-static int _giza_colour_index_min;
-static int _giza_colour_index_max;
+/* these are declared extern in the header file */
+int _giza_colour_index_min;
+int _giza_colour_index_max;
 
 /**
  * Settings: giza_set_colour_index
