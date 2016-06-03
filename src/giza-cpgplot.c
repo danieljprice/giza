@@ -34,7 +34,7 @@
 #include "cpgplot.h"
 #include <string.h>
 #include <stdlib.h>
-int pgfont;
+static int pgfont;
 
 /***************************************************************
  * Function to convert PGPLOT units value to giza units value

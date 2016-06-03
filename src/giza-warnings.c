@@ -25,7 +25,7 @@
 #include <giza.h>
 #include "giza-warnings-private.h"
 
-int _giza_warnings = 1;
+static int _giza_warnings = 1;
 
 /**
  * Settings: giza_start_warnings
