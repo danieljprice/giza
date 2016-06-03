@@ -28,23 +28,23 @@
 #include <giza.h>
 
 #define GIZA_SAVE_MAX 30
-int _giza_save_ncalls;
-double lw[GIZA_SAVE_MAX];
-double ch[GIZA_SAVE_MAX];
-int ls[GIZA_SAVE_MAX];
-int lc[GIZA_SAVE_MAX];
-int fs[GIZA_SAVE_MAX];
-int ci[GIZA_SAVE_MAX];
-int textbgci[GIZA_SAVE_MAX];
-int arrowfs[GIZA_SAVE_MAX];
-double arrowangle[GIZA_SAVE_MAX];
-double arrowcutback[GIZA_SAVE_MAX];
-double hatch_angle[GIZA_SAVE_MAX];
-double hatch_spacing[GIZA_SAVE_MAX];
-double hatch_phase[GIZA_SAVE_MAX];
-double band_lw[GIZA_SAVE_MAX];
-int band_ls[GIZA_SAVE_MAX];
-char font[GIZA_FONT_LEN];
+static int _giza_save_ncalls;
+static double lw[GIZA_SAVE_MAX];
+static double ch[GIZA_SAVE_MAX];
+static int ls[GIZA_SAVE_MAX];
+static int lc[GIZA_SAVE_MAX];
+static int fs[GIZA_SAVE_MAX];
+static int ci[GIZA_SAVE_MAX];
+static int textbgci[GIZA_SAVE_MAX];
+static int arrowfs[GIZA_SAVE_MAX];
+static double arrowangle[GIZA_SAVE_MAX];
+static double arrowcutback[GIZA_SAVE_MAX];
+static double hatch_angle[GIZA_SAVE_MAX];
+static double hatch_spacing[GIZA_SAVE_MAX];
+static double hatch_phase[GIZA_SAVE_MAX];
+static double band_lw[GIZA_SAVE_MAX];
+static int band_ls[GIZA_SAVE_MAX];
+static char font[GIZA_FONT_LEN];
 
 /**
  * Settings: giza_save
