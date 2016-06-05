@@ -73,10 +73,11 @@ struct GIZA_XWindow
 static void _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const int *anchory, int *x, int *y, char *ch);
 static void _giza_expose_xw (XEvent *event);
 static void _giza_flush_xw_event_queue (XEvent *event);
-/*static int _giza_errors_xw (Display *display, XErrorEvent *error);*/
+static int _giza_errors_xw (Display *display, XErrorEvent *error);
 
 static int giza_xw_id[GIZA_MAX_DEVICES];
 static int xid = -1;
+/*static int giza_xw_debug = 0;*/
 
 /**
  * Opens an XWindow device for drawing to.
@@ -129,14 +130,16 @@ _giza_open_device_xw (double width, double height, int units)
   XW[xid].depth = DefaultDepth(XW[xid].display,XW[xid].screennum);
 
   /* Debugging info */
-  /*
-  printf("giza_xw_debug: XW display: %s\n",XDisplayName((char*)XW[xid].display));
-  printf("giza_xw_debug: XW monitor resolution: %d x %d\n",
-                          DisplayWidth(XW[xid].display,XW[xid].screennum),
-                          DisplayHeight(XW[xid].display,XW[xid].screennum));
-  */
- /* printf("Connection number is %d\n",XW/); */
 
+  /*if (giza_xw_debug)
+     {
+       XSynchronize(XW[xid].display, True);
+       printf("(giza_xw_debug) XW display: %s\n",XDisplayName((char*)XW[xid].display));
+       printf("(giza_xw_debug) XW monitor resolution: %d x %d\n",
+                              DisplayWidth(XW[xid].display,XW[xid].screennum),
+                             DisplayHeight(XW[xid].display,XW[xid].screennum));
+    }
+  */
   if (XW[xid].depth == 1)
     {
        _giza_error("_giza_open_device_xw","XW depth = 1: no colour possible");
@@ -170,6 +173,7 @@ _giza_open_device_xw (double width, double height, int units)
     }
 
   XStoreName (XW[xid].display, XW[xid].window, Dev[id].prefix);
+  XSelectInput(XW[xid].display, XW[xid].window, StructureNotifyMask);
   XMapWindow (XW[xid].display, XW[xid].window);
 
    /* register interest in the delete window message */
@@ -177,7 +181,7 @@ _giza_open_device_xw (double width, double height, int units)
   XSetWMProtocols(XW[xid].display, XW[xid].window, &wmDeleteMessage, 1);
 
   /* register the routine to handle non-fatal X errors */
-  /*XSetErrorHandler( _giza_errors_xw );*/
+  XSetErrorHandler( _giza_errors_xw );
 
   /* create the pixmap */
   XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
@@ -201,6 +205,15 @@ _giza_open_device_xw (double width, double height, int units)
     }
 
   Dev[id].defaultBackgroundAlpha = 1.;
+
+  /* Wait for the MapNotify event */
+
+  for(;;) {
+      XEvent e;
+      XNextEvent(XW[xid].display, &e);
+      if (e.type == MapNotify)
+	  break;
+  }
 
   return 0;
 }
@@ -242,7 +255,7 @@ _giza_change_page_xw (void)
 
   cairo_surface_destroy (Dev[id].surface);
   XFreePixmap (XW[xid].display, XW[xid].pixmap);
-  
+
 /*  int resize = 0;*/
   if (Dev[id].resize) {
      /* Set the new device size */
@@ -302,7 +315,7 @@ _giza_close_device_xw (void)
   XCloseDisplay (XW[xid].display);
 }
 
-/*
+
 static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
 {
   char text[82];
@@ -311,7 +324,7 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
   _giza_error("giza_xw",text);
   return 0;
 }
-*/
+
 
 /**
  * Loops indefinitely, redrawing and resizing the window as necessary until a key is pressed.
