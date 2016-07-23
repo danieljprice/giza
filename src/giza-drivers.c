@@ -1082,8 +1082,8 @@ void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, cha
   /* this stuff is instead of using strcasestr
    * (giza should not use non-standard extensions)
    */
-  char lprefix[strlen(prefix)];
-  char lextens[strlen(extension)];
+  char lprefix[strlen(prefix) + 1];
+  char lextens[strlen(extension) + 1];
   _giza_lowercase(prefix,lprefix);
   _giza_lowercase(extension,lextens);
 
