@@ -133,14 +133,17 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
               }
          }
 	 else
-	   {	      
+	   {
 	      /* trace from top line to bottom one */
 	      cairo_line_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
-	   }	 
+	   }
       }
       
       if (dir == 8 || dir == 9) {
-         cairo_move_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
+         if (dir==8)
+            {
+              cairo_move_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
+            }
          for (i = n-1; i >= 0; i--)
            {
              /* draw line along bottom of error bars */
@@ -272,7 +275,10 @@ giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts, con
       }
       
       if (dir == 8 || dir == 9) {
-         cairo_move_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
+         if (dir==8)
+            {
+              cairo_move_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
+            }
          for (i = n-1; i >= 0; i--)
            {
              /* draw line along bottom of error bars */
