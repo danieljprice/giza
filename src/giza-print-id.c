@@ -56,7 +56,8 @@ giza_print_id (void)
   /* format the date and time into a string */
   char date[20];
   strftime(date,sizeof(date)," %e-%h-%Y %H:%M",current);
-  char *string = strcat(userid,date);
+  char *string = malloc(strlen(userid) + strlen(date) + 1);
+  sprintf(string, "%s%s",userid,date);
 
   double ch,xch,ych;
   giza_get_character_height(&ch);
@@ -79,6 +80,7 @@ giza_print_id (void)
 
   /* print text at location */
   giza_ptext(x,y,0.,1.,string);
+  free(string);
 
   /* reset settings */
   _giza_set_trans(oldtrans);
