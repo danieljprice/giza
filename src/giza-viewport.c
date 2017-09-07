@@ -145,7 +145,10 @@ giza_set_viewport_float (float xleft, float xright, float ybottom, float ytop)
 void
 giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
 {
-  if(!_giza_check_device_ready("giza_get_viewport")) return;
+  if(!_giza_check_device_ready("giza_get_viewport")) {
+     *x1 = 0.; *x2 = 1.; *y1 = 0; *y2 = 1.; /* avoid compiler warning */
+     return;
+  }
 
   *x1 = (Dev[id].VP.xmin);
   *x2 = (Dev[id].VP.xmax);

@@ -212,8 +212,10 @@ giza_set_window_equal_scale_float (float x1, float x2, float y1, float y2)
 void
 giza_get_window (double *x1, double *x2, double *y1, double *y2)
 {
-  if(!_giza_check_device_ready("giza_get_window")) return;
-
+  if(!_giza_check_device_ready("giza_get_window")) {
+    *x1 = 0.; *x2 = 1.; *y1 = 0; *y2 = 1.; /* avoid compiler warning */
+    return;
+  }
   *x1 = Dev[id].Win.xmin;
   *x2 = Dev[id].Win.xmax;
   *y1 = Dev[id].Win.ymin;
