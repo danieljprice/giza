@@ -342,7 +342,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		}
 	      if (xdraw_labels_ontop)
 		{
-		  giza_annotate ("T", .4, xratio, 0.5, tmp);
+		  giza_annotate ("T", 0.8, xratio, 0.5, tmp);
 		}
 	    }
 	}
@@ -370,7 +370,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		    }
 		  if (xdraw_labels_ontop)
 		    {
-		      giza_annotate ("T", .4, xratio, 0.5, tmp);
+		      giza_annotate ("T", .8, xratio, 0.5, tmp);
 		    }
 		}
 	    }
