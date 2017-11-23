@@ -276,30 +276,32 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		  if ((xdraw_axis && (i == 0)) || (xval >= Win.xmax) || (xval <= Win.xmin))
 		    currentTickL = 0;
 
-		  /* bottom */
-		  if (xdraw_bottom)
-		    {
-		      cairo_move_to (Dev[id].context, xval, Win.ymin);
-		      cairo_line_to (Dev[id].context, xval, Win.ymin + currentTickL);
-		    }
-		  /* grid */
-		  if (xdraw_grid)
-		    {
-		      cairo_move_to (Dev[id].context, xval, Win.ymin);
-		      cairo_line_to (Dev[id].context, xval, Win.ymax);
-		    }
-		  /* axis */
-		  else if (xdraw_axis)
-		    {
-		      cairo_move_to (Dev[id].context, xval, -currentTickL);
-		      cairo_line_to (Dev[id].context, xval, currentTickL);
-		    }
-		  /* top */
-		  if (xdraw_top)
-		    {
-		      cairo_move_to (Dev[id].context, xval, Win.ymax);
-		      cairo_line_to (Dev[id].context, xval, Win.ymax - currentTickL);
-		    }
+                  if ((major && xdraw_majticks) || xdraw_minticks) {
+		    /* bottom */
+		    if (xdraw_bottom)
+		      {
+		        cairo_move_to (Dev[id].context, xval, Win.ymin);
+		        cairo_line_to (Dev[id].context, xval, Win.ymin + currentTickL);
+		      }
+		    /* grid */
+		    if (xdraw_grid && major)
+		      {
+		        cairo_move_to (Dev[id].context, xval, Win.ymin);
+		        cairo_line_to (Dev[id].context, xval, Win.ymax);
+		      }
+		    /* axis */
+		    else if (xdraw_axis)
+		      {
+		        cairo_move_to (Dev[id].context, xval, -currentTickL);
+		        cairo_line_to (Dev[id].context, xval, currentTickL);
+		      }
+		    /* top */
+		    if (xdraw_top)
+		      {
+		        cairo_move_to (Dev[id].context, xval, Win.ymax);
+		        cairo_line_to (Dev[id].context, xval, Win.ymax - currentTickL);
+		      }
+                   }
 		}
 	    }
 	}
@@ -435,30 +437,32 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		  if ((ydraw_axis && (i == 0)) || yval >= Win.ymax || yval <= Win.ymin)
 		    currentTickL = 0.;
 
-		  /* left */
-		  if (ydraw_left)
-		    {
-		      cairo_move_to (Dev[id].context, Win.xmin, yval);
-		      cairo_line_to (Dev[id].context, Win.xmin + currentTickL, yval);
-		    }
-		  /* grid */
-		  if (ydraw_grid)
-		    {
-		      cairo_move_to (Dev[id].context, Win.xmin, yval);
-		      cairo_line_to (Dev[id].context, Win.xmax, yval);
-		    }
-		  /* axis */
-		  else if (ydraw_axis)
-		    {
-		      cairo_move_to (Dev[id].context, -currentTickL, yval);
-		      cairo_line_to (Dev[id].context, currentTickL, yval);
-		    }
-		  /* right */
-		  if (ydraw_right)
-		    {
-		      cairo_move_to (Dev[id].context, Win.xmax, yval);
-		      cairo_line_to (Dev[id].context, Win.xmax - currentTickL, yval);
-		    }
+                  if ((major && ydraw_majticks) || ydraw_minticks) {
+		    /* left */
+		    if (ydraw_left)
+		      {
+		        cairo_move_to (Dev[id].context, Win.xmin, yval);
+		        cairo_line_to (Dev[id].context, Win.xmin + currentTickL, yval);
+		      }
+		    /* grid */
+		    if (ydraw_grid && major)
+		      {
+		        cairo_move_to (Dev[id].context, Win.xmin, yval);
+		        cairo_line_to (Dev[id].context, Win.xmax, yval);
+		      }
+		    /* axis */
+		    else if (ydraw_axis)
+		      {
+		        cairo_move_to (Dev[id].context, -currentTickL, yval);
+		        cairo_line_to (Dev[id].context, currentTickL, yval);
+		      }
+		    /* right */
+		    if (ydraw_right)
+		      {
+		        cairo_move_to (Dev[id].context, Win.xmax, yval);
+		        cairo_line_to (Dev[id].context, Win.xmax - currentTickL, yval);
+		      }
+                   }
 		}
 	    }
 	}
