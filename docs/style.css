@@ -1,0 +1,177 @@
+table.api, .header, #menucontainer, body {
+  font-family:sans-serif;
+}
+
+.code {
+  font-family:monospace;
+}
+
+h1, h2, h3, .header, body, .code {
+  color:rgb(51,51,51);
+}
+
+a {
+  color:rgb(0,141,191);
+}
+
+.header, #menucontainer  {
+  text-align:center;
+}
+
+body, .code {
+  text-align:left;
+}
+
+.code {
+  text-decoration:italic;
+  padding-left:10%;
+}
+
+.header {
+  font-size:17pt;
+  padding-bottom:5px
+}
+
+#menucontainer ul {
+    /*padding-bottom: 1px; */
+    /* padding-top: 5px;*/
+    padding-left: 0;
+    /* margin-top: 0;*/
+    /* cancels gap caused by top padding in Opera 7.54 */
+    /* margin-left: 5%; */
+    background-color: rgb(51,51,51);
+    color: white;
+    /* width: 90%; */
+    /* line-height: 18px; */
+    /* fixes Firefox 0.9.3 */
+}
+
+#menucontainer ul li {
+    display: inline;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 5px;
+    /* matches link padding except for left and right */
+    padding-top: 5px;
+}
+
+#menucontainer ul li a {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    color: white;
+    text-decoration: none;
+    /* border-right: 1px solid #fff; */
+}
+
+#menucontainer ul li a:hover {
+    color: rgb(0,141,191)
+}
+
+table.api, body {
+  font-size:10pt;
+  margin-left:5%;
+  width:90%
+}
+
+p {
+  margin-left:5%;
+  margin-right:5%;
+}
+
+dl.toc {
+  margin-left:0%;
+  margin-right:0%;
+}
+
+ul.nested {
+  text-decoration: none;
+ 
+  margin-left:5%;
+  margin-right:5%;
+}
+
+a {
+  text-decoration:none;
+}
+
+a:hover {
+  text-decoration:underline;
+}
+
+h2 {
+  text-decoration:none;
+  font-size:12pt;
+  font-weight:bold;
+  margin-left:5%;
+}
+
+h1 {
+  text-decoration:none;
+  font-size:16pt;
+  font-weight:normal;  
+}
+
+h3 {
+  text-decoration:none;
+  font-size:14pt;
+  margin-left:0%;
+  font-weight:normal;  
+}
+
+h4 {
+  text-decoration:none;
+  font-size:10pt;
+  margin-left:5%;
+  font-weight:bold;
+}
+
+hr {
+  width:100%;
+  size:1;
+  color:rgb(51,51,51);
+}
+
+
+table.img {
+  margin-left:auto;
+  margin-right:auto;
+  background-color:rgb(51,51,51);
+  padding:5px;
+}
+
+table.proto {
+  width:90%;
+  margin-left:5%;
+  margin-right:5%;
+  padding:0px;
+  border-style:solid;
+  border-width:1px;
+  border-collapse:separate;
+  background-color:rgb(220,220,220);
+  text-color:white;
+}
+
+table.api {
+  width:auto;
+  margin-left:5%;
+  margin-right:auto;
+  padding:0px;
+  border-style:none;
+  border-width:2px;
+  border-collapse:separate;
+}
+
+table.api th {
+  border-width:1px;
+  padding:1px;
+  border-style:none;
+}
+
+table.api td {
+  text-align:left;
+  border-width:1px;
+  padding:1px;
+  border-style:none;
+}
