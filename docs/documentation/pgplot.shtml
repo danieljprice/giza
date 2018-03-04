@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <meta http-equiv="Conent-Type" content="text/html"; charset=utf-8" \>
+    <title>giza - documentation</title>
+    <link rel="stylesheet" href="../style.css" type="text/css" \>
+  </head>
+
+  <div class="header">
+    <a href="/"><img alt="giza" src="../title.png"\></a>
+  </div>
+
+  <div id="menucontainer">
+  <ul id="menulist">
+    <li><a href="/news/">news</a></li>
+    <li><a href="/download/">download</a></li>
+    <li><a href="/documentation/">documentation</a></li>
+    <li><a href="/contact/">contact</a></li>
+    <li><a href="/samples/">samples</a></li>
+  </ul>
+  </div>
+
+  <div id="content">
+  <h1>PGPLOT interface</h1>
+    <p>Included with giza are PGPLOT interfaces that aim to replicate the full public interface to PGPLOT. This means that giza can be compiled as a drop-in replacement for
+    libpgplot and libcpgplot. So older programs written using PGPLOT can be linked against giza with the source code unchanged, giving a modern
+    plotting library with antialiased lines, real fonts and PDF output. For the c library (libcpgplot) it also avoids the unnecessary linking against FORTRAN 
+    necessary with the original libcpgplot so increases portability of code written in c.
+    The giza-PGPLOT API also aims to provide maximum backwards compatibility with PGPLOT (e.g., line styles,
+    greek letter escape sequences, etc.) so that codes can be transitioned with ease.</p>
+    
+    <p>The status of the standard <a href="#libpgplot">Fortran</a> (libpgplot) and <a href="#libcpgplot">C</a> (libcpgplot) interfaces are given below. Contributions most welcome!</p>
+  </div>
+  <div id="content">
+    <h2><a name="libpgplot"></a>Current status (libpgplot):</h2>
+    <p>
+    <!--#include virtual="pgplot-status.html"-->
+    </p>
+    <h2><a name="libcpgplot"></a>Current status (libcpgplot):</h2>
+    <p>
+    <!--#include virtual="cpgplot-status.html"-->
+    </p>
+  </div>
+
+</html>

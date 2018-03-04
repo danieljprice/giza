@@ -1,0 +1,112 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html"; charset=utf-8" \>
+    <title>giza - installation</title>
+    <link rel="stylesheet" href="../style.css" type="text/css" \>
+  </head>
+
+  <div class="header">
+    <a href="/"><img alt="giza" src="../title.png"\></a>
+  </div>
+
+  <div id="menucontainer">
+  <ul id="menulist">
+    <li><a href="/news/">news</a></li>
+    <li><a href="/download/">download</a></li>
+    <li><a href="/documentation/">documentation</a></li>
+    <li><a href="/contact/">contact</a></li>
+    <li><a href="/samples/">samples</a></li>
+  </ul>
+  </div>
+
+  <div id="content">
+    <h1>Installation</h1>
+    <h2>Getting ready</h2>
+    <p>You will need some basic build tools such as make and a c compiler. Most linux
+    distributions provide packages containing these tools. In Ubuntu the required
+    packages are make and gcc.
+    You will also need the development packages for cairo and x11. In Ubuntu these packages
+    are libcairo2-dev and libx11-dev.
+    <h2>Get the source</h2>
+    <p>The first step is to get a copy of the code. There are two ways to do this; either get
+    the current source from the subversion repository, or grab the latest tar ball from our download
+    page.</p>
+    <p>To check out a copy of the code from subversion change to a directory to build the code in,
+    for exampe /path/to/my/home/src/. Then use the following command:</p>
+    <div class="code">
+      svn co http://svn.code.sf.net/p/giza/code/ giza
+    </div>
+    <p>It is always best to get the newest code from the subversion repository if possible, but if you 
+    don't have subversion installed then grab the newest tarball from 
+    <a href="http://sourceforge.net/projects/giza/files/">here</a>. Move the tar file to a directory 
+    in your home directory to build it in. For example /path/to/my/home/src. Then change to this 
+    directory and untar the code with the following command:</p>
+    <div class="code">
+      tar xzvf giza-0.8.0.tar.gz
+    </div>
+    <p>But replace giza-0.8.0.tar.gz with the version of giza you have.
+    
+    <h2>Configuration</h2>
+    <p>Once you have the code you may need to configure it for you system. If you are using a linux system
+    and cairo and x11 are installed in the standard places you may skip this section.</p>
+    <h4>Specify the location of dependancies</h4>
+    <p>If cairo and/or xlib are not installed in /usr/local and /usr/X11R6 respectivly you will need to
+    specify their location in the make file. To do this open build/Makefile. Near the top of the file
+    the variables X11LIBS, CAIROLIBS are set. Modify these lines so that the specify the location
+    of the cairo and x11 libraries, i.e.</p>
+    <div class="code">
+      X11LIBS=-L/path/to/X11/lib -lX11 <BR>
+      CAIROLIBS=-L/path/to/cairo/lib -lcairo
+    </div>
+    <p>You also need to set the include flags so the compiler can find the header. In build/Makefile
+    find where the variable INCFLAGS is set. Add to this the the location of cairo.h and xlib.h, i.e.</p>
+    <div class="code">
+      INCFLAGS= -I/path/to/xlib/header -I/path/to/cairo/header -I$(INCDIR) -I$(SRCDIR)
+    </div>
+    <p>Now giza should be able to find it's dependancies.
+
+    <h4>Non linux system</h4>
+    <p>If you are not using gcc on a linux system you will have to specify some system dependant things
+    in the make file. Open build/Makefile
+    and scroll down to the following code:</p>
+    <div class="code">
+    <pre>
+ifeq ($(SYSTEM),linux)
+  # using gcc
+  CC= gcc
+  CFLAGS += -fPIC
+  SHAREDLIBFLAGS= -shared
+  SHAREDEXT=.so
+  DEBUGFLAG= -Wall -Wextra -g -O0
+  RANLIB= ranlib
+  KNOWN_SYSTEM=yes
+endif
+    </pre>
+    </div>
+    <p>You will need to set all these variables according to your system. If you can't get this working, send an
+    email to the address on the contact page and I'll try to give you a hand.</p>
+
+    <h4>Install to a non-standard directory</h4>
+    <p>
+    giza's installation path is determined by the variable PREFIX in build/Makefile, so open this
+    file and find the line where this variable is specified and set it to the path you would like to install to, i.e.</p>
+    <div class="code">
+      PREFIX=/path/to/giza/installation
+    </div>
+
+    <h2>Compiling the code</h2>
+    <p>Once the configuration is complete you must build the code. Simply run the following command:</p>
+    <div class="code">
+      make
+    </div>
+
+    <h2>Install giza</h2>
+    <p>Now the final step is to install the libraries. If you are installing outside your home directory
+    you may need root privileges, sudo should do it:</p>
+    <div class="code">
+      sudo make install
+    </div>
+    <p>Now you should be able to link your code to the giza library.</p>
+  </div>
+
+</html>

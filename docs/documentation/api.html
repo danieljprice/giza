@@ -1,0 +1,1802 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html"; charset=utf-8" >
+    <title>giza - API Reference Manual</title>
+    <link rel="stylesheet" href="../style.css" type="text/css" >
+  </head>
+
+  <div class="header">
+    <a href="/"><img alt="giza" src="../title.png"></a>
+  </div>
+
+  <div id="menucontainer">
+  <ul id="menulist">
+    <li><a href="/news/">news</a></li>
+    <li><a href="/download/">download</a></li>
+    <li><a href="/documentation/">documentation</a></li>
+    <li><a href="/contact/">contact</a></li>
+    <li><a href="/samples/">samples</a></li>
+  </ul>
+  </div>
+
+  <div id="content">
+  <h1>API Reference Manual</h1>
+  <p>Here we provided a function by function reference for the low-level C API to giza. 
+  <br/>Please note that the giza API is <strong>not yet stable</strong>.
+  From version 1.0 we will aim to keep backwards compatibility, but in the 0.x series, changes to the API may be made arbitrarily.</p>
+  <h1>Index</h1>
+  <dl class="toc"><dt><a href="#Device_management">Device Management</a></dt>
+<dd><a href="#giza_device_has_cursor">giza_device_has_cursor</a></dd>
+<dd><a href="#giza_open_device">giza_open_device</a></dd>
+<dd><a href="#giza_open_device_size">giza_open_device_size</a></dd>
+<dd><a href="#giza_open_device_size_float">giza_open_device_size_float</a></dd>
+<dd><a href="#giza_get_device_id">giza_get_device_id</a></dd>
+<dd><a href="#giza_select_device">giza_select_device</a></dd>
+<dd><a href="#giza_flush_device">giza_flush_device</a></dd>
+<dd><a href="#giza_resize_device">giza_resize_device</a></dd>
+<dd><a href="#giza_change_page">giza_change_page</a></dd>
+<dd><a href="#giza_close_device">giza_close_device</a></dd>
+<dd><a href="#giza_query_device">giza_query_device</a></dd>
+<dd><a href="#giza_get_surface_size">giza_get_surface_size</a></dd>
+<dd><a href="#giza_get_surface_size_float">giza_get_surface_size_float</a></dd>
+<dd><a href="#giza_histogram">giza_histogram</a></dd>
+<dd><a href="#giza_histogram_float">giza_histogram_float</a></dd>
+<dd><a href="#giza_histogram_binned">giza_histogram_binned</a></dd>
+<dd><a href="#giza_histogram_binned_float">giza_histogram_binned_float</a></dd>
+<dd><a href="#giza_subpanel">giza_subpanel</a></dd>
+<dd><a href="#giza_set_panel">giza_set_panel</a></dd>
+<dd><a href="#giza_get_panel">giza_get_panel</a></dd>
+<dd><a href="#giza_init_subpanel">giza_init_subpanel</a></dd>
+<dd><a href="#giza_advance_panel">giza_advance_panel</a></dd>
+<dt><a href="#Drawing">Drawing</a></dt>
+<dd><a href="#giza_arrow">giza_arrow</a></dd>
+<dd><a href="#giza_arrow_float">giza_arrow_float</a></dd>
+<dd><a href="#giza_box_time">giza_box_time</a></dd>
+<dd><a href="#giza_box_time_float">giza_box_time_float</a></dd>
+<dd><a href="#giza_box_time">giza_box_time</a></dd>
+<dd><a href="#giza_box_time_float">giza_box_time_float</a></dd>
+<dd><a href="#giza_box">giza_box</a></dd>
+<dd><a href="#giza_box_float">giza_box_float</a></dd>
+<dd><a href="#giza_circle">giza_circle</a></dd>
+<dd><a href="#giza_circle_float">giza_circle_float</a></dd>
+<dd><a href="#giza_clip">giza_clip</a></dd>
+<dd><a href="#giza_get_clipping">giza_get_clipping</a></dd>
+<dd><a href="#giza_colour_bar">giza_colour_bar</a></dd>
+<dd><a href="#giza_colour_bar_float">giza_colour_bar_float</a></dd>
+<dd><a href="#giza_draw_background">giza_draw_background</a></dd>
+<dd><a href="#giza_draw">giza_draw</a></dd>
+<dd><a href="#giza_draw_float">giza_draw_float</a></dd>
+<dd><a href="#giza_error_bars">giza_error_bars</a></dd>
+<dd><a href="#giza_error_bars_float">giza_error_bars_float</a></dd>
+<dd><a href="#giza_error_bars_vert">giza_error_bars_vert</a></dd>
+<dd><a href="#giza_error_bars_vert_float">giza_error_bars_vert_float</a></dd>
+<dd><a href="#giza_function_t">giza_function_t</a></dd>
+<dd><a href="#giza_function_t_float">giza_function_t_float</a></dd>
+<dd><a href="#giza_function_x">giza_function_x</a></dd>
+<dd><a href="#giza_function_x_float">giza_function_x_float</a></dd>
+<dd><a href="#giza_line">giza_line</a></dd>
+<dd><a href="#giza_line_float">giza_line_float</a></dd>
+<dd><a href="#giza_move">giza_move</a></dd>
+<dd><a href="#giza_move_float">giza_move_float</a></dd>
+<dd><a href="#giza_get_current_point">giza_get_current_point</a></dd>
+<dd><a href="#giza_get_current_point_float">giza_get_current_point_float</a></dd>
+<dd><a href="#giza_points">giza_points</a></dd>
+<dd><a href="#giza_points_float">giza_points_float</a></dd>
+<dd><a href="#giza_single_point">giza_single_point</a></dd>
+<dd><a href="#giza_single_point_float">giza_single_point_float</a></dd>
+<dd><a href="#giza_polygon">giza_polygon</a></dd>
+<dd><a href="#giza_polygon_float">giza_polygon_float</a></dd>
+<dd><a href="#giza_rectangle">giza_rectangle</a></dd>
+<dd><a href="#giza_rectangle_float">giza_rectangle_float</a></dd>
+<dd><a href="#giza_rectangle_rounded">giza_rectangle_rounded</a></dd>
+<dd><a href="#giza_rectangle_rounded_float">giza_rectangle_rounded_float</a></dd>
+<dd><a href="#giza_render">giza_render</a></dd>
+<dd><a href="#giza_render_transparent">giza_render_transparent</a></dd>
+<dd><a href="#giza_render_alpha">giza_render_alpha</a></dd>
+<dd><a href="#giza_render_float">giza_render_float</a></dd>
+<dd><a href="#giza_render_transparent_float">giza_render_transparent_float</a></dd>
+<dd><a href="#giza_render_alpha_float">giza_render_alpha_float</a></dd>
+<dd><a href="#giza_render_gray">giza_render_gray</a></dd>
+<dd><a href="#giza_render_gray_float">giza_render_gray_float</a></dd>
+<dd><a href="#giza_draw_pixels">giza_draw_pixels</a></dd>
+<dd><a href="#giza_draw_pixels_float">giza_draw_pixels_float</a></dd>
+<dd><a href="#giza_vector">giza_vector</a></dd>
+<dd><a href="#giza_vector_float">giza_vector_float</a></dd>
+<dt><a href="#Text">Text</a></dt>
+<dd><a href="#giza_annotate">giza_annotate</a></dd>
+<dd><a href="#giza_annotate_float">giza_annotate_float</a></dd>
+<dd><a href="#giza_label">giza_label</a></dd>
+<dd><a href="#giza_print_id">giza_print_id</a></dd>
+<dd><a href="#giza_ptext">giza_ptext</a></dd>
+<dd><a href="#giza_ptext_float">giza_ptext_float</a></dd>
+<dd><a href="#giza_text">giza_text</a></dd>
+<dd><a href="#giza_text_float">giza_text_float</a></dd>
+<dd><a href="#giza_qtext">giza_qtext</a></dd>
+<dd><a href="#giza_qtext_float">giza_qtext_float</a></dd>
+<dd><a href="#giza_qtextlen">giza_qtextlen</a></dd>
+<dd><a href="#giza_qtextlen_float">giza_qtextlen_float</a></dd>
+<dt><a href="#Settings">Settings</a></dt>
+<dd><a href="#giza_set_arrow_style">giza_set_arrow_style</a></dd>
+<dd><a href="#giza_set_arrow_style_float">giza_set_arrow_style_float</a></dd>
+<dd><a href="#giza_get_arrow_style">giza_get_arrow_style</a></dd>
+<dd><a href="#giza_get_arrow_style_float">giza_get_arrow_style_float</a></dd>
+<dd><a href="#giza_set_band_style">giza_set_band_style</a></dd>
+<dd><a href="#giza_get_band_style">giza_get_band_style</a></dd>
+<dd><a href="#giza_begin_buffer">giza_begin_buffer</a></dd>
+<dd><a href="#giza_end_buffer">giza_end_buffer</a></dd>
+<dd><a href="#giza_get_buffering">giza_get_buffering</a></dd>
+<dd><a href="#giza_flush_buffer">giza_flush_buffer</a></dd>
+<dd><a href="#giza_set_character_height">giza_set_character_height</a></dd>
+<dd><a href="#giza_set_character_height">giza_set_character_height</a></dd>
+<dd><a href="#giza_get_character_height">giza_get_character_height</a></dd>
+<dd><a href="#giza_get_character_height_float">giza_get_character_height_float</a></dd>
+<dd><a href="#giza_get_character_size">giza_get_character_size</a></dd>
+<dd><a href="#giza_get_character_size_float">giza_get_character_size_float</a></dd>
+<dd><a href="#giza_set_colour_by_name">giza_set_colour_by_name</a></dd>
+<dd><a href="#giza_set_colour_index">giza_set_colour_index</a></dd>
+<dd><a href="#giza_get_colour_index">giza_get_colour_index</a></dd>
+<dd><a href="#giza_set_colour_representation">giza_set_colour_representation</a></dd>
+<dd><a href="#giza_set_colour_representation_float">giza_set_colour_representation_float</a></dd>
+<dd><a href="#giza_set_colour_representation_alpha">giza_set_colour_representation_alpha</a></dd>
+<dd><a href="#giza_set_colour_representation_alpha_float">giza_set_colour_representation_alpha_float</a></dd>
+<dd><a href="#giza_set_colour_representation_hls">giza_set_colour_representation_hls</a></dd>
+<dd><a href="#giza_set_colour_representation_hls_float">giza_set_colour_representation_hls_float</a></dd>
+<dd><a href="#giza_set_colour_representation_rgb">giza_set_colour_representation_rgb</a></dd>
+<dd><a href="#giza_set_colour_representation_rgba">giza_set_colour_representation_rgba</a></dd>
+<dd><a href="#giza_set_colour_representation_rgba_float">giza_set_colour_representation_rgba_float</a></dd>
+<dd><a href="#giza_get_colour_representation">giza_get_colour_representation</a></dd>
+<dd><a href="#giza_get_colour_representation_alpha">giza_get_colour_representation_alpha</a></dd>
+<dd><a href="#giza_set_colour_index_range">giza_set_colour_index_range</a></dd>
+<dd><a href="#giza_get_colour_index_range">giza_get_colour_index_range</a></dd>
+<dd><a href="#giza_set_range_as_colour_table">giza_set_range_as_colour_table</a></dd>
+<dd><a href="#giza_set_colour_palette">giza_set_colour_palette</a></dd>
+<dd><a href="#giza_set_colour_table">giza_set_colour_table</a></dd>
+<dd><a href="#giza_set_colour_table_float">giza_set_colour_table_float</a></dd>
+<dd><a href="#giza_rgb_from_table">giza_rgb_from_table</a></dd>
+<dd><a href="#giza_rgb_from_table_float">giza_rgb_from_table_float</a></dd>
+<dd><a href="#giza_save_colour_table">giza_save_colour_table</a></dd>
+<dd><a href="#giza_restore_colour_table">giza_restore_colour_table</a></dd>
+<dd><a href="#giza_set_environment">giza_set_environment</a></dd>
+<dd><a href="#giza_set_environment_float">giza_set_environment_float</a></dd>
+<dd><a href="#giza_set_fill">giza_set_fill</a></dd>
+<dd><a href="#giza_get_fill">giza_get_fill</a></dd>
+<dd><a href="#giza_set_hatching_style">giza_set_hatching_style</a></dd>
+<dd><a href="#giza_set_hatching_style_float">giza_set_hatching_style_float</a></dd>
+<dd><a href="#giza_get_hatching_style">giza_get_hatching_style</a></dd>
+<dd><a href="#giza_get_hatching_style_float">giza_get_hatching_style_float</a></dd>
+<dd><a href="#giza_begin_autolog">giza_begin_autolog</a></dd>
+<dd><a href="#giza_end_autolog">giza_end_autolog</a></dd>
+<dd><a href="#giza_set_line_cap">giza_set_line_cap</a></dd>
+<dd><a href="#giza_get_line_cap">giza_get_line_cap</a></dd>
+<dd><a href="#giza_set_line_style">giza_set_line_style</a></dd>
+<dd><a href="#giza_get_line_style">giza_get_line_style</a></dd>
+<dd><a href="#giza_set_line_width">giza_set_line_width</a></dd>
+<dd><a href="#giza_set_line_width_float">giza_set_line_width_float</a></dd>
+<dd><a href="#giza_get_line_width">giza_get_line_width</a></dd>
+<dd><a href="#giza_start_prompting">giza_start_prompting</a></dd>
+<dd><a href="#giza_stop_prompting">giza_stop_prompting</a></dd>
+<dd><a href="#giza_save">giza_save</a></dd>
+<dd><a href="#giza_restore">giza_restore</a></dd>
+<dd><a href="#giza_set_font">giza_set_font</a></dd>
+<dd><a href="#giza_set_font_bold">giza_set_font_bold</a></dd>
+<dd><a href="#giza_set_font_italic">giza_set_font_italic</a></dd>
+<dd><a href="#giza_set_font_bold_italic">giza_set_font_bold_italic</a></dd>
+<dd><a href="#giza_get_font">giza_get_font</a></dd>
+<dd><a href="#giza_set_text_background">giza_set_text_background</a></dd>
+<dd><a href="#giza_get_text_background">giza_get_text_background</a></dd>
+<dd><a href="#giza_version">giza_version</a></dd>
+<dd><a href="#giza_set_viewport">giza_set_viewport</a></dd>
+<dd><a href="#giza_set_viewport_float">giza_set_viewport_float</a></dd>
+<dd><a href="#giza_get_viewport">giza_get_viewport</a></dd>
+<dd><a href="#giza_get_viewport_float">giza_get_viewport_float</a></dd>
+<dd><a href="#giza_set_viewport_default">giza_set_viewport_default</a></dd>
+<dd><a href="#giza_set_viewport_inches">giza_set_viewport_inches</a></dd>
+<dd><a href="#giza_set_viewport_inches_float">giza_set_viewport_inches_float</a></dd>
+<dd><a href="#giza_start_warnings">giza_start_warnings</a></dd>
+<dd><a href="#giza_stop_warnings">giza_stop_warnings</a></dd>
+<dd><a href="#giza_set_window">giza_set_window</a></dd>
+<dd><a href="#giza_set_window_float">giza_set_window_float</a></dd>
+<dd><a href="#giza_set_window_equal_scale">giza_set_window_equal_scale</a></dd>
+<dd><a href="#giza_set_window_equal_scale_float">giza_set_window_equal_scale_float</a></dd>
+<dd><a href="#giza_get_window">giza_get_window</a></dd>
+<dd><a href="#giza_get_window_float">giza_get_window_float</a></dd>
+<dt><a href="#Interactive">Interactive</a></dt>
+<dd><a href="#giza_band">giza_band</a></dd>
+<dd><a href="#giza_band_float">giza_band_float</a></dd>
+<dd><a href="#giza_mark_points">giza_mark_points</a></dd>
+<dd><a href="#giza_mark_points_float">giza_mark_points_float</a></dd>
+<dd><a href="#giza_mark_points_ordered">giza_mark_points_ordered</a></dd>
+<dd><a href="#giza_mark_points_ordered_float">giza_mark_points_ordered_float</a></dd>
+<dd><a href="#giza_mark_line">giza_mark_line</a></dd>
+<dd><a href="#giza_mark_points_float">giza_mark_points_float</a></dd>
+<dd><a href="#giza_mark_line_ordered">giza_mark_line_ordered</a></dd>
+<dd><a href="#giza_mark_line_ordered_float">giza_mark_line_ordered_float</a></dd>
+<dd><a href="#giza_mark_line_char">giza_mark_line_char</a></dd>
+<dd><a href="#giza_mark_points_float">giza_mark_points_float</a></dd>
+<dd><a href="#giza_get_key_press">giza_get_key_press</a></dd>
+</dl><a name="Device_managment"></a><h1>Device Managment</h1>
+<h3><a name="giza_device_has_cursor">giza_device_has_cursor</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_device_has_cursor</td><td> (void) ;</tr></table><p>Query the interactivity of the device.</p>
+<h4>Return:</h4>
+<table class="api"><tr>
+<td>0 :</td><td>If the device is not interactive.</td>
+</tr><tr>
+<td>1 :</td><td>If the device is interactive.</td>
+</tr></table><h3><a name="giza_open_device">giza_open_device</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_open_device</td><td> (const char *newDeviceName, const char *newPrefix) ;</tr></table><p>Opens a new device to be drawn to. Must be called before any drawing can take place.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>newDeviceName :</td><td>Specifies the name and type of device to be opened. See below for details.</td>
+</tr><tr>
+<td>newPrefix     :</td><td>Specifies the default prefix to be used for file names.</td>
+</tr></table><h4>Return value:</h4>
+<table class="api"><tr>
+<td><=0 :</td><td>an error has occurred</td>
+</tr><tr>
+<td>1   :</td><td>id of current device</td>
+</tr></table><h4>Available devices:</h4>
+<table class="api"><tr>
+<td>?    :</td><td>User selects device</td>
+</tr><tr>
+<td>/xw  :</td><td>X-window</td>
+</tr><tr>
+<td>/eps :</td><td>Encapsulated Postscript</td>
+</tr><tr>
+<td>/png :</td><td>Portable Network Graphics file</td>
+</tr><tr>
+<td>/svg :</td><td>Scalable Vector Graphics file</td>
+</tr><tr>
+<td>/pdf :</td><td>Portable Document Format</td>
+</tr><tr>
+<td>/vpdf :</td><td>Landscape Portable Document Format</td>
+</tr><tr>
+<td>/ps  :</td><td>PostScript</td>
+</tr><tr>
+<td>/vps :</td><td>Landscape Postscript</td>
+</tr></table><h4>e.g:</h4>
+<table class="api"></table><h4>See Also:</h4><p><a href="#giza_select_device">giza_select_device</a> <a href="#giza_get_device_id">giza_get_device_id</a> <a href="#giza_close_device">giza_close_device</a> <a href="#giza_query_device">giza_query_device</a> </p><h3><a name="giza_open_device_size">giza_open_device_size</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_open_device_size</td><td> (const char *newDeviceName, const char *newPrefix, double width, double height, int units) ;</tr></table><p>Similar to giza_open_device, but allows one to specify the size of the device</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>newDeviceName :</td><td>Specifies the type of device to be opened. See below for details.</td>
+</tr><tr>
+<td>newPrefix     :</td><td>Specifies the default prefix to be used for file names.</td>
+</tr><tr>
+<td>width         :</td><td>Width for the newly opened device</td>
+</tr><tr>
+<td>height        :</td><td>Height for the newly opened device</td>
+</tr><tr>
+<td>units         :</td><td>Units in which the width/height of the device are specified</td>
+</tr></table><h4>Units:</h4>
+<table class="api"><tr>
+<td>GIZA_UNITS_DEVICE     :</td><td>device coords (i.e. pixels on bitmap devices, points on vector devices)</td>
+</tr><tr>
+<td>GIZA_UNITS_PIXELS     :</td><td>pixels</td>
+</tr><tr>
+<td>GIZA_UNITS_MM         :</td><td>mm</td>
+</tr><tr>
+<td>GIZA_UNITS_INCHES     :</td><td>inches Other values cause an error message and are treated as GIZA_UNITS_DEVICE</td>
+</tr></table><h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_open_device_size_float">giza_open_device_size_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_open_device_size_float</td><td> (const char *newDeviceName, const char *newPrefix, float width, float height, int units) ;</tr></table><p>Same functionality as giza_open_device_size but takes floats</p>
+<h3><a name="giza_get_device_id">giza_get_device_id</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_device_id</td><td> (int *devid) ;</tr></table><p>Returns the id of the currently selected device</p>
+<h4>Output:</h4>
+<table class="api"></table><h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_select_device">giza_select_device</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_select_device</td><td> (int devid) ;</tr></table><p>Select between the currently open devices</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>devid :</td><td>device id, as returned by giza_open_device</td>
+</tr></table><h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_flush_device">giza_flush_device</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_flush_device</td><td> (void) ;</tr></table><p>Flushes the currently open device.</p>
+<h3><a name="giza_resize_device">giza_resize_device</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>_giza_resize_device</td><td> (int width, int height) ;</tr></table><p>resizes the currently open device.</p>
+<h3><a name="giza_change_page">giza_change_page</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_change_page</td><td> (void) ;</tr></table><p>Advances the currently open device to the next page, and redraws the background. If no other actions have been performed since the device was opened or the last call to giza_change_page the call is ignored.</p>
+<h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_close_device">giza_close_device</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_close_device</td><td> (void) ;</tr></table><p>Closes the currently open device. Should always be called before exiting your program as it frees associated memory.</p>
+<h3><a name="giza_query_device">giza_query_device</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_query_device</td><td> (const char *querytype, char *returnval) ;</tr></table><p>Queries various things about the current device.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>querytype :</td><td>a string containing the query type</td>
+</tr></table><h4>Output:</h4>
+<table class="api"><tr>
+<td>returnval :</td><td>string with result of query</td>
+</tr></table><h4>The following query types are possible:</h4>
+<table class="api"></table><h4>"state"    :</h4>
+<table class="api"></table><h4>"device"   :</h4>
+<table class="api"></table><h4>"type"     :</h4>
+<table class="api"></table><h4>"dev/type" :</h4>
+<table class="api"></table><h4>"file"     :</h4>
+<table class="api"></table><h4>"user"     :</h4>
+<table class="api"></table><h4>"cursor"   :</h4>
+<table class="api"></table><h4>"hardcopy" :</h4>
+<table class="api"></table><h3><a name="giza_get_surface_size">giza_get_surface_size</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_surface_size</td><td> (double *x1, double *x2, double *y1, double *y2) ;</tr></table><p>Gets the size of the current surface that can be drawn to in device units (pixels or points).</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x1 :</td><td>Always gets set to 0.0</td>
+</tr><tr>
+<td>x2 :</td><td>Gets set to the width of the current surface</td>
+</tr><tr>
+<td>y1 :</td><td>Always gets set to 0.0</td>
+</tr><tr>
+<td>y2 :</td><td>Gets set to the width of the surface</td>
+</tr></table><h3><a name="giza_get_surface_size_float">giza_get_surface_size_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_surface_size_float</td><td> (float *x1, float *x2, float *y1, float *y2) ;</tr></table><p>Same functionality as giza_get_surface_size, but uses floats.</p>
+<h4>See Also:</h4><p><a href="#giza_get_surface_size">giza_get_surface_size</a> </p><h3><a name="giza_histogram">giza_histogram</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_histogram</td><td> (int n, const double *dat, double min, double max, int nbin, int flag) ;</tr></table><p>Plot a histogram (unbinned)</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n    :</td><td>number of data values</td>
+</tr><tr>
+<td>dat  :</td><td>data (n values)</td>
+</tr><tr>
+<td>min  :</td><td>minimum data value to use in histogram</td>
+</tr><tr>
+<td>max  :</td><td>maximum data value to use in histogram</td>
+</tr><tr>
+<td>nbin :</td><td>number of bins</td>
+</tr><tr>
+<td>flag :</td><td>flag to indicate page changes, see below</td>
+</tr></table><h4>See also:</h4>
+<table class="api"></table><h4>Flag:</h4>
+<table class="api"><tr>
+<td>0   :</td><td>giza_histogram calls giza_environment to set up new plotting page</td>
+</tr><tr>
+<td>1   :</td><td>plot in current window and viewport</td>
+</tr><tr>
+<td>2   :</td><td>with filled area style, calls giza_environment</td>
+</tr><tr>
+<td>3   :</td><td>with filled area style, in current window and viewport</td>
+</tr><tr>
+<td>4   :</td><td>bins drawn as simple outlines, as in giza_histogram_binned, calls giza_environment</td>
+</tr><tr>
+<td>5   :</td><td>bins drawn as simple outlines, but in current window and viewport Other values treated as 1</td>
+</tr></table><h3><a name="giza_histogram_float">giza_histogram_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_histogram_float</td><td> (int n, const float *dat, float min, float max, int nbin, int flag) ;</tr></table><p>Same as giza_histogram but takes floats</p>
+<h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_histogram_binned">giza_histogram_binned</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_histogram_binned</td><td> (int n, const double *x, const double *dat, int centre) ;</tr></table><p>Plot a histogram of already binned data</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n      :</td><td>number of bins</td>
+</tr><tr>
+<td>x      :</td><td>x values of bins</td>
+</tr><tr>
+<td>dat    :</td><td>data values for each bin</td>
+</tr><tr>
+<td>center :</td><td>if true (1) x values correspond to centre of each bin</td>
+</tr></table><h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_histogram_binned_float">giza_histogram_binned_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_histogram_binned_float</td><td> (int n, const float *x, const float *dat, int centre) ;</tr></table><p>Same as giza_histogram_binned but takes floats</p>
+<h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_subpanel">giza_subpanel</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_subpanel</td><td> (int nx, int ny) ;</tr></table><p>Set the number of sub panels</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>nx :</td><td>number of sub-panels in x direction</td>
+</tr><tr>
+<td>ny :</td><td>number of sub panels in y direction</td>
+</tr></table><h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_set_panel">giza_set_panel</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_panel</td><td> (int ix, int iy) ;</tr></table><p>Select the panel we are currently plotting in</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ix :</td><td>panel index in x direction</td>
+</tr><tr>
+<td>iy :</td><td>panel index in y direction</td>
+</tr></table><h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_get_panel">giza_get_panel</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_panel</td><td> (int *ix, int *iy) ;</tr></table><p>Select the panel we are currently plotting in</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ix :</td><td>panel index in x direction</td>
+</tr><tr>
+<td>iy :</td><td>panel index in y direction</td>
+</tr></table><h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_init_subpanel">giza_init_subpanel</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>_giza_init_subpanel</td><td> () ;</tr></table><p>initialises subpanel settings for device</p>
+<h3><a name="giza_advance_panel">giza_advance_panel</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>_giza_advance_panel</td><td> (int *newpage) ;</tr></table><p>Moves to next panel</p>
+<a name="Drawing"></a><h1>Drawing</h1>
+<h3><a name="giza_arrow">giza_arrow</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_arrow</td><td> (double x1, double y1, double x2, double y2) ;</tr></table><p>Draws an arrow. The style of the head of the arrow is set by giza_set_arrow_style.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x1 :</td><td>The world x-coord of the tail of the arrow.</td>
+</tr><tr>
+<td>y1 :</td><td>The world y-coord of the tail of the arrow.</td>
+</tr><tr>
+<td>x2 :</td><td>The world x-coord of the head of the arrow.</td>
+</tr><tr>
+<td>y2 :</td><td>The world y-coord of the head of the arrow.</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_arrow_style">giza_set_arrow_style</a> </p><h3><a name="giza_arrow_float">giza_arrow_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_arrow_float</td><td> (float x1, float y1, float x2, float y2) ;</tr></table><p>Same functionality as giza_arrow.</p>
+<h4>See Also:</h4><p><a href="#giza_arrow_float">giza_arrow_float</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_box_time</td><td> (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</tr></table><p>Same as giza_box, but labels axes with time-style labels i.e. DD HH MM SS as used in RA - DEC plots for Astronomy. If this option is used then giza_set_window should have been called with min/max given in seconds of time.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>xopt  :</td><td>As for giza_box, plus additional options below</td>
+</tr><tr>
+<td>xtick :</td><td>The distance, in world coordinates, between major ticks on the x-axis. If 0.0 the interval is chosen by giza_box_time.</td>
+</tr><tr>
+<td>nxsub :</td><td>The number of minor ticks to be placed between each major tick. If 0 the number is chosen by giza_box.</td>
+</tr><tr>
+<td>yopt  :</td><td>Similar to xdraw_minticks but for the y-axis.</td>
+</tr><tr>
+<td>ytick :</td><td>Similar to xtick but for the y-axis.</td>
+</tr><tr>
+<td>nysub :</td><td>Similar to nxsub but for the y-axis.</td>
+</tr></table><h4>Options for xopt and yopt (same as for giza_box, plus those below):</h4>
+<table class="api"><tr>
+<td>Z :</td><td>for time-style labelling: (DD) HH MM SS.S</td>
+</tr><tr>
+<td>Y :</td><td>exclude the day field so labels are just HH MM SS.S (hours can be >24)</td>
+</tr><tr>
+<td>X :</td><td>keep HH field in range (0..24)</td>
+</tr><tr>
+<td>H :</td><td>use d,h,m,s superscripts to label numbers</td>
+</tr><tr>
+<td>D :</td><td>use degree o, minute ' and second '' superscripts to label numbers</td>
+</tr><tr>
+<td>F :</td><td>do not draw the first label (left- or bottom-most)</td>
+</tr><tr>
+<td>O :</td><td>omit leading zeros in numbers < 10, i.e. 3 instead of 03</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_box">giza_box</a> <a href="#giza_box_float">giza_box_float</a> <a href="#giza_box_time_float">giza_box_time_float</a> </p><h3><a name="giza_box_time_float">giza_box_time_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_box_time_float</td><td> (const char *xopt, float xtick, int nxsub, const char *yopt, float ytick, int nysub) ;</tr></table><p>Same functionality as giza_box_time but takes floats instead of doubles.</p>
+<h4>See Also:</h4><p><a href="#giza_box_time">giza_box_time</a> <a href="#giza_box">giza_box</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_box_time</td><td> (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</tr></table><p>Same as giza_box, but labels axes with time-style labels i.e. DD HH MM SS as used in RA - DEC plots for Astronomy. If this option is used then giza_set_window should have been called with min/max given in seconds of time.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>xopt  :</td><td>As for giza_box, plus additional options below</td>
+</tr><tr>
+<td>xtick :</td><td>The distance, in world coordinates, between major ticks on the x-axis. If 0.0 the interval is chosen by giza_box_time.</td>
+</tr><tr>
+<td>nxsub :</td><td>The number of minor ticks to be placed between each major tick. If 0 the number is chosen by giza_box.</td>
+</tr><tr>
+<td>yopt  :</td><td>Similar to xdraw_minticks but for the y-axis.</td>
+</tr><tr>
+<td>ytick :</td><td>Similar to xtick but for the y-axis.</td>
+</tr><tr>
+<td>nysub :</td><td>Similar to nxsub but for the y-axis.</td>
+</tr></table><h4>Options for xopt and yopt (same as for giza_box, plus those below):</h4>
+<table class="api"><tr>
+<td>Z :</td><td>for time-style labelling: (DD) HH MM SS.S</td>
+</tr><tr>
+<td>Y :</td><td>exclude the day field so labels are just HH MM SS.S (hours can be >24)</td>
+</tr><tr>
+<td>X :</td><td>keep HH field in range (0..24)</td>
+</tr><tr>
+<td>H :</td><td>use d,h,m,s superscripts to label numbers</td>
+</tr><tr>
+<td>D :</td><td>use degree o, minute ' and second '' superscripts to label numbers</td>
+</tr><tr>
+<td>F :</td><td>do not draw the first label (left- or bottom-most)</td>
+</tr><tr>
+<td>O :</td><td>omit leading zeros in numbers < 10, i.e. 3 instead of 03</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_box">giza_box</a> <a href="#giza_box_float">giza_box_float</a> <a href="#giza_box_time_float">giza_box_time_float</a> </p><h3><a name="giza_box_time_float">giza_box_time_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_box_time_float</td><td> (const char *xopt, float xtick, int nxsub, const char *yopt, float ytick, int nysub) ;</tr></table><p>Same functionality as giza_box_time but takes floats instead of doubles.</p>
+<h4>See Also:</h4><p><a href="#giza_box_time">giza_box_time</a> <a href="#giza_box">giza_box</a> </p><h3><a name="giza_box">giza_box</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_box</td><td> (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</tr></table><p>Annotates the viewport with labelled axis/frame</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>xopt  :</td><td>String of options for the x-axis. The options may be in any order. See below for details</td>
+</tr><tr>
+<td>xtick :</td><td>The distance, in world coordinates, between major ticks on the x-axis. If 0.0 the interval is chosen by giza_box.</td>
+</tr><tr>
+<td>nxsub :</td><td>The number of minor ticks to be placed between each major tick. If 0 the number is chosen by giza_box.</td>
+</tr><tr>
+<td>yopt  :</td><td>Similar to xopt but for the y-axis.</td>
+</tr><tr>
+<td>ytick :</td><td>Similar to xtick but for the y-axis.</td>
+</tr><tr>
+<td>nysub :</td><td>Similar to nxsub but for the y-axis.</td>
+</tr></table><h4>Options:</h4>
+<table class="api"><tr>
+<td>A :</td><td>Draw the axis.</td>
+</tr><tr>
+<td>B :</td><td>Draw the bottom or left edge of the frame.</td>
+</tr><tr>
+<td>C :</td><td>Draw the top or right edge of the frame.</td>
+</tr><tr>
+<td>T :</td><td>Draw major ticks.</td>
+</tr><tr>
+<td>S :</td><td>Draw minor ticks.</td>
+</tr><tr>
+<td>N :</td><td>Label the axis.</td>
+</tr><tr>
+<td>V :</td><td>Orient numeric y labels vertically (only applies to left and right axis).</td>
+</tr><tr>
+<td>G :</td><td>Draw grid lines at major intervals</td>
+</tr><tr>
+<td>M :</td><td>Write numeric labels above x-axis or to right of y-axis instead of usual position</td>
+</tr><tr>
+<td>L :</td><td>Label axis logarithmically</td>
+</tr></table><h3><a name="giza_box_float">giza_box_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_box_float</td><td> (const char *xopt, float xtick, int nxsub, const char *yopt, float ytick, int nysub) ;</tr></table><p>Same functionality as giza_box but takes floats instead of doubles.</p>
+<h4>See Also:</h4><p><a href="#giza_box">giza_box</a> </p><h3><a name="giza_circle">giza_circle</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_circle</td><td> (double x, double y, double r) ;</tr></table><p>Draws a circle at x, y with radius r (in world coords), using the current fill set by giza_set_fill.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x    :</td><td>the world x-coord of the centre of the circle</td>
+</tr><tr>
+<td>y    :</td><td>the world y-coord of the centre of the circle</td>
+</tr><tr>
+<td>r    :</td><td>the radius of the circle in world coords</td>
+</tr></table><h3><a name="giza_circle_float">giza_circle_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_circle_float</td><td> (float x, float y, float r) ;</tr></table><p>Same functionality as giza_circle, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_circle">giza_circle</a> </p><h3><a name="giza_clip">giza_clip</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_clipping</td><td> (int clip) ;</tr></table><p>Set whether or not to clip at the edge of the viewport</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>clip :</td><td>Use 0 to disable clipping, 1 to enable clipping</td>
+</tr></table><h3><a name="giza_get_clipping">giza_get_clipping</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_clipping</td><td> (int *clip) ;</tr></table><p>Query whether or not clipping at edge of viewport is enabled or disabled</p>
+<h4>See Also:</h4><p><a href="#giza_move">giza_move</a> </p><h3><a name="giza_colour_bar">giza_colour_bar</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_colour_bar</td><td> (const char *side, double disp, double width,  double valMin, double valMax, const char *label) ;</tr></table><p>Draws a colour bar (wedge) using the current colour ramp</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>side    :</td><td>edge of viewport to draw colour bar relative to, either 'B' (bottom), 'T' (top), 'L' (left) or 'R' (right)</td>
+</tr><tr>
+<td>disp    :</td><td>displacement of the bar in character heights from the specified edge</td>
+</tr><tr>
+<td>width   :</td><td>width of the colour bar in character heights</td>
+</tr><tr>
+<td>valMin  :</td><td>The value in data that gets assigned the colour corresponding to zero on the colour ramp (The ramp is set by giza_set_colour_table)</td>
+</tr><tr>
+<td>valMax  :</td><td>The value in data that gets assigned the colour corresponding to one on the colour ramp</td>
+</tr><tr>
+<td>label   :</td><td>Text label to annotate colour bar with</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_render">giza_render</a> <a href="#giza_colour_bar_float">giza_colour_bar_float</a> <a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_colour_bar_float">giza_colour_bar_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_colour_bar_float</td><td> (const char *side, float disp, float width,  float valMin, float valMax, const char *label) ;</tr></table><p>Same functionality as giza_colour_bar, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_colour_bar">giza_colour_bar</a> </p><h3><a name="giza_draw_background">giza_draw_background</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_draw_background</td><td> (void) ;</tr></table><p>Redraws the background of the currently open device (erase)</p>
+<h3><a name="giza_draw">giza_draw</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_draw</td><td> (double xpt, double ypt) ;</tr></table><p>Plots a line from current pen position to a point</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>xpt :</td><td>The world x-coordinates of the point</td>
+</tr><tr>
+<td>ypt :</td><td>The world y-coordinates of the point</td>
+</tr></table><h3><a name="giza_draw_float">giza_draw_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_draw_float</td><td> (float xpt, float ypt) ;</tr></table><p>The same functionality as giza_draw, except it uses floats</p>
+<h3><a name="giza_error_bars">giza_error_bars</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_error_bars</td><td> (int dir, int n, const double *xpts, const double *ypts, const double *error, double term) ;</tr></table><p>Draws error bars.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>dir  :</td><td>the direction of the error bar, see below</td>
+</tr><tr>
+<td>n    :</td><td>the number of points</td>
+</tr><tr>
+<td>xpts :</td><td>the x world coords of the points</td>
+</tr><tr>
+<td>ypts :</td><td>the y world coords of the points</td>
+</tr><tr>
+<td>error:</td><td>the length of the bar to be drawn in world coords</td>
+</tr><tr>
+<td>term :</td><td>the length of the terminals as a multiple of the default length</td>
+</tr></table><h4>Directions:</h4>
+<table class="api"><tr>
+<td>1 :</td><td>+x</td>
+</tr><tr>
+<td>2 :</td><td>+y</td>
+</tr><tr>
+<td>3 :</td><td>-x</td>
+</tr><tr>
+<td>4 :</td><td>-y</td>
+</tr><tr>
+<td>5 :</td><td>+x and -x</td>
+</tr><tr>
+<td>6 :</td><td>+y and -y</td>
+</tr><tr>
+<td>7 :</td><td>-y but instead of drawing bars use a semi-transparent shaded region</td>
+</tr><tr>
+<td>8 :</td><td>+y using a semi-transparent shaded region</td>
+</tr><tr>
+<td>9 :</td><td>+y and -y using a semi-transparent shaded region</td>
+</tr></table><h3><a name="giza_error_bars_float">giza_error_bars_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_error_bars_float</td><td> (int dir, int n, const float *xpts, const float *ypts, const float *error, float term) ;</tr></table><p>Same as giza_error_bars but takes floats.</p>
+<h3><a name="giza_error_bars_vert">giza_error_bars_vert</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_error_bars_vert</td><td> (int n, const double *xpts, const double *ypts1, const double *ypts2, double term) ;</tr></table><p>Draws n vertical error bars. A call to giza_points must be made to draw the actual points.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n      :</td><td>the number of bars to draw</td>
+</tr><tr>
+<td>xpts   :</td><td>the x world coords of the points</td>
+</tr><tr>
+<td>ypts1  :</td><td>the y world coords of the lower part of the error bar</td>
+</tr><tr>
+<td>ypts2  :</td><td>the y world coords of the upper part of the error bar</td>
+</tr><tr>
+<td>term   :</td><td>length of the terminals, as a multiple of default length (T <= 0.0 means no terminals drawn)</td>
+</tr></table><h3><a name="giza_error_bars_vert_float">giza_error_bars_vert_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_error_bars_vert_float</td><td> (int n, const float *xpts, const float *ypts1, const float *ypts2, float term) ;</tr></table><p>Same functionality as giza_error_bars_vert but takes floats.</p>
+<h3><a name="giza_function_t">giza_function_t</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_function_t</td><td> (double (*funcx)(double *t), double (*funcy)(double *t), int n, double tmin, double tmax, int flag) ;</tr></table><p>Draw a curve defined by x = func(t), y = func(t), where funcx(t) and funcy(t) are user-supplied routines with a single double argument passed by reference, e.g. double myfuncx(double* t) double myfuncy(double* t)</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>funcx  :</td><td>The parametrisation of the x value.</td>
+</tr><tr>
+<td>funcy  :</td><td>The parametrisation of the y value.</td>
+</tr><tr>
+<td>n      :</td><td>The number of segments to use to approximate the curve.</td>
+</tr><tr>
+<td>tmin   :</td><td>The lower bound on the domain of t.</td>
+</tr><tr>
+<td>tmax   :</td><td>The upper bound on the domain of t.</td>
+</tr></table><h3><a name="giza_function_t_float">giza_function_t_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_function_t_float</td><td> (float (*funcx)(float *t), float (*funcy)(float *t), int n, float tmin, float tmax, int flag) ;</tr></table><p>The same functionality as giza_function_t but uses floats. Draw a curve defined by x = func(y), where func(y) is a user-supplied routine with a single float argument passed by reference, e.g. float myfuncx(float* t) float myfuncy(float* t)</p>
+<h4>See Also:</h4><p><a href="#giza_function_t">giza_function_t</a> </p><h3><a name="giza_function_x">giza_function_x</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_function_x</td><td> (double (*func)(double *x), int n, double xmin, double xmax, int flag) ;</tr></table><p>Draw a curve defined by y = func(x), where func(x) is a user-supplied routine with a single double argument, e.g. double myfunc(double* x)</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>func  :</td><td>The function describing y's dependence on x.</td>
+</tr><tr>
+<td>n     :</td><td>The number of segments with whichh to approximate the curve</td>
+</tr><tr>
+<td>xmin  :</td><td>The lower bound on the domain of x.</td>
+</tr><tr>
+<td>xmax  :</td><td>The upper bound on the domain of x.</td>
+</tr></table><h3><a name="giza_function_x_float">giza_function_x_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_function_x_float</td><td> (float (*func)(float *x), int n, float xmin, float xmax, int flag) ;</tr></table><p>Same functionality as giza_function_x but takes floats. Draw a curve defined by y = func(x), where func(x) is a user-supplied routine with a single double argument, e.g. float myfunc(float* x)</p>
+<h4>See Also:</h4><p><a href="#giza_function_x">giza_function_x</a> </p><h3><a name="giza_line">giza_line</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_line</td><td> (int n, const double *xpts, const double *ypts) ;</tr></table><p>Plots a line made up of n-1 straight segments.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n    :</td><td>The number of points that define the line. The line will be made up of n - 1 straight segments. If n is less than 2 nothing is done.</td>
+</tr><tr>
+<td>xpts :</td><td>The world x-coordinates of the points to be joined.</td>
+</tr><tr>
+<td>ypts :</td><td>The world y-coordinates of the points to be joined.</td>
+</tr></table><h3><a name="giza_line_float">giza_line_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_line_float</td><td> (int n, const float *xpts, const float *ypts) ;</tr></table><p>The same functionality as giza_line, except it uses arrays of floats</p>
+<h4>See Also:</h4><p><a href="#giza_line">giza_line</a> </p><h3><a name="giza_move">giza_move</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_move</td><td> (double xpt, double ypt) ;</tr></table><p>Move current pen position to a point</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>xpt :</td><td>The world x-coordinates of the point</td>
+</tr><tr>
+<td>ypt :</td><td>The world y-coordinates of the point</td>
+</tr></table><h3><a name="giza_move_float">giza_move_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_move_float</td><td> (float xpt, float ypt) ;</tr></table><p>The same functionality as giza_move, except it uses floats</p>
+<h4>See Also:</h4><p><a href="#giza_move">giza_move</a> </p><h3><a name="giza_get_current_point">giza_get_current_point</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_current_point</td><td> (double *xpt, double *ypt) ;</tr></table><p>Query current pen position</p>
+<h4>Output:</h4>
+<table class="api"><tr>
+<td>xpt :</td><td>The world x-coordinates of the point</td>
+</tr><tr>
+<td>ypt :</td><td>The world y-coordinates of the point</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_get_current_point_float">giza_get_current_point_float</a> </p><h3><a name="giza_get_current_point_float">giza_get_current_point_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_current_point_float</td><td> (float *xpt, float *ypt) ;</tr></table><p>The same functionality as giza_get_current_point, but uses floats</p>
+<h4>See Also:</h4><p><a href="#giza_get_current_point">giza_get_current_point</a> </p><h3><a name="giza_points">giza_points</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_points</td><td> (int n, const double* x, const double* y, int symbol) ;</tr></table><p>Plot n points at x[n], y[n] in world coords.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n      :</td><td>the number of points</td>
+</tr><tr>
+<td>x      :</td><td>the x-coordinates of the points in world coords</td>
+</tr><tr>
+<td>y      :</td><td>the y-coordinates of the points in world coords</td>
+</tr><tr>
+<td>symbol :</td><td>the type of marker to use</td>
+</tr></table><h4>Symbols:</h4>
+<table class="api"><tr>
+<td>default :</td><td>small point (same as 1)</td>
+</tr><tr>
+<td>0       :</td><td>square</td>
+</tr><tr>
+<td>1       :</td><td>.</td>
+</tr><tr>
+<td>2       :</td><td>+</td>
+</tr><tr>
+<td>3       :</td><td>*</td>
+</tr><tr>
+<td>4       :</td><td>o</td>
+</tr><tr>
+<td>5       :</td><td>x</td>
+</tr><tr>
+<td>>31    :</td><td>from the Unicode table</td>
+</tr></table><h3><a name="giza_points_float">giza_points_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_points_float</td><td> (int n, const float* x, const float* y, int symbol) ;</tr></table><p>Same functionality as giza_points but takes floats.</p>
+<h4>See Also:</h4><p><a href="#giza_points">giza_points</a> </p><h3><a name="giza_single_point">giza_single_point</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_single_point</td><td> (double x, double y, int symbol) ;</tr></table><p>Plots a single point at x, y in world coords.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x      :</td><td>the x-coordinate of the point in world coords</td>
+</tr><tr>
+<td>y      :</td><td>the y-coordinate of the point in world coords</td>
+</tr><tr>
+<td>symbol :</td><td>the type of marker to use</td>
+</tr></table><h3><a name="giza_single_point_float">giza_single_point_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_single_point_float</td><td> (float x, float y, int symbol) ;</tr></table><p>Same functionality as giza_single_point, but uses floats.</p>
+<h4>See Also:</h4><p><a href="#giza_single_point">giza_single_point</a> </p><h3><a name="giza_polygon">giza_polygon</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_polygon</td><td> (int n, const double *xpts, const double *ypts) ;</tr></table><p>Draws a polygon, using the current fill set by giza_set_fill.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n       :</td><td>number of vertices</td>
+</tr><tr>
+<td>xpts    :</td><td>x positions of vertices</td>
+</tr><tr>
+<td>ypts    :</td><td>y positions of vertices</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_fill">giza_set_fill</a> </p><h3><a name="giza_polygon_float">giza_polygon_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_polygon_float</td><td> (int n, const float *xpts, const float *ypts) ;</tr></table><p>Same functionality as giza_polygon, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_polygon">giza_polygon</a> </p><h3><a name="giza_rectangle">giza_rectangle</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_rectangle</td><td> (double x1, double x2, double y1, double y2) ;</tr></table><p>Draws a rectangle with corners ((x1, y1) (x2, y1) (x2, y2) (x1, y2)), using the current fill set by giza_set_fill.</p>
+<h4>Inputs:</h4>
+<table class="api"><tr>
+<td>x1  :</td><td>the x-coordinate of two of the points</td>
+</tr><tr>
+<td>x2  :</td><td>the x-coordinate of the other two points</td>
+</tr><tr>
+<td>y1  :</td><td>the y-coordinate of two of the points</td>
+</tr><tr>
+<td>y2  :</td><td>the y-coordinate of the other two points</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_fill">giza_set_fill</a> <a href="#giza_polygon">giza_polygon</a> </p><h3><a name="giza_rectangle_float">giza_rectangle_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_rectangle_float</td><td> (float x1, float x2, float y1, float y2) ;</tr></table><p>Same functionality as giza_rectangle but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_rectangle">giza_rectangle</a> </p><h3><a name="giza_rectangle_rounded">giza_rectangle_rounded</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_rectangle_rounded</td><td> (double x1, double x2, double y1, double y2, double radius) ;</tr></table><p>Draws a rectangle with rounded corners ((x1, y1) (x2, y1) (x2, y2) (x1, y2)),  using the current fill set by giza_set_fill.</p>
+<h4>Inputs:</h4>
+<table class="api"><tr>
+<td>x1  :</td><td>the x-coordinate of two of the points</td>
+</tr><tr>
+<td>x2  :</td><td>the x-coordinate of the other two points</td>
+</tr><tr>
+<td>y1  :</td><td>the y-coordinate of two of the points</td>
+</tr><tr>
+<td>y2  :</td><td>the y-coordinate of the other two points</td>
+</tr><tr>
+<td>radius :</td><td>radius of curvature for the corners</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_rectangle">giza_rectangle</a> <a href="#giza_set_fill">giza_set_fill</a> <a href="#giza_polygon">giza_polygon</a> </p><h3><a name="giza_rectangle_rounded_float">giza_rectangle_rounded_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_rectangle_rounded_float</td><td> (float x1, float x2, float y1, float y2, float radius) ;</tr></table><p>Same functionality as giza_rectangle_rounded but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_rectangle_rounded">giza_rectangle_rounded</a> </p><h3><a name="giza_render">giza_render</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, const double *affine) ;</tr></table><p>Renders data to the device.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>sizex         :</td><td>The dimensions of data in the x-direction</td>
+</tr><tr>
+<td>sizey         :</td><td>The dimensions of data in the y-direction</td>
+</tr><tr>
+<td>data          :</td><td>The data to be render</td>
+</tr><tr>
+<td>i1            :</td><td>The inclusive range of data to render in the x dimension.</td>
+</tr><tr>
+<td>i2            :</td><td>The inclusive range of data to render in the x dimension.</td>
+</tr><tr>
+<td>j1            :</td><td>The inclusive range of data to render in the y direction</td>
+</tr><tr>
+<td>j2            :</td><td>The inclusive range of data to render in the y direction</td>
+</tr><tr>
+<td>valMin        :</td><td>The value in data that gets assign the colour corresponding to zero on the colour ramp (The ramp is set by giza_set_colour_table)</td>
+</tr><tr>
+<td>valMax        :</td><td>The value in data that gets assigned the colour corresponding to one on the colour ramp</td>
+</tr><tr>
+<td>extend        :</td><td>Option for how to deal with image at edges</td>
+</tr><tr>
+<td>affine        :</td><td>The affine transformation matrix that will be applied to the data.</td>
+</tr></table><h4>Allowed extend settings:</h4>
+<table class="api"><tr>
+<td>0 or GIZA_EXTEND_NONE    :</td><td>no padding</td>
+</tr><tr>
+<td>1 or GIZA_EXTEND_REPEAT  :</td><td>periodic tiling</td>
+</tr><tr>
+<td>2 or GIZA_EXTEND_REFLECT :</td><td>reflective boundary</td>
+</tr><tr>
+<td>3 or GIZA_EXTEND_PAD     :</td><td>pad by extending last few pixels</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_render_transparent">giza_render_transparent</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_transparent</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, const double *affine) ;</tr></table><p>Same as giza_render, but data < valMin rendered as transparent</p>
+<h3><a name="giza_render_alpha">giza_render_alpha</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_alpha</td><td> (int sizex, int sizey, const double* data, const double* alpha, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, const double *affine) ;</tr></table><p>Same as giza_render, but uses additional array specifying transparency of each pixel</p>
+<h3><a name="giza_render_float">giza_render_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, const float *affine) ;</tr></table><p>Same functionality as giza_render but takes floats.</p>
+<h4>See Also:</h4><p><a href="#giza_render">giza_render</a> </p><h3><a name="giza_render_transparent_float">giza_render_transparent_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_transparent_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, const float *affine) ;</tr></table><p>Same functionality as giza_render_transparent but takes floats.</p>
+<h4>See Also:</h4><p><a href="#giza_render_transparent">giza_render_transparent</a> </p><h3><a name="giza_render_alpha_float">giza_render_alpha_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_alpha_float</td><td> (int sizex, int sizey, const float* data, const float* alpha, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, const float *affine) ;</tr></table><p>Same as giza_render_alpha but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_render_alpha">giza_render_alpha</a> </p><h3><a name="giza_render_gray">giza_render_gray</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_gray</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, const double *affine) ;</tr></table><p>Same functionality as giza_render but renders in grayscale</p>
+<h4>See Also:</h4><p><a href="#giza_render">giza_render</a> </p><h3><a name="giza_render_gray_float">giza_render_gray_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_gray_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, const float *affine) ;</tr></table><p>Same functionality as giza_render_gray but renders in grayscale</p>
+<h4>See Also:</h4><p><a href="#giza_render_gray">giza_render_gray</a> <a href="#giza_render">giza_render</a> </p><h3><a name="giza_draw_pixels">giza_draw_pixels</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_draw_pixels</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend) ;</tr></table><p>Renders an array of pixels according to a colour index defined for each pixel</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>sizex         :</td><td>The dimensions of data in the x-direction</td>
+</tr><tr>
+<td>sizey         :</td><td>The dimensions of data in the y-direction</td>
+</tr><tr>
+<td>idata          :</td><td>The data to be rendered (colour index on each pixel)</td>
+</tr><tr>
+<td>i1            :</td><td>The inclusive range of data to render in the x dimension.</td>
+</tr><tr>
+<td>i2            :</td><td>The inclusive range of data to render in the x dimension.</td>
+</tr><tr>
+<td>j1            :</td><td>The inclusive range of data to render in the y direction</td>
+</tr><tr>
+<td>j2            :</td><td>The inclusive range of data to render in the y direction</td>
+</tr><tr>
+<td>xmin        :</td><td>world coordinate corresponding to left of pixel array</td>
+</tr><tr>
+<td>xmax        :</td><td>world coordinate corresponding to right of pixel array</td>
+</tr><tr>
+<td>ymin        :</td><td>world coordinate corresponding to bottom of pixel array</td>
+</tr><tr>
+<td>ymax        :</td><td>world coordinate corresponding to top of pixel array</td>
+</tr><tr>
+<td>extend      :</td><td>Option for how to deal with image at edges (see giza_render)</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_render">giza_render</a> <a href="#giza_draw_pixels_float">giza_draw_pixels_float</a> </p><h3><a name="giza_draw_pixels_float">giza_draw_pixels_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_draw_pixels_float</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend) ;</tr></table><p>Same as giza_draw_pixels, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_draw_pixels">giza_draw_pixels</a> </p><h3><a name="giza_vector">giza_vector</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_vector</td><td> (int n, int m, const double* horizontal, const double* vertical, int i1, int i2, int j1, int j2, double scale, int position, const double* affine, double blank) ;</tr></table><p>Plot of vector data.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n             :</td><td>The dimensions of data in the x-direction</td>
+</tr><tr>
+<td>m             :</td><td>The dimensions of data in the y-direction</td>
+</tr><tr>
+<td>horizontal    :</td><td>The x-component of the data to be plotted</td>
+</tr><tr>
+<td>vertical      :</td><td>The y-component of the data to be plotted</td>
+</tr><tr>
+<td>i1            :</td><td>The inclusive range of data to render in the x dimension.</td>
+</tr><tr>
+<td>i2            :</td><td>The inclusive range of data to render in the x dimension.</td>
+</tr><tr>
+<td>j1            :</td><td>The inclusive range of data to render in the y direction</td>
+</tr><tr>
+<td>j2            :</td><td>The inclusive range of data to render in the y direction</td>
+</tr><tr>
+<td>scale         :</td><td>scaling factor for arrow lengths (0 = automatic)</td>
+</tr><tr>
+<td>position      :</td><td>justification of vector arrow with respect to pixel (0=left, 0.5=centred)</td>
+</tr><tr>
+<td>affine        :</td><td>The affine transformation matrix that will be applied to the data.</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_vector_float">giza_vector_float</a> <a href="#giza_arrow">giza_arrow</a> <a href="#giza_set_arrow_style">giza_set_arrow_style</a> </p><h3><a name="giza_vector_float">giza_vector_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_vector_float</td><td> (int n, int m, const float* horizontal, const float* vertical, int i1, int i2, int j1, int j2, float scale, int position, const float* affine, float blank) ;</tr></table><p>Same as giza_vector but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_vector">giza_vector</a> <a href="#giza_arrow">giza_arrow</a> <a href="#giza_set_arrow_style">giza_set_arrow_style</a> </p><a name="Text"></a><h1>Text</h1>
+<h3><a name="giza_annotate">giza_annotate</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_annotate</td><td> (const char *side, double displacment, double coord, double justification, const char *string) ;</tr></table><p>Writes text with a position relative to the viewport.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>side          :</td><td>Must contain a character 'B','L','T' or 'R' specifying the bottom, left, top or right margin respectively. The position of the text will be relative to the specified side.</td>
+</tr><tr>
+<td>displacement   :</td><td>The displacement of the text from the edge of the view-port specified in side, measured out of the view-port in units of character height.</td>
+</tr><tr>
+<td>coord         :</td><td>The location of the text along the edge of the view port specified in side, measured as a fraction of that size</td>
+</tr><tr>
+<td>justification :</td><td>Specifies the justification of the text. 0.0 means the left most edge of the string will be aligned with coord, 1.0 means the right most edge of the string will be aligned with coord etc.</td>
+</tr><tr>
+<td>string        :</td><td>The text that will be displayed.</td>
+</tr></table><h3><a name="giza_annotate_float">giza_annotate_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_annotate_float</td><td> (const char *side, float displacment, float coord, float justification, const char *string) ;</tr></table><p>The same functionality as giza_annotate but takes floats instead of doubles.</p>
+<h4>See Also:</h4><p><a href="#giza_annotate">giza_annotate</a> </p><h3><a name="giza_label">giza_label</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_label</td><td> (const char *labelx, const char *labely, const char *title) ;</tr></table><p>Labels the plot</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>labelx :</td><td>x-axis label</td>
+</tr><tr>
+<td>labely :</td><td>y-axis label</td>
+</tr><tr>
+<td>title  :</td><td>The title of the plot</td>
+</tr></table><h3><a name="giza_print_id">giza_print_id</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_print_id</td><td> (void) ;</tr></table><p>Prints user ID, date and time on the plot</p>
+<h3><a name="giza_ptext">giza_ptext</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_ptext</td><td> (double x, double y, double angle, double just, const char *text) ;</tr></table><p>Draws text at a given position in world coords at a given angle with a given justification.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x     :</td><td>The x world coord.</td>
+</tr><tr>
+<td>y     :</td><td>The y world coord.</td>
+</tr><tr>
+<td>angle :</td><td>The angle to be drawn at.</td>
+</tr><tr>
+<td>just  :</td><td>The justification.</td>
+</tr><tr>
+<td>text  :</td><td>The text to be drawn.</td>
+</tr></table><h3><a name="giza_ptext_float">giza_ptext_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_ptext_float</td><td> (float x, float y, float angle, float just, const char *text) ;</tr></table><p>Same functionality as giza_ptext but uses floats.</p>
+<h4>See Also:</h4><p><a href="#giza_ptext">giza_ptext</a> </p><h3><a name="giza_text">giza_text</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_text</td><td> (double x, double y, const char *text) ;</tr></table><p>Draws text at the position (x, y).</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x    :</td><td>The x-coordinate of the bottom left corner of the text.</td>
+</tr><tr>
+<td>y    :</td><td>The y-coordinate of the bottom left corner of the text.</td>
+</tr><tr>
+<td>text :</td><td>The text to be drawn.</td>
+</tr></table><h3><a name="giza_text_float">giza_text_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_text_float</td><td> (float x, float y, const char *text) ;</tr></table><p>Same functionality as giza_text but takes floats.</p>
+<h4>See Also:</h4><p><a href="#giza_text">giza_text</a> </p><h3><a name="giza_qtext">giza_qtext</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_qtext</td><td> (double x, double y, double angle, double just, const char *text, double xbox[4], double ybox[4]) ;</tr></table><p>Returns the co-ordinates of a box bounding the given string if printed by giza_ptext.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x     :</td><td>The x-coord of the text in world-coords</td>
+</tr><tr>
+<td>y     :</td><td>The y-coord of the text in world-coords</td>
+</tr><tr>
+<td>angle :</td><td>The angle to draw the text at, in degrees</td>
+</tr><tr>
+<td>just  :</td><td>The horizontal justification of the string. 0. for left-justified, 1. for right-justified</td>
+</tr><tr>
+<td>text  :</td><td>The text to be drawn -xbox  :-</td>
+</tr><tr>
+<td>ybox  :</td><td>Set to the world co-ords of the bounding box</td>
+</tr></table><h3><a name="giza_qtext_float">giza_qtext_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_qtext_float</td><td> (float x, float y, float angle, float just, const char *text, float xbox[4], float ybox[4]) ;</tr></table><p>Same as giza_qtext but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_qtext">giza_qtext</a> </p><h3><a name="giza_qtextlen">giza_qtextlen</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_qtextlen</td><td> (int units, const char *text, double *xlen, double *ylen) ;</tr></table><p>Returns the length of a string as would be printed by giza_ptext in a variety of units (added by DJP)</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>units  :</td><td>The units in which to return the values</td>
+</tr><tr>
+<td>text   :</td><td>The text to be drawn</td>
+</tr><tr>
+<td>xlen   :</td><td>The length of the text in the x-direction</td>
+</tr><tr>
+<td>ylen   :</td><td>The length of the text in the y-direction</td>
+</tr></table><h3><a name="giza_qtextlen_float">giza_qtextlen_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_qtextlen_float</td><td> (int units, const char *text, float *xlen, float *ylen) ;</tr></table><p>Same functionality as giza_qtextlen but uses floats</p>
+<h4>See Also:</h4><p><a href="#giza_qtextlen">giza_qtextlen</a> </p><a name="Settings"></a><h1>Settings</h1>
+<h3><a name="giza_set_arrow_style">giza_set_arrow_style</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_arrow_style</td><td> (int fillStyle, double angle, double cutback) ;</tr></table><p>Sets the style of arrow head to be used for arrows drawn with giza_arrow.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>fillStyle :</td><td>Sets the fill style. See giza_set_fill</td>
+</tr><tr>
+<td>angle     :</td><td>Sets the acute angle of the arrow head. Can range from 0.0 to 90.</td>
+</tr><tr>
+<td>cutback   :</td><td>The fraction of the back of the arrow head that is cut back. 0.0 gives a triangular arrow head, 1.0 gives >.</td>
+</tr></table><h3><a name="giza_set_arrow_style_float">giza_set_arrow_style_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_arrow_style_float</td><td> (int fillStyle, float angle, float cutback) ;</tr></table><p>Same functionality as giza_set_arrow_style but takes floats instead of doubles.</p>
+<h4>See Also:</h4><p><a href="#giza_set_arrow_style">giza_set_arrow_style</a> </p><h3><a name="giza_get_arrow_style">giza_get_arrow_style</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_arrow_style</td><td> (int *fillStyle, double *angle, double *cutback) ;</tr></table><p>Queries the current arrow style settings, as set by giza_set_arrow_style.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>fillStyle :</td><td>Gets set to the current fillstyle.</td>
+</tr><tr>
+<td>angle     :</td><td>Gets set to the current angle.</td>
+</tr><tr>
+<td>cutback   :</td><td>Gets set to the current cutback.</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_arrow_style">giza_set_arrow_style</a> </p><h3><a name="giza_get_arrow_style_float">giza_get_arrow_style_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_arrow_style_float</td><td> (int *fillStyle, float *angle, float *cutback) ;</tr></table><p>Same functionality as giza_get_arrow_style, but takes floats instead of doubles.</p>
+<h4>See Also:</h4><p><a href="#giza_get_arrow_style">giza_get_arrow_style</a> </p><h3><a name="giza_set_band_style">giza_set_band_style</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_band_style</td><td> (int ls, double lw) ;</tr></table><p>Sets the line style to be used by giza_band</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ls :</td><td>the line style for the band</td>
+</tr><tr>
+<td>lw :</td><td>the width for the line</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_band">giza_band</a> <a href="#giza_get_band_style">giza_get_band_style</a> </p><h3><a name="giza_get_band_style">giza_get_band_style</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_band_style</td><td> (int *ls, double *lw) ;</tr></table><p>Queries the current band style settings to be used by giza_band</p>
+<h4>Output:</h4>
+<table class="api"><tr>
+<td>ls :</td><td>the line style for the band</td>
+</tr><tr>
+<td>lw :</td><td>the width for the line</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_band">giza_band</a> <a href="#giza_set_band_style">giza_set_band_style</a> </p><h3><a name="giza_begin_buffer">giza_begin_buffer</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_begin_buffer</td><td> (void) ;</tr></table><p>Begins buffering</p>
+<h4>See Also:</h4><p><a href="#giza_end_buffer">giza_end_buffer</a> <a href="#giza_flush_buffer">giza_flush_buffer</a> </p><h3><a name="giza_end_buffer">giza_end_buffer</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_end_buffer</td><td> (void) ;</tr></table><p>Ends buffering</p>
+<h4>See Also:</h4><p><a href="#giza_begin_buffer">giza_begin_buffer</a> <a href="#giza_flush_buffer">giza_flush_buffer</a> </p><h3><a name="giza_get_buffering">giza_get_buffering</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_buffering</td><td> (int *buf) ;</tr></table><p>returns whether output is currently buffered on current device</p>
+<h4>See Also:</h4><p><a href="#giza_begin_buffer">giza_begin_buffer</a> <a href="#giza_flush_buffer">giza_flush_buffer</a> <a href="#giza_end_buffer">giza_end_buffer</a> </p><h3><a name="giza_flush_buffer">giza_flush_buffer</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_flush_buffer</td><td> (void) ;</tr></table><p>Updates graphics display Can be used to flush the graphics buffer manually between calls to giza_begin_buffer and giza_end_buffer</p>
+<h4>See Also:</h4><p><a href="#giza_begin_buffer">giza_begin_buffer</a> <a href="#giza_end_buffer">giza_end_buffer</a> </p><h3><a name="giza_set_character_height">giza_set_character_height</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_character_height</td><td> (double ch) ;</tr></table><p>Sets the font size in units of character height.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ch :</td><td>the new character height</td>
+</tr></table><h3><a name="giza_set_character_height">giza_set_character_height</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_character_height_float</td><td> (float ch) ;</tr></table><p>Same functionality as giza_set_character_height but takes a float</p>
+<h3><a name="giza_get_character_height">giza_get_character_height</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_character_height</td><td> (double *ch) ;</tr></table><p>Query the character height</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ch :</td><td>gets set to the character height.</td>
+</tr></table><h3><a name="giza_get_character_height_float">giza_get_character_height_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_character_height_float</td><td> (float *ch) ;</tr></table><p>Same functionality as giza_get_character_height but takes a float.</p>
+<h4>See Also:</h4><p><a href="#giza_get_character_height">giza_get_character_height</a> </p><h3><a name="giza_get_character_size">giza_get_character_size</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_character_size</td><td> (int units, double *heightx, double *heighty) ;</tr></table><p>Returns the character size in a variety of units.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>units  :</td><td>select the units the result will be returned in.</td>
+</tr><tr>
+<td>width  :</td><td>will be set to the width of a character.</td>
+</tr><tr>
+<td>height :</td><td>will be set to the height of a character.</td>
+</tr></table><h4>Units:</h4>
+<table class="api"><tr>
+<td>GIZA_UNITS_NORMALIZED :</td><td>normalised device coords.</td>
+</tr><tr>
+<td>GIZA_UNITS_WORLD      :</td><td>world coords.</td>
+</tr><tr>
+<td>GIZA_UNITS_PIXELS     :</td><td>pixels</td>
+</tr><tr>
+<td>GIZA_UNITS_DEVICE     :</td><td>device coords.</td>
+</tr><tr>
+<td>GIZA_UNITS_MM         :</td><td>mm</td>
+</tr><tr>
+<td>GIZA_UNITS_INCHES     :</td><td>inches Other values cause an error message and are treated as GIZA_UNITS_NORMALIZED</td>
+</tr></table><h3><a name="giza_get_character_size_float">giza_get_character_size_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_character_size_float</td><td> (int units, float *xch, float *ych) ;</tr></table><p>Same functionality as giza_get_character_size, but returns the values as floats</p>
+<h3><a name="giza_set_colour_by_name">giza_set_colour_by_name</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_by_name</td><td> (int ci, const char *name, int *flag) ;</tr></table><p>Set colour representation by matching string to known colours</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci   :</td><td>Which colour index to set.</td>
+</tr><tr>
+<td>name :</td><td>string containing name of the colour Output:</td>
+</tr><tr>
+<td>flag :</td><td>flag to indicate whether or not the colour was matched</td>
+</tr></table><h3><a name="giza_set_colour_index">giza_set_colour_index</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_index</td><td> (int ci) ;</tr></table><p>Sets the colour to that represented by the colour index ci. Represented colours can be changed via giza_set_colour_representation.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci :</td><td>The new colour index.</td>
+</tr></table><h3><a name="giza_get_colour_index">giza_get_colour_index</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_colour_index</td><td> (int *ci) ;</tr></table><p>Queries the current colour index.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci :</td><td>gets set to the current colour index.</td>
+</tr></table><h3><a name="giza_set_colour_representation">giza_set_colour_representation</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation</td><td> (int ci, double red, double green, double blue) ;</tr></table><p>Allows the user to set the colour represented by the given colour index.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci   :</td><td>Which colour index to set.</td>
+</tr><tr>
+<td>red  :</td><td>The red component of the colour (between 0 and 1).</td>
+</tr><tr>
+<td>green  :</td><td>The green component of the colour (between 0 and 1).</td>
+</tr><tr>
+<td>blue  :</td><td>The blue component of the colour (between 0 and 1).</td>
+</tr></table><h3><a name="giza_set_colour_representation_float">giza_set_colour_representation_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation_float</td><td> (int ci, float red, float green, float blue) ;</tr></table><p>Same functionality as giza_set_colour_representation but takes floats/</p>
+<h3><a name="giza_set_colour_representation_alpha">giza_set_colour_representation_alpha</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation_alpha</td><td> (int ci, double red, double green, double blue, double alpha) ;</tr></table><p>Allows the user to set the colour represented by the given colour index, aswell as the alpha.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci   :</td><td>Which colour index to set.</td>
+</tr><tr>
+<td>red  :</td><td>The red component of the colour (between 0 and 1).</td>
+</tr><tr>
+<td>green  :</td><td>The green component of the colour (between 0 and 1).</td>
+</tr><tr>
+<td>blue  :</td><td>The blue component of the colour (between 0 and 1).</td>
+</tr><tr>
+<td>alpha :</td><td>The alpha used when drawing with this colour index (between 0 and 1).</td>
+</tr></table><h3><a name="giza_set_colour_representation_alpha_float">giza_set_colour_representation_alpha_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation_alpha_float</td><td> (int ci, float red, float green, float blue, float alpha) ;</tr></table><p>Same functionality as giza_set_colour_representation_alpha but takes floats.</p>
+<h4>See Also:</h4><p><a href="#giza_set_colour_representation_alpha">giza_set_colour_representation_alpha</a> <a href="#giza_set_colour_representation">giza_set_colour_representation</a> </p><h3><a name="giza_set_colour_representation_hls">giza_set_colour_representation_hls</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation_hls</td><td> (int ci, double hue, double lightness, double saturation) ;</tr></table><p>Allows the user to set the colour represented by the given colour index This routine accepts colours in the Hue, Lightness and Saturation system.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci   :</td><td>Which colour index to set.</td>
+</tr><tr>
+<td>hue         :</td><td>The Hue component of the colour (between 0 and 360 degrees).</td>
+</tr><tr>
+<td>lightness   :</td><td>The Lightness component of the colour (between 0 and 1).</td>
+</tr><tr>
+<td>saturation  :</td><td>The Saturation component of the colour (between 0 and 1).</td>
+</tr></table><h3><a name="giza_set_colour_representation_hls_float">giza_set_colour_representation_hls_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation_hls_float</td><td> (int ci, float hue, float lightness, float saturation) ;</tr></table><p>Same functionality as giza_set_colour_representation_hls but takes floats</p>
+<h3><a name="giza_set_colour_representation_rgb">giza_set_colour_representation_rgb</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation_rgb</td><td> (int ci, int red, int green, int blue) ;</tr></table><p>Same as giza_set_colour_representation but accepts integer 0->255 instead of double 0->1</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci   :</td><td>Which colour index to set.</td>
+</tr><tr>
+<td>red  :</td><td>The red component of the colour (between 0 and 255).</td>
+</tr><tr>
+<td>green  :</td><td>The green component of the colour (between 0 and 255).</td>
+</tr><tr>
+<td>blue  :</td><td>The blue component of the colour (between 0 and 255).</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_colour_representation">giza_set_colour_representation</a> <a href="#giza_set_colour_representation_rgba">giza_set_colour_representation_rgba</a> </p><h3><a name="giza_set_colour_representation_rgba">giza_set_colour_representation_rgba</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation_rgba</td><td> (int ci, int red, int green, int blue, double alpha) ;</tr></table><p>Same as giza_set_colour_representation_alpha but accepts 0->255 instead of 0->1</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci   :</td><td>Which colour index to set.</td>
+</tr><tr>
+<td>red  :</td><td>The red component of the colour (between 0 and 255).</td>
+</tr><tr>
+<td>green  :</td><td>The green component of the colour (between 0 and 255).</td>
+</tr><tr>
+<td>blue  :</td><td>The blue component of the colour (between 0 and 255).</td>
+</tr><tr>
+<td>alpha :</td><td>The alpha component of the colour (between 0 and 1)</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_colour_representation_alpha">giza_set_colour_representation_alpha</a> <a href="#giza_set_colour_representation_rgb">giza_set_colour_representation_rgb</a> </p><h3><a name="giza_set_colour_representation_rgba_float">giza_set_colour_representation_rgba_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_representation_rgba_float</td><td> (int ci, int red, int green, int blue, float alpha) ;</tr></table><p>Same functionality as giza_set_colour_representation_rgba but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_set_colour_representation_rgba">giza_set_colour_representation_rgba</a> <a href="#giza_set_colour_representation_alpha">giza_set_colour_representation_alpha</a> </p><h3><a name="giza_get_colour_representation">giza_get_colour_representation</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_colour_representation</td><td> (int ci, double *red, double *green, double *blue) ;</tr></table><p>Query the RGB at a given colour index.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci    :</td><td>The index to enquire about</td>
+</tr><tr>
+<td>red   :</td><td>Gets set to the red value at ci (range 0->1)</td>
+</tr><tr>
+<td>green :</td><td>Gets set to the green value at ci (range 0->1)</td>
+</tr><tr>
+<td>blue  :</td><td>Gets set to the blue value at ci (range 0->1)</td>
+</tr></table><h3><a name="giza_get_colour_representation_alpha">giza_get_colour_representation_alpha</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_colour_representation_alpha</td><td> (int ci, double *red, double *green, double *blue, double *alpha) ;</tr></table><p>Query the RGB and alpha at a given colour index.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ci    :</td><td>The index to enquire about</td>
+</tr><tr>
+<td>red   :</td><td>Gets set to the red value at ci</td>
+</tr><tr>
+<td>green :</td><td>Gets set to the green value at ci</td>
+</tr><tr>
+<td>blue  :</td><td>Gets set to the blue value at ci</td>
+</tr><tr>
+<td>alpha :</td><td>Gets set to the alpha at ci</td>
+</tr></table><h3><a name="giza_set_colour_index_range">giza_set_colour_index_range</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_index_range</td><td> (int cimin, int cimax) ;</tr></table><p>Set the range of colour indices that are affected by giza_set_colour_table</p>
+<h4>Note:</h4>
+<table class="api"></table><h4>Input:</h4>
+<table class="api"><tr>
+<td>cimin  :</td><td>lowest colour index in range</td>
+</tr><tr>
+<td>cimax  :</td><td>highest colour index in range</td>
+</tr></table><h3><a name="giza_get_colour_index_range">giza_get_colour_index_range</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_colour_index_range</td><td> (int *cimin, int *cimax) ;</tr></table><p>Queries the current range of colour indices affected by giza_set_colour_table, as set by giza_set_colour_index_range</p>
+<h4>Output:</h4>
+<table class="api"><tr>
+<td>cimin  :</td><td>lowest colour index in range</td>
+</tr><tr>
+<td>cimax  :</td><td>highest colour index in range</td>
+</tr></table><h3><a name="giza_set_range_as_colour_table">giza_set_range_as_colour_table</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>/*void</td><td width=20%>giza_set_range_as_colour_table</td><td> (int *cimin, int *cimax) ;</tr></table><p>Can be used in place of giza_set_colour_table to install the colour table from a predefined set of colour indices</p>
+<h4>See Also:</h4><p><a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_set_colour_palette">giza_set_colour_palette</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void </td><td width=20%>giza_set_colour_palette</td><td> (int palette) ;</tr></table><p>Choose between various preset colour "palettes" for the first 16 colour indices commonly used for point and line drawing. This is equivalent to using giza_set_colour_representation  for each index in turn.</p>
+<h4>Note:</h4>
+<table class="api"></table><h4>Input:</h4>
+<table class="api"><tr>
+<td>palette  :</td><td>choice of colour palette</td>
+</tr></table><h4>Available palette options:</h4>
+<table class="api"><tr>
+<td>0 or GIZA_COLOUR_PALETTE_DEFAULT :</td><td>default giza palette</td>
+</tr><tr>
+<td>1 or GIZA_COLOUR_PALETTE_PGPLOT  :</td><td>default PGPLOT palette</td>
+</tr><tr>
+<td>2 to 4 :</td><td>various experimental line palettes</td>
+</tr><tr>
+<td>5 :</td><td>colourblind safe palette from http://jfly.iam.u-tokyo.ac.jp/color/</td>
+</tr><tr>
+<td>6 :</td><td>optimum palette from http://web.media.mit.edu/~wad/color/palette.html</td>
+</tr><tr>
+<td>7 :</td><td>graph-a-licious See Also: giza_set_colour_index, giza_set_colour_table</td>
+</tr></table><h3><a name="giza_set_colour_table">giza_set_colour_table</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_set_colour_table</td><td> (const double *controlPoints, const double *red, const double *green, const double *blue, int n,  double contrast, double brightness) ;</tr></table><p>Sets the colour table.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>controlPoints :</td><td>Specifies at which fraction of the ramp the control points are placed</td>
+</tr><tr>
+<td>red   :</td><td>the normalised value of the red component at each control point</td>
+</tr><tr>
+<td>green :</td><td>the normalised value of the green component at each control point</td>
+</tr><tr>
+<td>blue  :</td><td>the normalised value of the blue component at each control point</td>
+</tr><tr>
+<td>n     :</td><td>the number of control points</td>
+</tr><tr>
+<td>contrast   :</td><td>contrast of colour ramp (normally 1.0). Use -contrast to reverse direction of ramp</td>
+</tr><tr>
+<td>brightness :</td><td>brightness of colour ramp (normally 0.5)</td>
+</tr></table><h4>Return:</h4>
+<table class="api"><tr>
+<td>0 :</td><td>No error.</td>
+</tr><tr>
+<td>1 :</td><td>An error occurred.</td>
+</tr></table><h3><a name="giza_set_colour_table_float">giza_set_colour_table_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_set_colour_table_float</td><td> (const float *controlPoints, const float *red, const float *green, const float *blue, int n,  float contrast, float brightness) ;</tr></table><p>Same functionality as giza_set_colour_table but takes floats</p>
+<h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_rgb_from_table">giza_rgb_from_table</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_rgb_from_table</td><td> (double pos, double *red, double *green, double *blue) ;</tr></table><p>Gets the rgb values from the colour table corresponding to the fraction of the table.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>pos   :</td><td>The fraction along the table to retrieve the colour from. A value less then 0 is assigned the colour at zero, and above one assigned the colour at one.</td>
+</tr><tr>
+<td>red    :</td><td>Gets set to the red component of the colour at pos.</td>
+</tr><tr>
+<td>green  :</td><td>Gets set to the green component of the colour at pos.</td>
+</tr><tr>
+<td>blue   :</td><td>Gets set to the blue component of the colour at pos.</td>
+</tr></table><h4>See also:</h4>
+<table class="api"></table><h3><a name="giza_rgb_from_table_float">giza_rgb_from_table_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_rgb_from_table_float</td><td> (float pos, float *red, float *green, float *blue) ;</tr></table><p>Same functionality giza_rgb_from_table but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_rgb_from_table">giza_rgb_from_table</a> <a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_save_colour_table">giza_save_colour_table</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void </td><td width=20%>giza_save_colour_table</td><td> (void) ;</tr></table><p>Saves the current colour table</p>
+<h4>See Also:</h4><p><a href="#giza_restore_colour_table">giza_restore_colour_table</a> </p><h3><a name="giza_restore_colour_table">giza_restore_colour_table</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void </td><td width=20%>giza_restore_colour_table</td><td> (void) ;</tr></table><p>Restores the colour table from a previously saved one</p>
+<h4>See Also:</h4><p><a href="#giza_save_colour_table">giza_save_colour_table</a> </p><h3><a name="giza_set_environment">giza_set_environment</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_environment</td><td> (double xmin, double xmax, double ymin, double ymax, int just, int axis) ;</tr></table><p>Sets the plotting environment.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>xmin :</td><td>The min x value in world coords</td>
+</tr><tr>
+<td>xmax :</td><td>The max x value in world coords</td>
+</tr><tr>
+<td>ymin :</td><td>The min y value in world coords</td>
+</tr><tr>
+<td>ymax :</td><td>The max y value in world coords</td>
+</tr><tr>
+<td>just :</td><td>Give the x and y axis equal scales</td>
+</tr><tr>
+<td>axis :</td><td>Options for drawing axis, ticks etc.</td>
+</tr></table><h4>Axis:</h4>
+<table class="api"><tr>
+<td>-4 :</td><td>draw box and major tick marks only</td>
+</tr><tr>
+<td>-3 :</td><td>draw box and tick marks (major and minor) only</td>
+</tr><tr>
+<td>-2 :</td><td>no axis, no box, no labels</td>
+</tr><tr>
+<td>-1 :</td><td>draw the box only</td>
+</tr><tr>
+<td>0  :</td><td>draw a box and label it with world coords</td>
+</tr><tr>
+<td>1  :</td><td>same as 0 but also draw the axis</td>
+</tr><tr>
+<td>2  :</td><td>same as 1 but also draw grid lines at major intervals</td>
+</tr><tr>
+<td>10  :</td><td>draw box and label X-axis logarithmically</td>
+</tr><tr>
+<td>20  :</td><td>draw box and label Y-axis logarithmically</td>
+</tr><tr>
+<td>30  :</td><td>draw box and label X- and Y-axis logarithmically</td>
+</tr></table><h3><a name="giza_set_environment_float">giza_set_environment_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_environment_float</td><td> (float xmin, float xmax, float ymin, float ymax, int just, int axis) ;</tr></table><p>Same functionality as giza_set_environment but takes floats</p>
+<h3><a name="giza_set_fill">giza_set_fill</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_fill</td><td> (int fs) ;</tr></table><p>Sets the current fill style.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>fs :</td><td>the new fill style</td>
+</tr></table><h4>Fill Styles:</h4>
+<table class="api"><tr>
+<td>1 or GIZA_FILL_SOLID       :</td><td>solid</td>
+</tr><tr>
+<td>2 or GIZA_FILL_HOLLOW      :</td><td>hollow</td>
+</tr><tr>
+<td>3 or GIZA_FILL_HATCH       :</td><td>hatch</td>
+</tr><tr>
+<td>4 or GIZA_FILL_CROSSHATCH  :</td><td>crosshatch</td>
+</tr></table><h3><a name="giza_get_fill">giza_get_fill</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_fill</td><td> (int *fs) ;</tr></table><p>Query the current fill style.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>fs :</td><td>gets set to the current fill style.</td>
+</tr></table><h3><a name="giza_set_hatching_style">giza_set_hatching_style</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_hatching_style</td><td> (double angle, double spacing, double phase) ;</tr></table><p>Sets the hatching style when using GIZA_FILL_HATCH</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>angle   :</td><td>the angle of the hatching pattern with respect to the horizontal</td>
+</tr><tr>
+<td>spacing :</td><td>the line spacing, in units of the default (1.0)</td>
+</tr><tr>
+<td>phase   :</td><td>a number between 0.0 and 1.0 specifying the offset along the horizontal axis to start the hatching lines</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_fill">giza_fill</a> <a href="#giza_get_hatching_style">giza_get_hatching_style</a> </p><h3><a name="giza_set_hatching_style_float">giza_set_hatching_style_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_hatching_style_float</td><td> (float angle, float spacing, float phase) ;</tr></table><p>Same as giza_set_hatching_style, but takes floats</p>
+<h3><a name="giza_get_hatching_style">giza_get_hatching_style</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_hatching_style</td><td> (double *angle, double *spacing, double *phase) ;</tr></table><p>Queries the current hatching style wgen using GIZA_FILL_HATCH</p>
+<h4>Output:</h4>
+<table class="api"><tr>
+<td>angle   :</td><td>the angle of the hatching pattern with respect to the horizontal</td>
+</tr><tr>
+<td>spacing :</td><td>the line spacing, in units of the default (1.0)</td>
+</tr><tr>
+<td>phase   :</td><td>a number between 0.0 and 1.0 specifying the offset along the horizontal axis to start the hatching lines</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_fill">giza_fill</a> <a href="#giza_set_hatching_style">giza_set_hatching_style</a> </p><h3><a name="giza_get_hatching_style_float">giza_get_hatching_style_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_hatching_style_float</td><td> (float *angle, float *spacing, float *phase) ;</tr></table><p>Same as giza_get_hatching_style, but takes floats</p>
+<h3><a name="giza_begin_autolog">giza_begin_autolog</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void giza_begin_autolog (void)</td><td width=20%></td><td>;</tr></table><p>Turns on automatic logging of interactive devices This writes a png file every time the page is changed in an interactive device, with a name based on the current date/time (giza-%Y-%M-%D-%H:%M:%S.png). Logging can also be turned on by setting the GIZA_LOG environment variable.</p>
+<h4>See Also:</h4><p><a href="#giza_end_autolog">giza_end_autolog</a> </p><h3><a name="giza_end_autolog">giza_end_autolog</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void giza_end_autolog (void)</td><td width=20%></td><td>;</tr></table><p>Turns off automatic logging feature.</p>
+<h4>See Also:</h4><p><a href="#giza_begin_autolog">giza_begin_autolog</a> </p><h3><a name="giza_set_line_cap">giza_set_line_cap</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_line_cap</td><td> (int lc) ;</tr></table><p>Sets the line cap.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>lc :</td><td>An integer representing the line cap.</td>
+</tr></table><h4>Options:</h4>
+<table class="api"><tr>
+<td>0 :</td><td>butt</td>
+</tr><tr>
+<td>1 :</td><td>round</td>
+</tr><tr>
+<td>2 :</td><td>square</td>
+</tr></table><h3><a name="giza_get_line_cap">giza_get_line_cap</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_line_cap</td><td> (int *lc) ;</tr></table><p>Gets the current line cap, as set by giza_set_line_cap.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>lc :</td><td>gets set to the current line cap.</td>
+</tr></table><h3><a name="giza_set_line_style">giza_set_line_style</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_line_style</td><td> (int ls) ;</tr></table><p>Sets the current line style.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ls :</td><td>the new line style</td>
+</tr></table><h4>Line Styles:</h4>
+<table class="api"><tr>
+<td>GIZA_LS_SOLID            :</td><td>solid</td>
+</tr><tr>
+<td>GIZA_LS_LONG_DASH        :</td><td>long dash</td>
+</tr><tr>
+<td>GIZA_LS_SHORT_DASH       :</td><td>short dash</td>
+</tr><tr>
+<td>GIZA_LS_DOT              :</td><td>dot</td>
+</tr><tr>
+<td>GIZA_LS_DASH_DOT         :</td><td>dash dot</td>
+</tr><tr>
+<td>GIZA_LS_DASH_DOT_DOT_DOT :</td><td>dash dot dot dot</td>
+</tr></table><h3><a name="giza_get_line_style">giza_get_line_style</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_line_style</td><td> (int *ls) ;</tr></table><p>Query the current line style.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>ls :</td><td>gets set to the current line style</td>
+</tr></table><h3><a name="giza_set_line_width">giza_set_line_width</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_line_width</td><td> (double lw) ;</tr></table><p>Sets the line width for all subsequent drawing.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>lw :</td><td>The new line width. 1 is 1/4 of a millimetre.</td>
+</tr></table><h3><a name="giza_set_line_width_float">giza_set_line_width_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_line_width_float</td><td> (float lw) ;</tr></table><p>Same functionality as giza_set_line_width but uses floats</p>
+<h4>See Also:</h4><p><a href="#giza_set_line_width">giza_set_line_width</a> </p><h3><a name="giza_get_line_width">giza_get_line_width</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_line_width</td><td> (double *lw) ;</tr></table><p>Queries the current line width.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>lw :</td><td>gets set to the current line width.</td>
+</tr></table><h3><a name="giza_start_prompting">giza_start_prompting</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_start_prompting</td><td> (void) ;</tr></table><p>Turns on prompting for current device, i.e. the user will be  prompted before a page change or a device being closed.</p>
+<h4>See Also:</h4><p><a href="#giza_stop_prompting">giza_stop_prompting</a> </p><h3><a name="giza_stop_prompting">giza_stop_prompting</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_stop_prompting</td><td> (void) ;</tr></table><p>Turns off prompting, i.e. the user will not be prompted before a page change or a device being closed.</p>
+<h4>See Also:</h4><p><a href="#giza_start_prompting">giza_start_prompting</a> </p><h3><a name="giza_save">giza_save</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_save</td><td> (void) ;</tr></table><p>Saves current plot settings</p>
+<h4>See Also:</h4><p><a href="#giza_restore">giza_restore</a> </p><h3><a name="giza_restore">giza_restore</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_restore</td><td> (void) ;</tr></table><p>Restores plot settings stored via giza_save</p>
+<h4>See Also:</h4><p><a href="#giza_save">giza_save</a> </p><h3><a name="giza_set_font">giza_set_font</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_font</td><td> (char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>font :</td><td>the font family to be used.</td>
+</tr></table><h3><a name="giza_set_font_bold">giza_set_font_bold</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_font_bold</td><td> (char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>font :</td><td>the font family to be used.</td>
+</tr></table><h3><a name="giza_set_font_italic">giza_set_font_italic</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_font_italic</td><td> (char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>font :</td><td>the font family to be used.</td>
+</tr></table><h3><a name="giza_set_font_bold_italic">giza_set_font_bold_italic</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_font_bold_italic</td><td> (char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>font :</td><td>the font family to be used.</td>
+</tr></table><h3><a name="giza_get_font">giza_get_font</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_font</td><td> (char *font, int n) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>font :</td><td>Gets set to the current font family</td>
+</tr><tr>
+<td>n    :</td><td>The length of memory allocated to font</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_font">giza_set_font</a> </p><h3><a name="giza_set_text_background">giza_set_text_background</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_text_background</td><td> (int colourIndex) ;</tr></table><p>Set the colour index for the background of any text to be drawn. Use a negative value for a transparent background.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>colourIndex :</td><td>The colour index the background will be.</td>
+</tr></table><h3><a name="giza_get_text_background">giza_get_text_background</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_text_background</td><td> (int *colourIndex) ;</tr></table><p>Queries the current text background colour</p>
+<h4>Output:</h4>
+<table class="api"><tr>
+<td>colourIndex :</td><td>Current setting for the background text colour.</td>
+</tr></table><h3><a name="giza_version">giza_version</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_version</td><td> (int *major, int *minor, int *micro) ;</tr></table><p>Returns the giza version. Note that version information can also be obtained using the header variables GIZA_VERSION_STRING, GIZA_VERSION_MAJOR, GIZA_VERSION_MINOR and GIZA_VERSION_MICRO. These are available in the Fortran interface also.</p>
+<h4>Output:</h4>
+<table class="api"><tr>
+<td>major :</td><td>major version number</td>
+</tr><tr>
+<td>minor :</td><td>minor version number</td>
+</tr><tr>
+<td>micro :</td><td>micro version number</td>
+</tr></table><h3><a name="giza_set_viewport">giza_set_viewport</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_viewport</td><td> (double xleft, double xright, double ybottom, double ytop) ;</tr></table><p>Changes the size and position of the viewport, all arguments are in normalised device coordinates. The viewport is the region of the device that can be drawn to.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>xleft    :</td><td>The x coordinate of the left edge of the viewport</td>
+</tr><tr>
+<td>xright   :</td><td>The x coordinate of the right edge of the viewport</td>
+</tr><tr>
+<td>ybottom  :</td><td>The y coordinate of the bottom edge of the viewport</td>
+</tr><tr>
+<td>ytop     :</td><td>The y coordinate of the top edge of the viewport</td>
+</tr></table><h3><a name="giza_set_viewport_float">giza_set_viewport_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_viewport_float</td><td> (float xleft, float xright, float ybottom, float ytop) ;</tr></table><p>Same functionality as giza_set_viewport but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_set_viewport">giza_set_viewport</a> </p><h3><a name="giza_get_viewport">giza_get_viewport</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_viewport</td><td> (int units, double *x1, double *x2, double *y1, double *y2) ;</tr></table><p>Returns the viewport size and position.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>units :</td><td>specify the units to return values in.</td>
+</tr><tr>
+<td>x1    :</td><td>set to x-coord of upper-left corner</td>
+</tr><tr>
+<td>x2    :</td><td>set to x-coord of lower-right corner</td>
+</tr><tr>
+<td>y1    :</td><td>set to y-coord of upper-left corner</td>
+</tr><tr>
+<td>y2    :</td><td>set to y-coord of lower-right corner</td>
+</tr></table><h4>Units:</h4>
+<table class="api"><tr>
+<td>0 or GIZA_UNITS_NORMALIZED :</td><td>normalised device units</td>
+</tr><tr>
+<td>1 or GIZA_UNITS_INCHES     :</td><td>inches</td>
+</tr><tr>
+<td>2 or GIZA_UNITS_MM         :</td><td>mm</td>
+</tr><tr>
+<td>3 or GIZA_UNITS_PIXELS     :</td><td>pixels</td>
+</tr><tr>
+<td>5 or GIZA_UNITS_DEVICE     :</td><td>device units (pixels or points)</td>
+</tr><tr>
+<td>default                    :</td><td>normalised device units</td>
+</tr></table><h3><a name="giza_get_viewport_float">giza_get_viewport_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_viewport_float</td><td> (int units, float *x1, float *x2, float *y1, float *y2) ;</tr></table><p>Same functionality as giza_get_viewport but uses floats</p>
+<h4>See Also:</h4><p><a href="#giza_get_viewport">giza_get_viewport</a> </p><h3><a name="giza_set_viewport_default">giza_set_viewport_default</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_viewport_default</td><td> (void) ;</tr></table><p>Sets the viewport to the default settings</p>
+<h4>See Also:</h4><p><a href="#giza_set_viewport">giza_set_viewport</a> </p><h3><a name="giza_set_viewport_inches">giza_set_viewport_inches</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_viewport_inches</td><td> (double xleftin, double xrightin, double ybottomin, double ytopin) ;</tr></table><p>Sets the viewport size in inches</p>
+<h4>See Also:</h4><p><a href="#giza_set_viewport">giza_set_viewport</a> </p><h3><a name="giza_set_viewport_inches_float">giza_set_viewport_inches_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_viewport_inches_float</td><td> (float xleftin, float xrightin, float ybottomin, float ytopin) ;</tr></table><p>Same as giza_set_viewport_inches but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_set_viewport_inches">giza_set_viewport_inches</a> </p><h3><a name="giza_start_warnings">giza_start_warnings</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_start_warnings</td><td> (void) ;</tr></table><p>Warnings will be printed to stderr.</p>
+<h4>See Also:</h4><p><a href="#giza_stop_warnings">giza_stop_warnings</a> </p><h3><a name="giza_stop_warnings">giza_stop_warnings</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_stop_warnings</td><td> (void) ;</tr></table><p>Warnings will not be printed to stderr.</p>
+<h4>See Also:</h4><p><a href="#giza_start_warnings">giza_start_warnings</a> </p><h3><a name="giza_set_window">giza_set_window</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_window</td><td> (double x1, double x2, double y1, double y2) ;</tr></table><p>Sets the limits of the axis.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x1 :</td><td>the lowest value of the x axis</td>
+</tr><tr>
+<td>x2 :</td><td>the highest value of the x axis</td>
+</tr><tr>
+<td>y1 :</td><td>the lowest value of the y axis</td>
+</tr><tr>
+<td>y2 :</td><td>the highest value of the y axis</td>
+</tr></table><h3><a name="giza_set_window_float">giza_set_window_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_window_float</td><td> (float x1, float x2, float y1, float y2) ;</tr></table><p>Same functionality as giza_set_window but uses floats.</p>
+<h4>See Also:</h4><p><a href="#giza_set_window">giza_set_window</a> </p><h3><a name="giza_set_window_equal_scale">giza_set_window_equal_scale</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_window_equal_scale</td><td> (double x1, double x2, double y1, double y2) ;</tr></table><p>Sets the window so the x axis ranges from x1 to x2 and y from y1 to y2, then adjusts the view port to the largest possible size that that allows the axis have equal scales.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x1 :</td><td>the lowest value of the x axis</td>
+</tr><tr>
+<td>x2 :</td><td>the highest value of the x axis</td>
+</tr><tr>
+<td>y1 :</td><td>the lowest value of the y axis</td>
+</tr><tr>
+<td>y2 :</td><td>the highest value of the y axis</td>
+</tr></table><h3><a name="giza_set_window_equal_scale_float">giza_set_window_equal_scale_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_window_equal_scale_float</td><td> (float x1, float x2, float y1, float y2) ;</tr></table><p>Same functionality as giza_set_window_equal_scale but uses floats</p>
+<h4>See Also:</h4><p><a href="#giza_set_window_equal_scale">giza_set_window_equal_scale</a> </p><h3><a name="giza_get_window">giza_get_window</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_window</td><td> (double *x1, double *x2, double *y1, double *y2) ;</tr></table><p>Query the boundaries of the window in world coords</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x1 :</td><td>Gets set to the lowest value of the x axis</td>
+</tr><tr>
+<td>x2 :</td><td>Gets set to the highest value of the x axis</td>
+</tr><tr>
+<td>y1 :</td><td>Gets set to the lowest value of the y axis</td>
+</tr><tr>
+<td>y2 :</td><td>Gets set to the highest value of the y axis</td>
+</tr></table><h3><a name="giza_get_window_float">giza_get_window_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_get_window_float</td><td> (float *x1, float *x2, float *y1, float *y2) ;</tr></table><p>Same functionality as giza_get_window but uses floats</p>
+<a name="Interactive"></a><h1>Interactive</h1>
+<h3><a name="giza_band">giza_band</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_band</td><td> (int mode, int moveCurs, double xanc, double yanc, double *x, double *y, char *ch) ;</tr></table><p>Returns the cursor position and character typed by the user relative to an anchor point</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>mode     :</td><td>selects the type of shape to draw during input</td>
+</tr><tr>
+<td>moveCurs :</td><td>if 1 the cursor is moved to (x, y), if 0 the cursor is not moved.</td>
+</tr><tr>
+<td>xanc     :</td><td>the x-coord of the anchor point.</td>
+</tr><tr>
+<td>yanc     :</td><td>the y-coord of the anchor point.</td>
+</tr><tr>
+<td>x        :</td><td>Gets set the position of the cursor.</td>
+</tr><tr>
+<td>y        :</td><td>Gets set to the position of the cursor.</td>
+</tr><tr>
+<td>ch       :</td><td>Gets set to the character pressed by the user.</td>
+</tr></table><h4>Return:</h4>
+<table class="api"><tr>
+<td>1 :</td><td>The device has no cursor</td>
+</tr><tr>
+<td>0 :</td><td>The call was successful</td>
+</tr></table><h4>Modes:</h4>
+<table class="api"><tr>
+<td>0 or GIZA_BAND_NONE      :</td><td>None, behaves like giza_get_key_press</td>
+</tr><tr>
+<td>1 or GIZA_BAND_LINE      :</td><td>Straight line drawn from anchor point</td>
+</tr><tr>
+<td>2 or GIZA_BAND_RECTANGLE :</td><td>Hollow rectangle</td>
+</tr><tr>
+<td>3 or GIZA_BAND_HORZLINES :</td><td>Two horizontal lines</td>
+</tr><tr>
+<td>4 or GIZA_BAND_VERTLINES :</td><td>Two vertical lines</td>
+</tr><tr>
+<td>5 or GIZA_BAND_HORZLINE  :</td><td>Single horizontal line, ignores anchor point</td>
+</tr><tr>
+<td>6 or GIZA_BAND_VERTLINE  :</td><td>Single vertical lines, ignores anchor point</td>
+</tr><tr>
+<td>7 or GIZA_BAND_CROSSHAIR :</td><td>Cross hair, ignores anchor point</td>
+</tr><tr>
+<td>8 or GIZA_BAND_CIRCLE    :</td><td>Circle centred on anchor point</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_get_key_press">giza_get_key_press</a> </p><h3><a name="giza_band_float">giza_band_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_band_float</td><td> (int mode, int moveCurs, float xanc, float yanc, float *x, float *y, char *ch) ;</tr></table><p>Same functionality as giza_band, but uses floats.</p>
+<h4>See Also:</h4><p><a href="#giza_band">giza_band</a> </p><h3><a name="giza_mark_points">giza_mark_points</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_points</td><td> (int maxpts, int *npts, double* xpts, double* ypts, int symbol) ;</tr></table><p>Mark a set of points using the cursor</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>maxpts   :</td><td>maximum number of points that may be accepted</td>
+</tr><tr>
+<td>symbol   :</td><td>symbol code for drawing points</td>
+</tr></table><h4>Input/Output:</h4>
+<table class="api"><tr>
+<td>xpts     :</td><td>the x-coord of the points</td>
+</tr><tr>
+<td>ypts     :</td><td>the y-coord of the anchor point.</td>
+</tr><tr>
+<td>npts     :</td><td>number of points entered, should be zero on first call</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_points">giza_points</a> </p><h3><a name="giza_mark_points_float">giza_mark_points_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_points_float</td><td> (int maxpts, int *npts, float* xpts, float* ypts, int symbol) ;</tr></table><p>Same functionality as giza_mark_points, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_mark_points">giza_mark_points</a> </p><h3><a name="giza_mark_points_ordered">giza_mark_points_ordered</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_points_ordered</td><td> (int maxpts, int *npts, double* xpts, double* ypts, int symbol) ;</tr></table><p>Mark a set of points using the cursor</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>maxpts   :</td><td>maximum number of points that may be accepted</td>
+</tr><tr>
+<td>symbol   :</td><td>symbol code for drawing points</td>
+</tr></table><h4>Input/Output:</h4>
+<table class="api"><tr>
+<td>xpts     :</td><td>the x-coord of the points</td>
+</tr><tr>
+<td>ypts     :</td><td>the y-coord of the anchor point.</td>
+</tr><tr>
+<td>npts     :</td><td>number of points entered, should be zero on first call</td>
+</tr></table><h4>Note:</h4>
+<table class="api"></table><h4>See Also:</h4><p><a href="#giza_points">giza_points</a> </p><h3><a name="giza_mark_points_ordered_float">giza_mark_points_ordered_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_points_ordered_float</td><td> (int maxpts, int *npts, float* xpts, float* ypts, int symbol) ;</tr></table><p>Same functionality as giza_mark_points_ordered, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_mark_points">giza_mark_points</a> </p><h3><a name="giza_mark_line">giza_mark_line</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_line</td><td> (int maxpts, int *npts, double* xpts, double* ypts) ;</tr></table><p>Mark a set of points using the cursor</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>maxpts   :</td><td>maximum number of points that may be accepted</td>
+</tr></table><h4>Input/Output:</h4>
+<table class="api"><tr>
+<td>xpts     :</td><td>the x-coord of the points</td>
+</tr><tr>
+<td>ypts     :</td><td>the y-coord of the anchor point.</td>
+</tr><tr>
+<td>npts     :</td><td>number of points entered, should be zero on first call</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_mark_points">giza_mark_points</a> </p><h3><a name="giza_mark_points_float">giza_mark_points_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_line_float</td><td> (int maxpts, int *npts, float* xpts, float* ypts) ;</tr></table><p>Same functionality as giza_mark_line, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_mark_line">giza_mark_line</a> <a href="#giza_mark_points">giza_mark_points</a> <a href="#giza_mark_line_ordered">giza_mark_line_ordered</a> </p><h3><a name="giza_mark_line_ordered">giza_mark_line_ordered</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_line_ordered</td><td> (int maxpts, int *npts, double* xpts, double* ypts) ;</tr></table><p>Mark a set of points using the cursor</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>maxpts   :</td><td>maximum number of points that may be accepted</td>
+</tr></table><h4>Input/Output:</h4>
+<table class="api"><tr>
+<td>xpts     :</td><td>the x-coord of the points</td>
+</tr><tr>
+<td>ypts     :</td><td>the y-coord of the anchor point.</td>
+</tr><tr>
+<td>npts     :</td><td>number of points entered, should be zero on first call</td>
+</tr></table><h4>Note:</h4>
+<table class="api"></table><h4>See Also:</h4><p><a href="#giza_mark_line">giza_mark_line</a> <a href="#giza_mark_points">giza_mark_points</a> </p><h3><a name="giza_mark_line_ordered_float">giza_mark_line_ordered_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_line_ordered_float</td><td> (int maxpts, int *npts, float* xpts, float* ypts) ;</tr></table><p>Same functionality as giza_mark_line_ordered, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_mark_points">giza_mark_points</a> </p><h3><a name="giza_mark_line_char">giza_mark_line_char</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_line_char</td><td> (int maxpts, int *npts, double* xpts, double* ypts, char *ch) ;</tr></table><p>Same functionality as giza_mark_line, but also returns last character pressed</p>
+<h4>See Also:</h4><p><a href="#giza_mark_line">giza_mark_line</a> </p><h3><a name="giza_mark_points_float">giza_mark_points_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_mark_line_char_float</td><td> (int maxpts, int *npts, float* xpts, float* ypts, char *ch) ;</tr></table><p>Same functionality as giza_mark_line, but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_mark_line">giza_mark_line</a> <a href="#giza_mark_points">giza_mark_points</a> <a href="#giza_mark_line_ordered">giza_mark_line_ordered</a> </p><h3><a name="giza_get_key_press">giza_get_key_press</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_get_key_press</td><td> (double *x, double *y, char *ch) ;</tr></table><p>Returns the cursor position and key press after a key press.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x  :</td><td>Gets set to the x world coord of the cursor.</td>
+</tr><tr>
+<td>y  :</td><td>Gets set to the y world coord of the cursor.</td>
+</tr><tr>
+<td>ch :</td><td>Gets set to the character pressed.</td>
+</tr></table><h4>Return value:</h4>
+<table class="api"><tr>
+<td>0 :</td><td>If the call was successful</td>
+</tr><tr>
+<td>1 :</td><td>If the device has no cursor</td>
+</tr></table>

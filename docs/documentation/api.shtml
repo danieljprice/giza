@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <meta http-equiv="Conent-Type" content="text/html"; charset=utf-8" \>
+    <title>giza - API Reference Manual</title>
+    <link rel="stylesheet" href="../style.css" type="text/css" \>
+  </head>
+
+  <div class="header">
+    <a href="/"><img alt="giza" src="../title.png"\></a>
+  </div>
+
+  <div id="menucontainer">
+  <ul id="menulist">
+    <li><a href="/news/">news</a></li>
+    <li><a href="/download/">download</a></li>
+    <li><a href="/documentation/">documentation</a></li>
+    <li><a href="/contact/">contact</a></li>
+    <li><a href="/samples/">samples</a></li>
+  </ul>
+  </div>
+
+  <div id="content">
+  <h1>API Reference Manual</h1>
+  <p>Here we provided a function by function reference for cairo.
+  <h1>Index</h1>
+  <dl class="toc">
+<dt><a href="#text">Device Managment</a></dt>
+<dt><a href="#text">Drawing</a></dt>
+<dd><a href="#giza_arrow">giza_arrow</a></dt>
+<dt><a href="#text">Text</a></dt>
+<dd><a href="#giza_annotate">giza_annotate</a></dt>
+  </dl>
+  </p>
+  <a name="drawing"></a><h1>Functions for drawing</h1>
+<h3><a name="giza_arrow">giza_arrow</a><hr></h3>
+<p> Draws an arrow.</p>
+e tail of the arrow.</li>
+<li>x2:  The world x-coord of the tail of the arrow.</li>
+<li>y2:  The world y-coord of the head of the arrow.</li>
+<li>x1:  The world x-coord of the tail of the arrow.</li>
+</li>
+e position of the text will be relativeto the specified side.</li>
+<li>justification:  Specifies the justification of the text.0.0 means the left most edge of the stringwill be aligned with coord, 1.0 means theright most edge of the string will be aligned with coord etc.</li>
+<li>coord:  The location of the text along the edgeof the view port specified in side,measured as a fraction of that size</li>
+<li>string:  The text that will be displayed.</li>
+<li>displacement:  The displacement of the text from the edge of the view-port specified inside, measured out of the view-port in units of character height.</li>
+</li>
+  </div>
+
+</html>
