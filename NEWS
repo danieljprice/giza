@@ -1,4 +1,15 @@
 -----------------------------------
+Changes in 0.9.5 compared to 0.9.4
+-----------------------------------
+      (web) moved to github hosting
+      bug fix with shaded error bars
+      (giza_box) bug fix with spacing between box and numbers when numbers written on top of box
+      fix compiler warning in giza-viewport/giza-window
+      updated .gitignore to ignore .lo and .la files
+      (giza_box) bug fix with drawing major axis only; also with drawing grid (iaxis=1)
+      fix string allocation (thanks to Ole Streicher)
+
+-----------------------------------
 Changes in 0.9.4 compared to 0.9.3
 -----------------------------------
       updated readme
