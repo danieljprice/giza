@@ -5,7 +5,7 @@ m4_define(giza_version_micro,5)
 AC_INIT([giza],
         [giza_version_major.giza_version_minor.giza_version_micro],
         [daniel.price@monash.edu],[],
-        [http://giza.sf.net])
+        [http://danieljprice.github.io/giza])
 AC_CONFIG_AUX_DIR([build])
 AM_INIT_AUTOMAKE([1.11 -Wall -Werror -Wno-extra-portability])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
