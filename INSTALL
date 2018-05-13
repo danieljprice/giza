@@ -50,17 +50,28 @@ make test-2D
 ----
 PGPLOT replacement usage
 ----
-giza compiles a version of libpgplot that can be used as a drop-in replacement for the original PGPLOT libraries
+giza compiles a version of libpgplot that can be used as a drop-in replacement
+for the original PGPLOT libraries
 
-To test this, grab any program that previously used PGPLOT, and recompile with:
+If you want to test a program that previously used PGPLOT, then first compile
+and install giza as above (which by default will install libraries
+to /usr/local/lib). Then on a Mac you would type:
+ (assuming a Mac with giza libraries installed to /usr/local/lib), just type:
 
-PGPLOT_DIR=/where/you/installed/giza/
+export DYLD_LIBRARY_PATH=/usr/local/lib:${DYLD_LIBRARY_PATH}
 
-so that in the link step the following appear:
+or in Linux
 
--L/where/you/installed/giza/ -lpgplot
+export LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH}
 
-then simply compile and run your program. In fact, you don't even need to recompile your code.
-You can just put /where/you/installed/giza ahead of the "real" PGPLOT
-in your LD_LIBRARY_PATH (or on a Mac, the DYLD_LIBRARY_PATH)
-and proceed to run your pgplot program as previously, now with giza as backend.
+then run your PGPLOT-based program (you don't even need to recompile it).
+That is, as long as giza's version of pgplot libraries are first in the shared
+library path, they are the ones that will be used.
+
+There are some basic examples of PGPLOT usage (mainly written for my own testing)
+in the F90 dir:
+
+cd giza/tests/F90
+make test-pgaxis test-pgncur
+./test-pgaxis
+./test-pgncur
