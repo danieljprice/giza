@@ -1,9 +1,9 @@
-Type: 
+Type:
 
 ./configure
 make install
 
-You will need a C compiler, cairo and X11 development packages. If they are 
+You will need a C compiler, cairo and X11 development packages. If they are
 ready to go the above should build giza using gcc,
 and "make install" should install under a Linux or Mac operating system.
 
@@ -21,5 +21,46 @@ specify the location with the following flags:
             CAIRO_CFLAGS='-I/usr/X11/include/cairo' CAIRO_LIBS='-L/usr/X11/lib/cairo -lcairo'
 make install
 
+You can find out more configuration options using ./configure --help
 -----
-You can find out more options using ./configure --help
+BASIC USAGE (using giza directly, not via pgplot interface)
+-----
+For simple examples, you can try compiling some of the examples in the tests/ directory, e.g.
+
+cd giza/tests/C/
+make test-png
+./test-png
+%giza: test_0000.png created
+%giza: test_0001.png created
+%giza: test_0002.png created
+%giza: test_0003.png created
+%giza: test_0004.png created
+%giza: test_0005.png created
+%giza: test_0006.png created
+%giza: test_0007.png created
+%giza: test_0008.png created
+%giza: test_0009.png created
+
+Or for a Fortran equivalent:
+
+cd giza/tests/F90/
+make test-2D
+./test-2D
+
+----
+PGPLOT replacement usage
+----
+giza compiles a version of libpgplot that can be used as a drop-in replacement for the original PGPLOT libraries
+
+To test this, grab any program that previously used PGPLOT, and recompile with:
+
+PGPLOT_DIR=/where/you/installed/giza/
+
+so that in the link step the following appear:
+
+-L/where/you/installed/giza/ -lpgplot
+
+then simply compile and run your program. In fact, you don't even need to recompile your code.
+You can just put /where/you/installed/giza ahead of the "real" PGPLOT
+in your LD_LIBRARY_PATH (or on a Mac, the DYLD_LIBRARY_PATH)
+and proceed to run your pgplot program as previously, now with giza as backend.
