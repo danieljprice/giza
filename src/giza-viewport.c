@@ -103,10 +103,13 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
   giza_get_clipping(&clip);
   if (clip)
     cairo_clip (Dev[id].context);
-
+  /* Setting the viewport does not imply setting the window 
+   * cf. pgplot5.2/src/pgsvp.f
+   */
+/*
   giza_set_window(Dev[id].Win.xmin,Dev[id].Win.xmax,
                   Dev[id].Win.ymin,Dev[id].Win.ymax);
-
+*/
 }
 
 /**
