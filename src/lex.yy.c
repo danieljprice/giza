@@ -223,7 +223,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	yy_size_t yy_n_chars;
+	int yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -361,8 +361,8 @@ static void yy_fatal_error (yyconst char msg[] ,yyscan_t yyscanner );
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 72
-#define YY_END_OF_BUFFER 73
+#define YY_NUM_RULES 73
+#define YY_END_OF_BUFFER 74
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -372,32 +372,32 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[241] =
     {   0,
-        0,    0,   73,    7,    7,    7,    1,    2,    5,    6,
-       72,   72,   72,   72,    0,    0,    0,    0,    0,    0,
+        0,    0,   74,    8,    8,    8,    1,    2,    6,    7,
+       73,   73,   73,   73,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,   18,   20,   19,    0,    0,    0,
-        4,    0,    0,    0,    0,    0,    0,   17,    0,    0,
-        0,    0,    0,    0,    3,   13,    0,   21,   22,    7,
+        0,    0,    0,    0,   19,   21,   20,    0,    5,    0,
+        4,    0,    0,    0,    0,    0,    0,   18,    0,    0,
+        0,    0,    0,    0,    3,   14,    0,   22,   23,    8,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,   58,   59,    0,    0,   62,    0,    0,
-        0,    0,    0,    0,    0,   60,    0,    0,    0,   12,
-        0,    0,    0,    0,    0,   10,    8,    9,   11,   47,
+        0,    0,    0,   59,   60,    0,    0,   63,    0,    0,
+        0,    0,    0,    0,    0,   61,    0,    0,    0,   13,
+        0,    0,    0,    0,    0,   11,    9,   10,   12,   48,
 
-       48,   50,   51,   67,   49,   54,   55,   56,   57,   61,
-       69,   63,   64,   65,   66,   70,   68,   53,   52,   23,
-       24,   36,   26,   27,   43,   25,   30,   31,   32,   33,
-       34,   35,   37,   38,   45,   39,   40,   41,   42,   46,
-       44,   29,   28,    0,    0,    0,    0,    0,    0,    0,
+       49,   51,   52,   68,   50,   55,   56,   57,   58,   62,
+       70,   64,   65,   66,   67,   71,   69,   54,   53,   24,
+       25,   37,   27,   28,   44,   26,   31,   32,   33,   34,
+       35,   36,   38,   39,   46,   40,   41,   42,   43,   47,
+       45,   30,   29,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,   16,    0,    0,    0,    0,    0,    0,    0,    0,
-       14,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+        0,   17,    0,    0,    0,    0,    0,    0,    0,    0,
+       15,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
 
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
         0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,   23,    0,    0,   15,
-        0,   13,    0,    0,    0,    0,    0,    0,    0,    0
+        0,    0,    0,    0,    0,    0,   24,    0,    0,   16,
+        0,   14,    0,    0,    0,    0,    0,    0,    0,    0
     } ;
 
 static yyconst YY_CHAR yy_ec[256] =
@@ -640,6 +640,7 @@ static yyconst flex_int16_t yy_chk[429] =
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
+#include "giza-io-private.h"
 #include "giza-private.h"
 #include "giza-transforms-private.h"
 #include "giza-drivers-private.h"
@@ -658,6 +659,7 @@ static yyconst flex_int16_t yy_chk[429] =
 #define GIZA_TOKEN_OTHER  7
 #define GIZA_TOKEN_RAISE  8
 #define GIZA_TOKEN_LOWER  9
+#define GIZA_TOKEN_BACKSPC 99
 #define GIZA_TOKEN_INTEGRAL 10
 #define GIZA_TOKEN_NABLA 11
 
@@ -733,7 +735,7 @@ static yyconst flex_int16_t yy_chk[429] =
 static void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
 static int _giza_get_chunk (const char *text);
 
-#line 737 "lex.yy.c"
+#line 739 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -762,7 +764,7 @@ struct yyguts_t
     size_t yy_buffer_stack_max; /**< capacity of stack. */
     YY_BUFFER_STATE * yy_buffer_stack; /**< Stack as an array. */
     char yy_hold_char;
-    yy_size_t yy_n_chars;
+    int yy_n_chars;
     yy_size_t yyleng_r;
     char *yy_c_buf_p;
     int yy_init;
@@ -994,10 +996,10 @@ YY_DECL
 		}
 
 	{
-#line 205 "giza-scanner.l"
+#line 208 "giza-scanner.l"
 
 
-#line 1001 "lex.yy.c"
+#line 1003 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1056,371 +1058,376 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 207 "giza-scanner.l"
+#line 210 "giza-scanner.l"
 { return GIZA_TOKEN_SUPER; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 209 "giza-scanner.l"
+#line 212 "giza-scanner.l"
 { return GIZA_TOKEN_SUB; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 211 "giza-scanner.l"
+#line 214 "giza-scanner.l"
 { return GIZA_TOKEN_RAISE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 213 "giza-scanner.l"
+#line 216 "giza-scanner.l"
 { return GIZA_TOKEN_LOWER; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 215 "giza-scanner.l"
-{ return GIZA_TOKEN_OB; }
+#line 218 "giza-scanner.l"
+{ return GIZA_TOKEN_BACKSPC; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 217 "giza-scanner.l"
-{ return GIZA_TOKEN_CB; }
+#line 220 "giza-scanner.l"
+{ return GIZA_TOKEN_OB; }
 	YY_BREAK
 case 7:
-/* rule 7 can match eol */
 YY_RULE_SETUP
-#line 219 "giza-scanner.l"
-{ return GIZA_TOKEN_OTHER; }
+#line 222 "giza-scanner.l"
+{ return GIZA_TOKEN_CB; }
 	YY_BREAK
 case 8:
+/* rule 8 can match eol */
 YY_RULE_SETUP
-#line 221 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_NORMAL; }
+#line 224 "giza-scanner.l"
+{ return GIZA_TOKEN_OTHER; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 222 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_ROMAN; }
+#line 226 "giza-scanner.l"
+{ return GIZA_TOKEN_FONT_NORMAL; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 223 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_ITALIC; }
+#line 227 "giza-scanner.l"
+{ return GIZA_TOKEN_FONT_ROMAN; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 224 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_SCRIPT; }
+#line 228 "giza-scanner.l"
+{ return GIZA_TOKEN_FONT_ITALIC; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 225 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_BOLD; }
+#line 229 "giza-scanner.l"
+{ return GIZA_TOKEN_FONT_SCRIPT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 227 "giza-scanner.l"
-{ return GIZA_TOKEN_TIMES; }
+#line 230 "giza-scanner.l"
+{ return GIZA_TOKEN_FONT_BOLD; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 228 "giza-scanner.l"
-{ return GIZA_TOKEN_INTEGRAL; }
+#line 232 "giza-scanner.l"
+{ return GIZA_TOKEN_TIMES; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 229 "giza-scanner.l"
-{ return GIZA_TOKEN_NABLA; }
+#line 233 "giza-scanner.l"
+{ return GIZA_TOKEN_INTEGRAL; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 230 "giza-scanner.l"
-{ return GIZA_TOKEN_ODOT; }
+#line 234 "giza-scanner.l"
+{ return GIZA_TOKEN_NABLA; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 231 "giza-scanner.l"
-{ return GIZA_TOKEN_MARKER; }
+#line 235 "giza-scanner.l"
+{ return GIZA_TOKEN_ODOT; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 232 "giza-scanner.l"
-{ return GIZA_TOKEN_BACKSLASH; }
+#line 236 "giza-scanner.l"
+{ return GIZA_TOKEN_MARKER; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 233 "giza-scanner.l"
-{ return GIZA_TOKEN_UNDERSCORE; }
+#line 237 "giza-scanner.l"
+{ return GIZA_TOKEN_BACKSLASH; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 234 "giza-scanner.l"
-{ return GIZA_TOKEN_HAT; }
+#line 238 "giza-scanner.l"
+{ return GIZA_TOKEN_UNDERSCORE; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 235 "giza-scanner.l"
-{ return GIZA_TOKEN_CURLYOPEN; }
+#line 239 "giza-scanner.l"
+{ return GIZA_TOKEN_HAT; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 236 "giza-scanner.l"
-{ return GIZA_TOKEN_CURLYCLOSE; }
+#line 240 "giza-scanner.l"
+{ return GIZA_TOKEN_CURLYOPEN; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 238 "giza-scanner.l"
-{ return GIZA_TOKEN_ALPHA; }
+#line 241 "giza-scanner.l"
+{ return GIZA_TOKEN_CURLYCLOSE; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 239 "giza-scanner.l"
-{ return GIZA_TOKEN_BETA; }
+#line 243 "giza-scanner.l"
+{ return GIZA_TOKEN_ALPHA; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 240 "giza-scanner.l"
-{ return GIZA_TOKEN_GAMMA; }
+#line 244 "giza-scanner.l"
+{ return GIZA_TOKEN_BETA; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 241 "giza-scanner.l"
-{ return GIZA_TOKEN_DELTA; }
+#line 245 "giza-scanner.l"
+{ return GIZA_TOKEN_GAMMA; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 242 "giza-scanner.l"
-{ return GIZA_TOKEN_EPSILON; }
+#line 246 "giza-scanner.l"
+{ return GIZA_TOKEN_DELTA; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 243 "giza-scanner.l"
-{ return GIZA_TOKEN_ZETA; }
+#line 247 "giza-scanner.l"
+{ return GIZA_TOKEN_EPSILON; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 244 "giza-scanner.l"
-{ return GIZA_TOKEN_ETA; }
+#line 248 "giza-scanner.l"
+{ return GIZA_TOKEN_ZETA; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 245 "giza-scanner.l"
-{ return GIZA_TOKEN_THETA; }
+#line 249 "giza-scanner.l"
+{ return GIZA_TOKEN_ETA; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 246 "giza-scanner.l"
-{ return GIZA_TOKEN_IOTA; }
+#line 250 "giza-scanner.l"
+{ return GIZA_TOKEN_THETA; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 247 "giza-scanner.l"
-{ return GIZA_TOKEN_KAPPA; }
+#line 251 "giza-scanner.l"
+{ return GIZA_TOKEN_IOTA; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 248 "giza-scanner.l"
-{ return GIZA_TOKEN_LAMBDA; }
+#line 252 "giza-scanner.l"
+{ return GIZA_TOKEN_KAPPA; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 249 "giza-scanner.l"
-{ return GIZA_TOKEN_MU; }
+#line 253 "giza-scanner.l"
+{ return GIZA_TOKEN_LAMBDA; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 250 "giza-scanner.l"
-{ return GIZA_TOKEN_NU; }
+#line 254 "giza-scanner.l"
+{ return GIZA_TOKEN_MU; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 251 "giza-scanner.l"
-{ return GIZA_TOKEN_XI; }
+#line 255 "giza-scanner.l"
+{ return GIZA_TOKEN_NU; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 252 "giza-scanner.l"
-{ return GIZA_TOKEN_OMICRON; }
+#line 256 "giza-scanner.l"
+{ return GIZA_TOKEN_XI; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 253 "giza-scanner.l"
-{ return GIZA_TOKEN_PI; }
+#line 257 "giza-scanner.l"
+{ return GIZA_TOKEN_OMICRON; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 254 "giza-scanner.l"
-{ return GIZA_TOKEN_RHO; }
+#line 258 "giza-scanner.l"
+{ return GIZA_TOKEN_PI; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 255 "giza-scanner.l"
-{ return GIZA_TOKEN_SIGMA; }
+#line 259 "giza-scanner.l"
+{ return GIZA_TOKEN_RHO; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 256 "giza-scanner.l"
-{ return GIZA_TOKEN_TAU; }
+#line 260 "giza-scanner.l"
+{ return GIZA_TOKEN_SIGMA; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 257 "giza-scanner.l"
-{ return GIZA_TOKEN_UPSILON; }
+#line 261 "giza-scanner.l"
+{ return GIZA_TOKEN_TAU; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 258 "giza-scanner.l"
-{ return GIZA_TOKEN_PHI; }
+#line 262 "giza-scanner.l"
+{ return GIZA_TOKEN_UPSILON; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 259 "giza-scanner.l"
-{ return GIZA_TOKEN_CHI; }
+#line 263 "giza-scanner.l"
+{ return GIZA_TOKEN_PHI; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 260 "giza-scanner.l"
-{ return GIZA_TOKEN_PSI; }
+#line 264 "giza-scanner.l"
+{ return GIZA_TOKEN_CHI; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 261 "giza-scanner.l"
-{ return GIZA_TOKEN_OMEGA; }
+#line 265 "giza-scanner.l"
+{ return GIZA_TOKEN_PSI; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 263 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGALPHA; }
+#line 266 "giza-scanner.l"
+{ return GIZA_TOKEN_OMEGA; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 264 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGBETA; }
+#line 268 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGALPHA; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 265 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGGAMMA; }
+#line 269 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGBETA; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 266 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGDELTA; }
+#line 270 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGGAMMA; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 267 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGEPSILON; }
+#line 271 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGDELTA; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 268 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGZETA; }
+#line 272 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGEPSILON; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 269 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGETA; }
+#line 273 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGZETA; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 270 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGTHETA; }
+#line 274 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGETA; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 271 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGIOTA; }
+#line 275 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGTHETA; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 272 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGKAPPA; }
+#line 276 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGIOTA; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 273 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGLAMBDA; }
+#line 277 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGKAPPA; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 274 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGMU; }
+#line 278 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGLAMBDA; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 275 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGNU; }
+#line 279 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGMU; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 276 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGXI; }
+#line 280 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGNU; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 277 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGOMICRON; }
+#line 281 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGXI; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 278 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPI; }
+#line 282 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGOMICRON; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 279 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGRHO; }
+#line 283 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPI; }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 280 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGSIGMA; }
+#line 284 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGRHO; }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 281 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGTAU; }
+#line 285 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGSIGMA; }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 282 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGUPSILON; }
+#line 286 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGTAU; }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 283 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPHI; }
+#line 287 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGUPSILON; }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 284 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGCHI; }
+#line 288 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPHI; }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 285 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPSI; }
+#line 289 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGCHI; }
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 286 "giza-scanner.l"
+#line 290 "giza-scanner.l"
+{ return GIZA_TOKEN_BIGPSI; }
+	YY_BREAK
+case 71:
+YY_RULE_SETUP
+#line 291 "giza-scanner.l"
 { return GIZA_TOKEN_BIGOMEGA; }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 289 "giza-scanner.l"
+#line 294 "giza-scanner.l"
 { return GIZA_TOKEN_END; }
 	YY_BREAK
-case 71:
-/* rule 71 can match eol */
+case 72:
+/* rule 72 can match eol */
 YY_RULE_SETUP
-#line 291 "giza-scanner.l"
+#line 296 "giza-scanner.l"
 { return GIZA_TOKEN_ERROR; }
 	YY_BREAK
-case 72:
+case 73:
 YY_RULE_SETUP
-#line 293 "giza-scanner.l"
+#line 298 "giza-scanner.l"
 ECHO;
 	YY_BREAK
-#line 1424 "lex.yy.c"
+#line 1431 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1675,9 +1682,9 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
 
-	if ((yy_size_t) (yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+	if ((int) (yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
-		yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
+		int new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,new_size ,yyscanner );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
 			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
@@ -2108,7 +2115,7 @@ static void yyensure_buffer_stack (yyscan_t yyscanner)
 		 * scanner will even need a stack. We use 2 instead of 1 to avoid an
 		 * immediate realloc on the next call.
          */
-		num_to_alloc = 1; // After all that talk, this was set to 1 anyways...
+		num_to_alloc = 1; /* After all that talk, this was set to 1 anyways... */
 		yyg->yy_buffer_stack = (struct yy_buffer_state**)yyalloc
 								(num_to_alloc * sizeof(struct yy_buffer_state*)
 								, yyscanner);
@@ -2587,7 +2594,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 293 "giza-scanner.l"
+#line 298 "giza-scanner.l"
 
 
 
@@ -2683,25 +2690,47 @@ _giza_get_chunk_fontchange (const char *text)
    return length; /* assumes whole string if unclosed open bracket */
 }
 
+#define MAX_NFONT 32
+typedef struct _font_change_type {
+    char    font[GIZA_FONT_LEN];
+    int     ob_level; /* open bracket level at start of font change*/
+} font_change_type;
+
+typedef struct _glyph_pos_type {
+    double x, y;
+} glyph_pos_type;
+
 /**
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
  */
 void
 _giza_parse_string (const char *text, double *width, double *height, void (*action)(const char *, double *, double *))
 {
-  yyscan_t scanner;
-  int stop = 0, token, chunkLength, oldTrans;
-  int posInText = 0;
-  int insuper = 0;
-  int insub   = 0;
-  int lenstr  = strlen(text);
-  char processed[lenstr + 1];
-  processed[0] = '\0';
+  if( text==NULL ) {
+      _giza_error("giza_parse_string", "NULL string");
+      return;
+  }
+  const int            lenstr = strlen(text);
+  if( lenstr==0 )
+      return;
+
+  yyscan_t             scanner;
+  int                  stop      = 0, token, oldTrans, posInText = 0;
+  int                  insuper   = 0, insub = 0;
+  int                  ob        = 0; /* count open/close bracket */
+  int                  bckSpace  = 0;
+  int                  nGlyph    = 0;
+  int                  fontIdx   = 0, superIdx = 0, subIdx = 0;
+  int                  ob_super[MAX_NFONT], ob_sub[MAX_NFONT];
+  char                 tmp[32];
+  double               sina = sin(Dev[id].fontAngle);
+  double               cosa = cos(Dev[id].fontAngle);
+  cairo_glyph_t        gl_extents[lenstr];
+  glyph_pos_type       positions[lenstr];
+  font_change_type     oldfont[MAX_NFONT];
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
-  int lenfont = GIZA_FONT_LEN;
-  char oldfont[lenfont];
 
   /* initialise the scanner */
   yylex_init (&scanner);
@@ -2711,79 +2740,54 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
     {
       token = yylex(scanner);
       posInText += yyget_leng (scanner);;
-      /*printf("in parse string, token = %i pos = %i processed=\"%s\"\n",token,posInText,processed); */
+      /*printf("in parse string, token = %i pos = %i\n",token,posInText);*/
 
       switch(token)
         {
         case GIZA_TOKEN_OB:
-        case GIZA_TOKEN_CB: /* ignore closing bracket! */
+            ob++;
+            break;
+        case GIZA_TOKEN_CB:
+            ob--;
+            /* if we have seen a font change, end this if the
+               open-bracket-level falls below the open-bracket level
+               at start of font change */
+            if( fontIdx>0 && ob<oldfont[fontIdx].ob_level ) {
+                /* OK go back to old font */
+                giza_set_font(oldfont[fontIdx].font);
+                fontIdx--;
+            }
+            /* did the closing bracket mark end-of-superscript? */
+            if( superIdx>0 && ob<ob_super[superIdx] ) {
+                _giza_stop_super();
+                superIdx--;
+            }
+            /* did the closing bracket mark end-of-subscript? */
+            if( subIdx>0 && ob<ob_sub[subIdx] ) {
+                _giza_stop_sub();
+                subIdx--;
+            }
           break;
         case GIZA_TOKEN_SUPER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* Parse the brackets, i.e. get the chunk of text that needs to be superscript */
-          chunkLength = _giza_get_chunk (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-          
           /* Perform the action on this chunk */
-          _giza_start_super ();
-          _giza_parse_string (processed, width, height, action);
-          _giza_stop_super ();
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
+          if( superIdx<MAX_NFONT ) {
+              ob_super[superIdx] = ob;
+              _giza_start_super ();
+          } else {
+              _giza_error("giza_parse_string", "Too many levels of super-script");
+          }
           break;
         case GIZA_TOKEN_SUB:
-          /* Perform action on text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* Parse the brackets */
-          chunkLength = _giza_get_chunk (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-
-          /* perform action on this chunk */
-          _giza_start_sub ();
-          _giza_parse_string (processed, width, height, action);
-          _giza_stop_sub ();
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
+          /* Perform the action on this chunk */
+          if( subIdx<MAX_NFONT ) {
+              ob_sub[subIdx] = ob;
+              _giza_start_sub ();
+          } else {
+              _giza_error("giza_parse_string", "Too many levels of sub-script");
+          }
           break;
         case GIZA_TOKEN_RAISE:
           /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
           if (insub > 0)
             {
              _giza_stop_sub();
@@ -2797,8 +2801,6 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           break;
         case GIZA_TOKEN_LOWER:
           /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
           if (insuper > 0)
             {
              _giza_stop_super();
@@ -2810,30 +2812,28 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
              insub += 1;
             }
           break;
+        case GIZA_TOKEN_BACKSPC:
+          /* OK move to previous character, if 
+             backed up before start of string
+             ignore silently */
+          bckSpace -= 1;
+          if( bckSpace<0 )
+            break;
+          cairo_move_to(Dev[id].context, positions[bckSpace].x, positions[bckSpace].y);
+          break;
         case GIZA_TOKEN_FONT_NORMAL:
         case GIZA_TOKEN_FONT_ROMAN:
         case GIZA_TOKEN_FONT_ITALIC:
         case GIZA_TOKEN_FONT_SCRIPT:
         case GIZA_TOKEN_FONT_BOLD:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
+          if( fontIdx<MAX_NFONT ) {
+              oldfont[fontIdx].ob_level = ob;
+              /* save font */
+              giza_get_font(oldfont[fontIdx].font, GIZA_FONT_LEN /*lenfont*/);
+          } else {
+              _giza_error("giza_parse_string", "Too many nested levels of font changes");
               break;
-            }
-
-          /* Parse the brackets */
-          chunkLength = _giza_get_chunk_fontchange (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-          
-          /* save font */
-          giza_get_font(oldfont,lenfont);
-
+          }
           /* perform action on this chunk */
           switch (token)
             {
@@ -2853,86 +2853,73 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
               _giza_switch_font (1);
               break;
             }
-          _giza_parse_string (processed, width, height, action);
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          /* restore font */
-          giza_set_font(oldfont);
-
-          processed[0] = '\0';
           break;
         case GIZA_TOKEN_MARKER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
+          {
+              /* get current marker height */
+              double markerHeight;
+              _giza_get_markerheight(&markerHeight);
 
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* get current marker height */
-          double markerHeight;
-          _giza_get_markerheight(&markerHeight);
-
-          /* extract the symbol number from in front of the \m */
-          int number;
-          sscanf(text+posInText,"%i",&number);
-          
-          /* 
-           * get the length of the string containing the number 
-           * so we know how many characters we have processed
-           */
-          char temp[4];
-          sprintf(temp,"%i",number);
-          chunkLength = strlen(temp);
-          
-          /* either draw the symbol or increment the width */
-          if (*width < 0.) {
-             double xp, yp;
-             double sina = sin(Dev[id].fontAngle);
-             double cosa = cos(Dev[id].fontAngle);
-             double dx = 0.75*markerHeight;
-             double dy = -0.5*markerHeight;
-             cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
-             _giza_draw_symbol_device(xp + dx*cosa + dy*sina, yp + dx*sina + dy*cosa, number);
-             cairo_move_to(Dev[id].context, xp + 2.*dx*cosa, yp + 2.*dx*sina); /* restore pen position */
-
-          } else {
-             /* return width if action is _giza_action_get_size */
-             *width = *width + 1.5*markerHeight;
+              /* extract the symbol number from in front of the \m */
+              int number, chunkLength;
+              sscanf(text+posInText,"%i",&number);
+              
+              /* 
+               * get the length of the string containing the number 
+               * so we know how many characters we have processed
+               */
+              char temp[32];
+              sprintf(temp,"%i",number);
+              chunkLength = strlen(temp);
+              
+              /* either draw the symbol or increment the width */
+              if (*width < 0.) {
+                 double xp, yp;
+                 double dx = 0.75*markerHeight;
+                 double dy = -0.5*markerHeight;
+                 cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
+                 _giza_draw_symbol_device(xp + dx*cosa + dy*sina, yp + dx*sina + dy*cosa, number);
+                 cairo_move_to(Dev[id].context, xp + 2.*dx*cosa, yp + 2.*dx*sina); /* restore pen position */
+                 /* save what was the current pen position so we can back up to it */
+                 positions[nGlyph].x = xp;
+                 positions[nGlyph].y = yp;
+                 nGlyph++;
+              } else {
+                 /* return width if action is _giza_action_get_size */
+                 *width = *width + 1.5*markerHeight;
+              }
+              /* restart the scanner at the new position! */
+              yylex_destroy (scanner);
+              yylex_init (&scanner);
+              posInText += chunkLength;
+              yy_scan_string (text + posInText, scanner);
           }
-          
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
           break;
 
         case GIZA_TOKEN_END:
           stop = 1;
           break;
         default:
-          _giza_add_token_to_string (processed, scanner, token);
+          {
+              /* Save the current pen position so we can easily back up to this position */
+              double  xp, yp;
+              cairo_get_current_point(Dev[id].context, &xp, &yp);
+              positions[nGlyph].x = xp;
+              positions[nGlyph].y = yp;
+              nGlyph++;
+              /* added new character to end of string so 'top of stack'
+                 for backing up is now restored to new end of string */
+              bckSpace = nGlyph;
+
+              /* do the action for this thang */
+              tmp[0] = '\0';
+              _giza_add_token_to_string (tmp, scanner, token);
+              action (tmp, width, height);
+          }
           break;
         }
     }
   yylex_destroy (scanner);
-
-  /* Perform action on the last section of text */
-  action (processed, width, height);
 
   _giza_set_trans (oldTrans);
 }

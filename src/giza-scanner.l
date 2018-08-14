@@ -29,6 +29,7 @@
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
+#include "giza-io-private.h"
 #include "giza-private.h"
 #include "giza-transforms-private.h"
 #include "giza-drivers-private.h"
@@ -47,6 +48,7 @@
 #define GIZA_TOKEN_OTHER  7
 #define GIZA_TOKEN_RAISE  8
 #define GIZA_TOKEN_LOWER  9
+#define GIZA_TOKEN_BACKSPC 99
 #define GIZA_TOKEN_INTEGRAL 10
 #define GIZA_TOKEN_NABLA 11
 
@@ -128,6 +130,7 @@ SUPER    \136
 SUB      \137
 RAISE    "\\u"
 LOWER    "\\d"
+BACKSPC  "\\b"
 OB       \173 
 CB       \175
 TIMES    "\\times"|"\\x"
@@ -211,6 +214,8 @@ ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\
 {RAISE} { return GIZA_TOKEN_RAISE; }
 
 {LOWER}   { return GIZA_TOKEN_LOWER; }
+
+{BACKSPC} { return GIZA_TOKEN_BACKSPC; }
 
 {OB}    { return GIZA_TOKEN_OB; }
 
@@ -384,25 +389,47 @@ _giza_get_chunk_fontchange (const char *text)
    return length; /* assumes whole string if unclosed open bracket */
 }
 
+#define MAX_NFONT 32
+typedef struct _font_change_type {
+    char    font[GIZA_FONT_LEN];
+    int     ob_level; /* open bracket level at start of font change*/
+} font_change_type;
+
+typedef struct _glyph_pos_type {
+    double x, y;
+} glyph_pos_type;
+
 /**
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
  */
 void
 _giza_parse_string (const char *text, double *width, double *height, void (*action)(const char *, double *, double *))
 {
-  yyscan_t scanner;
-  int stop = 0, token, chunkLength, oldTrans;
-  int posInText = 0;
-  int insuper = 0;
-  int insub   = 0;
-  int lenstr  = strlen(text);
-  char processed[lenstr + 1];
-  processed[0] = '\0';
+  if( text==NULL ) {
+      _giza_error("giza_parse_string", "NULL string");
+      return;
+  }
+  const int            lenstr = strlen(text);
+  if( lenstr==0 )
+      return;
+
+  yyscan_t             scanner;
+  int                  stop      = 0, token, oldTrans, posInText = 0;
+  int                  insuper   = 0, insub = 0;
+  int                  ob        = 0; /* count open/close bracket */
+  int                  bckSpace  = 0;
+  int                  nGlyph    = 0;
+  int                  fontIdx   = 0, superIdx = 0, subIdx = 0;
+  int                  ob_super[MAX_NFONT], ob_sub[MAX_NFONT];
+  char                 tmp[32];
+  double               sina = sin(Dev[id].fontAngle);
+  double               cosa = cos(Dev[id].fontAngle);
+  cairo_glyph_t        gl_extents[lenstr];
+  glyph_pos_type       positions[lenstr];
+  font_change_type     oldfont[MAX_NFONT];
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
-  int lenfont = GIZA_FONT_LEN;
-  char oldfont[lenfont];
 
   /* initialise the scanner */
   yylex_init (&scanner);
@@ -412,79 +439,54 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
     {
       token = yylex(scanner);
       posInText += yyget_leng (scanner);;
-      /*printf("in parse string, token = %i pos = %i processed=\"%s\"\n",token,posInText,processed); */
+      /*printf("in parse string, token = %i pos = %i\n",token,posInText);*/
 
       switch(token)
         {
         case GIZA_TOKEN_OB:
-        case GIZA_TOKEN_CB: /* ignore closing bracket! */
+            ob++;
+            break;
+        case GIZA_TOKEN_CB:
+            ob--;
+            /* if we have seen a font change, end this if the
+               open-bracket-level falls below the open-bracket level
+               at start of font change */
+            if( fontIdx>0 && ob<oldfont[fontIdx].ob_level ) {
+                /* OK go back to old font */
+                giza_set_font(oldfont[fontIdx].font);
+                fontIdx--;
+            }
+            /* did the closing bracket mark end-of-superscript? */
+            if( superIdx>0 && ob<ob_super[superIdx] ) {
+                _giza_stop_super();
+                superIdx--;
+            }
+            /* did the closing bracket mark end-of-subscript? */
+            if( subIdx>0 && ob<ob_sub[subIdx] ) {
+                _giza_stop_sub();
+                subIdx--;
+            }
           break;
         case GIZA_TOKEN_SUPER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* Parse the brackets, i.e. get the chunk of text that needs to be superscript */
-          chunkLength = _giza_get_chunk (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-          
           /* Perform the action on this chunk */
-          _giza_start_super ();
-          _giza_parse_string (processed, width, height, action);
-          _giza_stop_super ();
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
+          if( superIdx<MAX_NFONT ) {
+              ob_super[superIdx] = ob;
+              _giza_start_super ();
+          } else {
+              _giza_error("giza_parse_string", "Too many levels of super-script");
+          }
           break;
         case GIZA_TOKEN_SUB:
-          /* Perform action on text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* Parse the brackets */
-          chunkLength = _giza_get_chunk (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-
-          /* perform action on this chunk */
-          _giza_start_sub ();
-          _giza_parse_string (processed, width, height, action);
-          _giza_stop_sub ();
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
+          /* Perform the action on this chunk */
+          if( subIdx<MAX_NFONT ) {
+              ob_sub[subIdx] = ob;
+              _giza_start_sub ();
+          } else {
+              _giza_error("giza_parse_string", "Too many levels of sub-script");
+          }
           break;
         case GIZA_TOKEN_RAISE:
           /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
           if (insub > 0)
             {
              _giza_stop_sub();
@@ -498,8 +500,6 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           break;
         case GIZA_TOKEN_LOWER:
           /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
           if (insuper > 0)
             {
              _giza_stop_super();
@@ -511,30 +511,28 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
              insub += 1;
             }
           break;
+        case GIZA_TOKEN_BACKSPC:
+          /* OK move to previous character, if 
+             backed up before start of string
+             ignore silently */
+          bckSpace -= 1;
+          if( bckSpace<0 )
+            break;
+          cairo_move_to(Dev[id].context, positions[bckSpace].x, positions[bckSpace].y);
+          break;
         case GIZA_TOKEN_FONT_NORMAL:
         case GIZA_TOKEN_FONT_ROMAN:
         case GIZA_TOKEN_FONT_ITALIC:
         case GIZA_TOKEN_FONT_SCRIPT:
         case GIZA_TOKEN_FONT_BOLD:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
+          if( fontIdx<MAX_NFONT ) {
+              oldfont[fontIdx].ob_level = ob;
+              /* save font */
+              giza_get_font(oldfont[fontIdx].font, GIZA_FONT_LEN /*lenfont*/);
+          } else {
+              _giza_error("giza_parse_string", "Too many nested levels of font changes");
               break;
-            }
-
-          /* Parse the brackets */
-          chunkLength = _giza_get_chunk_fontchange (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-          
-          /* save font */
-          giza_get_font(oldfont,lenfont);
-
+          }
           /* perform action on this chunk */
           switch (token)
             {
@@ -554,86 +552,73 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
               _giza_switch_font (1);
               break;
             }
-          _giza_parse_string (processed, width, height, action);
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          /* restore font */
-          giza_set_font(oldfont);
-
-          processed[0] = '\0';
           break;
         case GIZA_TOKEN_MARKER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
+          {
+              /* get current marker height */
+              double markerHeight;
+              _giza_get_markerheight(&markerHeight);
 
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* get current marker height */
-          double markerHeight;
-          _giza_get_markerheight(&markerHeight);
-
-          /* extract the symbol number from in front of the \m */
-          int number;
-          sscanf(text+posInText,"%i",&number);
-          
-          /* 
-           * get the length of the string containing the number 
-           * so we know how many characters we have processed
-           */
-          char temp[4];
-          sprintf(temp,"%i",number);
-          chunkLength = strlen(temp);
-          
-          /* either draw the symbol or increment the width */
-          if (*width < 0.) {
-             double xp, yp;
-             double sina = sin(Dev[id].fontAngle);
-             double cosa = cos(Dev[id].fontAngle);
-             double dx = 0.75*markerHeight;
-             double dy = -0.5*markerHeight;
-             cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
-             _giza_draw_symbol_device(xp + dx*cosa + dy*sina, yp + dx*sina + dy*cosa, number);
-             cairo_move_to(Dev[id].context, xp + 2.*dx*cosa, yp + 2.*dx*sina); /* restore pen position */
-
-          } else {
-             /* return width if action is _giza_action_get_size */
-             *width = *width + 1.5*markerHeight;
+              /* extract the symbol number from in front of the \m */
+              int number, chunkLength;
+              sscanf(text+posInText,"%i",&number);
+              
+              /* 
+               * get the length of the string containing the number 
+               * so we know how many characters we have processed
+               */
+              char temp[32];
+              sprintf(temp,"%i",number);
+              chunkLength = strlen(temp);
+              
+              /* either draw the symbol or increment the width */
+              if (*width < 0.) {
+                 double xp, yp;
+                 double dx = 0.75*markerHeight;
+                 double dy = -0.5*markerHeight;
+                 cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
+                 _giza_draw_symbol_device(xp + dx*cosa + dy*sina, yp + dx*sina + dy*cosa, number);
+                 cairo_move_to(Dev[id].context, xp + 2.*dx*cosa, yp + 2.*dx*sina); /* restore pen position */
+                 /* save what was the current pen position so we can back up to it */
+                 positions[nGlyph].x = xp;
+                 positions[nGlyph].y = yp;
+                 nGlyph++;
+              } else {
+                 /* return width if action is _giza_action_get_size */
+                 *width = *width + 1.5*markerHeight;
+              }
+              /* restart the scanner at the new position! */
+              yylex_destroy (scanner);
+              yylex_init (&scanner);
+              posInText += chunkLength;
+              yy_scan_string (text + posInText, scanner);
           }
-          
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
           break;
 
         case GIZA_TOKEN_END:
           stop = 1;
           break;
         default:
-          _giza_add_token_to_string (processed, scanner, token);
+          {
+              /* Save the current pen position so we can easily back up to this position */
+              double  xp, yp;
+              cairo_get_current_point(Dev[id].context, &xp, &yp);
+              positions[nGlyph].x = xp;
+              positions[nGlyph].y = yp;
+              nGlyph++;
+              /* added new character to end of string so 'top of stack'
+                 for backing up is now restored to new end of string */
+              bckSpace = nGlyph;
+
+              /* do the action for this thang */
+              tmp[0] = '\0';
+              _giza_add_token_to_string (tmp, scanner, token);
+              action (tmp, width, height);
+          }
           break;
         }
     }
   yylex_destroy (scanner);
-
-  /* Perform action on the last section of text */
-  action (processed, width, height);
 
   _giza_set_trans (oldTrans);
 }
