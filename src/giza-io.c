@@ -154,7 +154,8 @@ _giza_newpage_prompt (void)
    *  Use fgets here instead of scanf so that we can accept a
    *  newline character as the default input
    */
-  fgets(input,2,stdin);
+  if( fgets(input,2,stdin)==NULL )
+    _giza_error("giza_newpage_prompt", "Failed to read character from stdin");
 }
 
 /**
