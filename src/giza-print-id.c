@@ -29,6 +29,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 /**
  * Text: giza_print_id
