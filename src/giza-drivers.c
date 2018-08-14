@@ -158,7 +158,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
     }
   else
     {
-      char *devTypeStr;
+      char const *devTypeStr;
       _giza_split_device_string (newDeviceName, &devTypeStr);
       Dev[id].type = _giza_device_to_int (devTypeStr);
     }
@@ -721,7 +721,7 @@ _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, cons
  * and overwrites the prefix
  */
 void
-_giza_split_device_string (const char *deviceString, char **devType)
+_giza_split_device_string (const char *deviceString, char const **devType)
 {
   if (deviceString == NULL)
     return;
