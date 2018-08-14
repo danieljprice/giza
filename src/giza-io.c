@@ -104,7 +104,7 @@ _giza_prompt_for_device (void)
 	    }
           else
 	    {
-	      char *devTypeStr;
+	      char const *devTypeStr;
 	      _giza_split_device_string (input, &devTypeStr);
 	      devType = _giza_device_to_int (devTypeStr);
 	    }
