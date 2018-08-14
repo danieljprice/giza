@@ -247,7 +247,6 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   _giza_init_save ();
   giza_set_clipping(1);
   /*_giza_stroke();*/
-  
   return _giza_device_id;
 }
 
@@ -465,6 +464,9 @@ giza_change_page (void)
   if (Dev[id].resize) 
     {
       _giza_init_norm();
+      /* Must also adjust panel size in case of resized surface*/
+      Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
+      Dev[id].panelheight = Dev[id].height / Dev[id].ny;
     }
 
   if (Dev[id].prompting && Dev[id].isInteractive && !Dev[id].resize)

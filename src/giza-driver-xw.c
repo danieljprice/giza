@@ -193,10 +193,9 @@ _giza_open_device_xw (double width, double height, int units)
   XW[xid].gc = XDefaultGC (XW[xid].display, XW[xid].screennum);
 
   /* create Xlib surface in cairo */
-  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);
-  /* uncomment below for drawing direct to window
+  /*Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);*/
+  /* uncomment below for drawing direct to window*/
    Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].window, XW[xid].visual, XW[xid].width, XW[xid].height);
-   */
   if (!Dev[id].surface)
     {
       _giza_error ("_giza_open_device_xw", "Could not create surface");
@@ -207,7 +206,6 @@ _giza_open_device_xw (double width, double height, int units)
   Dev[id].defaultBackgroundAlpha = 1.;
 
   /* Wait for the MapNotify event */
-
   for(;;) {
       XEvent e;
       XNextEvent(XW[xid].display, &e);
@@ -228,7 +226,8 @@ _giza_flush_device_xw (void)
   cairo_surface_flush (Dev[id].surface);
 
   /* move the offscreen surface to the onscreen one */
-  XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, 0, 0, (unsigned) XW[xid].width, (unsigned) XW[xid].height, 0, 0);
+  /* Because we draw to the window directly, the XCopyArea is not needed */
+  /* XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, 0, 0, (unsigned) XW[xid].width, (unsigned) XW[xid].height, 0, 0); */
 
   if (!XFlush (XW[xid].display))
     {
@@ -239,10 +238,21 @@ _giza_flush_device_xw (void)
 
 /**
  * Advances the X window device to the next page.
+ * If resize was set upon function entry, resize the window accordingly.
+ * If, otoh, we detect the window was resized, take appropriate action and
+ * mark the device as resized.
  */
 void
 _giza_change_page_xw (void)
 {
+  int          resize = 0;
+  int          x_return, y_return;
+  Window       root_return;
+  unsigned int width_return, height_return, border_width_return, depth_return;
+
+  /* Enquire current geometry to see if it's changed */
+  XGetGeometry(XW[xid].display, XW[xid].window, &root_return, &x_return, &y_return, &width_return, &height_return, &border_width_return, &depth_return);
+
   /* interactive logging feature */
   if (Sets.autolog && Dev[id].drawn) _giza_write_log_file(Dev[id].surface);
   
@@ -256,20 +266,38 @@ _giza_change_page_xw (void)
   cairo_surface_destroy (Dev[id].surface);
   XFreePixmap (XW[xid].display, XW[xid].pixmap);
 
-/*  int resize = 0;*/
+  /* If the underlying device was resized (resize was set coming into this function) - follow that.
+   * Otherwise, if the window was resized, follow that lead and mark dev as resized too
+   */
   if (Dev[id].resize) {
-     /* Set the new device size */
-     XW[xid].width  = Dev[id].width + 2 * GIZA_XW_MARGIN;
-     XW[xid].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
+      resize = Dev[id].resize;
+      /* Set the new device size */
+      XW[xid].width  = Dev[id].width + 2 * GIZA_XW_MARGIN;
+      XW[xid].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
 
-     XResizeWindow(XW[xid].display, XW[xid].window,(unsigned) XW[xid].width,(unsigned) XW[xid].height);  
+      XResizeWindow(XW[xid].display, XW[xid].window,(unsigned) XW[xid].width,(unsigned) XW[xid].height);  
+  } else if( (unsigned int)XW[xid].width!=width_return || (unsigned int)XW[xid].height!=height_return ) {
+      /* Copy current window size into internal bookkeeping */
+      XW[xid].width  = Dev[id].width  = width_return;
+      XW[xid].height = Dev[id].height = height_return;
+
+      /* take care of margin - if there's room for that */
+      if( Dev[id].width > 2*GIZA_XW_MARGIN )
+          Dev[id].width -= 2*GIZA_XW_MARGIN;
+      if( Dev[id].height > 2*GIZA_XW_MARGIN )
+          Dev[id].height -= 2*GIZA_XW_MARGIN;
+      /* And mark for resize */
+      resize = 1;
   }
-  
+
+  /* technically this is superfluous because of drawing to the screen directly */  
   XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
 
   /* recreate the cairo surface */
-  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);
+  /*Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);*/
+  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].window, XW[xid].visual, XW[xid].width, XW[xid].height);
   Dev[id].context = cairo_create (Dev[id].surface);
+  Dev[id].resize  = resize;
 }
 
 /**
@@ -496,7 +524,6 @@ void
 _giza_change_size_xw (int width, int height)
 {
   /* Set the new device size */
-/*
   Dev[id].width  = width  - 2 * GIZA_XW_MARGIN;
   Dev[id].height = height - 2 * GIZA_XW_MARGIN;
 
@@ -506,7 +533,6 @@ _giza_change_size_xw (int width, int height)
   XResizeWindow(XW[xid].display, XW[xid].window,(unsigned) XW[xid].width,(unsigned) XW[xid].height);
 
   cairo_xlib_surface_set_size(Dev[id].surface,width,height);
-*/
 }
 
 /**
