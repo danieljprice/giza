@@ -155,7 +155,7 @@ int pgnpl(int nmax, int n) {
   }
 
   /* Repeat for Y-axis */
-  if( strchr(yopt_cp, 'Z') || strchr(yopt_cp, 'z') ) {
+  if( strchr(yopt_cp, 'Z') ) {
       /* possible request time axis - check if OK, not < 1ms */
       if( fabs(Dev[id].Win.ymax - Dev[id].Win.ymin)<0.001 )
           _giza_error("giza_box_time", "Y-axis time interval too small (< 1 ms) for time labels");
@@ -1082,9 +1082,8 @@ void pgtbx7(char const* suptyp, char signf, char asign, int ival[3], double rval
     if( writ[0] ) {
         /* depending on wether to print the sign or not choose the correct
          * format */
-        char const* fmt = (signf=='D' && asign!=' ') ? "%0$c%1$d%2$s" : "%1$d%2$s" ;
+        char const* fmt = (signf=='D' && asign!=' ') ? "%1$c%2$d%3$s" : "%2$d%3$s" ;
         *last  = *tlen;
-
         nch   = sprintf(&text[*tlen], fmt, asign, ival[0], suppnt[0]);
         *tlen = *tlen + nch;
     }
@@ -1148,7 +1147,6 @@ void pgtbx7(char const* suptyp, char signf, char asign, int ival[3], double rval
         nch   = sprintf(&text[*tlen], "%s", tmp);
         *tlen = *tlen + nch;
     }
-
     /* C   A trailing blank will occur if no superscripting wanted */
     if( *tlen>=5 && strcmp(&text[*tlen - 5], super[2][0])==0 ) {
         *tlen         = *tlen - 5;
