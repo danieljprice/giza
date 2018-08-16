@@ -51,6 +51,12 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
       _giza_error("_giza_mark_with_cursor","maxpts < 0 on input");
       return;
     }
+  /* Save (and restore) old colour index.
+   * pgdemo5 did not work; each subsequent polygon must be drawn in a
+   * different colour; with giza <= 0.9.5 all polygons were drawn in black
+   * */
+  int oldCI;
+  giza_get_colour_index(&oldCI);
 
   double x, y, xanc[1], yanc[1];
   double xmin,xmax,ymin,ymax;
@@ -144,7 +150,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
                {
                  giza_single_point(xpts[*npts-1],ypts[*npts-1],17);
                }
-             giza_set_colour_index(GIZA_FOREGROUND_COLOUR);
+             giza_set_colour_index(ci);
              giza_set_line_width(lw);
              
              *npts -= 1;
@@ -165,7 +171,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
 
        } else if (ch[0]==GIZA_RIGHT_CLICK || ch[0]=='X' || ch[0]=='x' || *ch == 13) {
 
-         giza_set_colour_index(GIZA_FOREGROUND_COLOUR);
+         giza_set_colour_index(oldCI);
          return;
 
        } else if (!strcmp(ch,"q") || *ch == 27 ) {
@@ -186,7 +192,7 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
      xanc[0] = x;
      yanc[0] = y;
   }
-  giza_set_colour_index(GIZA_FOREGROUND_COLOUR);
+  giza_set_colour_index( oldCI );
 
 }
 
