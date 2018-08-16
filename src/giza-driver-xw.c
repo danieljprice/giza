@@ -193,9 +193,7 @@ _giza_open_device_xw (double width, double height, int units)
   XW[xid].gc = XDefaultGC (XW[xid].display, XW[xid].screennum);
 
   /* create Xlib surface in cairo */
-  /*Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);*/
-  /* uncomment below for drawing direct to window*/
-   Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].window, XW[xid].visual, XW[xid].width, XW[xid].height);
+  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);
   if (!Dev[id].surface)
     {
       _giza_error ("_giza_open_device_xw", "Could not create surface");
@@ -226,8 +224,7 @@ _giza_flush_device_xw (void)
   cairo_surface_flush (Dev[id].surface);
 
   /* move the offscreen surface to the onscreen one */
-  /* Because we draw to the window directly, the XCopyArea is not needed */
-  /* XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, 0, 0, (unsigned) XW[xid].width, (unsigned) XW[xid].height, 0, 0); */
+  XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, 0, 0, (unsigned) XW[xid].width, (unsigned) XW[xid].height, 0, 0); 
 
   if (!XFlush (XW[xid].display))
     {
@@ -290,12 +287,10 @@ _giza_change_page_xw (void)
       resize = 1;
   }
 
-  /* technically this is superfluous because of drawing to the screen directly */  
   XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
 
   /* recreate the cairo surface */
-  /*Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);*/
-  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].window, XW[xid].visual, XW[xid].width, XW[xid].height);
+  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);
   Dev[id].context = cairo_create (Dev[id].surface);
   Dev[id].resize  = resize;
 }
@@ -531,8 +526,26 @@ _giza_change_size_xw (int width, int height)
   XW[xid].height = height;
   
   XResizeWindow(XW[xid].display, XW[xid].window,(unsigned) XW[xid].width,(unsigned) XW[xid].height);
+  /* From cairo_xlib_surface_set_size () [*]
+    "A Pixmap can never change size, so it is never necessary to call this function on a surface created for a Pixmap."
 
-  cairo_xlib_surface_set_size(Dev[id].surface,width,height);
+   [*] https://www.cairographics.org/manual/cairo-XLib-Surfaces.html#cairo-xlib-surface-set-size]
+   */
+  /* create a new pixmap */
+  cairo_destroy(Dev[id].context);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+     _giza_error("giza_change_size_xw",cairo_status_to_string(status));
+
+  cairo_surface_destroy (Dev[id].surface);
+  XFreePixmap (XW[xid].display, XW[xid].pixmap);
+
+  XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
+  /* recreate the cairo surface */
+  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);
+  Dev[id].context = cairo_create (Dev[id].surface);
+  Dev[id].resize  = 1;
 }
 
 /**
