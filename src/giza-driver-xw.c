@@ -38,6 +38,7 @@
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
 #include <string.h>
+#include <stdio.h>
 /**
  * Global variables specific to X.
  */
@@ -350,8 +351,11 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
 
 
 /**
- * Loops indefinitely, redrawing and resizing the window as necessary until a key is pressed.
+ * Loops indefinitely, redrawing the window as necessary until a key is pressed.
  * Returns the x and y position of the cursor (in device coords) and the key pressed.
+ *
+ * Update: do not /actively/ honour resizing of the window (neither does
+ *         PGPLOT) whilst waiting for key press.
  */
 static void
 _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const int *anchory, int *x, int *y, char *ch)
@@ -371,7 +375,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 
     /* wait for key press/expose (avoid using XNextEvent as breaks older systems) */
     XWindowEvent(XW[xid].display, XW[xid].window,
-       (long) (ExposureMask | KeyPressMask | StructureNotifyMask | ButtonPressMask | PointerMotionMask), &event);
+       (long) (ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask), &event);
     /*XNextEvent(XW[xid].display, &event);*/
 
     /* always return x, y values for safety */
@@ -412,10 +416,6 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 
 	break;
       }
-    case ConfigureNotify: /* check if the window has been resized */
-      if(event.xconfigure.width != XW[xid].width || event.xconfigure.height != XW[xid].height)
-	_giza_change_size_xw (event.xconfigure.width, event.xconfigure.height);
-      break;
     case ButtonPress:
       {
         *x = event.xbutton.x ;/*- GIZA_XW_MARGIN; */
@@ -524,8 +524,9 @@ _giza_change_size_xw (int width, int height)
 
   XW[xid].width  = width;
   XW[xid].height = height;
-  
+
   XResizeWindow(XW[xid].display, XW[xid].window,(unsigned) XW[xid].width,(unsigned) XW[xid].height);
+
   /* From cairo_xlib_surface_set_size () [*]
     "A Pixmap can never change size, so it is never necessary to call this function on a surface created for a Pixmap."
 
