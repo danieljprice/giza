@@ -496,8 +496,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		    /* right */
 		    if (ydraw_right)
 		      {
-		        cairo_move_to (Dev[id].context, Win.xmax + (major ? ydraw_project : 0) * currentTickL, yval);
-		        cairo_line_to (Dev[id].context, Win.xmax - ydraw_invert * currentTickL, yval);
+		        cairo_move_to (Dev[id].context, Win.xmax - (major ? ydraw_project : 0) * currentTickL, yval);
+		        cairo_line_to (Dev[id].context, Win.xmax + ydraw_invert * currentTickL, yval);
 		      }
                    }
 		}
