@@ -69,6 +69,9 @@ static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
  *  -M :- Write numeric labels above x-axis or to right of y-axis
  *        instead of usual position
  *  -L :- Label axis logarithmically
+ *  -I :- 'Invert' tick marks, draw them outside the viewport
+ *  -P :- extend ("Project") major tick marks outside the box (ignored if
+ *        option I is specified).
  */
 void
 giza_box (const char *xopt, double xtick, int nxsub,
@@ -93,11 +96,11 @@ giza_box (const char *xopt, double xtick, int nxsub,
   /* Begin buffering */
   giza_begin_buffer ();
 
-  int xdraw_axis = 0, xdraw_bottom = 0, xdraw_top = 0, xdraw_majticks = 0, xdraw_minticks = 0, xdraw_labels =
-    0, xdraw_labels_ontop = 0, xdraw_log = 0, xdraw_grid = 0;
+  int xdraw_axis = 0, xdraw_bottom = 0, xdraw_top = 0, xdraw_majticks = 0, xdraw_minticks = 0, xdraw_labels = 0,
+      xdraw_labels_ontop = 0, xdraw_log = 0, xdraw_grid = 0, xdraw_invert = -1, xdraw_project = 0;
 
-  int ydraw_axis = 0, ydraw_left = 0, ydraw_right = 0, ydraw_majticks = 0, ydraw_minticks = 0, ydraw_labels =
-    0, ydraw_labels_toright = 0, ydraw_vertical = 0, ydraw_log = 0, ydraw_grid = 0;
+  int ydraw_axis = 0, ydraw_left = 0, ydraw_right = 0, ydraw_majticks = 0, ydraw_minticks = 0, ydraw_labels = 0,
+      ydraw_labels_toright = 0, ydraw_vertical = 0, ydraw_log = 0, ydraw_grid = 0, ydraw_invert = -1, ydraw_project = 0;
 
   double xintervalMaj, xintervalMin, xval, xratio;
   double yintervalMaj, yintervalMin, yval, yratio;
@@ -163,6 +166,14 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	case ('G'):
 	  xdraw_grid = 1;
 	  break;
+	case ('i'):
+	case ('I'):
+	  xdraw_invert = 1;
+	  break;
+	case ('p'):
+	case ('P'):
+	  xdraw_project = -1;
+	  break;
 	default:
 	  break;
 	}
@@ -215,10 +226,25 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	case ('G'):
 	  ydraw_grid = 1;
 	  break;
+	case ('i'):
+	case ('I'):
+	  ydraw_invert = 1;
+	  break;
+	case ('p'):
+	case ('P'):
+	  ydraw_project = 1;
+	  break;
 	default:
 	  break;
 	}
     }
+  /* Note: -P :- extend ("Project") major tick marks outside the box (ignored if
+                 option I is specified).
+    In this code: invert<0 is default so >0 means option was specified */
+  if( xdraw_invert>0 )
+    xdraw_project = 0;
+  if( ydraw_invert>0 )
+    ydraw_project = 0;
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
@@ -291,8 +317,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		    /* bottom */
 		    if (xdraw_bottom)
 		      {
-		        cairo_move_to (Dev[id].context, xval, Win.ymin);
-		        cairo_line_to (Dev[id].context, xval, Win.ymin + currentTickL);
+		        cairo_move_to (Dev[id].context, xval, Win.ymin + (major ? xdraw_project : 0) * currentTickL);
+		        cairo_line_to (Dev[id].context, xval, Win.ymin - xdraw_invert * currentTickL);
 		      }
 		    /* grid */
 		    if (xdraw_grid && major)
@@ -309,8 +335,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		    /* top */
 		    if (xdraw_top)
 		      {
-		        cairo_move_to (Dev[id].context, xval, Win.ymax);
-		        cairo_line_to (Dev[id].context, xval, Win.ymax - currentTickL);
+		        cairo_move_to (Dev[id].context, xval, Win.ymax - (major ? xdraw_project : 0) * currentTickL);
+		        cairo_line_to (Dev[id].context, xval, Win.ymax + xdraw_invert * currentTickL);
 		      }
                    }
 		}
@@ -452,8 +478,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		    /* left */
 		    if (ydraw_left)
 		      {
-		        cairo_move_to (Dev[id].context, Win.xmin, yval);
-		        cairo_line_to (Dev[id].context, Win.xmin + currentTickL, yval);
+		        cairo_move_to (Dev[id].context, Win.xmin + (major ? ydraw_project : 0) * currentTickL, yval);
+		        cairo_line_to (Dev[id].context, Win.xmin - ydraw_invert * currentTickL, yval);
 		      }
 		    /* grid */
 		    if (ydraw_grid && major)
@@ -470,8 +496,8 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		    /* right */
 		    if (ydraw_right)
 		      {
-		        cairo_move_to (Dev[id].context, Win.xmax, yval);
-		        cairo_line_to (Dev[id].context, Win.xmax - currentTickL, yval);
+		        cairo_move_to (Dev[id].context, Win.xmax + (major ? ydraw_project : 0) * currentTickL, yval);
+		        cairo_line_to (Dev[id].context, Win.xmax - ydraw_invert * currentTickL, yval);
 		      }
                    }
 		}
