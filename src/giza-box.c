@@ -153,12 +153,11 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	  break;
         /* Any of nmNM means labels need to be drawn. mM sais to do so unconventionally. */
 	case ('n'):
+	case ('m'):
+	case ('N'):
 	case ('M'):
 	  xdraw_labels = 1;
-          break;
-	case ('m'):
-	case ('M'):
-	  xlabel_unconventional = 1;
+	  xlabel_unconventional = (xopt[i]=='m' || xopt[i]=='M');
 	  break;
 	case ('l'):
 	case ('L'):
@@ -210,12 +209,11 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	  break;
         /* Any of nmNM means labels need to be drawn. mM sais to do so unconventionally. */
 	case ('n'):
-	case ('N'):
-	  ydraw_labels = 1;
-          break;
 	case ('m'):
+	case ('N'):
 	case ('M'):
-	  ylabel_unconventional = 1;
+	  ydraw_labels = 1;
+	  ylabel_unconventional = (yopt[i]=='m' || yopt[i]=='M');
 	  break;
 	case ('v'):
 	case ('V'):
