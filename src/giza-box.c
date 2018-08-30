@@ -107,7 +107,18 @@ giza_box (const char *xopt, double xtick, int nxsub,
   double majTickL, subTickL, currentTickL;
   char tmp[100];
   int i, i1, i2, j, jmax, jtmp;
-  giza_window_t Win = Dev[id].Win;
+  /* get a normalized local copy of Dev[id].Win into Win such that xmin <= xmax AND ymin <= ymax
+   * otherwise axes with negative increment to the right won't display ANY tickmarks */
+  giza_window_t *pWin = &Dev[id].Win, Win = *pWin;
+
+  if( Win.xmax < Win.xmin ) {
+    Win.xmin = pWin->xmax;
+    Win.xmax = pWin->xmin;
+  }
+  if( Win.ymax < Win.ymin ) {
+    Win.ymin = pWin->ymax;
+    Win.ymax = pWin->ymin;
+  }
 
   /* set x-options */
   for (i = 0; xopt[i]; i++)
