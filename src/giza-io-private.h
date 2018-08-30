@@ -22,9 +22,9 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
-void _giza_warning (const char *source, const char *message);
+void _giza_warning (const char *source, const char *message, ...);
 void _giza_message (const char *message);
-void _giza_error (const char *source, const char *message);
+void _giza_error (const char *source, const char *message, ...);
 int _giza_prompt_for_device (void);
 void _giza_display_devices (void);
 int _giza_default_device (void);
