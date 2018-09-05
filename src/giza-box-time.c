@@ -708,7 +708,6 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
         time = nt * tick;
         it   = it + 1;
     }
-
     sprec = 0;
     if( tscale==1 ) {
         if( tick < 0.01 )
@@ -836,8 +835,9 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
     /* C   We may need an extra "virtual" tick if there is no zero crossing
        C   and SD=-1 & IS=1 or SD=1 & IS=-1.  It is used to work out which
        C   fields to label on the right most tick which is labelled first. */
-    if( izero==-1 && sd*is==-1 && ((sd==-1 && time<0.0) || (sd==1 && time>0.0)) ) {
-        time = 0.0;
+    if( izero==-1 && sd*is==-1 ) {
+        if( (sd==-1 && time<0.0) || (sd==1 && time>0.0) )
+            time = 0.0;
         pgtbx5(doday, time, &timel);
         pgtbx6(doday, mod24, tscale, &timel, ivall, &rval, writ);
     }
@@ -846,18 +846,19 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
        C  two passes. Determine the start and end ticks for each required pass. */
     jst[1] = jend[1] = -1; /* sentinels */
     npass  = 1;
+    /* Note: 'it' holds the /number of time ticks/ so array indices range from 0 .. it-1 */
     if( izero==-1 ) {
         if( is*sd==1 ) {
             jst[0]  = 0;
-            jend[0] = it;
+            jend[0] = it-1;
         } else {
-            jst[0]  = it;
+            jst[0]  = it-1;
             jend[0] = 0;
         }
     } else {
         if( ineg==-1 || ipos==-1 ) {
             jst[0]  = izero;
-            jend[0] = it;
+            jend[0] = it-1;
             if( izero==(it-1) )
                 jend[0] = 0;
         } else {
@@ -865,10 +866,9 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
             jst[0]  = izero;
             jend[0] = 0;
             jst[1]  = izero;
-            jend[1] = it;
+            jend[1] = it-1;
         }
     }
-
     /* C  Now label the rest of the ticks.  Always label away from 0 */
     for( i=0; i<npass; i++ ) {
         /* C  Initialize previous tick values.  Use virtual tick if labelling
@@ -884,7 +884,7 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
         /* Loop up or down */
         inc = (jend[i] < jst[i]) ? -1 : 1;
 
-        for(j = jst[i]; inc < 0 ? j>=jend[i] : j<jend[i]; j+=inc) {
+        for(j = jst[i]; inc < 0 ? j>=jend[i] : j<=jend[i]; j+=inc) {
             /* C  First and zero tick already labelled */
             if( j==0 || j==izero )
                 continue;
@@ -1061,9 +1061,9 @@ C                 seconds above the '.' and add DO2 option [nebk/jm]
 */
 void pgtbx7(char const* suptyp, char signf, char asign, int ival[3], double rval, int writ[4], int sprec, int do2, char* text, int* tlen, int* last) {
     /* the superscripting strings */
-    char const* super[3][4] = { "\\ud\\d"      , "\\uh\\d"      , "\\um\\d"      , "\\us\\d",
-                                "\\u\(2199)\\d", "\\u\(2729)\\d", "\\u\(2727)\\d", "\\u\(2728)\\d",
-                                "\\u \\d"      , "\\u \\d"      , "\\u \\d"      , "\\u \\d" };
+    char const* super[3][4] = { "\\ud\\d"       , "\\uh\\d"       , "\\um\\d"       , "\\us\\d",
+                                "\\u\\(2199)\\d", "\\u\\(2729)\\d", "\\u\\(2727)\\d", "\\u\\(2728)\\d",
+                                "\\u \\d"       , "\\u \\d"       , "\\u \\d"       , "\\u \\d" };
 
     int          nch;
     char const** suppnt;

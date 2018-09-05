@@ -127,7 +127,7 @@ void _giza_scale_character_size (double scalefac);
 int _giza_nint (double x);
 int _giza_equal (double x1, double x2);
 void _giza_init_save (void);
-void _giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight);
+void _giza_set_font (const char *font, cairo_font_slant_t slant, cairo_font_weight_t weight);
 double _giza_set_in_range (double val, double val1, double val2);
 void _giza_get_markerheight (double *mheight);
 void _giza_draw_symbol_device (double xd, double yd, int symbol);
