@@ -52,7 +52,7 @@ static int got_ftfont = 0;
  *  -font :- the font family to be used.
  */
 void
-giza_set_font (char *font)
+giza_set_font (const char *font)
 {
    if (!_giza_check_device_ready ("giza_set_font_bold"))
     return;
@@ -70,7 +70,7 @@ giza_set_font (char *font)
  *  -font :- the font family to be used.
  */
 void
-giza_set_font_bold (char *font)
+giza_set_font_bold (const char *font)
 {
    if (!_giza_check_device_ready ("giza_set_font_bold"))
     return;
@@ -87,7 +87,7 @@ giza_set_font_bold (char *font)
  *  -font :- the font family to be used.
  */
 void
-giza_set_font_italic (char *font)
+giza_set_font_italic (const char *font)
 {
    if (!_giza_check_device_ready ("giza_set_font_italic"))
     return;
@@ -104,7 +104,7 @@ giza_set_font_italic (char *font)
  *  -font :- the font family to be used.
  */
 void
-giza_set_font_bold_italic (char *font)
+giza_set_font_bold_italic (const char *font)
 {
    if (!_giza_check_device_ready ("giza_set_font_bold_italic"))
     return;
@@ -114,7 +114,7 @@ giza_set_font_bold_italic (char *font)
 
 
 void
-_giza_set_font (char *font, cairo_font_slant_t slant, cairo_font_weight_t weight)
+_giza_set_font (const char *font, cairo_font_slant_t slant, cairo_font_weight_t weight)
 {
    if (!_giza_check_device_ready ("giza_set_font"))
     return;

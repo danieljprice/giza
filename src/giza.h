@@ -319,10 +319,10 @@ void giza_subpanel (int nx, int ny);
 void giza_set_panel (int ix, int iy);
 void giza_get_panel (int *ix, int *iy);
 
-void giza_set_font (char *font);
-void giza_set_font_bold (char *font);
-void giza_set_font_bold_italic (char *font);
-void giza_set_font_italic (char *font);
+void giza_set_font (const char *font);
+void giza_set_font_bold (const char *font);
+void giza_set_font_bold_italic (const char *font);
+void giza_set_font_italic (const char *font);
 void giza_get_font (char *font, int n);
 
 void giza_set_text_background (int colourIndex);
