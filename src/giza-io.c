@@ -30,16 +30,24 @@
 #include <string.h>
 #include <giza.h>
 #include <time.h>
+#include <stdarg.h>
 
 /**
  * If warnings are switched on displays a warning message to stderr
  */
 void
-_giza_warning (const char *source, const char *message)
+_giza_warning (const char *source, const char *message, ...)
 {
   if (_giza_get_warnings ())
     {
-      fprintf (stderr, "%%giza - Warning - %s: %s\n", source, message);
+       va_list arg;
+       
+       fprintf(stderr, "%%giza - Warning - %s: ", source);
+     
+       va_start (arg, message);
+       vfprintf (stderr, message, arg);
+       va_end (arg);
+       fprintf(stderr, "\n");
     }
 }
 
@@ -56,11 +64,17 @@ _giza_message (const char *message)
  * Prints the error to stderr.
  */
 void
-_giza_error (const char *source, const char *message)
+_giza_error (const char* source, const char *message, ...)
 {
-  fprintf (stderr, "%%giza - ERROR - %s: %s\n", source, message);
+   va_list arg;
+   
+   fprintf(stderr, "%%giza - ERROR - %s: ", source);
+ 
+   va_start (arg, message);
+   vfprintf (stderr, message, arg);
+   va_end (arg);
+   fprintf(stderr, "\n");
 }
-
 /**
  * NOTE: should have a default.
  * Prompts the user to enter a device

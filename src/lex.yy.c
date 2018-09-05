@@ -223,7 +223,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	yy_size_t yy_n_chars;
+	int yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -361,8 +361,8 @@ static void yy_fatal_error (yyconst char msg[] ,yyscan_t yyscanner );
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
 
-#define YY_NUM_RULES 72
-#define YY_END_OF_BUFFER 73
+#define YY_NUM_RULES 24
+#define YY_END_OF_BUFFER 25
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -370,245 +370,131 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static yyconst flex_int16_t yy_accept[241] =
+static yyconst flex_int16_t yy_acclist[60] =
     {   0,
-        0,    0,   73,    7,    7,    7,    1,    2,    5,    6,
-       72,   72,   72,   72,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,   18,   20,   19,    0,    0,    0,
-        4,    0,    0,    0,    0,    0,    0,   17,    0,    0,
-        0,    0,    0,    0,    3,   13,    0,   21,   22,    7,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,   58,   59,    0,    0,   62,    0,    0,
-        0,    0,    0,    0,    0,   60,    0,    0,    0,   12,
-        0,    0,    0,    0,    0,   10,    8,    9,   11,   47,
+        9,    9,   25,   23,   24,   24,   16,   23,   24,   19,
+       23,   24,   20,   23,   24,   21,   23,   24,   22,   23,
+       24,    6,   24,    5,    6,   24,    9,   24,    9,   24,
+       12,   24,   11,   12,   24,   15,   24,   14,   15,   24,
+       18,   24,   18,   24,    7,    3,    2,    4,   13,   10,
+        1,    9,    9,   11,   17,    9,   17,    9,    8
+    } ;
 
-       48,   50,   51,   67,   49,   54,   55,   56,   57,   61,
-       69,   63,   64,   65,   66,   70,   68,   53,   52,   23,
-       24,   36,   26,   27,   43,   25,   30,   31,   32,   33,
-       34,   35,   37,   38,   45,   39,   40,   41,   42,   46,
-       44,   29,   28,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,   16,    0,    0,    0,    0,    0,    0,    0,    0,
-       14,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,    0,   23,    0,    0,   15,
-        0,   13,    0,    0,    0,    0,    0,    0,    0,    0
+static yyconst flex_int16_t yy_accept[48] =
+    {   0,
+        1,    1,    1,    1,    1,    2,    3,    3,    3,    3,
+        3,    3,    3,    4,    6,    7,   10,   13,   16,   19,
+       22,   24,   27,   29,   31,   33,   36,   38,   41,   43,
+       45,   46,   47,   48,   49,   50,   51,   52,   53,   54,
+       55,   56,   57,   58,   59,   60,   60
     } ;
 
 static yyconst YY_CHAR yy_ec[256] =
     {   0,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    2,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        2,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    3,
-        4,    1,    1,    1,    1,    1,    1,    1,    5,    6,
-        1,    1,    1,    7,    1,    8,    2,    2,    2,    2,
-        2,    2,    2,    2,    9,   10,   11,   12,   13,   14,
-       15,   16,   17,    2,   18,   19,   20,   21,   22,   23,
-       24,   25,   26,   27,   28,    2,   29,   30,   31,   32,
-        2,   33,    2,   34,   35,   36,   37,   38,   39,   40,
+        4,    1,    1,    1,    1,    1,    1,    5,    5,    5,
+        5,    5,    5,    5,    5,    5,    5,    1,    1,    1,
+        1,    1,    1,    1,    6,    7,    6,    8,    6,    9,
+       10,    6,   11,   12,    6,    6,   13,   11,    6,    6,
+        6,   11,   11,    6,   14,   12,    6,    6,    6,    6,
+        1,   15,    1,   16,   17,    1,    6,    7,    6,    8,
 
-       41,   42,   43,   44,   45,   36,   46,   47,   48,   49,
-       50,   51,   52,   53,   54,   55,   56,   36,   57,   58,
-       59,   60,   61,   62,   63,   64,   64,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   65,
-       65,   65,   65,   65,   65,   65,   65,   65,   65,   66,
-       66,   66,   66,   66,   66,   66,   66,   66,   66,   66,
-       66,   66,   66,   66,   66,   66,   66,   66,   66,   66,
-       66,   66,   66,   66,   66,   66,   66,   66,   66,   66,
-       66,   67,   67,   68,   68,   68,   68,   68,   68,   68,
+        6,    9,   10,    6,   11,   12,    6,    6,   13,   11,
+        6,    6,    6,   11,   11,    6,   14,   12,    6,    6,
+        6,    6,   18,    1,   19,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
 
-       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
-       68,   68,   68,   68,   68,   68,   68,   68,   68,   68,
-       68,   68,   68,   69,   70,   70,   70,   70,   70,   70,
-       70,   70,   70,   70,   70,   70,   70,   70,   70,   67,
-       67,   67,   67,   67,   67,   67,   67,   67,   67,   67,
-       67,   67,   67,   67,   67
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1
     } ;
 
-static yyconst YY_CHAR yy_meta[71] =
+static yyconst YY_CHAR yy_meta[20] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1
+        1,    1,    1,    2,    1,    3,    3,    3,    3,    3,
+        3,    3,    3,    3,    1,    1,    1,    1,    1
     } ;
 
-static yyconst flex_uint16_t yy_base[241] =
+static yyconst flex_uint16_t yy_base[54] =
     {   0,
-        0,    0,  357,  358,  358,   68,  358,  358,  358,  358,
-      358,    7,  290,    9,  349,  307,  312,  308,  310,   79,
-      313,  299,  311,  310,  290,  289,  296,   88,  299,   80,
-       55,  291,  296,  299,  358,  358,  358,  292,   96,   60,
-      297,   84,  102,  148,   94,  300,  299,  279,   90,   36,
-      165,   97,  289,  176,  282,  287,  290,  358,  358,  358,
-       87,  116,  324,  278,  273,  282,  279,  271,  287,  275,
-      267,  270,  272,  358,  358,  109,  274,  358,  273,  267,
-      273,  266,  258,  272,  258,  358,  256,  259,  254,  358,
-      261,  262,  259,  251,  267,  358,  358,  358,  358,  358,
-
-      358,  358,  358,  358,  358,  358,  358,  358,  358,  358,
-      358,  358,  358,  358,  358,  358,  358,  358,  358,  255,
-      358,  358,  358,  358,  358,  358,  358,  358,  358,  358,
-      358,  358,  358,  358,  358,  358,  358,  358,  358,  358,
-      358,  358,  358,  247,  246,  249,  251,  260,  247,  170,
-      251,  250,  244,  250,  236,  250,  242,  235,  233,  176,
-      243,  249,  230,  239,  235,  245,  230,  242,  236,  239,
-      229,  358,  221,  230,  237,  229,  235,  216,  225,  221,
-      358,  231,  216,  228,  218,  209,  220,  223,  213,  205,
-      218,  213,  220,  209,  251,  218,  217,  206,  215,  214,
-
-      210,  212,  195,  210,  209,  198,  207,  206,  195,  204,
-      203,  199,  201,  200,  183,  198,  197,  179,  185,  227,
-      226,  225,  178,  190,  176,  175,  358,  174,  186,  358,
-      172,  358,  168,  165,  163,   99,   71,   63,   33,  358
+        0,   18,   36,   46,    0,    2,    6,    7,   57,    0,
+       76,    0,   24,  123,  123,   93,  123,  123,  123,  123,
+      123,  123,    0,   18,  123,   17,  123,  123,  123,    0,
+      123,  123,  123,  123,  123,  123,  123,    0,   16,  123,
+        0,    9,    0,    9,  123,  123,  107,  110,  113,  116,
+      119,    7,    0
     } ;
 
-static yyconst flex_int16_t yy_def[241] =
+static yyconst flex_int16_t yy_def[54] =
     {   0,
-      240,    1,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,    0
+       47,   47,   48,   48,   49,   49,   50,   50,   46,    9,
+       46,   11,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   51,   51,   46,   46,   46,   46,   46,   52,
+       46,   46,   46,   46,   46,   46,   46,   51,   51,   46,
+       53,   51,   53,   51,   46,    0,   46,   46,   46,   46,
+       46,   46,   46
     } ;
 
-static yyconst flex_uint16_t yy_nxt[429] =
+static yyconst flex_uint16_t yy_nxt[143] =
     {   0,
-        4,    5,    4,    4,    4,    4,    4,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
-        5,    5,    6,    7,    8,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        4,    4,    4,    4,    4,    4,    4,    4,    4,    4,
-        9,    4,   10,    4,   11,   11,   11,   12,   13,   14,
-       15,   60,   60,   62,   62,  149,   16,   17,   18,   19,
-       20,  139,   21,  150,   22,   23,   24,   25,   26,   27,
-       28,   83,   29,   30,   31,   32,   91,   33,   84,   34,
+       46,   15,   43,   15,   24,   15,   24,   15,   15,   41,
+       26,   26,   45,   44,   16,   17,   18,   19,   20,   15,
+       42,   40,   39,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   16,   17,   18,   19,   20,   15,   46,   46,
+       46,   46,   22,   46,   46,   46,   22,   15,   46,   46,
+       46,   46,   22,   46,   46,   46,   22,   27,   15,   27,
+       27,   27,   28,   28,   28,   28,   28,   28,   27,   28,
+       28,   27,   27,   27,   27,   27,   29,   15,   29,   29,
+       29,   30,   30,   30,   30,   30,   30,   30,   30,   30,
+       29,   29,   29,   29,   29,   31,   46,   46,   46,   32,
 
-       35,   36,   37,   92,   38,   39,   40,   41,   42,   43,
-       44,  133,   45,   46,   47,   48,   49,   50,   51,  124,
-       52,   53,   54,   55,   81,   56,  148,   57,   58,   68,
-       59,   77,   78,   69,   94,   82,   89,   90,   95,   90,
-      153,   79,  144,  145,   98,  132,   96,  115,   96,  169,
-       97,   60,   60,  170,   98,   99,  100,  101,   86,  102,
-      103,  104,  105,  106,  107,  108,  109,   74,   75,  110,
-       78,  111,  112,  113,  114,  115,  116,  117,  118,  119,
-       60,   60,  194,  195,  120,  121,  122,  123,  124,  125,
-      126,  127,  128,  129,  130,  131,  132,  133,  134,  135,
-
-      136,  137,  138,  139,  140,  141,  142,  143,  151,  134,
-      187,  110,  155,  103,  188,  220,  221,  239,  152,  156,
-      157,  238,  130,  237,  236,  235,  109,  234,  172,  181,
-      230,  233,  232,  127,  137,  231,  140,  230,  229,  129,
-      126,  228,  123,  227,  226,  106,  113,  225,  116,  224,
-      108,  105,  223,  102,  100,  222,  143,  219,  218,  217,
-      216,  215,  214,  172,  213,  212,  211,  128,  210,  209,
-      208,  121,  207,  119,  206,  205,  204,  203,  202,  201,
-      200,  107,  199,  198,  197,  101,  196,  193,  192,  191,
-      190,  138,  189,  136,  135,  125,  186,  185,  184,  183,
-
-      182,  181,  180,  142,  179,  178,  141,   99,  177,  176,
-      175,  174,  173,  114,  172,  171,  112,  111,  104,  168,
-      167,  166,  165,  118,  164,  163,  117,  162,  161,  160,
-      159,  122,  158,  154,  131,  147,  146,   93,   88,   87,
-       86,   85,   80,   76,   75,   74,   73,   72,   71,   70,
-       67,   66,   65,   64,   63,   61,  240,    3,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240
+       33,   34,   35,   46,   46,   36,   37,   14,   14,   14,
+       21,   21,   21,   23,   23,   23,   25,   25,   25,   38,
+       46,   38,   13,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46
     } ;
 
-static yyconst flex_int16_t yy_chk[429] =
+static yyconst flex_int16_t yy_chk[143] =
     {   0,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        6,   12,   12,   14,   14,   50,    6,    6,    6,    6,
-        6,  239,    6,   50,    6,    6,    6,    6,    6,    6,
-        6,   31,    6,    6,    6,    6,   40,    6,   31,    6,
+        0,    1,   53,    5,    5,    6,    6,    7,    8,   52,
+        7,    8,   44,   42,    1,    1,    1,    1,    1,    2,
+       39,   26,   24,   13,    0,    0,    0,    0,    0,    0,
+        0,    0,    2,    2,    2,    2,    2,    3,    0,    0,
+        0,    0,    3,    0,    0,    0,    3,    4,    0,    0,
+        0,    0,    4,    0,    0,    0,    4,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
+        9,    9,    9,    9,    9,    9,   11,   11,   11,   11,
+       11,   11,   11,   11,   11,   11,   11,   11,   11,   11,
+       11,   11,   11,   11,   11,   16,    0,    0,    0,   16,
 
-        6,    6,    6,   40,    6,    6,    6,    6,    6,    6,
-        6,  238,    6,    6,    6,    6,    6,    6,    6,  237,
-        6,    6,    6,    6,   30,    6,   49,    6,    6,   20,
-        6,   28,   28,   20,   42,   30,   39,   39,   42,   43,
-       52,   28,   45,   45,   52,   49,   43,  236,   45,   76,
-       43,   61,   61,   76,   43,   43,   44,   44,   44,   44,
-       44,   44,   44,   44,   44,   44,   44,   44,   44,   44,
-       44,   44,   44,   44,   44,   44,   44,   44,   44,   44,
-       62,   62,  160,  160,   44,   44,   44,   44,   44,   44,
-       44,   44,   44,   44,   44,   44,   44,   44,   44,   44,
-
-       44,   44,   44,   44,   44,   44,   44,   44,   51,   51,
-      150,  235,   54,  234,  150,  194,  194,  233,   51,   54,
-       54,  231,  229,  228,  226,  225,  224,  223,  222,  221,
-      220,  219,  218,  217,  216,  215,  214,  213,  212,  211,
-      210,  209,  208,  207,  206,  205,  204,  203,  202,  201,
-      200,  199,  198,  197,  196,  195,  193,  192,  191,  190,
-      189,  188,  187,  186,  185,  184,  183,  182,  180,  179,
-      178,  177,  176,  175,  174,  173,  171,  170,  169,  168,
-      167,  166,  165,  164,  163,  162,  161,  159,  158,  157,
-      156,  155,  154,  153,  152,  151,  149,  148,  147,  146,
-
-      145,  144,  120,   95,   94,   93,   92,   91,   89,   88,
-       87,   85,   84,   83,   82,   81,   80,   79,   77,   73,
-       72,   71,   70,   69,   68,   67,   66,   65,   64,   63,
-       57,   56,   55,   53,   48,   47,   46,   41,   38,   34,
-       33,   32,   29,   27,   26,   25,   24,   23,   22,   21,
-       19,   18,   17,   16,   15,   13,    3,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240,  240,  240,
-      240,  240,  240,  240,  240,  240,  240,  240
+       16,   16,   16,    0,    0,   16,   16,   47,   47,   47,
+       48,   48,   48,   49,   49,   49,   50,   50,   50,   51,
+        0,   51,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46,   46,   46,   46,   46,   46,   46,   46,   46,
+       46,   46
     } ;
 
-/* The intent behind this definition is that it'll catch
- * any uses of REJECT which flex missed.
- */
-#define REJECT reject_used_but_not_detected
+#define REJECT \
+{ \
+*yy_cp = yyg->yy_hold_char; /* undo effects of setting up yytext */ \
+yy_cp = yyg->yy_full_match; /* restore poss. backed-over text */ \
+++yyg->yy_lp; \
+goto find_rule; \
+}
+
 #define yymore() yymore_used_but_not_detected
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
@@ -640,102 +526,70 @@ static yyconst flex_int16_t yy_chk[429] =
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
+#include "giza-io-private.h"
 #include "giza-private.h"
 #include "giza-transforms-private.h"
 #include "giza-drivers-private.h"
 #include "giza-text-private.h"
+#include "giza-hershey-to-utf.h"
 #include "giza.h"
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 
-#define GIZA_TOKEN_ERROR  0
-#define GIZA_TOKEN_END    1
-#define GIZA_TOKEN_SUPER  2
-#define GIZA_TOKEN_SUB    3
-#define GIZA_TOKEN_OB     4
-#define GIZA_TOKEN_CB     5
-#define GIZA_TOKEN_TIMES  6
-#define GIZA_TOKEN_OTHER  7
-#define GIZA_TOKEN_RAISE  8
-#define GIZA_TOKEN_LOWER  9
-#define GIZA_TOKEN_INTEGRAL 10
-#define GIZA_TOKEN_NABLA 11
 
-#define GIZA_TOKEN_FONT_NORMAL 12
-#define GIZA_TOKEN_FONT_ROMAN 13
-#define GIZA_TOKEN_FONT_ITALIC 14
-#define GIZA_TOKEN_FONT_SCRIPT 15
-#define GIZA_TOKEN_FONT_BOLD 16
+#define GIZA_TOKEN_END         1
+#define GIZA_TOKEN_SUPER       2
+#define GIZA_TOKEN_SUB         3
+#define GIZA_TOKEN_OB          4
+#define GIZA_TOKEN_CB          5
+#define GIZA_TOKEN_RAISE       8
+#define GIZA_TOKEN_LOWER       9
 
-#define GIZA_TOKEN_ALPHA   21
-#define GIZA_TOKEN_BETA    22
-#define GIZA_TOKEN_GAMMA   23
-#define GIZA_TOKEN_DELTA   24
-#define GIZA_TOKEN_EPSILON 25
-#define GIZA_TOKEN_ZETA    26
-#define GIZA_TOKEN_ETA     27
-#define GIZA_TOKEN_THETA   28
-#define GIZA_TOKEN_IOTA    29
-#define GIZA_TOKEN_KAPPA   30
-#define GIZA_TOKEN_LAMBDA  31
-#define GIZA_TOKEN_MU      32
-#define GIZA_TOKEN_NU      33
-#define GIZA_TOKEN_XI      34
-#define GIZA_TOKEN_OMICRON 35
-#define GIZA_TOKEN_PI      36
-#define GIZA_TOKEN_RHO     37
-#define GIZA_TOKEN_SIGMA   38
-#define GIZA_TOKEN_TAU     39
-#define GIZA_TOKEN_UPSILON 40
-#define GIZA_TOKEN_PHI     41
-#define GIZA_TOKEN_CHI     42
-#define GIZA_TOKEN_PSI     43
-#define GIZA_TOKEN_OMEGA   44
 
-#define GIZA_TOKEN_BIGALPHA   45
-#define GIZA_TOKEN_BIGBETA    46
-#define GIZA_TOKEN_BIGGAMMA   47
-#define GIZA_TOKEN_BIGDELTA   48
-#define GIZA_TOKEN_BIGEPSILON 49
-#define GIZA_TOKEN_BIGZETA    50
-#define GIZA_TOKEN_BIGETA     51
-#define GIZA_TOKEN_BIGTHETA   52
-#define GIZA_TOKEN_BIGIOTA    53
-#define GIZA_TOKEN_BIGKAPPA   54
-#define GIZA_TOKEN_BIGLAMBDA  55
-#define GIZA_TOKEN_BIGMU      56
-#define GIZA_TOKEN_BIGNU      57
-#define GIZA_TOKEN_BIGXI      58
-#define GIZA_TOKEN_BIGOMICRON 59
-#define GIZA_TOKEN_BIGPI      60
-#define GIZA_TOKEN_BIGRHO     61
-#define GIZA_TOKEN_BIGSIGMA   62
-#define GIZA_TOKEN_BIGTAU     63
-#define GIZA_TOKEN_BIGUPSILON 64
-#define GIZA_TOKEN_BIGPHI     65
-#define GIZA_TOKEN_BIGCHI     66
-#define GIZA_TOKEN_BIGPSI     67
-#define GIZA_TOKEN_BIGOMEGA   68
+#define GIZA_TOKEN_FONT        110
+#define GIZA_TOKEN_HERSHEY     111
+#define GIZA_TOKEN_MARKER      112
+#define GIZA_TOKEN_GREEK       113
 
-#define GIZA_TOKEN_ODOT 69
-#define GIZA_TOKEN_MARKER 70
-#define GIZA_TOKEN_BACKSLASH 71
-#define GIZA_TOKEN_UNDERSCORE 72
-#define GIZA_TOKEN_HAT 73
-#define GIZA_TOKEN_CURLYOPEN 74
-#define GIZA_TOKEN_CURLYCLOSE 75
+#define GIZA_TOKEN_BACKSPACE   120
+#define GIZA_TOKEN_REMAP       121
 
-#define GIZA_SCALE_SUPERS 0.65
-#define GIZA_RAISE_SUPERS 0.4
-#define GIZA_SCALE_SUBS   0.65
-#define GIZA_LOWER_SUBS   0.2
+#define GIZA_TOKEN_TEXT        130
 
-static void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
-static int _giza_get_chunk (const char *text);
+/* the token remapper can only be included after the tokens have been defined */
+#include "giza-token-remapper.h"
 
-#line 737 "lex.yy.c"
+/* Map single character to greek letter according to PGPLOT grsyds.f */
+/* ABGDEZYHIKLMNCOPRSTUFXQWabgdezyhiklmncoprstufxqw */
+static char const* const giza_greek_alphabet      = "ABGDEZYHIKLMNCOPRSTUFXQWabgdezyhiklmncoprstufxqw";
+static char const* const giza_greek_to_utf_data[] = {
+    /* Upper case */
+    "\u0391", "\u0392", "\u0393", "\u0394", "\u0395", "\u0396", "\u0397", "\u0398",
+    "\u0399", "\u039a", "\u039b", "\u039c", "\u039d", "\u039e", "\u039f", "\u03a0",
+    "\u03a1", "\u03a3", "\u03a4", "\u03a5", "\u03a6", "\u03a7", "\u03a8", "\u03a9",
+    /* and lower case */
+    "\u03b1", "\u03b2", "\u03b3", "\u03b4", "\u03b5", "\u03b6", "\u03b7", "\u03b8",
+    "\u03b9", "\u03ba", "\u03bb", "\u03bc", "\u03bd", "\u03be", "\u03bf", "\u03c0",
+    "\u03c1", "\u03c3", "\u03c4", "\u03c5", "\u03c6", "\u03c7", "\u03c8", "\u03c9"
+};
+
+/* Assume the caller has verified that letter is a /valid/ greek letter! */
+static char const*                       _giza_greek_to_utf(char letter);
+/* May return NULL if number is not a known Hershey symbol or the string in
+  <special> is not found in the remapped token lookup table */
+static giza_hershey_to_utf_entry const*  _giza_lookup_hershey(int number);
+static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
+
+
+#line 586 "lex.yy.c"
 
 #define INITIAL 0
+#define FONT 1
+#define HERSHEY 2
+#define MARKER 3
+#define GREEK 4
+#define ESCAPE 5
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -762,7 +616,7 @@ struct yyguts_t
     size_t yy_buffer_stack_max; /**< capacity of stack. */
     YY_BUFFER_STATE * yy_buffer_stack; /**< Stack as an array. */
     char yy_hold_char;
-    yy_size_t yy_n_chars;
+    int yy_n_chars;
     yy_size_t yyleng_r;
     char *yy_c_buf_p;
     int yy_init;
@@ -776,6 +630,17 @@ struct yyguts_t
 
     int yylineno_r;
     int yy_flex_debug_r;
+
+    yy_state_type *yy_state_buf;
+    yy_state_type *yy_state_ptr;
+    char *yy_full_match;
+    int yy_lp;
+
+    /* These are only needed for trailing context rules,
+     * but there's no conditional variable for that yet. */
+    int yy_looking_for_trail_begin;
+    int yy_full_lp;
+    int *yy_full_state;
 
     char *yytext_r;
     int yy_more_flag;
@@ -975,6 +840,12 @@ YY_DECL
 		YY_USER_INIT;
 #endif
 
+        /* Create the reject buffer large enough to save one state per allowed character. */
+        if ( ! yyg->yy_state_buf )
+            yyg->yy_state_buf = (yy_state_type *)yyalloc(YY_STATE_BUF_SIZE  ,yyscanner);
+            if ( ! yyg->yy_state_buf )
+                YY_FATAL_ERROR( "out of dynamic memory in yylex()" );
+
 		if ( ! yyg->yy_start )
 			yyg->yy_start = 1;	/* first start state */
 
@@ -994,10 +865,10 @@ YY_DECL
 		}
 
 	{
-#line 205 "giza-scanner.l"
+#line 92 "giza-scanner.l"
 
 
-#line 1001 "lex.yy.c"
+#line 872 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1012,33 +883,43 @@ YY_DECL
 		yy_bp = yy_cp;
 
 		yy_current_state = yyg->yy_start;
+
+		yyg->yy_state_ptr = yyg->yy_state_buf;
+		*yyg->yy_state_ptr++ = yy_current_state;
+
 yy_match:
 		do
 			{
 			YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)] ;
-			if ( yy_accept[yy_current_state] )
-				{
-				yyg->yy_last_accepting_state = yy_current_state;
-				yyg->yy_last_accepting_cpos = yy_cp;
-				}
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 241 )
+				if ( yy_current_state >= 47 )
 					yy_c = yy_meta[(unsigned int) yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+			*yyg->yy_state_ptr++ = yy_current_state;
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 358 );
+		while ( yy_base[yy_current_state] != 123 );
 
 yy_find_action:
-		yy_act = yy_accept[yy_current_state];
-		if ( yy_act == 0 )
-			{ /* have to back up */
-			yy_cp = yyg->yy_last_accepting_cpos;
-			yy_current_state = yyg->yy_last_accepting_state;
-			yy_act = yy_accept[yy_current_state];
+		yy_current_state = *--yyg->yy_state_ptr;
+		yyg->yy_lp = yy_accept[yy_current_state];
+find_rule: /* we branch to this label when backing up */
+		for ( ; ; ) /* until we find what rule we matched */
+			{
+			if ( yyg->yy_lp && yyg->yy_lp < yy_accept[yy_current_state + 1] )
+				{
+				yy_act = yy_acclist[yyg->yy_lp];
+					{
+					yyg->yy_full_match = yy_cp;
+					break;
+					}
+				}
+			--yy_cp;
+			yy_current_state = *--yyg->yy_state_ptr;
+			yyg->yy_lp = yy_accept[yy_current_state];
 			}
 
 		YY_DO_BEFORE_ACTION;
@@ -1047,380 +928,137 @@ do_action:	/* This label is used only to access EOF actions. */
 
 		switch ( yy_act )
 	{ /* beginning of action switch */
-			case 0: /* must back up */
-			/* undo the effects of YY_DO_BEFORE_ACTION */
-			*yy_cp = yyg->yy_hold_char;
-			yy_cp = yyg->yy_last_accepting_cpos;
-			yy_current_state = yyg->yy_last_accepting_state;
-			goto yy_find_action;
-
 case 1:
 YY_RULE_SETUP
-#line 207 "giza-scanner.l"
-{ return GIZA_TOKEN_SUPER; }
+#line 94 "giza-scanner.l"
+{ return GIZA_TOKEN_RAISE; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 209 "giza-scanner.l"
-{ return GIZA_TOKEN_SUB; }
+#line 95 "giza-scanner.l"
+{ return GIZA_TOKEN_LOWER; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 211 "giza-scanner.l"
-{ return GIZA_TOKEN_RAISE; }
+#line 96 "giza-scanner.l"
+{ return GIZA_TOKEN_BACKSPACE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 213 "giza-scanner.l"
-{ return GIZA_TOKEN_LOWER; }
+#line 98 "giza-scanner.l"
+{ BEGIN(FONT); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 215 "giza-scanner.l"
-{ return GIZA_TOKEN_OB; }
+#line 99 "giza-scanner.l"
+{ BEGIN(INITIAL); return GIZA_TOKEN_FONT; };
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 217 "giza-scanner.l"
-{ return GIZA_TOKEN_CB; }
+#line 100 "giza-scanner.l"
+{ BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid font specifier '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 7:
-/* rule 7 can match eol */
 YY_RULE_SETUP
-#line 219 "giza-scanner.l"
-{ return GIZA_TOKEN_OTHER; }
+#line 102 "giza-scanner.l"
+{ BEGIN(HERSHEY); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 221 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_NORMAL; }
+#line 103 "giza-scanner.l"
+{ if( _giza_lookup_hershey(atoi(yytext)) ) { BEGIN(INITIAL); return GIZA_TOKEN_HERSHEY; } REJECT; }
 	YY_BREAK
 case 9:
+/* rule 9 can match eol */
 YY_RULE_SETUP
-#line 222 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_ROMAN; }
+#line 104 "giza-scanner.l"
+{ BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid Hershey code '%s'", yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 223 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_ITALIC; }
+#line 106 "giza-scanner.l"
+{ BEGIN(MARKER); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 224 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_SCRIPT; }
+#line 107 "giza-scanner.l"
+{ const int marker = atoi(yytext); if( marker>=1 && marker<=31 ) { BEGIN(INITIAL); return GIZA_TOKEN_MARKER; } REJECT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 225 "giza-scanner.l"
-{ return GIZA_TOKEN_FONT_BOLD; }
+#line 108 "giza-scanner.l"
+{ BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid marker '%s'", yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 227 "giza-scanner.l"
-{ return GIZA_TOKEN_TIMES; }
+#line 110 "giza-scanner.l"
+{ BEGIN(GREEK); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 228 "giza-scanner.l"
-{ return GIZA_TOKEN_INTEGRAL; }
+#line 111 "giza-scanner.l"
+{ BEGIN(INITIAL); return GIZA_TOKEN_GREEK; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 229 "giza-scanner.l"
-{ return GIZA_TOKEN_NABLA; }
+#line 112 "giza-scanner.l"
+{ BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid greek letter '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 230 "giza-scanner.l"
-{ return GIZA_TOKEN_ODOT; }
+#line 114 "giza-scanner.l"
+{ BEGIN(ESCAPE); }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 231 "giza-scanner.l"
-{ return GIZA_TOKEN_MARKER; }
+#line 115 "giza-scanner.l"
+{ if( _giza_remap_token(yytext) ) { BEGIN(INITIAL); return GIZA_TOKEN_REMAP; } REJECT; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 232 "giza-scanner.l"
-{ return GIZA_TOKEN_BACKSLASH; }
+#line 116 "giza-scanner.l"
+{ BEGIN(INITIAL); return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 233 "giza-scanner.l"
-{ return GIZA_TOKEN_UNDERSCORE; }
+#line 118 "giza-scanner.l"
+{ return GIZA_TOKEN_SUPER; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 234 "giza-scanner.l"
-{ return GIZA_TOKEN_HAT; }
+#line 119 "giza-scanner.l"
+{ return GIZA_TOKEN_SUB; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 235 "giza-scanner.l"
-{ return GIZA_TOKEN_CURLYOPEN; }
+#line 120 "giza-scanner.l"
+{ return GIZA_TOKEN_OB; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 236 "giza-scanner.l"
-{ return GIZA_TOKEN_CURLYCLOSE; }
+#line 121 "giza-scanner.l"
+{ return GIZA_TOKEN_CB; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 238 "giza-scanner.l"
-{ return GIZA_TOKEN_ALPHA; }
+#line 123 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case YY_STATE_EOF(INITIAL):
+case YY_STATE_EOF(FONT):
+case YY_STATE_EOF(HERSHEY):
+case YY_STATE_EOF(MARKER):
+case YY_STATE_EOF(GREEK):
+case YY_STATE_EOF(ESCAPE):
+#line 125 "giza-scanner.l"
+{ return GIZA_TOKEN_END; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 239 "giza-scanner.l"
-{ return GIZA_TOKEN_BETA; }
-	YY_BREAK
-case 25:
-YY_RULE_SETUP
-#line 240 "giza-scanner.l"
-{ return GIZA_TOKEN_GAMMA; }
-	YY_BREAK
-case 26:
-YY_RULE_SETUP
-#line 241 "giza-scanner.l"
-{ return GIZA_TOKEN_DELTA; }
-	YY_BREAK
-case 27:
-YY_RULE_SETUP
-#line 242 "giza-scanner.l"
-{ return GIZA_TOKEN_EPSILON; }
-	YY_BREAK
-case 28:
-YY_RULE_SETUP
-#line 243 "giza-scanner.l"
-{ return GIZA_TOKEN_ZETA; }
-	YY_BREAK
-case 29:
-YY_RULE_SETUP
-#line 244 "giza-scanner.l"
-{ return GIZA_TOKEN_ETA; }
-	YY_BREAK
-case 30:
-YY_RULE_SETUP
-#line 245 "giza-scanner.l"
-{ return GIZA_TOKEN_THETA; }
-	YY_BREAK
-case 31:
-YY_RULE_SETUP
-#line 246 "giza-scanner.l"
-{ return GIZA_TOKEN_IOTA; }
-	YY_BREAK
-case 32:
-YY_RULE_SETUP
-#line 247 "giza-scanner.l"
-{ return GIZA_TOKEN_KAPPA; }
-	YY_BREAK
-case 33:
-YY_RULE_SETUP
-#line 248 "giza-scanner.l"
-{ return GIZA_TOKEN_LAMBDA; }
-	YY_BREAK
-case 34:
-YY_RULE_SETUP
-#line 249 "giza-scanner.l"
-{ return GIZA_TOKEN_MU; }
-	YY_BREAK
-case 35:
-YY_RULE_SETUP
-#line 250 "giza-scanner.l"
-{ return GIZA_TOKEN_NU; }
-	YY_BREAK
-case 36:
-YY_RULE_SETUP
-#line 251 "giza-scanner.l"
-{ return GIZA_TOKEN_XI; }
-	YY_BREAK
-case 37:
-YY_RULE_SETUP
-#line 252 "giza-scanner.l"
-{ return GIZA_TOKEN_OMICRON; }
-	YY_BREAK
-case 38:
-YY_RULE_SETUP
-#line 253 "giza-scanner.l"
-{ return GIZA_TOKEN_PI; }
-	YY_BREAK
-case 39:
-YY_RULE_SETUP
-#line 254 "giza-scanner.l"
-{ return GIZA_TOKEN_RHO; }
-	YY_BREAK
-case 40:
-YY_RULE_SETUP
-#line 255 "giza-scanner.l"
-{ return GIZA_TOKEN_SIGMA; }
-	YY_BREAK
-case 41:
-YY_RULE_SETUP
-#line 256 "giza-scanner.l"
-{ return GIZA_TOKEN_TAU; }
-	YY_BREAK
-case 42:
-YY_RULE_SETUP
-#line 257 "giza-scanner.l"
-{ return GIZA_TOKEN_UPSILON; }
-	YY_BREAK
-case 43:
-YY_RULE_SETUP
-#line 258 "giza-scanner.l"
-{ return GIZA_TOKEN_PHI; }
-	YY_BREAK
-case 44:
-YY_RULE_SETUP
-#line 259 "giza-scanner.l"
-{ return GIZA_TOKEN_CHI; }
-	YY_BREAK
-case 45:
-YY_RULE_SETUP
-#line 260 "giza-scanner.l"
-{ return GIZA_TOKEN_PSI; }
-	YY_BREAK
-case 46:
-YY_RULE_SETUP
-#line 261 "giza-scanner.l"
-{ return GIZA_TOKEN_OMEGA; }
-	YY_BREAK
-case 47:
-YY_RULE_SETUP
-#line 263 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGALPHA; }
-	YY_BREAK
-case 48:
-YY_RULE_SETUP
-#line 264 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGBETA; }
-	YY_BREAK
-case 49:
-YY_RULE_SETUP
-#line 265 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGGAMMA; }
-	YY_BREAK
-case 50:
-YY_RULE_SETUP
-#line 266 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGDELTA; }
-	YY_BREAK
-case 51:
-YY_RULE_SETUP
-#line 267 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGEPSILON; }
-	YY_BREAK
-case 52:
-YY_RULE_SETUP
-#line 268 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGZETA; }
-	YY_BREAK
-case 53:
-YY_RULE_SETUP
-#line 269 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGETA; }
-	YY_BREAK
-case 54:
-YY_RULE_SETUP
-#line 270 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGTHETA; }
-	YY_BREAK
-case 55:
-YY_RULE_SETUP
-#line 271 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGIOTA; }
-	YY_BREAK
-case 56:
-YY_RULE_SETUP
-#line 272 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGKAPPA; }
-	YY_BREAK
-case 57:
-YY_RULE_SETUP
-#line 273 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGLAMBDA; }
-	YY_BREAK
-case 58:
-YY_RULE_SETUP
-#line 274 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGMU; }
-	YY_BREAK
-case 59:
-YY_RULE_SETUP
-#line 275 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGNU; }
-	YY_BREAK
-case 60:
-YY_RULE_SETUP
-#line 276 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGXI; }
-	YY_BREAK
-case 61:
-YY_RULE_SETUP
-#line 277 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGOMICRON; }
-	YY_BREAK
-case 62:
-YY_RULE_SETUP
-#line 278 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPI; }
-	YY_BREAK
-case 63:
-YY_RULE_SETUP
-#line 279 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGRHO; }
-	YY_BREAK
-case 64:
-YY_RULE_SETUP
-#line 280 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGSIGMA; }
-	YY_BREAK
-case 65:
-YY_RULE_SETUP
-#line 281 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGTAU; }
-	YY_BREAK
-case 66:
-YY_RULE_SETUP
-#line 282 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGUPSILON; }
-	YY_BREAK
-case 67:
-YY_RULE_SETUP
-#line 283 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPHI; }
-	YY_BREAK
-case 68:
-YY_RULE_SETUP
-#line 284 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGCHI; }
-	YY_BREAK
-case 69:
-YY_RULE_SETUP
-#line 285 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGPSI; }
-	YY_BREAK
-case 70:
-YY_RULE_SETUP
-#line 286 "giza-scanner.l"
-{ return GIZA_TOKEN_BIGOMEGA; }
-	YY_BREAK
-case YY_STATE_EOF(INITIAL):
-#line 289 "giza-scanner.l"
-{ return GIZA_TOKEN_END; }
-	YY_BREAK
-case 71:
-/* rule 71 can match eol */
-YY_RULE_SETUP
-#line 291 "giza-scanner.l"
-{ return GIZA_TOKEN_ERROR; }
-	YY_BREAK
-case 72:
-YY_RULE_SETUP
-#line 293 "giza-scanner.l"
+#line 127 "giza-scanner.l"
 ECHO;
 	YY_BREAK
-#line 1424 "lex.yy.c"
+#line 1062 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1612,37 +1250,8 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 		while ( num_to_read <= 0 )
 			{ /* Not enough room in the buffer - grow it. */
 
-			/* just a shorter name for the current buffer */
-			YY_BUFFER_STATE b = YY_CURRENT_BUFFER_LVALUE;
-
-			int yy_c_buf_p_offset =
-				(int) (yyg->yy_c_buf_p - b->yy_ch_buf);
-
-			if ( b->yy_is_our_buffer )
-				{
-				yy_size_t new_size = b->yy_buf_size * 2;
-
-				if ( new_size <= 0 )
-					b->yy_buf_size += b->yy_buf_size / 8;
-				else
-					b->yy_buf_size *= 2;
-
-				b->yy_ch_buf = (char *)
-					/* Include room in for 2 EOB chars. */
-					yyrealloc((void *) b->yy_ch_buf,b->yy_buf_size + 2 ,yyscanner );
-				}
-			else
-				/* Can't grow it, we don't own it. */
-				b->yy_ch_buf = 0;
-
-			if ( ! b->yy_ch_buf )
-				YY_FATAL_ERROR(
-				"fatal error - scanner input buffer overflow" );
-
-			yyg->yy_c_buf_p = &b->yy_ch_buf[yy_c_buf_p_offset];
-
-			num_to_read = YY_CURRENT_BUFFER_LVALUE->yy_buf_size -
-						number_to_move - 1;
+			YY_FATAL_ERROR(
+"input buffer overflow, can't enlarge buffer because scanner uses REJECT" );
 
 			}
 
@@ -1675,9 +1284,9 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
 
-	if ((yy_size_t) (yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+	if ((int) (yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
-		yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
+		int new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc((void *) YY_CURRENT_BUFFER_LVALUE->yy_ch_buf,new_size ,yyscanner );
 		if ( ! YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
 			YY_FATAL_ERROR( "out of dynamic memory in yy_get_next_buffer()" );
@@ -1702,21 +1311,20 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 	yy_current_state = yyg->yy_start;
 
+	yyg->yy_state_ptr = yyg->yy_state_buf;
+	*yyg->yy_state_ptr++ = yy_current_state;
+
 	for ( yy_cp = yyg->yytext_ptr + YY_MORE_ADJ; yy_cp < yyg->yy_c_buf_p; ++yy_cp )
 		{
 		YY_CHAR yy_c = (*yy_cp ? yy_ec[YY_SC_TO_UI(*yy_cp)] : 1);
-		if ( yy_accept[yy_current_state] )
-			{
-			yyg->yy_last_accepting_state = yy_current_state;
-			yyg->yy_last_accepting_cpos = yy_cp;
-			}
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 241 )
+			if ( yy_current_state >= 47 )
 				yy_c = yy_meta[(unsigned int) yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
+		*yyg->yy_state_ptr++ = yy_current_state;
 		}
 
 	return yy_current_state;
@@ -1731,22 +1339,18 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 {
 	int yy_is_jam;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner; /* This var may be unused depending upon options. */
-	char *yy_cp = yyg->yy_c_buf_p;
 
 	YY_CHAR yy_c = 1;
-	if ( yy_accept[yy_current_state] )
-		{
-		yyg->yy_last_accepting_state = yy_current_state;
-		yyg->yy_last_accepting_cpos = yy_cp;
-		}
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 241 )
+		if ( yy_current_state >= 47 )
 			yy_c = yy_meta[(unsigned int) yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + (unsigned int) yy_c];
-	yy_is_jam = (yy_current_state == 240);
+	yy_is_jam = (yy_current_state == 46);
+	if ( ! yy_is_jam )
+		*yyg->yy_state_ptr++ = yy_current_state;
 
 	(void)yyg;
 	return yy_is_jam ? 0 : yy_current_state;
@@ -2108,7 +1712,7 @@ static void yyensure_buffer_stack (yyscan_t yyscanner)
 		 * scanner will even need a stack. We use 2 instead of 1 to avoid an
 		 * immediate realloc on the next call.
          */
-		num_to_alloc = 1; // After all that talk, this was set to 1 anyways...
+		num_to_alloc = 1; /* After all that talk, this was set to 1 anyways... */
 		yyg->yy_buffer_stack = (struct yy_buffer_state**)yyalloc
 								(num_to_alloc * sizeof(struct yy_buffer_state*)
 								, yyscanner);
@@ -2484,6 +2088,11 @@ static int yy_init_globals (yyscan_t yyscanner)
     yyg->yy_start_stack_depth = 0;
     yyg->yy_start_stack =  NULL;
 
+    yyg->yy_state_buf = 0;
+    yyg->yy_state_ptr = 0;
+    yyg->yy_full_match = 0;
+    yyg->yy_lp = 0;
+
 /* Defined in main.c */
 #ifdef YY_STDINIT
     yyin = stdin;
@@ -2518,6 +2127,9 @@ int yylex_destroy  (yyscan_t yyscanner)
     /* Destroy the start condition stack. */
         yyfree(yyg->yy_start_stack ,yyscanner );
         yyg->yy_start_stack = NULL;
+
+    yyfree ( yyg->yy_state_buf , yyscanner);
+    yyg->yy_state_buf  = NULL;
 
     /* Reset the globals. This is important in a non-reentrant scanner so the next time
      * yylex() is called, initialization will occur. */
@@ -2587,540 +2199,322 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 293 "giza-scanner.l"
+#line 127 "giza-scanner.l"
 
 
 
-/**
- * Parses brackets in text, returns the length of the string contained in outermost brackets
- */
-static int
-_giza_get_chunk (const char *text)
-{
-  int openb = 0;
-  int length = 0;
-  int token, stop = 0;
 
-  /* initialise the scanner */
-  yyscan_t scanner;
-  yylex_init (&scanner);
-  yy_scan_string (text, scanner);
- 
-  while(!stop)
-    {
-      token = yylex(scanner);
-      length += yyget_leng (scanner);
-
-      switch (token)
-        {
-	  case GIZA_TOKEN_OB:
-	    ++openb;
-	    break;
-	  case GIZA_TOKEN_CB:
-	    --openb;
-	    break;
-          case GIZA_TOKEN_END:
-            stop = 1;
-            break;
-	  default:
-	    break;
-        }
-
-	if (openb < 1) 
-          {
-            yylex_destroy (scanner);
-            return length;
-          }
-    }
-   yylex_destroy (scanner);
-   return length; /* assumes whole string if unclosed open bracket */
+/* Functions that look up character sequences and return utf strings; 
+   giza is built upon cairo, which in turn handles utf Just Fine (tm) */
+giza_hershey_to_utf_entry const* _giza_lookup_hershey(int number) {
+    giza_hershey_to_utf_entry const* rv = giza_hershey_to_utf;
+    while( rv->hershey!=-1 && rv->hershey!=number )
+        rv++;
+    return (rv->hershey==-1 ? NULL : rv);
 }
 
-/**
- * Parses remaining text to determine the chunk of text to which the font 
- * change should apply. In this case the chunk is defined as the text 
- * remaining until an unmatched close bracket, or the end of the string, 
- * whichever comes first.
- */
-static int
-_giza_get_chunk_fontchange (const char *text)
-{
-  int openb = 0;
-  int length = 0;
-  int token, stop = 0;
+giza_remapped_token_entry const* _giza_remap_token(char const* special) {
+    giza_remapped_tokens_entry const* rv = giza_remappable_tokens;
 
-  /* initialise the scanner */
-  yyscan_t scanner;
-  yylex_init (&scanner);
-  yy_scan_string (text, scanner);
- 
-  while(!stop)
-    {
-      token = yylex(scanner);
-      length += yyget_leng (scanner);
-
-      switch (token)
-        {
-	  case GIZA_TOKEN_OB:
-	    ++openb;
-	    break;
-	  case GIZA_TOKEN_CB:
-	    --openb;
-	    break;
-          case GIZA_TOKEN_END:
-            stop = 1;
-            break;
-	  default:
-	    break;
-        }
-
-        if (openb < 0) {
-           stop = 1;
-        }
-    }
-   yylex_destroy (scanner);
-   if (strlen(text) < length) length = strlen(text);
-   return length; /* assumes whole string if unclosed open bracket */
+    while( rv->text && strcmp(rv->text, special) )
+        rv++;
+    return (rv->text==NULL ? NULL : &rv->replacement);
 }
+
+char const* giza_greek_to_utf(char letter) {
+    return giza_greek_to_utf_data[ strchr(giza_greek_alphabet, letter) - giza_greek_alphabet ];
+}
+
+
+#define MAX_NFONT 32
+typedef struct _font_change_type {
+    char    font[GIZA_FONT_LEN];
+    int     ob_level;       /* open bracket level at start of font change*/
+    int     wait_for_token; /* 0 = wait for first token to be seen, < 0 stop font change immediately, == GIZA_TOKEN_CB wait until ob_count drops below .ob_level */
+} font_change_type;
+
+typedef struct _glyph_pos_type {
+    double x, y;
+} glyph_pos_type;
+
+typedef struct _ob_state_type {
+    int   ob_level;       /* open bracket level at start of state */
+    int   wait_for_token; /* 0 = wait for first token to be seen, < 0 stop super/sub script immediately, == GIZA_TOKEN_CB wait until global ob_count drops below .ob_level */
+} ob_state_type;
 
 /**
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
  */
-void
+    void
 _giza_parse_string (const char *text, double *width, double *height, void (*action)(const char *, double *, double *))
 {
-  yyscan_t scanner;
-  int stop = 0, token, chunkLength, oldTrans;
-  int posInText = 0;
-  int insuper = 0;
-  int insub   = 0;
-  int lenstr  = strlen(text);
-  char processed[lenstr + 1];
-  processed[0] = '\0';
+  if( text==NULL ) {
+      _giza_error("giza_parse_string", "NULL string");
+      return;
+  }
+
+  const int            lenstr = strlen(text);
+  if( lenstr==0 )
+      return;
+
+  yyscan_t             scanner;
+  int                  stop      = 0, token, oldTrans;
+  int                  insuper   = 0, insub = 0;
+  int                  ob        = 0; /* count open/close bracket */
+  int                  bckSpace  = 0;
+  int                  nGlyph    = 0;
+  double               sina = sin(Dev[id].fontAngle);
+  double               cosa = cos(Dev[id].fontAngle);
+  char const*          token_txt;
+  ob_state_type        ob_super[MAX_NFONT], *cur_super = &ob_super[-1];/* keep track of superscript state */
+  ob_state_type        ob_sub[MAX_NFONT],   *cur_sub   = &ob_sub[-1]; /* keep track of subscript state */
+  glyph_pos_type       positions[lenstr];  /* keep track of each glyph's x,y position (for backing up characters) */
+  font_change_type     oldfont[MAX_NFONT],  *cur_font = &oldfont[-1]; /* keep track of font change state */
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
-  int lenfont = GIZA_FONT_LEN;
-  char oldfont[lenfont];
 
   /* initialise the scanner */
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
- 
+
   while(!stop)
-    {
-      token = yylex(scanner);
-      posInText += yyget_leng (scanner);;
-      /*printf("in parse string, token = %i pos = %i processed=\"%s\"\n",token,posInText,processed); */
+  {
+      /* we can always do this - repeatedly overwriting the current top-of-symbol-stack's position
+         until the code below actually draws a symbol and increments nGlyph */
+      cairo_get_current_point(Dev[id].context, &positions[nGlyph].x, &positions[nGlyph].y);
+
+      /* Get current token from the scanner */
+      token      = yylex(scanner);
+      token_txt  = yyget_text(scanner);
+
+      /* If we found a special character sequence (e.g. "\Sun") this may be remapped to an actual symbol */
+      if( token==GIZA_TOKEN_REMAP ) {
+          giza_remapped_token_entry const* ptr = _giza_remap_token(token_txt);
+          token     = ptr->token;
+          token_txt = ptr->text;
+      }
+      /* Check if we need to do font, super- or subscript first-token-after-change checking:
+         if the first token after a change is not open bracket, the change
+         lasts only for the current glyph (if any)  [single character super-/subscript],
+         for font change we only keep a stack of nested font changes, not
+         'globals', which only last until the closing bracket of the current top-of-stack (if any) */
+      if( (cur_super>=ob_super) && cur_super->wait_for_token==0 )
+          cur_super->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+      if( cur_sub>=ob_sub   && cur_sub->wait_for_token==0 )
+          cur_sub->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+
+      if( cur_font>=oldfont && cur_font->wait_for_token==0 ) {
+          cur_font->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+          /* check if we need to 'forget' this font change state; if it was 'global' */
+          if( cur_font->wait_for_token==-1 /*it was a 'global font change'*/ &&
+              cur_font>oldfont /* there exists at least a previous state */ &&
+              (cur_font-1)->wait_for_token==GIZA_TOKEN_CB /* and that one is waiting for close bracket*/ )
+                /* basically forget current font state */
+                cur_font--;
+      }
 
       switch(token)
-        {
-        case GIZA_TOKEN_OB:
-        case GIZA_TOKEN_CB: /* ignore closing bracket! */
-          break;
-        case GIZA_TOKEN_SUPER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
+      {
+          case GIZA_TOKEN_OB:
+              ob++;
+              break;
+          case GIZA_TOKEN_CB:
+              ob--;
+              /* font change remains in effect until end of string or until close bracket, the latter only if the first token after
+                 font change was open bracket  */
+              if( (cur_font>=oldfont) && cur_font->wait_for_token==GIZA_TOKEN_CB && ob<=cur_font->ob_level ) {
+                  /* OK go back to old font */
+                  giza_set_font(cur_font->font);
+                  cur_font--;
+              }
+              /* Actual processing of closing bracket for super/sub is /after/ the switch statement
+                 because then it can be shared with single-token super/sub handling */
+              break;
 
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
+          /* Handle a Hershey symbol by replacing with its utf version (if any)
+             It's already verified by the lexer that the token is a valid Hershey number */
+          case GIZA_TOKEN_HERSHEY:
+              {
+                  action( _giza_lookup_hershey(atoi(token_txt))->utf, width, height );
+                  /* added new character to end of string so 'top of stack'
+                     for backing up is now restored to new end of string */
+                  bckSpace = nGlyph;
+              }
+              break;
+
+          /* Start of super/sub script. Mark the current level as waiting to check the next token;
+             if it's not open bracket, we must drop the superscript immediately after the first token */
+          case GIZA_TOKEN_SUPER:
+              if( cur_super<&ob_super[MAX_NFONT-1] ) {
+                  cur_super++;
+                  cur_super->ob_level       = ob;
+                  cur_super->wait_for_token = 0;
+                  _giza_start_super ();
+              } else {
+                  _giza_error("giza_parse_string", "Too many levels of super-script");
+              }
+              break;
+          case GIZA_TOKEN_SUB:
+              if( cur_sub<&ob_sub[MAX_NFONT-1] ) {
+                  cur_sub++;
+                  cur_sub->ob_level       = ob;
+                  cur_sub->wait_for_token = 0;
+                  _giza_start_sub ();
+              } else {
+                  _giza_error("giza_parse_string", "Too many levels of sub-script");
+              }
+              break;
+
+          /* raising/lowering works relative to current state */
+          case GIZA_TOKEN_RAISE:
+              if (insub > 0)
+              {
+                  _giza_stop_sub();
+                  insub -= 1;
+              }
+              else
+              {
+                  _giza_start_super();
+                  insuper += 1;
+              }
+              break;
+          case GIZA_TOKEN_LOWER:
+              if (insuper > 0)
+              {
+                  _giza_stop_super();
+                  insuper -= 1;
+              }
+              else
+              {
+                  _giza_start_sub();
+                  insub += 1;
+              }
+              break;
+
+          /* move to previous character position. If backed up before start of string
+             ignore silently. 
+             Note: in order to support having super + sub scripts appended
+                   to the same character you'll have to back up by *two*
+                   'characters': first backup up over the superscript, then
+                                 backing up to the baseline of the font
+                                 before the superscript was entered.
+                   It is as if ^, _, \u, \d act as glyphs too only they're
+                   not inked.
+             The upshot is that x^2\b\b_i renders nicely as proper x-i-squared */
+          case GIZA_TOKEN_BACKSPACE:
+              bckSpace -= 1;
+              if( bckSpace>=0 )
+                  cairo_move_to(Dev[id].context, positions[bckSpace].x, positions[bckSpace].y);
+              break;
+
+          /* Handle change of font! The lexer already verified it's a /valid/ font specifier */
+          case GIZA_TOKEN_FONT:
+              if ( cur_font<&oldfont[MAX_NFONT-1] )
+              {
+                  /* new font change state */
+                  cur_font++;
+                  cur_font->ob_level       = ob;
+                  cur_font->wait_for_token = 0;
+                  /* save font */
+                  giza_get_font(cur_font->font, GIZA_FONT_LEN);
+              } else {
+                  _giza_error("giza_parse_string", "Too many nested levels of font changes");
+                  break;
+              }
+              switch ( tolower(*token_txt) )
+              {
+                  case 'b': /* bold */
+                      _giza_switch_font (5);
+                      break;
+                  case 's': /* script */
+                      _giza_switch_font (4);
+                      break;
+                  case 'i': /* italic */
+                      _giza_switch_font (3);
+                      break;
+                  case 'r': /* roman */
+                      _giza_switch_font (2);
+                      break;
+                  case 'n': /* normal */
+                      _giza_switch_font (1);
+                      break;
+              }
+              break;
+
+          /* Draw PGPLOT marker \mnn The lexer already verified it's a /valid/ marker number,
+             i.e. 1 <= nn <= 31 */
+          case GIZA_TOKEN_MARKER:
+              {
+                  /* get current marker height */
+                  double markerHeight;
+                  _giza_get_markerheight(&markerHeight);
+
+                  /* extract the symbol number following the \m */
+                  int const number = atoi( token_txt );
+
+                  /* either draw the symbol or increment the width */
+                  if (*width < 0.) {
+                      double dx = 0.75*markerHeight;
+                      double dy = -0.5*markerHeight;
+                      _giza_draw_symbol_device(positions[nGlyph].x + dx*cosa + dy*sina,
+                                               positions[nGlyph].y + dx*sina + dy*cosa,
+                                               number);
+                      cairo_move_to(Dev[id].context, positions[nGlyph].x + 2.*dx*cosa, positions[nGlyph].y + 2.*dx*sina); /* restore pen position */
+                  } else {
+                      /* return width if action is _giza_action_get_size */
+                      *width = *width + 1.5*markerHeight;
+                  }
+              }
+              break;
+
+          /* Replace the greek letter by its unicode representation.
+             The lexer already verified it's a /valid/ greek letter.
+             After that processing is like normal text */
+          case GIZA_TOKEN_GREEK:
+              token_txt = giza_greek_to_utf( *token_txt );
+          case GIZA_TOKEN_TEXT:
+              {
+                  /* added new character to end of string so 'top of stack'
+                     for backing up is now restored to new end of string */
+                  bckSpace = nGlyph;
+                  action(token_txt, width, height);
+              }
+              break;
+
+          /* end of string */
+          case GIZA_TOKEN_END:
               stop = 1;
               break;
-            }
-
-          /* Parse the brackets, i.e. get the chunk of text that needs to be superscript */
-          chunkLength = _giza_get_chunk (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-          
-          /* Perform the action on this chunk */
-          _giza_start_super ();
-          _giza_parse_string (processed, width, height, action);
-          _giza_stop_super ();
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
-          break;
-        case GIZA_TOKEN_SUB:
-          /* Perform action on text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
+          /* Ow dear, we got something we didn't expect! */
+          default:
+              _giza_error("giza_parse_string", "unhandled token %d (%s)", token, token_txt);
               stop = 1;
               break;
-            }
-
-          /* Parse the brackets */
-          chunkLength = _giza_get_chunk (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-
-          /* perform action on this chunk */
-          _giza_start_sub ();
-          _giza_parse_string (processed, width, height, action);
-          _giza_stop_sub ();
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
-          break;
-        case GIZA_TOKEN_RAISE:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-          if (insub > 0)
-            {
-             _giza_stop_sub();
-             insub -= 1;
-            }
-          else
-            {
-             _giza_start_super();
-             insuper += 1;
-            }
-          break;
-        case GIZA_TOKEN_LOWER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-          if (insuper > 0)
-            {
-             _giza_stop_super();
-             insuper -= 1;
-            }
-          else
-            {
-             _giza_start_sub();
-             insub += 1;
-            }
-          break;
-        case GIZA_TOKEN_FONT_NORMAL:
-        case GIZA_TOKEN_FONT_ROMAN:
-        case GIZA_TOKEN_FONT_ITALIC:
-        case GIZA_TOKEN_FONT_SCRIPT:
-        case GIZA_TOKEN_FONT_BOLD:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* Parse the brackets */
-          chunkLength = _giza_get_chunk_fontchange (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-          
-          /* save font */
-          giza_get_font(oldfont,lenfont);
-
-          /* perform action on this chunk */
-          switch (token)
-            {
-            case GIZA_TOKEN_FONT_BOLD:
-              _giza_switch_font (5);
-              break;
-            case GIZA_TOKEN_FONT_SCRIPT:
-              _giza_switch_font (4);
-              break;
-            case GIZA_TOKEN_FONT_ITALIC:
-              _giza_switch_font (3);
-              break;
-            case GIZA_TOKEN_FONT_ROMAN:
-              _giza_switch_font (2);
-              break;
-            case GIZA_TOKEN_FONT_NORMAL:
-              _giza_switch_font (1);
-              break;
-            }
-          _giza_parse_string (processed, width, height, action);
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          /* restore font */
-          giza_set_font(oldfont);
-
-          processed[0] = '\0';
-          break;
-        case GIZA_TOKEN_MARKER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* get current marker height */
-          double markerHeight;
-          _giza_get_markerheight(&markerHeight);
-
-          /* extract the symbol number from in front of the \m */
-          int number;
-          sscanf(text+posInText,"%i",&number);
-          
-          /* 
-           * get the length of the string containing the number 
-           * so we know how many characters we have processed
-           */
-          char temp[4];
-          sprintf(temp,"%i",number);
-          chunkLength = strlen(temp);
-          
-          /* either draw the symbol or increment the width */
-          if (*width < 0.) {
-             double xp, yp;
-             double sina = sin(Dev[id].fontAngle);
-             double cosa = cos(Dev[id].fontAngle);
-             double dx = 0.75*markerHeight;
-             double dy = -0.5*markerHeight;
-             cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
-             _giza_draw_symbol_device(xp + dx*cosa + dy*sina, yp + dx*sina + dy*cosa, number);
-             cairo_move_to(Dev[id].context, xp + 2.*dx*cosa, yp + 2.*dx*sina); /* restore pen position */
-
-          } else {
-             /* return width if action is _giza_action_get_size */
-             *width = *width + 1.5*markerHeight;
-          }
-          
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
-          break;
-
-        case GIZA_TOKEN_END:
-          stop = 1;
-          break;
-        default:
-          _giza_add_token_to_string (processed, scanner, token);
-          break;
-        }
-    }
+      }
+      /* After having dealt with a token check if we need to drop super/sub/font immediately */
+      /* did the closing bracket mark end-of-superscript?
+         wait_for_token == CLOSE_BRACKET? then wait for level to fall below that, if == -1, drop immediately */
+      if( (cur_super>=ob_super) && ((cur_super->wait_for_token==GIZA_TOKEN_CB && ob<=cur_super->ob_level) || cur_super->wait_for_token==-1) ) {
+          _giza_stop_super();
+          cur_super--;
+      }
+      /* did the closing bracket mark end-of-subscript? */
+      if( (cur_sub>=ob_sub) && ((cur_sub->wait_for_token==GIZA_TOKEN_CB && ob<=cur_sub->ob_level) || cur_sub->wait_for_token==-1) ) {
+          _giza_stop_sub();
+          cur_sub--;
+      }
+      /* Move on to next 'glyph' position */
+      nGlyph++;
+  }
   yylex_destroy (scanner);
 
-  /* Perform action on the last section of text */
-  action (processed, width, height);
-
   _giza_set_trans (oldTrans);
+
+  /* In case we broke from the loop but there's font change still in effect
+     switch back to the font we started with */
+  if( cur_font>=oldfont )
+      giza_set_font( oldfont[0].font );
 }
 
-/**
- * Adds the utf-8 character representation of token to string.
- */
-static void
-_giza_add_token_to_string (char *string, yyscan_t scanner, int token)
-{
-  switch (token)
-    {
-     case GIZA_TOKEN_OTHER: /* print the ascii or unicode char */
-       strcat (string, yyget_text (scanner));
-       break;
-     case GIZA_TOKEN_TIMES:
-       strcat (string, "×");
-       break;
-     case GIZA_TOKEN_ALPHA: 
-       strcat (string, "α");
-       break;
-     case GIZA_TOKEN_BETA: 
-       strcat (string, "β");
-       break;
-     case GIZA_TOKEN_GAMMA: 
-       strcat (string, "γ");
-       break;
-     case GIZA_TOKEN_DELTA: 
-       strcat (string, "δ");
-       break;
-     case GIZA_TOKEN_EPSILON: 
-       strcat (string, "ε");
-       break;
-     case GIZA_TOKEN_ZETA: 
-       strcat (string, "ζ");
-       break;
-     case GIZA_TOKEN_ETA: 
-       strcat (string, "η");
-       break;
-     case GIZA_TOKEN_THETA: 
-       strcat (string, "θ");
-       break;
-     case GIZA_TOKEN_IOTA: 
-       strcat (string, "ι");
-       break;
-     case GIZA_TOKEN_KAPPA: 
-       strcat (string, "κ");
-       break;
-     case GIZA_TOKEN_LAMBDA: 
-       strcat (string, "λ");
-       break;
-     case GIZA_TOKEN_MU: 
-       strcat (string, "μ");
-       break;
-     case GIZA_TOKEN_NU: 
-       strcat (string, "ν");
-       break;
-     case GIZA_TOKEN_XI: 
-       strcat (string, "ξ");
-       break;
-     case GIZA_TOKEN_OMICRON: 
-       strcat (string, "ο");
-       break;
-     case GIZA_TOKEN_PI: 
-       strcat (string, "π");
-       break;
-     case GIZA_TOKEN_RHO: 
-       strcat (string, "ρ");
-       break;
-     case GIZA_TOKEN_SIGMA: 
-       strcat (string, "σ");
-       break;
-     case GIZA_TOKEN_TAU: 
-       strcat (string, "τ");
-       break;
-     case GIZA_TOKEN_UPSILON: 
-       strcat (string, "υ");
-       break;
-     case GIZA_TOKEN_PHI: 
-       strcat (string, "φ");
-       break;
-     case GIZA_TOKEN_CHI: 
-       strcat (string, "χ");
-       break;
-     case GIZA_TOKEN_PSI: 
-       strcat (string, "ψ");
-       break;
-     case GIZA_TOKEN_OMEGA: 
-       strcat (string, "ω");
-       break;
-     case GIZA_TOKEN_BIGALPHA: 
-       strcat (string, "Α");
-       break;
-     case GIZA_TOKEN_BIGBETA: 
-       strcat (string, "Β");
-       break;
-     case GIZA_TOKEN_BIGGAMMA: 
-       strcat (string, "Γ");
-       break;
-     case GIZA_TOKEN_BIGDELTA: 
-       strcat (string, "Δ");
-       break;
-     case GIZA_TOKEN_BIGEPSILON: 
-       strcat (string, "Ε");
-       break;
-     case GIZA_TOKEN_BIGZETA: 
-       strcat (string, "Ζ");
-       break;
-     case GIZA_TOKEN_BIGETA: 
-       strcat (string, "Η");
-       break;
-     case GIZA_TOKEN_BIGTHETA: 
-       strcat (string, "Θ");
-       break;
-     case GIZA_TOKEN_BIGIOTA: 
-       strcat (string, "Ι");
-       break;
-     case GIZA_TOKEN_BIGKAPPA: 
-       strcat (string, "Κ");
-       break;
-     case GIZA_TOKEN_BIGLAMBDA: 
-       strcat (string, "Λ");
-       break;
-     case GIZA_TOKEN_BIGMU: 
-       strcat (string, "Μ");
-       break;
-     case GIZA_TOKEN_BIGNU: 
-       strcat (string, "Ν");
-       break;
-     case GIZA_TOKEN_BIGXI: 
-       strcat (string, "Ξ");
-       break;
-     case GIZA_TOKEN_BIGOMICRON: 
-       strcat (string, "Ο");
-       break;
-     case GIZA_TOKEN_BIGPI: 
-       strcat (string, "Π");
-       break;
-     case GIZA_TOKEN_BIGRHO: 
-       strcat (string, "Ρ");
-       break;
-     case GIZA_TOKEN_BIGSIGMA: 
-       strcat (string, "Σ");
-       break;
-     case GIZA_TOKEN_BIGTAU: 
-       strcat (string, "Τ");
-       break;
-     case GIZA_TOKEN_BIGUPSILON: 
-       strcat (string, "Υ");
-       break;
-     case GIZA_TOKEN_BIGPHI: 
-       strcat (string, "Φ");
-       break;
-     case GIZA_TOKEN_BIGCHI: 
-       strcat (string, "Χ");
-       break;
-     case GIZA_TOKEN_BIGPSI: 
-       strcat (string, "Ψ");
-       break;
-     case GIZA_TOKEN_BIGOMEGA: 
-       strcat (string, "Ω");
-       break;
-     case GIZA_TOKEN_INTEGRAL:
-       strcat (string, "∫");
-       break;
-     case GIZA_TOKEN_NABLA:
-       strcat (string, "∇");
-       break;
-     case GIZA_TOKEN_ODOT:
-       strcat (string, "⊙");
-       break;
-     case GIZA_TOKEN_BACKSLASH:
-       strcat (string, "\\");
-       break;
-     case GIZA_TOKEN_UNDERSCORE:
-       strcat (string, "_");
-       break;
-     case GIZA_TOKEN_HAT:
-       strcat (string, "^");
-       break;
-     case GIZA_TOKEN_CURLYOPEN:
-       strcat (string, "{");
-       break;
-     case GIZA_TOKEN_CURLYCLOSE:
-       strcat (string, "}");
-       break;
-     default:
-       break;
-    }
-}
 

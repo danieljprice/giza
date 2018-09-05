@@ -247,7 +247,6 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   _giza_init_save ();
   giza_set_clipping(1);
   /*_giza_stroke();*/
-  
   return _giza_device_id;
 }
 
@@ -383,6 +382,9 @@ _giza_resize_device (int width, int height)
     case GIZA_DEVICE_XW:
       _giza_change_size_xw (width + 40, height + 40);
       _giza_init_norm ();
+      /* Must also adjust panel size in case of resized surface*/
+      Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
+      Dev[id].panelheight = Dev[id].height / Dev[id].ny;
       double ch;
       giza_get_character_height(&ch);
       giza_set_character_height(ch);

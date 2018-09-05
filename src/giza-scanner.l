@@ -29,798 +29,414 @@
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
+#include "giza-io-private.h"
 #include "giza-private.h"
 #include "giza-transforms-private.h"
 #include "giza-drivers-private.h"
 #include "giza-text-private.h"
+#include "giza-hershey-to-utf.h"
 #include "giza.h"
 #include <string.h>
 #include <math.h>
+#include <ctype.h>
 
-#define GIZA_TOKEN_ERROR  0
-#define GIZA_TOKEN_END    1
-#define GIZA_TOKEN_SUPER  2
-#define GIZA_TOKEN_SUB    3
-#define GIZA_TOKEN_OB     4
-#define GIZA_TOKEN_CB     5
-#define GIZA_TOKEN_TIMES  6
-#define GIZA_TOKEN_OTHER  7
-#define GIZA_TOKEN_RAISE  8
-#define GIZA_TOKEN_LOWER  9
-#define GIZA_TOKEN_INTEGRAL 10
-#define GIZA_TOKEN_NABLA 11
 
-#define GIZA_TOKEN_FONT_NORMAL 12
-#define GIZA_TOKEN_FONT_ROMAN 13
-#define GIZA_TOKEN_FONT_ITALIC 14
-#define GIZA_TOKEN_FONT_SCRIPT 15
-#define GIZA_TOKEN_FONT_BOLD 16
+#define GIZA_TOKEN_END         1
+#define GIZA_TOKEN_SUPER       2
+#define GIZA_TOKEN_SUB         3
+#define GIZA_TOKEN_OB          4
+#define GIZA_TOKEN_CB          5
+#define GIZA_TOKEN_RAISE       8
+#define GIZA_TOKEN_LOWER       9
 
-#define GIZA_TOKEN_ALPHA   21
-#define GIZA_TOKEN_BETA    22
-#define GIZA_TOKEN_GAMMA   23
-#define GIZA_TOKEN_DELTA   24
-#define GIZA_TOKEN_EPSILON 25
-#define GIZA_TOKEN_ZETA    26
-#define GIZA_TOKEN_ETA     27
-#define GIZA_TOKEN_THETA   28
-#define GIZA_TOKEN_IOTA    29
-#define GIZA_TOKEN_KAPPA   30
-#define GIZA_TOKEN_LAMBDA  31
-#define GIZA_TOKEN_MU      32
-#define GIZA_TOKEN_NU      33
-#define GIZA_TOKEN_XI      34
-#define GIZA_TOKEN_OMICRON 35
-#define GIZA_TOKEN_PI      36
-#define GIZA_TOKEN_RHO     37
-#define GIZA_TOKEN_SIGMA   38
-#define GIZA_TOKEN_TAU     39
-#define GIZA_TOKEN_UPSILON 40
-#define GIZA_TOKEN_PHI     41
-#define GIZA_TOKEN_CHI     42
-#define GIZA_TOKEN_PSI     43
-#define GIZA_TOKEN_OMEGA   44
 
-#define GIZA_TOKEN_BIGALPHA   45
-#define GIZA_TOKEN_BIGBETA    46
-#define GIZA_TOKEN_BIGGAMMA   47
-#define GIZA_TOKEN_BIGDELTA   48
-#define GIZA_TOKEN_BIGEPSILON 49
-#define GIZA_TOKEN_BIGZETA    50
-#define GIZA_TOKEN_BIGETA     51
-#define GIZA_TOKEN_BIGTHETA   52
-#define GIZA_TOKEN_BIGIOTA    53
-#define GIZA_TOKEN_BIGKAPPA   54
-#define GIZA_TOKEN_BIGLAMBDA  55
-#define GIZA_TOKEN_BIGMU      56
-#define GIZA_TOKEN_BIGNU      57
-#define GIZA_TOKEN_BIGXI      58
-#define GIZA_TOKEN_BIGOMICRON 59
-#define GIZA_TOKEN_BIGPI      60
-#define GIZA_TOKEN_BIGRHO     61
-#define GIZA_TOKEN_BIGSIGMA   62
-#define GIZA_TOKEN_BIGTAU     63
-#define GIZA_TOKEN_BIGUPSILON 64
-#define GIZA_TOKEN_BIGPHI     65
-#define GIZA_TOKEN_BIGCHI     66
-#define GIZA_TOKEN_BIGPSI     67
-#define GIZA_TOKEN_BIGOMEGA   68
+#define GIZA_TOKEN_FONT        110
+#define GIZA_TOKEN_HERSHEY     111
+#define GIZA_TOKEN_MARKER      112
+#define GIZA_TOKEN_GREEK       113
 
-#define GIZA_TOKEN_ODOT 69
-#define GIZA_TOKEN_MARKER 70
-#define GIZA_TOKEN_BACKSLASH 71
-#define GIZA_TOKEN_UNDERSCORE 72
-#define GIZA_TOKEN_HAT 73
-#define GIZA_TOKEN_CURLYOPEN 74
-#define GIZA_TOKEN_CURLYCLOSE 75
+#define GIZA_TOKEN_BACKSPACE   120
+#define GIZA_TOKEN_REMAP       121
 
-#define GIZA_SCALE_SUPERS 0.65
-#define GIZA_RAISE_SUPERS 0.4
-#define GIZA_SCALE_SUBS   0.65
-#define GIZA_LOWER_SUBS   0.2
+#define GIZA_TOKEN_TEXT        130
 
-static void _giza_add_token_to_string (char *string, yyscan_t scanner, int token);
-static int _giza_get_chunk (const char *text);
+/* the token remapper can only be included after the tokens have been defined */
+#include "giza-token-remapper.h"
+
+/* Map single character to greek letter according to PGPLOT grsyds.f */
+/* ABGDEZYHIKLMNCOPRSTUFXQWabgdezyhiklmncoprstufxqw */
+static char const* const giza_greek_alphabet      = "ABGDEZYHIKLMNCOPRSTUFXQWabgdezyhiklmncoprstufxqw";
+static char const* const giza_greek_to_utf_data[] = {
+    /* Upper case */
+    "\u0391", "\u0392", "\u0393", "\u0394", "\u0395", "\u0396", "\u0397", "\u0398",
+    "\u0399", "\u039a", "\u039b", "\u039c", "\u039d", "\u039e", "\u039f", "\u03a0",
+    "\u03a1", "\u03a3", "\u03a4", "\u03a5", "\u03a6", "\u03a7", "\u03a8", "\u03a9",
+    /* and lower case */
+    "\u03b1", "\u03b2", "\u03b3", "\u03b4", "\u03b5", "\u03b6", "\u03b7", "\u03b8",
+    "\u03b9", "\u03ba", "\u03bb", "\u03bc", "\u03bd", "\u03be", "\u03bf", "\u03c0",
+    "\u03c1", "\u03c3", "\u03c4", "\u03c5", "\u03c6", "\u03c7", "\u03c8", "\u03c9"
+};
+
+/* Assume the caller has verified that letter is a /valid/ greek letter! */
+static char const*                       _giza_greek_to_utf(char letter);
+/* May return NULL if number is not a known Hershey symbol or the string in
+  <special> is not found in the remapped token lookup table */
+static giza_hershey_to_utf_entry const*  _giza_lookup_hershey(int number);
+static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 
 %}
 
-SUPER    \136
-SUB      \137
-RAISE    "\\u"
-LOWER    "\\d"
-OB       \173 
-CB       \175
-TIMES    "\\times"|"\\x"
-INTEGRAL "\\int"|"\\(2268)"
-NABLA    "\\nabla"|"\\(2266)"
-MARKER   "\\m"
 
-BACKSLASH "\\\\"
-UNDERSCORE "\\_"
-HAT "\\^"
-CURLYOPEN "\\{"
-CURLYCLOSE "\\}"
-
-FONT_NORMAL "\\fn"
-FONT_ROMAN "\\fr"|"\\rm"
-FONT_ITALIC "\\fi"|"\\it"
-FONT_SCRIPT "\\fs"|"\\cal"
-FONT_BOLD "\\fb"|"\\bf"
-
-ALPHA    "\\ga"|"\\alpha"
-BETA     "\\gb"|"\\beta"
-GAMMA    "\\gg"|"\\gamma"
-DELTA    "\\gd"|"\\delta"
-EPSILON  "\\ge"|"\\epsilon"
-ZETA     "\\gz"|"\\zeta"
-ETA      "\\gy"|"\\eta"
-THETA    "\\gh"|"\\theta"
-IOTA     "\\gi"|"\\iota"
-KAPPA    "\\gk"|"\\kappa"
-LAMBDA   "\\gl"|"\\lambda"
-MU       "\\gm"|"\\mu"
-NU       "\\gn"|"\\nu"
-XI       "\\gc"|"\\xi"
-OMICRON  "\\go"|"\\omicron"
-PI       "\\gp"|"\\pi"
-RHO      "\\gr"|"\\rho"
-SIGMA    "\\gs"|"\\sigma"
-TAU      "\\gt"|"\\tau"
-UPSILON  "\\gu"|"\\upsilon"
-PHI      "\\gf"|"\\phi"
-CHI      "\\gx"|"\\chi"
-PSI      "\\gq"|"\\psi"
-OMEGA    "\\gw"|"\\omega"
-
-BIGALPHA   "\\gA"|"\\Alpha"
-BIGBETA    "\\gB"|"\\Beta"
-BIGGAMMA   "\\gG"|"\\Gamma"
-BIGDELTA   "\\gD"|"\\Delta"
-BIGEPSILON "\\gE"|"\\Epsilon"
-BIGZETA    "\\gZ"|"\\Zeta"
-BIGETA     "\\gY"|"\\Eta"
-BIGTHETA   "\\gH"|"\\Theta"
-BIGIOTA    "\\gI"|"\\Iota"
-BIGKAPPA   "\\gK"|"\\Kappa"
-BIGLAMBDA  "\\gL"|"\\Lambda"
-BIGMU      "\\gM"|"\\Mu"
-BIGNU      "\\gN"|"\\Nu"
-BIGXI      "\\gC"|"\\Xi"
-BIGOMICRON "\\gO"|"\\Omicron"
-BIGPI      "\\gP"|"\\Pi"
-BIGRHO     "\\gR"|"\\Rho"
-BIGSIGMA   "\\gS"|"\\Sigma"
-BIGTAU     "\\gT"|"\\Tau"
-BIGUPSILON "\\gU"|"\\Upsilon"
-BIGPHI     "\\gF"|"\\Phi"
-BIGCHI     "\\gX"|"\\Chi"
-BIGPSI     "\\gQ"|"\\Psi"
-BIGOMEGA   "\\gW"|"\\Omega"
-ODOT       "\\odot"|"\\Sun"|"\\(2281)"
-
-OTHER  [\0-\135]|[\138-\172]|[\174]|[\176-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
-PRINT  {FONT_NORMAL}|{FONT_ROMAN}|{FONT_ITALIC}|{FONT_SCRIPT}|{FONT_BOLD}|{BACKSLASH}|{UNDERSCORE}|{HAT}|{CURLYOPEN}|{CURLYCLOSE}|{TIMES}|{ODOT}|{INTEGRAL}|{NABLA}|{ALPHA}|{BETA}|{GAMMA}|{DELTA}|{EPSILON}|{ZETA}|{ETA}|{THETA}|{IOTA}|{KAPPA}|{LAMBDA}|{MU}|{NU}|{XI}|{OMICRON}|{PI}|{RHO}|{SIGMA}|{TAU}|{UPSILON}|{PHI}|{CHI}|{PSI}|{OMEGA}|{BIGALPHA}|{BIGBETA}|{BIGGAMMA}|{BIGDELTA}|{BIGEPSILON}|{BIGZETA}|{BIGETA}|{BIGTHETA}|{BIGIOTA}|{BIGKAPPA}|{BIGLAMBDA}|{BIGMU}|{BIGNU}|{BIGXI}|{BIGOMICRON}|{BIGPI}|{BIGRHO}|{BIGSIGMA}|{BIGTAU}|{BIGUPSILON}|{BIGPHI}|{BIGCHI}|{BIGPSI}|{BIGOMEGA}|{OTHER}
-ANY    [\0-\x7F]|[\xC2-\xDF][\x80-\xBF]|\xE0[\xA0-\xBF][\x80-\xBF]|[\xE1-\xEF][\x80-\xBF][\x80-\xBF]
+%x FONT HERSHEY MARKER GREEK ESCAPE
 
 %%
 
-{SUPER} { return GIZA_TOKEN_SUPER; }
+<INITIAL>"\\"[uU]     { return GIZA_TOKEN_RAISE; }
+<INITIAL>"\\"[dD]     { return GIZA_TOKEN_LOWER; }
+<INITIAL>"\\"[bB]     { return GIZA_TOKEN_BACKSPACE; }
 
-{SUB}   { return GIZA_TOKEN_SUB; }
+<INITIAL>"\\"[fF]     { BEGIN(FONT); }
+<FONT>[nrisbNRISB]    { BEGIN(INITIAL); return GIZA_TOKEN_FONT; };
+<FONT>.               { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid font specifier '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 
-{RAISE} { return GIZA_TOKEN_RAISE; }
+<INITIAL>"\\("        { BEGIN(HERSHEY); }
+<HERSHEY>[0-9]{4}")"  { if( _giza_lookup_hershey(atoi(yytext)) ) { BEGIN(INITIAL); return GIZA_TOKEN_HERSHEY; } REJECT; }
+<HERSHEY>[^)]*        { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid Hershey code '%s'", yytext); return GIZA_TOKEN_TEXT; }
 
-{LOWER}   { return GIZA_TOKEN_LOWER; }
+<INITIAL>"\\"[mM]     { BEGIN(MARKER); }
+<MARKER>[0-9]{1,2}    { const int marker = atoi(yytext); if( marker>=1 && marker<=31 ) { BEGIN(INITIAL); return GIZA_TOKEN_MARKER; } REJECT; }
+<MARKER>.             { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid marker '%s'", yytext); return GIZA_TOKEN_TEXT; }
 
-{OB}    { return GIZA_TOKEN_OB; }
+<INITIAL>"\\"[gG]        { BEGIN(GREEK); }
+<GREEK>[ABGDEZYHIKLMNCOPRSTUFXQWabgdezyhiklmncoprstufxqw] { BEGIN(INITIAL); return GIZA_TOKEN_GREEK; }
+<GREEK>.              { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid greek letter '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 
-{CB}    { return GIZA_TOKEN_CB; }
+<INITIAL>"\\"         { BEGIN(ESCAPE); }
+<ESCAPE>[a-zA-Z]{2,}  { if( _giza_remap_token(yytext) ) { BEGIN(INITIAL); return GIZA_TOKEN_REMAP; } REJECT; }
+<ESCAPE>.             { BEGIN(INITIAL); return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 
-{OTHER} { return GIZA_TOKEN_OTHER; }
+<INITIAL>"^"          { return GIZA_TOKEN_SUPER; }
+<INITIAL>"_"          { return GIZA_TOKEN_SUB; }
+<INITIAL>"{"          { return GIZA_TOKEN_OB; }
+<INITIAL>"}"          { return GIZA_TOKEN_CB; }
 
-{FONT_NORMAL} { return GIZA_TOKEN_FONT_NORMAL; }
-{FONT_ROMAN} { return GIZA_TOKEN_FONT_ROMAN; }
-{FONT_ITALIC} { return GIZA_TOKEN_FONT_ITALIC; }
-{FONT_SCRIPT} { return GIZA_TOKEN_FONT_SCRIPT; }
-{FONT_BOLD} { return GIZA_TOKEN_FONT_BOLD; }
+<INITIAL>.            { return GIZA_TOKEN_TEXT; }
 
-{TIMES} { return GIZA_TOKEN_TIMES; }
-{INTEGRAL} { return GIZA_TOKEN_INTEGRAL; }
-{NABLA} { return GIZA_TOKEN_NABLA; }
-{ODOT} { return GIZA_TOKEN_ODOT; }
-{MARKER} { return GIZA_TOKEN_MARKER; }
-{BACKSLASH} { return GIZA_TOKEN_BACKSLASH; }
-{UNDERSCORE} { return GIZA_TOKEN_UNDERSCORE; }
-{HAT} { return GIZA_TOKEN_HAT; }
-{CURLYOPEN} { return GIZA_TOKEN_CURLYOPEN; }
-{CURLYCLOSE} { return GIZA_TOKEN_CURLYCLOSE; }
-
-{ALPHA}     { return GIZA_TOKEN_ALPHA; }
-{BETA}      { return GIZA_TOKEN_BETA; }
-{GAMMA}     { return GIZA_TOKEN_GAMMA; }
-{DELTA}     { return GIZA_TOKEN_DELTA; }
-{EPSILON}   { return GIZA_TOKEN_EPSILON; }
-{ZETA}      { return GIZA_TOKEN_ZETA; }
-{ETA}       { return GIZA_TOKEN_ETA; }
-{THETA}     { return GIZA_TOKEN_THETA; }
-{IOTA}      { return GIZA_TOKEN_IOTA; }
-{KAPPA}     { return GIZA_TOKEN_KAPPA; }
-{LAMBDA}    { return GIZA_TOKEN_LAMBDA; }
-{MU}        { return GIZA_TOKEN_MU; }
-{NU}        { return GIZA_TOKEN_NU; }
-{XI}        { return GIZA_TOKEN_XI; }
-{OMICRON}   { return GIZA_TOKEN_OMICRON; }
-{PI}        { return GIZA_TOKEN_PI; }
-{RHO}       { return GIZA_TOKEN_RHO; }
-{SIGMA}     { return GIZA_TOKEN_SIGMA; }
-{TAU}       { return GIZA_TOKEN_TAU; }
-{UPSILON}   { return GIZA_TOKEN_UPSILON; }
-{PHI}       { return GIZA_TOKEN_PHI; }
-{CHI}       { return GIZA_TOKEN_CHI; }
-{PSI}       { return GIZA_TOKEN_PSI; }
-{OMEGA}     { return GIZA_TOKEN_OMEGA; }
-
-{BIGALPHA}   { return GIZA_TOKEN_BIGALPHA; }
-{BIGBETA}    { return GIZA_TOKEN_BIGBETA; }
-{BIGGAMMA}   { return GIZA_TOKEN_BIGGAMMA; }
-{BIGDELTA}   { return GIZA_TOKEN_BIGDELTA; }
-{BIGEPSILON} { return GIZA_TOKEN_BIGEPSILON; }
-{BIGZETA}    { return GIZA_TOKEN_BIGZETA; }
-{BIGETA}     { return GIZA_TOKEN_BIGETA; }
-{BIGTHETA}   { return GIZA_TOKEN_BIGTHETA; }
-{BIGIOTA}    { return GIZA_TOKEN_BIGIOTA; }
-{BIGKAPPA}   { return GIZA_TOKEN_BIGKAPPA; }
-{BIGLAMBDA}  { return GIZA_TOKEN_BIGLAMBDA; }
-{BIGMU}      { return GIZA_TOKEN_BIGMU; }
-{BIGNU}      { return GIZA_TOKEN_BIGNU; }
-{BIGXI}      { return GIZA_TOKEN_BIGXI; }
-{BIGOMICRON} { return GIZA_TOKEN_BIGOMICRON; }
-{BIGPI}      { return GIZA_TOKEN_BIGPI; }
-{BIGRHO}     { return GIZA_TOKEN_BIGRHO; }
-{BIGSIGMA}   { return GIZA_TOKEN_BIGSIGMA; }
-{BIGTAU}     { return GIZA_TOKEN_BIGTAU; }
-{BIGUPSILON} { return GIZA_TOKEN_BIGUPSILON; }
-{BIGPHI}     { return GIZA_TOKEN_BIGPHI; }
-{BIGCHI}     { return GIZA_TOKEN_BIGCHI; }
-{BIGPSI}     { return GIZA_TOKEN_BIGPSI; }
-{BIGOMEGA}   { return GIZA_TOKEN_BIGOMEGA; }
-
-
-<<EOF>> { return GIZA_TOKEN_END; }
-
-{ANY} { return GIZA_TOKEN_ERROR; }
+<<EOF>>               { return GIZA_TOKEN_END; }
 
 %%
 
-/**
- * Parses brackets in text, returns the length of the string contained in outermost brackets
- */
-static int
-_giza_get_chunk (const char *text)
-{
-  int openb = 0;
-  int length = 0;
-  int token, stop = 0;
 
-  /* initialise the scanner */
-  yyscan_t scanner;
-  yylex_init (&scanner);
-  yy_scan_string (text, scanner);
- 
-  while(!stop)
-    {
-      token = yylex(scanner);
-      length += yyget_leng (scanner);
-
-      switch (token)
-        {
-	  case GIZA_TOKEN_OB:
-	    ++openb;
-	    break;
-	  case GIZA_TOKEN_CB:
-	    --openb;
-	    break;
-          case GIZA_TOKEN_END:
-            stop = 1;
-            break;
-	  default:
-	    break;
-        }
-
-	if (openb < 1) 
-          {
-            yylex_destroy (scanner);
-            return length;
-          }
-    }
-   yylex_destroy (scanner);
-   return length; /* assumes whole string if unclosed open bracket */
+/* Functions that look up character sequences and return utf strings; 
+   giza is built upon cairo, which in turn handles utf Just Fine (tm) */
+giza_hershey_to_utf_entry const* _giza_lookup_hershey(int number) {
+    giza_hershey_to_utf_entry const* rv = giza_hershey_to_utf;
+    while( rv->hershey!=-1 && rv->hershey!=number )
+        rv++;
+    return (rv->hershey==-1 ? NULL : rv);
 }
 
-/**
- * Parses remaining text to determine the chunk of text to which the font 
- * change should apply. In this case the chunk is defined as the text 
- * remaining until an unmatched close bracket, or the end of the string, 
- * whichever comes first.
- */
-static int
-_giza_get_chunk_fontchange (const char *text)
-{
-  int openb = 0;
-  int length = 0;
-  int token, stop = 0;
+giza_remapped_token_entry const* _giza_remap_token(char const* special) {
+    giza_remapped_tokens_entry const* rv = giza_remappable_tokens;
 
-  /* initialise the scanner */
-  yyscan_t scanner;
-  yylex_init (&scanner);
-  yy_scan_string (text, scanner);
- 
-  while(!stop)
-    {
-      token = yylex(scanner);
-      length += yyget_leng (scanner);
-
-      switch (token)
-        {
-	  case GIZA_TOKEN_OB:
-	    ++openb;
-	    break;
-	  case GIZA_TOKEN_CB:
-	    --openb;
-	    break;
-          case GIZA_TOKEN_END:
-            stop = 1;
-            break;
-	  default:
-	    break;
-        }
-
-        if (openb < 0) {
-           stop = 1;
-        }
-    }
-   yylex_destroy (scanner);
-   if (strlen(text) < length) length = strlen(text);
-   return length; /* assumes whole string if unclosed open bracket */
+    while( rv->text && strcmp(rv->text, special) )
+        rv++;
+    return (rv->text==NULL ? NULL : &rv->replacement);
 }
+
+char const* giza_greek_to_utf(char letter) {
+    return giza_greek_to_utf_data[ strchr(giza_greek_alphabet, letter) - giza_greek_alphabet ];
+}
+
+
+#define MAX_NFONT 32
+typedef struct _font_change_type {
+    char    font[GIZA_FONT_LEN];
+    int     ob_level;       /* open bracket level at start of font change*/
+    int     wait_for_token; /* 0 = wait for first token to be seen, < 0 stop font change immediately, == GIZA_TOKEN_CB wait until ob_count drops below .ob_level */
+} font_change_type;
+
+typedef struct _glyph_pos_type {
+    double x, y;
+} glyph_pos_type;
+
+typedef struct _ob_state_type {
+    int   ob_level;       /* open bracket level at start of state */
+    int   wait_for_token; /* 0 = wait for first token to be seen, < 0 stop super/sub script immediately, == GIZA_TOKEN_CB wait until global ob_count drops below .ob_level */
+} ob_state_type;
 
 /**
  * Performs action on each chunk of text. If calculating size height and width get set to height and width of the text.
  */
-void
+    void
 _giza_parse_string (const char *text, double *width, double *height, void (*action)(const char *, double *, double *))
 {
-  yyscan_t scanner;
-  int stop = 0, token, chunkLength, oldTrans;
-  int posInText = 0;
-  int insuper = 0;
-  int insub   = 0;
-  int lenstr  = strlen(text);
-  char processed[lenstr + 1];
-  processed[0] = '\0';
+  if( text==NULL ) {
+      _giza_error("giza_parse_string", "NULL string");
+      return;
+  }
+
+  const int            lenstr = strlen(text);
+  if( lenstr==0 )
+      return;
+
+  yyscan_t             scanner;
+  int                  stop      = 0, token, oldTrans;
+  int                  insuper   = 0, insub = 0;
+  int                  ob        = 0; /* count open/close bracket */
+  int                  bckSpace  = 0;
+  int                  nGlyph    = 0;
+  double               sina = sin(Dev[id].fontAngle);
+  double               cosa = cos(Dev[id].fontAngle);
+  char const*          token_txt;
+  ob_state_type        ob_super[MAX_NFONT], *cur_super = &ob_super[-1];/* keep track of superscript state */
+  ob_state_type        ob_sub[MAX_NFONT],   *cur_sub   = &ob_sub[-1]; /* keep track of subscript state */
+  glyph_pos_type       positions[lenstr];  /* keep track of each glyph's x,y position (for backing up characters) */
+  font_change_type     oldfont[MAX_NFONT],  *cur_font = &oldfont[-1]; /* keep track of font change state */
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
-  int lenfont = GIZA_FONT_LEN;
-  char oldfont[lenfont];
 
   /* initialise the scanner */
   yylex_init (&scanner);
   yy_scan_string (text, scanner);
- 
+
   while(!stop)
-    {
-      token = yylex(scanner);
-      posInText += yyget_leng (scanner);;
-      /*printf("in parse string, token = %i pos = %i processed=\"%s\"\n",token,posInText,processed); */
+  {
+      /* we can always do this - repeatedly overwriting the current top-of-symbol-stack's position
+         until the code below actually draws a symbol and increments nGlyph */
+      cairo_get_current_point(Dev[id].context, &positions[nGlyph].x, &positions[nGlyph].y);
+
+      /* Get current token from the scanner */
+      token      = yylex(scanner);
+      token_txt  = yyget_text(scanner);
+
+      /* If we found a special character sequence (e.g. "\Sun") this may be remapped to an actual symbol */
+      if( token==GIZA_TOKEN_REMAP ) {
+          giza_remapped_token_entry const* ptr = _giza_remap_token(token_txt);
+          token     = ptr->token;
+          token_txt = ptr->text;
+      }
+      /* Check if we need to do font, super- or subscript first-token-after-change checking:
+         if the first token after a change is not open bracket, the change
+         lasts only for the current glyph (if any)  [single character super-/subscript],
+         for font change we only keep a stack of nested font changes, not
+         'globals', which only last until the closing bracket of the current top-of-stack (if any) */
+      if( (cur_super>=ob_super) && cur_super->wait_for_token==0 )
+          cur_super->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+      if( cur_sub>=ob_sub   && cur_sub->wait_for_token==0 )
+          cur_sub->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+
+      if( cur_font>=oldfont && cur_font->wait_for_token==0 ) {
+          cur_font->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+          /* check if we need to 'forget' this font change state; if it was 'global' */
+          if( cur_font->wait_for_token==-1 /*it was a 'global font change'*/ &&
+              cur_font>oldfont /* there exists at least a previous state */ &&
+              (cur_font-1)->wait_for_token==GIZA_TOKEN_CB /* and that one is waiting for close bracket*/ )
+                /* basically forget current font state */
+                cur_font--;
+      }
 
       switch(token)
-        {
-        case GIZA_TOKEN_OB:
-        case GIZA_TOKEN_CB: /* ignore closing bracket! */
-          break;
-        case GIZA_TOKEN_SUPER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
+      {
+          case GIZA_TOKEN_OB:
+              ob++;
+              break;
+          case GIZA_TOKEN_CB:
+              ob--;
+              /* font change remains in effect until end of string or until close bracket, the latter only if the first token after
+                 font change was open bracket  */
+              if( (cur_font>=oldfont) && cur_font->wait_for_token==GIZA_TOKEN_CB && ob<=cur_font->ob_level ) {
+                  /* OK go back to old font */
+                  giza_set_font(cur_font->font);
+                  cur_font--;
+              }
+              /* Actual processing of closing bracket for super/sub is /after/ the switch statement
+                 because then it can be shared with single-token super/sub handling */
+              break;
 
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
+          /* Handle a Hershey symbol by replacing with its utf version (if any)
+             It's already verified by the lexer that the token is a valid Hershey number */
+          case GIZA_TOKEN_HERSHEY:
+              {
+                  action( _giza_lookup_hershey(atoi(token_txt))->utf, width, height );
+                  /* added new character to end of string so 'top of stack'
+                     for backing up is now restored to new end of string */
+                  bckSpace = nGlyph;
+              }
+              break;
+
+          /* Start of super/sub script. Mark the current level as waiting to check the next token;
+             if it's not open bracket, we must drop the superscript immediately after the first token */
+          case GIZA_TOKEN_SUPER:
+              if( cur_super<&ob_super[MAX_NFONT-1] ) {
+                  cur_super++;
+                  cur_super->ob_level       = ob;
+                  cur_super->wait_for_token = 0;
+                  _giza_start_super ();
+              } else {
+                  _giza_error("giza_parse_string", "Too many levels of super-script");
+              }
+              break;
+          case GIZA_TOKEN_SUB:
+              if( cur_sub<&ob_sub[MAX_NFONT-1] ) {
+                  cur_sub++;
+                  cur_sub->ob_level       = ob;
+                  cur_sub->wait_for_token = 0;
+                  _giza_start_sub ();
+              } else {
+                  _giza_error("giza_parse_string", "Too many levels of sub-script");
+              }
+              break;
+
+          /* raising/lowering works relative to current state */
+          case GIZA_TOKEN_RAISE:
+              if (insub > 0)
+              {
+                  _giza_stop_sub();
+                  insub -= 1;
+              }
+              else
+              {
+                  _giza_start_super();
+                  insuper += 1;
+              }
+              break;
+          case GIZA_TOKEN_LOWER:
+              if (insuper > 0)
+              {
+                  _giza_stop_super();
+                  insuper -= 1;
+              }
+              else
+              {
+                  _giza_start_sub();
+                  insub += 1;
+              }
+              break;
+
+          /* move to previous character position. If backed up before start of string
+             ignore silently. 
+             Note: in order to support having super + sub scripts appended
+                   to the same character you'll have to back up by *two*
+                   'characters': first backup up over the superscript, then
+                                 backing up to the baseline of the font
+                                 before the superscript was entered.
+                   It is as if ^, _, \u, \d act as glyphs too only they're
+                   not inked.
+             The upshot is that x^2\b\b_i renders nicely as proper x-i-squared */
+          case GIZA_TOKEN_BACKSPACE:
+              bckSpace -= 1;
+              if( bckSpace>=0 )
+                  cairo_move_to(Dev[id].context, positions[bckSpace].x, positions[bckSpace].y);
+              break;
+
+          /* Handle change of font! The lexer already verified it's a /valid/ font specifier */
+          case GIZA_TOKEN_FONT:
+              if ( cur_font<&oldfont[MAX_NFONT-1] )
+              {
+                  /* new font change state */
+                  cur_font++;
+                  cur_font->ob_level       = ob;
+                  cur_font->wait_for_token = 0;
+                  /* save font */
+                  giza_get_font(cur_font->font, GIZA_FONT_LEN);
+              } else {
+                  _giza_error("giza_parse_string", "Too many nested levels of font changes");
+                  break;
+              }
+              switch ( tolower(*token_txt) )
+              {
+                  case 'b': /* bold */
+                      _giza_switch_font (5);
+                      break;
+                  case 's': /* script */
+                      _giza_switch_font (4);
+                      break;
+                  case 'i': /* italic */
+                      _giza_switch_font (3);
+                      break;
+                  case 'r': /* roman */
+                      _giza_switch_font (2);
+                      break;
+                  case 'n': /* normal */
+                      _giza_switch_font (1);
+                      break;
+              }
+              break;
+
+          /* Draw PGPLOT marker \mnn The lexer already verified it's a /valid/ marker number,
+             i.e. 1 <= nn <= 31 */
+          case GIZA_TOKEN_MARKER:
+              {
+                  /* get current marker height */
+                  double markerHeight;
+                  _giza_get_markerheight(&markerHeight);
+
+                  /* extract the symbol number following the \m */
+                  int const number = atoi( token_txt );
+
+                  /* either draw the symbol or increment the width */
+                  if (*width < 0.) {
+                      double dx = 0.75*markerHeight;
+                      double dy = -0.5*markerHeight;
+                      _giza_draw_symbol_device(positions[nGlyph].x + dx*cosa + dy*sina,
+                                               positions[nGlyph].y + dx*sina + dy*cosa,
+                                               number);
+                      cairo_move_to(Dev[id].context, positions[nGlyph].x + 2.*dx*cosa, positions[nGlyph].y + 2.*dx*sina); /* restore pen position */
+                  } else {
+                      /* return width if action is _giza_action_get_size */
+                      *width = *width + 1.5*markerHeight;
+                  }
+              }
+              break;
+
+          /* Replace the greek letter by its unicode representation.
+             The lexer already verified it's a /valid/ greek letter.
+             After that processing is like normal text */
+          case GIZA_TOKEN_GREEK:
+              token_txt = giza_greek_to_utf( *token_txt );
+          case GIZA_TOKEN_TEXT:
+              {
+                  /* added new character to end of string so 'top of stack'
+                     for backing up is now restored to new end of string */
+                  bckSpace = nGlyph;
+                  action(token_txt, width, height);
+              }
+              break;
+
+          /* end of string */
+          case GIZA_TOKEN_END:
               stop = 1;
               break;
-            }
-
-          /* Parse the brackets, i.e. get the chunk of text that needs to be superscript */
-          chunkLength = _giza_get_chunk (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-          
-          /* Perform the action on this chunk */
-          _giza_start_super ();
-          _giza_parse_string (processed, width, height, action);
-          _giza_stop_super ();
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
-          break;
-        case GIZA_TOKEN_SUB:
-          /* Perform action on text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
+          /* Ow dear, we got something we didn't expect! */
+          default:
+              _giza_error("giza_parse_string", "unhandled token %d (%s)", token, token_txt);
               stop = 1;
               break;
-            }
-
-          /* Parse the brackets */
-          chunkLength = _giza_get_chunk (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-
-          /* perform action on this chunk */
-          _giza_start_sub ();
-          _giza_parse_string (processed, width, height, action);
-          _giza_stop_sub ();
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
-          break;
-        case GIZA_TOKEN_RAISE:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-          if (insub > 0)
-            {
-             _giza_stop_sub();
-             insub -= 1;
-            }
-          else
-            {
-             _giza_start_super();
-             insuper += 1;
-            }
-          break;
-        case GIZA_TOKEN_LOWER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-          if (insuper > 0)
-            {
-             _giza_stop_super();
-             insuper -= 1;
-            }
-          else
-            {
-             _giza_start_sub();
-             insub += 1;
-            }
-          break;
-        case GIZA_TOKEN_FONT_NORMAL:
-        case GIZA_TOKEN_FONT_ROMAN:
-        case GIZA_TOKEN_FONT_ITALIC:
-        case GIZA_TOKEN_FONT_SCRIPT:
-        case GIZA_TOKEN_FONT_BOLD:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-          processed[0] = '\0';
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* Parse the brackets */
-          chunkLength = _giza_get_chunk_fontchange (text + posInText);
-          strncpy (processed, text + posInText, chunkLength);
-          processed[chunkLength] = '\0';
-          
-          /* save font */
-          giza_get_font(oldfont,lenfont);
-
-          /* perform action on this chunk */
-          switch (token)
-            {
-            case GIZA_TOKEN_FONT_BOLD:
-              _giza_switch_font (5);
-              break;
-            case GIZA_TOKEN_FONT_SCRIPT:
-              _giza_switch_font (4);
-              break;
-            case GIZA_TOKEN_FONT_ITALIC:
-              _giza_switch_font (3);
-              break;
-            case GIZA_TOKEN_FONT_ROMAN:
-              _giza_switch_font (2);
-              break;
-            case GIZA_TOKEN_FONT_NORMAL:
-              _giza_switch_font (1);
-              break;
-            }
-          _giza_parse_string (processed, width, height, action);
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          /* restore font */
-          giza_set_font(oldfont);
-
-          processed[0] = '\0';
-          break;
-        case GIZA_TOKEN_MARKER:
-          /* Perform action on the text so far parsed */
-          action (processed, width, height);
-
-          /* if end of string, do nothing */
-          if (posInText >= lenstr)
-            { 
-              stop = 1;
-              break;
-            }
-
-          /* get current marker height */
-          double markerHeight;
-          _giza_get_markerheight(&markerHeight);
-
-          /* extract the symbol number from in front of the \m */
-          int number;
-          sscanf(text+posInText,"%i",&number);
-          
-          /* 
-           * get the length of the string containing the number 
-           * so we know how many characters we have processed
-           */
-          char temp[4];
-          sprintf(temp,"%i",number);
-          chunkLength = strlen(temp);
-          
-          /* either draw the symbol or increment the width */
-          if (*width < 0.) {
-             double xp, yp;
-             double sina = sin(Dev[id].fontAngle);
-             double cosa = cos(Dev[id].fontAngle);
-             double dx = 0.75*markerHeight;
-             double dy = -0.5*markerHeight;
-             cairo_get_current_point(Dev[id].context, &xp, &yp); /* current pen position */
-             _giza_draw_symbol_device(xp + dx*cosa + dy*sina, yp + dx*sina + dy*cosa, number);
-             cairo_move_to(Dev[id].context, xp + 2.*dx*cosa, yp + 2.*dx*sina); /* restore pen position */
-
-          } else {
-             /* return width if action is _giza_action_get_size */
-             *width = *width + 1.5*markerHeight;
-          }
-          
-
-          /* restart the scanner at the new position! */
-          yylex_destroy (scanner);
-          yylex_init (&scanner);
-          yy_scan_string (text + posInText + chunkLength, scanner);
-
-          posInText += chunkLength;
-
-          processed[0] = '\0';
-          break;
-
-        case GIZA_TOKEN_END:
-          stop = 1;
-          break;
-        default:
-          _giza_add_token_to_string (processed, scanner, token);
-          break;
-        }
-    }
+      }
+      /* After having dealt with a token check if we need to drop super/sub/font immediately */
+      /* did the closing bracket mark end-of-superscript?
+         wait_for_token == CLOSE_BRACKET? then wait for level to fall below that, if == -1, drop immediately */
+      if( (cur_super>=ob_super) && ((cur_super->wait_for_token==GIZA_TOKEN_CB && ob<=cur_super->ob_level) || cur_super->wait_for_token==-1) ) {
+          _giza_stop_super();
+          cur_super--;
+      }
+      /* did the closing bracket mark end-of-subscript? */
+      if( (cur_sub>=ob_sub) && ((cur_sub->wait_for_token==GIZA_TOKEN_CB && ob<=cur_sub->ob_level) || cur_sub->wait_for_token==-1) ) {
+          _giza_stop_sub();
+          cur_sub--;
+      }
+      /* Move on to next 'glyph' position */
+      nGlyph++;
+  }
   yylex_destroy (scanner);
 
-  /* Perform action on the last section of text */
-  action (processed, width, height);
-
   _giza_set_trans (oldTrans);
+
+  /* In case we broke from the loop but there's font change still in effect
+     switch back to the font we started with */
+  if( cur_font>=oldfont )
+      giza_set_font( oldfont[0].font );
 }
 
-/**
- * Adds the utf-8 character representation of token to string.
- */
-static void
-_giza_add_token_to_string (char *string, yyscan_t scanner, int token)
-{
-  switch (token)
-    {
-     case GIZA_TOKEN_OTHER: /* print the ascii or unicode char */
-       strcat (string, yyget_text (scanner));
-       break;
-     case GIZA_TOKEN_TIMES:
-       strcat (string, "×");
-       break;
-     case GIZA_TOKEN_ALPHA: 
-       strcat (string, "α");
-       break;
-     case GIZA_TOKEN_BETA: 
-       strcat (string, "β");
-       break;
-     case GIZA_TOKEN_GAMMA: 
-       strcat (string, "γ");
-       break;
-     case GIZA_TOKEN_DELTA: 
-       strcat (string, "δ");
-       break;
-     case GIZA_TOKEN_EPSILON: 
-       strcat (string, "ε");
-       break;
-     case GIZA_TOKEN_ZETA: 
-       strcat (string, "ζ");
-       break;
-     case GIZA_TOKEN_ETA: 
-       strcat (string, "η");
-       break;
-     case GIZA_TOKEN_THETA: 
-       strcat (string, "θ");
-       break;
-     case GIZA_TOKEN_IOTA: 
-       strcat (string, "ι");
-       break;
-     case GIZA_TOKEN_KAPPA: 
-       strcat (string, "κ");
-       break;
-     case GIZA_TOKEN_LAMBDA: 
-       strcat (string, "λ");
-       break;
-     case GIZA_TOKEN_MU: 
-       strcat (string, "μ");
-       break;
-     case GIZA_TOKEN_NU: 
-       strcat (string, "ν");
-       break;
-     case GIZA_TOKEN_XI: 
-       strcat (string, "ξ");
-       break;
-     case GIZA_TOKEN_OMICRON: 
-       strcat (string, "ο");
-       break;
-     case GIZA_TOKEN_PI: 
-       strcat (string, "π");
-       break;
-     case GIZA_TOKEN_RHO: 
-       strcat (string, "ρ");
-       break;
-     case GIZA_TOKEN_SIGMA: 
-       strcat (string, "σ");
-       break;
-     case GIZA_TOKEN_TAU: 
-       strcat (string, "τ");
-       break;
-     case GIZA_TOKEN_UPSILON: 
-       strcat (string, "υ");
-       break;
-     case GIZA_TOKEN_PHI: 
-       strcat (string, "φ");
-       break;
-     case GIZA_TOKEN_CHI: 
-       strcat (string, "χ");
-       break;
-     case GIZA_TOKEN_PSI: 
-       strcat (string, "ψ");
-       break;
-     case GIZA_TOKEN_OMEGA: 
-       strcat (string, "ω");
-       break;
-     case GIZA_TOKEN_BIGALPHA: 
-       strcat (string, "Α");
-       break;
-     case GIZA_TOKEN_BIGBETA: 
-       strcat (string, "Β");
-       break;
-     case GIZA_TOKEN_BIGGAMMA: 
-       strcat (string, "Γ");
-       break;
-     case GIZA_TOKEN_BIGDELTA: 
-       strcat (string, "Δ");
-       break;
-     case GIZA_TOKEN_BIGEPSILON: 
-       strcat (string, "Ε");
-       break;
-     case GIZA_TOKEN_BIGZETA: 
-       strcat (string, "Ζ");
-       break;
-     case GIZA_TOKEN_BIGETA: 
-       strcat (string, "Η");
-       break;
-     case GIZA_TOKEN_BIGTHETA: 
-       strcat (string, "Θ");
-       break;
-     case GIZA_TOKEN_BIGIOTA: 
-       strcat (string, "Ι");
-       break;
-     case GIZA_TOKEN_BIGKAPPA: 
-       strcat (string, "Κ");
-       break;
-     case GIZA_TOKEN_BIGLAMBDA: 
-       strcat (string, "Λ");
-       break;
-     case GIZA_TOKEN_BIGMU: 
-       strcat (string, "Μ");
-       break;
-     case GIZA_TOKEN_BIGNU: 
-       strcat (string, "Ν");
-       break;
-     case GIZA_TOKEN_BIGXI: 
-       strcat (string, "Ξ");
-       break;
-     case GIZA_TOKEN_BIGOMICRON: 
-       strcat (string, "Ο");
-       break;
-     case GIZA_TOKEN_BIGPI: 
-       strcat (string, "Π");
-       break;
-     case GIZA_TOKEN_BIGRHO: 
-       strcat (string, "Ρ");
-       break;
-     case GIZA_TOKEN_BIGSIGMA: 
-       strcat (string, "Σ");
-       break;
-     case GIZA_TOKEN_BIGTAU: 
-       strcat (string, "Τ");
-       break;
-     case GIZA_TOKEN_BIGUPSILON: 
-       strcat (string, "Υ");
-       break;
-     case GIZA_TOKEN_BIGPHI: 
-       strcat (string, "Φ");
-       break;
-     case GIZA_TOKEN_BIGCHI: 
-       strcat (string, "Χ");
-       break;
-     case GIZA_TOKEN_BIGPSI: 
-       strcat (string, "Ψ");
-       break;
-     case GIZA_TOKEN_BIGOMEGA: 
-       strcat (string, "Ω");
-       break;
-     case GIZA_TOKEN_INTEGRAL:
-       strcat (string, "∫");
-       break;
-     case GIZA_TOKEN_NABLA:
-       strcat (string, "∇");
-       break;
-     case GIZA_TOKEN_ODOT:
-       strcat (string, "⊙");
-       break;
-     case GIZA_TOKEN_BACKSLASH:
-       strcat (string, "\\");
-       break;
-     case GIZA_TOKEN_UNDERSCORE:
-       strcat (string, "_");
-       break;
-     case GIZA_TOKEN_HAT:
-       strcat (string, "^");
-       break;
-     case GIZA_TOKEN_CURLYOPEN:
-       strcat (string, "{");
-       break;
-     case GIZA_TOKEN_CURLYCLOSE:
-       strcat (string, "}");
-       break;
-     default:
-       break;
-    }
-}
