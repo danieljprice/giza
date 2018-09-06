@@ -53,8 +53,6 @@
 <dd><a href="#giza_arrow_float">giza_arrow_float</a></dd>
 <dd><a href="#giza_box_time">giza_box_time</a></dd>
 <dd><a href="#giza_box_time_float">giza_box_time_float</a></dd>
-<dd><a href="#giza_box_time">giza_box_time</a></dd>
-<dd><a href="#giza_box_time_float">giza_box_time_float</a></dd>
 <dd><a href="#giza_box">giza_box</a></dd>
 <dd><a href="#giza_box_float">giza_box_float</a></dd>
 <dd><a href="#giza_circle">giza_circle</a></dd>
@@ -132,7 +130,6 @@
 <dd><a href="#giza_get_character_height_float">giza_get_character_height_float</a></dd>
 <dd><a href="#giza_get_character_size">giza_get_character_size</a></dd>
 <dd><a href="#giza_get_character_size_float">giza_get_character_size_float</a></dd>
-<dd><a href="#giza_set_colour_by_name">giza_set_colour_by_name</a></dd>
 <dd><a href="#giza_set_colour_index">giza_set_colour_index</a></dd>
 <dd><a href="#giza_get_colour_index">giza_get_colour_index</a></dd>
 <dd><a href="#giza_set_colour_representation">giza_set_colour_representation</a></dd>
@@ -443,7 +440,7 @@
 <tr><td width=10%>void</td><td width=20%>giza_arrow_float</td><td> (float x1, float y1, float x2, float y2) ;</tr></table><p>Same functionality as giza_arrow.</p>
 <h4>See Also:</h4><p><a href="#giza_arrow_float">giza_arrow_float</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_box_time</td><td> (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</tr></table><p>Same as giza_box, but labels axes with time-style labels i.e. DD HH MM SS as used in RA - DEC plots for Astronomy. If this option is used then giza_set_window should have been called with min/max given in seconds of time.</p>
+<tr><td width=10%>    void</td><td width=20%></td><td>     giza_box_time (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</tr></table><p>Same as giza_box, but labels axes with time-style labels i.e. DD HH MM SS as used in RA - DEC plots for Astronomy. If this option is used then giza_set_window should have been called with min/max given in seconds of time.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>xopt  :</td><td>As for giza_box, plus additional options below</td>
@@ -474,41 +471,7 @@
 <td>O :</td><td>omit leading zeros in numbers < 10, i.e. 3 instead of 03</td>
 </tr></table><h4>See Also:</h4><p><a href="#giza_box">giza_box</a> <a href="#giza_box_float">giza_box_float</a> <a href="#giza_box_time_float">giza_box_time_float</a> </p><h3><a name="giza_box_time_float">giza_box_time_float</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_box_time_float</td><td> (const char *xopt, float xtick, int nxsub, const char *yopt, float ytick, int nysub) ;</tr></table><p>Same functionality as giza_box_time but takes floats instead of doubles.</p>
-<h4>See Also:</h4><p><a href="#giza_box_time">giza_box_time</a> <a href="#giza_box">giza_box</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
-<table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_box_time</td><td> (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</tr></table><p>Same as giza_box, but labels axes with time-style labels i.e. DD HH MM SS as used in RA - DEC plots for Astronomy. If this option is used then giza_set_window should have been called with min/max given in seconds of time.</p>
-<h4>Input:</h4>
-<table class="api"><tr>
-<td>xopt  :</td><td>As for giza_box, plus additional options below</td>
-</tr><tr>
-<td>xtick :</td><td>The distance, in world coordinates, between major ticks on the x-axis. If 0.0 the interval is chosen by giza_box_time.</td>
-</tr><tr>
-<td>nxsub :</td><td>The number of minor ticks to be placed between each major tick. If 0 the number is chosen by giza_box.</td>
-</tr><tr>
-<td>yopt  :</td><td>Similar to xdraw_minticks but for the y-axis.</td>
-</tr><tr>
-<td>ytick :</td><td>Similar to xtick but for the y-axis.</td>
-</tr><tr>
-<td>nysub :</td><td>Similar to nxsub but for the y-axis.</td>
-</tr></table><h4>Options for xopt and yopt (same as for giza_box, plus those below):</h4>
-<table class="api"><tr>
-<td>Z :</td><td>for time-style labelling: (DD) HH MM SS.S</td>
-</tr><tr>
-<td>Y :</td><td>exclude the day field so labels are just HH MM SS.S (hours can be >24)</td>
-</tr><tr>
-<td>X :</td><td>keep HH field in range (0..24)</td>
-</tr><tr>
-<td>H :</td><td>use d,h,m,s superscripts to label numbers</td>
-</tr><tr>
-<td>D :</td><td>use degree o, minute ' and second '' superscripts to label numbers</td>
-</tr><tr>
-<td>F :</td><td>do not draw the first label (left- or bottom-most)</td>
-</tr><tr>
-<td>O :</td><td>omit leading zeros in numbers < 10, i.e. 3 instead of 03</td>
-</tr></table><h4>See Also:</h4><p><a href="#giza_box">giza_box</a> <a href="#giza_box_float">giza_box_float</a> <a href="#giza_box_time_float">giza_box_time_float</a> </p><h3><a name="giza_box_time_float">giza_box_time_float</a><hr></h3>
-<table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_box_time_float</td><td> (const char *xopt, float xtick, int nxsub, const char *yopt, float ytick, int nysub) ;</tr></table><p>Same functionality as giza_box_time but takes floats instead of doubles.</p>
+<tr><td width=10%>    void</td><td width=20%>giza_box_time_float</td><td> (const char *xopt, float xtick, int nxsub, const char *yopt, float ytick, int nysub) ;</tr></table><p>Same functionality as giza_box_time but takes floats instead of doubles.</p>
 <h4>See Also:</h4><p><a href="#giza_box_time">giza_box_time</a> <a href="#giza_box">giza_box</a> </p><h3><a name="giza_box">giza_box</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_box</td><td> (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</tr></table><p>Annotates the viewport with labelled axis/frame</p>
@@ -537,7 +500,9 @@
 </tr><tr>
 <td>S :</td><td>Draw minor ticks.</td>
 </tr><tr>
-<td>N :</td><td>Label the axis.</td>
+<td>N :</td><td>Label the axis (conventional, below/left viewport)</td>
+</tr><tr>
+<td>M :</td><td>Put labels in the unconvential location (above/right viewport)</td>
 </tr><tr>
 <td>V :</td><td>Orient numeric y labels vertically (only applies to left and right axis).</td>
 </tr><tr>
@@ -546,6 +511,10 @@
 <td>M :</td><td>Write numeric labels above x-axis or to right of y-axis instead of usual position</td>
 </tr><tr>
 <td>L :</td><td>Label axis logarithmically</td>
+</tr><tr>
+<td>I :</td><td>'Invert' tick marks, draw them outside the viewport</td>
+</tr><tr>
+<td>P :</td><td>extend ("Project") major tick marks outside the box (ignored if option I is specified).</td>
 </tr></table><h3><a name="giza_box_float">giza_box_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_box_float</td><td> (const char *xopt, float xtick, int nxsub, const char *yopt, float ytick, int nysub) ;</tr></table><p>Same functionality as giza_box but takes floats instead of doubles.</p>
@@ -1126,17 +1095,7 @@
 </tr></table><h3><a name="giza_get_character_size_float">giza_get_character_size_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_get_character_size_float</td><td> (int units, float *xch, float *ych) ;</tr></table><p>Same functionality as giza_get_character_size, but returns the values as floats</p>
-<h3><a name="giza_set_colour_by_name">giza_set_colour_by_name</a><hr></h3>
-<table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_set_colour_by_name</td><td> (int ci, const char *name, int *flag) ;</tr></table><p>Set colour representation by matching string to known colours</p>
-<h4>Input:</h4>
-<table class="api"><tr>
-<td>ci   :</td><td>Which colour index to set.</td>
-</tr><tr>
-<td>name :</td><td>string containing name of the colour Output:</td>
-</tr><tr>
-<td>flag :</td><td>flag to indicate whether or not the colour was matched</td>
-</tr></table><h3><a name="giza_set_colour_index">giza_set_colour_index</a><hr></h3>
+<h3><a name="giza_set_colour_index">giza_set_colour_index</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_set_colour_index</td><td> (int ci) ;</tr></table><p>Sets the colour to that represented by the colour index ci. Represented colours can be changed via giza_set_colour_representation.</p>
 <h4>Input:</h4>
@@ -1505,25 +1464,25 @@
 <tr><td width=10%>void</td><td width=20%>giza_restore</td><td> (void) ;</tr></table><p>Restores plot settings stored via giza_save</p>
 <h4>See Also:</h4><p><a href="#giza_save">giza_save</a> </p><h3><a name="giza_set_font">giza_set_font</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_set_font</td><td> (char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<tr><td width=10%>void</td><td width=20%>giza_set_font</td><td> (const char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>font :</td><td>the font family to be used.</td>
 </tr></table><h3><a name="giza_set_font_bold">giza_set_font_bold</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_set_font_bold</td><td> (char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<tr><td width=10%>void</td><td width=20%>giza_set_font_bold</td><td> (const char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>font :</td><td>the font family to be used.</td>
 </tr></table><h3><a name="giza_set_font_italic">giza_set_font_italic</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_set_font_italic</td><td> (char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<tr><td width=10%>void</td><td width=20%>giza_set_font_italic</td><td> (const char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>font :</td><td>the font family to be used.</td>
 </tr></table><h3><a name="giza_set_font_bold_italic">giza_set_font_bold_italic</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_set_font_bold_italic</td><td> (char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
+<tr><td width=10%>void</td><td width=20%>giza_set_font_bold_italic</td><td> (const char *font) ;</tr></table><p>Sets the current font to the family specified in font, otherwise it is unchanged.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>font :</td><td>the font family to be used.</td>
