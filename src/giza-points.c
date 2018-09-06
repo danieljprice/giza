@@ -632,6 +632,6 @@ _giza_drawchar (const char *str, double x, double y)
 void
 _giza_get_markerheight (double *mheight)
 {
-  *mheight = Dev[id].fontExtents.max_x_advance * 0.6;
+  *mheight = Dev[id].fontExtents.max_x_advance * 0.2;
   return;
 }
