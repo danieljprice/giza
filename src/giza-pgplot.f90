@@ -52,7 +52,7 @@ contains
                  giza_units_pixels
   implicit none
   integer, intent(in) :: pgplotunits
-  
+
   select case(pgplotunits)
   case(0)
      units_giza = giza_units_normalized
@@ -163,7 +163,7 @@ end function PGBAND
 subroutine PGBBUF
  use giza, only:giza_begin_buffer
  implicit none
- 
+
  call giza_begin_buffer()
 
 end subroutine PGBBUF
@@ -202,7 +202,7 @@ subroutine PGBIN (NBIN, X, DATA, CENTER)
     iflag = 1
  else
     iflag = 0
- endif 
+ endif
 
  call giza_histogram_binned(NBIN, X, DATA, iflag)
 
@@ -276,7 +276,7 @@ subroutine PGCONF (A, IDIM, JDIM, I1, I2, J1, J2, C1, C2, TR)
 end subroutine PGCONF
 
 !------------------------------------------------------------------------
-! Module: PGCONL -- label contour map of a 2D data array 
+! Module: PGCONL -- label contour map of a 2D data array
 ! Status: PARTIALLY IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGCONL (A, IDIM, JDIM, I1, I2, J1, J2, C, TR, LABEL, INTVAL, MININT)
@@ -289,7 +289,7 @@ subroutine PGCONL (A, IDIM, JDIM, I1, I2, J1, J2, C, TR, LABEL, INTVAL, MININT)
  real                      :: affine(6)
  integer, parameter  :: nc = 1
  real, dimension(nc) :: cc
- 
+
  cc(1) = C
  call convert_tr_to_affine(tr,affine)
  call giza_contour(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,cc,affine)
@@ -380,7 +380,7 @@ subroutine PGDRAW (X, Y)
  use giza, only:giza_draw
  implicit none
  real, intent(in) :: X, Y
- 
+
  call giza_draw(X, Y)
 
 end subroutine PGDRAW
@@ -392,9 +392,9 @@ end subroutine PGDRAW
 subroutine PGEBUF
  use giza, only:giza_end_buffer
  implicit none
- 
+
  call giza_end_buffer()
- 
+
 end subroutine PGEBUF
 
 !------------------------------------------------------------------------
@@ -404,9 +404,9 @@ end subroutine PGEBUF
 subroutine PGEND
  use giza, only:giza_close_device
  implicit none
- 
+
  call giza_close_device()
- 
+
 end subroutine PGEND
 
 !------------------------------------------------------------------------
@@ -430,9 +430,9 @@ end subroutine PGENV
 subroutine PGERAS
  use giza, only:giza_draw_background
  implicit none
- 
+
  call giza_draw_background()
- 
+
 end subroutine PGERAS
 
 !------------------------------------------------------------------------
@@ -445,7 +445,7 @@ subroutine PGERR1 (DIR, X, Y, E, T)
  real,    intent(in) :: X, Y, E
  real,    intent(in) :: T
  real, dimension(1) :: xi,yi,ei
-  
+
  xi(1) = x
  yi(1) = y
  ei(1) = e
@@ -494,7 +494,7 @@ subroutine PGERRY (N, X, Y1, Y2, T)
  integer, intent(in) :: N
  real,    intent(in) :: X(*), Y1(*), Y2(*)
  real,    intent(in) :: T
- 
+
  call giza_error_bars_y(N, X, Y1, Y2, T)
 
 end subroutine PGERRY
@@ -534,7 +534,7 @@ subroutine PGFUNX (FY, N, XMIN, XMAX, PGFLAG)
  integer, intent(in) :: N
  real,    intent(in) :: XMIN, XMAX
  integer, intent(in) :: PGFLAG
- 
+
  call giza_function_x(FY, N, XMIN, XMAX, PGFLAG)
 
 end subroutine PGFUNX
@@ -610,7 +610,7 @@ end subroutine PGHIST
 subroutine PGIDEN
  use giza, only:giza_print_id
  implicit none
- 
+
  call giza_print_id()
 
 end subroutine PGIDEN
@@ -667,7 +667,7 @@ end subroutine PGLCUR
 subroutine PGLDEV
  use giza, only:giza_print_device_list
  implicit none
- 
+
  call giza_print_device_list()
 
 end subroutine PGLDEV
@@ -790,7 +790,7 @@ integer function PGOPEN (DEVICE)
 ! print*,'giza units mm = ',giza_units_mm
 ! pgopen = giza_open_device_size(device,'giza',11.0,8.5,giza_units_inches)
  pgopen = giza_open_device(device,'giza')
- 
+
  call giza_set_colour_palette(giza_colour_palette_pgplot)
 
 end function PGOPEN
@@ -802,7 +802,7 @@ end function PGOPEN
 subroutine PGPAGE
  use giza, only:giza_change_page
  implicit none
- 
+
  call giza_change_page
 
 end subroutine PGPAGE
@@ -821,7 +821,7 @@ subroutine PGPANL(IX, IY)
 end subroutine PGPANL
 
 !------------------------------------------------------------------------
-! Module: PGPAP -- change the size of the view surface 
+! Module: PGPAP -- change the size of the view surface
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGPAP (WIDTH, ASPECT)
@@ -945,7 +945,7 @@ subroutine PGQCF (FONT)
  !--this is a setting for the PGPLOT frontend only
  !  (giza has much more general fonts than PGPLOT)
  !
- !  the value of pgfont is set by the call to PGSCF 
+ !  the value of pgfont is set by the call to PGSCF
  !
  FONT = pgfont
 
@@ -959,7 +959,7 @@ subroutine PGQCH (SIZE)
  use giza, only:giza_get_character_height
  implicit none
  real, intent(out) :: SIZE
- 
+
  call giza_get_character_height(SIZE)
 
 end subroutine PGQCH
@@ -999,7 +999,7 @@ subroutine PGQCLP(STATE)
  use giza, only:giza_get_clipping
  implicit none
  integer, intent(out) :: STATE
- 
+
  call giza_get_clipping(STATE)
 
 end subroutine PGQCLP
@@ -1067,7 +1067,7 @@ subroutine PGQFS (FS)
  use giza, only:giza_get_fill
  implicit none
  integer, intent(out) :: FS
- 
+
  call giza_get_fill(FS)
 
 end subroutine PGQFS
@@ -1165,7 +1165,7 @@ subroutine PGQLS (LS)
  use giza, only:giza_get_line_style
  implicit none
  integer, intent(out) :: LS
- 
+
  call giza_get_line_style(LS)
 
 end subroutine PGQLS
@@ -1179,7 +1179,7 @@ subroutine PGQLW (LW)
  implicit none
  integer, intent(out) :: LW
  real :: giza_lw
- 
+
  call giza_get_line_width(giza_lw)
  LW = int(2.*giza_lw)
 
@@ -1192,7 +1192,7 @@ end subroutine PGQLW
 subroutine PGQNDT(N)
  implicit none
  integer, intent(out) :: N
- 
+
  N = 1
 
 end subroutine PGQNDT
@@ -1218,7 +1218,7 @@ subroutine PGQTBG (TBCI)
  use giza, only:giza_get_text_background
  implicit none
  integer, intent(out) :: TBCI
- 
+
  call giza_get_text_background(TBCI)
 
 end subroutine PGQTBG
@@ -1263,11 +1263,11 @@ subroutine PGQVSZ (UNITS, X1, X2, Y1, Y2)
  implicit none
  integer, intent(in)  :: UNITS
  real,    intent(out) :: X1, X2, Y1, Y2
- 
+
  X1 = 0.
  Y1 = 0.
  call giza_get_paper_size(units_giza(UNITS),X2,Y2)
- 
+
 end subroutine PGQVSZ
 
 !------------------------------------------------------------------------
@@ -1349,7 +1349,7 @@ end subroutine PGSAH
 subroutine PGSAVE
  use giza, only:giza_save
  implicit none
- 
+
  call giza_save()
 
 end subroutine PGSAVE
@@ -1361,7 +1361,7 @@ end subroutine PGSAVE
 subroutine PGUNSA
  use giza, only:giza_restore
  implicit none
- 
+
  call giza_restore()
 
 end subroutine PGUNSA
@@ -1375,11 +1375,11 @@ subroutine PGSCF (FONT)
  use gizapgplot, only:pgfont
  implicit none
  integer, intent(in) :: FONT
- 
+
  select case(FONT)
- case(4) 
+ case(4)
     call giza_set_font('cursive')
- case(3) 
+ case(3)
     call giza_set_font_italic('times')
  case(2)
     call giza_set_font('times')
@@ -1390,7 +1390,7 @@ subroutine PGSCF (FONT)
  !--this is a setting for the PGPLOT frontend only
  !  (giza has much more general fonts than PGPLOT)
  !
- !  set pgfont so that query calls to PGQCF are successful 
+ !  set pgfont so that query calls to PGQCF are successful
  !
  pgfont = FONT
 
@@ -1404,7 +1404,7 @@ subroutine PGSCH (SIZE)
  use giza, only:giza_set_character_height
  implicit none
  real, intent(in) :: SIZE
- 
+
  call giza_set_character_height(SIZE)
 
 end subroutine PGSCH
@@ -1430,7 +1430,7 @@ subroutine PGSCIR(ICILO, ICIHI)
  use giza, only:giza_set_colour_index_range
  implicit none
  integer, intent(in) :: ICILO, ICIHI
- 
+
  call giza_set_colour_index_range(ICILO,ICIHI)
 
 end subroutine PGSCIR
@@ -1491,7 +1491,7 @@ subroutine PGSFS (FS)
  use giza, only:giza_set_fill
  implicit none
  integer, intent(in) :: FS
- 
+
  call giza_set_fill(FS)
 
 end subroutine PGSFS
@@ -1505,7 +1505,7 @@ subroutine PGSHLS (CI, CH, CL, CS)
  implicit none
  integer, intent(in) :: CI
  real,    intent(in) :: CH, CL, CS
- 
+
  call giza_set_colour_representation_hls(CI, CH, CL, CS)
 
 end subroutine PGSHLS
@@ -1556,10 +1556,10 @@ subroutine PGSLS (LS)
                 giza_ls_dash_dot_dot_dot
  implicit none
  integer, intent(in) :: LS
- 
+
  select case(LS)
  case(1)
-    call giza_set_line_style(giza_ls_solid) 
+    call giza_set_line_style(giza_ls_solid)
  case(2)
     call giza_set_line_style(giza_ls_short_dash)
  case(3)
@@ -1567,7 +1567,7 @@ subroutine PGSLS (LS)
  case(4)
     call giza_set_line_style(giza_ls_dot)
  case(5)
-    call giza_set_line_style(giza_ls_dash_dot_dot_dot) 
+    call giza_set_line_style(giza_ls_dash_dot_dot_dot)
  case(6) ! extension: we allow extra line styles beyond PGPLOT
     call giza_set_line_style(giza_ls_long_dash)
  case default
@@ -1584,9 +1584,9 @@ subroutine PGSLW (LW)
  use giza, only:giza_set_line_width
  implicit none
  integer, intent(in) :: LW
- 
+
  call giza_set_line_width(0.5 + 0.5*LW)
- 
+
 end subroutine PGSLW
 
 !------------------------------------------------------------------------
@@ -1597,7 +1597,7 @@ subroutine PGSTBG (TBCI)
  use giza, only:giza_set_text_background
  implicit none
  integer, intent(in) :: TBCI
- 
+
  call giza_set_text_background(TBCI)
 
 end subroutine PGSTBG
@@ -1643,7 +1643,7 @@ end subroutine PGSWIN
 
 !------------------------------------------------------------------------
 ! Module: PGTBOX -- draw frame and write (DD) HH MM SS.S labelling
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGTBOX (XOPT, XTICK, NXSUB, YOPT, YTICK, NYSUB)
  use giza, only:giza_box_time
@@ -1665,7 +1665,7 @@ subroutine PGTEXT (X, Y, TEXT)
  implicit none
  real,          intent(in) :: X, Y
  character*(*), intent(in) :: TEXT
- 
+
  call giza_text(X, Y, TEXT)
 
 end subroutine PGTEXT
@@ -1688,7 +1688,7 @@ end subroutine PGTICK
 subroutine PGUPDT
  use giza, only:giza_flush_buffer
  implicit none
- 
+
  call giza_flush_buffer()
 
 end subroutine PGUPDT
@@ -1730,7 +1730,7 @@ end subroutine PGVSIZ
 subroutine PGVSTD
  use giza, only:giza_set_viewport_default
  implicit none
- 
+
  call giza_set_viewport_default()
 
 end subroutine PGVSTD
@@ -1768,7 +1768,7 @@ end subroutine PGWNAD
 !------------------------------------------------------------------------
 subroutine PGADVANCE
  implicit none
- 
+
  call PGPAGE
 
 end subroutine PGADVANCE
@@ -1902,7 +1902,7 @@ subroutine PGVSIZE (XLEFT, XRIGHT, YBOT, YTOP)
  real, intent(in) :: XLEFT, XRIGHT, YBOT, YTOP
 
  call PGVSIZ(XLEFT, XRIGHT, YBOT, YTOP)
- 
+
 end subroutine PGVSIZE
 
 !------------------------------------------------------------------------

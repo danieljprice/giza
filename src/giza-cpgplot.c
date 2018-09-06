@@ -21,7 +21,7 @@
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
- 
+
 /*
  *  This file contains the cpgplot interface to giza
  *  so that giza can be used as a drop-in replacement
@@ -63,7 +63,7 @@ int units_giza(int pgplotunits)
      units = pgplotunits;
      break;
   }
-  
+
   return units;
 }
 
@@ -547,7 +547,7 @@ void cpgpanl(int nxc, int nyc)
  ***************************************************************/
 void cpgpap(float width, float aspect)
 {
- 
+
  giza_set_paper_size_float(GIZA_UNITS_INCHES,width,width*aspect);
 
 }
@@ -773,7 +773,7 @@ void cpgqlw(int *lw)
  ***************************************************************/
 void cpgqndt(int *n)
 {
-   *n = 1; 
+   *n = 1;
 }
 
 /***************************************************************
@@ -916,7 +916,7 @@ void cpgscf(int font)
    * set pgfont so that query calls to PGQCF are successful
    */
   pgfont = font;
-  
+
 }
 
 /***************************************************************
@@ -1083,7 +1083,7 @@ void cpgswin(float x1, float x2, float y1, float y2)
 
 /***************************************************************
  * cpgtbox -- draw frame and write (dd) hh mm ss.s labelling
- * Status: PARTIALLY IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgtbox(const char *xopt, float xtick, int nxsub, \
  const char *yopt, float ytick, int nysub)
