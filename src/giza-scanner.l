@@ -326,9 +326,9 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
                    not inked.
              The upshot is that x^2\b\b_i renders nicely as proper x-i-squared */
           case GIZA_TOKEN_BACKSPACE:
-              bckSpace -= 1;
               if( bckSpace>=0 )
                   cairo_move_to(Dev[id].context, positions[bckSpace].x, positions[bckSpace].y);
+              bckSpace -= 1;
               break;
 
           /* Handle change of font! The lexer already verified it's a /valid/ font specifier */
