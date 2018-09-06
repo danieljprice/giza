@@ -38,7 +38,7 @@
 int _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanc, const double *yanc, double *x, double *y, char *ch);
 void _giza_split_device_string (const char *deviceString, char const **devType);
 int _giza_device_to_int (const char *newDeviceName);
-int _giza_int_to_device (int numDevice, char *DeviceName);
+int _giza_int_to_device (int numDevice, char *DeviceName, int rval);
 void _giza_init_norm (void);
 void _giza_expand_clipping (void);
 void _giza_restore_clipping (void);

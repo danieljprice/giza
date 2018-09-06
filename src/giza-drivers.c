@@ -566,6 +566,7 @@ giza_close_device (void)
  *
  * Input:
  *  -querytype :- a string containing the query type
+ *  -rlen      :- integer containing the length of the return buffer
  *
  * Output:
  *  -returnval :- string with result of query
@@ -582,86 +583,74 @@ giza_close_device (void)
  *
  */
 int
-giza_query_device (const char *querytype, char *returnval)
+giza_query_device (const char *querytype, char *returnval, int* rlen)
 {
-  int ierr;
-  ierr = 0;
-  char devType[12];
+  int       ierr = 0;
+  char      devType[12];
+  const int max_chars = *rlen - 1;
 
+  if (max_chars<=0)
+    {
+        _giza_warning("giza_query_device", "destination string says it has %d characters available querying %s", max_chars, querytype);
+        return 1;
+    }
   /* Query device type */
 
-  if (!strcmp(querytype,"type"))
+  if (!strcasecmp(querytype,"type"))
      {
-       if (!_giza_int_to_device(Dev[id].type,returnval))
+       if (!_giza_int_to_device(Dev[id].type,returnval, max_chars))
          {
            ierr = 1;
          }
      }
   /* Query whether or not device has cursor */
-  else if (!strcmp(querytype,"cursor"))
+  else if (!strcasecmp(querytype,"cursor"))
     {
-      if (Dev[id].isInteractive)
-        {
-          strncpy(returnval,"YES",sizeof(returnval)-1);
-        }
-      else
-        {
-          strncpy(returnval,"NO",sizeof(returnval)-1);
-        }
+      strncpy(returnval, Dev[id].isInteractive ? "YES" : "NO", max_chars);
     }
   /* Query whether or not device is hard copy or not */
-  else if (!strcmp(querytype,"hardcopy"))
+  else if (!strcasecmp(querytype,"hardcopy"))
     {
-      if (Dev[id].isInteractive)
-        {
-          strncpy(returnval,"NO",sizeof(returnval)-1);
-        }
-      else
-        {
-          strncpy(returnval,"YES",sizeof(returnval)-1);
-        }
+      strncpy(returnval, Dev[id].isInteractive ? "NO" : "YES", max_chars);
     }
   /* Query whether or not device is open or not */
-  else if (!strcmp(querytype,"state"))
+  else if (!strcasecmp(querytype,"state"))
     {
-       if (Dev[id].deviceOpen)
-         {
-            strncpy(returnval,"OPEN",sizeof(returnval)-1);         
-         }
-       else
-         {
-            strncpy(returnval,"CLOSED",sizeof(returnval)-1);
-         }    
+      strncpy(returnval, Dev[id].deviceOpen ? "OPEN" : "CLOSED", max_chars);
     }
   /* Query current user */
-  else if (!strcmp(querytype,"user"))
+  else if (!strcasecmp(querytype,"user"))
     {
-       strncpy(returnval,getlogin(),sizeof(returnval)-1);
+       strncpy(returnval,getlogin(),max_chars);
     }
   /* Query current device name */
-  else if (!strcmp(querytype,"device"))
+  else if (!strcasecmp(querytype,"device"))
     {
-       strncpy(returnval,Dev[id].prefix,sizeof(returnval)-1);
+       strncpy(returnval,Dev[id].prefix,max_chars);
     }
   /* Query current device/type */
-  else if (!strcmp(querytype,"dev/type"))
+  else if (!strcasecmp(querytype,"dev/type"))
     {
-       strncpy(returnval,Dev[id].prefix,sizeof(returnval)-1);
-       if (!_giza_int_to_device(Dev[id].type,devType))
+       strncpy(returnval,Dev[id].prefix,max_chars);
+       if (!_giza_int_to_device(Dev[id].type,devType,sizeof(devType)))
          {
            ierr = 1;
            strncat(returnval,devType,4*sizeof(char));
          }
     }
   /* Query current filename (as entered by user) */
-  else if (!strcmp(querytype,"file"))
+  else if (!strcasecmp(querytype,"file"))
     {
        if (!Dev[id].isInteractive)
          {
-           strncpy(returnval,Dev[id].prefix,sizeof(returnval)-1);
+           strncpy(returnval,Dev[id].prefix,max_chars);
+         }
+       else 
+         {
+           strncpy(returnval, " ", max_chars);
          }
     }
-  returnval[sizeof(returnval)-1] = '\0'; /* make sure string is null-terminated */
+  returnval[max_chars] = '\0'; /* make sure string is null-terminated */
   return ierr;
 }
 
@@ -834,51 +823,51 @@ _giza_device_to_int (const char *newDeviceName)
  * An internal function that the integer representation back to the device string
  */
 int
-_giza_int_to_device (int numDevice, char *DeviceName)
+_giza_int_to_device (int numDevice, char *DeviceName, int rval)
 {
 
- int ierr;
- ierr = 0;
+ int       ierr = 0;
+ const int max_chars = rval - 1;
  switch (numDevice)
     {
     case GIZA_DEVICE_NULL:
-      strncpy(DeviceName,"/null",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/null",max_chars);
       break;
     case GIZA_DEVICE_PDF:
-      strncpy(DeviceName,"/pdf",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/pdf",max_chars);
       break;
     case GIZA_DEVICE_VPDF:
-      strncpy(DeviceName,"/vpdf",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/vpdf",max_chars);
       break;
     case GIZA_DEVICE_PNG:
-      strncpy(DeviceName,"/png",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/png",max_chars);
       break;
     case GIZA_DEVICE_SVG:
-      strncpy(DeviceName,"/svg",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/svg",max_chars);
       break;
     case GIZA_DEVICE_PS:
-      strncpy(DeviceName,"/ps",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/ps",max_chars);
       break;
     case GIZA_DEVICE_VPS:
-      strncpy(DeviceName,"/vps",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/vps",max_chars);
       break;
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
-      strncpy(DeviceName,"/xw",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/xw",max_chars);
       break;
 #endif
 #ifdef _GIZA_HAS_EPS
     case GIZA_DEVICE_EPS:
-      strncpy(DeviceName,"/eps",sizeof(DeviceName)-1);
+      strncpy(DeviceName,"/eps",max_chars);
       break;
 #endif
     default:
     /* Do not print an error here as this is an internal routine:
        Instead, make sure the error is handled in the calling routine */
-      strncpy(DeviceName," ",sizeof(DeviceName)-1);
+      strncpy(DeviceName," ",max_chars);
       ierr = 1;
     }
-    DeviceName[sizeof(DeviceName)-1] = '\0'; /* make sure string is null-terminated */
+    DeviceName[max_chars] = '\0'; /* make sure string is null-terminated */
     return ierr;
 }
 

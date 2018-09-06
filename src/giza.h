@@ -151,7 +151,7 @@ void giza_get_device_id (int *devid);
 void giza_flush_device (void);
 void giza_change_page (void);
 void giza_close_device (void);
-int giza_query_device (const char *querytype, char *returnval);
+int giza_query_device (const char *querytype, char *returnval, int* rlen);
 int giza_device_has_cursor (void);
 int giza_get_key_press (double *x, double *y, char *ch);
 int giza_get_key_press_float (float *x, float *y, char *ch);
