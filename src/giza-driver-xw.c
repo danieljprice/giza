@@ -109,7 +109,7 @@ _giza_open_device_xw (double width, double height, int units)
 
   xid += 1;
   giza_xw_id[id] = xid + 1;
-  
+
   /* set the XLib stuff */
   XW[xid].width = Dev[id].width + 2 * GIZA_XW_MARGIN;
   XW[xid].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
@@ -224,7 +224,7 @@ _giza_flush_device_xw (void)
   cairo_surface_flush (Dev[id].surface);
 
   /* move the offscreen surface to the onscreen one */
-  XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, 0, 0, (unsigned) XW[xid].width, (unsigned) XW[xid].height, 0, 0); 
+  XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, 0, 0, (unsigned) XW[xid].width, (unsigned) XW[xid].height, 0, 0);
 
   if (!XFlush (XW[xid].display))
     {
@@ -267,7 +267,7 @@ _giza_change_page_xw (void)
      XW[xid].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
 
      /* Request window to be resized */
-     XResizeWindow(XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height);  
+     XResizeWindow(XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height);
 
      /* Wait for ConfigureNotify events infomring us the window's size has actually changed to what we requested */
      for (;;) {
@@ -291,8 +291,8 @@ _giza_change_page_xw (void)
       Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
       Dev[id].panelheight = Dev[id].height / Dev[id].ny;
   }
- 
-  /* New page means new pixmap */ 
+
+  /* New page means new pixmap */
   XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
 
   /* New pixmap means new cairo surface */
@@ -434,22 +434,22 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
            break;
         case Button2:
            *ch = GIZA_MIDDLE_CLICK;
-           break;        
+           break;
         case Button3:
            *ch = GIZA_RIGHT_CLICK;
-           break;        
+           break;
         case 4: /* use integers in case ButtonN not defined for N>6 */
            *ch = GIZA_SCROLL_UP;
-           break;        
+           break;
         case 5:
            *ch = GIZA_SCROLL_DOWN;
-           break;        
+           break;
         case 6:
            *ch = GIZA_SCROLL_LEFT;
-           break;        
+           break;
         case 7:
            *ch = GIZA_SCROLL_RIGHT;
-           break;        
+           break;
         default:
            *ch = GIZA_OTHER_CLICK;
            break;
@@ -535,7 +535,7 @@ _giza_change_size_xw (int width, int height)
   Dev[id].panelheight = Dev[id].height / Dev[id].ny;
 
   /* Request window to be resized */
-  XResizeWindow(XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height);  
+  XResizeWindow(XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height);
 
   /* Wait for ConfigureNotify events infomring us the window's size has actually changed to what we requested */
   for (;;) {
@@ -582,7 +582,7 @@ _giza_expand_clipping_xw (void)
  * Loops until a key is pressed. At this point the position in world coords of the cursor is returned, along with the key pressed.
  */
 void
-_giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, const double *yanc, 
+_giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, const double *yanc,
                         double *x, double *y, char *ch)
 {
   int oldTrans = _giza_get_trans ();
