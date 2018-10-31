@@ -191,7 +191,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   char const*          token_txt;
   ob_state_type        ob_super[MAX_NFONT], *cur_super = &ob_super[-1];/* keep track of superscript state */
   ob_state_type        ob_sub[MAX_NFONT],   *cur_sub   = &ob_sub[-1]; /* keep track of subscript state */
-  glyph_pos_type       positions[lenstr];  /* keep track of each glyph's x,y position (for backing up characters) */
+  glyph_pos_type       positions[lenstr+1];  /* keep track of each glyph's x,y position (for backing up characters) */
   font_change_type     oldfont[MAX_NFONT],  *cur_font = &oldfont[-1]; /* keep track of font change state */
 
   oldTrans = _giza_get_trans ();
