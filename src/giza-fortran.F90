@@ -1641,10 +1641,11 @@ private
  end interface
 
  interface giza_query_device_c
-    integer(kind=c_int) function giza_query_device_c(qtype,string) bind(C,name="giza_query_device")
+    integer(kind=c_int) function giza_query_device_c(qtype,string,rval) bind(C,name="giza_query_device")
       import
       character(kind=c_char),dimension(*),intent(in)  :: qtype
       character(kind=c_char),dimension(*),intent(out) :: string
+      integer(kind=c_int),intent(out) :: rval
     end function giza_query_device_c
  end interface
 !------------------ end of interfaces -----------------------
@@ -1919,10 +1920,11 @@ contains
     implicit none
     character(len=*),intent(in)  :: qtype
     character(len=*),intent(out) :: string
+    integer(kind=c_int) :: rval
     integer(kind=c_int) :: ierr
     character(kind=c_char), dimension(len(string)+1) :: stringc
-    
-    ierr = giza_query_device_c(cstring(qtype),stringc)
+    rval = len(string)+1 
+    ierr = giza_query_device_c(cstring(qtype),stringc,rval)
     string = fstring(stringc)
   
   end subroutine giza_query_device_f2c

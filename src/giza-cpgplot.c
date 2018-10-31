@@ -31,9 +31,12 @@
 
 #include "giza.h"
 #include "giza-private.h"
+#include "giza-io-private.h" /* for _giza_error() */
 #include "cpgplot.h"
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
 static int pgfont;
 
 /***************************************************************
@@ -735,7 +738,52 @@ void cpgqid(int *id)
  ***************************************************************/
 void cpgqinf(const char *item, char *value, int *value_length)
 {
+  if (!item || !value || !value_length || (value_length && !*value_length))
+    {
+      _giza_error("cgpqinf", "one or more NULL pointers item=%p value=%p value_length=%p", (void*)item, (void*)value, (void*)value_length);
+      return;
+    }
+    if (!*value_length)
+     {
+        _giza_error("cgpqinf", "target string says it has length 0 querying '%s'", item);
+        return;
+     }
+  const int last_char = *value_length - 1;
+  /* check which item to query. do that case insensitive.
+     this means that mixed case is also matched */
+  if (strcasecmp(item, "VERSION")==0)
+   {
+      static char   giza_version_string[32] = {'\0',};
+      /* Initialize only once */
+      if (giza_version_string[0]=='\0' )
+         sprintf(giza_version_string, "giza-%s", GIZA_VERSION_STRING);
+      /* Copy at most *value_length-1 characters into value - note: strncpy(3)
+         may leave value not-NUL terminated if *value_length < length of giza_version_string.
+         Could have used strlcpy(3) but that is famously absent in glibc on Linux (need -lbsd 
+         to have it) so we tediously do it by hand */
+      strncpy(value, giza_version_string, last_char);
+   }
+  else if (strcasecmp(item, "NOW")==0 )
+   {
+     /* In F90 calls date_and_time(...) which returns (surprisingly) date and time:
+        (cf. https://gcc.gnu.org/onlinedocs/gfortran/DATE_005fAND_005fTIME.html)
+        but PGPLOT reformats that to:
+           "dd-mmm-yyyy hh:mm"
+        so we mimic that behaviour */
+     const time_t  now = time(NULL);
 
+     /* Use strftime(3) to format current time correctly in one go */
+     strftime(value, last_char, "%d-%b-%Y %H:%M", localtime(&now));
+   }
+  else
+   {
+     /* all other cases are handled by _giza_query_device() */
+     giza_query_device(item, value, value_length);
+   }
+
+  /* terminate string and return length of result */
+  value[last_char] = '\0';
+  *value_length    = strlen(value);
 }
 
 /***************************************************************
