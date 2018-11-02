@@ -1082,9 +1082,9 @@ void pgtbx7(char const* suptyp, char signf, char asign, int ival[3], double rval
     if( writ[0] ) {
         /* depending on wether to print the sign or not choose the correct
          * format */
-        char const* fmt = (signf=='D' && asign!=' ') ? "%1$c%2$d%3$s" : "%2$d%3$s" ;
+        char const* fmt = (signf=='D' && asign!=' ') ? "%3$c%1$d%2$s" : "%1$d%2$s" ;
         *last  = *tlen;
-        nch   = sprintf(&text[*tlen], fmt, asign, ival[0], suppnt[0]);
+        nch   = sprintf(&text[*tlen], fmt, ival[0], suppnt[0], asign);
         *tlen = *tlen + nch;
     }
 
