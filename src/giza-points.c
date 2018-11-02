@@ -77,6 +77,7 @@ static double markerHeight;
 void
 giza_points (int n, const double* x, const double* y, int symbol)
 {
+printf("giza_points(n=%d, <double>, symbol=%d)\n", n, symbol); 
   if (!_giza_check_device_ready ("giza_points"))
     return;
   if (n < 1) return;
@@ -120,6 +121,7 @@ giza_points (int n, const double* x, const double* y, int symbol)
 void
 giza_points_float (int n, const float* x, const float* y, int symbol)
 {
+printf("giza_points(n=%d, <float>, symbol=%d)\n", n, symbol); 
   if (!_giza_check_device_ready ("giza_points"))
     return;
   if (n < 1) return;
@@ -632,6 +634,6 @@ _giza_drawchar (const char *str, double x, double y)
 void
 _giza_get_markerheight (double *mheight)
 {
-  *mheight = Dev[id].fontExtents.max_x_advance * 0.2;
+  *mheight = Dev[id].fontExtents.max_x_advance /** 0.2*/;
   return;
 }
