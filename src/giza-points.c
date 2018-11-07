@@ -29,11 +29,15 @@
 #include <giza.h>
 #include <math.h>
 
+/* triangle pointings */
+#define GIZA_POINT_DOWN ((int)1)
+#define GIZA_POINT_UP   ((int)-1)
+
 /* Internal functions */
 static void _giza_point        (double x, double y);
 static void _giza_rect         (double x, double y, int fill);
 static void _giza_plus         (double x, double y);
-static void _giza_triangle     (double x, double y, int fill);
+static void _giza_triangle     (double x, double y, int fill, int updown, float scale, float offset_fraction);
 static void _giza_diamond      (double x, double y, int fill);
 static void _giza_polygon      (double x, double y, int nsides , int fill);
 static void _giza_star         (double x, double y, int npoints, double ratio, int fill);
@@ -327,14 +331,15 @@ _giza_draw_symbol (double xd, double yd, int symbol)
         case 16: /* filled square */
 	  _giza_rect (xd, yd, 1);
           break;
-        case 15: /* hollow triangle up */
-          _giza_polygon (xd, yd, 3, 0);
+        case 15: /* hollow up+down triangle, where we do slightly different raises on the the up/down triangle */
+          _giza_triangle(xd, yd, 0, GIZA_POINT_UP,   0.7, 0.5);
+          _giza_triangle(xd, yd, 0, GIZA_POINT_DOWN, 0.7, 0.5);
           break;
         case 14: /* pentagon */
           _giza_polygon (xd, yd, 5, 0);
           break;
         case 13: /* solid triangle */
-          _giza_triangle(xd, yd, 1);
+          _giza_triangle(xd, yd, 1, GIZA_POINT_UP, 0.7, 1);
           break;
         case 12: /* five-pointed star */
           _giza_star (xd, yd, 5, 0.5, 0);
@@ -354,8 +359,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
           _giza_circle_size (xd, yd, 1.25, 0);
           _giza_plus (xd, yd);
           break;
-        case 7: /* hollow downward-pointing triangle */
-          _giza_triangle(xd, yd, 0);
+        case 7: /* hollow upward-pointing triangle */
+          _giza_triangle(xd, yd, 0, GIZA_POINT_UP, 0.7, 1);
           break;
 	case 5: /* cross (x) */
 	  _giza_cross (xd, yd);
@@ -456,17 +461,25 @@ _giza_circle_size (double x, double y, double size, int fill)
 }
 
 /**
- * Draws a downward pointing triangle at x, y, either hollow or solid
+ * Draws a downward pointing triangle at x, y, either hollow or solid,
+ * pointing UP (updown=-1) or DOWN (updown=+1), with isosceles sides 
+ * of size scale * markerHeight, with the baseline offset scaled
+ * by offset_fraction (offset_fraction = 1 => isosceles triangle
+ * with center x,y, otherwise the triangle is displaced by offset_fraction
+ * in the y direction)
  */
 static void
-_giza_triangle(double x, double y, int fill)
+_giza_triangle(double x, double y, int fill, int updown, float scale, float offset_fraction)
 {
-  cairo_move_to (Dev[id].context, x - markerHeight * 0.5, y - markerHeight * 0.5);
-  cairo_line_to (Dev[id].context, x + markerHeight * 0.5, y - markerHeight * 0.5);
-  cairo_line_to (Dev[id].context, x, y + markerHeight * 0.5);
+  cairo_save(Dev[id].context);
+  giza_set_line_width(1.0);
+  cairo_move_to (Dev[id].context, x - markerHeight * scale, y - offset_fraction * updown * markerHeight * scale);
+  cairo_line_to (Dev[id].context, x + markerHeight * scale, y - offset_fraction * updown * markerHeight * scale);
+  cairo_line_to (Dev[id].context, x, y + updown * markerHeight * scale);
   cairo_close_path (Dev[id].context);
   if (fill) { cairo_fill(Dev[id].context); }
   _giza_stroke ();
+  cairo_restore(Dev[id].context);
 }
 
 /**
