@@ -42,7 +42,7 @@ static void _giza_fat_plus     (double x, double y, int fill, double scale, doub
 static void _giza_triangle     (double x, double y, int fill, int updown, float scale, float offset_fraction);
 static void _giza_diamond      (double x, double y, int fill);
 static void _giza_polygon      (double x, double y, int nsides , int fill);
-static void _giza_star         (double x, double y, int npoints, double ratio, int fill);
+static void _giza_star         (double x, double y, int npoints, double ratio, int fill, double scale);
 static void _giza_circle       (double x, double y);
 static void _giza_circle_size  (double x, double y, double size, int fill);
 static void _giza_cross        (double x, double y);
@@ -315,17 +315,15 @@ _giza_draw_symbol (double xd, double yd, int symbol)
         case 23:
         case 22:
         case 21:
-          _giza_circle_size (xd, yd, 0.33*fabs(symbol-20), 0);
-          break;
-        case 20: /* 7 pointed star */
-          _giza_star (xd, yd, 7, 0.25, 0);
+        case 20: 
+          _giza_circle_size (xd, yd, 0.33*fabs(symbol-19), 0);
           break;
         case 19: /* hexagon with cross */
           _giza_polygon (xd, yd, 6, 0);
           _giza_cross (xd, yd);
           break;
-        case 18: /* filled diamond */
-          _giza_diamond (xd, yd, 1);
+        case 18: /* Filled version of symbol 12 (five-pointed star) */
+          _giza_star (xd, yd, 5, 0.4, 1, 2.3);
           break;
 	case 17: /* solid circle */
 	  _giza_circle_size (xd, yd, 0.75, 1);
@@ -344,7 +342,7 @@ _giza_draw_symbol (double xd, double yd, int symbol)
           _giza_triangle(xd, yd, 1, GIZA_POINT_UP, 0.7, 1);
           break;
         case 12: /* five-pointed star */
-          _giza_star (xd, yd, 5, 0.5, 0);
+          _giza_star (xd, yd, 5, 0.4, 0, 2.0);
           break;
         case 11: /* hollow diamond */
           _giza_diamond (xd, yd, 0);
@@ -634,21 +632,25 @@ _giza_polygon (double x, double y, int nsides, int fill)
  * Draws an n-pointed star at x,y
  */
 static void
-_giza_star (double x, double y, int npoints, double ratio, int fill)
+_giza_star (double x, double y, int npoints, double ratio, int fill, double scale)
 {
  /* Define outer and inner radius */
- double r = 0.5 * markerHeight;
+ double r = 0.5 * markerHeight * scale;
  double ri = ratio * r;
 
  /* Set first vertex so that shape appears flat-bottomed */
  double alpha = (0.5 + 1./npoints)* M_PI;
  double cosalpha = cos(alpha);
  double sinalpha = sin(alpha);
- cairo_move_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
-
  /* Define other vertexes */
  double alpha_step = 2 * M_PI / npoints;
  int i;
+
+ cairo_save( Dev[id].context );
+ /* Use slightly thinner lines */
+ cairo_set_line_width( Dev[id].context, 0.9 );
+ cairo_move_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
+
  for (i = 1; i < npoints; i++)
  {
   alpha += 0.5*alpha_step;
@@ -666,7 +668,9 @@ _giza_star (double x, double y, int npoints, double ratio, int fill)
  cairo_line_to (Dev[id].context, x + ri * cosalpha, y + ri * sinalpha);
  cairo_close_path(Dev[id].context);
  if (fill) { cairo_fill(Dev[id].context); }
-  _giza_stroke ();
+
+ cairo_stroke ( Dev[id].context );
+ cairo_restore( Dev[id].context );
 
 }
 
