@@ -1,9 +1,6 @@
 .NOTPARALLEL:
 
-CLEANFILES = *.mod *.pc
-
-lex.yy.c: giza-scanner.l
-	flex -o $@ giza-scanner.l
+CLEANFILES = *.mod *.pc giza-scanner.c
 
 lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
 
@@ -26,7 +23,7 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
        giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
        giza-subpanel.c giza-text-background.c giza-text.c \
        giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
-       giza-warnings.c giza-window.c giza.c lex.yy.c \
+       giza-warnings.c giza-window.c giza.c giza-scanner.l \
        giza-arrow-style-private.h giza-driver-svg-private.h giza-stroke-private.h \
        giza-band-private.h giza-driver-xw-private.h giza-subpanel-private.h \
        giza-character-size-private.h giza-drivers-private.h giza-text-background-private.h \
