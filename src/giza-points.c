@@ -29,18 +29,24 @@
 #include <giza.h>
 #include <math.h>
 
+/* triangle pointings */
+#define GIZA_POINT_DOWN ((int)1)
+#define GIZA_POINT_UP   ((int)-1)
+
 /* Internal functions */
 static void _giza_point        (double x, double y);
-static void _giza_rect         (double x, double y, int fill);
+static void _giza_rect         (double x, double y, int fill, double scale);
+static void _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction);
 static void _giza_plus         (double x, double y);
-static void _giza_triangle     (double x, double y, int fill);
+static void _giza_fat_plus     (double x, double y, int fill, double scale, double inset_fraction);
+static void _giza_triangle     (double x, double y, int fill, int updown, float scale, float offset_fraction);
 static void _giza_diamond      (double x, double y, int fill);
-static void _giza_polygon      (double x, double y, int nsides , int fill);
-static void _giza_star         (double x, double y, int npoints, double ratio, int fill);
+static void _giza_polygon      (double x, double y, int nsides , int fill, double scale);
+static void _giza_star         (double x, double y, int npoints, double ratio, int fill, double scale);
 static void _giza_circle       (double x, double y);
 static void _giza_circle_size  (double x, double y, double size, int fill);
 static void _giza_cross        (double x, double y);
-static void _giza_arrow        (double x, double y, double angle);
+static void _giza_arrow        (double x, double y, double angle, double scale);
 static void _giza_char         (int symbol, double x, double y);
 static void _giza_drawchar     (const char *string, double x, double y);
 static void _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
@@ -291,16 +297,16 @@ _giza_draw_symbol (double xd, double yd, int symbol)
       switch (symbol)
 	{
         case 31: /* down arrow */
-          _giza_arrow (xd, yd, 0.5*M_PI);
+          _giza_arrow (xd, yd, 0.5*M_PI, 2.5);
           break;
         case 30: /* up arrow */
-          _giza_arrow (xd, yd, -0.5*M_PI);
+          _giza_arrow (xd, yd, -0.5*M_PI, 2.5);
           break;
         case 29: /* right arrow */
-          _giza_arrow (xd, yd, 0.);
+          _giza_arrow (xd, yd, 0., 2.5);
           break;
         case 28: /* left arrow */
-          _giza_arrow (xd, yd, M_PI);
+          _giza_arrow (xd, yd, M_PI, 2.5);
           break;
         case 27: /* hollow circles of various sizes */
         case 26:
@@ -309,42 +315,48 @@ _giza_draw_symbol (double xd, double yd, int symbol)
         case 23:
         case 22:
         case 21:
-          _giza_circle_size (xd, yd, 0.33*fabs(symbol-20), 0);
+        case 20: 
+          {
+              /* It looks the open circles do not follow an exact linear scale 
+               * from 19 -> 27. In stead we make scale from 0.3 -> 12 in 8
+               * exponentional steps (27 - 19 = 8)
+               */
+              const double  minScale = 0.3, maxScale = 12, nStep = 27 - 19;
+              const double  factor   = pow(maxScale / minScale, 1./nStep);
+              _giza_circle_size (xd, yd, minScale * pow(factor, symbol-19), 0);
+          }
+          /*_giza_circle_size (xd, yd, 0.33*fabs(symbol-19), 0);*/
           break;
-        case 20: /* 7 pointed star */
-          _giza_star (xd, yd, 7, 0.25, 0);
+        case 19: /* slightly larger open rect (just shy of 3x size of #6 */
+	      _giza_rect (xd, yd, 0, 3.5);
           break;
-        case 19: /* hexagon with cross */
-          _giza_polygon (xd, yd, 6, 0);
-          _giza_cross (xd, yd);
-          break;
-        case 18: /* filled diamond */
-          _giza_diamond (xd, yd, 1);
+        case 18: /* Filled version of symbol 12 (five-pointed star) */
+          _giza_star (xd, yd, 5, 0.4, 1, 2.3);
           break;
 	case 17: /* solid circle */
 	  _giza_circle_size (xd, yd, 0.75, 1);
           break;
         case 16: /* filled square */
-	  _giza_rect (xd, yd, 1);
+	  _giza_rect (xd, yd, 1, 1.0);
           break;
-        case 15: /* hollow triangle up */
-          _giza_polygon (xd, yd, 3, 0);
+        case 15: /* hollow up+down triangle, where we do slightly different raises on the the up/down triangle */
+          _giza_triangle(xd, yd, 0, GIZA_POINT_UP,   0.7, 0.5);
+          _giza_triangle(xd, yd, 0, GIZA_POINT_DOWN, 0.7, 0.5);
           break;
-        case 14: /* pentagon */
-          _giza_polygon (xd, yd, 5, 0);
+        case 14: /* open plus sign */
+          _giza_fat_plus(xd, yd, 0, 2.2, 0.5);
           break;
         case 13: /* solid triangle */
-          _giza_triangle(xd, yd, 1);
+          _giza_triangle(xd, yd, 1, GIZA_POINT_UP, 0.7, 1);
           break;
         case 12: /* five-pointed star */
-          _giza_star (xd, yd, 5, 0.5, 0);
+          _giza_star (xd, yd, 5, 0.4, 0, 2.0);
           break;
         case 11: /* hollow diamond */
           _giza_diamond (xd, yd, 0);
           break;
-        case 10: /* asterisk made from combined + and x */
-          _giza_cross(xd, yd);
-          _giza_plus(xd, yd);
+        case 10: /* square with concave sides, slightly larger than default rect */
+          _giza_rect_concave(xd, yd, 0, 1.8, .3);
           break;
         case 9: /* circle with small dot (like Sun symbol) */
           _giza_point (xd, yd);
@@ -354,8 +366,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
           _giza_circle_size (xd, yd, 1.25, 0);
           _giza_plus (xd, yd);
           break;
-        case 7: /* hollow downward-pointing triangle */
-          _giza_triangle(xd, yd, 0);
+        case 7: /* hollow upward-pointing triangle */
+          _giza_triangle(xd, yd, 0, GIZA_POINT_UP, 0.7, 1);
           break;
 	case 5: /* cross (x) */
 	  _giza_cross (xd, yd);
@@ -375,7 +387,7 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	  break;
         case 6: /* hollow square */
 	case 0:
-	  _giza_rect (xd, yd, 0);
+	  _giza_rect (xd, yd, 0, 1.5);
 	  break;
 	case -1: /* single small point */
 	case -2:
@@ -387,7 +399,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	case -6:
 	case -7:
 	case -8:
-          _giza_polygon (xd, yd, -symbol, 1);
+          /* scale those up a bit compared to original code */
+          _giza_polygon (xd, yd, -symbol, 1, 2.5);
           break;
 	default:
 	  _giza_point (xd, yd);
@@ -411,12 +424,47 @@ _giza_point (double x, double y)
  * Draw a rectangle centred at x, y
  */
 static void
-_giza_rect (double x, double y, int fill)
+_giza_rect (double x, double y, int fill, double scale)
 {
-  cairo_rectangle (Dev[id].context, x - markerHeight * 0.5, y - markerHeight * 0.5, markerHeight,
-		   markerHeight);
-  if (fill) { cairo_fill(Dev[id].context); }
+  const double size = scale * markerHeight;
 
+  cairo_save( Dev[id].context );
+  cairo_set_line_width( Dev[id].context, 0.9 );
+  cairo_rectangle (Dev[id].context, x - 0.5 * size, y - 0.5 * size, size, size );
+  if (fill) { cairo_fill(Dev[id].context); }
+  cairo_stroke( Dev[id].context );
+  cairo_restore( Dev[id].context );
+}
+
+/**
+ * Draw a rectangle with concave sides centred at x, y. 
+ * The principle size of of the rect is "0.5 * markerHeight * scale"
+ * The 'dent' is bulge_fraction * the size of the square
+ */
+static void
+_giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction)
+{
+  /* compute radius of circle, start/end angles and center */
+  const double dx = scale * 0.5 * markerHeight;
+  const double dy = bulge_fraction * dx;
+  const double beta = atan( dy/dx ), two_beta = 2 * beta;
+  const double one_over_tan2beta = 1. / tan(2*beta);
+  const double R      = dy + dx * one_over_tan2beta;
+  const double center = dx * (1 + one_over_tan2beta);
+
+  /* draw the four arcs with slightly thinner lines */
+  cairo_save(Dev[id].context);
+  cairo_set_line_width(Dev[id].context, 0.9);
+  cairo_arc(Dev[id].context, x + center, y, R, M_PI     - two_beta, M_PI     + two_beta);
+  cairo_new_sub_path(Dev[id].context);
+  cairo_arc(Dev[id].context, x - center, y, R, 2*M_PI   - two_beta, 2*M_PI   + two_beta);
+  cairo_new_sub_path(Dev[id].context);
+  cairo_arc(Dev[id].context, x, y - center, R, M_PI_2   - two_beta, M_PI_2   + two_beta);
+  cairo_new_sub_path(Dev[id].context);
+  cairo_arc(Dev[id].context, x, y + center, R, 3*M_PI_2 - two_beta, 3*M_PI_2 + two_beta);
+  if (fill) { cairo_fill(Dev[id].context); }
+  cairo_stroke(Dev[id].context);
+  cairo_restore(Dev[id].context);
 }
 
 /**
@@ -432,6 +480,41 @@ _giza_plus (double x, double y)
   _giza_stroke ();
 }
 
+
+/**
+ * Draw a 'fat' plus centred at x, y
+ * principal size = 0.5 * markerHeigth,
+ * this symbol's real size = principal size scaled by 'scale'
+ * The insets are inset_fraction * real size
+ */
+static void
+_giza_fat_plus (double x, double y, int fill, double scale, double inset_fraction)
+{
+  const double side  = 0.5 * markerHeight * scale;
+  const double inset = inset_fraction * side, outset = side - inset;
+
+  /* Use slightly thinner lines than the other symbols */
+  cairo_save( Dev[id].context );
+  cairo_set_line_width( Dev[id].context, 0.8 );
+
+  cairo_move_to     (Dev[id].context, x - side, y - outset/2);
+  cairo_rel_line_to (Dev[id].context, 0       , outset); /* up */
+  cairo_rel_line_to (Dev[id].context, inset   , 0);      /* right */
+  cairo_rel_line_to (Dev[id].context, 0       , inset);  /* up */
+  cairo_rel_line_to (Dev[id].context, outset  , 0);      /* right */
+  cairo_rel_line_to (Dev[id].context, 0       , -inset); /* down */
+  cairo_rel_line_to (Dev[id].context, inset   , 0);      /* right */
+  cairo_rel_line_to (Dev[id].context, 0       , -outset);/* down */
+  cairo_rel_line_to (Dev[id].context, -inset  , 0);      /* left */
+  cairo_rel_line_to (Dev[id].context, 0       , -inset); /* down */
+  cairo_rel_line_to (Dev[id].context, -outset , 0);      /* left */
+  cairo_rel_line_to (Dev[id].context, 0       , inset);  /* up */
+  cairo_rel_line_to (Dev[id].context, -inset  , 0);      /* left */
+  if (fill) { cairo_fill(Dev[id].context); }
+  cairo_stroke(  Dev[id].context );
+  cairo_restore( Dev[id].context );
+}
+
 /**
  * Draws a hollow circle at x, y
  */
@@ -445,28 +528,41 @@ _giza_circle (double x, double y)
 
 /**
  * Draws a hollow circle at x, y, with size and fill arguments
+ * size is in units of 'canonical symbol size' (== 0.5 * markerHeight)
  */
 static void
 _giza_circle_size (double x, double y, double size, int fill)
 {
-  cairo_move_to(Dev[id].context, x + size*markerHeight*0.5, y);
+  /* use slightly thinner lines */
+  cairo_save( Dev[id].context );
+  cairo_set_line_width( Dev[id].context, 0.9 );
+  /*cairo_move_to(Dev[id].context, x + size*markerHeight*0.5, y);*/
   cairo_arc (Dev[id].context, x, y, size * markerHeight * 0.5, 0., 2. * M_PI);
   if (fill) { cairo_fill(Dev[id].context); }
-  _giza_stroke ();
+  cairo_stroke ( Dev[id].context );
+  cairo_restore( Dev[id].context );
 }
 
 /**
- * Draws a downward pointing triangle at x, y, either hollow or solid
+ * Draws a downward pointing triangle at x, y, either hollow or solid,
+ * pointing UP (updown=-1) or DOWN (updown=+1), with isosceles sides 
+ * of size scale * markerHeight, with the baseline offset scaled
+ * by offset_fraction (offset_fraction = 1 => isosceles triangle
+ * with center x,y, otherwise the triangle is displaced by offset_fraction
+ * in the y direction)
  */
 static void
-_giza_triangle(double x, double y, int fill)
+_giza_triangle(double x, double y, int fill, int updown, float scale, float offset_fraction)
 {
-  cairo_move_to (Dev[id].context, x - markerHeight * 0.5, y - markerHeight * 0.5);
-  cairo_line_to (Dev[id].context, x + markerHeight * 0.5, y - markerHeight * 0.5);
-  cairo_line_to (Dev[id].context, x, y + markerHeight * 0.5);
+  cairo_save(Dev[id].context);
+  giza_set_line_width(1.0);
+  cairo_move_to (Dev[id].context, x - markerHeight * scale, y - offset_fraction * updown * markerHeight * scale);
+  cairo_line_to (Dev[id].context, x + markerHeight * scale, y - offset_fraction * updown * markerHeight * scale);
+  cairo_line_to (Dev[id].context, x, y + updown * markerHeight * scale);
   cairo_close_path (Dev[id].context);
   if (fill) { cairo_fill(Dev[id].context); }
-  _giza_stroke ();
+  cairo_stroke (Dev[id].context);
+  cairo_restore(Dev[id].context);
 }
 
 /**
@@ -501,15 +597,17 @@ _giza_cross (double x, double y)
 }
 
 /**
- * Draws an arrow at x, y
+ * Draws an arrow at x, y at scale 'scale'.
+ * Unit of scale is '0.5 * markerHeight' for the
+ * length of the arrow.
  */
 static void
-_giza_arrow (double x, double y, double angle)
+_giza_arrow (double x, double y, double angle, double scale)
 {
-  double headwidth  = 0.25*markerHeight;
-  double headlength = 0.25*markerHeight;
-  double r = 0.5*markerHeight;
-  double cosa = cos(angle); double sina = sin(angle);
+  const double r = scale * 0.5 * markerHeight;
+  const double headwidth  = 0.5 * r;
+  const double headlength = 0.5 * r;
+  const double cosa = cos(angle), sina = sin(angle);
   cairo_move_to (Dev[id].context, x - r*cosa, y - r*sina);
   cairo_line_to (Dev[id].context, x + r*cosa, y + r*sina);
   cairo_rel_line_to (Dev[id].context, - headlength*cosa + headwidth*sina, headwidth*cosa - headlength*sina);
@@ -520,13 +618,14 @@ _giza_arrow (double x, double y, double angle)
 
 
 /**
- * Draws a general polygon at x, y
+ * Draws a general polygon at x, y with nsides sides at scale scale.
+ * Units of scale are 'normalized symbol size' = 0.5 * markerHeight
  */
 static void
-_giza_polygon (double x, double y, int nsides, int fill)
+_giza_polygon (double x, double y, int nsides, int fill, double scale)
 {
  /* Define radius */
- double r = 0.5 * markerHeight;
+ double r = scale * 0.5 * markerHeight;
 
  /* Set first vertex above marker position */
  double alpha = 1.5 * M_PI;
@@ -554,21 +653,25 @@ _giza_polygon (double x, double y, int nsides, int fill)
  * Draws an n-pointed star at x,y
  */
 static void
-_giza_star (double x, double y, int npoints, double ratio, int fill)
+_giza_star (double x, double y, int npoints, double ratio, int fill, double scale)
 {
  /* Define outer and inner radius */
- double r = 0.5 * markerHeight;
+ double r = 0.5 * markerHeight * scale;
  double ri = ratio * r;
 
  /* Set first vertex so that shape appears flat-bottomed */
  double alpha = (0.5 + 1./npoints)* M_PI;
  double cosalpha = cos(alpha);
  double sinalpha = sin(alpha);
- cairo_move_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
-
  /* Define other vertexes */
  double alpha_step = 2 * M_PI / npoints;
  int i;
+
+ cairo_save( Dev[id].context );
+ /* Use slightly thinner lines */
+ cairo_set_line_width( Dev[id].context, 0.9 );
+ cairo_move_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
+
  for (i = 1; i < npoints; i++)
  {
   alpha += 0.5*alpha_step;
@@ -586,7 +689,9 @@ _giza_star (double x, double y, int npoints, double ratio, int fill)
  cairo_line_to (Dev[id].context, x + ri * cosalpha, y + ri * sinalpha);
  cairo_close_path(Dev[id].context);
  if (fill) { cairo_fill(Dev[id].context); }
-  _giza_stroke ();
+
+ cairo_stroke ( Dev[id].context );
+ cairo_restore( Dev[id].context );
 
 }
 
