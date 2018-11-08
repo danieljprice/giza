@@ -38,6 +38,7 @@ static void _giza_point        (double x, double y);
 static void _giza_rect         (double x, double y, int fill);
 static void _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction);
 static void _giza_plus         (double x, double y);
+static void _giza_fat_plus     (double x, double y, int fill, double scale, double inset_fraction);
 static void _giza_triangle     (double x, double y, int fill, int updown, float scale, float offset_fraction);
 static void _giza_diamond      (double x, double y, int fill);
 static void _giza_polygon      (double x, double y, int nsides , int fill);
@@ -336,8 +337,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
           _giza_triangle(xd, yd, 0, GIZA_POINT_UP,   0.7, 0.5);
           _giza_triangle(xd, yd, 0, GIZA_POINT_DOWN, 0.7, 0.5);
           break;
-        case 14: /* pentagon */
-          _giza_polygon (xd, yd, 5, 0);
+        case 14: /* open plus sign */
+          _giza_fat_plus(xd, yd, 0, 2.2, 0.5);
           break;
         case 13: /* solid triangle */
           _giza_triangle(xd, yd, 1, GIZA_POINT_UP, 0.7, 1);
@@ -465,6 +466,41 @@ _giza_plus (double x, double y)
   cairo_move_to (Dev[id].context, x, y - markerHeight * 0.5);
   cairo_line_to (Dev[id].context, x, y + markerHeight * 0.5);
   _giza_stroke ();
+}
+
+
+/**
+ * Draw a 'fat' plus centred at x, y
+ * principal size = 0.5 * markerHeigth,
+ * this symbol's real size = principal size scaled by 'scale'
+ * The insets are inset_fraction * real size
+ */
+static void
+_giza_fat_plus (double x, double y, int fill, double scale, double inset_fraction)
+{
+  const double side  = 0.5 * markerHeight * scale;
+  const double inset = inset_fraction * side, outset = side - inset;
+
+  /* Use slightly thinner lines than the other symbols */
+  cairo_save( Dev[id].context );
+  cairo_set_line_width( Dev[id].context, 0.8 );
+
+  cairo_move_to     (Dev[id].context, x - side, y - outset/2);
+  cairo_rel_line_to (Dev[id].context, 0       , outset); /* up */
+  cairo_rel_line_to (Dev[id].context, inset   , 0);      /* right */
+  cairo_rel_line_to (Dev[id].context, 0       , inset);  /* up */
+  cairo_rel_line_to (Dev[id].context, outset  , 0);      /* right */
+  cairo_rel_line_to (Dev[id].context, 0       , -inset); /* down */
+  cairo_rel_line_to (Dev[id].context, inset   , 0);      /* right */
+  cairo_rel_line_to (Dev[id].context, 0       , -outset);/* down */
+  cairo_rel_line_to (Dev[id].context, -inset  , 0);      /* left */
+  cairo_rel_line_to (Dev[id].context, 0       , -inset); /* down */
+  cairo_rel_line_to (Dev[id].context, -outset , 0);      /* left */
+  cairo_rel_line_to (Dev[id].context, 0       , inset);  /* up */
+  cairo_rel_line_to (Dev[id].context, -inset  , 0);      /* left */
+  if (fill) { cairo_fill(Dev[id].context); }
+  cairo_stroke(  Dev[id].context );
+  cairo_restore( Dev[id].context );
 }
 
 /**
