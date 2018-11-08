@@ -35,7 +35,7 @@
 
 /* Internal functions */
 static void _giza_point        (double x, double y);
-static void _giza_rect         (double x, double y, int fill);
+static void _giza_rect         (double x, double y, int fill, double scale);
 static void _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction);
 static void _giza_plus         (double x, double y);
 static void _giza_fat_plus     (double x, double y, int fill, double scale, double inset_fraction);
@@ -327,9 +327,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
           }
           /*_giza_circle_size (xd, yd, 0.33*fabs(symbol-19), 0);*/
           break;
-        case 19: /* hexagon with cross */
-          _giza_polygon (xd, yd, 6, 0);
-          _giza_cross (xd, yd);
+        case 19: /* slightly larger open rect (just shy of 3x size of #6 */
+	      _giza_rect (xd, yd, 0, 3.5);
           break;
         case 18: /* Filled version of symbol 12 (five-pointed star) */
           _giza_star (xd, yd, 5, 0.4, 1, 2.3);
@@ -338,7 +337,7 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	  _giza_circle_size (xd, yd, 0.75, 1);
           break;
         case 16: /* filled square */
-	  _giza_rect (xd, yd, 1);
+	  _giza_rect (xd, yd, 1, 1.0);
           break;
         case 15: /* hollow up+down triangle, where we do slightly different raises on the the up/down triangle */
           _giza_triangle(xd, yd, 0, GIZA_POINT_UP,   0.7, 0.5);
@@ -388,7 +387,7 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	  break;
         case 6: /* hollow square */
 	case 0:
-	  _giza_rect (xd, yd, 0);
+	  _giza_rect (xd, yd, 0, 1.5);
 	  break;
 	case -1: /* single small point */
 	case -2:
@@ -424,12 +423,16 @@ _giza_point (double x, double y)
  * Draw a rectangle centred at x, y
  */
 static void
-_giza_rect (double x, double y, int fill)
+_giza_rect (double x, double y, int fill, double scale)
 {
-  cairo_rectangle (Dev[id].context, x - markerHeight * 0.5, y - markerHeight * 0.5, markerHeight,
-		   markerHeight);
-  if (fill) { cairo_fill(Dev[id].context); }
+  const double size = scale * markerHeight;
 
+  cairo_save( Dev[id].context );
+  cairo_set_line_width( Dev[id].context, 0.9 );
+  cairo_rectangle (Dev[id].context, x - 0.5 * size, y - 0.5 * size, size, size );
+  if (fill) { cairo_fill(Dev[id].context); }
+  cairo_stroke( Dev[id].context );
+  cairo_restore( Dev[id].context );
 }
 
 /**
