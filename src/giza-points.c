@@ -316,7 +316,16 @@ _giza_draw_symbol (double xd, double yd, int symbol)
         case 22:
         case 21:
         case 20: 
-          _giza_circle_size (xd, yd, 0.33*fabs(symbol-19), 0);
+          {
+              /* It looks the open circles do not follow an exact linear scale 
+               * from 19 -> 27. In stead we make scale from 0.3 -> 12 in 8
+               * exponentional steps (27 - 19 = 8)
+               */
+              const double  minScale = 0.3, maxScale = 12, nStep = 27 - 19;
+              const double  factor   = pow(maxScale / minScale, 1./nStep);
+              _giza_circle_size (xd, yd, minScale * pow(factor, symbol-19), 0);
+          }
+          /*_giza_circle_size (xd, yd, 0.33*fabs(symbol-19), 0);*/
           break;
         case 19: /* hexagon with cross */
           _giza_polygon (xd, yd, 6, 0);
@@ -515,14 +524,19 @@ _giza_circle (double x, double y)
 
 /**
  * Draws a hollow circle at x, y, with size and fill arguments
+ * size is in units of 'canonical symbol size' (== 0.5 * markerHeight)
  */
 static void
 _giza_circle_size (double x, double y, double size, int fill)
 {
-  cairo_move_to(Dev[id].context, x + size*markerHeight*0.5, y);
+  /* use slightly thinner lines */
+  cairo_save( Dev[id].context );
+  cairo_set_line_width( Dev[id].context, 0.9 );
+  /*cairo_move_to(Dev[id].context, x + size*markerHeight*0.5, y);*/
   cairo_arc (Dev[id].context, x, y, size * markerHeight * 0.5, 0., 2. * M_PI);
   if (fill) { cairo_fill(Dev[id].context); }
-  _giza_stroke ();
+  cairo_stroke ( Dev[id].context );
+  cairo_restore( Dev[id].context );
 }
 
 /**
