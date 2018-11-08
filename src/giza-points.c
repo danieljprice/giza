@@ -36,6 +36,7 @@
 /* Internal functions */
 static void _giza_point        (double x, double y);
 static void _giza_rect         (double x, double y, int fill);
+static void _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction);
 static void _giza_plus         (double x, double y);
 static void _giza_triangle     (double x, double y, int fill, int updown, float scale, float offset_fraction);
 static void _giza_diamond      (double x, double y, int fill);
@@ -347,9 +348,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
         case 11: /* hollow diamond */
           _giza_diamond (xd, yd, 0);
           break;
-        case 10: /* asterisk made from combined + and x */
-          _giza_cross(xd, yd);
-          _giza_plus(xd, yd);
+        case 10: /* square with concave sides, slightly larger than default rect */
+          _giza_rect_concave(xd, yd, 0, 1.8, .3);
           break;
         case 9: /* circle with small dot (like Sun symbol) */
           _giza_point (xd, yd);
@@ -422,6 +422,36 @@ _giza_rect (double x, double y, int fill)
 		   markerHeight);
   if (fill) { cairo_fill(Dev[id].context); }
 
+}
+
+/**
+ * Draw a rectangle with concave sides centred at x, y. 
+ * The principle size of of the rect is "0.5 * markerHeight * scale"
+ * The 'dent' is bulge_fraction * the size of the square
+ */
+static void
+_giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction)
+{
+  /* compute radius of circle, start/end angles and center */
+  const double dx = scale * 0.5 * markerHeight;
+  const double dy = bulge_fraction * dx;
+  const double beta = atan( dy/dx ), two_beta = 2 * beta;
+  const double one_over_tan2beta = 1. / tan(2*beta);
+  const double R      = dy + dx * one_over_tan2beta;
+  const double center = dx * (1 + one_over_tan2beta);
+
+  /* draw the four arcs with slightly thinner lines */
+  cairo_save(Dev[id].context);
+  cairo_set_line_width(Dev[id].context, 1.1);
+  cairo_arc(Dev[id].context, x + center, y, R, M_PI     - two_beta, M_PI     + two_beta);
+  cairo_new_sub_path(Dev[id].context);
+  cairo_arc(Dev[id].context, x - center, y, R, 2*M_PI   - two_beta, 2*M_PI   + two_beta);
+  cairo_new_sub_path(Dev[id].context);
+  cairo_arc(Dev[id].context, x, y - center, R, M_PI_2   - two_beta, M_PI_2   + two_beta);
+  cairo_new_sub_path(Dev[id].context);
+  cairo_arc(Dev[id].context, x, y + center, R, 3*M_PI_2 - two_beta, 3*M_PI_2 + two_beta);
+  if (fill) { cairo_fill(Dev[id].context); }
+  cairo_restore(Dev[id].context);
 }
 
 /**
