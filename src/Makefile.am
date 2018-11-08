@@ -2,6 +2,9 @@
 
 CLEANFILES = *.mod *.pc
 
+lex.yy.c: giza-scanner.l
+	flex -o $@ giza-scanner.l
+
 lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
 
 libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
