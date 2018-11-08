@@ -41,7 +41,7 @@ static void _giza_plus         (double x, double y);
 static void _giza_fat_plus     (double x, double y, int fill, double scale, double inset_fraction);
 static void _giza_triangle     (double x, double y, int fill, int updown, float scale, float offset_fraction);
 static void _giza_diamond      (double x, double y, int fill);
-static void _giza_polygon      (double x, double y, int nsides , int fill);
+static void _giza_polygon      (double x, double y, int nsides , int fill, double scale);
 static void _giza_star         (double x, double y, int npoints, double ratio, int fill, double scale);
 static void _giza_circle       (double x, double y);
 static void _giza_circle_size  (double x, double y, double size, int fill);
@@ -399,7 +399,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	case -6:
 	case -7:
 	case -8:
-          _giza_polygon (xd, yd, -symbol, 1);
+          /* scale those up a bit compared to original code */
+          _giza_polygon (xd, yd, -symbol, 1, 2.5);
           break;
 	default:
 	  _giza_point (xd, yd);
@@ -617,13 +618,14 @@ _giza_arrow (double x, double y, double angle, double scale)
 
 
 /**
- * Draws a general polygon at x, y
+ * Draws a general polygon at x, y with nsides sides at scale scale.
+ * Units of scale are 'normalized symbol size' = 0.5 * markerHeight
  */
 static void
-_giza_polygon (double x, double y, int nsides, int fill)
+_giza_polygon (double x, double y, int nsides, int fill, double scale)
 {
  /* Define radius */
- double r = 0.5 * markerHeight;
+ double r = scale * 0.5 * markerHeight;
 
  /* Set first vertex above marker position */
  double alpha = 1.5 * M_PI;
