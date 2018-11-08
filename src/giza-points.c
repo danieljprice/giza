@@ -46,7 +46,7 @@ static void _giza_star         (double x, double y, int npoints, double ratio, i
 static void _giza_circle       (double x, double y);
 static void _giza_circle_size  (double x, double y, double size, int fill);
 static void _giza_cross        (double x, double y);
-static void _giza_arrow        (double x, double y, double angle);
+static void _giza_arrow        (double x, double y, double angle, double scale);
 static void _giza_char         (int symbol, double x, double y);
 static void _giza_drawchar     (const char *string, double x, double y);
 static void _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
@@ -297,16 +297,16 @@ _giza_draw_symbol (double xd, double yd, int symbol)
       switch (symbol)
 	{
         case 31: /* down arrow */
-          _giza_arrow (xd, yd, 0.5*M_PI);
+          _giza_arrow (xd, yd, 0.5*M_PI, 2.5);
           break;
         case 30: /* up arrow */
-          _giza_arrow (xd, yd, -0.5*M_PI);
+          _giza_arrow (xd, yd, -0.5*M_PI, 2.5);
           break;
         case 29: /* right arrow */
-          _giza_arrow (xd, yd, 0.);
+          _giza_arrow (xd, yd, 0., 2.5);
           break;
         case 28: /* left arrow */
-          _giza_arrow (xd, yd, M_PI);
+          _giza_arrow (xd, yd, M_PI, 2.5);
           break;
         case 27: /* hollow circles of various sizes */
         case 26:
@@ -596,15 +596,17 @@ _giza_cross (double x, double y)
 }
 
 /**
- * Draws an arrow at x, y
+ * Draws an arrow at x, y at scale 'scale'.
+ * Unit of scale is '0.5 * markerHeight' for the
+ * length of the arrow.
  */
 static void
-_giza_arrow (double x, double y, double angle)
+_giza_arrow (double x, double y, double angle, double scale)
 {
-  double headwidth  = 0.25*markerHeight;
-  double headlength = 0.25*markerHeight;
-  double r = 0.5*markerHeight;
-  double cosa = cos(angle); double sina = sin(angle);
+  const double r = scale * 0.5 * markerHeight;
+  const double headwidth  = 0.5 * r;
+  const double headlength = 0.5 * r;
+  const double cosa = cos(angle), sina = sin(angle);
   cairo_move_to (Dev[id].context, x - r*cosa, y - r*sina);
   cairo_line_to (Dev[id].context, x + r*cosa, y + r*sina);
   cairo_rel_line_to (Dev[id].context, - headlength*cosa + headwidth*sina, headwidth*cosa - headlength*sina);
