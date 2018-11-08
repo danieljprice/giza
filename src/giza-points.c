@@ -443,7 +443,7 @@ _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fra
 
   /* draw the four arcs with slightly thinner lines */
   cairo_save(Dev[id].context);
-  cairo_set_line_width(Dev[id].context, 1.1);
+  cairo_set_line_width(Dev[id].context, 0.9);
   cairo_arc(Dev[id].context, x + center, y, R, M_PI     - two_beta, M_PI     + two_beta);
   cairo_new_sub_path(Dev[id].context);
   cairo_arc(Dev[id].context, x - center, y, R, 2*M_PI   - two_beta, 2*M_PI   + two_beta);
@@ -452,6 +452,7 @@ _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fra
   cairo_new_sub_path(Dev[id].context);
   cairo_arc(Dev[id].context, x, y + center, R, 3*M_PI_2 - two_beta, 3*M_PI_2 + two_beta);
   if (fill) { cairo_fill(Dev[id].context); }
+  cairo_stroke(Dev[id].context);
   cairo_restore(Dev[id].context);
 }
 
@@ -544,7 +545,7 @@ _giza_triangle(double x, double y, int fill, int updown, float scale, float offs
   cairo_line_to (Dev[id].context, x, y + updown * markerHeight * scale);
   cairo_close_path (Dev[id].context);
   if (fill) { cairo_fill(Dev[id].context); }
-  _giza_stroke ();
+  cairo_stroke (Dev[id].context);
   cairo_restore(Dev[id].context);
 }
 
