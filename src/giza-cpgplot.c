@@ -378,7 +378,11 @@ void cpggray(const float *a, int idim, int jdim, int i1, int i2, \
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-  giza_render_gray_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,GIZA_EXTEND_NONE,affine);
+  /* giza_render has calling convetion
+   *     giza_render_*( ..., valMin, valMax, ...)
+   * i.e. fg, bg are reversed to what cpggray() gets passed by the user
+   */
+  giza_render_gray_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,bg,fg,GIZA_EXTEND_NONE,affine);
 }
 
 /***************************************************************
