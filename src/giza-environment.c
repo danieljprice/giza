@@ -58,9 +58,8 @@ giza_set_environment (double xmin, double xmax, double ymin, double ymax, int ju
 {
   if(!_giza_check_device_ready ("giza_set_environment"))
     return;
-printf("giza_set_environment/changeing page\n");
+
   giza_change_page ();
-printf("                     set viewport default\n");
   giza_set_viewport_default ();
 
   char opts[8], yopts[8];
@@ -111,15 +110,12 @@ printf("                     set viewport default\n");
       break;
     }
 
-printf("                     set window\n");
   if (just)
     giza_set_window_equal_scale (xmin, xmax, ymin, ymax);
   else
     giza_set_window (xmin, xmax, ymin, ymax);
-printf("                     giza_box\n");
 
   giza_box (opts, 0., 0, yopts, 0., 0);
-printf("                     Done.\n");
 }
 
 /**
