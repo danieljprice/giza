@@ -136,6 +136,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   Dev[id].type = GIZA_DEVICE_IV;
   Dev[id].defaultBackgroundAlpha = 1.;
   Dev[id].deviceOpen = 1;
+  Dev[id].firstPage  = 1; /* Trigger skipping asking first page */
   int success = -1;
   giza_set_text_background (-1);
   giza_start_prompting ();
@@ -426,6 +427,18 @@ giza_change_page (void)
   if (!_giza_check_device_ready ("giza_change_page"))
     return;
 
+  /* PGPLOT keeps a flag per device ("pgplot.inc", "PGADVS(PGMAXD)"
+   * (PGMAXD = maximum number of PGPLOT devices open at the same time)
+   * to be able to skip asking for the first page. This flag is set
+   * in PGOPEN and cleared in PGPAGE
+   */
+  if (Dev[id].prompting && Dev[id].isInteractive && !Dev[id].firstPage)
+    {
+      _giza_newpage_prompt();
+    }
+  /* OK skipped the first 'ask' */
+  Dev[id].firstPage = 0;
+
   /* save a whole bunch of settings
     (line style, width, colour index etc.) */
   giza_save();
@@ -462,16 +475,6 @@ giza_change_page (void)
     default:
       _giza_error ("giza_change_page", "No device open");
       return;
-    }
-
-  if (Dev[id].resize) 
-    {
-      _giza_init_norm();
-    }
-
-  if (Dev[id].prompting && Dev[id].isInteractive && !Dev[id].resize)
-    {
-      _giza_newpage_prompt();
     }
 
   Dev[id].pgNum++;

@@ -62,8 +62,8 @@ giza_set_paper_size (int units, double width, double height)
   Dev[id].panelheight = Dev[id].height/Dev[id].ny;
 
   Dev[id].resize = 1;
-  giza_change_page();
-  /*giza_flush_device (); */
+  /* already change the coordinate transform */
+  _giza_init_norm();
 }
 /**
  * Same as giza_get_paper_size but takes floats

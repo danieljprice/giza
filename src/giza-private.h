@@ -81,6 +81,7 @@ typedef struct
   int resize;      /* Flag that device has been resized */
   int prompting;   /* Turn prompting on/off for interactive device */
   int buf;         /* Buffering on/off */
+  int firstPage;   /* To skip asking on first page (see PGADVS in PGPLOT source code)*/
   /* viewport and window settings for this device */
   giza_viewport_t VP;
   giza_window_t Win;
