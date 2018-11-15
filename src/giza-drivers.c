@@ -370,31 +370,6 @@ giza_flush_device (void)
 }
 
 /**
- * Device: giza_resize_device
- *
- * Synopsis: resizes the currently open device.
- */
-void
-_giza_resize_device (int width, int height)
-{
-  switch (Dev[id].type)
-    {
-#ifdef _GIZA_HAS_XW
-    case GIZA_DEVICE_XW:
-      _giza_change_size_xw (width + 40, height + 40);
-      _giza_init_norm ();
-      /* Must also adjust panel size in case of resized surface*/
-      Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
-      Dev[id].panelheight = Dev[id].height / Dev[id].ny;
-      double ch;
-      giza_get_character_height(&ch);
-      giza_set_character_height(ch);
-      break;
-#endif
-    }
-}
-
-/**
  * Device: giza_change_page
  *
  * Synopsis: Advances the currently open device to the next page, and redraws
