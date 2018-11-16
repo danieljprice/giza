@@ -258,14 +258,6 @@ _giza_change_page_xw (void)
 
      /* Request window to be resized */
      XResizeWindow(XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height);
-
-     /* Wait for ConfigureNotify events infomring us the window's size has actually changed to what we requested */
-     for (;;) {
-      XEvent e;
-      XNextEvent(XW[xid].display, &e);
-      if (e.type == ConfigureNotify && e.xconfigure.width==XW[xid].width && e.xconfigure.height==XW[xid].height )
-        break;
-      }
   } else if( (unsigned int)XW[xid].width!=width_return || (unsigned int)XW[xid].height!=height_return ) {
       /* Oh. Someone probably resized the XWindow behind our backs. Handle that here */
       XW[xid].width  = Dev[id].width  = width_return;
