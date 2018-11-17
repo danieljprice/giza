@@ -136,6 +136,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   Dev[id].type = GIZA_DEVICE_IV;
   Dev[id].defaultBackgroundAlpha = 1.;
   Dev[id].deviceOpen = 1;
+  Dev[id].firstPage  = 1; /* Trigger skipping asking first page */
   int success = -1;
   giza_set_text_background (-1);
   giza_start_prompting ();
@@ -369,31 +370,6 @@ giza_flush_device (void)
 }
 
 /**
- * Device: giza_resize_device
- *
- * Synopsis: resizes the currently open device.
- */
-void
-_giza_resize_device (int width, int height)
-{
-  switch (Dev[id].type)
-    {
-#ifdef _GIZA_HAS_XW
-    case GIZA_DEVICE_XW:
-      _giza_change_size_xw (width + 40, height + 40);
-      _giza_init_norm ();
-      /* Must also adjust panel size in case of resized surface*/
-      Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
-      Dev[id].panelheight = Dev[id].height / Dev[id].ny;
-      double ch;
-      giza_get_character_height(&ch);
-      giza_set_character_height(ch);
-      break;
-#endif
-    }
-}
-
-/**
  * Device: giza_change_page
  *
  * Synopsis: Advances the currently open device to the next page, and redraws
@@ -425,6 +401,18 @@ giza_change_page (void)
 
   if (!_giza_check_device_ready ("giza_change_page"))
     return;
+
+  /* PGPLOT keeps a flag per device ("pgplot.inc", "PGADVS(PGMAXD)"
+   * (PGMAXD = maximum number of PGPLOT devices open at the same time)
+   * to be able to skip asking for the first page. This flag is set
+   * in PGOPEN and cleared in PGPAGE
+   */
+  if (Dev[id].prompting && Dev[id].isInteractive && !Dev[id].firstPage)
+    {
+      _giza_newpage_prompt();
+    }
+  /* OK skipped the first 'ask' */
+  Dev[id].firstPage = 0;
 
   /* save a whole bunch of settings
     (line style, width, colour index etc.) */
@@ -462,16 +450,6 @@ giza_change_page (void)
     default:
       _giza_error ("giza_change_page", "No device open");
       return;
-    }
-
-  if (Dev[id].resize) 
-    {
-      _giza_init_norm();
-    }
-
-  if (Dev[id].prompting && Dev[id].isInteractive && !Dev[id].resize)
-    {
-      _giza_newpage_prompt();
     }
 
   Dev[id].pgNum++;

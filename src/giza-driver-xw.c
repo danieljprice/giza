@@ -251,16 +251,6 @@ _giza_change_page_xw (void)
   /* interactive logging feature */
   if (Sets.autolog && Dev[id].drawn) _giza_write_log_file(Dev[id].surface);
 
-  /* create a new pixmap */
-  cairo_destroy(Dev[id].context);
-  cairo_surface_finish (Dev[id].surface);
-  cairo_status_t status = cairo_surface_status (Dev[id].surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-     _giza_error("giza_change_page_xw",cairo_status_to_string(status));
-
-  cairo_surface_destroy (Dev[id].surface);
-  XFreePixmap (XW[xid].display, XW[xid].pixmap);
-
   if (Dev[id].resize) {
      /* Set the new device size */
      XW[xid].width  = Dev[id].width + 2 * GIZA_XW_MARGIN;
@@ -268,16 +258,8 @@ _giza_change_page_xw (void)
 
      /* Request window to be resized */
      XResizeWindow(XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height);
-
-     /* Wait for ConfigureNotify events infomring us the window's size has actually changed to what we requested */
-     for (;;) {
-      XEvent e;
-      XNextEvent(XW[xid].display, &e);
-      if (e.type == ConfigureNotify && e.xconfigure.width==XW[xid].width && e.xconfigure.height==XW[xid].height )
-        break;
-      }
   } else if( (unsigned int)XW[xid].width!=width_return || (unsigned int)XW[xid].height!=height_return ) {
-      /* Ah. Detected a change of window size. Update internal bookkeeping */
+      /* Oh. Someone probably resized the XWindow behind our backs. Handle that here */
       XW[xid].width  = Dev[id].width  = width_return;
       XW[xid].height = Dev[id].height = height_return;
 
@@ -291,6 +273,16 @@ _giza_change_page_xw (void)
       Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
       Dev[id].panelheight = Dev[id].height / Dev[id].ny;
   }
+
+  /* This function is called for each new page, so new page means new pixmap */
+  cairo_destroy(Dev[id].context);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+     _giza_error("giza_change_page_xw",cairo_status_to_string(status));
+
+  cairo_surface_destroy (Dev[id].surface);
+  XFreePixmap (XW[xid].display, XW[xid].pixmap);
 
   /* New page means new pixmap */
   XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
@@ -514,56 +506,6 @@ _giza_expose_xw (XEvent *event)
 	     event->xexpose.y);
 
 /*  XFlush(XW[xid].display); */
-}
-
-/**
- * Changes the size of the current window
- */
-void
-_giza_change_size_xw (int width, int height)
-{
-  /* Set the new device size */
-  Dev[id].width  = width  - 2 * GIZA_XW_MARGIN;
-  Dev[id].height = height - 2 * GIZA_XW_MARGIN;
-
-  XW[xid].width  = width;
-  XW[xid].height = height;
-
-  /* Do stuff needed to reflect changed window size, notably adjust panel size in case of resized surface*/
-  _giza_init_norm();
-  Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
-  Dev[id].panelheight = Dev[id].height / Dev[id].ny;
-
-  /* Request window to be resized */
-  XResizeWindow(XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height);
-
-  /* Wait for ConfigureNotify events infomring us the window's size has actually changed to what we requested */
-  for (;;) {
-    XEvent e;
-    XNextEvent(XW[xid].display, &e);
-    if (e.type == ConfigureNotify && e.xconfigure.width==XW[xid].width && e.xconfigure.height==XW[xid].height )
-      break;
-  }
-
-  /* From cairo_xlib_surface_set_size () [*]
-    "A Pixmap can never change size, so it is never necessary to call this function on a surface created for a Pixmap."
-
-   [*] https://www.cairographics.org/manual/cairo-XLib-Surfaces.html#cairo-xlib-surface-set-size]
-   */
-  /* create a new pixmap */
-  cairo_destroy(Dev[id].context);
-  cairo_surface_finish (Dev[id].surface);
-  cairo_status_t status = cairo_surface_status (Dev[id].surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-     _giza_error("giza_change_size_xw",cairo_status_to_string(status));
-
-  cairo_surface_destroy (Dev[id].surface);
-  XFreePixmap (XW[xid].display, XW[xid].pixmap);
-
-  XW[xid].pixmap = XCreatePixmap (XW[xid].display, XW[xid].window, (unsigned) XW[xid].width, (unsigned) XW[xid].height, (unsigned) XW[xid].depth);
-  /* recreate the cairo surface */
-  Dev[id].surface = cairo_xlib_surface_create (XW[xid].display, XW[xid].pixmap, XW[xid].visual, XW[xid].width, XW[xid].height);
-  Dev[id].context = cairo_create (Dev[id].surface);
 }
 
 /**
