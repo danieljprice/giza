@@ -33,7 +33,6 @@
 <dd><a href="#giza_get_device_id">giza_get_device_id</a></dd>
 <dd><a href="#giza_select_device">giza_select_device</a></dd>
 <dd><a href="#giza_flush_device">giza_flush_device</a></dd>
-<dd><a href="#giza_resize_device">giza_resize_device</a></dd>
 <dd><a href="#giza_change_page">giza_change_page</a></dd>
 <dd><a href="#giza_close_device">giza_close_device</a></dd>
 <dd><a href="#giza_query_device">giza_query_device</a></dd>
@@ -295,9 +294,6 @@
 <table class="api"></table><h3><a name="giza_flush_device">giza_flush_device</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_flush_device</td><td> (void) ;</tr></table><p>Flushes the currently open device.</p>
-<h3><a name="giza_resize_device">giza_resize_device</a><hr></h3>
-<table class="proto">
-<tr><td width=10%>void</td><td width=20%>_giza_resize_device</td><td> (int width, int height) ;</tr></table><p>resizes the currently open device.</p>
 <h3><a name="giza_change_page">giza_change_page</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_change_page</td><td> (void) ;</tr></table><p>Advances the currently open device to the next page, and redraws the background. If no other actions have been performed since the device was opened or the last call to giza_change_page the call is ignored.</p>
@@ -307,10 +303,12 @@
 <tr><td width=10%>void</td><td width=20%>giza_close_device</td><td> (void) ;</tr></table><p>Closes the currently open device. Should always be called before exiting your program as it frees associated memory.</p>
 <h3><a name="giza_query_device">giza_query_device</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>int</td><td width=20%>giza_query_device</td><td> (const char *querytype, char *returnval) ;</tr></table><p>Queries various things about the current device.</p>
+<tr><td width=10%>int</td><td width=20%>giza_query_device</td><td> (const char *querytype, char *returnval, int* rlen) ;</tr></table><p>Queries various things about the current device.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>querytype :</td><td>a string containing the query type</td>
+</tr><tr>
+<td>rlen      :</td><td>integer containing the length of the return buffer</td>
 </tr></table><h4>Output:</h4>
 <table class="api"><tr>
 <td>returnval :</td><td>string with result of query</td>
