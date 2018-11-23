@@ -57,7 +57,8 @@
 
 static void _giza_set_prefix (const char *prefix);
 static int _giza_get_internal_id(int devid);
-static int _giza_device_id = 0;
+static void _giza_close_device_unchecked (void);
+static void _giza_init_device_struct(giza_device_t*);
 
 /* global settings */
 giza_settings_t Sets;
@@ -79,6 +80,9 @@ giza_device_t Dev[GIZA_MAX_DEVICES];
  * Return value:
  *  -<=0 :- an error has occurred
  *  -1   :- id of current device
+ *          Note: this is the EXTERNAL device number, running from 1..Ndev
+ *          The internal device numbers are array indices into the Dev[...]
+ *          array and run from 0..Ndev-1
  *
  * Available devices:
  *  -?    :- User selects device
@@ -128,28 +132,45 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
 int
 giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
 {
-  _giza_device_id += 1;
-  id = _giza_get_internal_id(_giza_device_id);
-  
-  /* Some general initialisation */
-  Dev[id].pgNum = 0;
-  Dev[id].type = GIZA_DEVICE_IV;
-  Dev[id].defaultBackgroundAlpha = 1.;
-  Dev[id].deviceOpen = 1;
-  Dev[id].firstPage  = 1; /* Trigger skipping asking first page */
-  int success = -1;
-  giza_set_text_background (-1);
-  giza_start_prompting ();
+  static int didInit = 0;
+
+  if( !didInit ) {
+      for(giza_device_t* pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
+          _giza_init_device_struct( pDev );
+       didInit = 1;
+  }
+
+  if( !newDeviceName || !strlen(newDeviceName) ) {
+      _giza_error("giza_open_device", newDeviceName==NULL ? "(nullptr devicename)" : "empty device name");
+      return -1;
+  }
+
+  /* request to open a new device.
+   * see if we can find an unused entry in our list of devices */
+  int   newId;
+
+  for( newId=0; newId<GIZA_MAX_DEVICES; newId++ )
+      if( Dev[newId].deviceOpen==0 )
+          break;
+  if( newId>=GIZA_MAX_DEVICES ) {
+      _giza_error("giza_open_device", "No more free devices (%d in use). Close some first.", GIZA_MAX_DEVICES);
+      return -1;
+  }
+
+  /* Some general initialisation.
+   * Everything was already zeroed out + type was already == GIZA_DEVICE_IV */
+
+  /* Change the "current device id" to the newly allocated device
+   * such that routines can initialize it properly.
+   * Note that if something fails we have to put back the 
+   * previous current device id */
+  const int prevId = id;
+
+  id = newId;
+
   _giza_init();
 
-  if (newPrefix)
-    {
-      _giza_set_prefix (newPrefix);
-    }
-  else
-    {
-      _giza_set_prefix (GIZA_DEFAULT_PREFIX);
-    }
+  _giza_set_prefix( newPrefix!=0 ? newPrefix : GIZA_DEFAULT_PREFIX );
 
   /* Determine which type of device to open */
   char firstchar = newDeviceName[0];
@@ -165,6 +186,8 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
     }
 
   /* Determine which driver is required */
+  int success;
+
   switch (Dev[id].type)
     {
 #ifdef _GIZA_HAS_XW
@@ -201,29 +224,40 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
     case GIZA_DEVICE_IV:
     default:
       _giza_error ("giza_open_device", "Unknown device, device not opened");
-      return -1;
+      success = 666;
+      break;
     }
 
   /* check that the surface was created */
-  if (success) {
-     _giza_device_id = _giza_device_id - 1;
-     id = _giza_get_internal_id(_giza_device_id);
-     return -1;
+  if (success!=0 || Dev[id].surface==0) {
+      /* Let giza_close_device_unchecked() reset the contents of the
+       * Dev[...] that we tried to initialize */
+      _giza_close_device_unchecked ();
+      /* And put back the old device */
+      id = prevId;
+      return -1;
   }
   /* bind the created surface to our Dev[id].context */
   Dev[id].context = cairo_create (Dev[id].surface);
   if (!Dev[id].context)
     {
-      _giza_error ("giza_open_device", "Could not create cairo surface.");
-      giza_close_device();
+      _giza_error ("giza_open_device", "Could not create cairo context.");
+      /* call the unchecked close device function because this one
+       * hasn't been fully constructed yet */
+      _giza_close_device_unchecked();
+      /* and put back previously active device */
+      id = prevId;
       return -1;
     }
 
-  /* some final initialisation */
+  /* Do the rest of the initialization.
+   * These routines check for Dev[id].deviceOpen so we must set that */
+  Dev[id].deviceOpen = 1;
+  Dev[id].defaultBackgroundAlpha = 1.;
+
+  giza_set_text_background (-1);
+  giza_start_prompting ();
   _giza_init_subpanel ();
-  Dev[id].drawn = 0;
-  Dev[id].resize = 0;
-  Dev[id].fontAngle = 0.;
   _giza_init_arrow_style ();
   _giza_init_line_style ();
   _giza_init_colour_index ();
@@ -247,8 +281,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   _giza_init_band_style ();
   _giza_init_save ();
   giza_set_clipping(1);
-  /*_giza_stroke();*/
-  return _giza_device_id;
+  return id+1;
 }
 
 /**
@@ -275,7 +308,7 @@ int _giza_get_internal_id(int devid)
 /**
  * Device: giza_get_device_id
  *
- * Synopsis: Returns the id of the currently selected device
+ * Synopsis: Returns the (external) id of the currently selected device
  *
  * Output:
  *  -devid, as returned by giza_open_device
@@ -285,7 +318,7 @@ int _giza_get_internal_id(int devid)
 void
 giza_get_device_id (int *devid)
 {
-  *devid = _giza_device_id;
+  *devid = id + 1;
   return;
 }
 
@@ -302,19 +335,20 @@ giza_get_device_id (int *devid)
 void
 giza_select_device (int devid)
 {
-  if (devid > 0 && devid <= GIZA_MAX_DEVICES) {
-    /* need to check if device is open */
+    /* attempt to map external device id to internal id */
     int tmpid = _giza_get_internal_id(devid);
-    if (!Dev[tmpid].deviceOpen) 
-      {
-        _giza_error ("giza_select_device", "Invalid/closed device selected");
 
-      } else {
-
-        _giza_device_id = devid;
-        id = _giza_get_internal_id(_giza_device_id);
-
-      }
+    if( tmpid<0 || tmpid>=GIZA_MAX_DEVICES ) {
+        _giza_error ("giza_select_device", "Invalid device number %d selected", devid);
+        return;
+    }
+    /* need to check if device is open */
+    if (!Dev[tmpid].deviceOpen) {
+        _giza_error ("giza_select_device", "Invalid/closed device %d selected", devid);
+        return;
+    }
+    /* The device can be selected */
+    id = tmpid;
 
     /*
      * select between currently open windows
@@ -327,10 +361,12 @@ giza_select_device (int devid)
         _giza_select_xw (id);
         break;
 #endif
+      /* some compilers may start to complain if there's a switch() w/o
+       * default case [e.g. if _GIZA_HAS_XW is not defined then the switch
+       * statement would be completely empty */
+      default:
+        break;
       }
-  } else {
-    _giza_error ("giza_select_device", "Invalid device selected");
-  }
 }
 
 /**
@@ -472,6 +508,19 @@ giza_change_page (void)
 }
 
 /**
+ * Device: giza_close_devices
+ *
+ * Synopsis: Close all open devices (to be called from PGEND())
+ */
+void
+giza_close_devices (void)
+{
+  for(id = 0; id<GIZA_MAX_DEVICES; id++)
+      if( Dev[id].deviceOpen )
+          giza_close_device();
+}
+
+/**
  * Device: giza_close_device
  *
  * Synopsis: Closes the currently open device. Should always be called before exiting your program
@@ -488,9 +537,34 @@ giza_close_device (void)
       cairo_surface_finish (Dev[id].surface);
       _giza_newpage_prompt();
     }
+  /* we've done our sanity checks so clean up! */
+  _giza_close_device_unchecked();
+}
 
+
+/**
+ * Device: _giza_close_device_unchecked
+ *
+ * Synopsis: In order to be able to share the cleaning-up code between
+ * giza_close_device() and giza_open_device_size() [when something fails
+ * during the construction of a new device] the actual cleaning up code
+ * is put in this internal function.
+ *
+ * This function deletes the context and calls a type-specific close routine
+ * to delete the surface. Some other resources (e.g. font) are released as
+ * well. After that the contents of Dev[id] are returned to a known, default
+ * state: all zeroes and .type set to GIZA_DEVICE_IV.
+ *
+ * giza_close_device() can do its sanity checks as it is an API function and
+ * then call the _unchecked() version to do the heavy lifting;
+ * giza_open_device_size() can call this one directly as it knows it doesn't
+ * have to do any sanity checks.
+ */
+void
+_giza_close_device_unchecked (void) {
   /* destroy the cairo context */
-  if (Dev[id].context) cairo_destroy(Dev[id].context);
+  if (Dev[id].context)
+      cairo_destroy(Dev[id].context);
 
   switch (Dev[id].type)
     {
@@ -522,19 +596,38 @@ giza_close_device (void)
       break;
 #endif
     default:
-       return;
+      /* unrecognized device type => don't do anything but finish other cleanup*/
+       break;
     }
-
-  Dev[id].deviceOpen = 0;
 
   /* Destroy the font */
   _giza_free_font ();
   _giza_free_colour_table ();
-  Dev[id].type = GIZA_DEVICE_IV;
-  _giza_device_id = _giza_device_id - 1;
-  id = _giza_get_internal_id(_giza_device_id);
 
-  return;
+  /* Return device struct contents to known empty state */
+  _giza_init_device_struct( &Dev[id] );
+}
+
+/**
+ * Device: _giza_init_device_struct
+ *
+ * Synopsis: resets the contents of a giza_device_t to a known state:
+ * the whole struct is zeroed out and .type is set to GIZA_DEVICE_IV.
+ *
+ * Note: this approach was chosen over having a static/const/global
+ * giza_device_t using a compond struct initializer like this:
+ *    static const giza_device_t prototype = { .type = GIZA_DEVICE_IV };
+ * since the opinions differ a bit on exactly which C standard does exactly
+ * what with members that are not named in the initializer list.
+ * See https://stackoverflow.com/questions/330793/how-to-initialize-a-struct-in-accordance-with-c-programming-language-standards
+ *
+ * Input:
+ *  -ptrDev :- a pointer to a giza_device_t 
+ */
+void
+_giza_init_device_struct(giza_device_t* ptrDev) {
+    memset(ptrDev, 0x0, sizeof(giza_device_t));
+    ptrDev->type = GIZA_DEVICE_IV;
 }
 
 /**
