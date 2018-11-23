@@ -1629,9 +1629,9 @@ private
 
  !private :: giza_format_number_c
  interface giza_format_number_c
-    subroutine giza_format_number_c(mantissa,power,iform,string) bind(C,name="giza_format_number")
+    subroutine giza_format_number_c(mantissa,power,iform,string,cstring_len) bind(C,name="giza_format_number")
       import
-      integer(kind=c_int),value,intent(in)    :: mantissa,power,iform
+      integer(kind=c_int),value,intent(in)    :: mantissa,power,iform,cstring_len
       character(kind=c_char),dimension(*),intent(out) :: string
     end subroutine giza_format_number_c
  end interface
@@ -1910,8 +1910,9 @@ contains
     integer(kind=c_int),intent(in) :: mantissa,power,iform
     character(len=*),  intent(out) :: string
     character(kind=c_char), dimension(len(string)+1) :: stringc
-  
-    call giza_format_number_c(mantissa,power,iform,stringc)
+    integer(kind=c_int) :: cstring_length
+    cstring_length = len(string)+1 
+    call giza_format_number_c(mantissa,power,iform,stringc,cstring_length)
     string = fstring(stringc)
 
   end subroutine giza_format_number_f2c

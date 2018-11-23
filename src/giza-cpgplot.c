@@ -499,11 +499,17 @@ void cpgncur(int maxpt, int *npt, float *x, float *y, int symbol)
 /***************************************************************
  * cpgnumb -- convert a number into a plottable character string
  * Status: IMPLEMENTED
+ * Update: In order to prevent memory corruption by
+ *         giza_format_number, assume that '*string_length', on
+ *         entry, contains the maximum length of the string 
+ *         buffer allocated by the caller.
+ *         PGPLOT c-binding does this, perl-PGPLOT5 does this
+ *         and giza's F90 wrapper's been changed to do this
  ***************************************************************/
 void cpgnumb(int mm, int pp, int form, char *string, \
  int *string_length)
 {
-  giza_format_number(mm, pp, form, string);
+  giza_format_number(mm, pp, form, string, *string_length);
   *string_length = strlen(string);
 }
 
@@ -756,7 +762,7 @@ void cpgqinf(const char *item, char *value, int *value_length)
       static char   giza_version_string[32] = {'\0',};
       /* Initialize only once */
       if (giza_version_string[0]=='\0' )
-         sprintf(giza_version_string, "giza-%s", GIZA_VERSION_STRING);
+         snprintf(giza_version_string, sizeof(giza_version_string), "giza-%s", GIZA_VERSION_STRING);
       /* Copy at most *value_length-1 characters into value - note: strncpy(3)
          may leave value not-NUL terminated if *value_length < length of giza_version_string.
          Could have used strlcpy(3) but that is famously absent in glibc on Linux (need -lbsd 
