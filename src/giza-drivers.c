@@ -517,7 +517,9 @@ giza_close_devices (void)
 {
   for(id = 0; id<GIZA_MAX_DEVICES; id++)
       if( Dev[id].deviceOpen )
-          giza_close_device();
+          giza_close_device ();
+  /* force-unload the font cache */
+  _giza_unload_font_cache ();
 }
 
 /**
@@ -539,6 +541,15 @@ giza_close_device (void)
     }
   /* we've done our sanity checks so clean up! */
   _giza_close_device_unchecked();
+
+  /* if no open devices remain, force-unload the font cache.
+   * it will be rebuilt as soon as new devices will be opened */
+  unsigned int nOpen = 0;
+  for(giza_device_t* p=&Dev[0]; p<&Dev[GIZA_MAX_DEVICES]; p++)
+      if( p->deviceOpen )
+          nOpen++;
+  if( nOpen==0 )
+    _giza_unload_font_cache ();
 }
 
 
@@ -1064,7 +1075,7 @@ _giza_expand_clipping (void)
 /**
  * Allocates the array for Dev[id].prefix and sets it to prefix
  */
-static void
+void
 _giza_set_prefix (const char *prefix)
 {
   if (strlen(prefix) > sizeof(Dev[id].prefix))

@@ -63,6 +63,20 @@ typedef struct
   double cutback;
 } giza_arrow_t;
 
+/* Keep track of font memory */
+typedef struct
+{
+  /* The font primary key */
+  char*               family;
+  cairo_font_slant_t  slant;
+  cairo_font_weight_t weight;
+  /* Keep own reference count for memory management.
+   * There is a reason for that, see giza-set-font.c
+   * in _giza_cache_get_font() */
+  unsigned int        refCount;
+  cairo_font_face_t*  font;
+} giza_font_t;
+
 /* Store variables relating to the current device */
 typedef struct
 {
@@ -104,6 +118,7 @@ typedef struct
   int text_background;
   int clip;
   giza_arrow_t Arrow;
+  giza_font_t* Font; /* This device's current font */
   /* cairo objects and settings */
   cairo_t *context;
   cairo_surface_t *surface;
