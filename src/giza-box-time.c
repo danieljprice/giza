@@ -1061,9 +1061,9 @@ C                 seconds above the '.' and add DO2 option [nebk/jm]
 */
 void pgtbx7(char const* suptyp, char signf, char asign, int ival[3], double rval, int writ[4], int sprec, int do2, char* text, int* tlen, int* last) {
     /* the superscripting strings */
-    char const* super[3][4] = { "\\ud\\d"       , "\\uh\\d"       , "\\um\\d"       , "\\us\\d",
-                                "\\u\\(2199)\\d", "\\u\\(2729)\\d", "\\u\\(2727)\\d", "\\u\\(2728)\\d",
-                                "\\u \\d"       , "\\u \\d"       , "\\u \\d"       , "\\u \\d" };
+    char const* super[3][4] = { {"\\ud\\d"       , "\\uh\\d"       , "\\um\\d"       , "\\us\\d"},
+                                {"\\u\\(2199)\\d", "\\u\\(2729)\\d", "\\u\\(2727)\\d", "\\u\\(2728)\\d"},
+                                {"\\u \\d"       , "\\u \\d"       , "\\u \\d"       , "\\u \\d" }};
 
     int          nch;
     char const** suppnt;
