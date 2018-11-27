@@ -112,5 +112,6 @@ _giza_change_page_null (void)
 void
 _giza_close_device_null (void)
 {
-  cairo_surface_destroy (Dev[id].surface);
+  if( Dev[id].surface )
+      cairo_surface_destroy (Dev[id].surface);
 }

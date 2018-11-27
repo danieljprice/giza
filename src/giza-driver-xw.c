@@ -61,6 +61,7 @@ struct GIZA_XWindow
   int depth;
   int pixelsize;
   int screensize;
+  int in_use;
 } XW[GIZA_MAX_DEVICES];
 
 #define GIZA_DEFAULT_WIDTH 800
@@ -76,7 +77,6 @@ static void _giza_flush_xw_event_queue (XEvent *event);
 static int _giza_errors_xw (Display *display, XErrorEvent *error);
 
 static int giza_xw_id[GIZA_MAX_DEVICES];
-static int xid = -1;
 /*static int giza_xw_debug = 0;*/
 
 /**
@@ -88,10 +88,69 @@ static int xid = -1;
  *  -3 :- No X visual could be created.
  *  -4 :- No window could be created.
  *  -5 :- No cairo surface could be created.
+ *  -6 :- No more XW entries available
+ *  -7 :- Internal error: the current giza device (Dev[id])'s
+ *        entry in the giza-to-xw-mapping was not freed up correctly
  */
 int
 _giza_open_device_xw (double width, double height, int units)
 {
+  int        tmp_count;
+
+  /* GIZA_XWindow contains pointers so much be initialized properly */
+  static int didInit = 0;
+  if( !didInit ) {
+      /* All device structs get zeroed out */
+      memset( &XW[0], 0x0, GIZA_MAX_DEVICES * sizeof(struct GIZA_XWindow) );
+      /* Initialize all giza-id-to-xid-map entries to -1 */
+      for(tmp_count = 0; tmp_count<GIZA_MAX_DEVICES; tmp_count++)
+          giza_xw_id[tmp_count] = -1;
+      didInit = 1;
+  }
+
+  if( giza_xw_id[id]!=-1 ) {
+      _giza_error ("_giza_open_device_xw", "Internal error: giza-device-id-to-xw entry for Dev[%d] is not empty, it is %d", id, giza_xw_id[id]);
+      return 7;
+  }
+
+  /* Find an unused GIZA_XWindow entry */
+  for( giza_xw_id[id] = 0; giza_xw_id[id]<GIZA_MAX_DEVICES; giza_xw_id[id]++ )
+      if( XW[giza_xw_id[id]].in_use==0 )
+          break;
+  if( giza_xw_id[id]>=GIZA_MAX_DEVICES ) {
+      giza_xw_id[id] = -1;
+      _giza_error ("_giza_open_device_xw", "No more unused XW entries available");
+      return 6;
+  }
+
+  const int xid = giza_xw_id[id];
+
+  /* Start with a clean slate for that device and mark it as being in use*/
+  memset( &XW[xid], 0x0, sizeof(struct GIZA_XWindow) );
+  XW[xid].in_use  = 1;
+
+  /* open the connection to the sever and check there was no error */
+  XW[xid].display = XOpenDisplay (NULL);
+  if (!XW[xid].display)
+    {
+      _giza_error ("_giza_open_device_xw", "Connection to the X server could not be made");
+      return 1;
+    }
+
+  /* get an identifier for the screen */
+  XW[xid].screenptr = DefaultScreenOfDisplay(XW[xid].display);
+  XW[xid].screennum = DefaultScreen (XW[xid].display);
+
+  /* create a visual */
+  XW[xid].visual = DefaultVisual (XW[xid].display, XW[xid].screennum);
+
+  if (!XW[xid].visual)
+    {
+      _giza_error ("_giza_open_device_xw", "Could not get X visual");
+      return 3;
+    }
+
+
   Dev[id].deviceUnitsPermm    = GIZA_DEVICE_UNITS_PER_MM;
   Dev[id].deviceUnitsPerPixel = GIZA_DEVICE_UNITS_PER_PIXEL;
   Dev[id].isInteractive       = GIZA_DEVICE_INTERACTIVE;
@@ -107,24 +166,9 @@ _giza_open_device_xw (double width, double height, int units)
       Dev[id].height = GIZA_DEFAULT_HEIGHT;
     }
 
-  xid += 1;
-  giza_xw_id[id] = xid + 1;
-
   /* set the XLib stuff */
   XW[xid].width = Dev[id].width + 2 * GIZA_XW_MARGIN;
   XW[xid].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
-
-  /* open the connection to the sever and check there was no error */
-  XW[xid].display = XOpenDisplay (NULL);
-  if (!XW[xid].display)
-    {
-      _giza_error ("_giza_open_device_xw", "Connection to the X server could not be made");
-      return 1;
-    }
-
-  /* get an identifier for the screen */
-  XW[xid].screenptr = DefaultScreenOfDisplay(XW[xid].display);
-  XW[xid].screennum = DefaultScreen (XW[xid].display);
 
   /* set the depth */
   XW[xid].depth = DefaultDepth(XW[xid].display,XW[xid].screennum);
@@ -149,14 +193,6 @@ _giza_open_device_xw (double width, double height, int units)
        /*printf("giza_xw_debug: XW colour depth = %d\n",XW[xid].depth);*/
     }
 
-  /* create a visual */
-  XW[xid].visual = DefaultVisual (XW[xid].display, XW[xid].screennum);
-
-  if (!XW[xid].visual)
-    {
-      _giza_error ("_giza_open_device_xw", "Could not get X visual");
-      return 3;
-    }
 
   unsigned long white = WhitePixel(XW[xid].display, XW[xid].screennum);
 
@@ -197,7 +233,6 @@ _giza_open_device_xw (double width, double height, int units)
   if (!Dev[id].surface)
     {
       _giza_error ("_giza_open_device_xw", "Could not create surface");
-      XFreePixmap (XW[xid].display, XW[xid].pixmap);
       return 5;
     }
 
@@ -220,6 +255,12 @@ _giza_open_device_xw (double width, double height, int units)
 void
 _giza_flush_device_xw (void)
 {
+  const int xid = giza_xw_id[id];
+
+  if( xid<0 ) {
+      _giza_warning ("_giza_flush_device_xw", "No GIZA_XWindow assigned to Dev[%d]", id);
+      return;
+  }
   /* flush the offscreen surface */
   cairo_surface_flush (Dev[id].surface);
 
@@ -244,7 +285,13 @@ _giza_change_page_xw (void)
 {
   int          x_return, y_return;
   Window       root_return;
+  const int    xid = giza_xw_id[id];
   unsigned int width_return, height_return, border_width_return, depth_return;
+
+  if( xid<0 ) {
+      _giza_warning ("_giza_change_page_xw", "No GIZA_XWindow assigned to Dev[%d]", id);
+      return;
+  }
 
   /* Enquire current geometry to see if it's changed */
   XGetGeometry(XW[xid].display, XW[xid].window, &root_return, &x_return, &y_return, &width_return, &height_return, &border_width_return, &depth_return);
@@ -309,13 +356,11 @@ int
 _giza_select_xw(int devid)
 {
   int tmp = giza_xw_id[devid];
-  if (!tmp) {
+  if (tmp<0) {
      _giza_error("giza_select_xw","internal error: selected device is not an X-Window");
      return 1;
-  } else {
-    xid = tmp-1;
-    return 0;
-  }
+  } 
+  return 0;
 }
 
 /**
@@ -324,15 +369,38 @@ _giza_select_xw(int devid)
 void
 _giza_close_device_xw (void)
 {
-  cairo_surface_finish (Dev[id].surface);
-  cairo_status_t status = cairo_surface_status (Dev[id].surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-     _giza_error("giza_close_device_xw",cairo_status_to_string(status));
+  const int    xid = giza_xw_id[id];
 
-  cairo_surface_destroy (Dev[id].surface);
-  XFreePixmap (XW[xid].display, XW[xid].pixmap);
-  /*XFreeGC(XW[xid].display,XW[xid].gc);*/
-  XCloseDisplay (XW[xid].display);
+  /* If we end up here with xid < 0 this means we refer to a non-XWindow.
+   * If, otoh, xid >= GIZA_MAX_DEVICE, this means we got here because of
+   * an error return of _giza_open_device_xw () without findind an unused
+   * GIZA_XWindow entry
+   */
+  if( xid<0 || xid >= GIZA_MAX_DEVICES ) {
+      if( xid < 0 )
+          _giza_warning ("_giza_close_device_xw", "No GIZA_XWindow assigned to Dev[%d]", id);
+      return;
+  }
+  if( Dev[id].surface ) {
+      cairo_surface_finish (Dev[id].surface);
+      cairo_status_t status = cairo_surface_status (Dev[id].surface);
+      if (status != CAIRO_STATUS_SUCCESS)
+         _giza_error("giza_close_device_xw",cairo_status_to_string(status));
+      cairo_surface_destroy (Dev[id].surface);
+  }
+  /* Release resources only if they seem to be there */
+  if( XW[xid].display ) {
+      if( XW[xid].window )
+          XDestroyWindow( XW[xid].display, XW[xid].window );
+      if( XW[xid].pixmap )
+          XFreePixmap (XW[xid].display, XW[xid].pixmap);
+      /*XFreeGC(XW[xid].display,XW[xid].gc);*/
+      XCloseDisplay (XW[xid].display);
+  }
+  /* Erase state of current XW device to pristine state */
+  memset( &XW[xid], 0x0, sizeof(struct GIZA_XWindow) );
+  /* Mark the XW entry for Dev[id] back to unused */
+  giza_xw_id[id] = -1;
 }
 
 
@@ -356,6 +424,12 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
 static void
 _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const int *anchory, int *x, int *y, char *ch)
 {
+  const int    xid = giza_xw_id[id];
+
+  if( xid<0 ) {
+      _giza_warning ("_giza_xevent_loop", "No GIZA_XWindow assigned to Dev[%d]", id);
+      return;
+  }
   /* move the cursor to the given position */
   if (moveCurs)
     {
@@ -478,6 +552,12 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 static void
 _giza_flush_xw_event_queue (XEvent *event)
 {
+  const int    xid = giza_xw_id[id];
+
+  if( xid<0 ) {
+      _giza_warning ("_giza_flush_xw_event_queue", "No GIZA_XWindow assigned to Dev[%d]", id);
+      return;
+  }
   /*
    * Discard un-handled ButtonPress, KeyPress and MotionNotify events
    * without blocking.
@@ -500,6 +580,12 @@ _giza_flush_xw_event_queue (XEvent *event)
 static void
 _giza_expose_xw (XEvent *event)
 {
+  const int    xid = giza_xw_id[id];
+
+  if( xid<0 ) {
+      _giza_warning ("_giza_expose_xw", "No GIZA_XWindow assigned to Dev[%d]", id);
+      return;
+  }
   XCopyArea (XW[xid].display, XW[xid].pixmap, XW[xid].window, XW[xid].gc, event->xexpose.x,
 	     event->xexpose.y, (unsigned) event->xexpose.width,
 	     (unsigned) event->xexpose.height, event->xexpose.x,
@@ -514,6 +600,12 @@ _giza_expose_xw (XEvent *event)
 void
 _giza_expand_clipping_xw (void)
 {
+  const int    xid = giza_xw_id[id];
+
+  if( xid<0 ) {
+      _giza_warning ("_giza_expand_clipping_xw", "No GIZA_XWindow assigned to Dev[%d]", id);
+      return;
+  }
   _giza_set_trans (GIZA_TRANS_IDEN);
   cairo_reset_clip (Dev[id].context);
   cairo_rectangle (Dev[id].context, 0, 0, XW[xid].width, XW[xid].height);
@@ -556,6 +648,12 @@ _giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, co
 int
 _giza_init_band_xw (void)
 {
+  const int    xid = giza_xw_id[id];
+
+  if( xid<0 ) {
+      _giza_warning ("_giza_init_band_xw", "No GIZA_XWindow assigned to Dev[%d]", id);
+      return;
+  }
   /* Set up box so it can draw the box... */
   Band.onscreen = cairo_xlib_surface_create (XW[xid].display, XW[xid].window, XW[xid].visual, XW[xid].width, XW[xid].height);
   Band.box = cairo_create (Band.onscreen);
