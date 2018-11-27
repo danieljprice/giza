@@ -349,24 +349,6 @@ giza_select_device (int devid)
     }
     /* The device can be selected */
     id = tmpid;
-
-    /*
-     * select between currently open windows
-     * for interactive devices 
-     */
-    switch (Dev[id].type)
-      {
-#ifdef _GIZA_HAS_XW
-      case GIZA_DEVICE_XW:
-        _giza_select_xw (id);
-        break;
-#endif
-      /* some compilers may start to complain if there's a switch() w/o
-       * default case [e.g. if _GIZA_HAS_XW is not defined then the switch
-       * statement would be completely empty */
-      default:
-        break;
-      }
 }
 
 /**
