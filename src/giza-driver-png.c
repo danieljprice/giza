@@ -121,6 +121,8 @@ _giza_change_page_png (void)
 void
 _giza_close_device_png (int last)
 {
+  if( Dev[id].surface==NULL )
+      return;
   int lenext = strlen (GIZA_DEVICE_EXTENSION);
   int length = strlen (Dev[id].prefix) + lenext + 5;
   char fileName[length + 1];

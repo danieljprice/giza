@@ -42,6 +42,7 @@
  *  -power    :- The power of the number
  *  -form     :- Determine which form to use, see below
  *  -string   :- Gets set to the string
+ *  -maxchar  :- The amount of available characters in string
  *
  * Forms:
  *  -GIZA_NUMBER_FORMAT_AUTO :- giza decides
@@ -49,10 +50,16 @@
  *  -GIZA_NUMBER_FORMAT_EXP  :- Use an exponent
  */
 void
-giza_format_number (int mantissa, int power, int form, char *string)
+giza_format_number (int mantissa, int power, int form, char *string, int maxchar)
 {
-  int minus, numDigits, digitsBeforePoint;
-  char tmp[100];
+  int       minus, numDigits, digitsBeforePoint;
+  char      tmp[100];
+  const int nChar = (maxchar - 1);
+
+  if( nChar < 1 ) {
+      _giza_error("giza_format_number", "caller allocated a buffer of only %d characters", maxchar);
+      return;
+  }
 
   /* return "0" */
   if (mantissa == 0)
@@ -66,11 +73,11 @@ giza_format_number (int mantissa, int power, int form, char *string)
   mantissa = abs (mantissa);
 
   /* Convert the mantissa to a string, and count the number of digits */
-  sprintf (tmp, "%i", mantissa);
+  snprintf (tmp, sizeof(tmp), "%i", mantissa);
   numDigits = strlen (tmp);
 
   /* Remove zeros on the right increasing power as needed */
-  while (tmp[numDigits - 1] == '0')
+  while (numDigits > 0 && tmp[numDigits - 1] == '0')
     {
       --numDigits;
       tmp[numDigits] = '\0';
@@ -82,7 +89,7 @@ giza_format_number (int mantissa, int power, int form, char *string)
   /* Integers of four or less digits (or forced integers) */
   if ((power >= 0) && ((form == GIZA_NUMBER_FORMAT_AUTO && (power + numDigits) <= 4) || (form == GIZA_NUMBER_FORMAT_DEC && power + numDigits <= 10)))
     {
-      for (; power > 0; --power)
+      for (; power > 0 && numDigits < (sizeof(tmp)-1); --power)
         {
 	  tmp[numDigits] = '0';
 	  ++numDigits;
@@ -92,7 +99,7 @@ giza_format_number (int mantissa, int power, int form, char *string)
   else if (form != GIZA_NUMBER_FORMAT_EXP && digitsBeforePoint >= 1 && digitsBeforePoint <= 4 && digitsBeforePoint < numDigits)
     {
       int i;
-      for (i = numDigits; i >= digitsBeforePoint; --i)
+      for (i = numDigits; i >= digitsBeforePoint ; --i)
         {
 	  tmp[i+1] = tmp[i];
 	}
@@ -144,17 +151,18 @@ giza_format_number (int mantissa, int power, int form, char *string)
   /* Add in the exponent */
   if (power != 0)
     {
-      sprintf (&tmp[numDigits], "\\times10^{%i}", power);
+      snprintf (&tmp[numDigits], sizeof(tmp)-numDigits, "\\times10^{%i}", power);
     }
 
-  /* Add leading minus sign and copy the result to output */
-  string[0] = '\0';
-  if (minus)
-    {
-      string[0] = '-';
-      string[1] = '\0';
-    }
-  strcat (string, tmp);
+  /* Add leading minus sign if necessary and copy the result to output.
+   * According to PGNUMB() description, if the target string is not
+   * long enough the hold the result the string should be set to '*'
+   * and NC=1. So we do that too.
+   * Note: some implementations of snprintf(3) return -1 if truncated,
+   * apparently.. */
+  const int nprint = snprintf(string, maxchar, (minus ? "%2$c%1$s" : "%1$s"), tmp, '-');
+  if( nprint==-1 || nprint>=maxchar )
+      strncpy(string, "*", maxchar);
 }
 
 /**

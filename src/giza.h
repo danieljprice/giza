@@ -24,10 +24,6 @@
 
 #include <giza-shared.h>
 
-/* do not allow use of freetype if cairo does not have it */
-#ifndef CAIRO_HAS_FT_FONT
-#undef GIZA_HAS_FT_FONT
-#endif
 
 void giza_arrow (double x1, double y1, double x2, double y2);
 void giza_arrow_float (float x1, float y1, float x2, float y2);
@@ -150,6 +146,7 @@ void giza_select_device (int devid);
 void giza_get_device_id (int *devid);
 void giza_flush_device (void);
 void giza_change_page (void);
+void giza_close_devices (void);
 void giza_close_device (void);
 int giza_query_device (const char *querytype, char *returnval, int* rlen);
 int giza_device_has_cursor (void);
@@ -183,7 +180,7 @@ void giza_error_bars_hori_float (int n, const float *xpts1, const float *xpts2,
 void giza_set_fill (int fs);
 void giza_get_fill (int *fs);
 
-void giza_format_number (int mantissa, int power, int form, char *str);
+void giza_format_number (int mantissa, int power, int form, char *str, int maxchar);
 
 void giza_function_x (double (*func) (double *x), int n, double xmin,
 		      double xmax, int flag);
