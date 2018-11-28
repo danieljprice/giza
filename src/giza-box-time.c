@@ -343,7 +343,7 @@ void _giza_tbx1( char axis, int* doday, int dopara, double tmin, double tmax, do
                                          {0,0} };
     const double secday              = 24*3600;
 
-    int               npl, ntick, itick;
+    int               npl, ntick;
     char              str[15] = {0,};
     double            tock, tock2, tint, tints, tmins, tmaxs;
     const int         nticmx = 8;
@@ -568,7 +568,7 @@ C
 C 10-Jun-1993 - new routine [nebk]
 */
 void _giza_tbx3( int doday, int npl, double tscale, double tints, int nticmx, tick_ntick const** tickptrptr, tick_ntick const* ticks, char axis, int dopara, char const* str, double* tick, int* nsub ) {
-    double       lens, lenx, leny, rel_tick_sz;
+    double       lens, lenx, leny;
     int const    ntick = (int)(tints / *tick);
 
     /* test for overflow in normalized device coordinates;
@@ -652,13 +652,10 @@ C 15-Jan-1995 - Add argument MOD24
 void _giza_tbx4(int doday, char const* suptyp, char axis, int convtl, int first, double tmin, double tmax, int tscale,
             double tick, int do2, int dopara, int mod24) {
     const int    maxtik = 1000;
-    const int    t = 1;
-    const int    f = 0;
 
     tmstamp      timestamps[maxtik], timel;
-    char         asignl;
 
-    double       time, xlen, ylen, coord, fjust, rval, disp, xlen2, ylen2;
+    double       time, coord, fjust, rval, disp;
     int          is, sd, nt, izero, ipos, ineg, it, i, j, k, sprec, jst[2], jend[2], tlen, last;
     int          ival[3], ivalo[3], ivalz[3], ivalf[3], ivall[3], npass, inc;
     int          writ[4];
@@ -778,7 +775,7 @@ void _giza_tbx4(int doday, char const* suptyp, char axis, int convtl, int first,
         fjust = 1.0;
         if( axis=='X' ) {
             coord = timestamps[0].tfrac + xlen/2;
-        } else if( axis=='Y' ) {
+        } else {  /* if( axis=='Y' ) */
             coord = timestamps[0].tfrac;
             if( dopara )
                 coord += ylen/2;
@@ -919,8 +916,7 @@ C
 C 10-Jun-1993 - new routine [nebk]
 */
 void _giza_tbx5(int doday, double tsec, tmstamp* ts) {
-    int    it;
-    double rem, tmp;
+    double tmp;
 
     /* remember sign and go to positive seconds */
     ts->asign = (tsec < 0) ? '-' : ' ';
