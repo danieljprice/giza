@@ -93,8 +93,6 @@ static int _giza_errors_xw (Display *display, XErrorEvent *error);
 int
 _giza_open_device_xw (double width, double height, int units)
 {
-  int        tmp_count;
-
   /* GIZA_XWindow contains pointers so much be initialized properly */
   static int didInit = 0;
   if( !didInit ) {
