@@ -103,6 +103,8 @@ _giza_flush_device_svg (void)
 void
 _giza_close_device_svg (void)
 {
+  if( Dev[id].surface==NULL )
+      return;
   cairo_surface_finish (Dev[id].surface);
   cairo_status_t status = cairo_surface_status (Dev[id].surface);
   if (status != CAIRO_STATUS_SUCCESS)

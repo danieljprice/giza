@@ -373,7 +373,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
             }
           else
             {
-              giza_format_number (i*nv, np, GIZA_NUMBER_FORMAT_AUTO, tmp);
+              giza_format_number (i*nv, np, GIZA_NUMBER_FORMAT_AUTO, tmp, sizeof(tmp));
             }
 
           if (xlabel_unconventional)
@@ -397,7 +397,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		{
 		  xratio = (xval - Win.xmin) / (Win.xmax - Win.xmin);
 		  xval = pow (10, xval);
-		  giza_format_number (j+1, _giza_nint (i * xintervalMin), GIZA_NUMBER_FORMAT_AUTO, tmp);
+		  giza_format_number (j+1, _giza_nint (i * xintervalMin), GIZA_NUMBER_FORMAT_AUTO, tmp, sizeof(tmp));
 
                   if (xlabel_unconventional)
                     giza_annotate ("T", 0.8, xratio, 0.5, tmp);
@@ -522,7 +522,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
             }
           else
             {
-              giza_format_number (i*nv, np, GIZA_NUMBER_FORMAT_AUTO, tmp);
+              giza_format_number (i*nv, np, GIZA_NUMBER_FORMAT_AUTO, tmp, sizeof(tmp));
             }
 
           if (ylabel_unconventional) 
@@ -555,7 +555,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		{
 		  yratio = (yval - Win.ymin) / (Win.ymax - Win.ymin);
 		  yval = pow (10, yval);
-		  giza_format_number (j+1, _giza_nint (i*yintervalMin), GIZA_NUMBER_FORMAT_AUTO, tmp);
+		  giza_format_number (j+1, _giza_nint (i*yintervalMin), GIZA_NUMBER_FORMAT_AUTO, tmp, sizeof(tmp));
 
                   if (ylabel_unconventional) 
                     {
