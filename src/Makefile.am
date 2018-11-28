@@ -35,14 +35,14 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
        giza-driver-png-private.h giza-set-font-private.h giza-window-private.h \
        giza-driver-ps-private.h giza-shared.h giza.h
 
-libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS)
+libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS)
 
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
 libpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-       -no-undefined $(X11_LIBS) $(CAIRO_LIBS)
+       -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS)
 
 libcpgplot_la_SOURCES = giza-cpgplot.c
 

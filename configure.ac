@@ -39,8 +39,14 @@ LT_INIT([shared])
 x11_libs="-L/usr/X11/lib -lX11"
 cairo_libs_osx="-L/usr/X11/lib -lcairo"
 cairo_cflags_osx="-I/usr/X11/include"
+ft_libs_osx="-L/usr/X11/lib -lfreetype"
+ft_cflags_osx="-I/usr/X11/include/freetype2/"
+fc_libs_osx="-L/usr/X11/lib -lfontconfig"
+fc_cflags_osx="-I/usr/X11/include/fontconfig/"
 PKG_CHECK_MODULES([CAIRO], [cairo],[],[AC_SUBST(CAIRO_LIBS,$cairo_libs_osx) AC_SUBST(CAIRO_CFLAGS,$cairo_cflags_osx)])
 PKG_CHECK_MODULES([X11], [x11], [], [AC_SUBST(X11_LIBS,$x11_libs)])
+PKG_CHECK_MODULES([FT], [freetype2], [], [AC_SUBST(FT_LIBS,$ft_libs_osx)  AC_SUBST(FT_CFLAGS,$ft_cflags_osx)])
+PKG_CHECK_MODULES([FC], [fontconfig], [], [AC_SUBST(FC_LIBS,$fc_libs_osx) AC_SUBST(FC_CFLAGS,$fc_cflags_osx)])
 AC_CONFIG_FILES([
  Makefile
  src/Makefile
