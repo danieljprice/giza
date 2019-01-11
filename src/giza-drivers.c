@@ -135,7 +135,8 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   static int didInit = 0;
 
   if( !didInit ) {
-      for(giza_device_t* pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
+	  giza_device_t* pDev;
+      for(pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
           _giza_init_device_struct( pDev );
        didInit = 1;
   }
@@ -527,7 +528,8 @@ giza_close_device (void)
   /* if no open devices remain, force-unload the font cache.
    * it will be rebuilt as soon as new devices will be opened */
   unsigned int nOpen = 0;
-  for(giza_device_t* p=&Dev[0]; p<&Dev[GIZA_MAX_DEVICES]; p++)
+  giza_device_t* p;
+  for(p=&Dev[0]; p<&Dev[GIZA_MAX_DEVICES]; p++)
       if( p->deviceOpen )
           nOpen++;
   if( nOpen==0 )

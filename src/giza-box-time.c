@@ -134,9 +134,11 @@ int _giza_npl(int nmax, int n) {
   }
   /* Now that we have a copy of the strings we can easily upcase them -
      makes parsing easier */
-  for(char* px = xopt_cp; *px; px++ )
+  char* px;
+  for(px = xopt_cp; *px; px++ )
       *px = toupper(*px);
-  for(char* py = yopt_cp; *py; py++ )
+  char* py;
+  for(py = yopt_cp; *py; py++ )
       *py = toupper(*py);
 
   /* X-axis */
