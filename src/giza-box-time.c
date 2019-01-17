@@ -691,7 +691,6 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
             break;
         if( it>=maxtik ) {
             _giza_error("pgtbx4", "storage exhausted -- you have asked for far too many ticks");
-            it/*--*/;
             break;
         }
         /*
