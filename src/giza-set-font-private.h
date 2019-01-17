@@ -24,3 +24,4 @@
 
 void _giza_init_font (void);
 void _giza_free_font (void);
+void _giza_unload_font_cache (void);

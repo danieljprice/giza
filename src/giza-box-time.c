@@ -48,19 +48,19 @@ extern int        units_giza(int pgplotunits);
 
 
 /* Local support routines */
-void              pgtbx1(char axis, int* doday, int dopara, double tmin, double tmax, double* tick, int* nsub, double* tscale );
-tick_ntick const* pgtbx2(double tock, tick_ntick const* ticks, double* tick, int* nsub);
-void              pgtbx3(int doday, int npl, double tscale, double tints, int nticmx, tick_ntick const** tickptrptr, tick_ntick const* ticks,
+void              _giza_tbx1(char axis, int* doday, int dopara, double tmin, double tmax, double* tick, int* nsub, double* tscale );
+tick_ntick const* _giza_tbx2(double tock, tick_ntick const* ticks, double* tick, int* nsub);
+void              _giza_tbx3(int doday, int npl, double tscale, double tints, int nticmx, tick_ntick const** tickptrptr, tick_ntick const* ticks,
                          char axis, int dopara, char const* str, double* tick, int* nsub );
-void              pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, double tmin, double tmax, int tscale,
+void              _giza_tbx4(int doday, char const* suptyp, char axis, int convtl, int first, double tmin, double tmax, int tscale,
                          double tick, int do2, int dopara, int mod24);
-void              pgtbx5(int doday, double tsec, tmstamp* ts);
-void              pgtbx6(int doday, int mod24, int tscale, tmstamp const* ts, int ival[3], double* rval, int writ[4]);
-void              pgtbx7(char const* suptyp, char signf, char asign, int ival[3], double rval, int writ[4], int sprec, int do2, char* text, int* tlen, int* last);
+void              _giza_tbx5(int doday, double tsec, tmstamp* ts);
+void              _giza_tbx6(int doday, int mod24, int tscale, tmstamp const* ts, int ival[3], double* rval, int writ[4]);
+void              _giza_tbx7(char const* suptyp, char signf, char asign, int ival[3], double rval, int writ[4], int sprec, int do2, char* text, int* tlen, int* last);
 
 #define MAXf(a, b) (a>b ? a : b)
 
-int pgnpl(int nmax, int n) {
+int _giza_npl(int nmax, int n) {
     int npl;
 
     if( n==0 )
@@ -70,7 +70,7 @@ int pgnpl(int nmax, int n) {
     if( n<0 )
         npl++;
     if( nmax>0 && npl>nmax )
-        _giza_error("pgnpl", "output conversion error likely; number too big for format");
+        _giza_error("_giza_npl", "output conversion error likely; number too big for format");
     return npl;
 }
 
@@ -151,7 +151,7 @@ int pgnpl(int nmax, int n) {
           if( strchr(xopt_cp, 'Y') || strchr(xopt_cp, 'D') )
               dodayx = 0;
           dopara = 1;
-          pgtbx1('X', &dodayx, dopara, Dev[id].Win.xmin, Dev[id].Win.xmax, &xtickd, &nxsubd, &tscalx);
+          _giza_tbx1('X', &dodayx, dopara, Dev[id].Win.xmin, Dev[id].Win.xmax, &xtickd, &nxsubd, &tscalx);
       }
   }
 
@@ -168,12 +168,12 @@ int pgnpl(int nmax, int n) {
           dopara = 1;
           if( strchr(yopt_cp, 'V') )
               dopara = 0;
-          pgtbx1('Y', &dodayy, dopara, Dev[id].Win.ymin, Dev[id].Win.ymax, &ytickd, &nysubd, &tscaly);
+          _giza_tbx1('Y', &dodayy, dopara, Dev[id].Win.ymin, Dev[id].Win.ymax, &ytickd, &nysubd, &tscaly);
       }
   }
   /*
-     C  Parse options list.  For call to PGBOX when doing time labelling, we 
-     C  don't want L (log), N or M (write numeric labels). 
+     C  Parse options list.  For call to PGBOX when doing time labelling, we
+     C  don't want L (log), N or M (write numeric labels).
      */
   char             x_repl[3] = {0,}, y_repl[3] = {0,}; /* remember replacements */
   char*            p;
@@ -200,9 +200,9 @@ int pgnpl(int nmax, int n) {
      */
   /* put back what we replaced */
   for( p=x_repl, d=strchr(xopt_cp, ' '); *p; p++, d=strchr(d, ' ') )
-      *d = *p; 
+      *d = *p;
   for( p=y_repl, d=strchr(yopt_cp, ' '); *p; p++, d=strchr(d, ' ') )
-      *d = *p; 
+      *d = *p;
 
   /* Handle x-axis */
   if( xtime && (strchr(xopt_cp, 'N') || strchr(xopt_cp, 'M')) ) {
@@ -225,9 +225,9 @@ int pgnpl(int nmax, int n) {
           mod24 = 1;
 
       if( strchr(xopt_cp, 'N') )
-          pgtbx4(dodayx, suptyp, 'X', 1, first, Dev[id].Win.xmin, Dev[id].Win.xmax, tscalx, xtickd, do2, dopara, mod24);
+          _giza_tbx4(dodayx, suptyp, 'X', 1, first, Dev[id].Win.xmin, Dev[id].Win.xmax, tscalx, xtickd, do2, dopara, mod24);
       if( strchr(xopt_cp, 'M') )
-          pgtbx4(dodayx, suptyp, 'X', 0, first, Dev[id].Win.xmin, Dev[id].Win.xmax, tscalx, xtickd, do2, dopara, mod24);
+          _giza_tbx4(dodayx, suptyp, 'X', 0, first, Dev[id].Win.xmin, Dev[id].Win.xmax, tscalx, xtickd, do2, dopara, mod24);
 
   }
   /* Repeat for y-axis */
@@ -254,9 +254,9 @@ int pgnpl(int nmax, int n) {
           mod24 = 1;
 
       if( strchr(xopt_cp, 'N') )
-          pgtbx4(dodayy, suptyp, 'Y', 1, first, Dev[id].Win.ymin, Dev[id].Win.ymax, tscaly, ytickd, do2, dopara, mod24);
+          _giza_tbx4(dodayy, suptyp, 'Y', 1, first, Dev[id].Win.ymin, Dev[id].Win.ymax, tscaly, ytickd, do2, dopara, mod24);
       if( strchr(xopt_cp, 'M') )
-          pgtbx4(dodayy, suptyp, 'Y', 0, first, Dev[id].Win.ymin, Dev[id].Win.ymax, tscaly, ytickd, do2, dopara, mod24);
+          _giza_tbx4(dodayy, suptyp, 'Y', 0, first, Dev[id].Win.ymin, Dev[id].Win.ymax, tscaly, ytickd, do2, dopara, mod24);
   }
   free(xopt_cp);
   free(yopt_cp);
@@ -282,7 +282,7 @@ giza_box_time_float (const char *xopt, float xtick, int nxsub,
 /***************************************************************************************************
  *
  *
- *                   Below follow local support routines for PGTBOX(...) 
+ *                   Below follow local support routines for PGTBOX(...)
  *
  *                     They should not be called by the user directly.
  *
@@ -293,23 +293,23 @@ giza_box_time_float (const char *xopt, float xtick, int nxsub,
 C Work out what the finest units the time labels will be in and
 C return the tick increments if the user does not set them.
 C
-C This is a support routine for PGTBOX and should not 
+C This is a support routine for PGTBOX and should not
 C be called by the user.
 C
 C Input:
 C  AXIS   :  'X' or 'Y' for use in determining if labels overwrite
-C  TMIN   :  Start time in seconds 
+C  TMIN   :  Start time in seconds
 C  TMAX   :  End   time in seconds
 C  DOPARA :  True if label to be parallel to axis, else perpendicular
 C Input/output:
 C  DODAY  :  Write labels as DD HH MM SS.S else HH MM SS.S with
 C            hours ranging above 24.  Useful for declination labels
-C  TICK   :  Major tick interval in seconds.  If 0.0 on input, will 
+C  TICK   :  Major tick interval in seconds.  If 0.0 on input, will
 C            be set here.
 C  NSUB   :  Number of minor ticks between major ticks. If 0 on input
 C            will be set here.
 C Outputs:
-C  TSCALE :  Determines finest unit of labelling 
+C  TSCALE :  Determines finest unit of labelling
 C            (1 => ss, 60 => mm, 3600 => hh, 3600*24 => dd)
 C 05-Sep-1988 - new routine (Neil Killeen)
 C 08-Apr-1991 - correctly work out HH MM SS when the time > 60 h [nebk]
@@ -317,7 +317,7 @@ C 20-Apr-1991 - revise to add support for new DD (day) field and
 C               do lots of work on tick algorithm [nebk]
 C 10-Jun-1993 - deal with user given ticks & rename from PGTIME [nebk/jm]
 */
-void pgtbx1( char axis, int* doday, int dopara, double tmin, double tmax, double* tick, int* nsub, double* tscale ) {
+void _giza_tbx1( char axis, int* doday, int dopara, double tmin, double tmax, double* tick, int* nsub, double* tscale ) {
     /* Time scales + subdivisions that (1) look good and (2) feel natural to the user */
     /* A: when time scale is seconds */
     static const tick_ntick ticks1[] = { {0.001, 4}, {0.002, 4}, {0.005, 2},
@@ -344,7 +344,7 @@ void pgtbx1( char axis, int* doday, int dopara, double tmin, double tmax, double
                                          {0,0} };
     const double secday              = 24*3600;
 
-    int               npl, ntick, itick;
+    int               npl, ntick;
     char              str[15] = {0,};
     double            tock, tock2, tint, tints, tmins, tmaxs;
     const int         nticmx = 8;
@@ -358,10 +358,10 @@ void pgtbx1( char axis, int* doday, int dopara, double tmin, double tmax, double
 
     if( !_giza_equal(*tick, 0.) ) {
         if( *tick >= tint ) {
-            _giza_error("pgtbx1", "user given tick bigger than time interval; will auto-tick");
+            _giza_error("_giza_tbx1", "user given tick bigger than time interval; will auto-tick");
             *tick = 0.0;
         } else if( *tick<0.001 ) {
-            _giza_error("pgtbx1", "user given tick too small (< 1ms); will auto-tick");
+            _giza_error("_giza_tbx1", "user given tick too small (< 1ms); will auto-tick");
             *tick = 0.0;
         } else {
             if( !_giza_equal(fmod(*tick, 60.), 0) ) {
@@ -381,7 +381,7 @@ void pgtbx1( char axis, int* doday, int dopara, double tmin, double tmax, double
         return;
     }
     /*
-       C  Work out label units depending on time interval if user 
+       C  Work out label units depending on time interval if user
        C  wants auto-ticking
        */
     if( tint<(5*60) )
@@ -401,14 +401,14 @@ void pgtbx1( char axis, int* doday, int dopara, double tmin, double tmax, double
     /*
        C  Divide interval into NTICK major ticks and NSUB minor intervals
        C  The tick choosing algorithm is not very robust, so watch out
-       C  if you fiddle anything. 
+       C  if you fiddle anything.
        */
     tints = tint / *tscale;
     if( _giza_equal(*tscale, 1) ) {
         /*
-        C  Time in seconds.  If the time interval is very small, may need to 
+        C  Time in seconds.  If the time interval is very small, may need to
         C  label with up to 3 decimal places.  Have less ticks to help prevent
-        C  label overwrite. STR is a dummy tick label to assess label 
+        C  label overwrite. STR is a dummy tick label to assess label
         C  overwrite potential
         */
         if( dopara ) {
@@ -431,31 +431,31 @@ void pgtbx1( char axis, int* doday, int dopara, double tmin, double tmax, double
             str[0] = '\0';
         }
         tock    = tints / ntick;
-        tickptr = pgtbx2(tock, ticks1, tick, nsub);
-        pgtbx3(*doday, 0, *tscale, tints, nticmx, &tickptr, ticks1, axis, dopara, str, tick, nsub);
+        tickptr = _giza_tbx2(tock, ticks1, tick, nsub);
+        _giza_tbx3(*doday, 0, *tscale, tints, nticmx, &tickptr, ticks1, axis, dopara, str, tick, nsub);
     } else if( _giza_equal(*tscale, 60) ) {
         /* time in minutes */
         ntick   = 6;
         tock    = tints / ntick;
-        tickptr = pgtbx2(tock, ticks2, tick, nsub);
+        tickptr = _giza_tbx2(tock, ticks2, tick, nsub);
 
         if( dopara )
             strcpy(str,"42m");
         else
             str[0] = '\0';
-        pgtbx3(*doday, 0, *tscale, tints, nticmx, &tickptr, ticks2, axis, dopara, str, tick, nsub);
+        _giza_tbx3(*doday, 0, *tscale, tints, nticmx, &tickptr, ticks2, axis, dopara, str, tick, nsub);
     } else {
         if( _giza_equal(*tscale, 3600) && *doday ) {
             /* time in hours with the day field */
             ntick   = 6;
             tock    = tints / ntick;
-            tickptr = pgtbx2(tock, ticks3, tick, nsub);
+            tickptr = _giza_tbx2(tock, ticks3, tick, nsub);
 
             if( dopara )
                 strcpy(str,"42h");
             else
                 str[0] = '\0';
-            pgtbx3(*doday, 0, *tscale, tints, nticmx, &tickptr, ticks3, axis, dopara, str, tick, nsub);
+            _giza_tbx3(*doday, 0, *tscale, tints, nticmx, &tickptr, ticks3, axis, dopara, str, tick, nsub);
         } else {
             /*
                C  Time in hours with no day field or time in days. Have less
@@ -464,13 +464,13 @@ void pgtbx1( char axis, int* doday, int dopara, double tmin, double tmax, double
            if( dopara ) {
                tmins = fabs(tmin) / *tscale;
                tmaxs = fabs(tmax) / *tscale;
-               npl   = pgnpl(-1, (int)rint(MAXf(tints, MAXf(tmins, tmaxs))));
+               npl   = _giza_npl(-1, (int)rint(MAXf(tints, MAXf(tmins, tmaxs))));
 
-               if( npl<=3 ) 
+               if( npl<=3 )
                    ntick = 6;
                else if( npl==4 )
                    ntick = 5;
-               else 
+               else
                    ntick = 4;
                strcpy(str,"345678912");
                str[npl-1] = 'd';
@@ -480,11 +480,11 @@ void pgtbx1( char axis, int* doday, int dopara, double tmin, double tmax, double
                ntick  = 6;
            }
            tock    = tints / ntick;
-           npl     = pgnpl(-1, (int)rint(tock));
+           npl     = _giza_npl(-1, (int)rint(tock));
            tock2   = tock / pow(10, npl-1);
-           tickptr = pgtbx2(tock2, ticks4, tick, nsub);
+           tickptr = _giza_tbx2(tock2, ticks4, tick, nsub);
            *tick   = *tick * pow(10, npl-1);
-            pgtbx3(*doday, 0, *tscale, tints, nticmx, &tickptr, ticks4, axis, dopara, str, tick, nsub);
+            _giza_tbx3(*doday, 0, *tscale, tints, nticmx, &tickptr, ticks4, axis, dopara, str, tick, nsub);
         }
     }
     /*
@@ -514,10 +514,10 @@ C
 C 10-Jun-1993 - new routine [nebk]
 
 
-Harro Verkouter: use a list of C-structs to combine tick values + number of subdivisions 
+Harro Verkouter: use a list of C-structs to combine tick values + number of subdivisions
                  in stead of separate lists.
 */
-tick_ntick const* pgtbx2(double tock, tick_ntick const* ticks, double* tick, int* nsub) {
+tick_ntick const* _giza_tbx2(double tock, tick_ntick const* ticks, double* tick, int* nsub) {
     int               nsubd = *nsub;
     double            dmin = strtod("Inf", NULL);
     tick_ntick const* rv = NULL;
@@ -537,14 +537,14 @@ tick_ntick const* pgtbx2(double tock, tick_ntick const* ticks, double* tick, int
 }
 
 /*
-C Try to see if label overwrite is going to occur with this tick 
+C Try to see if label overwrite is going to occur with this tick
 C selection, or if there are going to be more than a reasonable
-C number of ticks in the displayed time range.  If so, choose, 
+C number of ticks in the displayed time range.  If so, choose,
 C if available, the next tick (bigger separation) up in the list.
 C If the overwrite requires that we would need to go up to the bext
 C TSCALE, give up.  They will need to choose a smaller character size
 C
-C This is a support routine for PGTBOX and should not 
+C This is a support routine for PGTBOX and should not
 C be called by the user.
 C
 C Input:
@@ -562,17 +562,17 @@ C  AXIS   :  'X' or 'Y' axis
 C  DOPARA :  Labels parallel or perpendicualr to axis
 C  STR    :  A typical formatted string used for checking overwrite
 C Input/output:
-C  TICK   :  Current major tick interval in units of TSCALE. May be 
+C  TICK   :  Current major tick interval in units of TSCALE. May be
 C            made larger if possible if overwrite likely.
-C  NSUB   :  Number of minor ticks between major ticks. 
+C  NSUB   :  Number of minor ticks between major ticks.
 C
 C 10-Jun-1993 - new routine [nebk]
 */
-void pgtbx3( int doday, int npl, double tscale, double tints, int nticmx, tick_ntick const** tickptrptr, tick_ntick const* ticks, char axis, int dopara, char const* str, double* tick, int* nsub ) {
-    double       lens, lenx, leny, rel_tick_sz;
+void _giza_tbx3( int doday, int npl, double tscale, double tints, int nticmx, tick_ntick const** tickptrptr, tick_ntick const* ticks, char axis, int dopara, char const* str, double* tick, int* nsub ) {
+    double       lens, lenx, leny;
     int const    ntick = (int)(tints / *tick);
 
-    /* test for overflow in normalized device coordinates; 
+    /* test for overflow in normalized device coordinates;
        if the total length of the tick strings becomes a significant
        fraction of the viewport it's time to find a better scale */
     giza_qtextlen(GIZA_UNITS_NORMALIZED, str, &lenx, &leny);
@@ -616,22 +616,22 @@ void pgtbx3( int doday, int npl, double tscale, double tints, int nticmx, tick_n
 }
 
 /*
-C Label an axis in (DD) HH MM SS.S style.    This is the main 
+C Label an axis in (DD) HH MM SS.S style.    This is the main
 C workhorse of the PGTBOX routines.
 C
-C This is a support subroutine for PGTBOX and should not be 
-C called by the user. 
+C This is a support subroutine for PGTBOX and should not be
+C called by the user.
 C
 C Inputs:
 C  DODAY  :  Write labels as DD HH MM SS.S else HH MM SS.S with
 C            hours ranging above 24.  Useful for declination labels
 C  SUPTYP :  If 'DHMS' then superscript the fields with d, h, m, & s
-C            If ' DMS' then superscript the fields with    o, '  & '' 
-C              Good for declination plots.  You should obviously not 
-C              ask for the day field for this to do anything sensible. 
+C            If ' DMS' then superscript the fields with    o, '  & ''
+C              Good for declination plots.  You should obviously not
+C              ask for the day field for this to do anything sensible.
 C            If '    ' then no superscripting is done.
 C  AXIS   :  'X' for x-axis, 'Y' for y-axis
-C  CONVTL :  If .true., write the labels in the conventional axis 
+C  CONVTL :  If .true., write the labels in the conventional axis
 C            locations (bottom and left for 'X' and 'Y').  Otherwise
 C            write them on the top and right axes ('X' and 'Y')
 C  FIRST  :  If .false. then omit the first label.
@@ -646,20 +646,17 @@ C  MOD24  :  HH field labelled as modulo 24
 C
 C 05-Sep-1988 - new routine (Neil Killeen)
 C 20-Apr-1991 - add support for new DD (day) field [nebk]
-C 10-Jun-1993 - complete rewrite & rename from PGTLAB. Fixes user given 
+C 10-Jun-1993 - complete rewrite & rename from PGTLAB. Fixes user given
 C               ticks bug too [nebk]
 C 15-Jan-1995 - Add argument MOD24
 */
-void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, double tmin, double tmax, int tscale,
+void _giza_tbx4(int doday, char const* suptyp, char axis, int convtl, int first, double tmin, double tmax, int tscale,
             double tick, int do2, int dopara, int mod24) {
     const int    maxtik = 1000;
-    const int    t = 1;
-    const int    f = 0;
-   
-    tmstamp      timestamps[maxtik], timel; 
-    char         asignl;
 
-    double       time, xlen, ylen, coord, fjust, rval, disp, xlen2, ylen2;
+    tmstamp      timestamps[maxtik], timel;
+
+    double       time, coord, fjust, rval, disp;
     int          is, sd, nt, izero, ipos, ineg, it, i, j, k, sprec, jst[2], jend[2], tlen, last;
     int          ival[3], ivalo[3], ivalz[3], ivalf[3], ivall[3], npass, inc;
     int          writ[4];
@@ -672,7 +669,7 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
 
     /* C  Find first tick.  Return if none. */
     nt = tmin /tick;
-    if( is*sd == 1 && fabs(tmin)>(fabs(nt)*tick) )
+    if( is*sd == 1 && fabs(tmin)>(abs(nt)*tick) )
         nt += sd;
     time = nt * tick;
 
@@ -690,14 +687,14 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
             (sd==-1 && time<(tmax-1e-5)) )
             break;
         if( it>=maxtik ) {
-            _giza_error("pgtbx4", "storage exhausted -- you have asked for far too many ticks");
+            _giza_error("_giza_tbx4", "storage exhausted -- you have asked for far too many ticks");
             break;
         }
         /*
         C  Convert to (DD) HH MM SS.S and find fraction of window that this
         C  tick falls at
         */
-        pgtbx5(doday, time, &timestamps[it]);
+        _giza_tbx5(doday, time, &timestamps[it]);
         timestamps[it].tfrac = (time - tmin) / (tmax - tmin);
 
         /* note zero time */
@@ -718,16 +715,16 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
             sprec = 1;
     }
     /* C  Label special case of first tick.  Prepare fields and label */
-    pgtbx6(doday, mod24, tscale, &timestamps[0], ivalf, &rval, writ);
+    _giza_tbx6(doday, mod24, tscale, &timestamps[0], ivalf, &rval, writ);
     signf = 'H';
     if( doday )
         signf = 'D';
-    pgtbx7(suptyp, signf, timestamps[0].asign, ivalf, rval, writ, sprec, do2, text, &tlen, &last);
+    _giza_tbx7(suptyp, signf, timestamps[0].asign, ivalf, rval, writ, sprec, do2, text, &tlen, &last);
 
     /*
     C   Set label displacements from axes.  This is messy for labels oriented
     C   perpendicularly on the right hand axis as we need to know how long
-    C   the longest string we are going to write is before we write any 
+    C   the longest string we are going to write is before we write any
     C   labels as they are right justified.
     */
     if( axis=='X' ) {
@@ -779,7 +776,7 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
         fjust = 1.0;
         if( axis=='X' ) {
             coord = timestamps[0].tfrac + xlen/2;
-        } else if( axis=='Y' ) {
+        } else {  /* if( axis=='Y' ) */
             coord = timestamps[0].tfrac;
             if( dopara )
                 coord += ylen/2;
@@ -825,10 +822,10 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
     /*  C  Now label special case of zero tick. It carries the sign change
         C  when going from positive to negative time, left to right. */
     if( izero>0 ) {
-        pgtbx6(doday, mod24, tscale, &timestamps[izero], ivalz, &rval, writ);
+        _giza_tbx6(doday, mod24, tscale, &timestamps[izero], ivalz, &rval, writ);
         if( timestamps[izero-1].asign==' ' )
             timestamps[izero].asign = '-';
-        pgtbx7(suptyp, signf, timestamps[izero].asign, ivalz, rval, writ, sprec, do2, text, &tlen, &last);
+        _giza_tbx7(suptyp, signf, timestamps[izero].asign, ivalz, rval, writ, sprec, do2, text, &tlen, &last);
         coord = timestamps[izero].tfrac;
         giza_annotate_float(axloc, disp, coord, fjust, text);
     }
@@ -838,8 +835,8 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
     if( izero==-1 && sd*is==-1 ) {
         if( (sd==-1 && time<0.0) || (sd==1 && time>0.0) )
             time = 0.0;
-        pgtbx5(doday, time, &timel);
-        pgtbx6(doday, mod24, tscale, &timel, ivall, &rval, writ);
+        _giza_tbx5(doday, time, &timel);
+        _giza_tbx6(doday, mod24, tscale, &timel, ivall, &rval, writ);
     }
 
     /* C  We want to label in the direction(s) away from zero, so we may  need
@@ -889,13 +886,13 @@ void pgtbx4(int doday, char const* suptyp, char axis, int convtl, int first, dou
             if( j==0 || j==izero )
                 continue;
             /* C  Prepare fields */
-            pgtbx6(doday, mod24, tscale, &timestamps[j], ival, &rval, writ);
+            _giza_tbx6(doday, mod24, tscale, &timestamps[j], ival, &rval, writ);
             /* C  Don't write unchanging fields */
             for(k=0; k<3; k++)
                 if( ival[k]==ivalo[k] )
                     writ[k] = 0;
             /* prepare & write label */
-            pgtbx7(suptyp, signf, timestamps[j].asign, ival, rval, writ, sprec, do2, text, &tlen, &last);
+            _giza_tbx7(suptyp, signf, timestamps[j].asign, ival, rval, writ, sprec, do2, text, &tlen, &last);
             coord = timestamps[j].tfrac;
             giza_annotate_float(axloc, disp, coord, fjust, text);
             /* C  Update old values */
@@ -919,9 +916,8 @@ C  S      :  SS.S       (unsigned)
 C
 C 10-Jun-1993 - new routine [nebk]
 */
-void pgtbx5(int doday, double tsec, tmstamp* ts) {
-    int    it;
-    double rem, tmp;
+void _giza_tbx5(int doday, double tsec, tmstamp* ts) {
+    double tmp;
 
     /* remember sign and go to positive seconds */
     ts->asign = (tsec < 0) ? '-' : ' ';
@@ -973,7 +969,7 @@ C
 C  10-Jun-1993 - New routine [nebk]
 C  16-Jan-1995 - Add argument MOD24
 */
-void pgtbx6(int doday, int mod24, int tscale, tmstamp const* ts, int ival[3], double* rval, int writ[4]) {
+void _giza_tbx6(int doday, int mod24, int tscale, tmstamp const* ts, int ival[3], double* rval, int writ[4]) {
     int wm;
 
     ival[0] = ts->dd;
@@ -993,7 +989,7 @@ void pgtbx6(int doday, int mod24, int tscale, tmstamp const* ts, int ival[3], do
             }
         }
     }
-    if( mod24 ) 
+    if( mod24 )
         ival[1] %= 24;
 
     if( tscale==1 ) {
@@ -1036,30 +1032,30 @@ C
 C Inputs
 C  SUPTYP :  '    ', 'DHMS', or ' DMS' for no superscript labelling,
 C            d,h,m,s   or   o,','' superscripting
-C  SIGNF  :  Tells which field the sign is associated with.  
-C            One of 'D', 'H', 'M', or 'S'    
+C  SIGNF  :  Tells which field the sign is associated with.
+C            One of 'D', 'H', 'M', or 'S'
 C  ASIGN  :  ' ' or '-' for positive or negative times
 C  IVAL(3):  Day, hour, minutes of time
 C  RVAL   :  Seconds of time
 C  WRIT(4):  If .true. then write DD, HH, MM, SS  into label
-C  SPREC  :  Number of places after the decimal to write seconds 
+C  SPREC  :  Number of places after the decimal to write seconds
 C            string to.  Must be in the range 0-3
 C  DO2    :  If true, add a leading zero to numbers < 10
 C Outputs
 C  TEXT   :  Label
 C  TLEN   :  Length of label
-C  LAST   :  Is the location of the start character of the last 
+C  LAST   :  Is the location of the start character of the last
 C            field written into TEXT
 C
 C  05-Sep-1989 -- New routine (Neil Killeen)
-C  20-Apr-1991 -- Complete rewrite; support for new DD (day) field and 
+C  20-Apr-1991 -- Complete rewrite; support for new DD (day) field and
 C                 superscripted labels [nebk]
 C  14-May-1991 -- Removed BSL as a parameter (Char(92)) and made it
 C                 a variable to appease Cray compiler [mjs/nebk]
-C  10-Jun-1993 -- Rename from PGTLB1, add code to label superscript 
+C  10-Jun-1993 -- Rename from PGTLB1, add code to label superscript
 C                 seconds above the '.' and add DO2 option [nebk/jm]
 */
-void pgtbx7(char const* suptyp, char signf, char asign, int ival[3], double rval, int writ[4], int sprec, int do2, char* text, int* tlen, int* last) {
+void _giza_tbx7(char const* suptyp, char signf, char asign, int ival[3], double rval, int writ[4], int sprec, int do2, char* text, int* tlen, int* last) {
     /* the superscripting strings */
     char const* super[3][4] = { {"\\ud\\d"       , "\\uh\\d"       , "\\um\\d"       , "\\us\\d"},
                                 {"\\u\\(2199)\\d", "\\u\\(2729)\\d", "\\u\\(2727)\\d", "\\u\\(2728)\\d"},

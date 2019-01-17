@@ -113,6 +113,8 @@ _giza_change_page_pdf (void)
 void
 _giza_close_device_pdf (void)
 {
+  if( Dev[id].surface==NULL )
+      return;
   cairo_surface_finish (Dev[id].surface);
   cairo_status_t status = cairo_surface_status (Dev[id].surface);
   if (status != CAIRO_STATUS_SUCCESS)
