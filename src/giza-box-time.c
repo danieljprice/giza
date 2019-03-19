@@ -133,6 +133,7 @@ int _giza_npl(int nmax, int n) {
       _giza_error("giza_box_time", "out of memory/failure to strdup() x or y opt");
       return;
   }
+
   /* Now that we have a copy of the strings we can easily upcase them -
      makes parsing easier */
   for(cptr = xopt_cp; *cptr; cptr++ )

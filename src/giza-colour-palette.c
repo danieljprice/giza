@@ -162,6 +162,24 @@ giza_set_colour_palette (int palette)
        giza_set_colour_representation_rgb (8, 139, 94, 45); /* brown */
        nlinecolours = 9;
        break;
+    case 8: /* Matlab inspired colours */
+       giza_set_colour_representation_rgb( 2,   0,  114, 189);
+       giza_set_colour_representation_rgb( 3,  217,  83,  25);
+       giza_set_colour_representation_rgb( 4,  237, 177,  32);
+       giza_set_colour_representation_rgb( 5,  126,  47, 142);
+       giza_set_colour_representation_rgb( 6,  119, 172,  48);
+       giza_set_colour_representation_rgb( 7,   77, 190, 238);
+       giza_set_colour_representation_rgb( 8,  162,  20,  47);
+       giza_set_colour_representation_rgb( 9,   95, 158, 160);
+       giza_set_colour_representation_rgb(10,  238, 203, 173);
+       giza_set_colour_representation_rgb(11,  190, 179, 239);
+       giza_set_colour_representation_rgb(12, 0.35, 0.7, 0.9);
+       giza_set_colour_representation_rgb(13,   0., 0.6, 0.5);
+       giza_set_colour_representation_rgb(14,  0.8, 0.4,  0.);
+       giza_set_colour_representation_rgb(15,  0.8, 0.6, 0.7);
+       giza_set_colour_representation_rgb(16,  160, 160, 160);
+       nlinecolours = 16;
+       break;
     default:
        giza_set_colour_representation (0, 1., 1., 1.);	/* white */
        giza_set_colour_representation (1, 0., 0., 0.);	/* black */
