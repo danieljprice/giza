@@ -119,6 +119,7 @@ int _giza_npl(int nmax, int n) {
   int       xtime = 0, ytime = 0, dodayx = 0, dodayy = 0, mod24 = 0, dopara = 0, first = 0, do2 = 0;
   int       nxsubd = nxsub, nysubd = nysub;
   char*     suptyp = NULL;
+  char*     cptr;
   double    xtickd=xtick, ytickd=ytick, tscalx, tscaly;
   /* Need to make a copy of the x/y options for we may need to modify them */
   char*     xopt_cp  = strdup(xopt);
@@ -132,14 +133,13 @@ int _giza_npl(int nmax, int n) {
       _giza_error("giza_box_time", "out of memory/failure to strdup() x or y opt");
       return;
   }
+
   /* Now that we have a copy of the strings we can easily upcase them -
      makes parsing easier */
-  char* px;
-  for(px = xopt_cp; *px; px++ )
-      *px = toupper(*px);
-  char* py;
-  for(py = yopt_cp; *py; py++ )
-      *py = toupper(*py);
+  for(cptr = xopt_cp; *cptr; cptr++ )
+      *cptr = toupper(*cptr);
+  for(cptr = yopt_cp; *cptr; cptr++ )
+      *cptr = toupper(*cptr);
 
   /* X-axis */
   if( strchr(xopt_cp, 'Z') ) {
