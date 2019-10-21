@@ -121,25 +121,27 @@ _giza_change_page_png (void)
 void
 _giza_close_device_png (int last)
 {
-  if( Dev[id].surface==NULL )
+  if( Dev[id].surface==NULL ) {
       return;
-  int lenext = strlen (GIZA_DEVICE_EXTENSION);
-  int length = strlen (Dev[id].prefix) + lenext + 5;
-  char fileName[length + 1];
-  _giza_get_filename_for_device(fileName,Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,last);
-
-  cairo_status_t status = cairo_surface_write_to_png (Dev[id].surface, fileName);
-  if (status != CAIRO_STATUS_SUCCESS)
-     {
-       _giza_error (fileName, cairo_status_to_string(status));
-     }
-  else
-     {
-       char tmp[length + 10];
-       sprintf(tmp, "%s created", fileName);
-       _giza_message (tmp);
-     }
-
+  }
+  if (Dev[id].drawn) 
+    { 
+      int lenext = strlen (GIZA_DEVICE_EXTENSION);
+      int length = strlen (Dev[id].prefix) + lenext + 5;
+      char fileName[length + 1];
+      _giza_get_filename_for_device(fileName,Dev[id].prefix,Dev[id].pgNum,GIZA_DEVICE_EXTENSION,last);
+      cairo_status_t status = cairo_surface_write_to_png (Dev[id].surface, fileName);
+      if (status != CAIRO_STATUS_SUCCESS) 
+        {
+          _giza_error (fileName, cairo_status_to_string(status));
+        }
+/*    else
+       {
+         char tmp[length + 10];
+         sprintf(tmp, "%s created", fileName);
+         _giza_message (tmp);
+       }*/
+    }
   cairo_surface_destroy (Dev[id].surface);
 }
 
