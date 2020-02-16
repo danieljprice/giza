@@ -471,7 +471,9 @@ giza_change_page (void)
       return;
     }
 
-  Dev[id].pgNum++;
+  /* Only increase pagenumber if there was content */
+  if (Dev[id].drawn)
+      Dev[id].pgNum++;
 
   /* Reset stuff */
   giza_set_panel(1,1); /* also calls set_viewport */
@@ -1135,7 +1137,6 @@ void _giza_trim(char *str) {
 void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension,
                                     int lastpage)
 {
-
   /* this stuff is instead of using strcasestr
    * (giza should not use non-standard extensions)
    */
