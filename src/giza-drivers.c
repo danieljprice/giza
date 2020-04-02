@@ -173,6 +173,8 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
 
   _giza_set_prefix( newPrefix!=0 ? newPrefix : GIZA_DEFAULT_PREFIX );
 
+  Dev[id].number_format = GIZA_NUMBER_FORMAT_AUTO;
+
   /* Determine which type of device to open */
   char firstchar = newDeviceName[0];
   if (firstchar == '?')

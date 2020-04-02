@@ -181,6 +181,8 @@ void giza_set_fill (int fs);
 void giza_get_fill (int *fs);
 
 void giza_format_number (int mantissa, int power, int form, char *str, int maxchar);
+/// sets current device number format for giza_box()
+void giza_set_number_format(int fmt);
 
 void giza_function_x (double (*func) (double *x), int n, double xmin,
 		      double xmax, int flag);
