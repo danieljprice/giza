@@ -22,6 +22,9 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
+#include <stdio.h>
+#include <string.h>
+
 #include <giza.h>
 #include <math.h>
 
@@ -36,13 +39,13 @@ main ()
   m = 20000;
   p = -1;
   num = ((double) m) * pow (10, p);
-  giza_format_number (m, p, 0, string);
+  giza_format_number (m, p, 0, string, sizeof(string));
   printf ("%e: %s\n", num, string);
 
   m = 20000;
   p = -1;
   num = ((double) m) * pow (10, p);
-  giza_format_number (m, p, 0, string);
+  giza_format_number (m, p, 0, string, sizeof(string));
   printf ("%e: %s\n", num, string);
 /*
  // exponentials: with 3 digit exponents (-ve)

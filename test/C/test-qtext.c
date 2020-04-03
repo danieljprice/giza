@@ -24,6 +24,9 @@
 
 #include <giza.h>
 #include <stdio.h>
+#include <string.h>
+
+#include <giza.h>
 
 int
 main ()
