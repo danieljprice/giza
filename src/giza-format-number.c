@@ -187,3 +187,13 @@ giza_format_number_log (double power, char *str)
     }
 }
 */
+
+void giza_set_number_format(int fmt) {
+  if (!_giza_check_device_ready ("giza_set_number_format"))
+    return;
+  if (fmt > GIZA_NUMBER_FORMAT_EXP) {
+    _giza_error("giza_set_number_format", "Bad format number");
+    return;
+  }
+  Dev[id].number_format = fmt;
+}
