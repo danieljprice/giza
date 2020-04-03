@@ -124,6 +124,7 @@ typedef struct
   cairo_surface_t *surface;
   cairo_font_extents_t fontExtents;
   double fontAngle;
+  int number_format;
 } giza_device_t;
 
 extern giza_device_t Dev[GIZA_MAX_DEVICES];
