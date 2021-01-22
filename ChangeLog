@@ -1,3 +1,630 @@
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* doc/api.pl: fix comment about api not being stable (not true, it
+	is very stable)
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* docs/samples/index.html: updated sample images on webpage
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* INSTALL, Makefile.am, Makefile.in, aclocal.m4, configure,
+	src/Makefile.in, test/C/Makefile.in, test/F90/Makefile.in,
+	test/Makefile.in: updated automake and autoconf, restored necessary
+	INSTALL file and added rule for README to Makefile.am
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* : commit 03c20ab804e59a6d9d247083efacb8bbf4577f0f Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Fri Jan 22 14:22:37 2021
+	+1100
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* Makefile.am: remove INSTALL from Makefile.am
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/build.yml: Update build.yml
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/build.yml: Create build.yml
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* README, INSTALL => README.md: (docs) updated README.md for github; include contents of old INSTALL
+	file
+
+2020-04-03  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #30 from chafarderix/hack Avoid some compile warnings in tests
+
+2020-04-03  chafarderix <chafar@chafar.net>
+
+	* : Merge pull request #1 from danieljprice/master following upstream
+
+2020-04-02  chafar <chafar@chafar.net>
+
+	* src/giza-box.c, src/giza-drivers.c, src/giza-format-number.c,
+	src/giza-private.h, src/giza.h: new giza_set_number_format() sets
+	format to use by giza_box()
+
+2020-02-17  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #28 from aardk/master For PNG images sometimes the internal logic would classify a single
+	page
+
+2019-03-20  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #25 from markahutch/master Avoid compilation errors with Splash
+
+2019-03-20  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #26 from haavee/issue-21 Issue 21
+
+2019-01-17  haavee <hverkouter@gmail.com>
+
+	* src/giza-box-time.c: Fix unused expression result warning A no-op statement was still left in the code; it is now removed
+
+2019-01-17  haavee <hverkouter@gmail.com>
+
+	* src/giza-box-time.c: Remove C99 for-loop initial declarations There were still two C99-only idioms left which are now rewritten to
+	use a single, not-quite-as-transient-as-hoped, variable char* to
+	upcase the x/y option input strings.
+
+2019-01-11  Mark Hutchison <markahutch@gmail.com>
+
+	* src/giza-colour-palette.c: added Matlab style colour palette
+
+2019-01-11  Mark Hutchison <markahutch@gmail.com>
+
+	* src/giza-box-time.c, src/giza-drivers.c: define variables outside
+	of for loop to avoid the 'initial declarations are only allowed in
+	C99 mode' error
+
+2018-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-xw.c, src/giza-format-number.c: more compiler
+	warnings fixed
+
+2018-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-box-time.c: (giza-box-time) compiler warnings fixed
+
+2018-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-box-time.c: (giza-box-time) rename routines to follow internal routine
+	conventions consistent with rest of giza; whitespaces removed at end
+	of lines
+
+2018-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* : commit fb8c0e00805f73dc7cde7f09d2484df722c887cb Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Wed Nov 28 11:15:29 2018
+	+1100
+
+2018-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* : commit 34cbae10601f412fbdf46de33f47baf433aec317 Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Wed Nov 28 10:11:47 2018
+	+1100
+
+2018-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #24 from haavee/issue-21 This should fix issue #21 "missing braces"
+
+2018-11-27  haavee <hverkouter@gmail.com>
+
+	* src/giza-driver-xw.c, src/giza-drivers.c: Synchronize XW device id
+	with giza_device_t The global variable 'id' is now also used to address the instance of
+	the GIZA_XWindow struct where giza_device_t Dev[id]'s properties are
+	stored.  This can be done because: - giza-driver-xw.c implements a shadow array, "XW", of euqal length
+	as the Dev[...] array (GIZA_MAX_DEVICES - `giza_open_...()` now searches for an unused entry in Dev[...]
+	when opening a device - `giza_close_device()` closes the correct device when it's, well,
+	closed. If the entry happened to be an XWindow, the corresponding
+	XW[id] struct will now also be properly closed.
+
+2018-11-27  haavee <hverkouter@gmail.com>
+
+	* src/giza-driver-null.c, src/giza-driver-pdf.c,
+	src/giza-driver-png.c, src/giza-driver-ps.c, src/giza-driver-svg.c,
+	src/giza-driver-xw.c: Fix device specific close fn's giza_open() now detects and handles errors occuring during setup of
+	the new device. The device specific _giza_close_<device>() functions
+	needed to be updated to deal with partially/not fully initialized
+	devices.  For the XWindow driver, its shadow administration of GIZA_XWindow
+	devices (the "XW[...]" array) needed to be managed slightly
+	different, not unlinke how devices are now
+	initialized/de-initialized in giza-drivers.c The global 'xid' variable was removed and replaced by a lookup in
+	the (already existing) giza_xw_id[...] table.  Thinking about it, it seems to me the whole shadow 'xid'
+	administration can be simplified if Dev[N], if Dev[N] refers to an
+	XWindow, stores its peculiars in XW[N]. `giza_open()` now already
+	takes care of finding an empty slot and there should be no reason
+	for the XWindow driver to use that assigned slot as well.  A separate commit implementing that will follow, which makes that
+	change opt-in.
+
+2018-11-26  haavee <hverkouter@gmail.com>
+
+	* src/giza-drivers.c, src/giza-private.h,
+	src/giza-set-font-private.h, src/giza-set-font.c, src/giza.h: Font
+	memory management changed In order to (1) prevent excessive font unload/load sequences and (2)
+	proper support for per-device font handling and (3) simplifying font
+	loading and (4) get a handle on memory management, the giza_set_font()
+	implementation was changed.  Fonts are now cached internally based on the primary key
+	(font-family, slant, weight) and reference counted across open
+	devices.  Up to three mechanisms of loading a font are tried: FreeType,
+	FontConfig and cairo_toy_font - depending on cairo version and
+	wether cairo was compiled with support for that. FreeType/FontConfig
+	library initialization code made more robust and handling error(s)
+	and releasing allocated memory in such a case was improved.  Extra code to ensure cache unloading at program end was added.
+
+2018-11-23  haavee <hverkouter@gmail.com>
+
+	* src/giza-box.c, src/giza-cpgplot.c, src/giza-format-number.c,
+	src/giza-fortran.F90, src/giza.h: `giza_format_number()` string
+	buffer length The `giza_format_number()` function writes unconditionally to a
+	destination string buffer without being informed how large that
+	buffer is.  This commit adds an extra parameter to be passed to
+	`giza_format_number()` - the size of the string buffer. It changes
+	the implementation to take care of not writing outside the
+	destination string's boundaries.  It should be noted that this may have an effect on
+	cpgnumb()/PGNUMB() because there is no officially documented
+	necessity that the *string_length parameter in cpgnumb() has to
+	contain the size of the buffer upon entry; the documentation only
+	mentions the contents of that parameter are set on output to the
+	number of characters written.  I have checked the official PGPLOT libcpgplot binding and
+	perl5-PGPLOT which both do this: both write the size of the FORTRAN
+	string in the parameter before calling cpgnumb() or use a temporary
+	variable and pass that size in.  I have updated giza-fortran.F90 to
+	do the same. The Python-PGPLOT binding (ppgplot) does not expose cpgnumb() so at this point that's not an
+	issue.
+
+2018-11-23  haavee <hverkouter@gmail.com>
+
+	* src/giza-cpgplot.c, src/giza-drivers.c, src/giza.h: Fix multi dev
+	handling (SIGSEGV, libc corruption) The giza library, specifically in `giza_open_device_size()` and
+	`giza_close_device()`, did not handle multiple devices being opened
+	and closed in random order - which is what my own application
+	happens to do.  The internal bookkeeping got out of sync with the user's device
+	identification, leading to API calls wreaking havoc because they
+	would apply to an unitialized giza_device_t entry or overwrite
+	properties of a giza_device_t they weren't supposed to. (E.g.
+	cpgopen() could easily overwrite an already open device entry,
+	cpgclos() could fail because the internal bookkeeping had forgotten
+	that the user's open device actually existed).  Long story short: SIGSEGV and program termination because libc
+	malloc had detected corruption of its internal structures ensued.  In order to fix this a slightly larger than normal edit had to take
+	place.  Entries in the global giza_device_t array are now properly
+	initialized and de-initialized to a known state, even when opening a
+	device fails halfway through.  PGEND() / cpgend() did not, contrary to documentation, close all
+	current open devices; now it does.
+
+2018-11-20  Daniel Price <daniel.price@monash.edu>
+
+	* docs/documentation/api.html: [web-bot] updated auto-generated
+	documentation
+
+2018-11-20  Daniel Price <daniel.price@monash.edu>
+
+	* configure, configure.ac: updated version number
+
+2018-11-17  Daniel Price <daniel.price@monash.edu>
+
+	* : commit 2733835a13c73b272a5ff999f86906b7c8992bcc Author: haavee
+	<hverkouter@gmail.com> Date:   Fri Nov 16 17:55:41 2018 +0100
+
+2018-11-15  haavee <hverkouter@gmail.com>
+
+	* src/giza-drivers.c: Remove _giza_change_size() because it's not used anywhere anymore.
+
+2018-11-15  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #20 from haavee/issue-19 This fixes #19  build failure macports PPC
+
+2018-11-14  haavee <hverkouter@gmail.com>
+
+	* src/giza-cpgplot.c: Revert "Args swapped between  API and giza
+	implementation" This reverts commit c323737e7d49dd998d068b2964ffe76c86f648c5.
+	Should be on a completely different branch!
+
+2018-11-14  haavee <hverkouter@gmail.com>
+
+	* src/giza-driver-xw-private.h, src/giza-driver-xw.c,
+	src/giza-drivers.c, src/giza-paper.c, src/giza-private.h: Attempt to
+	be more PGPLOT compatible * PGPAP() does not resize the window immediately anymore, only sets
+	 .resize flag. Only when moving to a new page the change in size
+	takes effect * PGPAGE() skips asking for confirmation the first time * XWindow specific "_giza_change_size_xw()" removed - now handled
+	  better in giza_set_paper_size(). The resize flag is detected in   _giza_change_page_xw() and handled correctly there.
+
+2018-11-12  haavee <hverkouter@gmail.com>
+
+	* src/giza-driver-xw.c, src/giza-environment.c: Savegame issue #18
+
+2018-11-12  haavee <hverkouter@gmail.com>
+
+	* src/giza-cpgplot.c: Args swapped between  API and giza
+	implementation giza_render has calling convention     giza_render_*( ..., valMin, valMax, ...) whereas PGPLOT API     cpggray(..., float fg, float bg, ...) but the parameters 'fg', 'bg' were passed to giza_render in that
+	order as 'valMin', 'valMax' i.e. fg, bg are reversed
+
+2018-11-09  haavee <hverkouter@gmail.com>
+
+	* src/giza-box-time.c: This fixes #19  build failure macports PPC I erroneously used scoped for loop variables in a non-100% portable
+	way.
+
+2018-11-09  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #16 from haavee/symbol-issues Fixes #5 Symbol issues
+
+2018-11-08  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: Scale up symbols #-3..-8 They came out (noticeably) smaller in giza than in PGPLOT as far as
+	I could tell.
+
+2018-11-08  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: Scaled up the arrows (#28-31) a bit The arrows looked markedly smaller in giza than on the PGPLOT
+	original.  Scaled them up a bit.
+
+2018-11-08  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: Fix #19, update #0, 6 Symbol #19 was not a hexagon with a cross but a larger open square
+	than #6.  The squares are also drawn with a slightly thinner line.
+
+2018-11-08  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: Fix symbols #20 - 27 (inclusive) The open circles are now exponentially scaled and drawn with a
+	slightly thinner line than before
+
+2018-11-08  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: Fix symbols 12, 18 (5-pt star), #20 initiated Symbols 12 and 18 now are five-point stars, open and filled.  Symbol
+	20 was entered as seven-point star but it should be a small open
+	circle. Already changed it from _giza_star() => _giza_circle() but
+	symbols 20-27 are a bit off anyway, so that's going to be fixed in a
+	different commit.
+
+2018-11-08  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: New line widths only used if you actually
+	stroke
+
+2018-11-08  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: Fix symbol 14 (open plus sign)
+
+2018-11-08  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: Fix symbol #10 (concave rect)
+
+2018-11-07  haavee <hverkouter@gmail.com>
+
+	* src/giza-points.c: Fix symbols 7,13,15 The triangles 7, 13 were pointing the wrong way and symbol 15 is the
+	star of David formed by overplotting two open triangles offset a
+	little bit
+
+2018-11-07  haavee <hverkouter@gmail.com>
+
+	* : Merge remote-tracking branch 'upstream/master'
+
+2018-10-31  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #3 from haavee/master giza_parse_string() fix, add cpgqinf() support, fix critical bug
+	found doing this
+
+2018-09-06  haavee <hverkouter@gmail.com>
+
+	* src/giza-cpgplot.c, src/giza-drivers-private.h,
+	src/giza-drivers.c, src/giza-fortran.F90, src/giza.h: Support
+	cpgqinf(), fix critical bug Found out that the fortron giza pgplot binding implemented PQQINF()
+	(to query version &cet) but the C-language binding didn't.  Whilst implementing cpgqinf() found that giza_query_device() and
+	_giza_int_to_device() contained a serious bug, with SIGSEGV looming
+	or loss of information.  Both quoted functions copy information into a user allocated string
+	buffer.  Extract of relevant code with 'noise' deleted:     _giza_int_to_device (int numDevice, char *DeviceName)     {         case GIZA_DEVICE_NULL:           strncpy(DeviceName, "/null", sizeof(DeviceName)-1);           break;     ....  The user allocated buffers are passed by pointer ("char*
+	DeviceName") and the 'sizeof(...)' operator returns the size of the
+	_pointer_ not the size of the buffer it's pointing at! Depending on the platform "sizeof(char*) - 1" evaluates to 3 (32
+	bit) or 7 (64 bit), irrespective of how many characters the user
+	really allocated.  This can lead to either:     - overestimating the amount of characters available in case the
+	      user allocated less than 3 (or 7) bytes for their buffer. A
+	      strncpy() with a source longer than 3 (or 7) would then overwrite
+	      memory that it shouldn't, which in turn would lead to unpredictable
+	      behaviour at best and program termination via SIGSEGV at worst.      - underestimating the amount characters available if the user
+	      allocated more than 3 (or 7) characters for their target buffer.
+	      In this case, the strncpy() with a source string > 3 (or 7)
+	      characters would truncate the output - e.g. the file name of a
+	      device would easily be > 7 characters long but at most 3 (or 7) of
+	      them would be copied.  This would lead to unnecessary loss of
+	information.  In order to fix this the target buffer size must be explicitly
+	passed to the functions by the caller. Thus the prototype of
+	giza_query_device() needed to be altered and as a result the Fortran
+	wrapper needed adapting to the new signature and pass in the extra
+	variable accordingly.
+
+2018-09-06  haavee <hverkouter@gmail.com>
+
+	* src/giza-scanner.l, src/lex.yy.c: Fix backspace handling ...  The meaning of the nGlyph index used in giza_parse_string changed
+	subtly during development and the handling of backspace was not
+	changed accordingly.  The result was that "x^2\b_i" rendered fine but the unit superscript
+	over the decimal point in PGTBOX() now looked horrible because the
+	pen position was moved to an erroneous position. Sigh.  In order to make "x-i-squared" render nicely it must now be spelled
+	    as: x^2\b\b_i with two backspaces. The first backs up over the
+	superscript '2', the second backs up over the '^' superscript
+	operation; when entering the superscript the baseline of the font
+	and the current pen position is changed immediately. So if that is
+	not undone before staring to render further characters, the pen
+	position is not where you hoped it would be.
+
+2018-09-06  Daniel Price <daniel.price@monash.edu>
+
+	* docs/news/index.html: updated docs
+
+2018-09-06  Daniel Price <daniel.price@monash.edu>
+
+	* docs/documentation/api.html,
+	docs/documentation/cpgplot-status.html,
+	docs/documentation/pgplot-status.html: [web-bot] updated
+	auto-generated documentation
+
+2018-09-06  Daniel Price <daniel.price@monash.edu>
+
+	* configure: updated configure script
+
+2018-09-06  Daniel Price <daniel.price@monash.edu>
+
+	* AUTHORS, README, configure.ac, src/giza-cpgplot.c,
+	src/giza-pgplot.f90: updated docs and version number to following
+	merge
+
+2018-09-06  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-points.c: (giza_points) revert marker size to behaviour on master
+
+2018-09-06  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-xw.c: (xw) spaces at end of lines removed
+
+2018-09-06  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge https://github.com/haavee/giza into haavee-master
+
+2018-09-05  haavee <hverkouter@gmail.com>
+
+	* : commit 553bf85db2f60aaf908113322b0cae4c0d0836de Author: haavee
+	<hverkouter@gmail.com> Date:   Wed Sep 5 15:35:47 2018 +0200
+
+2018-09-05  haavee <hverkouter@gmail.com>
+
+	* src/giza-set-font.c, src/giza.h: giza_set_font_*(...) take const
+	char* Sometimes compile time static strings are fed into
+	giza_set_font*(...) calls but their prototype is "char *", implying
+	mutable strings.  None of the functions actually modify their argument so it probably
+	is better to make this explicit in their prototypes.
+
+2018-09-04  haavee <hverkouter@gmail.com>
+
+	* src/giza-driver-xw.c, src/giza-drivers.c: Better XWindow resizing
+	implementation It turned out that the XWindow resizing wasn't handled correctly in
+	all cases; notable pgdemo13 (with two x-windows) exposed a problem
+	in the code in the first window, the one with the choice menu.  More often than not it would show ellipses where circles should be
+	drawn and the text was (way) ouside the window.  What happened was two calls to giza_change_page_xw() quickly after
+	each other. The first had Dev[id].resize = 1 (from PGPAP(...) in
+	pgdemo13), which triggered an XResizeWindow(...) in the code, to
+	change the size of the XWindow to the requested device size. The
+	next call entered with Dev[id].resize = 0 (because that was already
+	handled) ... but that one detected a window geometry change! Upon
+	inspection it turned out that, as far as X11 was concerned, the
+	window still had the /old/ size whilst our internal bookkeeping was
+	already updated with the requested size.  Turns out that the XResizeWindow() does not take effect immediately.
+	So the code now waits for ConfigureNotify events until the requested
+	window size has been achieved. Now it works reliably and windows can
+	be resized between plotting.
+
+2018-08-30  haavee <hverkouter@gmail.com>
+
+	* src/giza-io-private.h, src/giza-io.c: Enable formatted
+	warning/error messages (compat) By changing _giza_warning() and _giza_error() prototype (and
+	implementation) slightly it is now possible to make the 'message'
+	parameter be a formatting string (cf. printf("formatting string %s =
+	%d", s, i)) Now this is possible:     _giza_warning("giza_parse_string", "Invalid Hershey number %d",
+	    hershey); _giza_error("giza_parse_string", "Unrecognized token
+	#%d '%s'", token, yytext); Existing _giza_warning()/_giza_error() calls are completely
+	unaffected by this.
+
+2018-08-30  haavee <hverkouter@gmail.com>
+
+	* src/giza-driver-xw.c: no XWindow resize waiting for keypress Whilst the system is waiting for a keypress, do not honour window
+	resizing requests. PGPLOT also does not do this.
+
+2018-08-30  haavee <hverkouter@gmail.com>
+
+	* src/giza-box.c: Fixed earlier broken 'repair' Sometimes the PGPLOT doc is somewhat ambiguous but not for 'N' and
+	'M' options: both imply labels have to be drawn, only 'M' sais to do
+	so in the unconvential location.  Ambiguity example: does 'L' (logarithmic labelling) *imply* 'N' or
+	'M' ("write labels")? Or is 'L' only honoured if either 'N' or 'M'
+	is specified (which is how the code currently works).
+
+2018-08-30  haavee <hverkouter@gmail.com>
+
+	* src/giza-box.c: Add support for 'M' option to PG(T)BOX When it comes to writing labels PG(T)BOX supports the following:   -N :- Label the axis (conventional, below/left viewport)   -M :- Put labels in the unconvential location (above/right
+	  viewport) The 'M' option was not implemented by giza so I added it.  Whilst at
+	it removed a few levels of somewhat unnecessary if()'s by adding a
+	high-level check and sometimes continue'ing from a loop if the rest
+	of the loop body is precluded from being executed anyway.
+
+2018-08-30  haavee <hverkouter@gmail.com>
+
+	* src/giza-box-time.c: Fixed minor bugs (logic, off-by-one, missing
+	/) There were two off-by-one lost-in-FORTRAN-to-C-translation:     - using number of items as last accessible index       ok in fortran, not so much in C (a classic)     - end condition off by one because of pretty much the same       in fortran "<" must be <= in C (if C-style counting with       fortran meaning of index) I condensed what I thought three levels of fortran IF .. END IF into
+	a single C "if( x && y && y)" but missed that the 3rd IF was a
+	single-statement and did not introduce the 3rd 'and' ...      IF x THEN         IF y THEN             IF z <stuff>             <other stuff>         END IF     END IF at first erroneously translated by me into     if( x && y && z ) {         <stuff>         <other stuff>     } now reads     if( x && y ) {         if( z )             <stuff>         <other stuff>     } And finally in the specification of the super/subscript label
+	formats I had forgotten to escape the backslash with a backslash in
+	the strings.
+
+2018-08-30  haavee <hverkouter@gmail.com>
+
+	* src/giza-box.c: y-axis ticks on the right were drawn wrong side Obviously the previous edit introduced a sign error :-) If y-axis
+	ticks were drawn on the right hand side they'd be drawn the same
+	direction as the ones on the left-hand side. Fixed.
+
+2018-08-30  haavee <hverkouter@gmail.com>
+
+	* src/giza-box.c: Support for PGBOX 'I' and 'P' options and bug fix giza's pgbox(...) routine did not support the PGPLOT options 'I' and
+	 'P': -I: Invert tick marks - write them outside the viewport in
+	     stead of inside (default)  -P: Project major tick marks outside the viewport (ignored if 'I'
+	     also specified) Fixed bug where tickmarks on 'the other side' of the frame were
+	drawn in the same direction but they need to be inverted: If tick marks on the bottom are drawn inwards (i.e. up) then at the
+	top they must be drawn downwards to achieve the same effect. The
+	existing code drew the top tick marks outside the viewport because
+	it would draw them 'up' as well.
+
+2018-08-30  haavee <hverkouter@gmail.com>
+
+	* src/giza-box.c: Fix axis ticks not being drawn if axis 'reversed' In checking pgdemo1 certain axes did not display any tick marks at
+	all! This was traced to be when the window set through pgswin() was
+	such that Dev[id].Win.[xy]max < Dev[id].Win.[xy]min, i.e. the axis
+	is reversed: the values decrease towards the right (X) or top (Y)
+
+2018-08-22  haavee <hverkouter@gmail.com>
+
+	* : commit c00f33c3c943fba12f94916ed468f76afdd76bd1 Author: haavee
+	<hverkouter@gmail.com> Date:   Fri Aug 17 17:38:56 2018 +0200
+
+2018-08-16  haavee <hverkouter@gmail.com>
+
+	* src/giza-cursor-routines.c: fix pgdemo5 misbehaving of
+	pgolin/pglcur pgdemo5 with giza master branch draws all subsequent polygons in
+	black whereas PGPLOT draws subsequenct polygons in different colours
+	by incrementing colour index at each new polygon.
+
+2018-08-16  haavee <hverkouter@gmail.com>
+
+	* src/giza-viewport.c: Revert "fix PGPLOT incompatibility" This reverts commit e9644f6b098e54fb2cd246434d8d1c58fc6e1ba1.
+	Breaks pgdemo2 (pgvsiz() function). It was not specifically a bug or
+	fix and it doesn't hurt keeping the original code but it hurts not
+	keeping the original version ... ;-)
+
+2018-08-16  haavee <hverkouter@gmail.com>
+
+	* src/giza-driver-xw.c, src/giza-drivers.c: revert to drawing to
+	pixamp, XCopyArea to window Turns out there's code relying on drawing onto the pixmap and in
+	general, direct drawing to the window is probably best avoided
+
+2018-08-16  Daniel Price <daniel.price@monash.edu>
+
+	* : commit da2f2eca704c4002386610f8f5b344f5f9465e17 Merge: 6c8ce0d
+	99aaa05 Author: Daniel Price <daniel.price@monash.edu> Date:   Thu
+	Aug 16 10:35:33 2018 +1000
+
+2018-08-15  eee software boss <casa@eee2.jive.nl>
+
+	* src/giza-box-time.c: fix sigsegv in pgtbox() Using printf()'s Parameter field(*) I used 0-based counting for the
+	argument replacement fields but it has to be 1-based for argument 0
+	is the format string itself ...  (*)
+	https://en.wikipedia.org/wiki/Printf_format_string#Parameter_field
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-print-id.c: Fix compiler warning prototype for sprintf() missing
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-cpgplot.c: fix off-by-one between external/internal
+	device id When using multiple open devices simultaneously, the returned device
+	id from cpgoen should be usable to later select that open device.
+	There was an extra +/- 1 mismatch between cpgopen and cpgslct.
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-drivers-private.h, src/giza-drivers.c, src/giza-io.c: fix
+	compiler warning casting const away When splitting the device string sometimes 'const char*' was
+	assigned to 'char *' - which the compiler doesn't like.  Fixed by changing prototype and destination data type of the split
+	string.
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-io.c: fix warning about unused return value fgets() returns an error code and the caller is expected to check
+	that return valuer; compiler verifies this.
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-box-time.c: Support for pgtbox() The existing pgtbox() redirected to pgbox().  For astronomy application(s) time labelling is very important and a
+	highly desirable property.  The existing PGTBOX() from the PGPLOT source code was ported into an
+	initial working version, behaving identically, modulo porting bugs.
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-scanner.l, src/lex.yy.c: Support for backspace (\b) in
+	printing strings For time labelling to look good it is 'necessary' to make the
+	superscript appear on top of e.g. the decimal point. This can be
+	done if 'backspace' is supported - backing up the text by one or
+	more characters.  This necessitated rewriting the giza_parse_string() a bit because in
+	the current version backing up to a previous character's position
+	was impossible.
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-viewport.c: fix PGPLOT incompatibility When setting a viewport (pgsvp) the window should not be
+	automatically set (pgswin), cf. "pgsvp.f" source code
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-io.c: fix warning about unused return value fgets() returns an error code and the caller is expected to check
+	that return valuer; compiler verifies this.
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-drivers-private.h, src/giza-drivers.c, src/giza-io.c: fix
+	compiler warning casting const away When splitting the device string sometimes 'const char*' was
+	assigned to 'char *' - which the compiler doesn't like.  Fixed by changing prototype and destination data type of the split
+	string.
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-print-id.c: Fix compiler warning prototype for sprintf() missing
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-driver-xw.c, src/giza-drivers.c: fix external XWindow
+	resize If plotting to an XWindow and the window was resized by the user
+	before re-plotting, the draw surface would not get updated to
+	reflect the new XWindow size.  Fixes necessary: - detect if the XWindow was resized (in handle change to new page
+	event) and set resize flag for the device in such a case - the PANEL size(s) were not updated: this was the main culprit.  The window and cairo surface were always changed upon a new XWindow
+	page but the panel sizes, kept internally in units of pixels(!) were
+	never updated.  Thus even if the XWindow was made smaller/larger,
+	the amount of pixels actually drawn was never changed.
+
+2018-08-14  Harro Verkouter <verkouter@jive.eu>
+
+	* src/giza-cpgplot.c: fix off-by-one between external/internal
+	device id When using multiple open devices simultaneously, the returned device
+	id from cpgoen should be usable to later select that open device.
+	There was an extra +/- 1 mismatch between cpgopen and cpgslct.
+
+2018-05-14  Daniel Price <daniel.price@monash.edu>
+
+	* INSTALL: updated pgplot instructions
+
+2018-05-14  Daniel Price <daniel.price@monash.edu>
+
+	* INSTALL: (install) added instructions for running basic examples to INSTALL
+	file
+
+2018-03-07  Daniel Price <daniel.price@monash.edu>
+
+	* docs/news/index.html, src/Makefile.in, test/C/Makefile.in,
+	test/F90/Makefile.in: docs for 0.9.5
+
+2018-03-07  Daniel Price <daniel.price@monash.edu>
+
+	* Makefile.in, aclocal.m4, configure, configure.ac: (config) updated configure scripts
+
+2018-03-07  Daniel Price <daniel.price@monash.edu>
+
+	* .mailmap, configure.ac: 0.9.5
+
+2018-03-05  Daniel Price <daniel.price@monash.edu>
+
+	* ChangeLog, NEWS, docs/news/index.html: 0.9.5
+
 2018-03-05  Daniel Price <daniel.price@monash.edu>
 
 	* docs/documentation/api.html,
@@ -47,122 +674,122 @@
 
 	* docs/index.html, docs/style.css: (web) test github pages
 
-2017-11-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2017-11-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: (giza_box) bug fix with drawing major axis only; also with drawing
 	grid (iaxis=1) git-svn-id: https://svn.code.sf.net/p/giza/code@533
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2017-09-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2017-09-07  Daniel Price <daniel.price@monash.edu>
 
 	* .gitignore: updated .gitignore to ignore .lo and .la files git-svn-id: https://svn.code.sf.net/p/giza/code@532
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2017-09-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2017-09-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c, src/giza-window.c: fix compiler warning in
 	giza-viewport/giza-window git-svn-id: https://svn.code.sf.net/p/giza/code@531
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2017-09-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2017-09-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: (giza_box) bug fix with spacing between box and numbers when numbers
 	written on top of box git-svn-id: https://svn.code.sf.net/p/giza/code@530
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2017-07-22  jfrieben <jfrieben@952f94de-64c9-43ce-8081-c12abd9885bf>
+2017-07-22  Joachim Frieben <jfrieben@hotmail.com>
 
 	* src/giza-print-id.c: fix string allocation (thanks to Ole
 	Streicher) git-svn-id: https://svn.code.sf.net/p/giza/code@529
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2017-04-24  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2017-04-24  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-error-bars.c: bug fix with shaded error bars git-svn-id: https://svn.code.sf.net/p/giza/code@528
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-07-23  jfrieben <jfrieben@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-07-23  Joachim Frieben <jfrieben@hotmail.com>
 
 	* src/giza-drivers.c: Fix off-by-one in string definition (thanks to
 	Ole Streicher) git-svn-id: https://svn.code.sf.net/p/giza/code@527
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-06-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-06-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: (giza_driver_xw) blank screen issue on Linux fixed (thanks to Ole
 	Streicher); also enabled XW error handling routine git-svn-id: https://svn.code.sf.net/p/giza/code@526
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-06-03  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-06-03  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: (giza-scanner) declared internal functions static; recompiled flex
 	file git-svn-id: https://svn.code.sf.net/p/giza/code@525
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-06-03  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-06-03  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band.c, src/giza-colour-index.c: (libgiza) build failures from previous commit fixed git-svn-id: https://svn.code.sf.net/p/giza/code@524
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-06-03  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-06-03  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band.c, src/giza-colour-index.c, src/giza-cpgplot.c,
 	src/giza-warnings.c: (libgiza) shared variables declared static where possible (thanks to
 	Ole Streicher) git-svn-id: https://svn.code.sf.net/p/giza/code@523
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-06-03  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-06-03  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-save.c: (giza_save) shared variables declared static (thanks to Ole
 	Streicher) git-svn-id: https://svn.code.sf.net/p/giza/code@522
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-05-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-05-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-cpgplot.c: (cpgplot) typo in cpgplot interface fixed (cpghi2D->cpghi2d); thanks
 	to Ole Streicher git-svn-id: https://svn.code.sf.net/p/giza/code@521
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-01-19  jfrieben <jfrieben@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-01-19  Joachim Frieben <jfrieben@hotmail.com>
 
 	* Makefile.am, Makefile.in, src/Makefile.am, src/Makefile.in: Move
 	directive .NOTPARALLEL to the correct location git-svn-id: https://svn.code.sf.net/p/giza/code@520
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-01-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-01-18  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile.am, Makefile.in: bug fix: .NOTPARALLEL: instead of
 	.NOTPARALLEL (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@519
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2016-01-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2016-01-18  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile.am, Makefile.in: added .NOTPARALLEL to avoid build
 	problems git-svn-id: https://svn.code.sf.net/p/giza/code@518
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-12-27  jfrieben <jfrieben@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-12-27  Joachim Frieben <jfrieben@hotmail.com>
 
 	* README: update postal address of the FSF git-svn-id: https://svn.code.sf.net/p/giza/code@517
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-12-22  jfrieben <jfrieben@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-12-22  Joachim Frieben <jfrieben@hotmail.com>
 
 	* COPYING: update to current GPLv2 git-svn-id: https://svn.code.sf.net/p/giza/code@516
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-12-12  jfrieben <jfrieben@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-12-12  Joachim Frieben <jfrieben@hotmail.com>
 
 	* src/Makefile.am, src/Makefile.in: Install giza.mod in the module
 	directory git-svn-id: https://svn.code.sf.net/p/giza/code@515
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-12-12  jfrieben <jfrieben@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-12-12  Joachim Frieben <jfrieben@hotmail.com>
 
 	* src/giza-points.c: Draw correct symbol for marker type -4 git-svn-id: https://svn.code.sf.net/p/giza/code@514
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-20  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile.in, aclocal.m4, configure, configure.ac,
 	src/Makefile.in, test/C/Makefile.in, test/F90/Makefile.in,
@@ -170,66 +797,66 @@
 	problems with timestamps if exported from svn git-svn-id: https://svn.code.sf.net/p/giza/code@513
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-17  Daniel Price <daniel.price@monash.edu>
 
 	* src/Makefile.am, src/Makefile.in: added .h files to Makefile.am so
 	that make dist works git-svn-id: https://svn.code.sf.net/p/giza/code@512
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-17  Daniel Price <daniel.price@monash.edu>
 
 	* AUTHORS, ChangeLog, NEWS: 0.9.4 git-svn-id: https://svn.code.sf.net/p/giza/code@511
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-13  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-13  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-points.c: patch for negative marker indices; now matches
 	expected PGPLOT behaviour; contributed by Joachim Frieben git-svn-id: https://svn.code.sf.net/p/giza/code@510
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-03  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-03  Daniel Price <daniel.price@monash.edu>
 
 	* INSTALL: updated INSTALL instructions git-svn-id: https://svn.code.sf.net/p/giza/code@509
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-03  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-03  Daniel Price <daniel.price@monash.edu>
 
 	* configure, configure.ac: added fallback options for cairo and x11
 	on OS/X if pkg-config not available git-svn-id: https://svn.code.sf.net/p/giza/code@508
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-03  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-03  Daniel Price <daniel.price@monash.edu>
 
 	* src/Makefile.am, src/Makefile.in: libpgplot and libcpgplot link to
 	libgiza instead of including .o files; faster build (thanks to
 	Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@507
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/Makefile.am, src/Makefile.in: build libgiza before libcpgplot;
 	also copy giza-fortran.F90 to include directory git-svn-id: https://svn.code.sf.net/p/giza/code@506
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-01  Daniel Price <daniel.price@monash.edu>
 
 	* configure, configure.ac: update libtool version info + added
 	comments git-svn-id: https://svn.code.sf.net/p/giza/code@505
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-01  Daniel Price <daniel.price@monash.edu>
 
 	* test/{ => C}/test-error-bars-2.c: test-error-bars-2.c -> test/C
 	(thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@504
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-01  Daniel Price <daniel.price@monash.edu>
 
 	* INSTALL: updated INSTALL instructions for autotools build (thanks
 	to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@503
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-11-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-11-01  Daniel Price <daniel.price@monash.edu>
 
 	* : removed obsolete dirs in svn (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@502
 	952f94de-64c9-43ce-8081-c12abd9885bf
@@ -240,7 +867,7 @@
 	doc string (missing _float) git-svn-id: https://svn.code.sf.net/p/giza/code@500
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile.in, aclocal.m4, configure, configure.ac,
 	src/Makefile.am, src/Makefile.in, test/C/Makefile.in,
@@ -248,20 +875,20 @@
 	pkg-config to find X11 and cairo libs git-svn-id: https://svn.code.sf.net/p/giza/code@499
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* configure.ac, src/giza-version.h.in: added versioning of
 	giza-version.h to configure stuff git-svn-id: https://svn.code.sf.net/p/giza/code@498
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* build/compile, build/config.guess, build/config.sub,
 	build/depcomp, build/install-sh, build/ltmain.sh, build/missing,
 	build/test-driver: added autoconf scripts to build dir git-svn-id: https://svn.code.sf.net/p/giza/code@497
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile.in, config.h.in, configure, src/Makefile.in,
 	test/C/Makefile.in, test/F90/Makefile.in, test/Makefile.in: added
@@ -269,13 +896,13 @@
 	Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@496
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile.am: replaced Makefiles with automake and autoconf
 	scripts (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@495
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile, Makefile.am, aclocal.m4, build/Makefile, configure.ac,
 	m4/libtool.m4, m4/ltoptions.m4, m4/ltsugar.m4, m4/ltversion.m4,
@@ -284,7 +911,7 @@
 	automake and autoconf scripts (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@494
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band-private.h, src/giza-band.c,
 	src/giza-colour-index.c, src/giza-colour-private.h,
@@ -292,46 +919,46 @@
 	defined in headers; now uses extern and declared in .c files git-svn-id: https://svn.code.sf.net/p/giza/code@493
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/cpgplot.pc.in, src/giza.pc.in, src/pgplot.pc.in: added
 	pkg-config metadata files (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@492
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* ChangeLog, CHANGES => NEWS: CHANGES->NEWS and added ChangeLog
 	(thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@491
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* include/.gitignore, lib/.gitignore: removed include and lib dirs
 	(thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@490
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* doc/cpgplot_status.pl, doc/get-fortran-params.pl,
 	doc/pgplot_status.pl: perl scripts updated to point to ../src
 	instead of ../interface (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@489
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* {include => src}/cpgplot.h, {include => src}/giza-shared.h,
 	{include => src}/giza.h: include/*.h->src (thanks to Joachim
 	Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@488
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* {interface => src}/giza-cpgplot.c, {interface =>
 	src}/giza-fortran.F90, {interface => src}/giza-pgplot.f90: 
 	interface/*->src (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@487
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-2D.f90, test/test-XOpenDisplay.c, test/test-arrow.c,
 	test/test-band.c, test/test-box.c, test/test-cairo-xw.c,
@@ -348,7 +975,7 @@
 	Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@486
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* test/C/test-XOpenDisplay.c, test/C/test-arrow.c,
 	test/C/test-band.c, test/C/test-box.c, test/C/test-cairo-xw.c,
@@ -366,7 +993,7 @@
 	test/F90 (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@485
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-30  Daniel Price <daniel.price@monash.edu>
 
 	* {docs => doc}/api.pl, {docs => doc}/cpgplot_status.pl, {docs =>
 	doc}/get-fortran-params.pl, {docs => doc}/get-source-files.pl,
@@ -392,236 +1019,236 @@
 	(dir = 9) git-svn-id: https://svn.code.sf.net/p/giza/code@481
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-10-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-10-20  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: (os/x) fixed X11 library path for OS/X El Capitan git-svn-id: https://svn.code.sf.net/p/giza/code@480
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-04-27  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-04-27  Daniel Price <daniel.price@monash.edu>
 
 	* README: updated readme git-svn-id: https://svn.code.sf.net/p/giza/code@479
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-04-27  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-04-27  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES: Changelog updated for 0.9.3 git-svn-id: https://svn.code.sf.net/p/giza/code@478
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-04-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-04-17  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: version bumped to 0.9.3 git-svn-id: https://svn.code.sf.net/p/giza/code@477
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-04-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-04-17  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: add -I$(PREFIX)/include/cairo to include flags git-svn-id: https://svn.code.sf.net/p/giza/code@476
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-04-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-04-17  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-io.c: flushing achieved with fflush instead of getchar to
 	avoid unnecessary hangs git-svn-id: https://svn.code.sf.net/p/giza/code@475
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-04-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-04-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-io.c: flush stdin after giza prompt to avoid repeated
 	device tries git-svn-id: https://svn.code.sf.net/p/giza/code@474
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-04-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-04-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza-io.c, src/giza-private.h: BUG FIX
 	with long device names; string length increased to 256 chars; added
 	error checks for strings too long (thanks to Hugh Williams) git-svn-id: https://svn.code.sf.net/p/giza/code@473
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-04-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-04-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-png.c: better error handling in png device (thanks
 	to Hugh Williams) git-svn-id: https://svn.code.sf.net/p/giza/code@472
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile: added testpg target to compile pgplot tests (thanks
 	to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@471
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-pdf.c, test/test-svg.c: added separate
 	test-svg; test-pdf now outputs pdf git-svn-id: https://svn.code.sf.net/p/giza/code@470
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-png.c: test-png spits out sensible number of files git-svn-id: https://svn.code.sf.net/p/giza/code@469
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-png.c: test-png spits out sensible number of files git-svn-id: https://svn.code.sf.net/p/giza/code@468
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-arrow.c: test-arrow now works as expected (thanks to
 	Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@467
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-2D.f90: added test-2D to default tests git-svn-id: https://svn.code.sf.net/p/giza/code@466
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/{test-xw.c => test-giza-xw.c}: renamed
 	test-xw.c->test-giza-xw.c (thanks to Joachim Frieben) git-svn-id: https://svn.code.sf.net/p/giza/code@465
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-fortran.f90: fixed build of test-fortran git-svn-id: https://svn.code.sf.net/p/giza/code@464
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-28  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: added FFLAGS setting and -fPIC to Makefile git-svn-id: https://svn.code.sf.net/p/giza/code@463
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-05  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES: updated ChangeLog for 0.9.2 git-svn-id: https://svn.code.sf.net/p/giza/code@462
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-04  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-04  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: 0.9.2 git-svn-id: https://svn.code.sf.net/p/giza/code@461
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2015-01-04  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2015-01-04  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: use $(FC) instead of $(LIBTOOL) to compile shared
 	Fortran library (thanks to Sean Farley) git-svn-id: https://svn.code.sf.net/p/giza/code@460
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-11-11  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-11-11  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-style-private.h, src/giza-line-style.c: fine-tuning
 	of line styles; added offset to patterns to give better legend git-svn-id: https://svn.code.sf.net/p/giza/code@459
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-11-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-11-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-fill.c: bug fix with typedef of line width in giza fill
 	(thanks to W. Dehnen) git-svn-id: https://svn.code.sf.net/p/giza/code@458
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-28  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: bug fix with giza.mod in install target git-svn-id: https://svn.code.sf.net/p/giza/code@457
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-28  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: reverted build targets; also install giza.mod into
 	include dir by default git-svn-id: https://svn.code.sf.net/p/giza/code@456
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-27  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-27  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: workaround for macports issue with all target git-svn-id: https://svn.code.sf.net/p/giza/code@455
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-27  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-27  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES, build/Makefile: version 0.9.1 git-svn-id: https://svn.code.sf.net/p/giza/code@454
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-27  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-27  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-pgaxis.f90: added test for pgaxis
 	routines git-svn-id: https://svn.code.sf.net/p/giza/code@453
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-27  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-27  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile, build/Makefile: minor changes to build: default target
 	is default, not all to avoid macports issue git-svn-id: https://svn.code.sf.net/p/giza/code@452
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90, src/giza-cursor-routines.c,
 	test/Makefile, test/test-pgncur.f90: implemented sorting in
 	mark_cursor/PGNCUR git-svn-id: https://svn.code.sf.net/p/giza/code@451
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-error-bars.c: bug fix with shaded error bar plotting
 	(causing shading of outside not inside) git-svn-id: https://svn.code.sf.net/p/giza/code@450
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: updated docs for fortran interface git-svn-id: https://svn.code.sf.net/p/giza/code@449
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES: 0.9.0 git-svn-id: https://svn.code.sf.net/p/giza/code@448
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: version 0.9.0 git-svn-id: https://svn.code.sf.net/p/giza/code@447
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: better margins in PGENV/giza_environment git-svn-id: https://svn.code.sf.net/p/giza/code@446
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-character-size.c, src/giza-drivers.c,
 	src/giza-subpanel.c: character size scaled according to panel height
 	not page height git-svn-id: https://svn.code.sf.net/p/giza/code@445
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c, src/giza-window.c: BUG FIX with clipping and
 	positioning of panels if more than one row git-svn-id: https://svn.code.sf.net/p/giza/code@444
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-subpanel.c: BUG FIX with panel changing if more than one
 	row git-svn-id: https://svn.code.sf.net/p/giza/code@443
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: BUG FIX with flushing if multiple XW devices
 	used git-svn-id: https://svn.code.sf.net/p/giza/code@442
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: BUG FIX with missing last page on interactive
 	devices if prompting is on git-svn-id: https://svn.code.sf.net/p/giza/code@441
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: comment removed git-svn-id: https://svn.code.sf.net/p/giza/code@440
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-28  Daniel Price <daniel.price@monash.edu>
 
 	* branches/opengl/INSTALL, branches/opengl/LICENSE,
 	branches/opengl/Makefile, branches/opengl/build/Makefile,
@@ -736,25 +1363,25 @@
 	branch git-svn-id: https://svn.code.sf.net/p/giza/code@439
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza-paper.c, src/giza-subpanel.c,
 	src/giza-window.c: sub-panelling now works; various bugs fixed with
 	this git-svn-id: https://svn.code.sf.net/p/giza/code@438
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: bug fix with uninitialised variables if bad
 	args to giza_viewport git-svn-id: https://svn.code.sf.net/p/giza/code@437
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: docs fixed for viewport routines git-svn-id: https://svn.code.sf.net/p/giza/code@436
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza-subpanel-private.h,
 	src/giza-subpanel.c, src/giza-viewport.c: clipping of plot for
@@ -762,33 +1389,33 @@
 	page changes git-svn-id: https://svn.code.sf.net/p/giza/code@435
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c, interface/giza-pgplot.f90,
 	src/giza-histogram.c: implemented giza_histogram_binned; implements
 	PGBIN git-svn-id: https://svn.code.sf.net/p/giza/code@434
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-histogram.c: giza_histogram implemented; compatible with
 	PGHIST git-svn-id: https://svn.code.sf.net/p/giza/code@433
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, include/giza.h, interface/giza-cpgplot.c,
 	interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-histogram.c: added interfaces for histogram routines git-svn-id: https://svn.code.sf.net/p/giza/code@432
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: can use /xs, /xserve and /xwindow to specify
 	X-windows device git-svn-id: https://svn.code.sf.net/p/giza/code@431
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-06-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-06-17  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, include/giza.h, interface/giza-cpgplot.c,
 	interface/giza-fortran.F90, interface/giza-pgplot.f90,
@@ -798,244 +1425,244 @@
 	working) git-svn-id: https://svn.code.sf.net/p/giza/code@430
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-31  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES, README: updated changelog git-svn-id: https://svn.code.sf.net/p/giza/code@429
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-27  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-27  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: support for limited scope of
 	font changing commands in strings, i.e. {\bf text} and {\it text} git-svn-id: https://svn.code.sf.net/p/giza/code@428
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: text routines handle escape
 	sequences for backslash (\\), underscore (\_), hat (\^) and curly
 	brackets git-svn-id: https://svn.code.sf.net/p/giza/code@427
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-save.c: giza-save uses GIZA_FONT_LEN to be consistent git-svn-id: https://svn.code.sf.net/p/giza/code@426
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-26  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: version bumped to 0.8.1 git-svn-id: https://svn.code.sf.net/p/giza/code@425
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-points.c, src/giza-ptext.c, src/giza-qtext.c,
 	src/giza-set-font.c: BUG FIX with font changing in rotated strings;
 	also original font now preserved after string is printed git-svn-id: https://svn.code.sf.net/p/giza/code@424
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/giza-text-private.h, src/giza-text.c,
 	src/lex.yy.c: can use \bf or \fb to get bold face in strings git-svn-id: https://svn.code.sf.net/p/giza/code@423
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-25  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-25  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-2D.f90: minor change to 2D test git-svn-id: https://svn.code.sf.net/p/giza/code@422
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2014-03-25  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2014-03-25  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: updated text scanner (uses
 	unicode Sun symbol) git-svn-id: https://svn.code.sf.net/p/giza/code@421
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-12-19  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-12-19  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-render.c: added link to giza_set_colour_table in docs git-svn-id: https://svn.code.sf.net/p/giza/code@420
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-12-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-12-18  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-bar.c, src/giza-render.c: bug fix in docs
 	referring to giza_colour_ramp, should be to giza_set_colour_table git-svn-id: https://svn.code.sf.net/p/giza/code@419
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-12-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-12-18  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box-time.c: updated links in docs git-svn-id: https://svn.code.sf.net/p/giza/code@418
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-12-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-12-18  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: affine array does not need to be
 	passed for most rendered images in simple f90 interface git-svn-id: https://svn.code.sf.net/p/giza/code@417
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-12-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-12-18  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-2D.f90: added test-2D thanks to
 	Jean-Francois Gonzalez git-svn-id: https://svn.code.sf.net/p/giza/code@416
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-12-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-12-18  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza.h: interface added for giza_get_device_id in giza.h git-svn-id: https://svn.code.sf.net/p/giza/code@415
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-12-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-12-18  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c: added cpgtbox interface to
 	giza_box_time; also bug fix with cpgswin git-svn-id: https://svn.code.sf.net/p/giza/code@414
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-15  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES: updated changelog git-svn-id: https://svn.code.sf.net/p/giza/code@413
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-15  Daniel Price <daniel.price@monash.edu>
 
 	* AUTHORS, build/Makefile: extra files included in release tarball git-svn-id: https://svn.code.sf.net/p/giza/code@412
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-15  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES: updated changelog for 0.8.0 git-svn-id: https://svn.code.sf.net/p/giza/code@411
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-15  Daniel Price <daniel.price@monash.edu>
 
 	* docs/api.pl: typo fixed in api script git-svn-id: https://svn.code.sf.net/p/giza/code@410
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c, interface/giza-pgplot.f90: updated
 	status of PGPAP/cpgpap git-svn-id: https://svn.code.sf.net/p/giza/code@409
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-version.c: bug fix with documentation of giza_version git-svn-id: https://svn.code.sf.net/p/giza/code@408
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, src/giza-version.c: added giza_version
 	routine to Fortran interface git-svn-id: https://svn.code.sf.net/p/giza/code@407
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, include/giza.h, src/giza-version.c: added giza
 	version routine to query version info git-svn-id: https://svn.code.sf.net/p/giza/code@406
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-vector.c: added docs for giza_vector git-svn-id: https://svn.code.sf.net/p/giza/code@405
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: added integer parameters giving
 	version number info in Fortran interface git-svn-id: https://svn.code.sf.net/p/giza/code@404
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: debugging/commented out cruft removed git-svn-id: https://svn.code.sf.net/p/giza/code@403
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: updated docs on return value for
 	giza_open_device git-svn-id: https://svn.code.sf.net/p/giza/code@402
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: device help shows filename option (file.png
 	instead of /png) git-svn-id: https://svn.code.sf.net/p/giza/code@401
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: debugging info removed git-svn-id: https://svn.code.sf.net/p/giza/code@400
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-text-background.c: bug fix with default text background
 	(should be -1 not 0) git-svn-id: https://svn.code.sf.net/p/giza/code@399
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-clipping.c, src/giza-private.h: clip setting specific to
 	each device git-svn-id: https://svn.code.sf.net/p/giza/code@398
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza-private.h, src/giza-ptext.c,
 	src/giza-text-background-private.h, src/giza-text-background.c: text
 	background colour setting specific to each device git-svn-id: https://svn.code.sf.net/p/giza/code@397
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-style.c: get_line_style always returns something
 	even if giza not started git-svn-id: https://svn.code.sf.net/p/giza/code@396
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-character-size.c, src/giza-private.h: character height
 	setting specific to each device git-svn-id: https://svn.code.sf.net/p/giza/code@395
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza-private.h, src/giza-ptext.c,
 	src/giza-qtext.c, src/giza-text.c, src/giza.c: fontAngle setting
 	specific to each device git-svn-id: https://svn.code.sf.net/p/giza/code@394
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c, src/giza-character-size.c, src/giza-points.c,
 	src/giza-private.h, src/giza-text.c: fontExtents stored specific to
 	each device; not globally git-svn-id: https://svn.code.sf.net/p/giza/code@393
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-style-private.h, src/giza-line-style.c,
 	src/giza-private.h: line style setting specific to each device git-svn-id: https://svn.code.sf.net/p/giza/code@392
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-width.c, src/giza-private.h: line width setting
 	specific to each device git-svn-id: https://svn.code.sf.net/p/giza/code@391
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-arrow-style-private.h, src/giza-arrow-style.c,
 	src/giza-arrow.c, src/giza-private.h: arrow style settings specific
 	to each device (giza_arrow_t) git-svn-id: https://svn.code.sf.net/p/giza/code@390
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-fill.c, src/giza-private.h: fill style and settings
 	specific to each device git-svn-id: https://svn.code.sf.net/p/giza/code@389
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza.h, src/giza-annotate.c, src/giza-arrow.c,
 	src/giza-box.c, src/giza-buffering.c, src/giza-circle.c,
@@ -1048,19 +1675,19 @@
 	device git-svn-id: https://svn.code.sf.net/p/giza/code@388
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c: commented out temporary stuff git-svn-id: https://svn.code.sf.net/p/giza/code@387
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c, src/giza-drivers.c, src/giza-private.h,
 	src/giza-viewport-private.h, src/giza-viewport.c, src/giza-window.c: 
 	viewport settings now specific to each device git-svn-id: https://svn.code.sf.net/p/giza/code@386
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-annotate.c, src/giza-box.c, src/giza-driver-xw.c,
 	src/giza-drivers.c, src/giza-private.h, src/giza-transforms.c,
@@ -1068,19 +1695,19 @@
 	window settings now specific to each device git-svn-id: https://svn.code.sf.net/p/giza/code@385
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: typo fixed git-svn-id: https://svn.code.sf.net/p/giza/code@384
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c, src/giza-private.h,
 	src/giza-prompting-private.h, src/giza-prompting.c: start/stop
 	prompting setting now specific to each device, not global git-svn-id: https://svn.code.sf.net/p/giza/code@383
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c, interface/giza-fortran.F90,
 	interface/giza-pgplot.f90, src/giza-drivers.c, src/giza.c: numbering
@@ -1088,14 +1715,14 @@
 	implemented PGQID/giza_get_device_id git-svn-id: https://svn.code.sf.net/p/giza/code@382
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c, src/giza-paper.c,
 	src/giza-private.h: implemented resizing of X-window/bitmap devices
 	via giza_paper_size (not perfect yet) git-svn-id: https://svn.code.sf.net/p/giza/code@381
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps-private.h, src/giza-driver-eps.c,
 	src/giza-driver-null-private.h, src/giza-driver-null.c,
@@ -1111,7 +1738,7 @@
 	giza_open_device_size rather than vice-versa) git-svn-id: https://svn.code.sf.net/p/giza/code@380
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, include/giza.h, interface/giza-cpgplot.c,
 	interface/giza-fortran.F90, interface/giza-pgplot.f90,
@@ -1136,19 +1763,19 @@
 	giza_select/pgslct routines to switch between devices git-svn-id: https://svn.code.sf.net/p/giza/code@379
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-08-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-08-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c: better cleanup on
 	failure to open device; does not require giza_close_device call git-svn-id: https://svn.code.sf.net/p/giza/code@378
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-06-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-06-18  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-table.c: silenced warning regarding colour not set
 	if NaNs input to giza-render routines git-svn-id: https://svn.code.sf.net/p/giza/code@377
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-06-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-06-08  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza.h, src/giza-driver-xw.c, src/giza-drivers.c,
 	src/giza-io.c, src/giza-private.h, src/giza.c: added autolog
@@ -1156,184 +1783,184 @@
 	GIZA_LOG environment variable git-svn-id: https://svn.code.sf.net/p/giza/code@376
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-06-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-06-08  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: link for -lgfortran fixed git-svn-id: https://svn.code.sf.net/p/giza/code@375
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-06-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-06-08  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-vector.c: BUG FIX with vector arrows in double precision git-svn-id: https://svn.code.sf.net/p/giza/code@374
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-06-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-06-08  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: newline removed git-svn-id: https://svn.code.sf.net/p/giza/code@373
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-06-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-06-08  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-window.c: floating exception fixed in
 	giza_set_window_equal_scale if width=height=0 git-svn-id: https://svn.code.sf.net/p/giza/code@372
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-02-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-02-20  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: gfortran version checking removed (obsolete/no
 	longer necessary) git-svn-id: https://svn.code.sf.net/p/giza/code@371
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-02-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-02-18  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES, Makefile, README: dates/changelog updated for 0.7.6 git-svn-id: https://svn.code.sf.net/p/giza/code@370
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-02-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-02-18  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile, build/Makefile: minor fixes to install target; should
 	now work with Macports git-svn-id: https://svn.code.sf.net/p/giza/code@369
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2013-02-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2013-02-18  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: [PATCH] fortran interface compiles
 	with ifort+debugging; thanks to Andy McLeod git-svn-id: https://svn.code.sf.net/p/giza/code@368
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: bug fix with box being drawn randomly due to
 	giza_stroke call git-svn-id: https://svn.code.sf.net/p/giza/code@367
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, test/Makefile: better clean targets for Makefiles git-svn-id: https://svn.code.sf.net/p/giza/code@366
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES: updated CHANGES for 0.7.5 git-svn-id: https://svn.code.sf.net/p/giza/code@365
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: compiler warnings with strncpy fixed (clang) git-svn-id: https://svn.code.sf.net/p/giza/code@364
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: version number bumped to 0.7.5 git-svn-id: https://svn.code.sf.net/p/giza/code@363
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: compiler warning fixed git-svn-id: https://svn.code.sf.net/p/giza/code@362
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* AUTHORS: added AUTHORS file git-svn-id: https://svn.code.sf.net/p/giza/code@361
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* INSTALL: updated INSTALL instructions git-svn-id: https://svn.code.sf.net/p/giza/code@360
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* CHANGES, README: CHANGES file added; README now contains small
 	blurb git-svn-id: https://svn.code.sf.net/p/giza/code@359
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* LICENSE => COPYING: LICENSE file renamed to COPYING git-svn-id: https://svn.code.sf.net/p/giza/code@358
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: XW driver no longer uses XNextEvent to
 	prevent compile problems on Ubuntu; also initial window call uses
 	WhitePixel as defined by Xlib git-svn-id: https://svn.code.sf.net/p/giza/code@357
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-arrow.c, test/test-box.c: added box/more
 	arrow tests git-svn-id: https://svn.code.sf.net/p/giza/code@356
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-arrow.c: giza arrow uses semi-angle instead of full
 	angle, as in PGPLOT (pgdemo1) git-svn-id: https://svn.code.sf.net/p/giza/code@355
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-arrow.c: BUG FIX with arrow heads becoming small in
 	certain directions git-svn-id: https://svn.code.sf.net/p/giza/code@354
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: giza_stroke called after device opened; avoids
 	black page bug if no box/window/viewport called prior to drawing git-svn-id: https://svn.code.sf.net/p/giza/code@353
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-palette.c: new colour palette options added git-svn-id: https://svn.code.sf.net/p/giza/code@352
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: BUG FIX with log axis labelling if interval < 10 git-svn-id: https://svn.code.sf.net/p/giza/code@351
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-02  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: build respects DESTDIR conventions git-svn-id: https://svn.code.sf.net/p/giza/code@350
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-palette.c: various line palettes added; can be
 	selected with GIZA_PALETTE environment variable git-svn-id: https://svn.code.sf.net/p/giza/code@349
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-11-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-11-02  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza.h, src/giza-colour-index.c: routines added to set
 	colour representation in rgb git-svn-id: https://svn.code.sf.net/p/giza/code@348
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-08-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-08-28  Daniel Price <daniel.price@monash.edu>
 
 	* README: README added to repository git-svn-id: https://svn.code.sf.net/p/giza/code@347
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-08-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-08-28  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: README included in distribution git-svn-id: https://svn.code.sf.net/p/giza/code@346
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-08-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-08-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: commented out X-windows error-handling
 	routine to avoid compilation problems in Ubuntu git-svn-id: https://svn.code.sf.net/p/giza/code@345
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-08-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-08-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps.c, src/giza-driver-svg.c: uses _0000 numbering
 	if part of sequence for eps and svg devices (by renaming file when
 	changing page) git-svn-id: https://svn.code.sf.net/p/giza/code@344
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-08-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-08-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps.c, src/giza-driver-pdf.c,
 	src/giza-driver-png-private.h, src/giza-driver-png.c,
@@ -1343,49 +1970,49 @@
 	sequence git-svn-id: https://svn.code.sf.net/p/giza/code@343
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-08-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-08-23  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-fortran.f90: test Makefile compiles a
 	fortran example git-svn-id: https://svn.code.sf.net/p/giza/code@342
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-08-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-08-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: can specify hardcopy devices just using the
 	filename e.g. crap.png instead of having to type crap.png/png git-svn-id: https://svn.code.sf.net/p/giza/code@341
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-render.c: better handling of valMin=valMax in
 	giza_render_float git-svn-id: https://svn.code.sf.net/p/giza/code@340
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-07-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-07-21  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: minor change to comment git-svn-id: https://svn.code.sf.net/p/giza/code@339
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-07-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-07-21  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: BUG FIX with giza_function_x/y/t
 	interfaces with gfortran v4.7; also giza_plot_line now giza_line in
 	Fortran interface git-svn-id: https://svn.code.sf.net/p/giza/code@338
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-06-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-06-15  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: bumped version to 0.7.4 in Makefile git-svn-id: https://svn.code.sf.net/p/giza/code@337
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-06-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-06-15  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, src/giza-rectangle.c: added
 	giza_rectangle_rounded routine for plotting rectangles with rounded
 	corners git-svn-id: https://svn.code.sf.net/p/giza/code@336
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-06-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-06-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-cursor-routines.c: improvements to cursor routines:
 	mark_with_cursor handled by get_key_press routine, allows polygon
@@ -1395,7 +2022,7 @@
 	which return last character pressed, like giza_band git-svn-id: https://svn.code.sf.net/p/giza/code@335
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-06-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-06-15  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza-shared.h, interface/giza-fortran.F90,
 	src/giza-band-private.h, src/giza-band.c,
@@ -1410,46 +2037,46 @@
 	giza_band git-svn-id: https://svn.code.sf.net/p/giza/code@334
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-06-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-06-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band.c: circle cursor uses filled, partially transparent
 	circle similar to rectangle selection git-svn-id: https://svn.code.sf.net/p/giza/code@333
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-06-13  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-06-13  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza-shared.h, interface/giza-fortran.F90,
 	src/giza-driver-xw.c: xw driver returns key bindings for
 	right/middle clicks and scroll events git-svn-id: https://svn.code.sf.net/p/giza/code@332
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* Makefile, build/Makefile: version number bumped git-svn-id: https://svn.code.sf.net/p/giza/code@331
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* docs/get-source-files.pl: minor change to script git-svn-id: https://svn.code.sf.net/p/giza/code@330
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: uses X11DIR to specify libX11 location in Makefile git-svn-id: https://svn.code.sf.net/p/giza/code@329
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c: fixed comment so does not get deleted by
 	header script git-svn-id: https://svn.code.sf.net/p/giza/code@328
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* include/cpgplot.h: updated comments in cpgplot.h git-svn-id: https://svn.code.sf.net/p/giza/code@327
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza.h, interface/giza-cpgplot.c,
 	interface/giza-fortran.F90, interface/giza-pgplot.f90,
@@ -1506,102 +2133,102 @@
 	test/test-xw.c: file headers updated and unified across all files git-svn-id: https://svn.code.sf.net/p/giza/code@326
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: typo fixed git-svn-id: https://svn.code.sf.net/p/giza/code@325
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-io-private.h, src/giza-io.c: giza-io routines declare
 	const char* not just char; avoids compiler warnings git-svn-id: https://svn.code.sf.net/p/giza/code@324
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: use surface_finish and checks for errors
 	when closing xlib surface git-svn-id: https://svn.code.sf.net/p/giza/code@323
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile: makefile compiles several tests git-svn-id: https://svn.code.sf.net/p/giza/code@322
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps.c, src/giza-driver-pdf.c,
 	src/giza-driver-ps.c, src/giza-driver-svg.c: better error handling
 	on closing vector surfaces (picks up cairo bug in Lion) git-svn-id: https://svn.code.sf.net/p/giza/code@321
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-14  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-png.c: added png test git-svn-id: https://svn.code.sf.net/p/giza/code@320
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-08  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-xw.c: updated xw test git-svn-id: https://svn.code.sf.net/p/giza/code@319
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-08  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-cairo-xw.c: test reports cairo version git-svn-id: https://svn.code.sf.net/p/giza/code@318
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-08  Daniel Price <daniel.price@monash.edu>
 
 	* test/Makefile, test/test-cairo-xw.c: added Makefile for tests git-svn-id: https://svn.code.sf.net/p/giza/code@317
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-05-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-05-08  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-cairo-xw.c, test/test-xw.c: added tests for the xw bug git-svn-id: https://svn.code.sf.net/p/giza/code@316
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-22  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza-shared.h: defined GIZA_FOREGROUND and GIZA_BACKGROUND git-svn-id: https://svn.code.sf.net/p/giza/code@315
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-22  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza.h, interface/giza-fortran.F90,
 	src/giza-render-private.h, src/giza-render.c: added
 	giza_render_alpha routines for brightness-corrected rendering git-svn-id: https://svn.code.sf.net/p/giza/code@314
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: optional viewport arguments to
 	giza_plot handled correctly git-svn-id: https://svn.code.sf.net/p/giza/code@313
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-22  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza-shared.h: giza_units_normalised added git-svn-id: https://svn.code.sf.net/p/giza/code@312
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, test/test-fortran.f90: work on
 	giza_plot continues; handles and renders 2D array git-svn-id: https://svn.code.sf.net/p/giza/code@311
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: bug fix with gfortran4.6 and giza_open
 	interface git-svn-id: https://svn.code.sf.net/p/giza/code@310
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: X11 driver no longer uses XDefaultGCOfScreen
 	so should work on older systems git-svn-id: https://svn.code.sf.net/p/giza/code@309
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, include/giza.h, interface/giza-fortran.F90,
 	interface/giza-pgplot.f90, src/giza-box-time.c: routines/interfaces
@@ -1609,94 +2236,94 @@
 	options unchanged) git-svn-id: https://svn.code.sf.net/p/giza/code@308
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: high level giza_open/giza_close
 	interfaces added to Fortran interface git-svn-id: https://svn.code.sf.net/p/giza/code@307
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, include/giza.h, src/giza-set-font.c: freetype font
 	loading added (experimental, not compiled by default) git-svn-id: https://svn.code.sf.net/p/giza/code@306
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: minor fix to warning git-svn-id: https://svn.code.sf.net/p/giza/code@305
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: minor fix to documentation git-svn-id: https://svn.code.sf.net/p/giza/code@304
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps.c: fixed icc warnings for eps driver git-svn-id: https://svn.code.sf.net/p/giza/code@303
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90, src/giza-drivers.c,
 	src/giza-private.h, src/giza.c: PGQINF fully implemented; additional
 	queries added to giza_query_device git-svn-id: https://svn.code.sf.net/p/giza/code@302
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-png.c: bug fix with .png.png naming in png device;
 	change page now calls close_device_png to avoid repeated code git-svn-id: https://svn.code.sf.net/p/giza/code@301
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: obsolete comment removed git-svn-id: https://svn.code.sf.net/p/giza/code@300
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: improved readability of giza_box; variables better
 	named; docs added for M and L options git-svn-id: https://svn.code.sf.net/p/giza/code@299
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: minor cleanup, commented-out stuff removed git-svn-id: https://svn.code.sf.net/p/giza/code@298
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c, src/giza-environment.c: full range of box/env
 	options implemented (grid lines, log axes) git-svn-id: https://svn.code.sf.net/p/giza/code@297
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-style.c: minor cleanups git-svn-id: https://svn.code.sf.net/p/giza/code@296
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2012-03-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2012-03-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: BUG FIX with default viewport on first page
 	(character height not initialised correctly), affects
 	giza_environment git-svn-id: https://svn.code.sf.net/p/giza/code@295
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-12-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-12-14  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: make clean does not destroy cairo libraries if
 	installed to giza/lib git-svn-id: https://svn.code.sf.net/p/giza/code@294
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-12-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-12-09  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: giza_set_colour_representation_alpha
 	now folded into generic giza_set_colour_representation interface in
 	Fortran git-svn-id: https://svn.code.sf.net/p/giza/code@293
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-12-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-12-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-bar.c: bug fix with viewport/window not being
 	reset properly in giza_colour_bar/pgwedg git-svn-id: https://svn.code.sf.net/p/giza/code@292
@@ -1707,59 +2334,59 @@
 	* src/giza-colour-bar.c: Colour bar affine fix git-svn-id: https://svn.code.sf.net/p/giza/code@291
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-12-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-12-07  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza.h, interface/giza-fortran.F90,
 	src/giza-colour-table.c: bug fix with giza_rgb_from_table_float git-svn-id: https://svn.code.sf.net/p/giza/code@290
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-12-07  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-12-07  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-width.c: silenced warning if line width too small
 	(now just silently sets the lw to the smallest possible) git-svn-id: https://svn.code.sf.net/p/giza/code@289
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, include/giza.h, interface/giza-cpgplot.c,
 	interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-colour-bar.c: implemented giza_colour_bar/PGWEDG git-svn-id: https://svn.code.sf.net/p/giza/code@288
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* docs/api.pl: added comments to api web page git-svn-id: https://svn.code.sf.net/p/giza/code@287
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: x errors are errors, not warnings git-svn-id: https://svn.code.sf.net/p/giza/code@286
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: added routine to handle X11 protocol errors
 	nicely (issues a giza warning) git-svn-id: https://svn.code.sf.net/p/giza/code@285
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: added code (commented out) for better GC
 	create/free in xw driver git-svn-id: https://svn.code.sf.net/p/giza/code@284
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-svg.c: icc warnings silenced in svg driver git-svn-id: https://svn.code.sf.net/p/giza/code@283
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* docs/get-fortran-params.pl: fixed script with new location for
 	giza-shared.h git-svn-id: https://svn.code.sf.net/p/giza/code@282
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-14  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza-shared.h, include/giza.h, interface/giza-cpgplot.c,
 	interface/giza-fortran.F90, interface/giza-pgplot.f90,
@@ -1767,31 +2394,31 @@
 	to image rendering routines to set the padding type around the image git-svn-id: https://svn.code.sf.net/p/giza/code@281
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-13  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-13  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-render.c: image padding set back to default instead of
 	repeat in giza_render (fixes pgdemo4) git-svn-id: https://svn.code.sf.net/p/giza/code@280
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-13  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-13  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: debugging statements removed git-svn-id: https://svn.code.sf.net/p/giza/code@279
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-13  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-13  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c, interface/giza-pgplot.f90: bug fix with
 	translation of tr->affine in pgplot interfaces if shear present
 	(fixes pgdemo4) git-svn-id: https://svn.code.sf.net/p/giza/code@278
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-11  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-11  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c, interface/giza-pgplot.f90: updated
 	PGCTAB calls to giza_set_colour_table to handle contrast/brightness git-svn-id: https://svn.code.sf.net/p/giza/code@277
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-11  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-11  Daniel Price <daniel.price@monash.edu>
 
 	* include/giza.h, interface/giza-fortran.F90,
 	src/giza-colour-table.c: added contrast and brightness arguments to
@@ -1799,17 +2426,17 @@
 	(not yet full support for brightness and contrast) git-svn-id: https://svn.code.sf.net/p/giza/code@276
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-contour.c: BUG FIX with indexing in contour_float git-svn-id: https://svn.code.sf.net/p/giza/code@275
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: clean removes .mod files from Fortran build git-svn-id: https://svn.code.sf.net/p/giza/code@274
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-box.c, test/test-circle.c, test/test-environment.c,
 	test/test-error-bars.c, test/test-line-cap.c,
@@ -1817,48 +2444,48 @@
 	test/test-set-line-width.c: permissions fixed git-svn-id: https://svn.code.sf.net/p/giza/code@273
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: 0.7.2 git-svn-id: https://svn.code.sf.net/p/giza/code@272
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, {interface => include}/cpgplot.h, {src =>
 	include}/giza-shared.h, {src => include}/giza.h: public header files
 	now live in the include directory rather than being copied around git-svn-id: https://svn.code.sf.net/p/giza/code@271
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-set-font.c: minor fix in api documentation git-svn-id: https://svn.code.sf.net/p/giza/code@270
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c, src/giza-window.c: compiler warnings
 	fixed/uses fabs instead of abs git-svn-id: https://svn.code.sf.net/p/giza/code@269
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-vector.c: bug fix with giza-vector in previous commit git-svn-id: https://svn.code.sf.net/p/giza/code@268
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* src/lex.yy.c: added const to all array input variables; consistent
 	with cpgplot interface git-svn-id: https://svn.code.sf.net/p/giza/code@267
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers-private.h, src/giza-render-private.h,
 	src/giza-text-private.h: added const to all array input variables;
 	consistent with cpgplot interface git-svn-id: https://svn.code.sf.net/p/giza/code@266
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c, src/giza-annotate.c,
 	src/giza-contour.c, src/giza-drivers.c, src/giza-error-bars.c,
@@ -1869,25 +2496,25 @@
 	with cpgplot interface git-svn-id: https://svn.code.sf.net/p/giza/code@265
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c, src/giza-window.c: [PATCH contributed by
 	Daniel Kelson] viewport and window now handle xmin>xmax and
 	ymin>ymax correctly git-svn-id: https://svn.code.sf.net/p/giza/code@264
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c: added cpgimag interface git-svn-id: https://svn.code.sf.net/p/giza/code@263
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c: updated cpgplot interface to include
 	imaging routines; now similar to libpgplot in implementation level git-svn-id: https://svn.code.sf.net/p/giza/code@262
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-10  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-contour.c, src/giza-cursor-routines.c,
 	src/giza-points.c, src/giza-render-private.h, src/giza-render.c,
@@ -1896,7 +2523,7 @@
 	interface issues; tested against splash and works fine git-svn-id: https://svn.code.sf.net/p/giza/code@261
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-11-04  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-11-04  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-contour.c, src/giza-cursor-routines.c,
 	src/giza-points.c, src/giza-render-private.h, src/giza-render.c,
@@ -1911,18 +2538,18 @@
 	arrays git-svn-id: https://svn.code.sf.net/p/giza/code@259
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-10-18  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-10-18  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c, src/giza-error-bars.c,
 	src/giza-private.h: implemented semi-transparent error bar plotting git-svn-id: https://svn.code.sf.net/p/giza/code@258
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-style.c: typo in warning message fixed git-svn-id: https://svn.code.sf.net/p/giza/code@257
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c, src/giza-character-size.c, src/giza-points.c,
 	src/giza-ptext.c, src/giza-qtext.c: bug fix (regression) with
@@ -1930,107 +2557,107 @@
 	character height where it belongs) git-svn-id: https://svn.code.sf.net/p/giza/code@256
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-table.c: mistaken const declarations removed;
 	replaced with static git-svn-id: https://svn.code.sf.net/p/giza/code@255
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-table.c: mistaken const declarations removed git-svn-id: https://svn.code.sf.net/p/giza/code@254
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* docs/api.pl, src/giza-colour-palette.c, src/giza-colour-table.c,
 	src/giza-render.c: bug fixes with generation of api documentation git-svn-id: https://svn.code.sf.net/p/giza/code@253
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-set-font.c: uses explicit font face creation/destruction
 	to avoid memory leaks (cairo >=1.8 only) git-svn-id: https://svn.code.sf.net/p/giza/code@252
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: character height initialises after font (does
 	not really matter, but better this way) git-svn-id: https://svn.code.sf.net/p/giza/code@251
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c: colour index variables declared static git-svn-id: https://svn.code.sf.net/p/giza/code@250
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* docs/get-fortran-params.pl: minor edit to fortran-params script git-svn-id: https://svn.code.sf.net/p/giza/code@249
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-contour.c: bug fix with array overflow in giza_contour git-svn-id: https://svn.code.sf.net/p/giza/code@248
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-points.c: markerHeight declared static git-svn-id: https://svn.code.sf.net/p/giza/code@247
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-15  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-openclose.c: basic test of multiple open/close calls
 	added git-svn-id: https://svn.code.sf.net/p/giza/code@246
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: valgrind bug fix with init_device_list using
 	uninitialised string git-svn-id: https://svn.code.sf.net/p/giza/code@245
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: bug fix with log labelling of 1 and 10 git-svn-id: https://svn.code.sf.net/p/giza/code@244
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-14  Daniel Price <daniel.price@monash.edu>
 
 	* test/test-XOpenDisplay.c: test added for memory leaks in X11 git-svn-id: https://svn.code.sf.net/p/giza/code@243
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-12  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-12  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90, src/giza-shared.h: changed order of
 	long/short dashes; line styles in libpgplot now always match pgplot git-svn-id: https://svn.code.sf.net/p/giza/code@242
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-12  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-12  Daniel Price <daniel.price@monash.edu>
 
 	* docs/get-fortran-params.pl, interface/giza-fortran.F90: updated
 	list of fortran params automatically git-svn-id: https://svn.code.sf.net/p/giza/code@241
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-12  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-12  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-label.c: bug fix with chopped labels in giza_label git-svn-id: https://svn.code.sf.net/p/giza/code@240
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-12  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-12  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-annotate.c: giza-annotate code shortened (unnecessary
 	extra lines removed) git-svn-id: https://svn.code.sf.net/p/giza/code@239
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-12  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-12  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: bug fix in default viewport causing labels
 	with giza_label to be clipped git-svn-id: https://svn.code.sf.net/p/giza/code@238
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-12  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-12  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c, src/giza-character-size.c, src/giza-points.c,
 	src/giza-ptext.c, src/giza-qtext.c: [optimisation] do not query the
@@ -2038,17 +2665,17 @@
 	only in the routines that need to use Sets.font information git-svn-id: https://svn.code.sf.net/p/giza/code@237
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-12  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-12  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: bumped version number git-svn-id: https://svn.code.sf.net/p/giza/code@236
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-paper.c: header included for internal routine git-svn-id: https://svn.code.sf.net/p/giza/code@235
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-09  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-driver-eps.c, src/giza-driver-null.c,
@@ -2060,24 +2687,24 @@
 	Dev.widthCM and Dev.heightCM removed; less confusing all round git-svn-id: https://svn.code.sf.net/p/giza/code@234
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-paper.c: paper size queries use Dev.width not Dev.widthCM
 	(safer) git-svn-id: https://svn.code.sf.net/p/giza/code@233
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: set_viewport_inches uses Dev.width not
 	Dev.widthCM (safer) git-svn-id: https://svn.code.sf.net/p/giza/code@232
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-ps.c: added comments to postscript header git-svn-id: https://svn.code.sf.net/p/giza/code@231
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza-viewport-private.h,
 	src/giza-viewport.c: standard viewport (as used by giza_environment)
@@ -2085,56 +2712,56 @@
 	a fixed fraction git-svn-id: https://svn.code.sf.net/p/giza/code@230
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-06  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: gfortran version checks work with old gfortran
 	(v4.1.2) and give error git-svn-id: https://svn.code.sf.net/p/giza/code@229
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-06  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: checks gfortran version number and gives error if
 	gfortran is too old to compile fortran interface git-svn-id: https://svn.code.sf.net/p/giza/code@228
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-05  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: added $PREFIX/include to include line git-svn-id: https://svn.code.sf.net/p/giza/code@227
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-pdf.c, src/giza-driver-ps.c: all drivers call
 	get_filename_for_device; avoids trim/case issues git-svn-id: https://svn.code.sf.net/p/giza/code@226
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: id decreased again when device close (fixes
 	spurious warnings) git-svn-id: https://svn.code.sf.net/p/giza/code@225
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-05  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: minor changes to Makefile structure git-svn-id: https://svn.code.sf.net/p/giza/code@224
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-05  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: still working on dylib vs .so; works on both now git-svn-id: https://svn.code.sf.net/p/giza/code@223
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-05  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: build more portable on os/x vs linux git-svn-id: https://svn.code.sf.net/p/giza/code@222
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-09-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-09-05  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: shared lib extension determined automatically git-svn-id: https://svn.code.sf.net/p/giza/code@221
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-31  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, interface/giza-fortran.F90,
 	interface/giza-pgplot.f90, src/giza-colour-index.c,
@@ -2144,13 +2771,13 @@
 	by default git-svn-id: https://svn.code.sf.net/p/giza/code@220
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-31  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: bug fix with len_trim in f2c string
 	conversion git-svn-id: https://svn.code.sf.net/p/giza/code@219
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-annotate.c, src/giza-arrow.c, src/giza-band.c,
 	src/giza-box.c, src/giza-character-size.c, src/giza-circle.c,
@@ -2174,143 +2801,143 @@
 	lines removed (script) git-svn-id: https://svn.code.sf.net/p/giza/code@218
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-annotate.c: better placement of text above viewport in
 	giza-annotate git-svn-id: https://svn.code.sf.net/p/giza/code@217
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c, src/giza-colour-private.h,
 	src/giza-drivers.c: implemented option to give exact pgplot colour
 	table git-svn-id: https://svn.code.sf.net/p/giza/code@216
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: better linewidth conversion between
 	pgplot and giza in libpgplot git-svn-id: https://svn.code.sf.net/p/giza/code@215
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: whitespace removed from strings in
 	when passed through giza-fortran interface git-svn-id: https://svn.code.sf.net/p/giza/code@214
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers-private.h, src/giza-drivers.c: bug fix with
 	whitespace in device names git-svn-id: https://svn.code.sf.net/p/giza/code@213
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: handles failure to call close_device; also bug
 	fix with _giza_lowercase git-svn-id: https://svn.code.sf.net/p/giza/code@212
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: handles failure to call close_device; also bug
 	fix with _giza_lowercase git-svn-id: https://svn.code.sf.net/p/giza/code@211
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-error-bars.c: more warnings silenced git-svn-id: https://svn.code.sf.net/p/giza/code@210
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: uses libtool instead of c compiler to build shared
 	library git-svn-id: https://svn.code.sf.net/p/giza/code@209
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-points.c, src/giza-polygon.c: silenced spurious warnings
 	in giza-points and giza-polygon git-svn-id: https://svn.code.sf.net/p/giza/code@208
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: better flush of xevents git-svn-id: https://svn.code.sf.net/p/giza/code@207
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-29  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-29  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: updated include paths git-svn-id: https://svn.code.sf.net/p/giza/code@206
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: debugging stuff removed git-svn-id: https://svn.code.sf.net/p/giza/code@205
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: minor fix in build git-svn-id: https://svn.code.sf.net/p/giza/code@204
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-paper.c: compiler warnings fixed git-svn-id: https://svn.code.sf.net/p/giza/code@203
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c: compiler warnings fixed git-svn-id: https://svn.code.sf.net/p/giza/code@202
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-arrow-style.c: compiler warnings fixed in arrow style git-svn-id: https://svn.code.sf.net/p/giza/code@201
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: .PHONY targets added git-svn-id: https://svn.code.sf.net/p/giza/code@200
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: minor tweaks to build git-svn-id: https://svn.code.sf.net/p/giza/code@199
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: makefile compatible with new splash build git-svn-id: https://svn.code.sf.net/p/giza/code@198
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: minor fixes to build git-svn-id: https://svn.code.sf.net/p/giza/code@197
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* interface/pgplot-stubs.f90: removed obsolete pgplot-stubs file git-svn-id: https://svn.code.sf.net/p/giza/code@196
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* .gitignore: updated .gitignore to ignore built libraries git-svn-id: https://svn.code.sf.net/p/giza/code@195
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* docs/get-source-files.pl: script for getting list of source files
 	for Makefile git-svn-id: https://svn.code.sf.net/p/giza/code@194
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* interface/cpgplot.h: minor formatting changes git-svn-id: https://svn.code.sf.net/p/giza/code@193
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile, interface/Makefile, interface/giza-fortran.F90,
 	src/giza-format-number.c, src/{giza-shared-cpp.h => giza-shared.h},
@@ -2319,138 +2946,138 @@
 	(subsumed into main Makefile) git-svn-id: https://svn.code.sf.net/p/giza/code@192
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-points.c: bug fix with polygon and stars in symbol
 	plotting git-svn-id: https://svn.code.sf.net/p/giza/code@191
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-points.c, src/giza-private.h, src/giza-scanner.l,
 	src/giza-text.c, src/lex.yy.c: implemented markers in character
 	strings (e.g. \m8) git-svn-id: https://svn.code.sf.net/p/giza/code@190
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c: finished adding cpgplot functions --
 	imaging routines not yet implemented git-svn-id: https://svn.code.sf.net/p/giza/code@189
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: bug fix in pgqvsz git-svn-id: https://svn.code.sf.net/p/giza/code@188
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-17  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c, interface/giza-fortran.F90,
 	interface/giza-pgplot.f90: more cpgplot stuff; giza_version_string
 	in fortran module git-svn-id: https://svn.code.sf.net/p/giza/code@187
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-17  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-17  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c: implemented more cpgplot stuff git-svn-id: https://svn.code.sf.net/p/giza/code@186
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-svg-private.h, src/giza-driver-svg.c,
 	src/giza-drivers-private.h, src/giza-drivers.c: svg driver added git-svn-id: https://svn.code.sf.net/p/giza/code@185
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw-private.h, src/giza-driver-xw.c: allow
 	change_size_xw to be called from other routines git-svn-id: https://svn.code.sf.net/p/giza/code@184
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-draw-background.c: background only painted explicitly if
 	it is not transparent (to avoid bounding box issues on eps devices) git-svn-id: https://svn.code.sf.net/p/giza/code@183
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza-viewport.c, src/giza-window.c: BUG
 	FIX with initialisation of viewport/window (window now called from
 	set_viewport; fixes pgdemo2 issue) git-svn-id: https://svn.code.sf.net/p/giza/code@182
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: added \odot (but not in standard
 	font) git-svn-id: https://svn.code.sf.net/p/giza/code@181
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-10  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-10  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c: whole bunch more cpgplot routines added git-svn-id: https://svn.code.sf.net/p/giza/code@180
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-09  Daniel Price <daniel.price@monash.edu>
 
 	* interface/Makefile, interface/giza-cpgplot.c: added build for
 	libcpgplot; few more functions implemented git-svn-id: https://svn.code.sf.net/p/giza/code@179
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-09  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c, src/giza-colour-table.c, src/giza.h: 
 	pgctab; use const on input variables git-svn-id: https://svn.code.sf.net/p/giza/code@178
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-09  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-cpgplot.c: implemented the first few cpgplot
 	functions git-svn-id: https://svn.code.sf.net/p/giza/code@177
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-09  Daniel Price <daniel.price@monash.edu>
 
 	* docs/cpgplot_status.pl, interface/giza-cpgplot.c: documentation of
 	cpgplot interface added git-svn-id: https://svn.code.sf.net/p/giza/code@176
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-09  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: bug fix with pggray interface + compile
 	problems git-svn-id: https://svn.code.sf.net/p/giza/code@175
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-09  Daniel Price <daniel.price@monash.edu>
 
 	* interface/cpgplot.h, interface/giza-cpgplot.c: added basic cpgplot
 	interface (just empty functions at present) git-svn-id: https://svn.code.sf.net/p/giza/code@174
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: all icc warnings fixed git-svn-id: https://svn.code.sf.net/p/giza/code@173
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers-private.h, src/giza-drivers.c: strcasestr
 	replaced with standard c stuff git-svn-id: https://svn.code.sf.net/p/giza/code@172
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: unicode chars direct not using
 	escape sequences; \odot and \Sun implemented git-svn-id: https://svn.code.sf.net/p/giza/code@171
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: fixed icc warning (int->char conversion now
 	explicit) git-svn-id: https://svn.code.sf.net/p/giza/code@170
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-arrow.c, src/giza-box.c, src/giza-colour-index.c,
 	src/giza-colour-private.h, src/giza-colour-table.c,
@@ -2467,121 +3094,121 @@
 	warnings git-svn-id: https://svn.code.sf.net/p/giza/code@169
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-05  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-05  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: xw driver catches the close window event git-svn-id: https://svn.code.sf.net/p/giza/code@168
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-08-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-08-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band-style.c, src/giza-band.c, src/giza-driver-xw.c: band
 	now draws transparent box (looks nicer) git-svn-id: https://svn.code.sf.net/p/giza/code@167
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-29  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-29  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza.h: icc compiler warnings fixed git-svn-id: https://svn.code.sf.net/p/giza/code@166
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-29  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-29  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-null.c: bug fix with types in null surface size git-svn-id: https://svn.code.sf.net/p/giza/code@165
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-29  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-29  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c: SEG FAULT FIXED!!!
 	finally got this show-stopping bug git-svn-id: https://svn.code.sf.net/p/giza/code@164
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-29  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-29  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-shared-cpp.h: bug fix in version numbering git-svn-id: https://svn.code.sf.net/p/giza/code@163
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-29  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-29  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-io.c, src/giza-shared-cpp.h, src/giza-version.h: added
 	giza version number; prints this with device list along with cairo
 	version git-svn-id: https://svn.code.sf.net/p/giza/code@162
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-29  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-29  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: much better string conversion between
 	c and fortran (standards conforming) git-svn-id: https://svn.code.sf.net/p/giza/code@161
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: band drawn in grey rather than foreground
 	colour (works on both black and white backgrounds git-svn-id: https://svn.code.sf.net/p/giza/code@160
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: bug fix with uninitialised variable in xw
 	driver git-svn-id: https://svn.code.sf.net/p/giza/code@159
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band.c: bug fix with uninitialised variables in giza-band git-svn-id: https://svn.code.sf.net/p/giza/code@158
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-text.c: string.h included for strlen git-svn-id: https://svn.code.sf.net/p/giza/code@157
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: window initialisation commented (should be
 	unnecessary) git-svn-id: https://svn.code.sf.net/p/giza/code@156
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-private.h: revised GIZA_ZERO_FLOAT and GIZA_ZERO_DOUBLE
 	upwards slightly git-svn-id: https://svn.code.sf.net/p/giza/code@155
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-window.c: unnecessary checking of dxWin, dyWin removed git-svn-id: https://svn.code.sf.net/p/giza/code@154
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: BUG FIX with uninitialised variable in xw
 	driver git-svn-id: https://svn.code.sf.net/p/giza/code@153
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: header changed git-svn-id: https://svn.code.sf.net/p/giza/code@152
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: setting the default viewport does not reset
 	the window (because Win not set) git-svn-id: https://svn.code.sf.net/p/giza/code@151
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-28  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-28  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-window.c: code cleanup; bug fix with viewport
 	initialisation before window has been set; window setting now robust
 	if x1=x2 or y1=y2 git-svn-id: https://svn.code.sf.net/p/giza/code@150
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-07-26  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-07-26  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-text.c: minor checks added to text print (checks
 	strlen>0) git-svn-id: https://svn.code.sf.net/p/giza/code@149
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-character-size.c, src/giza-driver-eps.c,
@@ -2593,26 +3220,26 @@
 	specify resolution of vector devices other than 1 pixel per point) git-svn-id: https://svn.code.sf.net/p/giza/code@148
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, src/giza-render.c, src/giza.h: added
 	giza_render_transparent for rendering with a transparent minimum git-svn-id: https://svn.code.sf.net/p/giza/code@147
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-table.c: cleanup of debugging stuff;
 	allocate/deallocate routines now unnecessary in colour table stuff git-svn-id: https://svn.code.sf.net/p/giza/code@146
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c: save/restore colour tables implemented
 	(could not get working with allocatable array components; so colour
 	tables now have fixed memory allocation; also more efficient) git-svn-id: https://svn.code.sf.net/p/giza/code@145
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-private.h, src/giza-colour-table.c,
 	src/giza-render.c, src/giza.h: save/restore colour tables
@@ -2621,7 +3248,7 @@
 	more efficient) git-svn-id: https://svn.code.sf.net/p/giza/code@144
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c, src/giza-colour-private.h,
 	src/giza-colour-table.c, src/giza-private.h: giza_set_colour_table
@@ -2629,191 +3256,191 @@
 	returns double git-svn-id: https://svn.code.sf.net/p/giza/code@143
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-table.c: neatened up set_colour_table routines
 	with reallocate routine git-svn-id: https://svn.code.sf.net/p/giza/code@142
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-render.c, src/giza.h: added giza_render_gray routine; does
 	work but currently resets colour table git-svn-id: https://svn.code.sf.net/p/giza/code@141
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-30  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-30  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c: removed commented bit about redrawing
 	background (should never be done here) git-svn-id: https://svn.code.sf.net/p/giza/code@140
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-24  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-24  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: flushing of xevent queue restored git-svn-id: https://svn.code.sf.net/p/giza/code@139
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-24  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-24  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: debugging stuff removed from xw driver; also
 	commented out queue flushing git-svn-id: https://svn.code.sf.net/p/giza/code@138
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-20  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: bug fix: background colour changes now take
 	effect provided nothing has been plotted on the page git-svn-id: https://svn.code.sf.net/p/giza/code@137
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-20  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: documentation added for giza_query_device git-svn-id: https://svn.code.sf.net/p/giza/code@136
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-20  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line.c: warnings about <2 points in giza_line removed git-svn-id: https://svn.code.sf.net/p/giza/code@135
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-20  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps.c, src/giza-driver-png.c,
 	src/giza-drivers-private.h: png and eps devices use new
 	filename-setting routine git-svn-id: https://svn.code.sf.net/p/giza/code@134
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-20  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: added internal routine for setting filename on
 	one-file-per-plot devices; also bug fix with page change on null
 	device git-svn-id: https://svn.code.sf.net/p/giza/code@133
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-20  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: added function to purge Xevent queue git-svn-id: https://svn.code.sf.net/p/giza/code@132
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-20  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-set-font.c: initialisation of font matrix (commented out) git-svn-id: https://svn.code.sf.net/p/giza/code@131
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-20  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-20  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-character-size.c: minor comments added git-svn-id: https://svn.code.sf.net/p/giza/code@130
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-08  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-08  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: BUG FIX with super/subscripting
 	at end of string git-svn-id: https://svn.code.sf.net/p/giza/code@129
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/giza-text-private.h, src/lex.yy.c: 
 	compiler warning about pointers fixed git-svn-id: https://svn.code.sf.net/p/giza/code@128
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: attempt to see if using longer
 	string fixes the seg fault problem git-svn-id: https://svn.code.sf.net/p/giza/code@127
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: BUG FIX with memory leaks in
 	get_chunk git-svn-id: https://svn.code.sf.net/p/giza/code@126
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-01  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: BUG FIX with cstring conversion
 	routine with zero-length strings and ifort/icc git-svn-id: https://svn.code.sf.net/p/giza/code@125
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: set_default_viewport handled slightly
 	differently; avoids possibility of recursive calls; less repeated
 	code git-svn-id: https://svn.code.sf.net/p/giza/code@124
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-private.h: added declarations for some internal routines git-svn-id: https://svn.code.sf.net/p/giza/code@123
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-06-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-06-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-style.c: uses GIZA_UNITS_MM instead of 2 git-svn-id: https://svn.code.sf.net/p/giza/code@122
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-05-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-05-31  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: restored use of X pixmap so banding works
 	again git-svn-id: https://svn.code.sf.net/p/giza/code@121
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-05-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-05-31  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-character-size.c: unnecessary set_trans call removed git-svn-id: https://svn.code.sf.net/p/giza/code@120
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-05-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-05-31  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-qtext.c: minor cleanups, sin/cos done more efficiently git-svn-id: https://svn.code.sf.net/p/giza/code@119
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-05-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-05-31  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-qtext.c: save/restore on character height in text query
 	routines git-svn-id: https://svn.code.sf.net/p/giza/code@118
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-05-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-05-31  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: comments added to make things clearer git-svn-id: https://svn.code.sf.net/p/giza/code@117
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-05-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-05-31  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-fill.c: bug fix with fill in old cairo versions git-svn-id: https://svn.code.sf.net/p/giza/code@116
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-05-31  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-05-31  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: temporary amendments to xwin driver to see
 	if seg fault problem is solved git-svn-id: https://svn.code.sf.net/p/giza/code@115
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: conversion of anchor point to integer is
 	done explicitly rather than implicitly (do we have to use ints for
 	this though?) git-svn-id: https://svn.code.sf.net/p/giza/code@114
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: spelling fixed git-svn-id: https://svn.code.sf.net/p/giza/code@113
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/lex.yy.c: -pedantic warnings fixed; c++
 	comments->c; moved some declarations git-svn-id: https://svn.code.sf.net/p/giza/code@112
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: better error handling in giza-viewport; on
 	error reverts to default viewport settings git-svn-id: https://svn.code.sf.net/p/giza/code@111
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-annotate.c, src/giza-arrow-style-private.h,
 	src/giza-arrow.c, src/giza-band.c, src/giza-box.c,
@@ -2833,182 +3460,182 @@
 	-pedantic works OK) git-svn-id: https://svn.code.sf.net/p/giza/code@110
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-15  Daniel Price <daniel.price@monash.edu>
 
 	* interface/Makefile: added -Wextra on interface compilation git-svn-id: https://svn.code.sf.net/p/giza/code@109
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: some more minor cleanups to fix icc compiler
 	warnings git-svn-id: https://svn.code.sf.net/p/giza/code@108
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-15  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-15  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-box.c: minor cleanups; removed multiple declarations of
 	variables git-svn-id: https://svn.code.sf.net/p/giza/code@107
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c: MEMORY LEAK fixed; failure to call
 	cairo_destroy when changing page (valgrind) git-svn-id: https://svn.code.sf.net/p/giza/code@106
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-table.c: explicitly checks that colours have been
 	set git-svn-id: https://svn.code.sf.net/p/giza/code@105
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-14  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-14  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza.h: added const to declarations for arrays git-svn-id: https://svn.code.sf.net/p/giza/code@104
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-render.c: c style comments git-svn-id: https://svn.code.sf.net/p/giza/code@103
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-table.c: BUG FIX causing uninitialised variable
 	problem in valgrind git-svn-id: https://svn.code.sf.net/p/giza/code@102
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-stroke.c: header file included git-svn-id: https://svn.code.sf.net/p/giza/code@101
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-text-background.c: giza.h included in header git-svn-id: https://svn.code.sf.net/p/giza/code@100
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-warnings.c: giza.h included in header git-svn-id: https://svn.code.sf.net/p/giza/code@99
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza.h: added declarations for set_viewport_inches git-svn-id: https://svn.code.sf.net/p/giza/code@98
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-set-font.c: includes relevant header file git-svn-id: https://svn.code.sf.net/p/giza/code@97
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-width.c: added giza.h in header git-svn-id: https://svn.code.sf.net/p/giza/code@96
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-09  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-09  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-line-cap.c: added giza.h in header git-svn-id: https://svn.code.sf.net/p/giza/code@95
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: BUG FIX with memory overflow in
 	init_device_list causing seg fault git-svn-id: https://svn.code.sf.net/p/giza/code@94
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: BUG FIX with memory overflow in
 	init_device_list causing seg fault git-svn-id: https://svn.code.sf.net/p/giza/code@93
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps.c, src/giza-driver-pdf.c,
 	src/giza-driver-ps.c: default background alpha 0 on eps, ps and pdf git-svn-id: https://svn.code.sf.net/p/giza/code@92
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: bug fix with pgNum not pgnum git-svn-id: https://svn.code.sf.net/p/giza/code@91
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: return Dev.pgnum instead of 0 from open_device git-svn-id: https://svn.code.sf.net/p/giza/code@90
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c, src/giza-private.h: giza-prefix is now fixed
 	length; avoids possible memory leaks from failure to deallocate git-svn-id: https://svn.code.sf.net/p/giza/code@89
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: default background alpha is 1 not 0 git-svn-id: https://svn.code.sf.net/p/giza/code@88
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-06  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: uses generic code for flush_device except for
 	xwin device git-svn-id: https://svn.code.sf.net/p/giza/code@87
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-04  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-04  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps.c: bug fix and uncommented cairo_surface_flush
 	in eps driver (should use surface not context) git-svn-id: https://svn.code.sf.net/p/giza/code@86
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-04  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-04  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-save.c, src/giza-set-font.c: BUG FIX with font not being
 	kept across a change of page: but currently ONLY works to one level
 	of save/restore git-svn-id: https://svn.code.sf.net/p/giza/code@85
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-04  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-04  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: giza_change_page uses giza-save/giza-restore
 	to save/restore settings git-svn-id: https://svn.code.sf.net/p/giza/code@84
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: giza_open_device prompts if first letter of
 	device string is ? git-svn-id: https://svn.code.sf.net/p/giza/code@83
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-colour-index.c, src/giza.h: implemented
 	set_colour_representation_hls git-svn-id: https://svn.code.sf.net/p/giza/code@82
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c: checks bounds on scir; avoids stupid
 	settings git-svn-id: https://svn.code.sf.net/p/giza/code@81
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-shared-cpp.h: allow 256 + 16 colours (mainly so splash
 	does not complain) git-svn-id: https://svn.code.sf.net/p/giza/code@80
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index-private.h, src/{giza-colour-table-private.h
 	=> giza-colour-private.h}: now only giza-colour-private.h git-svn-id: https://svn.code.sf.net/p/giza/code@79
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-colour-index.c, src/giza-colour-table.c,
@@ -3017,122 +3644,122 @@
 	for this; colour-index and colour-table have shared header file git-svn-id: https://svn.code.sf.net/p/giza/code@78
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-io-private.h, src/giza-prompting.c: private interfaces
 	declared properly git-svn-id: https://svn.code.sf.net/p/giza/code@77
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-io.c: unused variable warning fixed (do not care about
 	return value of fgets) git-svn-id: https://svn.code.sf.net/p/giza/code@76
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-02  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-colour-index.c, src/giza-render.c, src/giza-shared-cpp.h,
 	src/giza.h: PGPIXEL/giza_draw_pixels implemented git-svn-id: https://svn.code.sf.net/p/giza/code@75
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90, src/giza-print-id.c: 
 	giza-print-id/PGIDEN implemented fully git-svn-id: https://svn.code.sf.net/p/giza/code@74
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-print-id.c: giza-print-id now working properly git-svn-id: https://svn.code.sf.net/p/giza/code@73
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-character-size.c: docs fixed for giza-character-size git-svn-id: https://svn.code.sf.net/p/giza/code@72
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza.h: added paper_size function declarations to giza.h git-svn-id: https://svn.code.sf.net/p/giza/code@71
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-ptext.c: docs for ptext fixed git-svn-id: https://svn.code.sf.net/p/giza/code@70
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-paper.c: better docs on giza-get-paper-size git-svn-id: https://svn.code.sf.net/p/giza/code@69
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-print-id.c: added giza-print-id; replicates PGIDEN git-svn-id: https://svn.code.sf.net/p/giza/code@68
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza.h: giza-qtextlen routines added to giza.h git-svn-id: https://svn.code.sf.net/p/giza/code@67
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: FINISHED hatch fill implementation;
 	seems to work perfectly now; no known issues remaining git-svn-id: https://svn.code.sf.net/p/giza/code@66
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-fill.c: FINISHED hatch fill implementation; seems to work
 	perfectly now; no known issues remaining git-svn-id: https://svn.code.sf.net/p/giza/code@65
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-03-01  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-03-01  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-fill.c: hatch fill now explicitly draws lines on
 	transparent background; rotation partially working git-svn-id: https://svn.code.sf.net/p/giza/code@64
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-27  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-27  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-text.c, src/giza.h: added declarations for
 	giza_set_font_italic, giza_set_font_bold etc git-svn-id: https://svn.code.sf.net/p/giza/code@63
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-25  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-25  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-fill.c: hatch fill completely re-done; now explicitly
 	draws lines instead of using pre-drawn pattern; no funny effects;
 	some minor issues with robust handling of all angles remaining git-svn-id: https://svn.code.sf.net/p/giza/code@62
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-25  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-25  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-fill.c: implemented hatch fill using larger tiles, with
 	alpha, still not perfect git-svn-id: https://svn.code.sf.net/p/giza/code@61
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90, src/giza-text.c: changed definition of
 	-normal- font to arial; handles greek letters git-svn-id: https://svn.code.sf.net/p/giza/code@60
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c: initialised colour indices up to 16 git-svn-id: https://svn.code.sf.net/p/giza/code@59
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: PGERAS implemented ->
 	giza_draw_background git-svn-id: https://svn.code.sf.net/p/giza/code@58
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, src/giza-colour-index.c,
 	src/giza-draw-background.c, src/giza-driver-eps-private.h,
@@ -3146,184 +3773,184 @@
 	device specific; also public git-svn-id: https://svn.code.sf.net/p/giza/code@57
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band-style.c, src/giza-save.c, src/giza.h: added
 	get_band_style function; band style added to save/restore functions git-svn-id: https://svn.code.sf.net/p/giza/code@56
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-save.c: hatching style and text background colour added
 	to save/restore routines git-svn-id: https://svn.code.sf.net/p/giza/code@55
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: bug fix with set/get hatching
 	interface git-svn-id: https://svn.code.sf.net/p/giza/code@54
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: hatching style interface routines
 	added git-svn-id: https://svn.code.sf.net/p/giza/code@53
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90, src/giza-fill.c, src/giza.h: added
 	set_hatching_style and get_hatching_style routines and interfaces;
 	not yet applied to hatch git-svn-id: https://svn.code.sf.net/p/giza/code@52
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-23  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-23  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-buffering.c, src/giza.h: added giza_flush_buffer,
 	replicates PGUPDT git-svn-id: https://svn.code.sf.net/p/giza/code@51
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: PGQCF implemented, behaves as expected git-svn-id: https://svn.code.sf.net/p/giza/code@50
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-scanner.l, src/giza-text-private.h, src/giza-text.c,
 	src/lex.yy.c: added support for inline font switching; \rm, \it,
 	\fn, \fi, \fr, \fs; also \x for times git-svn-id: https://svn.code.sf.net/p/giza/code@49
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: PGSCF now does roughly what it says on
 	the tin git-svn-id: https://svn.code.sf.net/p/giza/code@48
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: prompt happens for close_device routine; fixes
 	bug with windows closing before plot can be viewed git-svn-id: https://svn.code.sf.net/p/giza/code@47
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, src/giza-private.h,
 	src/giza-set-font.c: added set_font_bold, set_font_italic and
 	set_font_bold_italic routines git-svn-id: https://svn.code.sf.net/p/giza/code@46
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90, src/giza-fill.c: implemented hatched
 	fill styles git-svn-id: https://svn.code.sf.net/p/giza/code@45
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-viewport.c: clipping of viewport turned off if
 	giza_set_clipping set to false git-svn-id: https://svn.code.sf.net/p/giza/code@44
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-clipping.c: set/get clipping state routines added
 	(PGQCLP/PGSCLP) git-svn-id: https://svn.code.sf.net/p/giza/code@43
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-drivers.c, src/giza.h: set/get clipping state routines
 	added (PGQCLP/PGSCLP) git-svn-id: https://svn.code.sf.net/p/giza/code@42
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-move.c, src/giza.h: added PGQPOS/giza_get_current_point git-svn-id: https://svn.code.sf.net/p/giza/code@41
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-cursor-routines.c, src/giza.h: function definitions for
 	giza_mark_points etc added to giza.h; also spurious printf removed git-svn-id: https://svn.code.sf.net/p/giza/code@40
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-text-background.c, src/giza.h: added PGQTBG;
 	giza_get_text_background git-svn-id: https://svn.code.sf.net/p/giza/code@39
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-cursor-routines.c: added interface routines for
 	mark_points_ordered and mark_line_ordered git-svn-id: https://svn.code.sf.net/p/giza/code@38
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-22  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-22  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-shared-cpp.h: bug fix (regression) with definition of
 	GIZA_LEFT_CLICK: mark_points now works again with new structure git-svn-id: https://svn.code.sf.net/p/giza/code@37
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-colour-index.c: stuff for setting alpha added git-svn-id: https://svn.code.sf.net/p/giza/code@36
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-21  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-cursor-routines.c: added basic functionality for PGLCUR,
 	PGOLIN; mostly working but a few issues remaining git-svn-id: https://svn.code.sf.net/p/giza/code@35
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-21  Daniel Price <daniel.price@monash.edu>
 
 	* interface/Makefile: added -Wall in libpgplot build git-svn-id: https://svn.code.sf.net/p/giza/code@34
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-shared-cpp.h: defined foreground and background colour
 	indices using GIZA_BACKGROUND_COLOUR etc git-svn-id: https://svn.code.sf.net/p/giza/code@33
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-21  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-21  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-points.c: made -ve symbol points slightly bigger git-svn-id: https://svn.code.sf.net/p/giza/code@32
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-19  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-19  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band.c, src/giza-shared-cpp.h: giza band types defined in
 	preprocessing git-svn-id: https://svn.code.sf.net/p/giza/code@31
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-19  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-19  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-box.c, src/giza.h: PGRND implemented; interface to
 	giza_round; added giza_round_float git-svn-id: https://svn.code.sf.net/p/giza/code@30
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-16  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: PGNUMB interface added git-svn-id: https://svn.code.sf.net/p/giza/code@29
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-16  Daniel Price <daniel.price@monash.edu>
 
 	* .gitignore: added .gitignore file git-svn-id: https://svn.code.sf.net/p/giza/code@28
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-16  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90, interface/giza-pgplot.f90,
 	src/giza-error-bars.c: PGERRX implemented; added
@@ -3331,32 +3958,32 @@
 	specifications git-svn-id: https://svn.code.sf.net/p/giza/code@27
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-band.c, src/giza-drivers.c: giza_band stuff moved to
 	giza_band routine where possible; implemented all 7 pgplot band
 	styles plus additional circle band style; better docs for giza_band git-svn-id: https://svn.code.sf.net/p/giza/code@26
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-drivers.c: minor amendments to device list (eps vs. ps
 	differences); neatened code slightly git-svn-id: https://svn.code.sf.net/p/giza/code@25
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-prompting.c: bug fix with giza-prompting initialisation git-svn-id: https://svn.code.sf.net/p/giza/code@24
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-16  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c, src/giza-io.c,
 	src/giza-prompting.c: giza_prompting now behaves like PGASK: uses
 	terminal prompts instead of key press in window git-svn-id: https://svn.code.sf.net/p/giza/code@23
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2011-02-16  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2011-02-16  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-pgplot.f90: use line missing in PGASK git-svn-id: https://svn.code.sf.net/p/giza/code@22
 	952f94de-64c9-43ce-8081-c12abd9885bf
@@ -3652,18 +4279,18 @@
 	* src/giza-drivers.c: Device type is now case insensitive git-svn-id: https://svn.code.sf.net/p/giza/code@8
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2010-12-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2010-12-06  Daniel Price <daniel.price@monash.edu>
 
 	* interface/giza-fortran.F90: added set_text_background to Fortran
 	interface git-svn-id: https://svn.code.sf.net/p/giza/code@7
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2010-12-06  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2010-12-06  Daniel Price <daniel.price@monash.edu>
 
 	* build/Makefile: added warnings to default compilation git-svn-id: https://svn.code.sf.net/p/giza/code@6
 	952f94de-64c9-43ce-8081-c12abd9885bf
 
-2010-12-02  danielprice <danielprice@952f94de-64c9-43ce-8081-c12abd9885bf>
+2010-12-02  Daniel Price <daniel.price@monash.edu>
 
 	* src/giza-driver-eps.c, src/giza-render.c: updated svn repo with
 	git stuff git-svn-id: https://svn.code.sf.net/p/giza/code@5
