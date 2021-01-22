@@ -16,5 +16,5 @@ jobs:
         run: |
           git config --global user.name 'Daniel Price'
           git config --global user.email 'daniel.price@monash.edu'
-          git commit -am "[doc-bot] updated auto-generated documentation"
+          git diff-index --quiet HEAD || git commit -am "[doc-bot] updated auto-generated documentation"
           git push
