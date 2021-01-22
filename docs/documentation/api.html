@@ -34,7 +34,10 @@
 <dd><a href="#giza_select_device">giza_select_device</a></dd>
 <dd><a href="#giza_flush_device">giza_flush_device</a></dd>
 <dd><a href="#giza_change_page">giza_change_page</a></dd>
+<dd><a href="#giza_close_devices">giza_close_devices</a></dd>
 <dd><a href="#giza_close_device">giza_close_device</a></dd>
+<dd><a href="#_giza_close_device_unchecked">_giza_close_device_unchecked</a></dd>
+<dd><a href="#_giza_init_device_struct">_giza_init_device_struct</a></dd>
 <dd><a href="#giza_query_device">giza_query_device</a></dd>
 <dd><a href="#giza_get_surface_size">giza_get_surface_size</a></dd>
 <dd><a href="#giza_get_surface_size_float">giza_get_surface_size_float</a></dd>
@@ -231,7 +234,7 @@
 <table class="api"><tr>
 <td><=0 :</td><td>an error has occurred</td>
 </tr><tr>
-<td>1   :</td><td>id of current device</td>
+<td>1   :</td><td>id of current device Note: this is the EXTERNAL device number, running from 1..Ndev The internal device numbers are array indices into the Dev[...] array and run from 0..Ndev-1</td>
 </tr></table><h4>Available devices:</h4>
 <table class="api"><tr>
 <td>?    :</td><td>User selects device</td>
@@ -281,7 +284,7 @@
 <tr><td width=10%>int</td><td width=20%>giza_open_device_size_float</td><td> (const char *newDeviceName, const char *newPrefix, float width, float height, int units) ;</tr></table><p>Same functionality as giza_open_device_size but takes floats</p>
 <h3><a name="giza_get_device_id">giza_get_device_id</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_get_device_id</td><td> (int *devid) ;</tr></table><p>Returns the id of the currently selected device</p>
+<tr><td width=10%>void</td><td width=20%>giza_get_device_id</td><td> (int *devid) ;</tr></table><p>Returns the (external) id of the currently selected device</p>
 <h4>Output:</h4>
 <table class="api"></table><h4>See also:</h4>
 <table class="api"></table><h3><a name="giza_select_device">giza_select_device</a><hr></h3>
@@ -298,10 +301,26 @@
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_change_page</td><td> (void) ;</tr></table><p>Advances the currently open device to the next page, and redraws the background. If no other actions have been performed since the device was opened or the last call to giza_change_page the call is ignored.</p>
 <h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_close_device">giza_close_device</a><hr></h3>
+<table class="api"></table><h3><a name="giza_close_devices">giza_close_devices</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_close_devices</td><td> (void) ;</tr></table><p>Close all open devices (to be called from PGEND())</p>
+<h3><a name="giza_close_device">giza_close_device</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_close_device</td><td> (void) ;</tr></table><p>Closes the currently open device. Should always be called before exiting your program as it frees associated memory.</p>
-<h3><a name="giza_query_device">giza_query_device</a><hr></h3>
+<h3><a name="_giza_close_device_unchecked">_giza_close_device_unchecked</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%></td><td>;</tr></table><p>In order to be able to share the cleaning-up code between giza_close_device() and giza_open_device_size() [when something fails during the construction of a new device] the actual cleaning up code is put in this internal function.</p>
+<h4>state:</h4>
+<table class="api"></table><h3><a name="_giza_init_device_struct">_giza_init_device_struct</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%></td><td>;</tr></table><p>resets the contents of a giza_device_t to a known state: the whole struct is zeroed out and .type is set to GIZA_DEVICE_IV.</p>
+<h4>Note:</h4>
+<table class="api"></table><h4>giza_device_t using a compond struct initializer like this:</h4>
+<table class="api"></table><h4>See https:</h4>
+<table class="api"></table><h4>Input:</h4>
+<table class="api"><tr>
+<td>ptrDev :</td><td>a pointer to a giza_device_t </td>
+</tr></table><h3><a name="giza_query_device">giza_query_device</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>int</td><td width=20%>giza_query_device</td><td> (const char *querytype, char *returnval, int* rlen) ;</tr></table><p>Queries various things about the current device.</p>
 <h4>Input:</h4>

@@ -1,0 +1,20 @@
+name: Update API docs
+on: push
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Update API documentation
+        run: |
+          cd doc
+          ./pgplot_status.pl > ../docs/documentation/pgplot-status.html
+          ./cpgplot_status.pl > ../docs/documentation/cpgplot-status.html
+          ./api.pl ../src/*.c
+          mv api.html ../docs/documentation
+      - name: Commit API documentation
+        run: |
+          git config --global user.name 'Daniel Price'
+          git config --global user.email 'daniel.price@monash.edu'
+          git commit -am "[doc-bot] updated auto-generated documentation"
+          git push
