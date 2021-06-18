@@ -90,7 +90,7 @@ jobs:
         HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.BREW_TOKEN }}
         version: ${{ steps.get_version.outputs.version }}
         brewtap: danieljprice/all
-        formula: ${{ steps.get_version.outputs.repo }} # formula name same as repo name
+        formula: giza-x11 #${{ steps.get_version.outputs.repo }} # formula name same as repo name
       run: |
         git config --global user.email "daniel.price@monash.edu"
         git config --global user.name "Daniel Price"
