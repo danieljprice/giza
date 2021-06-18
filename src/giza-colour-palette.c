@@ -33,10 +33,10 @@
  *
  * Synopsis: Choose between various preset colour "palettes" for the first 16
  *           colour indices commonly used for point and line drawing.
- *           This is equivalent to using giza_set_colour_representation 
+ *           This is equivalent to using giza_set_colour_representation
  *           for each index in turn.
  *
- * Note: 
+ * Note:
  *   giza_render is not affected by this setting
  *
  * Input:
@@ -52,7 +52,7 @@
  * See Also: giza_set_colour_index, giza_set_colour_table
  *
  */
-void 
+void
 giza_set_colour_palette (int palette)
 {
   int nlinecolours;
@@ -173,10 +173,10 @@ giza_set_colour_palette (int palette)
        giza_set_colour_representation_rgb( 9,   95, 158, 160);
        giza_set_colour_representation_rgb(10,  238, 203, 173);
        giza_set_colour_representation_rgb(11,  190, 179, 239);
-       giza_set_colour_representation_rgb(12, 0.35, 0.7, 0.9);
-       giza_set_colour_representation_rgb(13,   0., 0.6, 0.5);
-       giza_set_colour_representation_rgb(14,  0.8, 0.4,  0.);
-       giza_set_colour_representation_rgb(15,  0.8, 0.6, 0.7);
+       giza_set_colour_representation_rgb(12,   89, 179, 230);
+       giza_set_colour_representation_rgb(13,    0, 153, 128);
+       giza_set_colour_representation_rgb(14,  204, 102,   0);
+       giza_set_colour_representation_rgb(15,  204, 153, 179);
        giza_set_colour_representation_rgb(16,  160, 160, 160);
        nlinecolours = 16;
        break;
@@ -222,4 +222,3 @@ giza_set_colour_palette (int palette)
   giza_set_colour_index_range(nlinecolours,GIZA_COLOUR_INDEX_MAX);
 
 }
-
