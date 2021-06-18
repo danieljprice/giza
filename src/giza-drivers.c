@@ -163,7 +163,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
 
   /* Change the "current device id" to the newly allocated device
    * such that routines can initialize it properly.
-   * Note that if something fails we have to put back the 
+   * Note that if something fails we have to put back the
    * previous current device id */
   const int prevId = id;
 
@@ -269,7 +269,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   _giza_init_colour_table ();
   _giza_set_trans (GIZA_TRANS_IDEN);
   _giza_init_norm ();
-  
+
   /* font and character height initialisations
      need to come before set_viewport_default */
   _giza_init_character_height (); /* must come BEFORE init_font */
@@ -366,7 +366,7 @@ giza_flush_device (void)
     return;
 
   Dev[id].drawn = 1;
-  
+
   if (!Dev[id].buf) /* do not flush if buffering is on */
     {
      switch (Dev[id].type)
@@ -415,7 +415,7 @@ giza_change_page (void)
 
     /* if nothing has changed, safe to redraw/reset the background colour */
     giza_draw_background ();
-    
+
     /* do nothing */
     return;
   }
@@ -479,7 +479,7 @@ giza_change_page (void)
 
   /* Reset stuff */
   giza_set_panel(1,1); /* also calls set_viewport */
-  /*giza_set_viewport (Dev[id].VP.xmin,Dev[id].VP.xmax, 
+  /*giza_set_viewport (Dev[id].VP.xmin,Dev[id].VP.xmax,
                      Dev[id].VP.ymin, Dev[id].VP.ymax);*/
   giza_set_window (Dev[id].Win.xmin, Dev[id].Win.xmax,
                    Dev[id].Win.ymin, Dev[id].Win.ymax);
@@ -621,7 +621,7 @@ _giza_close_device_unchecked (void) {
  * See https://stackoverflow.com/questions/330793/how-to-initialize-a-struct-in-accordance-with-c-programming-language-standards
  *
  * Input:
- *  -ptrDev :- a pointer to a giza_device_t 
+ *  -ptrDev :- a pointer to a giza_device_t
  */
 void
 _giza_init_device_struct(giza_device_t* ptrDev) {
@@ -715,7 +715,7 @@ giza_query_device (const char *querytype, char *returnval, int* rlen)
          {
            strncpy(returnval,Dev[id].prefix,max_chars);
          }
-       else 
+       else
          {
            strncpy(returnval, " ", max_chars);
          }
@@ -787,10 +787,15 @@ _giza_split_device_string (const char *deviceString, char const **devType)
 
   *devType = strrchr (deviceString, (int) '/');
 
-  /* An invalid string */
-  if (*devType == NULL)
+  /* Can either set the device name as 'myfile/png'
+     or with a file extension 'myfile.png'
+     try the latter either if no '/' found,
+     or if the string after the '/' contains a dot
+     as in 'dir/myfile.png'
+   */
+  if (*devType == NULL || strrchr(*devType,(int) '.') != NULL)
     {
-      /* look for file extension (.blah) at end of filename 
+      /* look for file extension (.blah) at end of filename
        * no need to check details of this as will not be
        * recognised as a device if not valid hardcopy file extension
        * and this is only done if / not present
