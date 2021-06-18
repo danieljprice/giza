@@ -87,7 +87,7 @@ jobs:
 
     - name: Bump Brew
       env:
-        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.BREW_TOKEN_SPLASH }}
+        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.BREW_TOKEN }}
         version: ${{ steps.get_version.outputs.version }}
         brewtap: danieljprice/all
         formula: ${{ steps.get_version.outputs.repo }} # formula name same as repo name
