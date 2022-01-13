@@ -77,6 +77,9 @@ typedef struct
   cairo_font_face_t*  font;
 } giza_font_t;
 
+/* type definition for the motion callback function */
+typedef void (*giza_callback_t)(double *x, double *y);
+
 /* Store variables relating to the current device */
 typedef struct
 {
@@ -125,6 +128,7 @@ typedef struct
   cairo_font_extents_t fontExtents;
   double fontAngle;
   int number_format;
+  giza_callback_t motion_callback;
 } giza_device_t;
 
 extern giza_device_t Dev[GIZA_MAX_DEVICES];

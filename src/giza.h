@@ -75,9 +75,9 @@ void giza_get_character_size_float (int units, float *xch, float *ych);
 void giza_set_clipping (int clip);
 void giza_get_clipping (int *clip);
 
-void giza_colour_bar (const char *side, double disp, double width, 
+void giza_colour_bar (const char *side, double disp, double width,
                       double valMin, double valMax, const char *label);
-void giza_colour_bar_float (const char *side, float disp, float width, 
+void giza_colour_bar_float (const char *side, float disp, float width,
                             float valMin, float valMax, const char *label);
 
 void giza_set_colour_index (int ci);
@@ -152,6 +152,7 @@ int giza_query_device (const char *querytype, char *returnval, int* rlen);
 int giza_device_has_cursor (void);
 int giza_get_key_press (double *x, double *y, char *ch);
 int giza_get_key_press_float (float *x, float *y, char *ch);
+int giza_set_motion_callback (void (*func)(double *x, double *y));
 
 void giza_draw (double xpt, double ypt);
 void giza_draw_float (float xpt, float ypt);

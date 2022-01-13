@@ -426,7 +426,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
     case ButtonPress:
       {
         *x = event.xbutton.x ;/*- GIZA_XW_MARGIN; */
-	*y = event.xbutton.y ;/*- GIZA_XW_MARGIN; */
+        *y = event.xbutton.y ;/*- GIZA_XW_MARGIN; */
         switch(event.xbutton.button) {
         case Button1:
            if (event.xbutton.state==1) {
@@ -459,13 +459,21 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
         }
         _giza_destroy_band (mode);
         _giza_flush_xw_event_queue(&event);
-	return;
+        return;
       }
     case MotionNotify:
       {
         /* discard all except the last pointer motion event */
         while(XCheckWindowEvent(XW[id].display, XW[id].window,
                               (long)(PointerMotionMask), &event) == True);
+
+        /* if a callback function is set to do things while the cursor is moving, call it */
+        if (Dev[id].motion_callback != NULL) {
+           double xpt = (double) event.xmotion.x;
+           double ypt = (double) event.xmotion.y;
+           cairo_device_to_user (Dev[id].context, &xpt, &ypt);
+           Dev[id].motion_callback(&xpt, &ypt);
+        }
 
         _giza_refresh_band (mode, nanc, anchorx, anchory, event.xmotion.x, event.xmotion.y);
         _giza_flush_xw_event_queue(&event);

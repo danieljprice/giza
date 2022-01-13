@@ -257,6 +257,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
    * These routines check for Dev[id].deviceOpen so we must set that */
   Dev[id].deviceOpen = 1;
   Dev[id].defaultBackgroundAlpha = 1.;
+  Dev[id].motion_callback = NULL;
 
   giza_set_text_background (-1);
   giza_start_prompting ();
@@ -722,6 +723,32 @@ giza_query_device (const char *querytype, char *returnval, int* rlen)
     }
   returnval[max_chars] = '\0'; /* make sure string is null-terminated */
   return ierr;
+}
+
+/**
+ * Device: giza_set_motion_callback
+ *
+ * Synopsis: set a callback function to be called
+ *           during cursor movement (e.g. to print things)
+ *           Function should be of the form
+ *           void func(double *x, double *y)
+ *
+ * Input:
+ *  -func  :- The subroutine to be called
+ *
+ */
+int
+giza_set_motion_callback (void (*func)(double *x, double *y))
+{
+  if (!_giza_check_device_ready ("giza_set_motion_callback"))
+    return 1;
+
+  /*if (Dev[id].motion_callback != NULL) printf("WARNING: motion callback already set\n");*/
+
+  /* assign the motion pointer callback */
+  Dev[id].motion_callback = func;
+
+  return 0;
 }
 
 /**

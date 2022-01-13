@@ -72,7 +72,7 @@ giza_set_window (double x1, double x2, double y1, double y2)
   /* Scaling */
   double dxWin = (Win.xmax - Win.xmin);
   double dyWin = (Win.ymax - Win.ymin);
-  
+
   double x0,y0,xfac,yfac;
   if (Dev[id].ix > 0 && Dev[id].iy > 0) { /* sanity check */
      x0 = (Dev[id].ix - 1)*Dev[id].panelwidth/Dev[id].width;
