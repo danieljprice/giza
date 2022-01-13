@@ -73,6 +73,7 @@ module giza
       giza_close_device, &
       giza_close, &
       giza_get_key_press, &
+      giza_set_motion_callback, &
       giza_device_has_cursor, &
       giza_draw, &
       giza_draw_background, &
@@ -219,7 +220,7 @@ private
       import
       real(kind=c_double),intent(in),value :: x1,y1,x2,y2
     end subroutine giza_arrow
-    
+
     subroutine giza_arrow_float(x1,y1,x2,y2) bind(C)
       import
       real(kind=c_float),intent(in),value :: x1,y1,x2,y2
@@ -277,21 +278,21 @@ private
  interface giza_annotate
     module procedure giza_intern_annotate_f2c
  end interface
- 
+
  interface giza_annotate_c
     subroutine giza_annotate_c (side,displacement,coord,justification,text) bind(C,name="giza_annotate")
       import
       character(kind=c_char),dimension(*),intent(in) :: side,text
       real(kind=c_double),intent(in),value    ::displacement,coord,justification
     end subroutine giza_annotate_c
-    
+
     subroutine giza_annotate_float_c (side,displacement,coord,justification,text) bind(C,name="giza_annotate_float")
       import
       character(kind=c_char),dimension(*),intent(in) :: side,text
       real(kind=c_float),intent(in),value     ::displacement,coord,justification
     end subroutine giza_annotate_float_c
  end interface
- 
+
  interface giza_box
     module procedure giza_intern_box_f2c
  end interface
@@ -299,7 +300,7 @@ private
  interface giza_box_time
     module procedure giza_intern_box_time_f2c
  end interface
- 
+
  interface giza_box_c
     subroutine giza_box_float_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box_float")
       import
@@ -307,7 +308,7 @@ private
       real(kind=c_float), value, intent(in)    :: xtick,ytick
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
     end subroutine giza_box_float_c
-    
+
     subroutine giza_box_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box")
       import
       character(kind=c_char),dimension(*), intent(in) :: xopt,yopt
@@ -323,7 +324,7 @@ private
       real(kind=c_float), value, intent(in)    :: xtick,ytick
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
     end subroutine giza_box_time_float_c
-    
+
     subroutine giza_box_time_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box_time")
       import
       character(kind=c_char),dimension(*), intent(in) :: xopt,yopt
@@ -359,24 +360,24 @@ private
     end subroutine giza_circle_float
  end interface
 
- interface giza_set_character_height 
+ interface giza_set_character_height
     subroutine giza_set_character_height(ch) bind(C)
       import
       real(kind=c_double),intent(in),value :: ch
     end subroutine giza_set_character_height
-    
+
     subroutine giza_set_character_height_float(ch) bind(C)
       import
       real(kind=c_float),intent(in),value :: ch
     end subroutine giza_set_character_height_float
  end interface
- 
+
  interface giza_get_character_height
     subroutine giza_get_character_height(ch) bind(C)
       import
       real(kind=c_double),intent(out) :: ch
     end subroutine giza_get_character_height
-    
+
     subroutine giza_get_character_height_float(ch) bind(C)
       import
       real(kind=c_float),intent(out) :: ch
@@ -389,7 +390,7 @@ private
       integer(kind=c_int),intent(in),value :: units
       real(kind=c_double),intent(out)      :: xch,ych
     end subroutine giza_get_character_size
-    
+
     subroutine giza_get_character_size_float(units,xch,ych) bind(C)
       import
       integer(kind=c_int),intent(in),value :: units
@@ -470,7 +471,7 @@ private
       integer(kind=c_int), value, intent(in)    :: ci
       real(kind=c_float), value, intent(in)     :: red,green,blue
     end subroutine giza_set_colour_representation_float
-    
+
     subroutine giza_set_colour_representation(ci,red,green,blue) bind(C)
       import
       integer(kind=c_int), value, intent(in) :: ci
@@ -482,7 +483,7 @@ private
       integer(kind=c_int), value, intent(in)    :: ci
       real(kind=c_float), value, intent(in)     :: red,green,blue,alpha
     end subroutine giza_set_colour_representation_alpha_float
-    
+
     subroutine giza_set_colour_representation_alpha(ci,red,green,blue,alpha) bind(C)
       import
       integer(kind=c_int), value, intent(in) :: ci
@@ -496,7 +497,7 @@ private
       integer(kind=c_int),intent(in),value       :: ci
       real(kind=c_double),intent(out) :: red,green,blue
     end subroutine giza_get_colour_representation
-   
+
     subroutine giza_get_colour_representation_float(ci,red,green,blue) bind(C)
       import
       integer(kind=c_int),intent(in),value       :: ci
@@ -508,7 +509,7 @@ private
       integer(kind=c_int),intent(in),value       :: ci
       real(kind=c_double),intent(out) :: red,green,blue,alpha
     end subroutine giza_get_colour_representation_alpha
-   
+
     subroutine giza_get_colour_representation_alpha_float(ci,red,green,blue,alpha) bind(C)
       import
       integer(kind=c_int),intent(in),value       :: ci
@@ -537,7 +538,7 @@ private
       real(kind=c_double),intent(in),dimension(n) :: controlPoints,red,green,blue
       real(kind=c_double),intent(in),value        :: cont,bright
     end subroutine giza_set_colour_table
-    
+
     subroutine giza_set_colour_table_float(controlPoints,red,green,blue,n,cont,bright) bind(C)
       import
       integer(kind=c_int),intent(in),value       :: n
@@ -554,7 +555,7 @@ private
       real(kind=c_double),intent(in) :: cont(ncont)
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_contour
-    
+
     subroutine giza_contour_float(sizex,sizey,data,i1,i2,j1,j2,ncont,cont,affine) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,ncont
@@ -569,7 +570,7 @@ private
       import
       real(kind=c_double),intent(out) :: xpt,ypt
     end subroutine giza_get_current_point
-    
+
     subroutine giza_get_current_point_float(xpt,ypt) bind(C)
       import
       real(kind=c_float),intent(out) :: xpt,ypt
@@ -628,7 +629,7 @@ private
       integer(kind=c_int),intent(in),value    :: units
     end function giza_open_device_size_float_c
  end interface
- 
+
 ! device_has_cursor is logical in Fortran but int in c
 ! (cannot do a generic interface for int/logical), can call c version directly with _int version
  interface giza_device_has_cursor
@@ -686,6 +687,19 @@ private
       real(kind=c_float),intent(out)     :: x,y
       character(kind=c_char),intent(out) :: ch
     end function giza_get_key_press_float
+ end interface
+
+ interface giza_set_motion_callback
+    function giza_set_motion_callback(func) bind(C)
+      import
+      integer(kind=c_int) :: giza_set_motion_callback
+      abstract interface
+       subroutine func(x,y) bind(c)
+         import
+         real(c_double), intent(in) :: x,y
+       end subroutine
+      end interface
+    end function giza_set_motion_callback
  end interface
 
  interface giza_draw
@@ -773,7 +787,7 @@ private
       integer(kind=c_int),intent(in),value :: fs
     end subroutine giza_set_fill
  end interface
- 
+
  interface giza_get_fill
     subroutine giza_get_fill(fs) bind(C)
       import
@@ -887,7 +901,7 @@ private
       real(kind=c_double),intent(out) :: x1,x2,y1,y2
     end subroutine giza_get_surface_size
  end interface
- 
+
  interface giza_set_hatching_style
     subroutine giza_set_hatching_style(angle,spacing,phase) bind(C)
       import
@@ -945,7 +959,7 @@ private
  interface giza_label
     module procedure giza_intern_label_f2c
  end interface
- 
+
  interface giza_label_c
     subroutine giza_label_c (labelx,labely,title) bind(C,name="giza_label")
       import
@@ -966,32 +980,32 @@ private
       real(kind=c_double),intent(in),dimension(n) :: xpts,ypts
     end subroutine giza_line
  end interface
- 
+
  interface giza_set_line_width
     subroutine giza_set_line_width(lw) bind(C)
       import
       real(kind=c_double),intent(in), value :: lw
     end subroutine giza_set_line_width
-    
+
     subroutine giza_set_line_width_float(lw) bind(C)
       import
       real(kind=c_float),intent(in), value :: lw
     end subroutine giza_set_line_width_float
-    
+
     module procedure giza_intern_set_line_width_int
  end interface
- 
+
  interface giza_get_line_width
     subroutine giza_get_line_width(lw) bind(C)
       import
       real(kind=c_double),intent(out) :: lw
     end subroutine giza_get_line_width
-    
+
     subroutine giza_get_line_width_float(lw) bind(C)
       import
       real(kind=c_float),intent(out) :: lw
     end subroutine giza_get_line_width_float
-    
+
     module procedure giza_intern_get_line_width_int
  end interface
 
@@ -1022,7 +1036,7 @@ private
       integer(c_int),intent(out) :: ls
     end subroutine giza_get_line_style
  end interface
- 
+
  interface giza_mark_line
     subroutine giza_mark_line(maxpts,npts,xpts,ypts) bind(C)
       import
@@ -1031,7 +1045,7 @@ private
       real(kind=c_double), dimension(*), intent(inout) :: xpts
       real(kind=c_double), dimension(*), intent(inout) :: ypts
     end subroutine giza_mark_line
-    
+
     subroutine giza_mark_line_float(maxpts,npts,xpts,ypts) bind(C)
       import
       integer(kind=c_int),intent(in),value :: maxpts
@@ -1048,7 +1062,7 @@ private
       real(kind=c_double), dimension(*), intent(inout) :: ypts
       character(kind=c_char),intent(out)   :: ch
     end subroutine giza_mark_line_char
-    
+
     subroutine giza_mark_line_char_float(maxpts,npts,xpts,ypts,ch) bind(C)
       import
       integer(kind=c_int),intent(in),value :: maxpts
@@ -1067,7 +1081,7 @@ private
       real(kind=c_double), dimension(*), intent(inout) :: xpts
       real(kind=c_double), dimension(*), intent(inout) :: ypts
     end subroutine giza_mark_line_ordered
-    
+
     subroutine giza_mark_line_ordered_float(maxpts,npts,xpts,ypts) bind(C)
       import
       integer(kind=c_int),intent(in),value :: maxpts
@@ -1086,7 +1100,7 @@ private
       real(kind=c_double), dimension(*), intent(inout) :: ypts
       integer(kind=c_int),intent(in),value :: symbol
     end subroutine giza_mark_points
-    
+
     subroutine giza_mark_points_float(maxpts,npts,xpts,ypts,symbol) bind(C)
       import
       integer(kind=c_int),intent(in),value :: maxpts
@@ -1106,7 +1120,7 @@ private
       real(kind=c_double), dimension(*), intent(inout) :: ypts
       integer(kind=c_int),intent(in),value :: symbol
     end subroutine giza_mark_points_ordered
-    
+
     subroutine giza_mark_points_ordered_float(maxpts,npts,xpts,ypts,symbol) bind(C)
       import
       integer(kind=c_int),intent(in),value :: maxpts
@@ -1116,7 +1130,7 @@ private
       integer(kind=c_int),intent(in),value :: symbol
     end subroutine giza_mark_points_ordered_float
  end interface
- 
+
  interface giza_move
     subroutine giza_move(x,y) bind(C)
       import
@@ -1215,7 +1229,7 @@ private
  end interface
 
  interface giza_text
-    module procedure giza_intern_text_f2c    
+    module procedure giza_intern_text_f2c
     module procedure giza_intern_text_float_f2c
  end interface
 
@@ -1252,7 +1266,7 @@ private
  end interface giza_open
 
  interface giza_ptext
-    module procedure giza_intern_ptext_f2c    
+    module procedure giza_intern_ptext_f2c
     module procedure giza_intern_ptext_float_f2c
  end interface
 
@@ -1271,7 +1285,7 @@ private
  end interface
 
  interface giza_qtext
-    module procedure giza_intern_qtext_f2c   
+    module procedure giza_intern_qtext_f2c
     module procedure giza_intern_qtext_float_f2c
  end interface
 
@@ -1292,7 +1306,7 @@ private
  end interface
 
  interface giza_qtextlen
-    module procedure giza_intern_qtextlen_f2c   
+    module procedure giza_intern_qtextlen_f2c
     module procedure giza_intern_qtextlen_float_f2c
  end interface
 
@@ -1320,7 +1334,7 @@ private
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_render
-    
+
     subroutine giza_render_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
@@ -1336,7 +1350,7 @@ private
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_render_alpha
-    
+
     subroutine giza_render_alpha_float(sizex,sizey,data,alpha,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
@@ -1354,7 +1368,7 @@ private
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_render_transparent
-    
+
     subroutine giza_render_transparent_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
@@ -1372,7 +1386,7 @@ private
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_render_gray
-    
+
     subroutine giza_render_gray_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
@@ -1389,7 +1403,7 @@ private
       integer(kind=c_int),intent(in) :: idata(sizex,sizey)
       real(kind=c_double),intent(in),value :: xmin,xmax,ymin,ymax
     end subroutine giza_draw_pixels
-    
+
     subroutine giza_draw_pixels_float(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax,extend) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
@@ -1440,7 +1454,7 @@ private
       real(kind=c_float) :: giza_round_float
     end function giza_round_float
  end interface giza_round
- 
+
  interface giza_save
     subroutine giza_save() bind(C)
     end subroutine giza_save
@@ -1493,7 +1507,7 @@ private
       integer(kind=c_int), intent(in),value :: nx,ny
     end subroutine giza_subpanel
  end interface
- 
+
  interface giza_set_panel
     subroutine giza_set_panel(ix,iy) bind(C)
       import
@@ -1516,7 +1530,7 @@ private
       real(kind=c_double),intent(in),value :: scale,blank
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_vector
-    
+
     subroutine giza_vector_float(sizex,sizey,horizontal,vertical,i1,i2,j1,j2,scale,position,affine,blank) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,position
@@ -1550,7 +1564,7 @@ private
       integer(kind=c_int), value, intent(in)  :: units
       real(kind=c_double),        intent(out) :: x1,x2,y1,y2
     end subroutine giza_get_viewport
-    
+
     subroutine giza_get_viewport_float(units,x1,x2,y1,y2) bind(C)
       import
       integer(kind=c_int),value, intent(in)  :: units
@@ -1569,7 +1583,7 @@ private
       real(kind=c_double), value, intent(in) :: xleft,xright,ybot,ytop
     end subroutine giza_set_viewport_inches
  end interface
- 
+
  interface giza_version
     subroutine giza_version(major,minor,micro) bind(C)
      import
@@ -1654,7 +1668,7 @@ contains
 
 !-------------------------------------------------------
 ! these are subroutines whose arguments need conversion
-! before passing to c (mainly strings)       
+! before passing to c (mainly strings)
 !-------------------------------------------------------
 
   subroutine giza_intern_annotate_f2c(side,displacement,coord,justification,text)
@@ -1703,20 +1717,20 @@ contains
     character(len=*), intent(in) :: side,label
     real, intent(in) :: disp,width,valmin,valmax
     real(kind=c_double) :: disp_c,width_c,valmin_c,valmax_c
-    
+
     disp_c = disp
     width_c = width
     valmin_c = valmin
     valmax_c = valmax
-    
+
     call giza_colour_bar_c(cstring(side),disp_c,width_c,valmin_c,valmax_c,cstring(label))
-    
+
   end subroutine giza_intern_colour_bar_f2c
 
   integer function  giza_intern_open_device(dev,prefix)
     implicit none
     character(len=*),intent(in) :: dev,prefix
-    
+
     giza_intern_open_device = giza_open_device_c(cstring(dev),cstring(prefix))
   end function giza_intern_open_device
 
@@ -1728,15 +1742,15 @@ contains
     integer, intent(in), optional :: units
     integer, intent(out), optional :: error
     integer :: giza_open
-    
+
     character(len=40) :: fdev
     if (present(dev)) then
        fdev = dev
     else
        fdev = '?'
     endif
-    
-    if (present(units) .and. present(width) .and. present(height)) then    
+
+    if (present(units) .and. present(width) .and. present(height)) then
        if (present(prefix)) then
           giza_open = giza_open_device_size_c(cstring(fdev),cstring(prefix),width,height,units)
        else
@@ -1752,9 +1766,9 @@ contains
     if (present(error)) then
        error = giza_open
     endif
-  
+
   end subroutine giza_open_sub
-  
+
   subroutine giza_close
      call giza_close_device()
   end subroutine giza_close
@@ -1765,12 +1779,12 @@ contains
     character(len=*),intent(in) :: dev,prefix
     real,intent(in)             :: width,height
     integer, intent(in)         :: units
-    
+
     giza_intern_open_device_size = giza_open_device_size_c(cstring(dev),cstring(prefix),width,height,units)
-  
+
   end function giza_intern_open_device_size
 
-  ! So cursor functionality can be queried as logical 
+  ! So cursor functionality can be queried as logical
   logical function giza_intern_device_has_cursor()
     implicit none
 
@@ -1781,7 +1795,7 @@ contains
   subroutine giza_intern_label_f2c(labelx,labely,title)
     implicit none
     character(len=*),intent(in) :: labelx,labely,title
-    
+
     call giza_label_c(cstring(labelx),cstring(labely),cstring(title))
 
   end subroutine giza_intern_label_f2c
@@ -1790,7 +1804,7 @@ contains
     implicit none
     integer(kind=c_int),value,intent(in) :: lw
     real(kind=c_double) :: reallw
-    
+
     !--cairo line widths are best as .5, 1.5 etc
     reallw = dble(lw) + 0.5d0
     call giza_set_line_width(reallw)
@@ -1817,7 +1831,7 @@ contains
     implicit none
     real(kind=c_float),intent(in) :: x,y
     character(len=*),intent(in)    :: text
-    
+
     call giza_text_float_c(x,y,cstring(text))
   end subroutine giza_intern_text_float_f2c
 
@@ -1833,7 +1847,7 @@ contains
     implicit none
     real(kind=c_float),intent(in) :: x,y,angle,just
     character(len=*),intent(in)    :: text
-    
+
     call giza_ptext_float_c(x,y,angle,just,cstring(text))
   end subroutine giza_intern_ptext_float_f2c
 
@@ -1851,7 +1865,7 @@ contains
     real(kind=c_float),intent(in) :: x,y,angle,just
     real(kind=c_float),intent(out):: xbox(4),ybox(4)
     character(len=*),intent(in)   :: text
-    
+
     call giza_qtext_float_c(x,y,angle,just,cstring(text),xbox,ybox)
   end subroutine giza_intern_qtext_float_f2c
 
@@ -1876,7 +1890,7 @@ contains
   subroutine giza_intern_set_font_f2c(font)
     implicit none
     character(len=*),intent(in) :: font
-  
+
     call giza_set_font_c(cstring(font))
 
   end subroutine giza_intern_set_font_f2c
@@ -1884,7 +1898,7 @@ contains
   subroutine giza_intern_set_font_bold_f2c(font)
     implicit none
     character(len=*),intent(in) :: font
-  
+
     call giza_set_font_bold_c(cstring(font))
 
   end subroutine giza_intern_set_font_bold_f2c
@@ -1892,7 +1906,7 @@ contains
   subroutine giza_intern_set_font_italic_f2c(font)
     implicit none
     character(len=*),intent(in) :: font
-  
+
     call giza_set_font_italic_c(cstring(font))
 
   end subroutine giza_intern_set_font_italic_f2c
@@ -1900,7 +1914,7 @@ contains
   subroutine giza_intern_set_font_bold_italic_f2c(font)
     implicit none
     character(len=*),intent(in) :: font
-  
+
     call giza_set_font_bold_italic_c(cstring(font))
 
   end subroutine giza_intern_set_font_bold_italic_f2c
@@ -1911,7 +1925,7 @@ contains
     character(len=*),  intent(out) :: string
     character(kind=c_char), dimension(len(string)+1) :: stringc
     integer(kind=c_int) :: cstring_length
-    cstring_length = len(string)+1 
+    cstring_length = len(string)+1
     call giza_format_number_c(mantissa,power,iform,stringc,cstring_length)
     string = fstring(stringc)
 
@@ -1924,10 +1938,10 @@ contains
     integer(kind=c_int) :: rval
     integer(kind=c_int) :: ierr
     character(kind=c_char), dimension(len(string)+1) :: stringc
-    rval = len(string)+1 
+    rval = len(string)+1
     ierr = giza_query_device_c(cstring(qtype),stringc,rval)
     string = fstring(stringc)
-  
+
   end subroutine giza_query_device_f2c
 
   !---------------------------------------------------------------------------
@@ -2002,7 +2016,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  character(len=20) :: devi
  character(len=40) :: xlabeli,ylabeli,titlei
  real(kind=c_double), dimension(:), allocatable :: arrtmp
- 
+
  real(kind=c_double)  :: lw_c, ch_c
  integer(kind=c_int)  :: n, nx_c, ny_c
  integer(kind=c_int)  :: symbol_c, iextend
@@ -2028,7 +2042,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     endif
  else
     if (present(prefix)) then
-       call giza_open(dev=devi,prefix=prefix)    
+       call giza_open(dev=devi,prefix=prefix)
     else
        call giza_open(dev=devi)
     endif
@@ -2046,7 +2060,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
        xmini = 0.
     endif
  endif
- if (present(xmax)) then    
+ if (present(xmax)) then
     xmaxi = xmax
  else
     if (present(x)) then
@@ -2142,12 +2156,12 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  if (present(ci)) then
     call giza_set_colour_index(ci)
  endif
- 
+
  if (present(x) .and. present(y)) then
     n = min(size(x),size(y))
     if (present(symbol)) then
        symbol_c = symbol
-       call giza_points(n,real(x,kind=c_double),real(y,kind=c_double),symbol_c)    
+       call giza_points(n,real(x,kind=c_double),real(y,kind=c_double),symbol_c)
     else
        call giza_line(n,real(x,kind=c_double),real(y,kind=c_double))
     endif
@@ -2178,7 +2192,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     endif
     deallocate(arrtmp)
  endif
- 
+
  if (present(img)) then
     nx = size(img(:,1))
     ny = size(img(1,:))
@@ -2208,9 +2222,9 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     call giza_render(nx_c,ny_c,real(img,kind=c_double),int(1,kind=c_int),&
                      nx_c,int(1,kind=c_int),ny_c,valmin,valmax,iextend,affinei)
  endif
- 
+
  call giza_close()
- 
+
 end subroutine giza_plot
 
 end module giza
