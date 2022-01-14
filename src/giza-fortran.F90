@@ -1956,9 +1956,9 @@ contains
     character(kind=c_char), dimension(len(string)+1) :: array
     integer :: i, ilen
 
-    ilen = len_trim(string) ! use the trimmed string length
-    do i=1, ilen
-      array(i)=string(i:i)
+    ilen = len(string) ! use the trimmed string length
+    do i=1,ilen
+       array(i)=string(i:i)
     end do
     array(ilen+1)=achar(0)
 
