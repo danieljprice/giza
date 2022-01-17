@@ -694,9 +694,10 @@ private
       import
       integer(kind=c_int) :: giza_set_motion_callback
       abstract interface
-       subroutine func(x,y) bind(c)
+       subroutine func(x,y,mode) bind(c)
          import
          real(c_double), intent(in) :: x,y
+         integer(c_int), intent(in) :: mode
        end subroutine
       end interface
     end function giza_set_motion_callback

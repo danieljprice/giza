@@ -472,7 +472,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
            double xpt = (double) event.xmotion.x;
            double ypt = (double) event.xmotion.y;
            cairo_device_to_user (Dev[id].context, &xpt, &ypt);
-           Dev[id].motion_callback(&xpt, &ypt);
+           Dev[id].motion_callback(&xpt, &ypt, &mode);
         }
 
         _giza_refresh_band (mode, nanc, anchorx, anchory, event.xmotion.x, event.xmotion.y);

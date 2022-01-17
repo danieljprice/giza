@@ -78,7 +78,7 @@ typedef struct
 } giza_font_t;
 
 /* type definition for the motion callback function */
-typedef void (*giza_callback_t)(double *x, double *y);
+typedef void (*giza_callback_t)(double *x, double *y, int *mode);
 
 /* Store variables relating to the current device */
 typedef struct

@@ -152,7 +152,7 @@ int giza_query_device (const char *querytype, char *returnval, int* rlen);
 int giza_device_has_cursor (void);
 int giza_get_key_press (double *x, double *y, char *ch);
 int giza_get_key_press_float (float *x, float *y, char *ch);
-int giza_set_motion_callback (void (*func)(double *x, double *y));
+int giza_set_motion_callback (void (*func)(double *x, double *y, int *mode));
 
 void giza_draw (double xpt, double ypt);
 void giza_draw_float (float xpt, float ypt);

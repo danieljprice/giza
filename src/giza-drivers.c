@@ -738,7 +738,7 @@ giza_query_device (const char *querytype, char *returnval, int* rlen)
  *
  */
 int
-giza_set_motion_callback (void (*func)(double *x, double *y))
+giza_set_motion_callback (void (*func)(double *x, double *y, int *mode))
 {
   if (!_giza_check_device_ready ("giza_set_motion_callback"))
     return 1;
