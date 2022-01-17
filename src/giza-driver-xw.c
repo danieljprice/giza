@@ -377,6 +377,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
   XSelectInput (XW[id].display, XW[id].window, ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask);
 
   _giza_init_band (mode);
+  _giza_expand_clipping_xw();
 
  while(1) {
 
