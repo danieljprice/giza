@@ -38,7 +38,7 @@
  * Input:
  *  -sizex         :- The dimensions of data in the x-direction
  *  -sizey         :- The dimensions of data in the y-direction
- *  -data          :- The data to be render
+ *  -data          :- The data to be rendered
  *  -i1            :- The inclusive range of data to render in the x dimension.
  *  -i2            :- The inclusive range of data to render in the x dimension.
  *  -j1            :- The inclusive range of data to render in the y direction
@@ -60,7 +60,7 @@
  */
 void
 giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, int extend, const double *affine)
+             int j1, int j2, double valMin, double valMax, int extend, const double *affine)
 {
    _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0,extend,data);
 }
@@ -86,7 +86,7 @@ giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i
  */
 void
 giza_render_alpha (int sizex, int sizey, const double* data, const double* alpha, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, int extend, const double *affine)
+                   int j1, int j2, double valMin, double valMax, int extend, const double *affine)
 {
    _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,2,extend,alpha);
 }
@@ -97,8 +97,8 @@ giza_render_alpha (int sizex, int sizey, const double* data, const double* alpha
  */
 void
 _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, const double *affine, 
-            int transparent, int extend, const double* datalpha)
+	           int j1, int j2, double valMin, double valMax, const double *affine,
+              int transparent, int extend, const double* datalpha)
 {
   if (!_giza_check_device_ready ("giza_render"))
     return;
@@ -507,7 +507,7 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   cairo_surface_t *pixmap;
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
-  
+
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
 

@@ -4,7 +4,7 @@ CLEANFILES = *.mod *.pc
 
 lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
 
-libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
+libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c \
        giza-band-style.c giza-band.c giza-box-time.c giza-box.c \
        giza-buffering.c giza-character-size.c giza-circle.c \
        giza-clipping.c giza-colour-bar.c giza-colour-index.c \

@@ -33,9 +33,6 @@
 #include <math.h>
 #include <stdio.h>
 
-static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
-				  int *i1, int *i2);
-
 /**
  * Drawing: giza_box
  *
@@ -76,7 +73,7 @@ static void _giza_tick_intervals (double xmin, double xmax, double xinterval,
  */
 void
 giza_box (const char *xopt, double xtick, int nxsub,
-	  const char *yopt, double ytick, int nysub)
+          const char *yopt, double ytick, int nysub)
 {
   if (!_giza_check_device_ready ("giza_box"))
     return;
@@ -270,7 +267,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   else if (_giza_equal(xtick,0.))
     {
       xintervalMaj =
-	7. * Dev[id].fontExtents.max_x_advance / 
+	7. * Dev[id].fontExtents.max_x_advance /
         ((Dev[id].VP.xmax - Dev[id].VP.xmin)*Dev[id].width);
       if (xintervalMaj > 0.2)
 	xintervalMaj = 0.2;
@@ -426,7 +423,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   else if (_giza_equal(ytick,0.))
     {
       yintervalMaj =
-	7. * Dev[id].fontExtents.max_x_advance / 
+	7. * Dev[id].fontExtents.max_x_advance /
         ((Dev[id].VP.ymax - Dev[id].VP.ymin) * Dev[id].height);
       if (yintervalMaj > 0.2) yintervalMaj = 0.2;
       if (yintervalMaj < 0.05) yintervalMaj = 0.05;
@@ -525,7 +522,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
               giza_format_number (i*nv, np, Dev[id].number_format, tmp, sizeof(tmp));
             }
 
-          if (ylabel_unconventional) 
+          if (ylabel_unconventional)
             {
               if (ydraw_vertical)
                 giza_annotate ("RV", .7, yratio, 0., tmp);
@@ -557,7 +554,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		  yval = pow (10, yval);
 		  giza_format_number (j+1, _giza_nint (i*yintervalMin), Dev[id].number_format, tmp, sizeof(tmp));
 
-                  if (ylabel_unconventional) 
+                  if (ylabel_unconventional)
                     {
                       if (ydraw_vertical)
                         giza_annotate ("RV", .7, yratio, 0., tmp);
@@ -658,7 +655,7 @@ giza_box_float (const char *xopt, float xtick, int nxsub,
 /**
  * Works out which intervals in which to draw ticks.
  */
-static void
+void
 _giza_tick_intervals (double xmin, double xmax, double xinterval, int *i1,
 		      int *i2)
 {

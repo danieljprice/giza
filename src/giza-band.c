@@ -45,8 +45,8 @@ giza_band_t Band;
  *               if 0 the cursor is not moved.
  *  -xanc     :- the x-coord of the anchor point.
  *  -yanc     :- the y-coord of the anchor point.
- *  -x        :- Gets set the position of the cursor.
- *  -y        :- Gets set to the position of the cursor.
+ *  -x        :- Gets set to the x position of the cursor.
+ *  -y        :- Gets set to the y position of the cursor.
  *  -ch       :- Gets set to the character pressed by the user.
  *
  * Return:
@@ -140,7 +140,7 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
   int x1 = xanc[nanc-1];
   int y1 = yanc[nanc-1];
   int i,j;
- 
+
   switch (mode)
     {
       case 1: /* Straight line */
@@ -149,7 +149,7 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
            if (j==0) {
               cairo_set_source_rgba (Band.box,1.,1.,1.,0.2);
            } else {
-              cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);           
+              cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
            }
 	   cairo_move_to (Band.box, xanc[0], yanc[0]);
            for (i=1;i<=nanc-1;i++) {
@@ -235,4 +235,3 @@ _giza_destroy_band (int mode)
   /* remove the last band */
   giza_flush_device ();
 }
-

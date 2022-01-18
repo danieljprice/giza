@@ -37,6 +37,7 @@ module giza
       giza_set_arrow_style, &
       giza_get_arrow_style, &
       giza_annotate, &
+      giza_axis, &
       giza_band, &
       giza_box, &
       giza_box_time, &
@@ -254,6 +255,31 @@ private
       real(kind=c_float) ,intent(out) :: angle,cutback
     end subroutine giza_get_arrow_style_float
  end interface
+
+ interface giza_axis
+    module procedure giza_intern_axis_f2c
+ end interface
+
+ interface giza_axis_c
+    subroutine giza_axis_float_c(opt,x1,y1,x2,y2,v1,v2,&
+               tick,nsub,dmajl,dmajr,fmin,disp,angle) bind(C,name="giza_axis_float")
+      import
+      character(kind=c_char),dimension(*), intent(in) :: opt
+      real(kind=c_float), value, intent(in)  :: x1,y1,x2,y2,v1,v2
+      real(kind=c_float), value, intent(in)  :: tick,dmajl,dmajr,fmin,disp,angle
+      integer(kind=c_int), value, intent(in) :: nsub
+    end subroutine giza_axis_float_c
+
+    subroutine giza_axis_c(opt,x1,y1,x2,y2,v1,v2,&
+               tick,nsub,dmajl,dmajr,fmin,disp,angle) bind(C,name="giza_axis")
+      import
+      character(kind=c_char),dimension(*), intent(in) :: opt
+      real(kind=c_double), value, intent(in)   :: x1,y1,x2,y2,v1,v2
+      real(kind=c_double), value, intent(in)   :: tick,dmajl,dmajr,fmin,disp,angle
+      integer(kind=c_int), value, intent(in)   :: nsub
+    end subroutine giza_axis_c
+ end interface
+
 
  interface giza_band
     function giza_band(mode,moveCurs,xanc,yanc,x,y,ch) bind(C)
@@ -1684,6 +1710,27 @@ contains
 
     call giza_annotate_c(cstring(side),displacement_c,coord_c,justification_c,cstring(text))
   end subroutine giza_intern_annotate_f2c
+
+  subroutine giza_intern_axis_f2c(opt,x1,y1,x2,y2,v1,v2,&
+             tick,nsub,dmajl,dmajr,fmin,disp,angle)
+    implicit none
+    character(len=*),intent(in) :: opt
+    real, intent(in)  :: x1,y1,x2,y2,v1,v2
+    real, intent(in)  :: tick,dmajl,dmajr,fmin,disp,angle
+    integer,intent(in)  :: nsub
+    real(kind=c_double) :: x1_c,y1_c,x2_c,y2_c,v1_c,v2_c
+    real(kind=c_double) :: tick_c,dmajl_c,dmajr_c,fmin_c,disp_c,angle_c
+    integer(kind=c_int) :: nsub_c
+
+    x1_c = x1; y1_c = y1; x2_c = x2; y2_c = y2; v1_c = v1; v2_c = v2
+    tick_c = tick; dmajl_c = dmajl; dmajr_c = dmajr; fmin_c = fmin
+    disp_c = disp; angle_c = angle
+    nsub_c = nsub
+
+    call giza_axis_c(cstring(opt),x1_c,y1_c,x2_c,y2_c,v1_c,v2_c,&
+                     tick_c,nsub_c,dmajl_c,dmajr_c,fmin_c,disp_c,angle_c)
+
+  end subroutine giza_intern_axis_f2c
 
   subroutine giza_intern_box_f2c(xopt,xtick,nxsub,yopt,ytick,nysub)
     implicit none
