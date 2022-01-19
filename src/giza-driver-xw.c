@@ -419,6 +419,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 
           _giza_destroy_band (mode);
           _giza_flush_xw_event_queue(&event);
+          _giza_reset_clipping_xw();
 	  return;
 	};
 
@@ -460,6 +461,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
         }
         _giza_destroy_band (mode);
         _giza_flush_xw_event_queue(&event);
+        _giza_reset_clipping_xw();
         return;
       }
     case MotionNotify:
@@ -538,6 +540,18 @@ _giza_expand_clipping_xw (void)
   cairo_reset_clip (Dev[id].context);
   cairo_rectangle (Dev[id].context, 0, 0, XW[id].width, XW[id].height);
   cairo_clip (Dev[id].context);
+}
+
+/**
+ * Restores clipping of the plotting surface
+ */
+void
+_giza_reset_clipping_xw (void)
+{
+  /* Restore clipping */
+  giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);
+  _giza_set_trans (GIZA_TRANS_WORLD);
+
 }
 
 /**

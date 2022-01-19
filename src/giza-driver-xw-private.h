@@ -30,7 +30,8 @@ void _giza_flush_device_xw (void);
 void _giza_change_page_xw (void);
 void _giza_close_device_xw (void);
 void _giza_expand_clipping_xw (void);
-void _giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, const double *yanch, 
+void _giza_reset_clipping_xw (void);
+void _giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, const double *yanch,
                              double *x, double *y, char *ch);
 int _giza_init_band_xw (void);
 int _giza_select_xw(int devid);
