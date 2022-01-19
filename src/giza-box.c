@@ -148,7 +148,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	case ('S'):
 	  xdraw_minticks = 1;
 	  break;
-        /* Any of nmNM means labels need to be drawn. mM sais to do so unconventionally. */
+        /* Any of nmNM means labels need to be drawn. mM says to do so unconventionally. */
 	case ('n'):
 	case ('m'):
 	case ('N'):
@@ -204,7 +204,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	case ('S'):
 	  ydraw_minticks = 1;
 	  break;
-        /* Any of nmNM means labels need to be drawn. mM sais to do so unconventionally. */
+        /* Any of nmNM means labels need to be drawn. mM says to do so unconventionally. */
 	case ('n'):
 	case ('m'):
 	case ('N'):
@@ -239,10 +239,10 @@ giza_box (const char *xopt, double xtick, int nxsub,
   /* Note: -P :- extend ("Project") major tick marks outside the box (ignored if
                  option I is specified).
     In this code: invert<0 is default so >0 means option was specified */
-  if( xdraw_invert>0 )
-    xdraw_project = 0;
-  if( ydraw_invert>0 )
-    ydraw_project = 0;
+  if ( xdraw_invert>0 )
+     xdraw_project = 0;
+  if ( ydraw_invert>0 )
+     ydraw_project = 0;
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
