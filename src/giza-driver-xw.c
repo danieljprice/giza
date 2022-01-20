@@ -474,6 +474,9 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
         if (Dev[id].motion_callback != NULL) {
            double xpt = (double) event.xmotion.x;
            double ypt = (double) event.xmotion.y;
+           /* make sure the transform is to world coords, because arbitrary drawing
+              can happen in the callback routine, which may change the transform */
+           _giza_set_trans (GIZA_TRANS_WORLD);
            cairo_device_to_user (Dev[id].context, &xpt, &ypt);
            Dev[id].motion_callback(&xpt, &ypt, &mode);
         }
