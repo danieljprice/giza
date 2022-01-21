@@ -147,11 +147,12 @@ libcpgplot_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 libgiza_la_LIBADD =
 am_libgiza_la_OBJECTS = libgiza_la-giza-annotate.lo \
 	libgiza_la-giza-arrow-style.lo libgiza_la-giza-arrow.lo \
-	libgiza_la-giza-band-style.lo libgiza_la-giza-band.lo \
-	libgiza_la-giza-box-time.lo libgiza_la-giza-box.lo \
-	libgiza_la-giza-buffering.lo libgiza_la-giza-character-size.lo \
-	libgiza_la-giza-circle.lo libgiza_la-giza-clipping.lo \
-	libgiza_la-giza-colour-bar.lo libgiza_la-giza-colour-index.lo \
+	libgiza_la-giza-axis.lo libgiza_la-giza-band-style.lo \
+	libgiza_la-giza-band.lo libgiza_la-giza-box-time.lo \
+	libgiza_la-giza-box.lo libgiza_la-giza-buffering.lo \
+	libgiza_la-giza-character-size.lo libgiza_la-giza-circle.lo \
+	libgiza_la-giza-clipping.lo libgiza_la-giza-colour-bar.lo \
+	libgiza_la-giza-colour-index.lo \
 	libgiza_la-giza-colour-palette.lo \
 	libgiza_la-giza-colour-table.lo libgiza_la-giza-contour.lo \
 	libgiza_la-giza-cursor-routines.lo \
@@ -210,6 +211,7 @@ am__depfiles_remade = ./$(DEPDIR)/libcpgplot_la-giza-cpgplot.Plo \
 	./$(DEPDIR)/libgiza_la-giza-annotate.Plo \
 	./$(DEPDIR)/libgiza_la-giza-arrow-style.Plo \
 	./$(DEPDIR)/libgiza_la-giza-arrow.Plo \
+	./$(DEPDIR)/libgiza_la-giza-axis.Plo \
 	./$(DEPDIR)/libgiza_la-giza-band-style.Plo \
 	./$(DEPDIR)/libgiza_la-giza-band.Plo \
 	./$(DEPDIR)/libgiza_la-giza-box-time.Plo \
@@ -491,7 +493,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 CLEANFILES = *.mod *.pc
 lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
-libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
+libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c \
        giza-band-style.c giza-band.c giza-box-time.c giza-box.c \
        giza-buffering.c giza-character-size.c giza-circle.c \
        giza-clipping.c giza-colour-bar.c giza-colour-index.c \
@@ -633,6 +635,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-annotate.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-arrow-style.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-arrow.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-axis.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-band-style.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-band.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-box-time.Plo@am__quote@ # am--include-marker
@@ -765,6 +768,13 @@ libgiza_la-giza-arrow.lo: giza-arrow.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='giza-arrow.c' object='libgiza_la-giza-arrow.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgiza_la-giza-arrow.lo `test -f 'giza-arrow.c' || echo '$(srcdir)/'`giza-arrow.c
+
+libgiza_la-giza-axis.lo: giza-axis.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgiza_la-giza-axis.lo -MD -MP -MF $(DEPDIR)/libgiza_la-giza-axis.Tpo -c -o libgiza_la-giza-axis.lo `test -f 'giza-axis.c' || echo '$(srcdir)/'`giza-axis.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgiza_la-giza-axis.Tpo $(DEPDIR)/libgiza_la-giza-axis.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='giza-axis.c' object='libgiza_la-giza-axis.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgiza_la-giza-axis.lo `test -f 'giza-axis.c' || echo '$(srcdir)/'`giza-axis.c
 
 libgiza_la-giza-band-style.lo: giza-band-style.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgiza_la-giza-band-style.lo -MD -MP -MF $(DEPDIR)/libgiza_la-giza-band-style.Tpo -c -o libgiza_la-giza-band-style.lo `test -f 'giza-band-style.c' || echo '$(srcdir)/'`giza-band-style.c
@@ -1432,6 +1442,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-annotate.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-arrow-style.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-arrow.Plo
+	-rm -f ./$(DEPDIR)/libgiza_la-giza-axis.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-band-style.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-band.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-box-time.Plo
@@ -1547,6 +1558,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-annotate.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-arrow-style.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-arrow.Plo
+	-rm -f ./$(DEPDIR)/libgiza_la-giza-axis.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-band-style.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-band.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-box-time.Plo

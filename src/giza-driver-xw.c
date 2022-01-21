@@ -377,6 +377,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
   XSelectInput (XW[id].display, XW[id].window, ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask);
 
   _giza_init_band (mode);
+  _giza_expand_clipping_xw();
 
  while(1) {
 
@@ -418,6 +419,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 
           _giza_destroy_band (mode);
           _giza_flush_xw_event_queue(&event);
+          _giza_reset_clipping_xw();
 	  return;
 	};
 
@@ -426,7 +428,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
     case ButtonPress:
       {
         *x = event.xbutton.x ;/*- GIZA_XW_MARGIN; */
-	*y = event.xbutton.y ;/*- GIZA_XW_MARGIN; */
+        *y = event.xbutton.y ;/*- GIZA_XW_MARGIN; */
         switch(event.xbutton.button) {
         case Button1:
            if (event.xbutton.state==1) {
@@ -459,13 +461,25 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
         }
         _giza_destroy_band (mode);
         _giza_flush_xw_event_queue(&event);
-	return;
+        _giza_reset_clipping_xw();
+        return;
       }
     case MotionNotify:
       {
         /* discard all except the last pointer motion event */
         while(XCheckWindowEvent(XW[id].display, XW[id].window,
                               (long)(PointerMotionMask), &event) == True);
+
+        /* if a callback function is set to do things while the cursor is moving, call it */
+        if (Dev[id].motion_callback != NULL) {
+           double xpt = (double) event.xmotion.x;
+           double ypt = (double) event.xmotion.y;
+           /* make sure the transform is to world coords, because arbitrary drawing
+              can happen in the callback routine, which may change the transform */
+           _giza_set_trans (GIZA_TRANS_WORLD);
+           cairo_device_to_user (Dev[id].context, &xpt, &ypt);
+           Dev[id].motion_callback(&xpt, &ypt, &mode);
+        }
 
         _giza_refresh_band (mode, nanc, anchorx, anchory, event.xmotion.x, event.xmotion.y);
         _giza_flush_xw_event_queue(&event);
@@ -529,6 +543,18 @@ _giza_expand_clipping_xw (void)
   cairo_reset_clip (Dev[id].context);
   cairo_rectangle (Dev[id].context, 0, 0, XW[id].width, XW[id].height);
   cairo_clip (Dev[id].context);
+}
+
+/**
+ * Restores clipping of the plotting surface
+ */
+void
+_giza_reset_clipping_xw (void)
+{
+  /* Restore clipping */
+  giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);
+  _giza_set_trans (GIZA_TRANS_WORLD);
+
 }
 
 /**

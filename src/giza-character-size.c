@@ -31,6 +31,8 @@
  * Settings: giza_set_character_height
  *
  * Synopsis: Sets the font size in units of character height.
+ *           A character height of 1.0 corresponds to 1/37th
+ *           of the plotting surface height by default
  *
  * Input:
  *  -ch :- the new character height
@@ -114,6 +116,8 @@ giza_get_character_height_float (float *ch)
  *
  * Input:
  *  -units  :- select the units the result will be returned in.
+ *
+ * Output:
  *  -width  :- will be set to the width of a character.
  *  -height :- will be set to the height of a character.
  *

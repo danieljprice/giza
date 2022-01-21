@@ -121,14 +121,17 @@ end subroutine PGASK
 
 !------------------------------------------------------------------------
 ! Module: PGAXIS -- draw an axis
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGAXIS (OPT, X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, DISP, ORIENT)
+ use giza, only:giza_axis
  implicit none
  character*(*), intent(in) :: OPT
  real, intent(in) :: X1, Y1, X2, Y2, V1, V2, STEP, DMAJL, DMAJR, FMIN, DISP
  real, intent(in) :: ORIENT
  integer, intent(in) :: NSUB
+
+ call giza_axis(OPT, X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, DISP, ORIENT)
 
 end subroutine PGAXIS
 

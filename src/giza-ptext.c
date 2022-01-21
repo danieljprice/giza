@@ -56,7 +56,7 @@ giza_ptext (double x, double y, double angle, double just, const char *text)
   giza_get_character_height (&ch);
 
   cairo_save (Dev[id].context);
-  
+
   /* save the font (can be changed by \rm \fn \fc during text write) */
   int len = GIZA_FONT_LEN;
   char giza_font[len];
@@ -73,11 +73,14 @@ giza_ptext (double x, double y, double angle, double just, const char *text)
   /* Draw the bounding box */
   if (Dev[id].text_background >= 0)
   {
-    int oldCi;
+    int oldCi,oldfill;
     giza_get_colour_index (&oldCi);
     giza_set_colour_index (Dev[id].text_background);
+    giza_get_fill (&oldfill);
+    giza_set_fill(GIZA_FILL_SOLID);
     giza_polygon (4, xbox, ybox);
     giza_set_colour_index (oldCi);
+    giza_set_fill (oldfill);
   }
 
   /* change the current trans to world coords */

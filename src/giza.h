@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2022 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -40,6 +40,14 @@ void giza_annotate_float (const char *side, float displacment, float coord,
 			  float justification, const char *string);
 void giza_begin_autolog(void);
 void giza_end_autolog(void);
+
+void giza_axis (const char *opt, double x1, double y1, double x2, double y2,
+          double v1, double v2, double step, int nsub,
+          double dmajl, double dmajr, double fmin, double disp, double angle);
+void giza_axis_float (const char *opt, float x1, float y1, float x2, float y2,
+          float v1, float v2, float step, int nsub,
+          float dmajl, float dmajr, float fmin, float disp, float angle);
+
 int giza_band (int mode, int moveCursm, double xanc, double yanc, double *x,
 	       double *y, char *ch);
 int giza_band_float (int mode, int moveCurs, float xanc, float yanc, float *x,
@@ -75,9 +83,9 @@ void giza_get_character_size_float (int units, float *xch, float *ych);
 void giza_set_clipping (int clip);
 void giza_get_clipping (int *clip);
 
-void giza_colour_bar (const char *side, double disp, double width, 
+void giza_colour_bar (const char *side, double disp, double width,
                       double valMin, double valMax, const char *label);
-void giza_colour_bar_float (const char *side, float disp, float width, 
+void giza_colour_bar_float (const char *side, float disp, float width,
                             float valMin, float valMax, const char *label);
 
 void giza_set_colour_index (int ci);
@@ -152,6 +160,8 @@ int giza_query_device (const char *querytype, char *returnval, int* rlen);
 int giza_device_has_cursor (void);
 int giza_get_key_press (double *x, double *y, char *ch);
 int giza_get_key_press_float (float *x, float *y, char *ch);
+int giza_set_motion_callback (void (*func)(double *x, double *y, int *mode));
+int giza_end_motion_callback (void);
 
 void giza_draw (double xpt, double ypt);
 void giza_draw_float (float xpt, float ypt);
