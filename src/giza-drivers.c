@@ -743,12 +743,36 @@ giza_set_motion_callback (void (*func)(double *x, double *y, int *mode))
   if (!_giza_check_device_ready ("giza_set_motion_callback"))
     return 1;
 
-  /*if (Dev[id].motion_callback != NULL) printf("WARNING: motion callback already set\n");*/
-
   /* assign the motion pointer callback */
   Dev[id].motion_callback = func;
 
   return 0;
+}
+
+/**
+ * Device: giza_end_motion_callback
+ *
+ * Synopsis: Free the motion callback pointer
+ *
+ * See: giza_end_motion_callback
+ *
+ */
+int
+giza_end_motion_callback (void)
+{
+  if (!_giza_check_device_ready ("giza_end_motion_callback"))
+    return 1;
+
+  if (Dev[id].motion_callback != NULL)
+     {
+       Dev[id].motion_callback = NULL;
+       return 0;
+     }
+  else
+     {
+       return 1; /* return error if already null */
+     }
+
 }
 
 /**

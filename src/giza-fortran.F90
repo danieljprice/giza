@@ -75,6 +75,7 @@ module giza
       giza_close, &
       giza_get_key_press, &
       giza_set_motion_callback, &
+      giza_end_motion_callback, &
       giza_device_has_cursor, &
       giza_draw, &
       giza_draw_background, &
@@ -729,6 +730,13 @@ private
     end function giza_set_motion_callback
  end interface
 
+ interface giza_end_motion_callback
+    function giza_end_motion_callback() bind(C)
+      import
+      integer(kind=c_int) :: giza_end_motion_callback
+    end function giza_end_motion_callback
+ end interface
+
  interface giza_draw
     subroutine giza_draw(x,y) bind(C)
       import
@@ -743,7 +751,7 @@ private
 
  interface giza_draw_background
     subroutine giza_draw_background() bind(C)
-    end subroutine
+    end subroutine giza_draw_background
  end interface
 
  interface giza_set_environment
