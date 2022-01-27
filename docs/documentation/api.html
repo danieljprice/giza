@@ -39,6 +39,8 @@
 <dd><a href="#_giza_close_device_unchecked">_giza_close_device_unchecked</a></dd>
 <dd><a href="#_giza_init_device_struct">_giza_init_device_struct</a></dd>
 <dd><a href="#giza_query_device">giza_query_device</a></dd>
+<dd><a href="#giza_set_motion_callback">giza_set_motion_callback</a></dd>
+<dd><a href="#giza_end_motion_callback">giza_end_motion_callback</a></dd>
 <dd><a href="#giza_get_surface_size">giza_get_surface_size</a></dd>
 <dd><a href="#giza_get_surface_size_float">giza_get_surface_size_float</a></dd>
 <dd><a href="#giza_histogram">giza_histogram</a></dd>
@@ -53,6 +55,8 @@
 <dt><a href="#Drawing">Drawing</a></dt>
 <dd><a href="#giza_arrow">giza_arrow</a></dd>
 <dd><a href="#giza_arrow_float">giza_arrow_float</a></dd>
+<dd><a href="#giza_axis">giza_axis</a></dd>
+<dd><a href="#giza_axis_float">giza_axis_float</a></dd>
 <dd><a href="#giza_box_time">giza_box_time</a></dd>
 <dd><a href="#giza_box_time_float">giza_box_time_float</a></dd>
 <dd><a href="#giza_box">giza_box</a></dd>
@@ -100,6 +104,8 @@
 <dd><a href="#giza_render_gray_float">giza_render_gray_float</a></dd>
 <dd><a href="#giza_draw_pixels">giza_draw_pixels</a></dd>
 <dd><a href="#giza_draw_pixels_float">giza_draw_pixels_float</a></dd>
+<dd><a href="#giza_tick">giza_tick</a></dd>
+<dd><a href="#giza_tick_float">giza_tick_float</a></dd>
 <dd><a href="#giza_vector">giza_vector</a></dd>
 <dd><a href="#giza_vector_float">giza_vector_float</a></dd>
 <dt><a href="#Text">Text</a></dt>
@@ -319,7 +325,7 @@
 <table class="api"></table><h4>See https:</h4>
 <table class="api"></table><h4>Input:</h4>
 <table class="api"><tr>
-<td>ptrDev :</td><td>a pointer to a giza_device_t </td>
+<td>ptrDev :</td><td>a pointer to a giza_device_t</td>
 </tr></table><h3><a name="giza_query_device">giza_query_device</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>int</td><td width=20%>giza_query_device</td><td> (const char *querytype, char *returnval, int* rlen) ;</tr></table><p>Queries various things about the current device.</p>
@@ -340,6 +346,16 @@
 <table class="api"></table><h4>"user"     :</h4>
 <table class="api"></table><h4>"cursor"   :</h4>
 <table class="api"></table><h4>"hardcopy" :</h4>
+<table class="api"></table><h3><a name="giza_set_motion_callback">giza_set_motion_callback</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_set_motion_callback</td><td> (void (*func)(double *x, double *y, int *mode)) ;</tr></table><p>set a callback function to be called during cursor movement (e.g. to print things) Function should be of the form void func(double *x, double *y)</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>func  :</td><td>The subroutine to be called</td>
+</tr></table><h3><a name="giza_end_motion_callback">giza_end_motion_callback</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_end_motion_callback</td><td> (void) ;</tr></table><p>Free the motion callback pointer</p>
+<h4>See:</h4>
 <table class="api"></table><h3><a name="giza_get_surface_size">giza_get_surface_size</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_get_surface_size</td><td> (double *x1, double *x2, double *y1, double *y2) ;</tr></table><p>Gets the size of the current surface that can be drawn to in device units (pixels or points).</p>
@@ -455,7 +471,59 @@
 </tr></table><h4>See Also:</h4><p><a href="#giza_set_arrow_style">giza_set_arrow_style</a> </p><h3><a name="giza_arrow_float">giza_arrow_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_arrow_float</td><td> (float x1, float y1, float x2, float y2) ;</tr></table><p>Same functionality as giza_arrow.</p>
-<h4>See Also:</h4><p><a href="#giza_arrow_float">giza_arrow_float</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_arrow_float">giza_arrow_float</a> </p><h3><a name="giza_axis">giza_axis</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_axis</td><td> (const char *opt, double x1, double y1, double x2, double y2, double v1, double v2, double tick, int nsub, double dmajl, double dmajr, double fmin, double disp, double angle) ;</tr></table><p>Draw a labelled axis from (x1,y1) to (x2,y2)</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>opt  :</td><td>String of options for the axis. The options may be in any order. See below for details</td>
+</tr><tr>
+<td>x1   :</td><td>starting x position in world coordinates</td>
+</tr><tr>
+<td>y1   :</td><td>starting y position in world coordinates</td>
+</tr><tr>
+<td>x2   :</td><td>finishing x position in world coordinates</td>
+</tr><tr>
+<td>y2   :</td><td>finishing y position in world coordinates</td>
+</tr><tr>
+<td>v1   :</td><td>axis value at starting position</td>
+</tr><tr>
+<td>v2   :</td><td>axis value at finishing position</td>
+</tr><tr>
+<td>tick :</td><td>The distance, in world coordinates, between major ticks on the axis. If 0.0 the interval is chosen automatically.</td>
+</tr><tr>
+<td>nsub :</td><td>The number of minor ticks to be placed between each major tick. If 0 the number is chosen automatically. Ignored if log axis.</td>
+</tr><tr>
+<td>dmajl :</td><td>Length of major tick marks drawn to "left/bottom" of axis in units of character height</td>
+</tr><tr>
+<td>dmajr :</td><td>Length of major tick marks drawn to "right/top" of axis in units of character height</td>
+</tr><tr>
+<td>fmin  :</td><td>Length of minor tick marks as fraction of major</td>
+</tr><tr>
+<td>disp  :</td><td>Displacement of labels from axis in units of character height</td>
+</tr><tr>
+<td>angle :</td><td>Label orientation; angle between text and direction of axis; in degrees</td>
+</tr></table><h4>Options:</h4>
+<table class="api"><tr>
+<td>T :</td><td>Draw major ticks.</td>
+</tr><tr>
+<td>S :</td><td>Draw minor ticks.</td>
+</tr><tr>
+<td>N :</td><td>Label the axis</td>
+</tr><tr>
+<td>L :</td><td>Label axis logarithmically</td>
+</tr><tr>
+<td>H :</td><td>Hide the axis (draw ticks only)</td>
+</tr><tr>
+<td>I :</td><td>'Invert' tick marks, draw them on opposite side</td>
+</tr><tr>
+<td>1 :</td><td>Force decimal labelling instead of automatic choice (see giza_format_number)</td>
+</tr><tr>
+<td>2 :</td><td>Force exponential labelling instead of automatic choice (see giza_format_number)</td>
+</tr></table><h3><a name="giza_axis_float">giza_axis_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_axis_float</td><td> (const char *opt, float x1, float y1, float x2, float y2, float v1, float v2, float step, int nsub, float dmajl, float dmajr, float fmin, float disp, float angle) ;</tr></table><p>Same functionality as giza_axis but takes floats instead of doubles.</p>
+<h4>See Also:</h4><p><a href="#giza_axis">giza_axis</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>    void</td><td width=20%></td><td>     giza_box_time (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</tr></table><p>Same as giza_box, but labels axes with time-style labels i.e. DD HH MM SS as used in RA - DEC plots for Astronomy. If this option is used then giza_set_window should have been called with min/max given in seconds of time.</p>
 <h4>Input:</h4>
@@ -811,7 +879,7 @@
 </tr><tr>
 <td>sizey         :</td><td>The dimensions of data in the y-direction</td>
 </tr><tr>
-<td>data          :</td><td>The data to be render</td>
+<td>data          :</td><td>The data to be rendered</td>
 </tr><tr>
 <td>i1            :</td><td>The inclusive range of data to render in the x dimension.</td>
 </tr><tr>
@@ -889,7 +957,34 @@
 </tr></table><h4>See Also:</h4><p><a href="#giza_render">giza_render</a> <a href="#giza_draw_pixels_float">giza_draw_pixels_float</a> </p><h3><a name="giza_draw_pixels_float">giza_draw_pixels_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_draw_pixels_float</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend) ;</tr></table><p>Same as giza_draw_pixels, but takes floats</p>
-<h4>See Also:</h4><p><a href="#giza_draw_pixels">giza_draw_pixels</a> </p><h3><a name="giza_vector">giza_vector</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_draw_pixels">giza_draw_pixels</a> </p><h3><a name="giza_tick">giza_tick</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_tick</td><td> (double x1, double y1, double x2, double y2, double v, double tickl, double tickr, double disp, double angle, const char *label) ;</tr></table><p>Draw a single tick along an axis. The axis extends from (x1,y1) to (x2,y2) and the tick is drawn perpendicular to the axis which is not drawn by this routine. Optional text label drawn parallel to the axis if the orientation angle is zero</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>x1   :</td><td>starting x position in world coordinates</td>
+</tr><tr>
+<td>y1   :</td><td>starting y position in world coordinates</td>
+</tr><tr>
+<td>x2   :</td><td>finishing x position in world coordinates</td>
+</tr><tr>
+<td>y2   :</td><td>finishing y position in world coordinates</td>
+</tr><tr>
+<td>v    :</td><td>axis value at tick location</td>
+</tr><tr>
+<td>tickl :</td><td>Length of tick mark drawn to "left/bottom" of axis in units of character height</td>
+</tr><tr>
+<td>tickr :</td><td>Length of tick mark drawn to "right/top" of axis in units of character height</td>
+</tr><tr>
+<td>disp  :</td><td>Displacement of labels from axis in units of character height</td>
+</tr><tr>
+<td>angle :</td><td>Label orientation; angle between text and direction of axis; in degrees</td>
+</tr><tr>
+<td>label :</td><td>Text string used for label (can be blank)</td>
+</tr></table><h3><a name="giza_tick_float">giza_tick_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_tick_float</td><td> (float x1, float y1, float x2, float y2, float v, float tickl, float tickr, float disp, float angle, const char *label) ;</tr></table><p>Same functionality as giza_tick but takes floats instead of doubles.</p>
+<h4>See Also:</h4><p><a href="#giza_tick">giza_tick</a> </p><h3><a name="giza_vector">giza_vector</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_vector</td><td> (int n, int m, const double* horizontal, const double* vertical, int i1, int i2, int j1, int j2, double scale, int position, const double* affine, double blank) ;</tr></table><p>Plot of vector data.</p>
 <h4>Input:</h4>
@@ -1070,7 +1165,7 @@
 <tr><td width=10%>void</td><td width=20%>giza_flush_buffer</td><td> (void) ;</tr></table><p>Updates graphics display Can be used to flush the graphics buffer manually between calls to giza_begin_buffer and giza_end_buffer</p>
 <h4>See Also:</h4><p><a href="#giza_begin_buffer">giza_begin_buffer</a> <a href="#giza_end_buffer">giza_end_buffer</a> </p><h3><a name="giza_set_character_height">giza_set_character_height</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_set_character_height</td><td> (double ch) ;</tr></table><p>Sets the font size in units of character height.</p>
+<tr><td width=10%>void</td><td width=20%>giza_set_character_height</td><td> (double ch) ;</tr></table><p>Sets the font size in units of character height. A character height of 1.0 corresponds to 1/37th of the plotting surface height by default</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>ch :</td><td>the new character height</td>
@@ -1092,7 +1187,8 @@
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>units  :</td><td>select the units the result will be returned in.</td>
-</tr><tr>
+</tr></table><h4>Output:</h4>
+<table class="api"><tr>
 <td>width  :</td><td>will be set to the width of a character.</td>
 </tr><tr>
 <td>height :</td><td>will be set to the height of a character.</td>
@@ -1248,7 +1344,7 @@
 <tr><td width=10%>/*void</td><td width=20%>giza_set_range_as_colour_table</td><td> (int *cimin, int *cimax) ;</tr></table><p>Can be used in place of giza_set_colour_table to install the colour table from a predefined set of colour indices</p>
 <h4>See Also:</h4><p><a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_set_colour_palette">giza_set_colour_palette</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void </td><td width=20%>giza_set_colour_palette</td><td> (int palette) ;</tr></table><p>Choose between various preset colour "palettes" for the first 16 colour indices commonly used for point and line drawing. This is equivalent to using giza_set_colour_representation  for each index in turn.</p>
+<tr><td width=10%>void</td><td width=20%>giza_set_colour_palette</td><td> (int palette) ;</tr></table><p>Choose between various preset colour "palettes" for the first 16 colour indices commonly used for point and line drawing. This is equivalent to using giza_set_colour_representation for each index in turn.</p>
 <h4>Note:</h4>
 <table class="api"></table><h4>Input:</h4>
 <table class="api"><tr>
@@ -1652,9 +1748,9 @@
 </tr><tr>
 <td>yanc     :</td><td>the y-coord of the anchor point.</td>
 </tr><tr>
-<td>x        :</td><td>Gets set the position of the cursor.</td>
+<td>x        :</td><td>Gets set to the x position of the cursor.</td>
 </tr><tr>
-<td>y        :</td><td>Gets set to the position of the cursor.</td>
+<td>y        :</td><td>Gets set to the y position of the cursor.</td>
 </tr><tr>
 <td>ch       :</td><td>Gets set to the character pressed by the user.</td>
 </tr></table><h4>Return:</h4>
