@@ -21,14 +21,14 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-paper.c giza-points.c giza-polygon.c giza-print-id.c \
        giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
        giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
-       giza-subpanel.c giza-text-background.c giza-text.c \
+       giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
        giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
        giza-warnings.c giza-window.c giza.c lex.yy.c \
        giza-arrow-style-private.h giza-driver-svg-private.h giza-stroke-private.h \
        giza-band-private.h giza-driver-xw-private.h giza-subpanel-private.h \
        giza-character-size-private.h giza-drivers-private.h giza-text-background-private.h \
        giza-colour-private.h giza-fill-private.h giza-text-private.h \
-       giza-cursor-private.h giza-io-private.h giza-transforms-private.h \
+       giza-cursor-private.h giza-io-private.h giza-tick-private.h giza-transforms-private.h \
        giza-driver-eps-private.h giza-line-style-private.h giza-version.h \
        giza-driver-null-private.h giza-private.h giza-viewport-private.h \
        giza-driver-pdf-private.h giza-render-private.h giza-warnings-private.h \

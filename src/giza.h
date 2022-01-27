@@ -337,6 +337,11 @@ void giza_get_font (char *font, int n);
 void giza_set_text_background (int colourIndex);
 void giza_get_text_background (int *colourIndex);
 
+void giza_tick_float (float x1, float y1, float x2, float y2, float v,
+      float tickl, float tickr, float disp, float angle, const char *label);
+void giza_tick (double x1, double y1, double x2, double y2, double v,
+      double tickl, double tickr, double disp, double angle, const char *label);
+
 void
 giza_vector (int n, int m, const double* horizontal, const double* vertical,
 	     int i1, int i2, int j1, int j2, double scale, int position,

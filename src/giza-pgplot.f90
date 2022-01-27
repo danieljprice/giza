@@ -1675,12 +1675,15 @@ end subroutine PGTEXT
 
 !------------------------------------------------------------------------
 ! Module: PGTICK -- draw a single tick mark on an axis
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGTICK (X1, Y1, X2, Y2, V, TIKL, TIKR, DISP, ORIENT, STR)
+ use giza, only:giza_tick
  implicit none
  real, intent(in) :: X1, Y1, X2, Y2, V, TIKL, TIKR, DISP, ORIENT
  character*(*), intent(in) :: STR
+
+ call giza_tick(X1, Y1, X2, Y2, V, TIKL, TIKR, DISP, ORIENT, STR)
 
 end subroutine PGTICK
 

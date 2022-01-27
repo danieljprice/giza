@@ -135,6 +135,7 @@ module giza
       giza_subpanel, &
       giza_set_panel, &
       giza_get_panel, &
+      giza_tick, &
       giza_vector, &
       giza_set_viewport_default, &
       giza_set_viewport, &
@@ -281,6 +282,27 @@ private
     end subroutine giza_axis_c
  end interface
 
+ interface giza_tick
+    module procedure giza_intern_tick_f2c
+ end interface
+
+ interface giza_tick_c
+   subroutine giza_tick_float_c(x1,y1,x2,y2,v,&
+              tickl,tickr,disp,angle,label) bind(C,name="giza_tick_float")
+     import
+     real(kind=c_float), value, intent(in)  :: x1,y1,x2,y2,v
+     real(kind=c_float), value, intent(in)  :: tickl,tickr,disp,angle
+     character(kind=c_char),dimension(*), intent(in) :: label
+   end subroutine giza_tick_float_c
+
+   subroutine giza_tick_c(x1,y1,x2,y2,v,&
+              tickl,tickr,disp,angle,label) bind(C,name="giza_tick")
+     import
+     real(kind=c_double), value, intent(in)   :: x1,y1,x2,y2,v
+     real(kind=c_double), value, intent(in)   :: tickl,tickr,disp,angle
+     character(kind=c_char),dimension(*), intent(in) :: label
+   end subroutine giza_tick_c
+ end interface
 
  interface giza_band
     function giza_band(mode,moveCurs,xanc,yanc,x,y,ch) bind(C)
@@ -1739,6 +1761,23 @@ contains
                      tick_c,nsub_c,dmajl_c,dmajr_c,fmin_c,disp_c,angle_c)
 
   end subroutine giza_intern_axis_f2c
+
+  subroutine giza_intern_tick_f2c(x1,y1,x2,y2,v,&
+             tickl,tickr,disp,angle,label)
+    implicit none
+    real, intent(in)  :: x1,y1,x2,y2,v
+    real, intent(in)  :: tickl,tickr,disp,angle
+    character(len=*),intent(in) :: label
+    real(kind=c_double) :: x1_c,y1_c,x2_c,y2_c,v_c
+    real(kind=c_double) :: tickl_c,tickr_c,disp_c,angle_c
+
+    x1_c = x1; y1_c = y1; x2_c = x2; y2_c = y2; v_c = v
+    tickl_c = tickl; tickr_c = tickr; disp_c = disp; angle_c = angle
+
+    call giza_tick_c(x1_c,y1_c,x2_c,y2_c,v_c,&
+                     tickl_c,tickr_c,disp_c,angle_c,cstring(label))
+
+  end subroutine giza_intern_tick_f2c
 
   subroutine giza_intern_box_f2c(xopt,xtick,nxsub,yopt,ytick,nysub)
     implicit none

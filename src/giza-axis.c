@@ -29,6 +29,7 @@
 #include "giza-window-private.h"
 #include "giza-viewport-private.h"
 #include "giza-drivers-private.h"
+#include "giza-tick-private.h"
 #include <giza.h>
 #include <math.h>
 #include <stdio.h>
@@ -76,8 +77,8 @@
  */
 void
 giza_axis (const char *opt, double x1, double y1, double x2, double y2,
-          double v1, double v2, double tick, int nsub,
-          double dmajl, double dmajr, double fmin, double disp, double angle)
+           double v1, double v2, double tick, int nsub,
+           double dmajl, double dmajr, double fmin, double disp, double angle)
 {
   if (!_giza_check_device_ready ("giza_axis"))
     return;
@@ -110,15 +111,7 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
   double majTickL_r, subTickL_r, currentTickL_r;
   char tmp[100];
   int i, i1, i2, j, jmax, jtmp;
-  double x,y,xpt,ypt,theta,theta_deg,dr;
-
-  theta = atan2(y2-y1,x2-x1);
-  theta_deg = theta / GIZA_DEG_TO_RAD;
-  dr = sqrt(pow(x2-x1,2) + pow(y2-y1,2));
-
-  cairo_matrix_t mat;
-  cairo_matrix_init_translate(&mat,x1,y1);
-  cairo_matrix_rotate(&mat,theta);
+  double x,y,theta,theta_deg,dr;
 
   /* set x-options */
   for (i = 0; opt[i]; i++)
@@ -163,6 +156,15 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
 
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
+
+  /* get the angle to rotate in viewport coordinates */
+  theta = atan2(y2-y1,x2-x1);
+  theta_deg = theta / GIZA_DEG_TO_RAD;
+  dr = sqrt(pow(x2-x1,2) + pow(y2-y1,2));
+
+  cairo_matrix_t mat;
+  cairo_matrix_init_translate(&mat,x1,y1);
+  cairo_matrix_rotate(&mat,theta);
 
   double xch, ych;
   giza_get_character_size (GIZA_UNITS_WORLD, &xch, &ych);
@@ -241,26 +243,15 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
               val = (i + logTab[j]) * intervalMin;
               ratio = (val - v1) / (v2 - v1);
 
-              /* don't draw over axis or outside the box */
-              if ((i == 0) || (val >= v2) || (val <= v1))
+              /* don't draw outside the box */
+              if ((val >= v2) || (val <= v1))
                 continue;
               /* are we supposed to draw this tick anyway? */
               if ( !((major && draw_majticks) || draw_minticks) )
                 continue;
 
-              /* set location of tick start and end in non-rotated coords */
-              x   = dr * ratio;
-              xpt = x;
-              y   = -currentTickL_l;
-              ypt = currentTickL_r;
-
-              /* rotate and translate */
-              cairo_matrix_transform_point (&mat,&x,&y);
-              cairo_matrix_transform_point (&mat,&xpt,&ypt);
-
-              /* draw the tick(s) along the axis */
-              cairo_move_to (Dev[id].context, x, y);
-              cairo_line_to (Dev[id].context, xpt, ypt);
+              /* draw tick, rotate as necessary */
+              _giza_draw_tick(mat,ratio,dr,currentTickL_l,currentTickL_r);
 
             }
         }
