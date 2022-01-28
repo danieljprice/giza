@@ -7,13 +7,11 @@ jobs:
       - uses: actions/checkout@v2
       - name: Update API documentation
         run: |
-          cd doc
-          ./pgplot_status.pl > ../docs/documentation/pgplot-status.html
-          ./cpgplot_status.pl > ../docs/documentation/cpgplot-status.html
-          ./api.pl ../src/*.c
-          mv api.html ../docs/documentation
+          cd scripts
+          ./generate-docs.sh
       - name: Commit API documentation
-        run: |
-          git config --global user.name 'Daniel Price'
-          git config --global user.email 'daniel.price@monash.edu'
-          git diff-index --quiet HEAD || git commit -am "[doc-bot] updated auto-generated documentation" || git push
+      - uses: EndBug/add-and-commit@v8
+        with:
+          default_author: github_actions
+          message: '[web-bot] updated auto-generated documentation'
+          add: 'docs/documentation/*.html --force'
