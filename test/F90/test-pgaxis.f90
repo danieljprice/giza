@@ -17,7 +17,7 @@ program test_pgaxis
  fmin = 0.5
  disp = 0.
  orient = 90.
- call pgaxis("N",x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient)
+ call pgaxis("NST",x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient)
  call pgend
 
 end program test_pgaxis
