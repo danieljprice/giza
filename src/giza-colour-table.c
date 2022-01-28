@@ -125,7 +125,7 @@ giza_set_colour_table (const double *controlPoints, const double *red, const dou
  *
  * Synopsis: Same functionality as giza_set_colour_table but takes floats
  *
- * See also: giza_set_colour_table
+ * See Also: giza_set_colour_table
  */
 int
 giza_set_colour_table_float (const float *controlPoints, const float *red, const float *green, const float *blue, int n, 
@@ -164,7 +164,7 @@ giza_set_colour_table_float (const float *controlPoints, const float *red, const
  *  -green  :- Gets set to the green component of the colour at pos.
  *  -blue   :- Gets set to the blue component of the colour at pos.
  *
- * See also: giza_set_colour_table
+ * See Also: giza_set_colour_table
  */
 void
 giza_rgb_from_table (double pos, double *red, double *green, double *blue)

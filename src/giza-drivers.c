@@ -127,7 +127,7 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
  *  -GIZA_UNITS_INCHES     :- inches
  *  Other values cause an error message and are treated as GIZA_UNITS_DEVICE
  *
- * See also: giza_open_device
+ * See Also: giza_open_device
  */
 int
 giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
@@ -317,7 +317,7 @@ int _giza_get_internal_id(int devid)
  * Output:
  *  -devid, as returned by giza_open_device
  *
- * See also: giza_open_device, giza_get_device_id
+ * See Also: giza_open_device, giza_get_device_id
  */
 void
 giza_get_device_id (int *devid)
@@ -334,7 +334,7 @@ giza_get_device_id (int *devid)
  * Input:
  *  -devid :- device id, as returned by giza_open_device
  *
- * See also: giza_get_device_id, giza_open_device
+ * See Also: giza_get_device_id, giza_open_device
  */
 void
 giza_select_device (int devid)
@@ -398,7 +398,7 @@ giza_flush_device (void)
  * the background. If no other actions have been performed since the device was
  * opened or the last call to giza_change_page the call is ignored.
  *
- * See also: giza_subpanel, giza_set_panel
+ * See Also: giza_subpanel, giza_set_panel
  */
 void
 giza_change_page (void)
@@ -729,12 +729,14 @@ giza_query_device (const char *querytype, char *returnval, int* rlen)
  * Device: giza_set_motion_callback
  *
  * Synopsis: set a callback function to be called
- *           during cursor movement (e.g. to print things)
+ *           during cursor movement (e.g. to print things).
  *           Function should be of the form
  *           void func(double *x, double *y)
  *
  * Input:
  *  -func  :- The subroutine to be called
+ *
+ * See Also: giza_end_motion_callback
  *
  */
 int
@@ -754,7 +756,7 @@ giza_set_motion_callback (void (*func)(double *x, double *y, int *mode))
  *
  * Synopsis: Free the motion callback pointer
  *
- * See: giza_end_motion_callback
+ * See Also: giza_set_motion_callback
  *
  */
 int

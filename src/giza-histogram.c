@@ -40,7 +40,7 @@
  *  -nbin :- number of bins
  *  -flag :- flag to indicate page changes, see below
  *
- * See also: giza_histogram_binned, giza_histogram_float
+ * See Also: giza_histogram_binned, giza_histogram_float
  *
  *  Flag:
  *   -0   :- giza_histogram calls giza_environment to set up new plotting page
@@ -66,8 +66,8 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
     {
       ninbin[ibin] = 0;
     }
-  
-  for (i=0;i<n;i++) 
+
+  for (i=0;i<n;i++)
     {
       ibin = (int) ((dat[i] - min)/bin_width);
       if (ibin >= 0 && ibin < nbin)
@@ -82,11 +82,11 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
   ymax = nmax;
   ymax = giza_round(1.01*ymax, &nval);
   giza_get_fill(&oldFill);
-  
+
   if (flag % 2 == 0) giza_set_environment(min,max,0.,(double) ymax,0,0);
-  
+
   /* set up plotting environment and options */
-  switch (flag) 
+  switch (flag)
     {
     case 5:
     default:
@@ -101,13 +101,13 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   /* plot the bars of the histogram */
-  for (ibin=0;ibin<nbin;ibin++) 
+  for (ibin=0;ibin<nbin;ibin++)
     {
        xmin = min + ibin*bin_width;
        xmax = xmin + bin_width;
        ymin = 0.;
        ymax = (double) ninbin[ibin];
-       
+
        /* plot only 3 sides of the rectangle for all except the last */
        cairo_move_to (Dev[id].context, xmin, ymin);
        cairo_line_to (Dev[id].context, xmin, ymax);
@@ -118,7 +118,7 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
     }
 
   /* restore previous fill style */
-  giza_set_fill(oldFill);  
+  giza_set_fill(oldFill);
   _giza_set_trans (oldTrans);
 }
 
@@ -127,7 +127,7 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
  *
  * Synopsis: Same as giza_histogram but takes floats
  *
- * See also: giza_histogram, giza_histogram_binned_float
+ * See Also: giza_histogram, giza_histogram_binned_float
  *
  */
 void
@@ -142,7 +142,7 @@ giza_histogram_float (int n, const float *dat, float min, float max, int nbin, i
       ddat[i] = (double) dat[i];
   }
   giza_histogram(n, ddat, (double) min, (double) max, nbin, flag);
- 
+
 }
 
 /**
@@ -156,7 +156,7 @@ giza_histogram_float (int n, const float *dat, float min, float max, int nbin, i
  *  -dat    :- data values for each bin
  *  -center :- if true (1) x values correspond to centre of each bin
  *
- * See also: giza_histogram, giza_histogram_binned_float
+ * See Also: giza_histogram, giza_histogram_binned_float
  *
  */
 void
@@ -173,7 +173,7 @@ giza_histogram_binned (int n, const double *x, const double *dat, int centre)
   double dx;
 
   /* plot the bars of the histogram */
-  for (i=0;i<n;i++) 
+  for (i=0;i<n;i++)
     {
        if (i==n-1) {
          dx = x[i] - x[i-1];
@@ -195,7 +195,7 @@ giza_histogram_binned (int n, const double *x, const double *dat, int centre)
  *
  * Synopsis: Same as giza_histogram_binned but takes floats
  *
- * See also: giza_histogram, giza_histogram_binned_float
+ * See Also: giza_histogram, giza_histogram_binned_float
  *
  */
 void

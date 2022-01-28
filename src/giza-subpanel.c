@@ -40,7 +40,7 @@
  * down-then-across instead of the default
  * across-then-down
  *
- * See also: giza_select_panel, giza_get_panel
+ * See Also: giza_select_panel, giza_get_panel
  *
  */
 void
@@ -84,7 +84,7 @@ giza_subpanel (int nx, int ny)
  *  -ix :- panel index in x direction
  *  -iy :- panel index in y direction
  *
- * See also: giza_subpanel, giza_get_panel
+ * See Also: giza_subpanel, giza_get_panel
  *
  */
 void
@@ -117,7 +117,7 @@ giza_set_panel (int ix, int iy)
  *  -ix :- panel index in x direction
  *  -iy :- panel index in y direction
  *
- * See also: giza_subpanel, giza_set_panel
+ * See Also: giza_subpanel, giza_set_panel
  *
  */
 void
