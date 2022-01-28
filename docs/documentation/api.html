@@ -36,8 +36,6 @@
 <dd><a href="#giza_change_page">giza_change_page</a></dd>
 <dd><a href="#giza_close_devices">giza_close_devices</a></dd>
 <dd><a href="#giza_close_device">giza_close_device</a></dd>
-<dd><a href="#_giza_close_device_unchecked">_giza_close_device_unchecked</a></dd>
-<dd><a href="#_giza_init_device_struct">_giza_init_device_struct</a></dd>
 <dd><a href="#giza_query_device">giza_query_device</a></dd>
 <dd><a href="#giza_set_motion_callback">giza_set_motion_callback</a></dd>
 <dd><a href="#giza_end_motion_callback">giza_end_motion_callback</a></dd>
@@ -309,20 +307,7 @@
 <h3><a name="giza_close_device">giza_close_device</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_close_device</td><td> (void) ;</tr></table><p>Closes the currently open device. Should always be called before exiting your program as it frees associated memory.</p>
-<h3><a name="_giza_close_device_unchecked">_giza_close_device_unchecked</a><hr></h3>
-<table class="proto">
-<tr><td width=10%>void</td><td width=20%></td><td>;</tr></table><p>In order to be able to share the cleaning-up code between giza_close_device() and giza_open_device_size() [when something fails during the construction of a new device] the actual cleaning up code is put in this internal function.</p>
-<h4>state:</h4>
-<table class="api"></table><h3><a name="_giza_init_device_struct">_giza_init_device_struct</a><hr></h3>
-<table class="proto">
-<tr><td width=10%>void</td><td width=20%></td><td>;</tr></table><p>resets the contents of a giza_device_t to a known state: the whole struct is zeroed out and .type is set to GIZA_DEVICE_IV.</p>
-<h4>Note:</h4>
-<table class="api"></table><h4>giza_device_t using a compond struct initializer like this:</h4>
-<table class="api"></table><h4>See https:</h4>
-<table class="api"></table><h4>Input:</h4>
-<table class="api"><tr>
-<td>ptrDev :</td><td>a pointer to a giza_device_t</td>
-</tr></table><h3><a name="giza_query_device">giza_query_device</a><hr></h3>
+<h3><a name="giza_query_device">giza_query_device</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>int</td><td width=20%>giza_query_device</td><td> (const char *querytype, char *returnval, int* rlen) ;</tr></table><p>Queries various things about the current device.</p>
 <h4>Input:</h4>
