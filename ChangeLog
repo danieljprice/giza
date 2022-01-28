@@ -1,3 +1,235 @@
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-drivers.c: (docs) private routines removed from api docs
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* : commit 23d9c67e0caa0fafde228f2d9b20f1696d77326b Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Fri Jan 28 15:44:05 2022
+	+1100
+
+2022-01-28  github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+
+	* docs/documentation/api.html: [web-bot] updated auto-generated
+	documentation
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* : commit 6a52d44e30da0beb293e31ff5571b3fa60678bba Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Fri Jan 28 15:35:09 2022
+	+1100
+
+2022-01-28  github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+
+	* docs/documentation/pgplot.html: [web-bot] updated auto-generated
+	documentation
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml, docs/documentation/{pgplot.shtml =>
+	pgplot-header.html}, scripts/generate-docs.sh: (docs) bug fix with auto-generated docs: use simple cat instead of
+	sed -r
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* : commit c3429bf2707b6a2ec55cf5d41a554bb7b9d2c1ad Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Fri Jan 28 15:15:08 2022
+	+1100
+
+2022-01-28  github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+
+	* docs/documentation/pgplot.html: [web-bot] updated auto-generated
+	documentation
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml: (api) fix github workflow
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml: (api) fix github workflow
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml: (api) fix github workflow
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml: (api) fix github workflow
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml: (api) fix github workflow
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml, {doc => scripts}/api.pl, {doc =>
+	scripts}/cpgplot_status.pl, {doc => scripts}/generate-docs.sh, {doc
+	=> scripts}/get-fortran-params.pl, {doc =>
+	scripts}/get-source-files.pl, {doc => scripts}/pgplot_status.pl: (docs) moved doc->scripts to avoid confusion
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, doc/generate-docs.sh, docs/documentation/pgplot.html,
+	docs/documentation/pgplot.shtml: (docs) broken links fixed
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* doc/generate-docs.sh, docs/documentation/cpgplot-status.html,
+	docs/documentation/index.html, docs/documentation/pgplot.html,
+	docs/index.html, src/giza-cpgplot.c: (docs) updated cpgplot interfaces for giza_axis and giza_tick; fix
+	issues in documentation
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* docs/documentation/gettingstarted.html, docs/news/index.html: (docs) fix broken links
+
+2022-01-27  Daniel Price <daniel.price@monash.edu>
+
+	* docs/documentation/api.html,
+	docs/documentation/pgplot-status.html: [web-bot] updated
+	auto-generated documentation
+
+2022-01-27  Daniel Price <daniel.price@monash.edu>
+
+	* docs/news/index.html: updated version
+
+2022-01-27  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, src/Makefile.am, src/Makefile.in, src/giza-axis.c,
+	src/giza-fortran.F90, src/giza-pgplot.f90, src/giza-tick-private.h,
+	src/giza-tick.c, src/giza.h: (#12) implemented giza_tick replacement
+	functionality for PGTICK
+
+2022-01-21  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, configure, configure.ac: v1.3.0
+
+2022-01-21  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #34 from danieljprice/motion-callback Motion callback
+
+2022-01-21  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-drivers.c, src/giza-fortran.F90, src/giza.h: (motion
+	callback) added giza_end_motion_callback
+
+2022-01-21  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-xw.c: (motion callback) bug fix: make sure
+	transform is to world coords
+
+2022-01-19  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-xw-private.h, src/giza-driver-xw.c: (motion
+	callback) bug fix: restore clipping at end of Xwindows loop
+
+2022-01-19  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-axis.c, src/giza-box.c, src/giza-character-size.c: (giza_axis) bug fixes; everything now works according to the API
+
+2022-01-18  Daniel Price <daniel.price@monash.edu>
+
+	* src/Makefile.am, src/Makefile.in, src/giza-band.c,
+	src/giza-box.c, src/giza-fortran.F90, src/giza-pgplot.f90,
+	src/giza-render.c, src/giza-stroke-private.h, src/giza.h: (giza_axis) implemented giza_axis to replace PGAXIS
+
+2022-01-17  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-xw.c: (motion callback) expand clipping during
+	Xwindows loop
+
+2022-01-17  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-xw.c, src/giza-drivers.c, src/giza-fortran.F90,
+	src/giza-private.h, src/giza.h: (motion callback) send band mode
+
+2022-01-14  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-fortran.F90: (fortran) do not trim strings when passing text to giza
+
+2022-01-14  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-fortran.F90: (motion callback) fortran interface to
+	giza_set_motion_callback added
+
+2022-01-14  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-xw.c, src/giza-drivers.c, src/giza-private.h,
+	src/giza-window.c, src/giza.h: (motion callback) implemented
+	giza_set_motion_callback specifying function to be called during
+	cursor movement (works for xw device)
+
+2021-06-18  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/release.yml: updated brew update to point to
+	giza-x11 in danieljprice/all
+
+2021-06-18  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, configure.ac: v1.2.1
+
+2021-06-18  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/release.yml: (github) updated API token
+
+2021-06-18  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-colour-palette.c: (giza_colour_palette) compiler warning/bug fixed for GIZA_PALETTE=8
+	(matlab-inspired)
+
+2021-06-18  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-drivers.c: (device) bug fix specifying device with directory path e.g.
+	dir/file.png
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml: (doc-bot) second attempt to stop failing github action if no files
+	committed
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* .mailmap: updated .mailmap
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml: (doc-bot) do not fail build if nothing to commit
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/release.yml, LATEST.md: added release notes and
+	github workflow for automated release-on-tag
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* docs/documentation/installation.html, docs/download/index.html: (docs) updated links
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* : commit 91a67f39b63eb537066ec0e584034b36e0f4d98b Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Fri Jan 22 15:23:06 2021
+	+1100
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* docs/documentation/api.html: [doc-bot] updated auto-generated
+	documentation
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* : commit 9ad57ce8a0eff64e9c31462cea960d45c0cfa242 Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Fri Jan 22 04:00:17 2021
+	+0000
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml: Create api.yml
+
+2021-01-22  Daniel Price <daniel.price@monash.edu>
+
+	* ChangeLog: updated ChangeLog
+
 2021-01-22  Daniel Price <daniel.price@monash.edu>
 
 	* doc/api.pl: fix comment about api not being stable (not true, it
@@ -64,11 +296,11 @@
 
 	* : Merge pull request #26 from haavee/issue-21 Issue 21
 
-2019-01-17  haavee <hverkouter@gmail.com>
+2019-01-17  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box-time.c: Fix unused expression result warning A no-op statement was still left in the code; it is now removed
 
-2019-01-17  haavee <hverkouter@gmail.com>
+2019-01-17  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box-time.c: Remove C99 for-loop initial declarations There were still two C99-only idioms left which are now rewritten to
 	use a single, not-quite-as-transient-as-hoped, variable char* to
@@ -115,7 +347,7 @@
 
 	* : Merge pull request #24 from haavee/issue-21 This should fix issue #21 "missing braces"
 
-2018-11-27  haavee <hverkouter@gmail.com>
+2018-11-27  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c: Synchronize XW device id
 	with giza_device_t The global variable 'id' is now also used to address the instance of
@@ -126,7 +358,7 @@
 	closed. If the entry happened to be an XWindow, the corresponding
 	XW[id] struct will now also be properly closed.
 
-2018-11-27  haavee <hverkouter@gmail.com>
+2018-11-27  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-driver-null.c, src/giza-driver-pdf.c,
 	src/giza-driver-png.c, src/giza-driver-ps.c, src/giza-driver-svg.c,
@@ -144,7 +376,7 @@
 	for the XWindow driver to use that assigned slot as well.  A separate commit implementing that will follow, which makes that
 	change opt-in.
 
-2018-11-26  haavee <hverkouter@gmail.com>
+2018-11-26  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-drivers.c, src/giza-private.h,
 	src/giza-set-font-private.h, src/giza-set-font.c, src/giza.h: Font
@@ -159,7 +391,7 @@
 	library initialization code made more robust and handling error(s)
 	and releasing allocated memory in such a case was improved.  Extra code to ensure cache unloading at program end was added.
 
-2018-11-23  haavee <hverkouter@gmail.com>
+2018-11-23  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box.c, src/giza-cpgplot.c, src/giza-format-number.c,
 	src/giza-fortran.F90, src/giza.h: `giza_format_number()` string
@@ -180,7 +412,7 @@
 	do the same. The Python-PGPLOT binding (ppgplot) does not expose cpgnumb() so at this point that's not an
 	issue.
 
-2018-11-23  haavee <hverkouter@gmail.com>
+2018-11-23  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-cpgplot.c, src/giza-drivers.c, src/giza.h: Fix multi dev
 	handling (SIGSEGV, libc corruption) The giza library, specifically in `giza_open_device_size()` and
@@ -210,10 +442,11 @@
 
 2018-11-17  Daniel Price <daniel.price@monash.edu>
 
-	* : commit 2733835a13c73b272a5ff999f86906b7c8992bcc Author: haavee
-	<hverkouter@gmail.com> Date:   Fri Nov 16 17:55:41 2018 +0100
+	* : commit 2733835a13c73b272a5ff999f86906b7c8992bcc Author: Harro
+	Verkouter <hverkouter@gmail.com> Date:   Fri Nov 16 17:55:41 2018
+	+0100
 
-2018-11-15  haavee <hverkouter@gmail.com>
+2018-11-15  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-drivers.c: Remove _giza_change_size() because it's not used anywhere anymore.
 
@@ -221,13 +454,13 @@
 
 	* : Merge pull request #20 from haavee/issue-19 This fixes #19  build failure macports PPC
 
-2018-11-14  haavee <hverkouter@gmail.com>
+2018-11-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-cpgplot.c: Revert "Args swapped between  API and giza
 	implementation" This reverts commit c323737e7d49dd998d068b2964ffe76c86f648c5.
 	Should be on a completely different branch!
 
-2018-11-14  haavee <hverkouter@gmail.com>
+2018-11-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-driver-xw-private.h, src/giza-driver-xw.c,
 	src/giza-drivers.c, src/giza-paper.c, src/giza-private.h: Attempt to
@@ -236,17 +469,17 @@
 	takes effect * PGPAGE() skips asking for confirmation the first time * XWindow specific "_giza_change_size_xw()" removed - now handled
 	  better in giza_set_paper_size(). The resize flag is detected in   _giza_change_page_xw() and handled correctly there.
 
-2018-11-12  haavee <hverkouter@gmail.com>
+2018-11-12  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-driver-xw.c, src/giza-environment.c: Savegame issue #18
 
-2018-11-12  haavee <hverkouter@gmail.com>
+2018-11-12  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-cpgplot.c: Args swapped between  API and giza
 	implementation giza_render has calling convention     giza_render_*( ..., valMin, valMax, ...) whereas PGPLOT API     cpggray(..., float fg, float bg, ...) but the parameters 'fg', 'bg' were passed to giza_render in that
 	order as 'valMin', 'valMax' i.e. fg, bg are reversed
 
-2018-11-09  haavee <hverkouter@gmail.com>
+2018-11-09  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box-time.c: This fixes #19  build failure macports PPC I erroneously used scoped for loop variables in a non-100% portable
 	way.
@@ -255,27 +488,27 @@
 
 	* : Merge pull request #16 from haavee/symbol-issues Fixes #5 Symbol issues
 
-2018-11-08  haavee <hverkouter@gmail.com>
+2018-11-08  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: Scale up symbols #-3..-8 They came out (noticeably) smaller in giza than in PGPLOT as far as
 	I could tell.
 
-2018-11-08  haavee <hverkouter@gmail.com>
+2018-11-08  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: Scaled up the arrows (#28-31) a bit The arrows looked markedly smaller in giza than on the PGPLOT
 	original.  Scaled them up a bit.
 
-2018-11-08  haavee <hverkouter@gmail.com>
+2018-11-08  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: Fix #19, update #0, 6 Symbol #19 was not a hexagon with a cross but a larger open square
 	than #6.  The squares are also drawn with a slightly thinner line.
 
-2018-11-08  haavee <hverkouter@gmail.com>
+2018-11-08  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: Fix symbols #20 - 27 (inclusive) The open circles are now exponentially scaled and drawn with a
 	slightly thinner line than before
 
-2018-11-08  haavee <hverkouter@gmail.com>
+2018-11-08  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: Fix symbols 12, 18 (5-pt star), #20 initiated Symbols 12 and 18 now are five-point stars, open and filled.  Symbol
 	20 was entered as seven-point star but it should be a small open
@@ -283,26 +516,26 @@
 	symbols 20-27 are a bit off anyway, so that's going to be fixed in a
 	different commit.
 
-2018-11-08  haavee <hverkouter@gmail.com>
+2018-11-08  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: New line widths only used if you actually
 	stroke
 
-2018-11-08  haavee <hverkouter@gmail.com>
+2018-11-08  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: Fix symbol 14 (open plus sign)
 
-2018-11-08  haavee <hverkouter@gmail.com>
+2018-11-08  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: Fix symbol #10 (concave rect)
 
-2018-11-07  haavee <hverkouter@gmail.com>
+2018-11-07  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-points.c: Fix symbols 7,13,15 The triangles 7, 13 were pointing the wrong way and symbol 15 is the
 	star of David formed by overplotting two open triangles offset a
 	little bit
 
-2018-11-07  haavee <hverkouter@gmail.com>
+2018-11-07  Harro Verkouter <hverkouter@gmail.com>
 
 	* : Merge remote-tracking branch 'upstream/master'
 
@@ -311,7 +544,7 @@
 	* : Merge pull request #3 from haavee/master giza_parse_string() fix, add cpgqinf() support, fix critical bug
 	found doing this
 
-2018-09-06  haavee <hverkouter@gmail.com>
+2018-09-06  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-cpgplot.c, src/giza-drivers-private.h,
 	src/giza-drivers.c, src/giza-fortran.F90, src/giza.h: Support
@@ -339,7 +572,7 @@
 	wrapper needed adapting to the new signature and pass in the extra
 	variable accordingly.
 
-2018-09-06  haavee <hverkouter@gmail.com>
+2018-09-06  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-scanner.l, src/lex.yy.c: Fix backspace handling ...  The meaning of the nGlyph index used in giza_parse_string changed
 	subtly during development and the handling of backspace was not
@@ -386,12 +619,13 @@
 
 	* : Merge https://github.com/haavee/giza into haavee-master
 
-2018-09-05  haavee <hverkouter@gmail.com>
+2018-09-05  Harro Verkouter <hverkouter@gmail.com>
 
-	* : commit 553bf85db2f60aaf908113322b0cae4c0d0836de Author: haavee
-	<hverkouter@gmail.com> Date:   Wed Sep 5 15:35:47 2018 +0200
+	* : commit 553bf85db2f60aaf908113322b0cae4c0d0836de Author: Harro
+	Verkouter <hverkouter@gmail.com> Date:   Wed Sep 5 15:35:47 2018
+	+0200
 
-2018-09-05  haavee <hverkouter@gmail.com>
+2018-09-05  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-set-font.c, src/giza.h: giza_set_font_*(...) take const
 	char* Sometimes compile time static strings are fed into
@@ -399,7 +633,7 @@
 	mutable strings.  None of the functions actually modify their argument so it probably
 	is better to make this explicit in their prototypes.
 
-2018-09-04  haavee <hverkouter@gmail.com>
+2018-09-04  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c: Better XWindow resizing
 	implementation It turned out that the XWindow resizing wasn't handled correctly in
@@ -418,7 +652,7 @@
 	window size has been achieved. Now it works reliably and windows can
 	be resized between plotting.
 
-2018-08-30  haavee <hverkouter@gmail.com>
+2018-08-30  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-io-private.h, src/giza-io.c: Enable formatted
 	warning/error messages (compat) By changing _giza_warning() and _giza_error() prototype (and
@@ -429,12 +663,12 @@
 	#%d '%s'", token, yytext); Existing _giza_warning()/_giza_error() calls are completely
 	unaffected by this.
 
-2018-08-30  haavee <hverkouter@gmail.com>
+2018-08-30  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-driver-xw.c: no XWindow resize waiting for keypress Whilst the system is waiting for a keypress, do not honour window
 	resizing requests. PGPLOT also does not do this.
 
-2018-08-30  haavee <hverkouter@gmail.com>
+2018-08-30  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box.c: Fixed earlier broken 'repair' Sometimes the PGPLOT doc is somewhat ambiguous but not for 'N' and
 	'M' options: both imply labels have to be drawn, only 'M' sais to do
@@ -442,7 +676,7 @@
 	'M' ("write labels")? Or is 'L' only honoured if either 'N' or 'M'
 	is specified (which is how the code currently works).
 
-2018-08-30  haavee <hverkouter@gmail.com>
+2018-08-30  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box.c: Add support for 'M' option to PG(T)BOX When it comes to writing labels PG(T)BOX supports the following:   -N :- Label the axis (conventional, below/left viewport)   -M :- Put labels in the unconvential location (above/right
 	  viewport) The 'M' option was not implemented by giza so I added it.  Whilst at
@@ -450,7 +684,7 @@
 	high-level check and sometimes continue'ing from a loop if the rest
 	of the loop body is precluded from being executed anyway.
 
-2018-08-30  haavee <hverkouter@gmail.com>
+2018-08-30  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box-time.c: Fixed minor bugs (logic, off-by-one, missing
 	/) There were two off-by-one lost-in-FORTRAN-to-C-translation:     - using number of items as last accessible index       ok in fortran, not so much in C (a classic)     - end condition off by one because of pretty much the same       in fortran "<" must be <= in C (if C-style counting with       fortran meaning of index) I condensed what I thought three levels of fortran IF .. END IF into
@@ -459,13 +693,13 @@
 	formats I had forgotten to escape the backslash with a backslash in
 	the strings.
 
-2018-08-30  haavee <hverkouter@gmail.com>
+2018-08-30  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box.c: y-axis ticks on the right were drawn wrong side Obviously the previous edit introduced a sign error :-) If y-axis
 	ticks were drawn on the right hand side they'd be drawn the same
 	direction as the ones on the left-hand side. Fixed.
 
-2018-08-30  haavee <hverkouter@gmail.com>
+2018-08-30  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box.c: Support for PGBOX 'I' and 'P' options and bug fix giza's pgbox(...) routine did not support the PGPLOT options 'I' and
 	 'P': -I: Invert tick marks - write them outside the viewport in
@@ -476,33 +710,34 @@
 	existing code drew the top tick marks outside the viewport because
 	it would draw them 'up' as well.
 
-2018-08-30  haavee <hverkouter@gmail.com>
+2018-08-30  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box.c: Fix axis ticks not being drawn if axis 'reversed' In checking pgdemo1 certain axes did not display any tick marks at
 	all! This was traced to be when the window set through pgswin() was
 	such that Dev[id].Win.[xy]max < Dev[id].Win.[xy]min, i.e. the axis
 	is reversed: the values decrease towards the right (X) or top (Y)
 
-2018-08-22  haavee <hverkouter@gmail.com>
+2018-08-22  Harro Verkouter <hverkouter@gmail.com>
 
-	* : commit c00f33c3c943fba12f94916ed468f76afdd76bd1 Author: haavee
-	<hverkouter@gmail.com> Date:   Fri Aug 17 17:38:56 2018 +0200
+	* : commit c00f33c3c943fba12f94916ed468f76afdd76bd1 Author: Harro
+	Verkouter <hverkouter@gmail.com> Date:   Fri Aug 17 17:38:56 2018
+	+0200
 
-2018-08-16  haavee <hverkouter@gmail.com>
+2018-08-16  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-cursor-routines.c: fix pgdemo5 misbehaving of
 	pgolin/pglcur pgdemo5 with giza master branch draws all subsequent polygons in
 	black whereas PGPLOT draws subsequenct polygons in different colours
 	by incrementing colour index at each new polygon.
 
-2018-08-16  haavee <hverkouter@gmail.com>
+2018-08-16  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-viewport.c: Revert "fix PGPLOT incompatibility" This reverts commit e9644f6b098e54fb2cd246434d8d1c58fc6e1ba1.
 	Breaks pgdemo2 (pgvsiz() function). It was not specifically a bug or
 	fix and it doesn't hurt keeping the original code but it hurts not
 	keeping the original version ... ;-)
 
-2018-08-16  haavee <hverkouter@gmail.com>
+2018-08-16  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c: revert to drawing to
 	pixamp, XCopyArea to window Turns out there's code relying on drawing onto the pixmap and in
@@ -521,36 +756,36 @@
 	is the format string itself ...  (*)
 	https://en.wikipedia.org/wiki/Printf_format_string#Parameter_field
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-print-id.c: Fix compiler warning prototype for sprintf() missing
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-cpgplot.c: fix off-by-one between external/internal
 	device id When using multiple open devices simultaneously, the returned device
 	id from cpgoen should be usable to later select that open device.
 	There was an extra +/- 1 mismatch between cpgopen and cpgslct.
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-drivers-private.h, src/giza-drivers.c, src/giza-io.c: fix
 	compiler warning casting const away When splitting the device string sometimes 'const char*' was
 	assigned to 'char *' - which the compiler doesn't like.  Fixed by changing prototype and destination data type of the split
 	string.
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-io.c: fix warning about unused return value fgets() returns an error code and the caller is expected to check
 	that return valuer; compiler verifies this.
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-box-time.c: Support for pgtbox() The existing pgtbox() redirected to pgbox().  For astronomy application(s) time labelling is very important and a
 	highly desirable property.  The existing PGTBOX() from the PGPLOT source code was ported into an
 	initial working version, behaving identically, modulo porting bugs.
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-scanner.l, src/lex.yy.c: Support for backspace (\b) in
 	printing strings For time labelling to look good it is 'necessary' to make the
@@ -560,28 +795,28 @@
 	the current version backing up to a previous character's position
 	was impossible.
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-viewport.c: fix PGPLOT incompatibility When setting a viewport (pgsvp) the window should not be
 	automatically set (pgswin), cf. "pgsvp.f" source code
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-io.c: fix warning about unused return value fgets() returns an error code and the caller is expected to check
 	that return valuer; compiler verifies this.
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-drivers-private.h, src/giza-drivers.c, src/giza-io.c: fix
 	compiler warning casting const away When splitting the device string sometimes 'const char*' was
 	assigned to 'char *' - which the compiler doesn't like.  Fixed by changing prototype and destination data type of the split
 	string.
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-print-id.c: Fix compiler warning prototype for sprintf() missing
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-driver-xw.c, src/giza-drivers.c: fix external XWindow
 	resize If plotting to an XWindow and the window was resized by the user
@@ -592,7 +827,7 @@
 	never updated.  Thus even if the XWindow was made smaller/larger,
 	the amount of pixels actually drawn was never changed.
 
-2018-08-14  Harro Verkouter <verkouter@jive.eu>
+2018-08-14  Harro Verkouter <hverkouter@gmail.com>
 
 	* src/giza-cpgplot.c: fix off-by-one between external/internal
 	device id When using multiple open devices simultaneously, the returned device
