@@ -7,3 +7,4 @@ mv api.html $destdir;
 cd $destdir;
 sed -e "/\<\!--\#include virtual=\"pgplot-status.html\"--\>/r pgplot-status.html" -e "//d" pgplot.shtml > tmp.html
 sed -e "/\<\!--\#include virtual=\"cpgplot-status.html\"--\>/r cpgplot-status.html" -e "//d" tmp.html > pgplot.html
+rm tmp.html
