@@ -543,9 +543,7 @@ giza_close_device (void)
 
 
 /**
- * Device: _giza_close_device_unchecked
- *
- * Synopsis: In order to be able to share the cleaning-up code between
+ * In order to be able to share the cleaning-up code between
  * giza_close_device() and giza_open_device_size() [when something fails
  * during the construction of a new device] the actual cleaning up code
  * is put in this internal function.
@@ -609,9 +607,7 @@ _giza_close_device_unchecked (void) {
 }
 
 /**
- * Device: _giza_init_device_struct
- *
- * Synopsis: resets the contents of a giza_device_t to a known state:
+ * Resets the contents of a giza_device_t to a known state:
  * the whole struct is zeroed out and .type is set to GIZA_DEVICE_IV.
  *
  * Note: this approach was chosen over having a static/const/global
