@@ -4,8 +4,10 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-      - name: Update API documentation
+      - name: checkout code
         uses: actions/checkout@v2
+
+      - name: update api docs
         run: |
           cd scripts
           ./generate-docs.sh
