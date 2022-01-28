@@ -284,30 +284,26 @@
 <td>GIZA_UNITS_MM         :</td><td>mm</td>
 </tr><tr>
 <td>GIZA_UNITS_INCHES     :</td><td>inches Other values cause an error message and are treated as GIZA_UNITS_DEVICE</td>
-</tr></table><h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_open_device_size_float">giza_open_device_size_float</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_open_device">giza_open_device</a> </p><h3><a name="giza_open_device_size_float">giza_open_device_size_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>int</td><td width=20%>giza_open_device_size_float</td><td> (const char *newDeviceName, const char *newPrefix, float width, float height, int units) ;</tr></table><p>Same functionality as giza_open_device_size but takes floats</p>
 <h3><a name="giza_get_device_id">giza_get_device_id</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_get_device_id</td><td> (int *devid) ;</tr></table><p>Returns the (external) id of the currently selected device</p>
 <h4>Output:</h4>
-<table class="api"></table><h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_select_device">giza_select_device</a><hr></h3>
+<table class="api"></table><h4>See Also:</h4><p><a href="#giza_open_device">giza_open_device</a> <a href="#giza_get_device_id">giza_get_device_id</a> </p><h3><a name="giza_select_device">giza_select_device</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_select_device</td><td> (int devid) ;</tr></table><p>Select between the currently open devices</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>devid :</td><td>device id, as returned by giza_open_device</td>
-</tr></table><h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_flush_device">giza_flush_device</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_get_device_id">giza_get_device_id</a> <a href="#giza_open_device">giza_open_device</a> </p><h3><a name="giza_flush_device">giza_flush_device</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_flush_device</td><td> (void) ;</tr></table><p>Flushes the currently open device.</p>
 <h3><a name="giza_change_page">giza_change_page</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_change_page</td><td> (void) ;</tr></table><p>Advances the currently open device to the next page, and redraws the background. If no other actions have been performed since the device was opened or the last call to giza_change_page the call is ignored.</p>
-<h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_close_devices">giza_close_devices</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_subpanel">giza_subpanel</a> <a href="#giza_set_panel">giza_set_panel</a> </p><h3><a name="giza_close_devices">giza_close_devices</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_close_devices</td><td> (void) ;</tr></table><p>Close all open devices (to be called from PGEND())</p>
 <h3><a name="giza_close_device">giza_close_device</a><hr></h3>
@@ -348,15 +344,14 @@
 <table class="api"></table><h4>"hardcopy" :</h4>
 <table class="api"></table><h3><a name="giza_set_motion_callback">giza_set_motion_callback</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>int</td><td width=20%>giza_set_motion_callback</td><td> (void (*func)(double *x, double *y, int *mode)) ;</tr></table><p>set a callback function to be called during cursor movement (e.g. to print things) Function should be of the form void func(double *x, double *y)</p>
+<tr><td width=10%>int</td><td width=20%>giza_set_motion_callback</td><td> (void (*func)(double *x, double *y, int *mode)) ;</tr></table><p>set a callback function to be called during cursor movement (e.g. to print things). Function should be of the form void func(double *x, double *y)</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>func  :</td><td>The subroutine to be called</td>
-</tr></table><h3><a name="giza_end_motion_callback">giza_end_motion_callback</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_end_motion_callback">giza_end_motion_callback</a> </p><h3><a name="giza_end_motion_callback">giza_end_motion_callback</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>int</td><td width=20%>giza_end_motion_callback</td><td> (void) ;</tr></table><p>Free the motion callback pointer</p>
-<h4>See:</h4>
-<table class="api"></table><h3><a name="giza_get_surface_size">giza_get_surface_size</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_set_motion_callback">giza_set_motion_callback</a> </p><h3><a name="giza_get_surface_size">giza_get_surface_size</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_get_surface_size</td><td> (double *x1, double *x2, double *y1, double *y2) ;</tr></table><p>Gets the size of the current surface that can be drawn to in device units (pixels or points).</p>
 <h4>Input:</h4>
@@ -387,8 +382,7 @@
 <td>nbin :</td><td>number of bins</td>
 </tr><tr>
 <td>flag :</td><td>flag to indicate page changes, see below</td>
-</tr></table><h4>See also:</h4>
-<table class="api"></table><h4>Flag:</h4>
+</tr></table><h4>Flag:</h4>
 <table class="api"><tr>
 <td>0   :</td><td>giza_histogram calls giza_environment to set up new plotting page</td>
 </tr><tr>
@@ -401,11 +395,10 @@
 <td>4   :</td><td>bins drawn as simple outlines, as in giza_histogram_binned, calls giza_environment</td>
 </tr><tr>
 <td>5   :</td><td>bins drawn as simple outlines, but in current window and viewport Other values treated as 1</td>
-</tr></table><h3><a name="giza_histogram_float">giza_histogram_float</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_histogram_binned">giza_histogram_binned</a> <a href="#giza_histogram_float">giza_histogram_float</a> </p><h3><a name="giza_histogram_float">giza_histogram_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_histogram_float</td><td> (int n, const float *dat, float min, float max, int nbin, int flag) ;</tr></table><p>Same as giza_histogram but takes floats</p>
-<h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_histogram_binned">giza_histogram_binned</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_histogram">giza_histogram</a> <a href="#giza_histogram_binned_float">giza_histogram_binned_float</a> </p><h3><a name="giza_histogram_binned">giza_histogram_binned</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_histogram_binned</td><td> (int n, const double *x, const double *dat, int centre) ;</tr></table><p>Plot a histogram of already binned data</p>
 <h4>Input:</h4>
@@ -417,12 +410,10 @@
 <td>dat    :</td><td>data values for each bin</td>
 </tr><tr>
 <td>center :</td><td>if true (1) x values correspond to centre of each bin</td>
-</tr></table><h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_histogram_binned_float">giza_histogram_binned_float</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_histogram">giza_histogram</a> <a href="#giza_histogram_binned_float">giza_histogram_binned_float</a> </p><h3><a name="giza_histogram_binned_float">giza_histogram_binned_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_histogram_binned_float</td><td> (int n, const float *x, const float *dat, int centre) ;</tr></table><p>Same as giza_histogram_binned but takes floats</p>
-<h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_subpanel">giza_subpanel</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_histogram">giza_histogram</a> <a href="#giza_histogram_binned_float">giza_histogram_binned_float</a> </p><h3><a name="giza_subpanel">giza_subpanel</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_subpanel</td><td> (int nx, int ny) ;</tr></table><p>Set the number of sub panels</p>
 <h4>Input:</h4>
@@ -430,8 +421,7 @@
 <td>nx :</td><td>number of sub-panels in x direction</td>
 </tr><tr>
 <td>ny :</td><td>number of sub panels in y direction</td>
-</tr></table><h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_set_panel">giza_set_panel</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_select_panel">giza_select_panel</a> <a href="#giza_get_panel">giza_get_panel</a> </p><h3><a name="giza_set_panel">giza_set_panel</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_set_panel</td><td> (int ix, int iy) ;</tr></table><p>Select the panel we are currently plotting in</p>
 <h4>Input:</h4>
@@ -439,8 +429,7 @@
 <td>ix :</td><td>panel index in x direction</td>
 </tr><tr>
 <td>iy :</td><td>panel index in y direction</td>
-</tr></table><h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_get_panel">giza_get_panel</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_subpanel">giza_subpanel</a> <a href="#giza_get_panel">giza_get_panel</a> </p><h3><a name="giza_get_panel">giza_get_panel</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_get_panel</td><td> (int *ix, int *iy) ;</tr></table><p>Select the panel we are currently plotting in</p>
 <h4>Input:</h4>
@@ -448,8 +437,7 @@
 <td>ix :</td><td>panel index in x direction</td>
 </tr><tr>
 <td>iy :</td><td>panel index in y direction</td>
-</tr></table><h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_init_subpanel">giza_init_subpanel</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_subpanel">giza_subpanel</a> <a href="#giza_set_panel">giza_set_panel</a> </p><h3><a name="giza_init_subpanel">giza_init_subpanel</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>_giza_init_subpanel</td><td> () ;</tr></table><p>initialises subpanel settings for device</p>
 <h3><a name="giza_advance_panel">giza_advance_panel</a><hr></h3>
@@ -1388,8 +1376,7 @@
 </tr></table><h3><a name="giza_set_colour_table_float">giza_set_colour_table_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>int</td><td width=20%>giza_set_colour_table_float</td><td> (const float *controlPoints, const float *red, const float *green, const float *blue, int n,  float contrast, float brightness) ;</tr></table><p>Same functionality as giza_set_colour_table but takes floats</p>
-<h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_rgb_from_table">giza_rgb_from_table</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_rgb_from_table">giza_rgb_from_table</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_rgb_from_table</td><td> (double pos, double *red, double *green, double *blue) ;</tr></table><p>Gets the rgb values from the colour table corresponding to the fraction of the table.</p>
 <h4>Input:</h4>
@@ -1401,8 +1388,7 @@
 <td>green  :</td><td>Gets set to the green component of the colour at pos.</td>
 </tr><tr>
 <td>blue   :</td><td>Gets set to the blue component of the colour at pos.</td>
-</tr></table><h4>See also:</h4>
-<table class="api"></table><h3><a name="giza_rgb_from_table_float">giza_rgb_from_table_float</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_rgb_from_table_float">giza_rgb_from_table_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_rgb_from_table_float</td><td> (float pos, float *red, float *green, float *blue) ;</tr></table><p>Same functionality giza_rgb_from_table but takes floats</p>
 <h4>See Also:</h4><p><a href="#giza_rgb_from_table">giza_rgb_from_table</a> <a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_save_colour_table">giza_save_colour_table</a><hr></h3>
