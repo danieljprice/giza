@@ -108,13 +108,13 @@ void cpgask(Logical flag)
 
 /***************************************************************
  * cpgaxis -- draw an axis
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgaxis(const char *opt, float x1, float y1, float x2, float y2, \
              float v1, float v2, float step, int nsub, float dmajl, \
              float dmajr, float fmin, float disp, float orient)
 {
-
+   giza_axis_float(opt,x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient);
 }
 
 /***************************************************************
@@ -501,7 +501,7 @@ void cpgncur(int maxpt, int *npt, float *x, float *y, int symbol)
  * Status: IMPLEMENTED
  * Update: In order to prevent memory corruption by
  *         giza_format_number, assume that '*string_length', on
- *         entry, contains the maximum length of the string 
+ *         entry, contains the maximum length of the string
  *         buffer allocated by the caller.
  *         PGPLOT c-binding does this, perl-PGPLOT5 does this
  *         and giza's F90 wrapper's been changed to do this
@@ -765,7 +765,7 @@ void cpgqinf(const char *item, char *value, int *value_length)
          snprintf(giza_version_string, sizeof(giza_version_string), "giza-%s", GIZA_VERSION_STRING);
       /* Copy at most *value_length-1 characters into value - note: strncpy(3)
          may leave value not-NUL terminated if *value_length < length of giza_version_string.
-         Could have used strlcpy(3) but that is famously absent in glibc on Linux (need -lbsd 
+         Could have used strlcpy(3) but that is famously absent in glibc on Linux (need -lbsd
          to have it) so we tediously do it by hand */
       strncpy(value, giza_version_string, last_char);
    }
@@ -1156,12 +1156,12 @@ void cpgtext(float x, float y, const char *text)
 
 /***************************************************************
  * cpgtick -- draw a single tick mark on an axis
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgtick(float x1, float y1, float x2, float y2, float v, \
  float tikl, float tikr, float disp, float orient, const char *str)
 {
-
+   giza_tick_float(x1,y1,x2,y2,v,tikl,tikr,disp,orient,str);
 }
 
 /***************************************************************
