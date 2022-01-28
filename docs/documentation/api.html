@@ -461,17 +461,17 @@
 <tr><td width=10%>void</td><td width=20%>giza_arrow</td><td> (double x1, double y1, double x2, double y2) ;</tr></table><p>Draws an arrow. The style of the head of the arrow is set by giza_set_arrow_style.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
-<td>x1 :</td><td>The world x-coord of the tail of the arrow.</td>
+<td>x1 :</td><td>The world x-coord of the tail of the arrow</td>
 </tr><tr>
-<td>y1 :</td><td>The world y-coord of the tail of the arrow.</td>
+<td>y1 :</td><td>The world y-coord of the tail of the arrow</td>
 </tr><tr>
-<td>x2 :</td><td>The world x-coord of the head of the arrow.</td>
+<td>x2 :</td><td>The world x-coord of the head of the arrow</td>
 </tr><tr>
-<td>y2 :</td><td>The world y-coord of the head of the arrow.</td>
-</tr></table><h4>See Also:</h4><p><a href="#giza_set_arrow_style">giza_set_arrow_style</a> </p><h3><a name="giza_arrow_float">giza_arrow_float</a><hr></h3>
+<td>y2 :</td><td>The world y-coord of the head of the arrow</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_set_arrow_style">giza_set_arrow_style</a> <a href="#giza_arrow_float">giza_arrow_float</a> </p><h3><a name="giza_arrow_float">giza_arrow_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_arrow_float</td><td> (float x1, float y1, float x2, float y2) ;</tr></table><p>Same functionality as giza_arrow.</p>
-<h4>See Also:</h4><p><a href="#giza_arrow_float">giza_arrow_float</a> </p><h3><a name="giza_axis">giza_axis</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_arrow">giza_arrow</a> <a href="#giza_set_arrow_style">giza_set_arrow_style</a> </p><h3><a name="giza_axis">giza_axis</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_axis</td><td> (const char *opt, double x1, double y1, double x2, double y2, double v1, double v2, double tick, int nsub, double dmajl, double dmajr, double fmin, double disp, double angle) ;</tr></table><p>Draw a labelled axis from (x1,y1) to (x2,y2)</p>
 <h4>Input:</h4>
@@ -520,7 +520,7 @@
 <td>1 :</td><td>Force decimal labelling instead of automatic choice (see giza_format_number)</td>
 </tr><tr>
 <td>2 :</td><td>Force exponential labelling instead of automatic choice (see giza_format_number)</td>
-</tr></table><h3><a name="giza_axis_float">giza_axis_float</a><hr></h3>
+</tr></table><h4>See Also:</h4><p><a href="#giza_axis_float">giza_axis_float</a> <a href="#giza_box">giza_box</a> <a href="#giza_tick">giza_tick</a> <a href="#giza_box_time">giza_box_time</a> </p><h3><a name="giza_axis_float">giza_axis_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_axis_float</td><td> (const char *opt, float x1, float y1, float x2, float y2, float v1, float v2, float step, int nsub, float dmajl, float dmajr, float fmin, float disp, float angle) ;</tr></table><p>Same functionality as giza_axis but takes floats instead of doubles.</p>
 <h4>See Also:</h4><p><a href="#giza_axis">giza_axis</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
