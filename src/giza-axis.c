@@ -74,6 +74,9 @@
  *  -I :- 'Invert' tick marks, draw them on opposite side
  *  -1 :- Force decimal labelling instead of automatic choice (see giza_format_number)
  *  -2 :- Force exponential labelling instead of automatic choice (see giza_format_number)
+ *
+ * See Also: giza_axis_float, giza_box, giza_tick, giza_box_time
+ *
  */
 void
 giza_axis (const char *opt, double x1, double y1, double x2, double y2,

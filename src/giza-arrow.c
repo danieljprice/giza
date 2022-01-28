@@ -37,12 +37,12 @@
  * by giza_set_arrow_style.
  *
  * Input:
- *  -x1 :- The world x-coord of the tail of the arrow.
- *  -y1 :- The world y-coord of the tail of the arrow.
- *  -x2 :- The world x-coord of the head of the arrow.
- *  -y2 :- The world y-coord of the head of the arrow.
+ *  -x1 :- The world x-coord of the tail of the arrow
+ *  -y1 :- The world y-coord of the tail of the arrow
+ *  -x2 :- The world x-coord of the head of the arrow
+ *  -y2 :- The world y-coord of the head of the arrow
  *
- * See Also: giza_set_arrow_style
+ * See Also: giza_set_arrow_style, giza_arrow_float
  */
 void
 giza_arrow (double x1, double y1, double x2, double y2)
@@ -102,7 +102,7 @@ giza_arrow (double x1, double y1, double x2, double y2)
 	      dxPerp = dxPerp / magnitude;
 	      dyPerp = dyPerp / magnitude;
 	    }
-	  
+
 	  if (magnitude > 0)
 	    {
 	      dx = dx/magnitude;
@@ -120,12 +120,12 @@ giza_arrow (double x1, double y1, double x2, double y2)
 	  xpts[0] = x2;
 	  ypts[0] = y2;
 
-          /* 'above' the unit vector 
+          /* 'above' the unit vector
            * Note that we want the hypoteneuse of the arrow head
            * to always have same length regardless of the angle:
            *      |\
            *    b | \ r
-           *      |  \ 
+           *      |  \
            * -----|   \
            * hence we use sin(angle) = b/r, with r=1 to get b.
            */
@@ -174,7 +174,7 @@ giza_arrow (double x1, double y1, double x2, double y2)
  *
  * Synopsis: Same functionality as giza_arrow.
  *
- * See Also: giza_arrow_float
+ * See Also: giza_arrow, giza_set_arrow_style
  */
 void
 giza_arrow_float (float x1, float y1, float x2, float y2)
