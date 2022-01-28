@@ -7,9 +7,6 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
 
-      - name: Install updated sed
-        run: sudo apt-get install -y sed
-
       - name: update api docs
         run: |
           cd scripts

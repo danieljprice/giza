@@ -5,6 +5,21 @@ destdir=../docs/documentation
 ./api.pl ../src/*.c;
 mv api.html $destdir;
 cd $destdir;
-sed -e "/\<\!--\#include virtual=\"pgplot-status.html\"--\>/r pgplot-status.html" -e "//d" pgplot.shtml > tmp.html
-sed -e "/\<\!--\#include virtual=\"cpgplot-status.html\"--\>/r cpgplot-status.html" -e "//d" tmp.html > pgplot.html
-rm tmp.html
+cat pgplot-header.html > pgplot.html
+cat >> pgplot.html << EOF
+ <div id="content">
+    <h2><a name="libpgplot"></a>Current status (libpgplot):</h2>
+EOF
+cat pgplot-status.html >> pgplot.html
+cat >> pgplot.html << EOF
+</div>
+EOF
+cat >> pgplot.html << EOF
+ <div id="content">
+    <h2><a name="libcpgplot"></a>Current status (libcpgplot):</h2>
+EOF
+cat cpgplot-status.html >> pgplot.html
+cat >> pgplot.html << EOF
+</div>
+</html>
+EOF
