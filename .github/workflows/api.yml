@@ -5,13 +5,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update API documentation
-      - uses: actions/checkout@v2
+        uses: actions/checkout@v2
         run: |
           cd scripts
           ./generate-docs.sh
 
       - name: Commit API documentation
-      - uses: EndBug/add-and-commit@v8
+        uses: EndBug/add-and-commit@v8
         with:
           default_author: github_actions
           message: '[web-bot] updated auto-generated documentation'
