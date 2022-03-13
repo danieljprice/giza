@@ -179,7 +179,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   char firstchar = newDeviceName[0];
   if (firstchar == '?')
     {
-    Dev[id].type = _giza_prompt_for_device ();
+      Dev[id].type = _giza_prompt_for_device ();
     }
   else
     {
@@ -867,6 +867,7 @@ _giza_split_device_string (const char *deviceString, char const **devType)
       char devName[nameLength + 1];
       strncpy (devName, deviceString, (size_t) nameLength);
       devName[nameLength] = '\0';
+      _giza_trim(devName);
       _giza_set_prefix (devName);
     }
 }
@@ -1127,6 +1128,7 @@ _giza_set_prefix (const char *prefix)
         _giza_error("giza_set_prefix","device name exceeds maximum string length");
      }
   strncpy (Dev[id].prefix, prefix, sizeof(Dev[id].prefix));
+  _giza_trim(Dev[id].prefix);
 }
 
 /*

@@ -1738,7 +1738,7 @@ contains
     coord_c = coord
     justification_c = justification
 
-    call giza_annotate_c(cstring(side),displacement_c,coord_c,justification_c,cstring(text))
+    call giza_annotate_c(cstring(trim(side)),displacement_c,coord_c,justification_c,cstring(text))
   end subroutine giza_intern_annotate_f2c
 
   subroutine giza_intern_axis_f2c(opt,x1,y1,x2,y2,v1,v2,&
@@ -1757,7 +1757,7 @@ contains
     disp_c = disp; angle_c = angle
     nsub_c = nsub
 
-    call giza_axis_c(cstring(opt),x1_c,y1_c,x2_c,y2_c,v1_c,v2_c,&
+    call giza_axis_c(cstring(trim(opt)),x1_c,y1_c,x2_c,y2_c,v1_c,v2_c,&
                      tick_c,nsub_c,dmajl_c,dmajr_c,fmin_c,disp_c,angle_c)
 
   end subroutine giza_intern_axis_f2c
@@ -1790,7 +1790,8 @@ contains
     xtick_c = xtick; ytick_c = ytick
     nxsub_c = nxsub; nysub_c = nysub
 
-    call giza_box_c(cstring(xopt),xtick_c,nxsub_c,cstring(yopt),ytick_c,nysub_c)
+    call giza_box_c(cstring(trim(xopt)),xtick_c,nxsub_c,cstring(yopt),ytick_c,nysub_c)
+
   end subroutine giza_intern_box_f2c
 
   subroutine giza_intern_box_time_f2c(xopt,xtick,nxsub,yopt,ytick,nysub)
@@ -1804,7 +1805,8 @@ contains
     xtick_c = xtick; ytick_c = ytick
     nxsub_c = nxsub; nysub_c = nysub
 
-    call giza_box_time_c(cstring(xopt),xtick_c,nxsub_c,cstring(yopt),ytick_c,nysub_c)
+    call giza_box_time_c(cstring(trim(xopt)),xtick_c,nxsub_c,cstring(yopt),ytick_c,nysub_c)
+
   end subroutine giza_intern_box_time_f2c
 
   subroutine giza_intern_colour_bar_f2c(side,disp,width,valmin,valmax,label)
@@ -1822,11 +1824,12 @@ contains
 
   end subroutine giza_intern_colour_bar_f2c
 
-  integer function  giza_intern_open_device(dev,prefix)
+  integer function giza_intern_open_device(dev,prefix)
     implicit none
     character(len=*),intent(in) :: dev,prefix
 
     giza_intern_open_device = giza_open_device_c(cstring(dev),cstring(prefix))
+
   end function giza_intern_open_device
 
   subroutine giza_open_sub(dev,prefix,width,height,units,error)
@@ -1867,7 +1870,6 @@ contains
   subroutine giza_close
      call giza_close_device()
   end subroutine giza_close
-
 
   integer function giza_intern_open_device_size(dev,prefix,width,height,units)
     implicit none
@@ -1912,6 +1914,7 @@ contains
 
     call giza_get_line_width(reallw)
     lw = nint(reallw - 0.5d0)
+
   end subroutine giza_intern_get_line_width_int
 
   subroutine giza_intern_text_f2c(x,y,text)
@@ -1920,14 +1923,16 @@ contains
     character(len=*),intent(in)    :: text
 
     call giza_text_c(x,y,cstring(text))
+
   end subroutine giza_intern_text_f2c
 
- subroutine giza_intern_text_float_f2c(x,y,text)
+  subroutine giza_intern_text_float_f2c(x,y,text)
     implicit none
     real(kind=c_float),intent(in) :: x,y
     character(len=*),intent(in)    :: text
 
     call giza_text_float_c(x,y,cstring(text))
+
   end subroutine giza_intern_text_float_f2c
 
   subroutine giza_intern_ptext_f2c(x,y,angle,just,text)
@@ -1936,6 +1941,7 @@ contains
     character(len=*),intent(in)    :: text
 
     call giza_ptext_c(x,y,angle,just,cstring(text))
+
   end subroutine giza_intern_ptext_f2c
 
  subroutine giza_intern_ptext_float_f2c(x,y,angle,just,text)
@@ -1944,6 +1950,7 @@ contains
     character(len=*),intent(in)    :: text
 
     call giza_ptext_float_c(x,y,angle,just,cstring(text))
+
   end subroutine giza_intern_ptext_float_f2c
 
   subroutine giza_intern_qtext_f2c(x,y,angle,just,text,xbox,ybox)
@@ -1953,6 +1960,7 @@ contains
     character(len=*),intent(in)    :: text
 
     call giza_qtext_c(x,y,angle,just,cstring(text),xbox,ybox)
+
   end subroutine giza_intern_qtext_f2c
 
   subroutine giza_intern_qtext_float_f2c(x,y,angle,just,text,xbox,ybox)
@@ -1962,6 +1970,7 @@ contains
     character(len=*),intent(in)   :: text
 
     call giza_qtext_float_c(x,y,angle,just,cstring(text),xbox,ybox)
+
   end subroutine giza_intern_qtext_float_f2c
 
   subroutine giza_intern_qtextlen_f2c(units,text,xlen,ylen)
@@ -1971,6 +1980,7 @@ contains
     real(kind=c_double),intent(out):: xlen,ylen
 
     call giza_qtextlen_c(units,cstring(text),xlen,ylen)
+
   end subroutine giza_intern_qtextlen_f2c
 
   subroutine giza_intern_qtextlen_float_f2c(units,text,xlen,ylen)
@@ -1980,13 +1990,14 @@ contains
     real(kind=c_float),intent(out) :: xlen,ylen
 
     call giza_qtextlen_float_c(units,cstring(text),xlen,ylen)
+
   end subroutine giza_intern_qtextlen_float_f2c
 
   subroutine giza_intern_set_font_f2c(font)
     implicit none
     character(len=*),intent(in) :: font
 
-    call giza_set_font_c(cstring(font))
+    call giza_set_font_c(cstring(trim(font)))
 
   end subroutine giza_intern_set_font_f2c
 
@@ -1994,7 +2005,7 @@ contains
     implicit none
     character(len=*),intent(in) :: font
 
-    call giza_set_font_bold_c(cstring(font))
+    call giza_set_font_bold_c(cstring(trim(font)))
 
   end subroutine giza_intern_set_font_bold_f2c
 
@@ -2002,7 +2013,7 @@ contains
     implicit none
     character(len=*),intent(in) :: font
 
-    call giza_set_font_italic_c(cstring(font))
+    call giza_set_font_italic_c(cstring(trim(font)))
 
   end subroutine giza_intern_set_font_italic_f2c
 
@@ -2010,7 +2021,7 @@ contains
     implicit none
     character(len=*),intent(in) :: font
 
-    call giza_set_font_bold_italic_c(cstring(font))
+    call giza_set_font_bold_italic_c(cstring(trim(font)))
 
   end subroutine giza_intern_set_font_bold_italic_f2c
 
@@ -2034,7 +2045,7 @@ contains
     integer(kind=c_int) :: ierr
     character(kind=c_char), dimension(len(string)+1) :: stringc
     rval = len(string)+1
-    ierr = giza_query_device_c(cstring(qtype),stringc,rval)
+    ierr = giza_query_device_c(cstring(trim(qtype)),stringc,rval)
     string = fstring(stringc)
 
   end subroutine giza_query_device_f2c
