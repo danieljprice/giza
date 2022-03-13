@@ -2,7 +2,7 @@
 !  giza - a scientific plotting library built on cairo
 !
 !  Copyright (c) 2010      James Wetter and Daniel Price
-!  Copyright (c) 2010-2012 Daniel Price
+!  Copyright (c) 2010-2022 Daniel Price
 !
 !  This library is free software; and you are welcome to redistribute
 !  it under the terms of the GNU General Public License
@@ -688,7 +688,6 @@ private
  interface giza_device_has_cursor_int
     function giza_device_has_cursor_c() bind(C,name="giza_device_has_cursor")
      import
-     implicit none
      integer(kind=c_int) :: giza_device_has_cursor_c
     end function giza_device_has_cursor_c
  end interface
@@ -1729,7 +1728,6 @@ contains
 !-------------------------------------------------------
 
   subroutine giza_intern_annotate_f2c(side,displacement,coord,justification,text)
-    implicit none
     character(len=*),intent(in)    :: side,text
     real,intent(in)                :: displacement,coord,justification
     real(kind=c_double)            :: displacement_c,coord_c,justification_c
@@ -1743,7 +1741,6 @@ contains
 
   subroutine giza_intern_axis_f2c(opt,x1,y1,x2,y2,v1,v2,&
              tick,nsub,dmajl,dmajr,fmin,disp,angle)
-    implicit none
     character(len=*),intent(in) :: opt
     real, intent(in)  :: x1,y1,x2,y2,v1,v2
     real, intent(in)  :: tick,dmajl,dmajr,fmin,disp,angle
@@ -1764,7 +1761,6 @@ contains
 
   subroutine giza_intern_tick_f2c(x1,y1,x2,y2,v,&
              tickl,tickr,disp,angle,label)
-    implicit none
     real, intent(in)  :: x1,y1,x2,y2,v
     real, intent(in)  :: tickl,tickr,disp,angle
     character(len=*),intent(in) :: label
@@ -1780,7 +1776,6 @@ contains
   end subroutine giza_intern_tick_f2c
 
   subroutine giza_intern_box_f2c(xopt,xtick,nxsub,yopt,ytick,nysub)
-    implicit none
     character(len=*),intent(in) :: xopt,yopt
     real,intent(in)             :: xtick,ytick
     integer,intent(in)          :: nxsub,nysub
@@ -1795,7 +1790,6 @@ contains
   end subroutine giza_intern_box_f2c
 
   subroutine giza_intern_box_time_f2c(xopt,xtick,nxsub,yopt,ytick,nysub)
-    implicit none
     character(len=*),intent(in) :: xopt,yopt
     real,intent(in)             :: xtick,ytick
     integer,intent(in)          :: nxsub,nysub
@@ -1810,7 +1804,6 @@ contains
   end subroutine giza_intern_box_time_f2c
 
   subroutine giza_intern_colour_bar_f2c(side,disp,width,valmin,valmax,label)
-    implicit none
     character(len=*), intent(in) :: side,label
     real, intent(in) :: disp,width,valmin,valmax
     real(kind=c_double) :: disp_c,width_c,valmin_c,valmax_c
@@ -1825,7 +1818,6 @@ contains
   end subroutine giza_intern_colour_bar_f2c
 
   integer function giza_intern_open_device(dev,prefix)
-    implicit none
     character(len=*),intent(in) :: dev,prefix
 
     giza_intern_open_device = giza_open_device_c(cstring(dev),cstring(prefix))
@@ -1833,7 +1825,6 @@ contains
   end function giza_intern_open_device
 
   subroutine giza_open_sub(dev,prefix,width,height,units,error)
-    implicit none
     character(len=*),intent(in), optional  :: dev
     character(len=*), intent(in), optional :: prefix
     real,intent(in), optional     :: width,height
@@ -1872,7 +1863,6 @@ contains
   end subroutine giza_close
 
   integer function giza_intern_open_device_size(dev,prefix,width,height,units)
-    implicit none
     character(len=*),intent(in) :: dev,prefix
     real,intent(in)             :: width,height
     integer, intent(in)         :: units
@@ -1883,14 +1873,12 @@ contains
 
   ! So cursor functionality can be queried as logical
   logical function giza_intern_device_has_cursor()
-    implicit none
 
     giza_intern_device_has_cursor = (giza_device_has_cursor_c().eq.1)
 
   end function giza_intern_device_has_cursor
 
   subroutine giza_intern_label_f2c(labelx,labely,title)
-    implicit none
     character(len=*),intent(in) :: labelx,labely,title
 
     call giza_label_c(cstring(labelx),cstring(labely),cstring(title))
@@ -1898,7 +1886,6 @@ contains
   end subroutine giza_intern_label_f2c
 
   subroutine giza_intern_set_line_width_int(lw)
-    implicit none
     integer(kind=c_int),value,intent(in) :: lw
     real(kind=c_double) :: reallw
 
@@ -1908,7 +1895,6 @@ contains
   end subroutine giza_intern_set_line_width_int
 
   subroutine giza_intern_get_line_width_int(lw)
-    implicit none
     integer(kind=c_int),intent(out) :: lw
     real(kind=c_double) :: reallw
 
@@ -1918,7 +1904,6 @@ contains
   end subroutine giza_intern_get_line_width_int
 
   subroutine giza_intern_text_f2c(x,y,text)
-    implicit none
     real(kind=c_double),intent(in) :: x,y
     character(len=*),intent(in)    :: text
 
@@ -1927,7 +1912,6 @@ contains
   end subroutine giza_intern_text_f2c
 
   subroutine giza_intern_text_float_f2c(x,y,text)
-    implicit none
     real(kind=c_float),intent(in) :: x,y
     character(len=*),intent(in)    :: text
 
@@ -1936,7 +1920,6 @@ contains
   end subroutine giza_intern_text_float_f2c
 
   subroutine giza_intern_ptext_f2c(x,y,angle,just,text)
-    implicit none
     real(kind=c_double),intent(in) :: x,y,angle,just
     character(len=*),intent(in)    :: text
 
@@ -1945,7 +1928,6 @@ contains
   end subroutine giza_intern_ptext_f2c
 
  subroutine giza_intern_ptext_float_f2c(x,y,angle,just,text)
-    implicit none
     real(kind=c_float),intent(in) :: x,y,angle,just
     character(len=*),intent(in)    :: text
 
@@ -1954,7 +1936,6 @@ contains
   end subroutine giza_intern_ptext_float_f2c
 
   subroutine giza_intern_qtext_f2c(x,y,angle,just,text,xbox,ybox)
-    implicit none
     real(kind=c_double),intent(in) :: x,y,angle,just
     real(kind=c_double),intent(out):: xbox(4),ybox(4)
     character(len=*),intent(in)    :: text
@@ -1964,7 +1945,6 @@ contains
   end subroutine giza_intern_qtext_f2c
 
   subroutine giza_intern_qtext_float_f2c(x,y,angle,just,text,xbox,ybox)
-    implicit none
     real(kind=c_float),intent(in) :: x,y,angle,just
     real(kind=c_float),intent(out):: xbox(4),ybox(4)
     character(len=*),intent(in)   :: text
@@ -1974,7 +1954,6 @@ contains
   end subroutine giza_intern_qtext_float_f2c
 
   subroutine giza_intern_qtextlen_f2c(units,text,xlen,ylen)
-    implicit none
     integer(kind=c_int),intent(in) :: units
     character(len=*),intent(in)    :: text
     real(kind=c_double),intent(out):: xlen,ylen
@@ -1984,7 +1963,6 @@ contains
   end subroutine giza_intern_qtextlen_f2c
 
   subroutine giza_intern_qtextlen_float_f2c(units,text,xlen,ylen)
-    implicit none
     integer(kind=c_int),intent(in) :: units
     character(len=*),intent(in)    :: text
     real(kind=c_float),intent(out) :: xlen,ylen
@@ -1994,7 +1972,6 @@ contains
   end subroutine giza_intern_qtextlen_float_f2c
 
   subroutine giza_intern_set_font_f2c(font)
-    implicit none
     character(len=*),intent(in) :: font
 
     call giza_set_font_c(cstring(trim(font)))
@@ -2002,7 +1979,6 @@ contains
   end subroutine giza_intern_set_font_f2c
 
   subroutine giza_intern_set_font_bold_f2c(font)
-    implicit none
     character(len=*),intent(in) :: font
 
     call giza_set_font_bold_c(cstring(trim(font)))
@@ -2010,7 +1986,6 @@ contains
   end subroutine giza_intern_set_font_bold_f2c
 
   subroutine giza_intern_set_font_italic_f2c(font)
-    implicit none
     character(len=*),intent(in) :: font
 
     call giza_set_font_italic_c(cstring(trim(font)))
@@ -2018,7 +1993,6 @@ contains
   end subroutine giza_intern_set_font_italic_f2c
 
   subroutine giza_intern_set_font_bold_italic_f2c(font)
-    implicit none
     character(len=*),intent(in) :: font
 
     call giza_set_font_bold_italic_c(cstring(trim(font)))
@@ -2026,7 +2000,6 @@ contains
   end subroutine giza_intern_set_font_bold_italic_f2c
 
   subroutine giza_format_number_f2c(mantissa,power,iform,string)
-    implicit none
     integer(kind=c_int),intent(in) :: mantissa,power,iform
     character(len=*),  intent(out) :: string
     character(kind=c_char), dimension(len(string)+1) :: stringc
@@ -2038,7 +2011,6 @@ contains
   end subroutine giza_format_number_f2c
 
   subroutine giza_query_device_f2c(qtype,string)
-    implicit none
     character(len=*),intent(in)  :: qtype
     character(len=*),intent(out) :: string
     integer(kind=c_int) :: rval
@@ -2057,7 +2029,6 @@ contains
   !
   !---------------------------------------------------------------------------
   function cstring(string) result(array)
-    implicit none
     character(len=*), intent(in) :: string
     character(kind=c_char), dimension(len(string)+1) :: array
     integer :: i, ilen
@@ -2077,7 +2048,6 @@ contains
   !
   !---------------------------------------------------------------------------
    function fstring(array)
-    implicit none
     character(kind=c_char), dimension(:), intent(in) :: array
     character(len=size(array)-1) :: fstring
     integer :: i
@@ -2101,7 +2071,6 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
                      vptxmin,vptxmax,vptymin,vptymax, &
                      xlabel,ylabel,title,font,&
                      ls,lw,ci,ch,symbol,just,axis,extend,printid)
- implicit none
  real, intent(in), dimension(:), optional :: y,x
  real, intent(in), dimension(:,:), optional :: img
  integer, intent(in), optional :: units
