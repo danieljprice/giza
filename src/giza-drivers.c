@@ -888,6 +888,8 @@ _giza_device_to_int (const char *newDeviceName)
       devName[i] = (char) tolower (newDeviceName[i]);
     }
   devName[i] = '\0';
+  /* trim spaces from the device string */
+  _giza_trim(devName);
 
   if (!strcmp (devName, "/null"))
     newDevice = GIZA_DEVICE_NULL;
