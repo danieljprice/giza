@@ -1,5 +1,3 @@
-Changes in v1.3.1
+Changes in v1.3.2
 ------------------
-- giza_axis and giza_tick added to libcpgplot interface (#12)
-- fixed various documentation issues
-- API documentation automatically updates via github workflow
+- bug fix with spaces at end of string causing failure on open_device in Fortran interface (#35)
