@@ -38,6 +38,7 @@ static void _giza_point        (double x, double y);
 static void _giza_rect         (double x, double y, int fill, double scale);
 static void _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction);
 static void _giza_plus         (double x, double y);
+static void _giza_plus_size    (double x, double y, double size);
 static void _giza_fat_plus     (double x, double y, int fill, double scale, double inset_fraction);
 static void _giza_triangle     (double x, double y, int fill, int updown, float scale, float offset_fraction);
 static void _giza_diamond      (double x, double y, int fill);
@@ -50,9 +51,9 @@ static void _giza_arrow        (double x, double y, double angle, double scale);
 static void _giza_char         (int symbol, double x, double y);
 static void _giza_drawchar     (const char *string, double x, double y);
 static void _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
-                                      double *oldLineWidth, double *oldCh);
+                                      double *oldCh);
 static void _giza_end_draw_symbols   (int oldTrans, int oldLineStyle, int oldLineCap,
-                                      double oldLineWidth, double oldCh);
+                                      double oldCh);
 static void _giza_draw_symbol (double xd, double yd, int symbol);
 
 /* Stores the height of the markers */
@@ -88,10 +89,10 @@ giza_points (int n, const double* x, const double* y, int symbol)
   if (n < 1) return;
 
   int oldTrans,oldLineStyle,oldLineCap;
-  double oldLineWidth,oldCh;
+  double oldCh;
 
   /* initialise symbol drawing */
-  _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldLineWidth,&oldCh);
+  _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldCh);
 
   /* for each point find where to put each marker */
   int i;
@@ -113,7 +114,7 @@ giza_points (int n, const double* x, const double* y, int symbol)
   giza_flush_device ();
 
   /* restore old setting */
-  _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
+  _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldCh);
 }
 
 /**
@@ -131,10 +132,10 @@ giza_points_float (int n, const float* x, const float* y, int symbol)
   if (n < 1) return;
 
   int oldTrans,oldLineStyle,oldLineCap;
-  double oldLineWidth,oldCh;
+  double oldCh;
 
   /* initialise symbol drawing */
-  _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldLineWidth,&oldCh);
+  _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldCh);
 
   /* for each point find where to put each marker */
   double xd, yd;
@@ -158,7 +159,7 @@ giza_points_float (int n, const float* x, const float* y, int symbol)
   giza_flush_device ();
 
   /* restore old settings */
-  _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
+  _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldCh);
 }
 
 /**
@@ -206,14 +207,14 @@ void
 _giza_draw_symbol_device (double xd, double yd, int symbol)
 {
   int oldTrans,oldLineStyle,oldLineCap;
-  double oldLineWidth,oldCh;
+  double oldCh;
 
   /* store existing font matrix */
   cairo_matrix_t mat;
   cairo_get_font_matrix (Dev[id].context, &mat);
 
   /* initialise symbol drawing */
-  _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldLineWidth,&oldCh);
+  _giza_start_draw_symbols (&oldTrans,&oldLineStyle,&oldLineCap,&oldCh);
 
   /* for each point find where to put each marker */
   _giza_draw_symbol(xd, yd, symbol);
@@ -222,7 +223,7 @@ _giza_draw_symbol_device (double xd, double yd, int symbol)
   giza_flush_device ();
 
   /* restore old setting */
-  _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldLineWidth,oldCh);
+  _giza_end_draw_symbols (oldTrans,oldLineStyle,oldLineCap,oldCh);
 
    /* restore font matrix */
    cairo_set_font_matrix (Dev[id].context, &mat);
@@ -235,13 +236,12 @@ _giza_draw_symbol_device (double xd, double yd, int symbol)
  */
 void
 _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
-                          double *oldLineWidth, double *oldCh)
+                          double *oldCh)
 {
   /* store the old trans and line width */
   *oldTrans = _giza_get_trans ();
   giza_get_line_style       (oldLineStyle);
   giza_get_line_cap         (oldLineCap);
-  giza_get_line_width       (oldLineWidth);
   giza_get_character_height (oldCh);
 
   /* Set the height for manually drawn markers */
@@ -250,7 +250,6 @@ _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
   /* Set the line width for manually drawn markers */
   /*_giza_set_trans (GIZA_TRANS_IDEN); */
 
-  giza_set_line_width(1.5);
   giza_set_line_style(1);
   giza_set_line_cap(0);
 
@@ -261,13 +260,12 @@ _giza_start_draw_symbols (int *oldTrans, int *oldLineStyle, int *oldLineCap,
 
 void
 _giza_end_draw_symbols (int oldTrans, int oldLineStyle, int oldLineCap,
-                        double oldLineWidth, double oldCh)
+                        double oldCh)
 {
   /* restore old settings */
   _giza_set_trans (oldTrans);
   giza_set_line_style       (oldLineStyle);
   giza_set_line_cap         (oldLineCap);
-  giza_set_line_width       (oldLineWidth);
   giza_set_character_height (oldCh);
 }
 /**
@@ -340,31 +338,73 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	  _giza_rect (xd, yd, 1, 1.0);
           break;
         case 15: /* hollow up+down triangle, where we do slightly different raises on the the up/down triangle */
-          _giza_triangle(xd, yd, 0, GIZA_POINT_UP,   0.7, 0.5);
-          _giza_triangle(xd, yd, 0, GIZA_POINT_DOWN, 0.7, 0.5);
+          {
+              double lw;
+              giza_get_line_width( &lw );
+              giza_set_line_width( lw*0.8 );
+              _giza_triangle(xd, yd, 0, GIZA_POINT_UP,   0.7, 0.5);
+              _giza_triangle(xd, yd, 0, GIZA_POINT_DOWN, 0.7, 0.5);
+              giza_set_line_width( lw );
+          }
           break;
         case 14: /* open plus sign */
-          _giza_fat_plus(xd, yd, 0, 2.2, 0.5);
+          {
+              double lw;
+              giza_get_line_width( &lw );
+              giza_set_line_width( lw*0.8 );
+              _giza_fat_plus(xd, yd, 0, 2.2, 0.5);
+              giza_set_line_width( lw );
+          }
           break;
         case 13: /* solid triangle */
           _giza_triangle(xd, yd, 1, GIZA_POINT_UP, 0.7, 1);
           break;
         case 12: /* five-pointed star */
-          _giza_star (xd, yd, 5, 0.4, 0, 2.0);
+          {
+              double lw;
+              giza_get_line_width( &lw );
+              giza_set_line_width( lw*0.8 );
+              _giza_star (xd, yd, 5, 0.4, 0, 2.0);
+              giza_set_line_width( lw );
+          }
           break;
         case 11: /* hollow diamond */
-          _giza_diamond (xd, yd, 0);
+          {
+              double lw;
+              giza_get_line_width( &lw );
+              giza_set_line_width( lw*0.8 );
+              _giza_diamond (xd, yd, 0);
+              giza_set_line_width( lw );
+          }
           break;
         case 10: /* square with concave sides, slightly larger than default rect */
           _giza_rect_concave(xd, yd, 0, 1.8, .3);
           break;
+          /* In PGPLOT, when increasing both line width and character
+           * height, the following symbols get larger (character height scaling)
+           * and the lines of the circle and the plus/dot thicker (line
+           * width) compared to default settings for both.
+           * Note: hacked pgdemo2.f "PGEX22" function to experiment
+           */
         case 9: /* circle with small dot (like Sun symbol) */
-          _giza_point (xd, yd);
-	  _giza_circle_size (xd, yd, 1.25, 0);
+          {
+              double lw;
+              giza_get_line_width( &lw );
+              giza_set_line_width( lw*0.8 );
+              _giza_circle_size(xd, yd, 0.2*Dev[id].ch,  1);/*_giza_point (xd, yd);*/
+              _giza_circle_size(xd, yd, 1.25*Dev[id].ch, 0);
+              giza_set_line_width( lw );
+          }
           break;
         case 8: /* circle and plus */
-          _giza_circle_size (xd, yd, 1.25, 0);
-          _giza_plus (xd, yd);
+          {
+              double lw;
+              giza_get_line_width( &lw );
+              giza_set_line_width( lw*0.8 );
+              _giza_circle_size (xd, yd, 1.25*Dev[id].ch, 0);
+              _giza_plus_size (xd, yd, 1.25*Dev[id].ch);
+              giza_set_line_width( lw );
+          }
           break;
         case 7: /* hollow upward-pointing triangle */
           _giza_triangle(xd, yd, 0, GIZA_POINT_UP, 0.7, 1);
@@ -379,8 +419,13 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	  _giza_drawchar ("*",xd, yd);
 	  break;
 	case 2: /* plus */
-	  /*_giza_drawchar ("+",xd, yd); */
-	  _giza_plus (xd, yd);
+      {
+          double lw;
+          giza_get_line_width( &lw );
+          giza_set_line_width( 0.8*lw );
+    	  _giza_plus_size (xd, yd, Dev[id].ch);
+          giza_set_line_width( lw );
+      }
 	  break;
 	case 1: /* single small point */
 	  _giza_point (xd, yd);
@@ -389,9 +434,16 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	case 0:
 	  _giza_rect (xd, yd, 0, 1.5);
 	  break;
-	case -1: /* single small point */
-	case -2:
-          _giza_point (xd, yd);
+    /* single small point
+       MV: 22 July 2022 According to PGPLOT doc these scale with linewidth, strangely enough
+                        see https://sites.astro.caltech.edu/~tjp/pgplot/subroutines.html#PGPT */
+	case -1:
+    case -2:
+          {
+              double lw;
+              giza_get_line_width(&lw);
+              _giza_circle_size( xd, yd, lw, 1);/*_giza_point (xd, yd);*/
+          }
           break;
 	case -3: /* solid polygons */
 	case -4:
@@ -426,10 +478,13 @@ _giza_point (double x, double y)
 static void
 _giza_rect (double x, double y, int fill, double scale)
 {
+  double       lw;
   const double size = scale * markerHeight;
 
+  /* use slightly thinner lines */
+  giza_get_line_width( &lw );
   cairo_save( Dev[id].context );
-  cairo_set_line_width( Dev[id].context, 0.9 );
+  cairo_set_line_width( Dev[id].context, 0.8*lw );
   cairo_rectangle (Dev[id].context, x - 0.5 * size, y - 0.5 * size, size, size );
   if (fill) { cairo_fill(Dev[id].context); }
   cairo_stroke( Dev[id].context );
@@ -445,6 +500,7 @@ static void
 _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction)
 {
   /* compute radius of circle, start/end angles and center */
+  double       lw;
   const double dx = scale * 0.5 * markerHeight;
   const double dy = bulge_fraction * dx;
   const double beta = atan( dy/dx ), two_beta = 2 * beta;
@@ -453,8 +509,9 @@ _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fra
   const double center = dx * (1 + one_over_tan2beta);
 
   /* draw the four arcs with slightly thinner lines */
+  giza_get_line_width( &lw );
   cairo_save(Dev[id].context);
-  cairo_set_line_width(Dev[id].context, 0.9);
+  cairo_set_line_width(Dev[id].context, 0.8*lw);
   cairo_arc(Dev[id].context, x + center, y, R, M_PI     - two_beta, M_PI     + two_beta);
   cairo_new_sub_path(Dev[id].context);
   cairo_arc(Dev[id].context, x - center, y, R, 2*M_PI   - two_beta, 2*M_PI   + two_beta);
@@ -480,6 +537,20 @@ _giza_plus (double x, double y)
   _giza_stroke ();
 }
 
+/**
+ * Draw a plus centred at x, y
+ */
+static void
+_giza_plus_size (double x, double y, double size)
+{
+  cairo_move_to (Dev[id].context, x - markerHeight * 0.5 * size, y);
+  cairo_line_to (Dev[id].context, x + markerHeight * 0.5 * size, y);
+  cairo_move_to (Dev[id].context, x, y - markerHeight * 0.5 * size);
+  cairo_line_to (Dev[id].context, x, y + markerHeight * 0.5 * size);
+  _giza_stroke ();
+}
+
+
 
 /**
  * Draw a 'fat' plus centred at x, y
@@ -490,12 +561,14 @@ _giza_plus (double x, double y)
 static void
 _giza_fat_plus (double x, double y, int fill, double scale, double inset_fraction)
 {
+  double       lw;
   const double side  = 0.5 * markerHeight * scale;
   const double inset = inset_fraction * side, outset = side - inset;
 
   /* Use slightly thinner lines than the other symbols */
+  giza_get_line_width( &lw );
   cairo_save( Dev[id].context );
-  cairo_set_line_width( Dev[id].context, 0.8 );
+  cairo_set_line_width( Dev[id].context, 0.8*lw );
 
   cairo_move_to     (Dev[id].context, x - side, y - outset/2);
   cairo_rel_line_to (Dev[id].context, 0       , outset); /* up */
@@ -533,9 +606,11 @@ _giza_circle (double x, double y)
 static void
 _giza_circle_size (double x, double y, double size, int fill)
 {
+  double lw;
   /* use slightly thinner lines */
+  giza_get_line_width( &lw );
   cairo_save( Dev[id].context );
-  cairo_set_line_width( Dev[id].context, 0.9 );
+  cairo_set_line_width( Dev[id].context, 0.8*lw );
   /*cairo_move_to(Dev[id].context, x + size*markerHeight*0.5, y);*/
   cairo_arc (Dev[id].context, x, y, size * markerHeight * 0.5, 0., 2. * M_PI);
   if (fill) { cairo_fill(Dev[id].context); }
@@ -554,8 +629,11 @@ _giza_circle_size (double x, double y, double size, int fill)
 static void
 _giza_triangle(double x, double y, int fill, int updown, float scale, float offset_fraction)
 {
+  double lw;
+  /* draw with slightly thinner lines */
+  giza_get_line_width( &lw );
   cairo_save(Dev[id].context);
-  giza_set_line_width(1.0);
+  cairo_set_line_width(Dev[id].context, 0.8*lw);
   cairo_move_to (Dev[id].context, x - markerHeight * scale, y - offset_fraction * updown * markerHeight * scale);
   cairo_line_to (Dev[id].context, x + markerHeight * scale, y - offset_fraction * updown * markerHeight * scale);
   cairo_line_to (Dev[id].context, x, y + updown * markerHeight * scale);
@@ -656,7 +734,7 @@ static void
 _giza_star (double x, double y, int npoints, double ratio, int fill, double scale)
 {
  /* Define outer and inner radius */
- double r = 0.5 * markerHeight * scale;
+ double r = 0.5 * markerHeight * scale, lw;
  double ri = ratio * r;
 
  /* Set first vertex so that shape appears flat-bottomed */
@@ -669,7 +747,8 @@ _giza_star (double x, double y, int npoints, double ratio, int fill, double scal
 
  cairo_save( Dev[id].context );
  /* Use slightly thinner lines */
- cairo_set_line_width( Dev[id].context, 0.9 );
+ giza_get_line_width( &lw );
+ cairo_set_line_width( Dev[id].context, 0.8*lw );
  cairo_move_to (Dev[id].context, x + r * cosalpha, y + r * sinalpha);
 
  for (i = 1; i < npoints; i++)
