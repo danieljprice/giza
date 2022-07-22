@@ -434,17 +434,10 @@ _giza_draw_symbol (double xd, double yd, int symbol)
 	case 0:
 	  _giza_rect (xd, yd, 0, 1.5);
 	  break;
-    /* single small point
-       MV: 22 July 2022 According to PGPLOT doc these scale with linewidth, strangely enough
-                        see https://sites.astro.caltech.edu/~tjp/pgplot/subroutines.html#PGPT */
 	case -1:
     case -2:
-          {
-              double lw;
-              giza_get_line_width(&lw);
-              _giza_circle_size( xd, yd, lw, 1);/*_giza_point (xd, yd);*/
-          }
-          break;
+      _giza_point (xd, yd);
+      break;
 	case -3: /* solid polygons */
 	case -4:
 	case -5:
@@ -729,6 +722,7 @@ _giza_polygon (double x, double y, int nsides, int fill, double scale)
 
 /**
  * Draws an n-pointed star at x,y
+ *
  */
 static void
 _giza_star (double x, double y, int npoints, double ratio, int fill, double scale)
