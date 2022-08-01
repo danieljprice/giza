@@ -25,6 +25,7 @@
 #include "giza-io-private.h"
 #include "giza-private.h"
 #include "giza-transforms-private.h"
+#include "giza-itf.h"
 #include "giza-render-private.h"
 #include <giza.h>
 #include <stdlib.h>
@@ -106,6 +107,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   if (sizex < 1 || sizey < 1)
     {
       _giza_warning ("giza_render", "Invalid array size, skipping render.");
+      return;
     }
   if (i1 < 0 || i2 < i1 || j1 < 0 || j2 < j1)
     {
@@ -118,6 +120,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   cairo_surface_t *pixmap;
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
+  int cimin, cimax;
   double pos, alpha;
 
   cairo_extend_t cairoextendtype;
@@ -142,6 +145,9 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 
   /* colour each pixel in the pixmap */
   int i, j;
+  giza_itf_idx_type itf_idx = giza_itf_idx[ Dev[id].itf ];
+
+  giza_get_colour_index_range(&cimin, &cimax);
   pixnum = 0;
   /* transparent if-statement is outside loop as optimisation */
   if (transparent==2) {
@@ -150,20 +156,19 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (data[j*sizex+i] - valMin) / (valMax - valMin);
-            alpha = datalpha[j*sizex + i];
-	    _giza_colour_pixel_alpha (pixdata, pixnum, pos, alpha);
+	    _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax), datalpha[j*sizex + i]);
 	    pixnum = pixnum + 1;
 	  }
       }
   } else if (transparent==1) {
     /* render each pixel, using transparent routine */
+      int idx;
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (data[j*sizex+i] - valMin) / (valMax - valMin);
-	    _giza_colour_pixel_transparent (pixdata, pixnum, pos);
+            idx = itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax);
+	    _giza_colour_pixel_index_alpha (pixdata, pixnum, idx, idx==cimin ? 0. : 1.);
 	    pixnum = pixnum + 1;
 	  }
       }
@@ -173,8 +178,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (data[j*sizex+i] - valMin) / (valMax - valMin);
-	    _giza_colour_pixel (pixdata, pixnum, pos);
+	    _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin,cimax), 1.);
 	    pixnum = pixnum + 1;
 	  }
       }
@@ -257,6 +261,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
     {
       _giza_warning ("giza_render_float",
 		    "Invalid array size, skipping render.");
+      return;
     }
   if (i1 < 0 || i2 < i1 || j1 < 0 || j2 < j1)
     {
@@ -270,6 +275,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   cairo_surface_t *pixmap;
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
+  int cimin, cimax;
   double pos,alpha,ddval;
   double dvalMin = (double) valMin;
   if (valMax - valMin > 0.) {
@@ -298,6 +304,9 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   pixdata = malloc (stride * height);
 
   int i, j;
+  giza_itf_idx_type_f itf_idx = giza_itf_idx_f[ Dev[id].itf ];
+
+  giza_get_colour_index_range(&cimin, &cimax);
   pixnum = 0;
   /* transparent if-statement is outside loop as optimisation */
   if (transparent==2) {
@@ -306,21 +315,20 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (((double) data[j*sizex+i]) - dvalMin)*ddval;
-            alpha = (double) datalpha[j*sizex + i];
-	    _giza_colour_pixel_alpha (pixdata, pixnum, pos, alpha);
+	    _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax), datalpha[j*sizex + i]);
 	    pixnum = pixnum + 1;
 	  }
       }
   } else if (transparent==1) {
     /* render each pixel, using transparent routine */
+      int idx;
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (((double) data[j*sizex+i]) - dvalMin)*ddval;
-	    _giza_colour_pixel_transparent (pixdata, pixnum, pos);
-	    pixnum = pixnum + 1;
+              idx = itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax);
+              _giza_colour_pixel_index_alpha (pixdata, pixnum, idx, idx==cimin ? 0. : 1.);
+              pixnum = pixnum + 1;
 	  }
       }
   } else {
@@ -329,9 +337,8 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
       {
         for (i = i1; i <= i2; i++)
 	  {
-            pos = (((double) data[j*sizex+i]) - dvalMin)*ddval;
-	    _giza_colour_pixel (pixdata, pixnum, pos);
-	    pixnum = pixnum + 1;
+              _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax), 1);
+              pixnum = pixnum + 1;
 	  }
       }
   }
@@ -456,6 +463,29 @@ _giza_colour_pixel_index (unsigned char *array, int pixNum, int ci)
 {
   double r, g, b,alpha;
   giza_get_colour_representation_alpha(ci, &r, &g, &b, &alpha);
+  /* set the alpha */
+  array[pixNum * 4 + 3] = (unsigned char) (alpha * 255.);
+  /* set the red, green, and blue */
+  array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
+  array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
+  array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
+}
+
+/**
+ * Sets the rgb for a given pixel, given the colour index, but allow
+ * override of alpha
+ *
+ * Input:
+ *  -array  :- the array in which to store the colour.
+ *  -pixnum :- the pixel to be coloured.
+ *  -ci     :- the colour index with which to colour the pixel.
+ *  -alpha  :- the alpha to use, override what's in the colour table
+ */
+static void
+_giza_colour_pixel_index_alpha (unsigned char *array, int pixNum, int ci, double alpha)
+{
+  double r, g, b,dummy;
+  giza_get_colour_representation_alpha(ci, &r, &g, &b, &dummy);
   /* set the alpha */
   array[pixNum * 4 + 3] = (unsigned char) (alpha * 255.);
   /* set the red, green, and blue */
