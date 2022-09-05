@@ -427,31 +427,12 @@ _giza_init_colour_index (void)
 void
 giza_set_colour_index_range (int cimin, int cimax)
 {
-  if (cimin < GIZA_COLOUR_INDEX_MIN)
-    {
-      _giza_colour_index_min = GIZA_COLOUR_INDEX_MIN;
-    }
-   else if (cimin > GIZA_COLOUR_INDEX_MAX)
-    {
-      _giza_colour_index_min = GIZA_COLOUR_INDEX_MAX;
-    }
-   else
-    {
-      _giza_colour_index_min = cimin;
-    }
-
-  if (cimax < GIZA_COLOUR_INDEX_MIN)
-    {
-      _giza_colour_index_max = GIZA_COLOUR_INDEX_MIN;
-    }
-   else if (cimax > GIZA_COLOUR_INDEX_MAX)
-    {
-      _giza_colour_index_max = GIZA_COLOUR_INDEX_MAX;
-    }
-   else
-    {
-      _giza_colour_index_max = cimax;
-    }
+  /* constrain both colour indices to be within GIZA_COLOUR_INDEX_MIN, GIZA_COLOUR_INDEX_MAX */
+  _giza_colour_index_min = MAX(GIZA_COLOUR_INDEX_MIN, MIN(cimin, GIZA_COLOUR_INDEX_MAX));
+  _giza_colour_index_max = MIN(GIZA_COLOUR_INDEX_MAX, MAX(cimax, GIZA_COLOUR_INDEX_MIN));
+  /* Now make sure that colour_index_min <= colour_index_max */
+  _giza_colour_index_min = MIN(_giza_colour_index_min, _giza_colour_index_max);
+  _giza_colour_index_max = MAX(_giza_colour_index_min, _giza_colour_index_max);
 }
 
 /**

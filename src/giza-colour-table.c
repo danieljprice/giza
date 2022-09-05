@@ -110,8 +110,13 @@ giza_set_colour_table (const double *controlPoints, const double *red, const dou
   _giza_colour_table.n = tmpn;
    if (tmpn < n)
    {
-     _giza_warning ("giza_set_colour_table", "Invalid values for control points in colour table settings");
-     return 2;
+       /* require at least two valid control points in our table to remain! */
+       if( tmpn<2 ) {
+           _giza_warning ("giza_set_colour_table", "not enough valid control points in colour table remain after vetting");
+           return 2;
+       }
+       /* otherwise just issue a warning */
+       _giza_warning ("giza_set_colour_table", "%d invalid values for control points in colour table settings out of %d", tmpn, n);
    }
 
   /* use the installed colour table to set the colours of colour indices in the specified range */

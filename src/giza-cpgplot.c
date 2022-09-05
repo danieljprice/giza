@@ -237,7 +237,7 @@ void cpgcons(const float *a, int idim, int jdim, int i1, int i2, \
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);
+  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,c,affine);
 }
 
 /***************************************************************
@@ -249,7 +249,7 @@ void cpgcont(const float *a, int idim, int jdim, int i1, int i2, \
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),c,affine);
+  giza_contour_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,c,affine);
 }
 
 /***************************************************************
@@ -798,7 +798,7 @@ void cpgqinf(const char *item, char *value, int *value_length)
  ***************************************************************/
 void cpgqitf(int *itf)
 {
-
+	giza_get_image_transfer_function(itf);
 }
 
 /***************************************************************
@@ -1069,7 +1069,7 @@ void cpgshs(float angle, float sepn, float phase)
  ***************************************************************/
 void cpgsitf(int itf)
 {
-
+	giza_set_image_transfer_function(itf);
 }
 
 /***************************************************************

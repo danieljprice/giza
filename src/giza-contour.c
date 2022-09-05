@@ -31,11 +31,12 @@
 #include "giza-io-private.h"
 #include "giza-transforms-private.h"
 #include <giza.h>
+#include <stdlib.h> /* for abs() */
 
 
 void
 giza_contour (int sizex, int sizey, const double* data, int i1,
-	      int i2, int j1, int j2, int ncont, const double* cont,
+	      int i2, int j1, int j2, int ncont_in, const double* cont,
 	      const double *affine)
 {
 #define xsect(p1,p2) (h[p2]*xh[p1]-h[p1]*xh[p2])/(h[p2]-h[p1])
@@ -75,9 +76,12 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
 
   /* set up the line style */
   int ls;
+  int       curls, newls;
+  const int ncont      = abs(ncont_in);
+  const int auto_style = (ncont_in > 0);
   giza_get_line_style (&ls);
-  giza_set_line_style (ls);
-
+  curls = ls;
+  giza_set_line_style (curls);
 
   for (j = (j2 - 1); j >= j1; j--)
     {
@@ -101,7 +105,6 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
 	    {
 	      if (cont[k] < dmin || cont[k] > dmax)
 		continue;
-
 	      for (m = 4; m >= 0; m--)
 		{
 		  /* calculate the relative height of the four corners and centre of the square */
@@ -201,6 +204,12 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
 		    default:
 		      break;
 		    }
+                  /* compute what the line style should be */
+                  newls = (auto_style ? (cont[k]<0 ? GIZA_LS_DOT : GIZA_LS_SOLID) : ls);
+                  if( newls!=curls ) {
+                      curls = newls;
+                      giza_set_line_style (curls);
+                  }
 		  /* draw the line */
                   cairo_matrix_transform_point (&mat, &x1, &y1);
                   cairo_matrix_transform_point (&mat, &x2, &y2);
@@ -216,6 +225,9 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
 
   /* restore the transformation */
   _giza_set_trans (oldTrans);
+
+  /* make sure line style returned to previous value */
+  giza_set_line_style (ls);
 
   /* restore buffering and stroke */
   if (!oldBuf)
@@ -239,7 +251,7 @@ giza_contour_float (int sizex, int sizey, const float* data, int i1,
       }
   }
 
-  for (i=0; i<ncont; i++) {
+  for (i=0; i<abs(ncont); i++) {
       dcont[i] = (double) cont[i];
   }
 

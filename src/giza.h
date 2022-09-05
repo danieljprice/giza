@@ -379,3 +379,6 @@ void giza_set_window_equal_scale_float (float x1, float x2, float y1,
 					float y2);
 void giza_get_window (double *x1, double *x2, double *y1, double *y2);
 void giza_get_window_float (float *x1, float *x2, float *y1, float *y2);
+
+void giza_set_image_transfer_function(int itf);
+void giza_get_image_transfer_function(int* itfp);

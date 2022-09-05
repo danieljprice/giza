@@ -148,6 +148,8 @@ module giza
       giza_set_window_equal_scale, &
       giza_get_window, &
       giza_format_number, &
+      giza_set_image_transfer_function, &
+      giza_get_image_transfer_function, &
       giza_query_device
 
 #include "giza-shared.h"
@@ -1718,6 +1720,21 @@ private
       integer(kind=c_int),intent(out) :: rval
     end function giza_query_device_c
  end interface
+
+ interface giza_set_image_transfer_function
+    subroutine giza_set_image_transfer_function(itf) bind(C)
+      import
+      integer(kind=c_int), value, intent(in) :: itf
+    end subroutine giza_set_image_transfer_function
+ end interface
+
+ interface giza_get_image_transfer_function
+    subroutine giza_get_image_transfer_function(itf) bind(C)
+      import
+      integer(kind=c_int), intent(out) :: itf
+    end subroutine giza_get_image_transfer_function
+ end interface
+
 !------------------ end of interfaces -----------------------
 
 contains
@@ -2021,6 +2038,7 @@ contains
     string = fstring(stringc)
 
   end subroutine giza_query_device_f2c
+
 
   !---------------------------------------------------------------------------
   !

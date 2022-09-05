@@ -129,6 +129,7 @@ typedef struct
   double fontAngle;
   int number_format;
   giza_callback_t motion_callback;
+  int itf; /* image transfer function */
 } giza_device_t;
 
 extern giza_device_t Dev[GIZA_MAX_DEVICES];
