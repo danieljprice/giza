@@ -96,7 +96,7 @@ library path, they are the ones that will be used.
 There are some basic examples of PGPLOT usage (mainly written for my own testing)
 in the F90 dir:
 ```
-cd giza/tests/F90
+cd giza/test/F90
 make test-pgaxis test-pgncur
 ./test-pgaxis
 ./test-pgncur

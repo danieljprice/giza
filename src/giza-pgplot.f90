@@ -329,7 +329,7 @@ subroutine PGCONT (A, IDIM, JDIM, I1, I2, J1, J2, C, NC, TR)
  real                :: affine(6)
 
  call convert_tr_to_affine(tr,affine)
- call giza_contour(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),C,affine)
+ call giza_contour(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,C,affine)
 
 end subroutine PGCONT
 
@@ -1155,8 +1155,11 @@ end subroutine PGQINF
 ! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQITF (ITF)
+ use giza, only:giza_get_image_transfer_function
  implicit none
  integer, intent(out) :: ITF
+
+ call giza_get_image_transfer_function(ITF)
 
 end subroutine PGQITF
 
@@ -1531,8 +1534,11 @@ end subroutine PGSHS
 ! Status: NOT IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSITF (ITF)
+ use giza, only:giza_set_image_transfer_function
  implicit none
  integer, intent(in) :: ITF
+
+ call giza_set_image_transfer_function(ITF)
 
 end subroutine PGSITF
 
