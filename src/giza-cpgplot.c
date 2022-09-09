@@ -794,7 +794,7 @@ void cpgqinf(const char *item, char *value, int *value_length)
 
 /***************************************************************
  * cpgqitf -- inquire image transfer function
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgqitf(int *itf)
 {
@@ -1065,7 +1065,7 @@ void cpgshs(float angle, float sepn, float phase)
 
 /***************************************************************
  * cpgsitf -- set image transfer function
- * Status: NOT IMPLEMENTED
+ * Status: IMPLEMENTED
  ***************************************************************/
 void cpgsitf(int itf)
 {

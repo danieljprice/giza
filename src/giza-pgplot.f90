@@ -1152,7 +1152,7 @@ end subroutine PGQINF
 
 !------------------------------------------------------------------------
 ! Module: PGQITF -- inquire image transfer function
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQITF (ITF)
  use giza, only:giza_get_image_transfer_function
@@ -1531,7 +1531,7 @@ end subroutine PGSHS
 
 !------------------------------------------------------------------------
 ! Module: PGSITF -- set image transfer function
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSITF (ITF)
  use giza, only:giza_set_image_transfer_function
