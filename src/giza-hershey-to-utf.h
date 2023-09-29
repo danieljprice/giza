@@ -101,6 +101,8 @@ static giza_hershey_to_utf_entry const giza_hershey_to_utf[] = {
 {233, "#"},
 {234, "&"},
 {235, "\u2311"},
+{273, "\u00ae"},
+{274, "\u00a9"},
 {501, "A"},
 {502, "B"},
 {503, "C"},
