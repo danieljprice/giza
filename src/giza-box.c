@@ -108,6 +108,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
   double majTickL, subTickL, currentTickL;
   char tmp[100];
   int i, i1, i2, j, jmax, jtmp;
+  int xnumber_format = Dev[id].number_format, ynumber_format = Dev[id].number_format;
   /* get a normalized local copy of Dev[id].Win into Win such that xmin <= xmax AND ymin <= ymax
    * otherwise axes with negative increment to the right won't display ANY tickmarks */
   giza_window_t *pWin = &Dev[id].Win, Win = *pWin;
@@ -172,6 +173,12 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	case ('P'):
 	  xdraw_project = -1;
 	  break;
+        case ('1'):
+          xnumber_format = GIZA_NUMBER_FORMAT_DEC;
+          break;
+        case ('2'):
+          xnumber_format = GIZA_NUMBER_FORMAT_EXP;
+          break;
 	default:
 	  break;
 	}
@@ -232,6 +239,12 @@ giza_box (const char *xopt, double xtick, int nxsub,
 	case ('P'):
 	  ydraw_project = 1;
 	  break;
+        case ('1'):
+          ynumber_format = GIZA_NUMBER_FORMAT_DEC;
+          break;
+        case ('2'):
+          ynumber_format = GIZA_NUMBER_FORMAT_EXP;
+          break;
 	default:
 	  break;
 	}
@@ -370,7 +383,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
             }
           else
             {
-              giza_format_number (i*nv, np, Dev[id].number_format, tmp, sizeof(tmp));
+              giza_format_number (i*nv, np, xnumber_format, tmp, sizeof(tmp));
             }
 
           if (xlabel_unconventional)
@@ -394,7 +407,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		{
 		  xratio = (xval - Win.xmin) / (Win.xmax - Win.xmin);
 		  xval = pow (10, xval);
-		  giza_format_number (j+1, _giza_nint (i * xintervalMin), Dev[id].number_format, tmp, sizeof(tmp));
+		  giza_format_number (j+1, _giza_nint (i * xintervalMin), xnumber_format, tmp, sizeof(tmp));
 
                   if (xlabel_unconventional)
                     giza_annotate ("T", 0.8, xratio, 0.5, tmp);
@@ -519,7 +532,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
             }
           else
             {
-              giza_format_number (i*nv, np, Dev[id].number_format, tmp, sizeof(tmp));
+              giza_format_number (i*nv, np, ynumber_format, tmp, sizeof(tmp));
             }
 
           if (ylabel_unconventional)
@@ -552,7 +565,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
 		{
 		  yratio = (yval - Win.ymin) / (Win.ymax - Win.ymin);
 		  yval = pow (10, yval);
-		  giza_format_number (j+1, _giza_nint (i*yintervalMin), Dev[id].number_format, tmp, sizeof(tmp));
+		  giza_format_number (j+1, _giza_nint (i*yintervalMin), ynumber_format, tmp, sizeof(tmp));
 
                   if (ylabel_unconventional)
                     {
