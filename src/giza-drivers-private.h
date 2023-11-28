@@ -32,6 +32,7 @@
 #define GIZA_DEVICE_VPS    7
 #define GIZA_DEVICE_EPS    8
 #define GIZA_DEVICE_SVG    9
+#define GIZA_DEVICE_MP4    10
 
 #define GIZA_DEFAULT_PREFIX "giza"
 
