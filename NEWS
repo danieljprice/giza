@@ -1,3 +1,76 @@
+v1.4.0
+------
+- added mp4 driver, can simply give "file.mp4" as the device to generate mp4 file
+- can amend flags to ffmpeg using GIZA_FFMPEG_FLAGS environment variable
+- automated cleanup of temporary .png files used to make the movie
+
+v1.3.2
+------
+- bug fix with spaces at end of string causing failure on open_device in Fortran interface (#35)
+
+v1.3.1
+------
+- giza_axis and giza_tick added to libcpgplot interface (#12)
+- fixed various documentation issues
+- API documentation automatically updates via github workflow
+
+v1.3.0
+------
+- new library functions giza_set_motion_callback and giza_end_motion_callback
+- can now specify a callback function func(x,y,mode) that will be called every time the cursor moves
+- implemented giza_axis and giza_tick with replacement functionality for PGAXIS and PGTICK (#12)
+- Fortran API no longer trims text strings before passing them to giza routines. This enables one to send a string of blank characters with an opaque background colour in order to erase previously drawn text
+
+v1.2.1
+------
+- bug fix specifying device at prompt with directory path, e.g. dir/file.png
+
+v1.2.0
+------
+Features:
+- new giza_set_number_format() sets format to use by giza_box() (thanks to chafar)
+- giza_open() now detects and handles errors occurring during setup of the new device
+- PGEND()/cpgend() now closes all open devices, as per documentation (thanks to H. Verkouter)
+- giza build includes freetype and fontconfig libraries
+- improved font memory management (thanks to H. Verkouter)
+
+Bug fixes:
+- build failure caused by giza_box_time fixed (#21)
+- bug fix with internal logic in naming png files if blank page exists (thanks to Aard Keimpema, #28)
+- seg fault fixed when multiple devices are opened and closed in random order (thanks to H. Verkouter)
+- fixed possible buffer overflow in giza_format_number (thanks to H. Verkouter)
+- avoid the 'initial declarations are only allowed in C99 mode' error (thanks to M. Hutchison)
+
+Other:
+- deleted unused _giza_change_size() function
+- updated documentation for github
+- automated build checking, api documentation and release-on-tag via github actions
+
+v1.1.0
+------
+Features:
+- various PGPLOT compatibility improvements
+- better compatibility with PGPLOT marker symbols (#5, #16)
+- reworked PGPAP implementation
+
+Bug fixes:
+- segmentation fault in _giza_parse_string fixed (#13)
+- pgqinf issue fixed (#11)
+- splash movie mode/ resize X-window bug fixed (#18)
+- Macports build failure fixed (#19)
+- cpggray issue fixed
+- fix backspace handling (\b) in text strings
+
+v1.0.0
+------
+A swag of new/missing features, mainly thanks to excellent contributions from Harro Verkouter:
+
+- implementation (port) of PGTBOX / giza_tbox, giving option for axis labelling in days, minutes and seconds
+- ability to resize X-windows
+- wider character set supported
+- support for PGBOX 'I' and 'P' options
+- support for backspace (\b) in printing strings
+
 -----------------------------------
 Changes in 0.9.5 compared to 0.9.4
 -----------------------------------

@@ -1,6 +1,183 @@
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/release.yml: (release) fix bump brew command
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #47 from danieljprice/mp4 mp4 device, v1.4.0
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, configure, configure.ac, docs/documentation/api.html,
+	docs/index.html, docs/news/index.html: v1.4.0
+
+2023-11-28  github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+
+	* docs/documentation/api.html: [web-bot] updated auto-generated
+	documentation
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-mp4.c: (mp4) always replace existing mp4 file; allow user to set ffmpeg
+	flags using GIZA_FFMPEG_FLAGS environment variable
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* LICENSE => COPYING, src/Makefile.am, src/Makefile.in,
+	src/giza-driver-mp4-private.h, src/giza-driver-mp4.c,
+	src/giza-drivers-private.h, src/giza-drivers.c: (mp4) added mp4 device; tested and seems to work
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* COPYING, LICENSE: changed license to LGPL3
+
+2023-10-10  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #46 from
+	htrb/add_registered_and_copyright_sign add registered and copyright sign as symbols.
+
+2023-09-29  Hiroyuki Ito <ZXB01226@nifty.com>
+
+	* src/giza-hershey-to-utf.h: add registered and copyright sign as
+	symbols.
+
+2023-09-29  Hiroyuki Ito <ZXB01226@nifty.com>
+
+	* src/giza-box.c: Add support for '1' and '2' options to giza_box.
+
+2023-03-10  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #40 from bkmgit/empty-file Delete empty api-ref.html file
+
+2022-09-09  github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+
+	* docs/documentation/cpgplot-status.html,
+	docs/documentation/pgplot-status.html,
+	docs/documentation/pgplot.html: [web-bot] updated auto-generated
+	documentation
+
+2022-09-09  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-cpgplot.c, src/giza-pgplot.f90: (docs) updated pgplot implementation status for PGSITF/PGQITF
+
+2022-09-09  Daniel Price <daniel.price@monash.edu>
+
+	* Makefile.in, aclocal.m4, config.h.in, configure, src/Makefile.in,
+	test/C/Makefile.in, test/F90/Makefile.in, test/Makefile.in: (build) updated automake files
+
+2022-09-09  Daniel Price <daniel.price@monash.edu>
+
+	* : commit 1902b4d55ffc1439fabc7e564f9d3e16cf2c8817 Merge: 4ff70a8
+	ace6b44 Author: Daniel Price <daniel.price@monash.edu> Date:   Tue
+	Sep 6 08:32:19 2022 +1000
+
+2022-09-06  Daniel Price <daniel.price@monash.edu>
+
+	* : Merge pull request #38 from kerel-fs/pr/fix_readme
+
+2022-08-01  Harro Verkouter <hverkouter@gmail.com>
+
+	* src/Makefile.am, src/giza-cpgplot.c, src/giza-fortran.F90,
+	src/giza-itf.c, src/giza-itf.h, src/giza-pgplot.f90,
+	src/giza-private.h, src/giza-render-private.h, src/giza-render.c,
+	src/giza.h: Add support for PG[SQ]ITF, fix PGCONT PGPLOT has three image transfer functions defined for PGIMAG:
+	linear, log, sqrt. These are now implemented by this commit.  The current render engine uses pixel-colour-indices to colour
+	pixels: based on the pixel value, limits, the transfer function
+	computes the "position" of the pixel on the 0->1 scale and
+	transforms that to the nearest colour index from the current
+	CIMIN/CIMAX colour index range. (To follow PGPLOT docs.) The old code would ignore the colour index range and for each pixel
+	interpolate the colour table that was set, basically always "true
+	colour" representation. In a subsequent commit I could provide
+	infrastructure to support both: code calling giza_render() directly
+	would return to this behaviour, the call via the PGPLOT interface
+	would force it through using colour index range.  The code now has several flavours of transforming a pixel value to a
+	normalized colour (on the interval 0..1) or converting that directly
+	into a colour index between cimin, cimax.  In the process fixed some minor bugs.  Tested using pgdemo4, adding a PGSITF([123]) manually in the demo
+	program.
+
+2022-08-01  Harro Verkouter <hverkouter@gmail.com>
+
+	* src/giza-colour-table.c: Fix giza_set_colour_table to set
+	colourindices The function would warn about inconsistent entries in the
+	controlPoints and return with an error, not setting the colour-index
+	table.  PGPLOT pgdemo4 (demonstrating PGIMAG) has a table with controlpoints
+	outside the range 0->1 (-.5, 1.7) triggering this warning and error
+	exit.  The colour table is installed nonetheless! Net effect: pixel
+	colourings in "true colour" - i.e. those that do not go through
+	colour indices - keep on working, but those relying on colour
+	indices don't.  This fix prints the warning, checks that a sensible number of
+	control points remain, and then goes on computing the colours for
+	the set colour index range (PGSCIR) - as per documentation.
+
+2022-08-01  Harro Verkouter <hverkouter@gmail.com>
+
+	* src/giza-colour-index.c: Simplified set_colour_index_range
+
+2022-08-01  Harro Verkouter <hverkouter@gmail.com>
+
+	* src/giza-contour.c: Follow PGPLOT auto-linestyle in PGCONT
+
+2022-07-27  Fabian P. Schmidt <kerel@mailbox.org>
+
+	* README.md: (docs) fix typo in pgplot replacement usage section
+
+2022-07-25  Harro Verkouter <hverkouter@gmail.com>
+
+	* src/giza-points.c: Address char height/line width scaling issues According to PGPLOT documentation, symbols are drawn using current
+	attributes character height and line width (see
+	https://sites.astro.caltech.edu/~tjp/pgplot/subroutines.html#PGPT).  Using the pgdemo2 program, 2nd page (SUBROUTINE PGEX22 in
+	pgdemo2.f), this behaviour can be tested. I modified both the
+	linewidth (LW=8) and the character height (CH=2.5) to see how PGPLOT
+	handles this.  Indeed PGPLOT makes the symbols larger and draws thicker lines. The
+	Giza master branch does not follow this behaviour. This commit seeks
+	to address that.  Some base symbols had to be scaled up a bit wrt to their current
+	setting, after which character height scaling could be used to do
+	the rest.  giza-points.c does not set a fixed line width anymore, in stead it
+	follows the current device's setting.
+
+2022-03-14  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, configure, configure.ac: v1.3.2
+
+2022-03-14  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-fortran.F90: (giza-fortran) cleanup unnecessary implicit none statements; keep
+	only the one at the top of the module
+
+2022-03-14  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-drivers.c, src/giza-fortran.F90: (#35) added additional
+	trims for safety where required
+
+2022-03-14  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-drivers.c: (giza-drivers) trim spaces at end of device string in C causing test
+	failures in Fortran interface, fixes #35
+
+2022-01-28  github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+
+	* docs/documentation/api.html: [web-bot] updated auto-generated
+	documentation
+
 2022-01-28  Daniel Price <daniel.price@monash.edu>
 
-	* src/giza-drivers.c: (docs) private routines removed from api docs
+	* ChangeLog, LATEST.md, configure, configure.ac,
+	docs/news/index.html: v1.3.1
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* test/F90/test-pgaxis.f90: (pgaxis) better pgaxis test
+
+2022-01-28  Daniel Price <daniel.price@monash.edu>
+
+	* : commit e27012112cb66166dfe3a50d86a22aeba1fbeab2 Author: Daniel
+	Price <daniel.price@monash.edu> Date:   Fri Jan 28 15:51:26 2022
+	+1100
+
+2022-01-28  github-actions <41898282+github-actions[bot]@users.noreply.github.com>
+
+	* docs/documentation/api.html: [web-bot] updated auto-generated
+	documentation
 
 2022-01-28  Daniel Price <daniel.price@monash.edu>
 
