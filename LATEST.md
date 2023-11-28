@@ -1,3 +1,5 @@
-Changes in v1.3.2
+Changes in v1.4.0
 ------------------
-- bug fix with spaces at end of string causing failure on open_device in Fortran interface (#35)
+- added mp4 driver, can simply give "file.mp4" as the device to generate mp4 file
+- can amend flags to ffmpeg using GIZA_FFMPEG_FLAGS environment variable
+- automated cleanup of temporary .png files used to make the movie
