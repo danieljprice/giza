@@ -12,7 +12,7 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-cursor-routines.c giza-device-has-cursor.c \
        giza-draw-background.c giza-draw.c giza-driver-eps.c \
        giza-driver-null.c giza-driver-pdf.c giza-driver-png.c \
-       giza-driver-ps.c giza-driver-svg.c giza-driver-xw.c \
+       giza-driver-mp4.c giza-driver-ps.c giza-driver-svg.c giza-driver-xw.c \
        giza-drivers.c giza-environment.c giza-error-bars.c giza-fill.c \
        giza-format-number.c giza-function-t.c giza-function-x.c \
        giza-function-y.c giza-get-key-press.c giza-get-surface-size.c \
@@ -32,7 +32,7 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-driver-eps-private.h giza-line-style-private.h giza-version.h \
        giza-driver-null-private.h giza-private.h giza-viewport-private.h \
        giza-driver-pdf-private.h giza-render-private.h giza-warnings-private.h \
-       giza-driver-png-private.h giza-set-font-private.h giza-window-private.h \
+       giza-driver-png-private.h giza-driver-mp4-private.h giza-set-font-private.h giza-window-private.h \
        giza-driver-ps-private.h giza-shared.h giza.h giza-itf.h
 
 libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS)

@@ -26,6 +26,7 @@
 #include "giza-drivers-private.h"
 #include "giza-driver-xw-private.h"
 #include "giza-driver-png-private.h"
+#include "giza-driver-mp4-private.h"
 #include "giza-driver-pdf-private.h"
 #include "giza-driver-ps-private.h"
 #include "giza-driver-eps-private.h"
@@ -89,6 +90,7 @@ giza_device_t Dev[GIZA_MAX_DEVICES];
  *  -/xw  :- X-window
  *  -/eps :- Encapsulated Postscript
  *  -/png :- Portable Network Graphics file
+ *  -/mp4 :- Mpeg4 movie [requires ffmpeg support]
  *  -/svg :- Scalable Vector Graphics file
  *  -/pdf :- Portable Document Format
  *  -/vpdf :- Landscape Portable Document Format
@@ -198,6 +200,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
       success = _giza_open_device_xw (width, height, units);
       break;
 #endif
+    case GIZA_DEVICE_MP4:
     case GIZA_DEVICE_PNG:
       success = _giza_open_device_png (width, height, units);
       break;
@@ -447,6 +450,7 @@ giza_change_page (void)
       _giza_change_page_xw ();
       break;
 #endif
+    case GIZA_DEVICE_MP4:
     case GIZA_DEVICE_PNG:
       _giza_change_page_png ();
       break;
@@ -571,8 +575,11 @@ _giza_close_device_unchecked (void) {
       _giza_close_device_xw ();
       break;
 #endif
+    case GIZA_DEVICE_MP4:
+      _giza_close_device_mp4(1);
+      break;
     case GIZA_DEVICE_PNG:
-      _giza_close_device_png (1);
+      _giza_close_device_png(1);
       break;
     case GIZA_DEVICE_SVG:
       _giza_close_device_svg ();
@@ -904,7 +911,9 @@ _giza_device_to_int (const char *newDeviceName)
 #endif
   else if (!strcmp (devName, "/png"))
     newDevice = GIZA_DEVICE_PNG;
-  else if (!strcmp (devName, "/svg"))
+  else if (!strcmp(devName, "/mp4"))
+    newDevice = GIZA_DEVICE_MP4;
+  else if (!strcmp(devName, "/svg"))
     newDevice = GIZA_DEVICE_SVG;
   else if (!strcmp (devName, "/pdf"))
     newDevice = GIZA_DEVICE_PDF;
@@ -928,7 +937,9 @@ _giza_device_to_int (const char *newDeviceName)
  */
       if (!strcmp (devName, ".png"))
         newDevice = GIZA_DEVICE_PNG;
-      else if (!strcmp (devName, ".svg"))
+      else if (!strcmp(devName, ".mp4"))
+        newDevice = GIZA_DEVICE_MP4;
+      else if (!strcmp(devName, ".svg"))
         newDevice = GIZA_DEVICE_SVG;
       else if (!strcmp (devName, ".pdf"))
         newDevice = GIZA_DEVICE_PDF;
@@ -969,8 +980,11 @@ _giza_int_to_device (int numDevice, char *DeviceName, int rval)
     case GIZA_DEVICE_PNG:
       strncpy(DeviceName,"/png",max_chars);
       break;
+    case GIZA_DEVICE_MP4:
+      strncpy(DeviceName, "/mp4", max_chars);
+      break;
     case GIZA_DEVICE_SVG:
-      strncpy(DeviceName,"/svg",max_chars);
+      strncpy(DeviceName, "/svg", max_chars);
       break;
     case GIZA_DEVICE_PS:
       strncpy(DeviceName,"/ps",max_chars);
@@ -1022,6 +1036,7 @@ _giza_init_device_list (char **deviceList)
 #endif
   strcat (*deviceList, "Non-interactive file formats:\n");
   strcat (*deviceList, "\t/png or file.png   (Portable network graphics file)\n");
+  strcat (*deviceList, "\t/mp4 or file.mp4   (mpeg4 movie [requires ffmpeg installation])\n");
   strcat (*deviceList, "\t/svg or file.svg   (Scalable vector graphics file)\n");
 #ifdef _GIZA_HAS_EPS
   strcat (*deviceList, "\t/eps or file.eps   (Encapsulated Postscript, one file per page)\n");
