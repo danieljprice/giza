@@ -3,3 +3,9 @@ Changes in v1.4.0
 - added mp4 driver, can simply give "file.mp4" as the device to generate mp4 file
 - can amend flags to ffmpeg using GIZA_FFMPEG_FLAGS environment variable
 - automated cleanup of temporary .png files used to make the movie
+- add registered and copyright sign as symbols (thanks To Hiroyuki Ito)
+- Add support for '1' and '2' options to giza_box (thanks to Hiroyuki Ito)
+- Add support for PG[SQ]ITF. PGPLOT has three image transfer functions defined for PGIMAG: linear, log, sqrt. These are now implemented (thanks to Harro Verkouter)
+- Fix giza_set_colour_table to set colour indices. The function would warn about inconsistent entries in the controlPoints and return with an error, not setting the colour-index table (thanks to Harro Verkouter)
+- Follow PGPLOT auto-linestyle in PGCONT (thanks to Harro Verkouter)
+- Address char height/line width scaling issues: According to PGPLOT documentation, symbols are drawn using current attributes character height and line width  (thanks to Harro Verkouter)
