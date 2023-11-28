@@ -34,6 +34,7 @@
 #include <unistd.h>
 
 #define GIZA_DEVICE_EXTENSION ".mp4"
+#define GIZA_FFMPEG_FLAGS_DEFAULT "-r 10 -vb 50M -bt 100M -pix_fmt yuv420p -vf setpts=4.*PTS"
 
 /**
  * Closes an open mp4 device. This closes the sequence of png images
@@ -50,9 +51,19 @@ _giza_close_device_mp4 (int last)
      char fileName[length + 1];
      _giza_get_filename_for_device(fileName, Dev[id].prefix, 0, GIZA_DEVICE_EXTENSION, 1);
 
+     /* delete the existing mp4 file if it exists */
+     if (access(fileName, F_OK) != -1)
+       {
+         remove(fileName);
+       }
+
+     /* allow the user to change the ffmpeg flags with an environment variable */
+     char *userFlags = getenv("GIZA_FFMPEG_FLAGS");
+     char *flagsToUse = userFlags ? userFlags : GIZA_FFMPEG_FLAGS_DEFAULT;
+
      /* construct ffmpeg command and repeat it to the user */
      char command[512]; /* Adjust size as needed */
-     sprintf(command, "ffmpeg -i %s_%%04d.png -r 10 -vb 50M -bt 100M -pix_fmt yuv420p -vf setpts=4.*PTS %s", Dev[id].prefix, fileName);
+     sprintf(command, "ffmpeg -i %s_%%04d.png %s %s", Dev[id].prefix,flagsToUse,fileName);
      _giza_message(command);
 
      /* issue command and check that it succeeded */
