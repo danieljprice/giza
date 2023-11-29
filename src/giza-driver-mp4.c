@@ -34,7 +34,7 @@
 #include <unistd.h>
 
 #define GIZA_DEVICE_EXTENSION ".mp4"
-#define GIZA_FFMPEG_FLAGS_DEFAULT "-r 10 -vb 50M -bt 100M -pix_fmt yuv420p -vf setpts=4.*PTS"
+#define GIZA_FFMPEG_FLAGS_DEFAULT "-r 10 -vb 50M -bt 100M -pix_fmt yuv420p -vf setpts=4.*PTS -loglevel quiet"
 
 /**
  * Closes an open mp4 device. This closes the sequence of png images
