@@ -1,3 +1,8 @@
+v1.4.1
+------
+- quieter output from mp4 device
+- bug fix in release workflow
+
 v1.4.0
 ------
 - added mp4 driver, can simply give "file.mp4" as the device to generate mp4 file
