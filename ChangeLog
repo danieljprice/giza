@@ -1,3 +1,30 @@
+2023-11-30  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, NEWS, configure, configure.ac, docs/news/index.html: 
+	v1.4.1
+
+2023-11-30  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-mp4.c: (mp4) use -loglevel quiet in default ffmpeg flags
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, NEWS: update release notes for v1.4.0
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* .github/workflows/api.yml, .github/workflows/build.yml,
+	.github/workflows/release.yml: update github workflows
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* src/giza-driver-mp4.c: (mp4) avoid possibility to overflow string length using environment
+	variable
+
+2023-11-28  Daniel Price <daniel.price@monash.edu>
+
+	* ChangeLog, NEWS: updated ChangeLog + NEWS
+
 2023-11-28  Daniel Price <daniel.price@monash.edu>
 
 	* .github/workflows/release.yml: (release) fix bump brew command
