@@ -27,14 +27,7 @@ jobs:
     # check out the repository
     - uses: actions/checkout@v4
 
-    - name: compile giza (Mac OS)
-      if: runner.os == 'macOS'
-      run: |
-           ./configure
-           make install
-
-    - name: compile giza (Linux)
-      if: runner.os == 'Linux'
+    - name: compile and install giza
       run: |
            ./configure
            make
