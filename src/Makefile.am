@@ -51,7 +51,7 @@ libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
 # fix issue with -DHAVE_CONFIG_H being passed incorrectly to libtool
 libpgplot_la_FCFLAGS = $(AM_FCFLAGS)
 libpgplot_la_FFLAGS = $(AM_FFLAGS)
-libpgplot_la_CPPFLAGS = $(AM_CPPFLAGS)
+libpgplot_la_CPPFLAGS =
 
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS) -static
 
