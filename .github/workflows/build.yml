@@ -24,11 +24,11 @@ jobs:
         brew install libx11
         brew install freetype
         brew install fontconfig
+        brew install gfortran
 
     - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
       run: |
-        sudo apt-get update
         sudo apt-get install -y gfortran
         sudo apt-get install -y libcairo2-dev
         sudo apt-get install -y libx11-dev
