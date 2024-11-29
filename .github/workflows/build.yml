@@ -25,7 +25,7 @@ jobs:
         brew install freetype
         brew install fontconfig
 
-    #- name: Install dependencies (Ubuntu)
+    - name: Install dependencies (Ubuntu)
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
