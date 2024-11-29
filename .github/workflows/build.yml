@@ -8,22 +8,42 @@ on:
   pull_request:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Install gfortran for Linux
-      run: sudo apt-get install gfortran
+    #- name: Install dependencies (macOS)
+     # if: runner.os == 'macOS'
+     # run: |
+     #   brew install cairo
+     #   brew install pkg-config
+     #   brew install libx11
+     #   brew install freetype
+     #   brew install fontconfig
+
+    #- name: Install dependencies (Ubuntu)
+    #  if: runner.os == 'Linux'
+      #run: |
+      #  sudo apt-get update
+      #  sudo apt-get install -y libcairo2-dev
+      #  sudo apt-get install -y libx11-dev
+      #  sudo apt-get install -y pkg-config
+      #  sudo apt-get install -y libfreetype6-dev
+      #  sudo apt-get install -y libfontconfig1-dev
+
+    - name: Install gfortran compiler
+      uses: fortran-lang/setup-fortran@v1
+      with:
+         compiler: gcc
 
     - name: Check gfortran version
       run: gfortran --version
 
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    # check out the repository
     - uses: actions/checkout@v3
 
     - name: compile giza
