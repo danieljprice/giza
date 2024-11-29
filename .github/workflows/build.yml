@@ -17,14 +17,21 @@ jobs:
         os: [ubuntu-latest, macos-latest]
 
     steps:
+
+    # make sure we have gfortran installed and linked
+    - name: Install gfortran compiler
+      uses: fortran-lang/setup-fortran@v1
+      with:
+        compiler: gcc
+
     # check out the repository
     - uses: actions/checkout@v4
 
     - name: compile giza (Mac OS)
       if: runner.os == 'macOS'
       run: |
-           ./configure --prefix=/opt/homebrew
-           make V=1 install
+           ./configure
+           make install
 
     - name: compile giza (Linux)
       if: runner.os == 'Linux'
