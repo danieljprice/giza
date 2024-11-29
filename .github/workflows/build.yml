@@ -22,6 +22,14 @@ jobs:
     - name: compile giza (Mac OS)
       if: runner.os == 'macOS'
       run: |
+           echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
+           pkg-config --version
+           echo "Checking cairo:"
+           pkg-config --cflags cairo
+           pkg-config --libs cairo
+           echo "Checking paths:"
+           pkg-config --variable=includedir cairo
+           pkg-config --variable=libdir cairo
            ./configure --prefix=/opt/homebrew
            make install
 
@@ -29,4 +37,5 @@ jobs:
       if: runner.os == 'Linux'
       run: |
            ./configure
-           make install
+           make
+           sudo make install
