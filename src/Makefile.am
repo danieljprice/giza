@@ -2,7 +2,14 @@
 
 CLEANFILES = *.mod *.pc
 
-lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
+lib_LTLIBRARIES = libgiza.la libcpgplot.la
+
+# only compile libpglot.a and giza.mod if we have a working Fortran compiler
+if HAVE_FC
+lib_LTLIBRARIES += libpgplot.la
+fmoddir = $(libdir)/$(FC)/modules
+fmod_DATA = giza.mod
+endif
 
 libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c \
        giza-band-style.c giza-band.c giza-box-time.c giza-box.c \
@@ -39,23 +46,18 @@ libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS)
 
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
-libpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
-
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
        -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS)
 
 libcpgplot_la_SOURCES = giza-cpgplot.c
 
-libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS) -lgiza
+libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS) -lgiza -static
 
 libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
 
-libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS)
+libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS) -static
 
 include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
-
-fmoddir = $(libdir)/$(FC)/modules
-fmod_DATA = giza.mod

@@ -14,6 +14,14 @@ AM_MAINTAINER_MODE([disable])
 AC_PROG_CC
 AC_PROG_FC
 AC_CONFIG_HEADERS([config.h])
+#
+# conditional on whether Fortran compiler found,
+# skip compilation of libpgplot.a otherwise
+#
+AM_CONDITIONAL([HAVE_FC], [test "x$FC" != "x"])
+#
+# set giza version
+#
 AC_SUBST(GIZA_VERSION_MAJOR,giza_version_major)
 AC_SUBST(GIZA_VERSION_MINOR,giza_version_minor)
 AC_SUBST(GIZA_VERSION_MICRO,giza_version_micro)
@@ -43,7 +51,20 @@ ft_libs_osx="-L/usr/X11/lib -lfreetype"
 ft_cflags_osx="-I/usr/X11/include/freetype2/"
 fc_libs_osx="-L/usr/X11/lib -lfontconfig"
 fc_cflags_osx="-I/usr/X11/include/fontconfig/"
-PKG_CHECK_MODULES([CAIRO], [cairo],[],[AC_SUBST(CAIRO_LIBS,$cairo_libs_osx) AC_SUBST(CAIRO_CFLAGS,$cairo_cflags_osx)])
+#
+# for cairo have to be careful to return the /usr/X11/include not /usr/X11/include/cairo
+# because in the code we always write "include <cairo/cairo.h>" not "include <cairo.h>"
+#
+PKG_CHECK_MODULES([CAIRO], [cairo],
+    [
+        CAIRO_INCLUDEDIR=`$PKG_CONFIG --variable=includedir cairo`
+        CAIRO_LIBS=`$PKG_CONFIG --libs cairo`
+        CAIRO_CFLAGS="-I$CAIRO_INCLUDEDIR"
+    ],
+    [
+        AC_SUBST(CAIRO_LIBS,$cairo_libs_osx)
+        AC_SUBST(CAIRO_CFLAGS,$cairo_cflags_osx)
+    ])
 PKG_CHECK_MODULES([X11], [x11], [], [AC_SUBST(X11_LIBS,$x11_libs)])
 PKG_CHECK_MODULES([FT], [freetype2], [], [AC_SUBST(FT_LIBS,$ft_libs_osx)  AC_SUBST(FT_CFLAGS,$ft_cflags_osx)])
 PKG_CHECK_MODULES([FC], [fontconfig], [], [AC_SUBST(FC_LIBS,$fc_libs_osx) AC_SUBST(FC_CFLAGS,$fc_cflags_osx)])
@@ -58,4 +79,21 @@ AC_CONFIG_FILES([
  test/C/Makefile
  test/F90/Makefile
 ])
+
+AC_MSG_NOTICE([====== Compilation flags being used ======])
+AC_MSG_NOTICE([CFLAGS = $CFLAGS])
+AC_MSG_NOTICE([CPPFLAGS = $CPPFLAGS])
+AC_MSG_NOTICE([CAIRO_CFLAGS = $CAIRO_CFLAGS])
+AC_MSG_NOTICE([CAIRO_LIBS = $CAIRO_LIBS])
+AC_MSG_NOTICE([X11_CFLAGS = $X11_CFLAGS])
+AC_MSG_NOTICE([X11_LIBS = $X11_LIBS])
+AC_MSG_NOTICE([FT_CFLAGS = $FT_CFLAGS])
+AC_MSG_NOTICE([FT_LIBS = $FT_LIBS])
+AC_MSG_NOTICE([FC_CFLAGS = $FC_CFLAGS])
+AC_MSG_NOTICE([FC_LIBS = $FC_LIBS])
+AC_MSG_NOTICE([PKG_CONFIG_PATH = $PKG_CONFIG_PATH])
+AC_MSG_NOTICE([================================])
+AS_IF([test "x$FC" = "x"],
+    [AC_MSG_WARN([*** NO FORTRAN COMPILER FOUND: skipping compilation of libpglot and giza Fortran module *** ])])
+
 AC_OUTPUT

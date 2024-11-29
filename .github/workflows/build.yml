@@ -8,25 +8,27 @@ on:
   pull_request:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Install gfortran for Linux
-      run: sudo apt-get install gfortran
 
-    - name: Check gfortran version
-      run: gfortran --version
+    # make sure we have gfortran installed and linked
+    - name: Install gfortran compiler
+      uses: fortran-lang/setup-fortran@v1
+      with:
+        compiler: gcc
 
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v3
+    # check out the repository
+    - uses: actions/checkout@v4
 
-    - name: compile giza
+    - name: compile and install giza
       run: |
            ./configure
            make
+           sudo make install
