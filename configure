@@ -16217,6 +16217,10 @@ ft_libs_osx="-L/usr/X11/lib -lfreetype"
 ft_cflags_osx="-I/usr/X11/include/freetype2/"
 fc_libs_osx="-L/usr/X11/lib -lfontconfig"
 fc_cflags_osx="-I/usr/X11/include/fontconfig/"
+#
+# for cairo have to be careful to return the /usr/X11/include not /usr/X11/include/cairo
+# because in the code we always write "include <cairo/cairo.h>" not "include <cairo.h>"
+#
 
 
 
@@ -16408,20 +16412,30 @@ fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$CAIRO_PKG_ERRORS" >&5
 
-	CAIRO_LIBS=$cairo_libs_osx
- CAIRO_CFLAGS=$cairo_cflags_osx
+
+        CAIRO_LIBS=$cairo_libs_osx
+
+        CAIRO_CFLAGS=$cairo_cflags_osx
+
 
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
-	CAIRO_LIBS=$cairo_libs_osx
- CAIRO_CFLAGS=$cairo_cflags_osx
+
+        CAIRO_LIBS=$cairo_libs_osx
+
+        CAIRO_CFLAGS=$cairo_cflags_osx
+
 
 else
 	CAIRO_CFLAGS=$pkg_cv_CAIRO_CFLAGS
 	CAIRO_LIBS=$pkg_cv_CAIRO_LIBS
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
 printf "%s\n" "yes" >&6; }
+
+        CAIRO_INCLUDEDIR=`$PKG_CONFIG --variable=includedir cairo`
+        CAIRO_LIBS=`$PKG_CONFIG --libs cairo`
+        CAIRO_CFLAGS="-I$CAIRO_INCLUDEDIR"
 
 fi
 
