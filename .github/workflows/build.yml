@@ -24,7 +24,7 @@ jobs:
       if: runner.os == 'macOS'
       run: |
            ./configure --prefix=/opt/homebrew
-           make install
+           make -V install
 
     - name: compile giza (Linux)
       if: runner.os == 'Linux'
