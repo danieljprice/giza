@@ -24,23 +24,36 @@ jobs:
         brew install libx11
         brew install freetype
         brew install fontconfig
-
-    - name: Install dependencies (Ubuntu)
-      if: runner.os == 'Linux'
+        ls /usr/X11/include/cairo
+    
+    - name: Check X11 paths (macOS)
+      if: runner.os == 'macOS'
       run: |
-        sudo apt-get install -y libcairo2-dev
-        sudo apt-get install -y libx11-dev
-        sudo apt-get install -y pkgconf
-        sudo apt-get install -y libfreetype6-dev
-        sudo apt-get install -y libfontconfig1-dev
+        ls -l /usr/X11/include/cairo
+        ls -l /usr/X11/lib
+
+    - name: update package list
+      if: runner.os == 'Linux'
+      run: sudo apt-get update
+    
+    #- name: Install dependencies (Ubuntu)
+      #if: runner.os == 'Linux'
+      #run: |
+      #  sudo apt-get install -y libcairo2-dev
+      #  sudo apt-get install -y libx11-dev
+      #  sudo apt-get install -y pkgconf
+      #  sudo apt-get install -y libfreetype6-dev
+      #  sudo apt-get install -y libfontconfig1-dev
 
     - name: install gfortran compiler
       uses: fortran-lang/setup-fortran@v1
+      env:
+        DEBIAN_FRONTEND: noninteractive
       with:
         compiler: gcc
 
     # check out the repository
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: compile giza
       run: |
