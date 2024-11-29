@@ -4991,11 +4991,6 @@ else
   HAVE_FC_FALSE=
 fi
 
-if test "x$FC" = "x"
-then :
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: No Fortran compiler found - skipping compilation of libpglot and giza Fortran module" >&5
-printf "%s\n" "$as_me: WARNING: No Fortran compiler found - skipping compilation of libpglot and giza Fortran module" >&2;}
-fi
 #
 # set giza version
 #
@@ -16820,6 +16815,11 @@ printf "%s\n" "$as_me: FC_LIBS = $FC_LIBS" >&6;}
 printf "%s\n" "$as_me: PKG_CONFIG_PATH = $PKG_CONFIG_PATH" >&6;}
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: ================================" >&5
 printf "%s\n" "$as_me: ================================" >&6;}
+if test "x$FC" = "x"
+then :
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** NO FORTRAN COMPILER FOUND: skipping compilation of libpglot and giza Fortran module *** " >&5
+printf "%s\n" "$as_me: WARNING: *** NO FORTRAN COMPILER FOUND: skipping compilation of libpglot and giza Fortran module *** " >&2;}
+fi
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
