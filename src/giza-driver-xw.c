@@ -76,6 +76,7 @@ static void _giza_expose_xw (XEvent *event);
 static void _giza_flush_xw_event_queue (XEvent *event);
 static int _giza_errors_xw (Display *display, XErrorEvent *error);
 
+static Atom wmDeleteMessage;
 /*static int giza_xw_debug = 0;*/
 
 /**
@@ -116,7 +117,7 @@ _giza_open_device_xw (double width, double height, int units)
   XW[id].display = XOpenDisplay (NULL);
   if (!XW[id].display)
     {
-      _giza_error ("_giza_open_device_xw", "Connection to the X server could not be made");
+      _giza_error ("_giza_open_device_xw", "Cannot launch X window (use ssh -Y not ssh / install XQuartz if on Mac)");
       return 1;
     }
 
@@ -196,7 +197,7 @@ _giza_open_device_xw (double width, double height, int units)
   XMapWindow (XW[id].display, XW[id].window);
 
    /* register interest in the delete window message */
-  Atom wmDeleteMessage = XInternAtom(XW[id].display, "WM_DELETE_WINDOW", 1);
+  wmDeleteMessage = XInternAtom(XW[id].display, "WM_DELETE_WINDOW", 0);
   XSetWMProtocols(XW[id].display, XW[id].window, &wmDeleteMessage, 1);
 
   /* register the routine to handle non-fatal X errors */
@@ -374,7 +375,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
     }
 
   XEvent event;
-  XSelectInput (XW[id].display, XW[id].window, ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask);
+  XSelectInput (XW[id].display, XW[id].window, ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask | StructureNotifyMask );
 
   _giza_init_band (mode);
   _giza_expand_clipping_xw();
@@ -383,19 +384,22 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 
     /* wait for key press/expose (avoid using XNextEvent as breaks older systems) */
     XWindowEvent(XW[id].display, XW[id].window,
-       (long) (ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask), &event);
+       (long) (ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask | StructureNotifyMask), &event);
     /*XNextEvent(XW[id].display, &event);*/
 
     /* always return x, y values for safety */
     *x = 0;
     *y = 0;
-
     switch  (event.type) {
     case ClientMessage: /* catch close window event */
       *ch = 'q';
-      if (!strcmp( XGetAtomName( XW[id].display, event.xclient.message_type ), "WM_PROTOCOLS" )) {
-         return;
-      }
+       if ((Atom)event.xclient.data.l[0] == wmDeleteMessage) {
+          return;
+       }
+       break;
+    case DestroyNotify:
+      *ch = 'q';
+      return;
     case Expose: /* redraw */
       _giza_expose_xw (&event);
       break;
