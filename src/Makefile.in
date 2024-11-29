@@ -93,7 +93,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 
-# only compile libpglot.a if we have a working Fortran compiler
+# only compile libpglot.a and giza.mod if we have a working Fortran compiler
 @HAVE_FC_TRUE@am__append_1 = libpgplot.la
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -506,6 +506,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 CLEANFILES = *.mod *.pc
 lib_LTLIBRARIES = libgiza.la libcpgplot.la $(am__append_1)
+@HAVE_FC_TRUE@fmoddir = $(libdir)/$(FC)/modules
+@HAVE_FC_TRUE@fmod_DATA = giza.mod
 libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c \
        giza-band-style.c giza-band.c giza-box-time.c giza-box.c \
        giza-buffering.c giza-character-size.c giza-circle.c \
@@ -549,8 +551,6 @@ libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS) -static
 include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
-fmoddir = $(libdir)/$(FC)/modules
-fmod_DATA = giza.mod
 all: all-am
 
 .SUFFIXES:

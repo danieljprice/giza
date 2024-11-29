@@ -4,9 +4,11 @@ CLEANFILES = *.mod *.pc
 
 lib_LTLIBRARIES = libgiza.la libcpgplot.la
 
-# only compile libpglot.a if we have a working Fortran compiler
+# only compile libpglot.a and giza.mod if we have a working Fortran compiler
 if HAVE_FC
 lib_LTLIBRARIES += libpgplot.la
+fmoddir = $(libdir)/$(FC)/modules
+fmod_DATA = giza.mod
 endif
 
 libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c \
@@ -59,6 +61,3 @@ include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
-
-fmoddir = $(libdir)/$(FC)/modules
-fmod_DATA = giza.mod

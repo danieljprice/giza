@@ -19,6 +19,8 @@ AC_CONFIG_HEADERS([config.h])
 # skip compilation of libpgplot.a otherwise
 #
 AM_CONDITIONAL([HAVE_FC], [test "x$FC" != "x"])
+AS_IF([test "x$FC" = "x"],
+    [AC_MSG_WARN([No Fortran compiler found - skipping compilation of libpglot and giza Fortran module])])
 #
 # set giza version
 #
