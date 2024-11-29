@@ -92,6 +92,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
+
+# only compile libpglot.a if we have a working Fortran compiler
+@HAVE_FC_TRUE@am__append_1 = libpgplot.la
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -190,12 +193,12 @@ libgiza_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(libgiza_la_LDFLAGS) $(LDFLAGS) -o $@
 libpgplot_la_LIBADD =
-am_libpgplot_la_OBJECTS = libpgplot_la-giza-fortran.lo \
-	libpgplot_la-giza-pgplot.lo
+am_libpgplot_la_OBJECTS = giza-fortran.lo giza-pgplot.lo
 libpgplot_la_OBJECTS = $(am_libpgplot_la_OBJECTS)
 libpgplot_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(FCLD) $(libpgplot_la_FCFLAGS) \
-	$(FCFLAGS) $(libpgplot_la_LDFLAGS) $(LDFLAGS) -o $@
+	$(LIBTOOLFLAGS) --mode=link $(FCLD) $(AM_FCFLAGS) $(FCFLAGS) \
+	$(libpgplot_la_LDFLAGS) $(LDFLAGS) -o $@
+@HAVE_FC_TRUE@am_libpgplot_la_rpath = -rpath $(libdir)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -502,7 +505,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 CLEANFILES = *.mod *.pc
-lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
+lib_LTLIBRARIES = libgiza.la libcpgplot.la $(am__append_1)
 libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c \
        giza-band-style.c giza-band.c giza-box-time.c giza-box.c \
        giza-buffering.c giza-character-size.c giza-circle.c \
@@ -542,11 +545,6 @@ libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
 libcpgplot_la_SOURCES = giza-cpgplot.c
 libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS) -lgiza -static
 libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
-
-# fix issue with -DHAVE_CONFIG_H being passed incorrectly to libtool
-libpgplot_la_FCFLAGS = $(AM_FCFLAGS)
-libpgplot_la_FFLAGS = $(AM_FFLAGS)
-libpgplot_la_CPPFLAGS = 
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS) -static
 include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90
 pkgconfigdir = $(libdir)/pkgconfig
@@ -635,7 +633,7 @@ libgiza.la: $(libgiza_la_OBJECTS) $(libgiza_la_DEPENDENCIES) $(EXTRA_libgiza_la_
 	$(AM_V_CCLD)$(libgiza_la_LINK) -rpath $(libdir) $(libgiza_la_OBJECTS) $(libgiza_la_LIBADD) $(LIBS)
 
 libpgplot.la: $(libpgplot_la_OBJECTS) $(libpgplot_la_DEPENDENCIES) $(EXTRA_libpgplot_la_DEPENDENCIES) 
-	$(AM_V_FCLD)$(libpgplot_la_LINK) -rpath $(libdir) $(libpgplot_la_OBJECTS) $(libpgplot_la_LIBADD) $(LIBS)
+	$(AM_V_FCLD)$(libpgplot_la_LINK) $(am_libpgplot_la_rpath) $(libpgplot_la_OBJECTS) $(libpgplot_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -731,9 +729,6 @@ am--depfiles: $(am__depfiles_remade)
 
 .F90.lo:
 	$(AM_V_PPFC)$(LTPPFCCOMPILE) -c -o $@ $<
-
-libpgplot_la-giza-fortran.lo: giza-fortran.F90
-	$(AM_V_PPFC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libpgplot_la_CPPFLAGS) $(CPPFLAGS) $(libpgplot_la_FCFLAGS) $(FCFLAGS) -c -o libpgplot_la-giza-fortran.lo `test -f 'giza-fortran.F90' || echo '$(srcdir)/'`giza-fortran.F90
 
 .c.o:
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -1275,9 +1270,6 @@ libgiza_la-giza-itf.lo: giza-itf.c
 
 .f90.lo:
 	$(AM_V_FC)$(LTFCCOMPILE) -c -o $@ $<
-
-libpgplot_la-giza-pgplot.lo: giza-pgplot.f90
-	$(AM_V_FC)$(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(FC) $(libpgplot_la_FCFLAGS) $(FCFLAGS) -c -o libpgplot_la-giza-pgplot.lo `test -f 'giza-pgplot.f90' || echo '$(srcdir)/'`giza-pgplot.f90
 
 mostlyclean-libtool:
 	-rm -f *.lo

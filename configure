@@ -702,6 +702,8 @@ LT_CURRENT
 GIZA_VERSION_MICRO
 GIZA_VERSION_MINOR
 GIZA_VERSION_MAJOR
+HAVE_FC_FALSE
+HAVE_FC_TRUE
 ac_ct_FC
 FCFLAGS
 FC
@@ -4976,6 +4978,18 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 ac_config_headers="$ac_config_headers config.h"
+
+#
+# conditional on whether Fortran compiler found,
+# skip compilation of libpgplot.a otherwise
+#
+ if test "x$FC" != "x"; then
+  HAVE_FC_TRUE=
+  HAVE_FC_FALSE='#'
+else
+  HAVE_FC_TRUE='#'
+  HAVE_FC_FALSE=
+fi
 
 #
 # set giza version
@@ -16949,6 +16963,10 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
   as_fn_error $? "conditional \"am__fastdepCC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_FC_TRUE}" && test -z "${HAVE_FC_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_FC\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 

@@ -2,7 +2,12 @@
 
 CLEANFILES = *.mod *.pc
 
-lib_LTLIBRARIES = libgiza.la libcpgplot.la libpgplot.la
+lib_LTLIBRARIES = libgiza.la libcpgplot.la
+
+# only compile libpglot.a if we have a working Fortran compiler
+if HAVE_FC
+lib_LTLIBRARIES += libpgplot.la
+endif
 
 libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c \
        giza-band-style.c giza-band.c giza-box-time.c giza-box.c \
@@ -47,11 +52,6 @@ libcpgplot_la_SOURCES = giza-cpgplot.c
 libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS) -lgiza -static
 
 libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
-
-# fix issue with -DHAVE_CONFIG_H being passed incorrectly to libtool
-libpgplot_la_FCFLAGS = $(AM_FCFLAGS)
-libpgplot_la_FFLAGS = $(AM_FFLAGS)
-libpgplot_la_CPPFLAGS =
 
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS) -static
 

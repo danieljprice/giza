@@ -15,6 +15,11 @@ AC_PROG_CC
 AC_PROG_FC
 AC_CONFIG_HEADERS([config.h])
 #
+# conditional on whether Fortran compiler found,
+# skip compilation of libpgplot.a otherwise
+#
+AM_CONDITIONAL([HAVE_FC], [test "x$FC" != "x"])
+#
 # set giza version
 #
 AC_SUBST(GIZA_VERSION_MAJOR,giza_version_major)
