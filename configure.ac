@@ -14,6 +14,15 @@ AM_MAINTAINER_MODE([disable])
 AC_PROG_CC
 AC_PROG_FC
 AC_CONFIG_HEADERS([config.h])
+#
+# following 3 lines are to fix a bug where -DHAVE_CONFIG_H should not be passed to libtool on Mac OS
+#
+AC_FC_PP_DEFINE
+AM_FCFLAGS="-cpp"
+AC_SUBST([AM_FCFLAGS])
+#
+# set giza version
+#
 AC_SUBST(GIZA_VERSION_MAJOR,giza_version_major)
 AC_SUBST(GIZA_VERSION_MINOR,giza_version_minor)
 AC_SUBST(GIZA_VERSION_MICRO,giza_version_micro)
