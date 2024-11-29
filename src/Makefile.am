@@ -39,8 +39,6 @@ libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS)
 
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
-libpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
-
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
        -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS)
 
@@ -49,6 +47,11 @@ libcpgplot_la_SOURCES = giza-cpgplot.c
 libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS) -lgiza -static
 
 libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
+
+# fix issue with -DHAVE_CONFIG_H being passed incorrectly to libtool
+libpgplot_la_FCFLAGS = $(AM_FCFLAGS)
+libpgplot_la_FFLAGS = $(AM_FFLAGS)
+libpgplot_la_CPPFLAGS = $(AM_CPPFLAGS)
 
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS) -static
 
