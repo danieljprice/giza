@@ -604,8 +604,10 @@ _giza_init_band_xw (void)
   /* use grey for band */
   cairo_set_source_rgba (Band.box, 0.5, 0.5, 0.5, 1.0);
 
-  /* Set up restore to remove box */
+  /* Set up restore to remove box (DP: 2/12/24 we now restore from pixmap instead of window to fix issue on Mac OS)*/
+  Band.onscreen = cairo_xlib_surface_create (XW[id].display, XW[id].pixmap, XW[id].visual, XW[id].width, XW[id].height);
   Band.restore = cairo_create (Band.onscreen);
+
   cairo_set_source_surface (Band.restore, Dev[id].surface, 0, 0);
   Band.maxHeight = XW[id].height;
   Band.maxWidth = XW[id].width;
