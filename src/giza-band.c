@@ -114,6 +114,7 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
 
   /* Draw over the old band */
   cairo_paint (Band.restore);
+  giza_flush_device();
 
 /*
   int topleftx = x1 - 10;

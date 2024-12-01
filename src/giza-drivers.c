@@ -1164,7 +1164,7 @@ _giza_init_band (int mode)
 #endif
       default:
         _giza_error ("_giza_init_band", "band not implemented for this device");
-	break;
+        break;
     }
   _giza_set_line_style (Band.ls, Band.box);
   double lwDevice = Band.lw * Dev[id].deviceUnitsPermm * 0.25;
