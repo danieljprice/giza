@@ -373,7 +373,8 @@ _giza_draw_symbol (double xd, double yd, int symbol)
           _giza_plus_size (xd, yd, Dev[id].ch);
           break;
         case 1: /* single small point that scales w/ character height */
-          _giza_circle_size (xd, yd, 0.5, 1);
+          /*_giza_circle_size (xd, yd, 0.5, 1);*/
+          _giza_point (xd, yd);
           break;
         case 19: /* slightly larger open rect (just shy of 3x size of #6 */
         case 16: /* filled square */

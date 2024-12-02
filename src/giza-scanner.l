@@ -87,7 +87,7 @@ static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 %}
 
 
-%x FONT HERSHEY MARKER GREEK ESCAPE
+%x FONT HERSHEY MARKER GREEK
 
 %%
 
@@ -107,20 +107,18 @@ static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 <MARKER>[0-9]{1,2}    { const int marker = atoi(yytext); if( marker>=1 && marker<=31 ) { BEGIN(INITIAL); return GIZA_TOKEN_MARKER; } REJECT; }
 <MARKER>.             { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid marker '%s'", yytext); return GIZA_TOKEN_TEXT; }
 
-<INITIAL>"\\"[gG]        { BEGIN(GREEK); }
+<INITIAL>"\\"[gG]     { BEGIN(GREEK); }
 <GREEK>[ABGDEZYHIKLMNCOPRSTUFXQWabgdezyhiklmncoprstufxqw] { BEGIN(INITIAL); return GIZA_TOKEN_GREEK; }
 <GREEK>.              { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid greek letter '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 
-<INITIAL>"\\"         { BEGIN(ESCAPE); }
-<ESCAPE>[a-zA-Z]{2,}  { if( _giza_remap_token(yytext) ) { BEGIN(INITIAL); return GIZA_TOKEN_REMAP; } REJECT; }
-<ESCAPE>.             { BEGIN(INITIAL); return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
+<INITIAL>"\\"[a-zA-Z]{2,}  { if( _giza_remap_token(yytext) ) { return GIZA_TOKEN_REMAP; } REJECT; }
 
 <INITIAL>"^"          { return GIZA_TOKEN_SUPER; }
 <INITIAL>"_"          { return GIZA_TOKEN_SUB; }
 <INITIAL>"{"          { return GIZA_TOKEN_OB; }
 <INITIAL>"}"          { return GIZA_TOKEN_CB; }
 
-<INITIAL>.            { return GIZA_TOKEN_TEXT; }
+<INITIAL>.            { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 
 <<EOF>>               { return GIZA_TOKEN_END; }
 
@@ -139,7 +137,7 @@ giza_hershey_to_utf_entry const* _giza_lookup_hershey(int number) {
 giza_remapped_token_entry const* _giza_remap_token(char const* special) {
     giza_remapped_tokens_entry const* rv = giza_remappable_tokens;
 
-    while( rv->text && strcmp(rv->text, special) )
+    while( rv->text && strcmp(rv->text, special+1) )
         rv++;
     return (rv->text==NULL ? NULL : &rv->replacement);
 }
@@ -378,7 +376,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
                   /* either draw the symbol or increment the width */
                   if (*width < 0.) {
-                      double dx = 0.75*markerHeight;
+                      double dx = 1.0*markerHeight;
                       double dy = -0.5*markerHeight;
                       _giza_draw_symbol_device(positions[nGlyph].x + dx*cosa + dy*sina,
                                                positions[nGlyph].y + dx*sina + dy*cosa,
@@ -386,7 +384,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
                       cairo_move_to(Dev[id].context, positions[nGlyph].x + 2.*dx*cosa, positions[nGlyph].y + 2.*dx*sina); /* restore pen position */
                   } else {
                       /* return width if action is _giza_action_get_size */
-                      *width = *width + 1.5*markerHeight;
+                      *width = *width + 2.*markerHeight;
                   }
               }
               break;

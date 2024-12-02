@@ -91,7 +91,7 @@ jobs:
 
     - name: Bump Brew
       env:
-        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.BREW_TOKEN }}
+        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.BREW_TOKEN_GIZA }}
         version: ${{ steps.get_version.outputs.version }}
         brewtap: danieljprice/all
         formula: giza-x11 #${{ steps.get_version.outputs.repo }} # formula name same as repo name
