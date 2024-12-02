@@ -24,14 +24,19 @@
 #include <giza.h>
 
 int main() {
- int ierr;
- ierr = giza_open_device("/xw","test");
+ int id;
+ id = giza_open_device("/xw","test");
  /*giza_stop_prompting();*/
  giza_close_device();
 
- ierr = giza_open_device("/xw","test");
+ id = giza_open_device("/xw","test");
  /*giza_stop_prompting();*/
  giza_close_device();
 
- return ierr;
+ /* open_device should return a positive integer */
+ if (id <= 0) {
+   return 1;
+ } else {
+   return 0;
+ }
 }
