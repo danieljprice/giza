@@ -104,17 +104,16 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__EXEEXT_1 = test-arrow$(EXEEXT) test-band$(EXEEXT) \
-	test-box$(EXEEXT) test-cairo-xw$(EXEEXT) \
-	test-change-page$(EXEEXT) test-circle$(EXEEXT) \
-	test-colour-index$(EXEEXT) test-environment$(EXEEXT) \
-	test-error-bars$(EXEEXT) test-format-number$(EXEEXT) \
-	test-giza-xw$(EXEEXT) test-line-cap$(EXEEXT) \
-	test-line-style$(EXEEXT) test-openclose$(EXEEXT) \
-	test-pdf$(EXEEXT) test-png$(EXEEXT) test-points$(EXEEXT) \
-	test-qtext$(EXEEXT) test-rectangle$(EXEEXT) \
-	test-set-line-width$(EXEEXT) test-svg$(EXEEXT) \
-	test-vector$(EXEEXT) test-window$(EXEEXT) \
+am__EXEEXT_1 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
+	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
+	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
+	test-environment$(EXEEXT) test-error-bars$(EXEEXT) \
+	test-format-number$(EXEEXT) test-giza-xw$(EXEEXT) \
+	test-line-cap$(EXEEXT) test-line-style$(EXEEXT) \
+	test-openclose$(EXEEXT) test-pdf$(EXEEXT) test-png$(EXEEXT) \
+	test-points$(EXEEXT) test-qtext$(EXEEXT) \
+	test-rectangle$(EXEEXT) test-set-line-width$(EXEEXT) \
+	test-svg$(EXEEXT) test-vector$(EXEEXT) test-window$(EXEEXT) \
 	test-XOpenDisplay$(EXEEXT)
 test_XOpenDisplay_SOURCES = test-XOpenDisplay.c
 test_XOpenDisplay_OBJECTS = test-XOpenDisplay.$(OBJEXT)
@@ -128,10 +127,6 @@ test_arrow_SOURCES = test-arrow.c
 test_arrow_OBJECTS = test-arrow.$(OBJEXT)
 test_arrow_LDADD = $(LDADD)
 test_arrow_DEPENDENCIES = ../../src/libgiza.la
-test_band_SOURCES = test-band.c
-test_band_OBJECTS = test-band.$(OBJEXT)
-test_band_LDADD = $(LDADD)
-test_band_DEPENDENCIES = ../../src/libgiza.la
 test_box_SOURCES = test-box.c
 test_box_OBJECTS = test-box.$(OBJEXT)
 test_box_LDADD = $(LDADD)
@@ -232,10 +227,9 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
-	./$(DEPDIR)/test-arrow.Po ./$(DEPDIR)/test-band.Po \
-	./$(DEPDIR)/test-box.Po ./$(DEPDIR)/test-cairo-xw.Po \
-	./$(DEPDIR)/test-change-page.Po ./$(DEPDIR)/test-circle.Po \
-	./$(DEPDIR)/test-colour-index.Po \
+	./$(DEPDIR)/test-arrow.Po ./$(DEPDIR)/test-box.Po \
+	./$(DEPDIR)/test-cairo-xw.Po ./$(DEPDIR)/test-change-page.Po \
+	./$(DEPDIR)/test-circle.Po ./$(DEPDIR)/test-colour-index.Po \
 	./$(DEPDIR)/test-environment.Po ./$(DEPDIR)/test-error-bars.Po \
 	./$(DEPDIR)/test-format-number.Po ./$(DEPDIR)/test-giza-xw.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
@@ -263,14 +257,14 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
-	test-cairo-xw.c test-change-page.c test-circle.c \
-	test-colour-index.c test-environment.c test-error-bars.c \
-	test-format-number.c test-giza-xw.c test-line-cap.c \
-	test-line-style.c test-openclose.c test-pdf.c test-png.c \
-	test-points.c test-qtext.c test-rectangle.c \
-	test-set-line-width.c test-svg.c test-vector.c test-window.c
-DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
+SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c test-cairo-xw.c \
+	test-change-page.c test-circle.c test-colour-index.c \
+	test-environment.c test-error-bars.c test-format-number.c \
+	test-giza-xw.c test-line-cap.c test-line-style.c \
+	test-openclose.c test-pdf.c test-png.c test-points.c \
+	test-qtext.c test-rectangle.c test-set-line-width.c test-svg.c \
+	test-vector.c test-window.c
+DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c \
 	test-cairo-xw.c test-change-page.c test-circle.c \
 	test-colour-index.c test-environment.c test-error-bars.c \
 	test-format-number.c test-giza-xw.c test-line-cap.c \
@@ -658,7 +652,7 @@ AM_CPPFLAGS = -I../../src
 AM_LDFLAGS = -no-install -lm -lX11
 LDADD = ../../src/libgiza.la
 CLEANFILES = *.png *.pdf *.svg
-ctests = test-arrow test-band test-box test-cairo-xw test-change-page \
+ctests = test-arrow test-box test-cairo-xw test-change-page \
 	test-circle test-colour-index \
 	test-environment \
 	test-error-bars test-format-number test-giza-xw test-line-cap \
@@ -711,10 +705,6 @@ test-XOpenDisplay$(EXEEXT): $(test_XOpenDisplay_OBJECTS) $(test_XOpenDisplay_DEP
 test-arrow$(EXEEXT): $(test_arrow_OBJECTS) $(test_arrow_DEPENDENCIES) $(EXTRA_test_arrow_DEPENDENCIES) 
 	@rm -f test-arrow$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_arrow_OBJECTS) $(test_arrow_LDADD) $(LIBS)
-
-test-band$(EXEEXT): $(test_band_OBJECTS) $(test_band_DEPENDENCIES) $(EXTRA_test_band_DEPENDENCIES) 
-	@rm -f test-band$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(test_band_OBJECTS) $(test_band_LDADD) $(LIBS)
 
 test-box$(EXEEXT): $(test_box_OBJECTS) $(test_box_DEPENDENCIES) $(EXTRA_test_box_DEPENDENCIES) 
 	@rm -f test-box$(EXEEXT)
@@ -808,7 +798,6 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-XOpenDisplay.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-arrow.Po@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-band.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-box.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-cairo-xw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-change-page.Po@am__quote@ # am--include-marker
@@ -1089,13 +1078,6 @@ test-arrow.log: test-arrow$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
-test-band.log: test-band$(EXEEXT)
-	@p='test-band$(EXEEXT)'; \
-	b='test-band'; \
-	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
-	--log-file $$b.log --trs-file $$b.trs \
-	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
-	"$$tst" $(AM_TESTS_FD_REDIRECT)
 test-box.log: test-box$(EXEEXT)
 	@p='test-box$(EXEEXT)'; \
 	b='test-box'; \
@@ -1345,7 +1327,6 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
 distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-XOpenDisplay.Po
 	-rm -f ./$(DEPDIR)/test-arrow.Po
-	-rm -f ./$(DEPDIR)/test-band.Po
 	-rm -f ./$(DEPDIR)/test-box.Po
 	-rm -f ./$(DEPDIR)/test-cairo-xw.Po
 	-rm -f ./$(DEPDIR)/test-change-page.Po
@@ -1414,7 +1395,6 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-XOpenDisplay.Po
 	-rm -f ./$(DEPDIR)/test-arrow.Po
-	-rm -f ./$(DEPDIR)/test-band.Po
 	-rm -f ./$(DEPDIR)/test-box.Po
 	-rm -f ./$(DEPDIR)/test-cairo-xw.Po
 	-rm -f ./$(DEPDIR)/test-change-page.Po
