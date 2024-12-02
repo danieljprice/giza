@@ -13,5 +13,5 @@ ctests = test-arrow test-band test-box test-cairo-xw test-change-page \
 	test-qtext test-rectangle test-set-line-width \
 	test-svg test-vector test-window test-XOpenDisplay # test-contour test-render
 
-#TESTS = $(ctests)
+TESTS = $(ctests)
 check_PROGRAMS = $(ctests)
