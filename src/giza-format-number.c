@@ -89,7 +89,7 @@ giza_format_number (int mantissa, int power, int form, char *string, int maxchar
   /* Integers of four or less digits (or forced integers) */
   if ((power >= 0) && ((form == GIZA_NUMBER_FORMAT_AUTO && (power + numDigits) <= 4) || (form == GIZA_NUMBER_FORMAT_DEC && power + numDigits <= 10)))
     {
-      for (; power > 0 && numDigits < (sizeof(tmp)-1); --power)
+      for (; power > 0 && numDigits < (int) (sizeof(tmp)-1); --power)
         {
 	  tmp[numDigits] = '0';
 	  ++numDigits;
