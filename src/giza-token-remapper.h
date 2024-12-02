@@ -33,6 +33,7 @@ static giza_remapped_tokens_entry giza_remappable_tokens[] = {
     {"times",    {GIZA_TOKEN_TEXT   , "\u00d7" }},
     {"int",      {GIZA_TOKEN_HERSHEY, "2268"   }},
     {"nabla",    {GIZA_TOKEN_HERSHEY, "2266"   }},
+    {"odot" ,    {GIZA_TOKEN_MARKER , "9"      }},
     /* misc */
     {"A",        {GIZA_TOKEN_TEXT   , "\u212b" }}, /* Angstrom */
     /* fonts */
