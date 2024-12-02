@@ -46,10 +46,5 @@ jobs:
     - name: Run test programs, pressing enter to all prompts
       if: matrix.os == 'ubuntu-latest'
       run: |
-        yes "" | make check
+        yes "" | make check || { echo "Tests failed. Printing test-suite.log..."; cat test/C/test-suite.log; exit 1; }
  
-    # Run tests
-    - name: show the test logs
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        cat test/C/test-suite.log
