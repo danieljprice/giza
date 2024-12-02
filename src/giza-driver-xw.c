@@ -117,7 +117,7 @@ _giza_open_device_xw (double width, double height, int units)
   XW[id].display = XOpenDisplay (NULL);
   if (!XW[id].display)
     {
-      _giza_error ("_giza_open_device_xw", "Cannot launch X window (use ssh -Y not ssh / install XQuartz if on Mac)");
+      _giza_error ("_giza_open_device_xw", "Cannot launch X window (use ssh -Y if remote; install XQuartz if on Mac)");
       return 1;
     }
 
