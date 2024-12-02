@@ -29,6 +29,21 @@ jobs:
 
     - name: compile and install giza
       run: |
-           ./configure
-           make
-           sudo make install
+        ./configure
+        make
+        sudo make install
+
+    # Set up Xvfb for graphical tests
+    - name: Set up and start Xvfb
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y xvfb
+        Xvfb :99 -screen 0 1920x1080x24 &
+        export DISPLAY=:99
+
+    # Run tests
+    - name: Run test programs, pressing enter to all prompts
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        yes "" | make check
