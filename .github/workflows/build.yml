@@ -47,3 +47,4 @@ jobs:
       if: matrix.os == 'ubuntu-latest'
       run: |
         yes "" | make check
+        cat test/C/test-suite.log
