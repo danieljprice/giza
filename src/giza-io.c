@@ -201,7 +201,7 @@ _giza_get_log_file (char *string, int len)
 void
 _giza_write_log_file (cairo_surface_t *surface)
 {
-   char msg[80];
+   char msg[120];
    char string[80];
    _giza_get_log_file(string,sizeof(string));
    sprintf(msg,"writing %s",string);
