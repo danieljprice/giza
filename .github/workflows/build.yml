@@ -16,6 +16,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest]
 
+    env:
+      DISPLAY: :99
+
     steps:
 
     # make sure we have gfortran installed and linked
@@ -34,17 +37,17 @@ jobs:
         sudo make install
 
     # Set up Xvfb for graphical tests
-    - name: Set up and start Xvfb
+    - name: Install Xvfb to pretend to launch X-windows in the workflow
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
         sudo apt-get install -y xvfb
-        Xvfb :99 -screen 0 1920x1080x24 &
-        export DISPLAY=:99
 
     # Run tests
     - name: Run test programs, pressing enter to all prompts
       if: matrix.os == 'ubuntu-latest'
       run: |
+        Xvfb :99 -screen 0 1920x1080x24 &
+        echo "Current DISPLAY: $DISPLAY"
         yes "" | make check || { echo "Tests failed. Printing test-suite.log..."; cat test/C/test-suite.log; exit 1; }
  
