@@ -23,7 +23,6 @@
  */
 
 static void _giza_colour_pixel (unsigned char *array, int pixNum, double pos);
-static void _giza_colour_pixel_transparent (unsigned char *array, int pixNum, double pos);
 static void _giza_colour_pixel_alpha (unsigned char *array, int pixNum, double pos, double alpha);
 static void _giza_colour_pixel_index_alpha (unsigned char *array, int pixNum, int ci, double alpha);
 void _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
