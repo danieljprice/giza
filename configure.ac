@@ -1,7 +1,7 @@
 AC_PREREQ(2.61)
 m4_define(giza_version_major,1)
 m4_define(giza_version_minor,4)
-m4_define(giza_version_micro,1)
+m4_define(giza_version_micro,2)
 AC_INIT([giza],
         [giza_version_major.giza_version_minor.giza_version_micro],
         [daniel.price@monash.edu],[],

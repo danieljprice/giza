@@ -121,7 +121,6 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
   int cimin, cimax;
-  double pos, alpha;
 
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
@@ -162,12 +161,12 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
       }
   } else if (transparent==1) {
     /* render each pixel, using transparent routine */
-      int idx;
+    int idx;
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
 	  {
-            idx = itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax);
+      idx = itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax);
 	    _giza_colour_pixel_index_alpha (pixdata, pixnum, idx, idx==cimin ? 0. : 1.);
 	    pixnum = pixnum + 1;
 	  }
@@ -276,13 +275,6 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   cairo_matrix_t mat;
   int stride, pixnum, width = i2 - i1 + 1, height = j2 - j1 + 1;
   int cimin, cimax;
-  double pos,alpha,ddval;
-  double dvalMin = (double) valMin;
-  if (valMax - valMin > 0.) {
-     ddval = 1./((double) valMax - dvalMin);
-  } else {
-     ddval = 0.;
-  }
 
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
@@ -408,26 +400,6 @@ _giza_colour_pixel (unsigned char *array, int pixNum, double pos)
   giza_rgb_from_table (pos, &r, &g, &b);
   /* set the alpha */
   array[pixNum * 4 + 3] = 255.;
-  /* set the red, green, and blue */
-  array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
-  array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
-  array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
-}
-
-/**
- * As in _giza_colour_pixel, but sets the pixels to be transparent if pos <= 0
- */
-static void
-_giza_colour_pixel_transparent (unsigned char *array, int pixNum, double pos)
-{
-  double r, g, b;
-  giza_rgb_from_table (pos, &r, &g, &b);
-  /* set the alpha */
-  if (pos <= 0.) {
-     array[pixNum * 4 + 3] = 0.;
-  } else {
-     array[pixNum * 4 + 3] = 255.;
-  }
   /* set the red, green, and blue */
   array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
   array[pixNum * 4 + 1] = (unsigned char) (g * 255.);

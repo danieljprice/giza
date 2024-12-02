@@ -30,5 +30,5 @@ int main ()
   display = XOpenDisplay(NULL);
 
   XCloseDisplay(display);
-  return 1;
+  return 0;
 }

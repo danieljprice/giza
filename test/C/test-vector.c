@@ -32,7 +32,7 @@ main ()
   giza_set_window (0., 10., 0., 10.);
   giza_box ("BCNT", 0., 0, "BCTN", 0., 0);
 
-  int n = 2, m = 2;
+  const int n = 2, m = 2;
   float hori[m][n], vert[m][n];
   float scale = 1.;
   float affine[6];
@@ -52,7 +52,7 @@ main ()
   affine[4] = 0.;
   affine[5] = 0.;
 
-  giza_vector_float (n, m, hori, vert, 0, 1, 0, 1, scale, 0, affine, 1000.);
+  giza_vector_float (n, m, (float *) &hori, (float *) &vert, 0, 1, 0, 1, scale, 0, affine, 1000.);
 
   giza_close_device ();
 } 

@@ -23,11 +23,14 @@
  */
 #include <giza.h>
 #include "math.h"
+#include <unistd.h>
+#include <stdio.h>
 static double sinx(double *x);
+int check_pdf_file(void);
 
 int main() {
- int ierr, i;
- ierr = giza_open_device("/pdf","test");
+ int id, i;
+ id = giza_open_device("/pdf","test");
  for (i=1;i<=10;i++) {
      giza_set_environment(0.,1.,-1.,1.,0,0);
      giza_label("x","y","title");
@@ -35,9 +38,28 @@ int main() {
  }
  giza_close_device();
 
- return ierr;
+ /* open_device should return a positive integer */
+ if (id <= 0 || !check_pdf_file()) {
+   return 1;
+ } else {
+   return 0;
+ }
 }
 
 double sinx(double *x) {
    return sin(6.28*(*x));
+}
+
+/* check if the corresponding files exist */
+int check_pdf_file() {
+    char filename[20];
+    snprintf(filename, sizeof(filename), "test.pdf");
+    /* Check if the file exists */
+    if (access(filename, F_OK) == -1) {
+       fprintf(stderr, "Error: Required file %s does not exist.\n", filename);
+       return 0; /* Return 0 if file is missing */
+    } else {
+       fprintf(stdout, "File %s exists -> OK\n", filename);
+    }
+    return 1; /* Return 1 if file exists */
 }
