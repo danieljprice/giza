@@ -49,5 +49,5 @@ jobs:
       run: |
         Xvfb :99 -screen 0 1920x1080x24 &
         echo "Current DISPLAY: $DISPLAY"
-        yes "" | make -j check || { echo "Tests failed. Printing test-suite.log..."; cat test/C/test-suite.log; cat test/F90/test-suite.log; exit 1; }
+        yes "" | make check || { echo "Tests failed. Printing test-suite.log..."; cat test/C/test-suite.log; cat test/F90/test-suite.log; exit 1; }
  
