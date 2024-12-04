@@ -1,6 +1,5 @@
-Changes in v1.4.3
+Changes in v1.4.4
 -----------------
-- bug fix with parsing longer escape sequences that contain shorter ones, like \beta (containing \b) and \gamma (containing \ga)
-- added \odot symbol
-- revert marker 1 to point plotting, not resized with character height
+- bug fix with missing dynamic libraries in v1.4.3 and v1.4.2 (#61; thanks to Ole Streicher)
+- bug fix with test suite using make -j (#62; thanks to Ole Streicher)
 
