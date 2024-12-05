@@ -687,7 +687,7 @@ subroutine PGLEN (UNITS, STRING, XL, YL)
  integer,       intent(in) :: UNITS
  character*(*), intent(in) :: STRING
 
- call giza_qtextlen(units_giza(UNITS),STRING,XL,YL)
+ call giza_qtextlen(units_giza(UNITS),trim(STRING),XL,YL)
 
 end subroutine PGLEN
 
@@ -728,7 +728,7 @@ subroutine PGMTXT (SIDE, DISP, COORD, FJUST, TEXT)
  character*(*), intent(in) :: SIDE, TEXT
  real, intent(in) :: DISP, COORD, FJUST
 
- call giza_annotate(SIDE,DISP,COORD,FJUST,TEXT)
+ call giza_annotate(SIDE,DISP,COORD,FJUST,TEXT(:LEN_TRIM(TEXT)))
 
 end subroutine PGMTXT
 
@@ -917,7 +917,7 @@ subroutine PGPTXT (X, Y, ANGLE, FJUST, TEXT)
  real,          intent(in) :: X, Y, ANGLE, FJUST
  character*(*), intent(in) :: TEXT
 
- call giza_ptext(X, Y, ANGLE, FJUST, TEXT)
+ call giza_ptext(X, Y, ANGLE, FJUST, TEXT(:LEN_TRIM(TEXT)))
 
 end subroutine PGPTXT
 
@@ -1240,7 +1240,7 @@ subroutine PGQTXT (X, Y, ANGLE, FJUST, TEXT, XBOX, YBOX)
  character*(*), intent(in) :: TEXT
  real, intent(out) :: XBOX(4), YBOX(4)
 
- call giza_qtext(X, Y, ANGLE, FJUST, TEXT, XBOX, YBOX)
+ call giza_qtext(X, Y, ANGLE, FJUST, TEXT(:LEN_TRIM(TEXT)), XBOX, YBOX)
 
 end subroutine PGQTXT
 
@@ -1675,7 +1675,7 @@ subroutine PGTEXT (X, Y, TEXT)
  real,          intent(in) :: X, Y
  character*(*), intent(in) :: TEXT
 
- call giza_text(X, Y, TEXT)
+ call giza_text(X, Y, TEXT(:LEN_TRIM(TEXT)))
 
 end subroutine PGTEXT
 
