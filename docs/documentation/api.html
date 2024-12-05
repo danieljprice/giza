@@ -847,7 +847,7 @@
 <tr><td width=10%>void</td><td width=20%>giza_rectangle_rounded_float</td><td> (float x1, float x2, float y1, float y2, float radius) ;</tr></table><p>Same functionality as giza_rectangle_rounded but takes floats</p>
 <h4>See Also:</h4><p><a href="#giza_rectangle_rounded">giza_rectangle_rounded</a> </p><h3><a name="giza_render">giza_render</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_render</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, const double *affine) ;</tr></table><p>Renders data to the device.</p>
+<tr><td width=10%>void</td><td width=20%>giza_render</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, int filter, const double *affine) ;</tr></table><p>Renders data to the device.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>sizex         :</td><td>The dimensions of data in the x-direction</td>
@@ -870,6 +870,8 @@
 </tr><tr>
 <td>extend        :</td><td>Option for how to deal with image at edges</td>
 </tr><tr>
+<td>filter        :</td><td>Option for how to interpolate between pixels (since v1.5)</td>
+</tr><tr>
 <td>affine        :</td><td>The affine transformation matrix that will be applied to the data.</td>
 </tr></table><h4>Allowed extend settings:</h4>
 <table class="api"><tr>
@@ -880,30 +882,43 @@
 <td>2 or GIZA_EXTEND_REFLECT :</td><td>reflective boundary</td>
 </tr><tr>
 <td>3 or GIZA_EXTEND_PAD     :</td><td>pad by extending last few pixels</td>
+</tr></table><h4>Allowed filter settings (from cairo_filter_t):</h4>
+<table class="api"><tr>
+<td>0 or GIZA_FILTER_DEFAULT  :</td><td>default, usually bilinear interpolation</td>
+</tr><tr>
+<td>1 or GIZA_FILTER_FAST     :</td><td>a high performance filter with quality similar to GIZA_FILTER_NEAREST</td>
+</tr><tr>
+<td>2 or GIZA_FILTER_GOOD     :</td><td>a reasonable-performance filter, with quality similar to GIZA_FILTER_BILINEAR</td>
+</tr><tr>
+<td>3 or GIZA_FILTER_BEST     :</td><td>highest quality available, performance may not be suited for interactive use</td>
+</tr><tr>
+<td>4 or GIZA_FILTER_NEAREST  :</td><td>Nearest-neighbour filtering</td>
+</tr><tr>
+<td>5 or GIZA_FILTER_BILINEAR :</td><td>Linear interpolation in two dimensions</td>
 </tr></table><h4>See Also:</h4><p><a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_render_transparent">giza_render_transparent</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_render_transparent</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, const double *affine) ;</tr></table><p>Same as giza_render, but data < valMin rendered as transparent</p>
+<tr><td width=10%>void</td><td width=20%>giza_render_transparent</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, int filter, const double *affine) ;</tr></table><p>Same as giza_render, but data < valMin rendered as transparent</p>
 <h3><a name="giza_render_alpha">giza_render_alpha</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_render_alpha</td><td> (int sizex, int sizey, const double* data, const double* alpha, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, const double *affine) ;</tr></table><p>Same as giza_render, but uses additional array specifying transparency of each pixel</p>
+<tr><td width=10%>void</td><td width=20%>giza_render_alpha</td><td> (int sizex, int sizey, const double* data, const double* alpha, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, int filter, const double *affine) ;</tr></table><p>Same as giza_render, but uses additional array specifying transparency of each pixel</p>
 <h3><a name="giza_render_float">giza_render_float</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_render_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, const float *affine) ;</tr></table><p>Same functionality as giza_render but takes floats.</p>
+<tr><td width=10%>void</td><td width=20%>giza_render_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, int filter, const float *affine) ;</tr></table><p>Same functionality as giza_render but takes floats.</p>
 <h4>See Also:</h4><p><a href="#giza_render">giza_render</a> </p><h3><a name="giza_render_transparent_float">giza_render_transparent_float</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_render_transparent_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, const float *affine) ;</tr></table><p>Same functionality as giza_render_transparent but takes floats.</p>
+<tr><td width=10%>void</td><td width=20%>giza_render_transparent_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, int filter, const float *affine) ;</tr></table><p>Same functionality as giza_render_transparent but takes floats.</p>
 <h4>See Also:</h4><p><a href="#giza_render_transparent">giza_render_transparent</a> </p><h3><a name="giza_render_alpha_float">giza_render_alpha_float</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_render_alpha_float</td><td> (int sizex, int sizey, const float* data, const float* alpha, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, const float *affine) ;</tr></table><p>Same as giza_render_alpha but takes floats</p>
+<tr><td width=10%>void</td><td width=20%>giza_render_alpha_float</td><td> (int sizex, int sizey, const float* data, const float* alpha, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, int filter, const float *affine) ;</tr></table><p>Same as giza_render_alpha but takes floats</p>
 <h4>See Also:</h4><p><a href="#giza_render_alpha">giza_render_alpha</a> </p><h3><a name="giza_render_gray">giza_render_gray</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_render_gray</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, const double *affine) ;</tr></table><p>Same functionality as giza_render but renders in grayscale</p>
+<tr><td width=10%>void</td><td width=20%>giza_render_gray</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double valMin, double valMax, int extend, int filter, const double *affine) ;</tr></table><p>Same functionality as giza_render but renders in grayscale</p>
 <h4>See Also:</h4><p><a href="#giza_render">giza_render</a> </p><h3><a name="giza_render_gray_float">giza_render_gray_float</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_render_gray_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, const float *affine) ;</tr></table><p>Same functionality as giza_render_gray but renders in grayscale</p>
+<tr><td width=10%>void</td><td width=20%>giza_render_gray_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, int filter, const float *affine) ;</tr></table><p>Same functionality as giza_render_gray but renders in grayscale</p>
 <h4>See Also:</h4><p><a href="#giza_render_gray">giza_render_gray</a> <a href="#giza_render">giza_render</a> </p><h3><a name="giza_draw_pixels">giza_draw_pixels</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_draw_pixels</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend) ;</tr></table><p>Renders an array of pixels according to a colour index defined for each pixel</p>
+<tr><td width=10%>void</td><td width=20%>giza_draw_pixels</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend, int filter) ;</tr></table><p>Renders an array of pixels according to a colour index defined for each pixel</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>sizex         :</td><td>The dimensions of data in the x-direction</td>
@@ -929,9 +944,11 @@
 <td>ymax        :</td><td>world coordinate corresponding to top of pixel array</td>
 </tr><tr>
 <td>extend      :</td><td>Option for how to deal with image at edges (see giza_render)</td>
+</tr><tr>
+<td>filter      :</td><td>Option for how to interpolate between pixels (see giza_render, since v1.5)</td>
 </tr></table><h4>See Also:</h4><p><a href="#giza_render">giza_render</a> <a href="#giza_draw_pixels_float">giza_draw_pixels_float</a> </p><h3><a name="giza_draw_pixels_float">giza_draw_pixels_float</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_draw_pixels_float</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend) ;</tr></table><p>Same as giza_draw_pixels, but takes floats</p>
+<tr><td width=10%>void</td><td width=20%>giza_draw_pixels_float</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend, int filter) ;</tr></table><p>Same as giza_draw_pixels, but takes floats</p>
 <h4>See Also:</h4><p><a href="#giza_draw_pixels">giza_draw_pixels</a> </p><h3><a name="giza_tick">giza_tick</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_tick</td><td> (double x1, double y1, double x2, double y2, double v, double tickl, double tickr, double disp, double angle, const char *label) ;</tr></table><p>Draw a single tick along an axis. The axis extends from (x1,y1) to (x2,y2) and the tick is drawn perpendicular to the axis which is not drawn by this routine. Optional text label drawn parallel to the axis if the orientation angle is zero</p>
