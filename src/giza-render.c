@@ -49,6 +49,7 @@
  *  -valMax        :- The value in data that gets assigned the colour corresponding to one
  *                    on the colour ramp
  *  -extend        :- Option for how to deal with image at edges
+ *  -filter        :- Option for how to interpolate between pixels (since v1.5)
  *  -affine        :- The affine transformation matrix that will be applied to the data.
  *
  * Allowed extend settings:
@@ -57,13 +58,21 @@
  *  -2 or GIZA_EXTEND_REFLECT :- reflective boundary
  *  -3 or GIZA_EXTEND_PAD     :- pad by extending last few pixels
  *
+ * Allowed filter settings (from cairo_filter_t):
+ *  -0 or GIZA_FILTER_DEFAULT  :- default, usually bilinear interpolation
+ *  -1 or GIZA_FILTER_FAST     :- a high performance filter with quality similar to GIZA_FILTER_NEAREST
+ *  -2 or GIZA_FILTER_GOOD     :- a reasonable-performance filter, with quality similar to GIZA_FILTER_BILINEAR
+ *  -3 or GIZA_FILTER_BEST     :- highest quality available, performance may not be suited for interactive use
+ *  -4 or GIZA_FILTER_NEAREST  :- Nearest-neighbour filtering
+ *  -5 or GIZA_FILTER_BILINEAR :- Linear interpolation in two dimensions
+ *
  * See Also: giza_set_colour_table
  */
 void
 giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-             int j1, int j2, double valMin, double valMax, int extend, const double *affine)
+             int j1, int j2, double valMin, double valMax, int extend, int filter, const double *affine)
 {
-   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0,extend,data);
+   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,0,extend,filter,data);
 }
 
 /**
@@ -74,9 +83,9 @@ giza_render (int sizex, int sizey, const double* data, int i1, int i2,
  */
 void
 giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i2,
-	    int j1, int j2, double valMin, double valMax, int extend, const double *affine)
+           int j1, int j2, double valMin, double valMax, int extend, int filter, const double *affine)
 {
-   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,1,extend,data);
+   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,1,extend,filter,data);
 }
 
 /**
@@ -87,9 +96,9 @@ giza_render_transparent (int sizex, int sizey, const double* data, int i1, int i
  */
 void
 giza_render_alpha (int sizex, int sizey, const double* data, const double* alpha, int i1, int i2,
-                   int j1, int j2, double valMin, double valMax, int extend, const double *affine)
+                   int j1, int j2, double valMin, double valMax, int extend, int filter, const double *affine)
 {
-   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,2,extend,alpha);
+   _giza_render (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,2,extend,filter,alpha);
 }
 
 /**
@@ -98,8 +107,8 @@ giza_render_alpha (int sizex, int sizey, const double* data, const double* alpha
  */
 void
 _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	           int j1, int j2, double valMin, double valMax, const double *affine,
-              int transparent, int extend, const double* datalpha)
+	            int j1, int j2, double valMin, double valMax, const double *affine,
+              int transparent, int extend, int filter, const double* datalpha)
 {
   if (!_giza_check_device_ready ("giza_render"))
     return;
@@ -124,6 +133,9 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
+
+  cairo_filter_t cairofiltertype;
+  _giza_get_filter(filter,&cairofiltertype);
 
   /* apply the transformation */
   int oldCi;
@@ -190,6 +202,10 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   /* paint the pixmap to the primary surface */
   cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
   cairo_pattern_set_extend (cairo_get_source (Dev[id].context), cairoextendtype);
+
+  /* Set the interpolation filter */
+  cairo_pattern_set_filter (cairo_get_source(Dev[id].context), cairofiltertype);
+
   cairo_paint (Dev[id].context);
 
   /* clean up and restore settings */
@@ -211,9 +227,9 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 void
 giza_render_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  int extend, const float *affine)
+		  int extend, int filter, const float *affine)
 {
-  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,0,extend,data);
+  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,0,extend,filter,data);
 }
 
 /**
@@ -226,9 +242,9 @@ giza_render_float (int sizex, int sizey, const float* data, int i1,
 void
 giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  int extend, const float *affine)
+		  int extend, int filter, const float *affine)
 {
-  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,1,extend,data);
+  _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,1,extend,filter,data);
 }
 
 /**
@@ -240,9 +256,9 @@ giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
  */
 void
 giza_render_alpha_float (int sizex, int sizey, const float* data, const float* alpha, int i1, int i2,
-	    int j1, int j2, float valMin, float valMax, int extend, const float *affine)
+	    int j1, int j2, float valMin, float valMax, int extend, int filter, const float *affine)
 {
-   _giza_render_float (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,2,extend,alpha);
+   _giza_render_float (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,2,extend,filter,alpha);
 }
 /**
  *  _giza_render_float is the internal routine with the most general (and changeable) interface
@@ -251,7 +267,7 @@ giza_render_alpha_float (int sizex, int sizey, const float* data, const float* a
 void
 _giza_render_float (int sizex, int sizey, const float* data, int i1,
 		    int i2, int j1, int j2, float valMin, float valMax,
-		    const float *affine, int transparent, int extend, const float* datalpha)
+		    const float *affine, int transparent, int extend, int filter, const float* datalpha)
 {
   if (!_giza_check_device_ready ("giza_render_float"))
     return;
@@ -278,6 +294,9 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
 
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
+
+  cairo_filter_t cairofiltertype;
+  _giza_get_filter(filter,&cairofiltertype);
 
   int oldCi;
   giza_get_colour_index (&oldCi);
@@ -340,6 +359,8 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
 
   cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
   cairo_pattern_set_extend (cairo_get_source (Dev[id].context), cairoextendtype);
+  cairo_pattern_set_filter (cairo_get_source(Dev[id].context), cairofiltertype);
+
   cairo_paint (Dev[id].context);
 
   _giza_set_trans (oldTrans);
@@ -359,11 +380,11 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
 void
 giza_render_gray (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  int extend, const double *affine)
+		  int extend, int filter, const double *affine)
 {
   giza_save_colour_table();
   giza_set_colour_table_gray ();
-  giza_render (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, extend, affine);
+  giza_render (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, extend, filter, affine);
   giza_restore_colour_table();
 }
 
@@ -377,11 +398,11 @@ giza_render_gray (int sizex, int sizey, const double* data, int i1,
 void
 giza_render_gray_float (int sizex, int sizey, const float* data, int i1,
 		  int i2, int j1, int j2, float valMin, float valMax,
-		  int extend, const float *affine)
+		  int extend, int filter, const float *affine)
 {
   giza_save_colour_table();
   giza_set_colour_table_gray();
-  giza_render_float (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, extend, affine);
+  giza_render_float (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, extend, filter, affine);
   giza_restore_colour_table();
 }
 
@@ -484,12 +505,13 @@ _giza_colour_pixel_index_alpha (unsigned char *array, int pixNum, int ci, double
  *  -ymin        :- world coordinate corresponding to bottom of pixel array
  *  -ymax        :- world coordinate corresponding to top of pixel array
  *  -extend      :- Option for how to deal with image at edges (see giza_render)
+ *  -filter      :- Option for how to interpolate between pixels (see giza_render, since v1.5)
  *
  * See Also: giza_render, giza_draw_pixels_float
  */
 void
 giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend)
+	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend, int filter)
 {
   if (!_giza_check_device_ready ("giza_render_pixels"))
     return;
@@ -512,6 +534,9 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
 
   cairo_extend_t cairoextendtype;
   _giza_get_extend(extend,&cairoextendtype);
+
+  cairo_filter_t cairofiltertype;
+  _giza_get_filter(filter,&cairofiltertype);
 
   /* apply the transformation */
   int oldCi;
@@ -553,6 +578,7 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   /* paint the pixmap to the primary surface */
   cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
   cairo_pattern_set_extend (cairo_get_source (Dev[id].context), cairoextendtype);
+  cairo_pattern_set_filter (cairo_get_source (Dev[id].context), cairofiltertype);
   cairo_paint (Dev[id].context);
 
   /* clean up and restore settings */
@@ -573,13 +599,13 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
  */
 void
 giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend)
+	    int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend, int filter)
 {
   if (!_giza_check_device_ready ("giza_render_pixels_float"))
     return;
 
   giza_draw_pixels (sizex, sizey, idata, i1, i2,
-	    j1, j2, (double) xmin, (double) xmax, (double) ymin, (double) ymax, extend);
+	    j1, j2, (double) xmin, (double) xmax, (double) ymin, (double) ymax, extend, filter);
 
 }
 
@@ -603,6 +629,40 @@ _giza_get_extend (int extend, cairo_extend_t *cairoextend)
        break;
     default:
        *cairoextend = CAIRO_EXTEND_NONE;
+       break;
+    }
+  return;
+}
+
+/**
+ * Internal routine to translate giza's integer value of filter to cairo's cairo_filter_t
+ */
+void
+_giza_get_filter (int filter, cairo_filter_t *cairofilter)
+{
+
+  switch (filter)
+    {
+    case GIZA_FILTER_FAST:
+       *cairofilter = CAIRO_FILTER_FAST;
+       break;
+    case GIZA_FILTER_GOOD:
+       *cairofilter = CAIRO_FILTER_GOOD;
+       break;
+    case GIZA_FILTER_BEST:
+       *cairofilter = CAIRO_FILTER_BEST;
+       break;
+    case GIZA_FILTER_NEAREST:
+       *cairofilter = CAIRO_FILTER_NEAREST;
+       break;
+    case GIZA_FILTER_BILINEAR:
+       *cairofilter = CAIRO_FILTER_BILINEAR;
+       break;
+    case GIZA_FILTER_GAUSSIAN:
+       *cairofilter = CAIRO_FILTER_GAUSSIAN;
+       break;
+    default:
+       *cairofilter = GIZA_FILTER_BEST;
        break;
     }
   return;

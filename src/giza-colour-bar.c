@@ -118,12 +118,12 @@ giza_colour_bar (const char *side, double disp, double width,
        if (greyscale)
          {
            giza_render_gray(npixwedg,1,sample,0,npixwedg-1,0,0,valMin,valMax,
-                       GIZA_EXTEND_PAD,affine);
+                       GIZA_EXTEND_PAD,GIZA_FILTER_DEFAULT,affine);
          }
        else
          {
            giza_render(npixwedg,1,sample,0,npixwedg-1,0,0,valMin,valMax,
-                       GIZA_EXTEND_PAD,affine);         
+                       GIZA_EXTEND_PAD,GIZA_FILTER_DEFAULT,affine);
          }
 
        giza_set_window(vmin,vmax,0.0,1.0);
@@ -155,12 +155,12 @@ giza_colour_bar (const char *side, double disp, double width,
        if (greyscale)
          {
            giza_render_gray(1,npixwedg,sample,0,0,0,npixwedg-1,valMin,valMax,
-                       GIZA_EXTEND_PAD,affine);
+                       GIZA_EXTEND_PAD,GIZA_FILTER_DEFAULT,affine);
          }
        else
          {
            giza_render(1,npixwedg,sample,0,0,0,npixwedg-1,valMin,valMax,
-                       GIZA_EXTEND_PAD,affine);         
+                       GIZA_EXTEND_PAD,GIZA_FILTER_DEFAULT,affine);
          }
 
        giza_set_window(0.0,1.0,vmin,vmax);

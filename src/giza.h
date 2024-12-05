@@ -291,35 +291,35 @@ void giza_rectangle_rounded_float (float x1, float x2, float y1, float y2, float
 
 void giza_render (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  int extend, const double *affine);
+		  int extend, int filter, const double *affine);
 void giza_render_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, int extend, const float *affine);
+			float valMax, int extend, int filter, const float *affine);
 
 void giza_render_transparent (int sizex, int sizey, const double* data, int i1,
 		  int i2, int j1, int j2, double valMin, double valMax,
-		  int extend, const double *affine);
+		  int extend, int filter, const double *affine);
 void giza_render_transparent_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, int extend, const float *affine);
+			float valMax, int extend, int filter, const float *affine);
 
 void giza_render_alpha (int sizex, int sizey, const double* data, const double* alpha,
                   int i1, int i2, int j1, int j2, double valMin, double valMax,
-                  int extend, const double *affine);
+                  int extend, int filter, const double *affine);
 void giza_render_alpha_float (int sizex, int sizey, const float* data, const float* alpha,
                   int i1, int i2, int j1, int j2, float valMin, float valMax,
-                  int extend, const float *affine);
+                  int extend, int filter, const float *affine);
 
 void giza_render_gray (int sizex, int sizey, const double* data, int i1,
-		  int i2, int j1, int j2, double valMin, double valMax, int extend,
+		  int i2, int j1, int j2, double valMin, double valMax, int extend, int filter,
 		  const double *affine);
 void giza_render_gray_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
-			float valMax, int extend, const float *affine);
+			float valMax, int extend, int filter, const float *affine);
 void giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend);
+	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend, int filter);
 void giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend);
+	    int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend, int filter);
 
 double giza_round (double x, int *nsub);
 float giza_round_float (float x, int *nsub);

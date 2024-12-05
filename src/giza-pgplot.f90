@@ -563,7 +563,7 @@ end subroutine PGFUNY
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
- use giza,       only:giza_render_gray,giza_extend_none
+ use giza,       only:giza_render_gray,giza_extend_none,giza_filter_nearest
  use gizapgplot, only:convert_tr_to_affine
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2
@@ -571,7 +571,7 @@ subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
  real, dimension(6)  :: affine
 
  call convert_tr_to_affine(tr,affine)
- call giza_render_gray(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,giza_extend_none,affine)
+ call giza_render_gray(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,giza_extend_none,giza_filter_nearest,affine)
 
 end subroutine PGGRAY
 
@@ -623,7 +623,7 @@ end subroutine PGIDEN
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGIMAG (A, IDIM, JDIM, I1, I2, J1, J2, A1, A2, TR)
- use giza,       only:giza_render,giza_extend_none
+ use giza,       only:giza_render,giza_extend_none,giza_filter_nearest
  use gizapgplot, only:convert_tr_to_affine
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2
@@ -631,7 +631,7 @@ subroutine PGIMAG (A, IDIM, JDIM, I1, I2, J1, J2, A1, A2, TR)
  real                :: affine(6)
 
  call convert_tr_to_affine(tr,affine)
- call giza_render(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,a1,a2,giza_extend_none,affine)
+ call giza_render(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,a1,a2,giza_extend_none,giza_filter_nearest,affine)
 
 end subroutine PGIMAG
 
@@ -841,14 +841,14 @@ end subroutine PGPAP
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGPIXL (IA, IDIM, JDIM, I1, I2, J1, J2, X1, X2, Y1, Y2)
- use giza, only:giza_draw_pixels,giza_extend_none
+ use giza, only:giza_draw_pixels,giza_extend_none,giza_filter_nearest
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2
  integer, intent(in) :: IA(IDIM,JDIM)
  real,    intent(in) :: X1, X2, Y1, Y2
 
  call giza_draw_pixels(IDIM, JDIM, IA, I1-1, I2-1, J1-1, J2-1, X1, X2, Y1, Y2,&
-                       giza_extend_none)
+                       giza_extend_none,giza_filter_nearest)
 
 end subroutine PGPIXL
 

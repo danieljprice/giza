@@ -1,7 +1,7 @@
 AC_PREREQ(2.61)
 m4_define(giza_version_major,1)
-m4_define(giza_version_minor,4)
-m4_define(giza_version_micro,4)
+m4_define(giza_version_minor,5)
+m4_define(giza_version_micro,0)
 AC_INIT([giza],
         [giza_version_major.giza_version_minor.giza_version_micro],
         [daniel.price@monash.edu],[],
@@ -37,9 +37,9 @@ AC_SUBST(GIZA_VERSION_MICRO,giza_version_micro)
 # 3) increment LT_AGE if interface is backwards compatible
 # 4) set LT_AGE to 0 if interface is not backwards compatible
 #
-AC_SUBST(LT_CURRENT, 1)
-AC_SUBST(LT_REVISION, giza_version_micro)
-AC_SUBST(LT_AGE, 1)
+AC_SUBST(LT_CURRENT, 2)
+AC_SUBST(LT_REVISION, 0)
+AC_SUBST(LT_AGE, 0)
 LT_INIT([shared])
 #
 # cairo and X11 libraries. Use pkg-config if available but provide fallback options if not (OS/X)
