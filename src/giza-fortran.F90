@@ -211,6 +211,13 @@ module giza
   integer, parameter, public :: giza_extend_repeat = GIZA_EXTEND_REPEAT
   integer, parameter, public :: giza_extend_reflect = GIZA_EXTEND_REFLECT
   integer, parameter, public :: giza_extend_pad = GIZA_EXTEND_PAD
+  integer, parameter, public :: giza_filter_default = GIZA_FILTER_DEFAULT
+  integer, parameter, public :: giza_filter_fast = GIZA_FILTER_FAST
+  integer, parameter, public :: giza_filter_good = GIZA_FILTER_GOOD
+  integer, parameter, public :: giza_filter_best = GIZA_FILTER_BEST
+  integer, parameter, public :: giza_filter_nearest = GIZA_FILTER_NEAREST
+  integer, parameter, public :: giza_filter_bilinear = GIZA_FILTER_BILINEAR
+  integer, parameter, public :: giza_filter_gaussian = GIZA_FILTER_GAUSSIAN
 
 private
 
@@ -1385,33 +1392,33 @@ private
  end interface
 
  interface giza_render
-    subroutine giza_render(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+    subroutine giza_render(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_double),intent(in) :: data(sizex,sizey)
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_render
 
-    subroutine giza_render_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+    subroutine giza_render_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_float),intent(in) :: data(sizex,sizey)
       real(kind=c_float),intent(in),value :: valMin,valMax
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_render_float
 
-    subroutine giza_render_alpha(sizex,sizey,data,alpha,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+    subroutine giza_render_alpha(sizex,sizey,data,alpha,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_double),intent(in) :: data(sizex,sizey), alpha(sizex,sizey)
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_render_alpha
 
-    subroutine giza_render_alpha_float(sizex,sizey,data,alpha,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+    subroutine giza_render_alpha_float(sizex,sizey,data,alpha,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_float),intent(in) :: data(sizex,sizey), alpha(sizex,sizey)
       real(kind=c_float),intent(in),value :: valMin,valMax
       real(kind=c_float),intent(in) :: affine(6)
@@ -1419,17 +1426,17 @@ private
  end interface
 
  interface giza_render_transparent
-    subroutine giza_render_transparent(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+    subroutine giza_render_transparent(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_double),intent(in) :: data(sizex,sizey)
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_render_transparent
 
-    subroutine giza_render_transparent_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+    subroutine giza_render_transparent_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_float),intent(in) :: data(sizex,sizey)
       real(kind=c_float),intent(in),value :: valMin,valMax
       real(kind=c_float),intent(in) :: affine(6)
@@ -1437,17 +1444,17 @@ private
  end interface
 
  interface giza_render_gray
-    subroutine giza_render_gray(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+    subroutine giza_render_gray(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_double),intent(in) :: data(sizex,sizey)
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_render_gray
 
-    subroutine giza_render_gray_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,affine) bind(C)
+    subroutine giza_render_gray_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_float),intent(in) :: data(sizex,sizey)
       real(kind=c_float),intent(in),value :: valMin,valMax
       real(kind=c_float),intent(in) :: affine(6)
@@ -1455,16 +1462,16 @@ private
  end interface
 
  interface giza_draw_pixels
-    subroutine giza_draw_pixels(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax,extend) bind(C)
+    subroutine giza_draw_pixels(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax,extend,filter) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       integer(kind=c_int),intent(in) :: idata(sizex,sizey)
       real(kind=c_double),intent(in),value :: xmin,xmax,ymin,ymax
     end subroutine giza_draw_pixels
 
-    subroutine giza_draw_pixels_float(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax,extend) bind(C)
+    subroutine giza_draw_pixels_float(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax,extend,filter) bind(C)
       import
-      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       integer(kind=c_int),intent(in) :: idata(sizex,sizey)
       real(kind=c_float),intent(in),value :: xmin,xmax,ymin,ymax
     end subroutine giza_draw_pixels_float
@@ -2088,7 +2095,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
                      xmin,xmax,ymin,ymax,imgmin,imgmax,affine,&
                      vptxmin,vptxmax,vptymin,vptymax, &
                      xlabel,ylabel,title,font,&
-                     ls,lw,ci,ch,symbol,just,axis,extend,printid)
+                     ls,lw,ci,ch,symbol,just,axis,extend,filter,printid)
  real, intent(in), dimension(:), optional :: y,x
  real, intent(in), dimension(:,:), optional :: img
  integer, intent(in), optional :: units
@@ -2098,7 +2105,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  real, intent(in), optional :: vptxmin,vptxmax,vptymin,vptymax
  character(len=*), intent(in), optional :: xlabel,ylabel,title
  character(len=*), intent(in), optional :: font
- integer, intent(in), optional :: ls,ci,symbol,axis,just,extend
+ integer, intent(in), optional :: ls,ci,symbol,axis,just,extend,filter
  real, intent(in), optional :: lw,ch
  real, dimension(6), intent(in), optional :: affine
  logical, intent(in), optional :: printid
@@ -2112,7 +2119,7 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
 
  real(kind=c_double)  :: lw_c, ch_c
  integer(kind=c_int)  :: n, nx_c, ny_c
- integer(kind=c_int)  :: symbol_c, iextend
+ integer(kind=c_int)  :: symbol_c, iextend, ifilter
 
 !
 !--open giza device
@@ -2311,9 +2318,14 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
     else
        iextend = giza_extend_none
     endif
+    if (present(filter)) then
+       ifilter = filter
+    else
+       ifilter = giza_filter_default
+    endif
     nx_c = nx; ny_c = ny
     call giza_render(nx_c,ny_c,real(img,kind=c_double),int(1,kind=c_int),&
-                     nx_c,int(1,kind=c_int),ny_c,valmin,valmax,iextend,affinei)
+                     nx_c,int(1,kind=c_int),ny_c,valmin,valmax,iextend,ifilter,affinei)
  endif
 
  call giza_close()

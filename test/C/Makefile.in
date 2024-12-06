@@ -114,7 +114,8 @@ am__EXEEXT_1 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-points$(EXEEXT) test-qtext$(EXEEXT) \
 	test-rectangle$(EXEEXT) test-set-line-width$(EXEEXT) \
 	test-svg$(EXEEXT) test-vector$(EXEEXT) test-window$(EXEEXT) \
-	test-XOpenDisplay$(EXEEXT)
+	test-XOpenDisplay$(EXEEXT) test-contour$(EXEEXT) \
+	test-render$(EXEEXT)
 test_XOpenDisplay_SOURCES = test-XOpenDisplay.c
 test_XOpenDisplay_OBJECTS = test-XOpenDisplay.$(OBJEXT)
 test_XOpenDisplay_LDADD = $(LDADD)
@@ -147,6 +148,10 @@ test_colour_index_SOURCES = test-colour-index.c
 test_colour_index_OBJECTS = test-colour-index.$(OBJEXT)
 test_colour_index_LDADD = $(LDADD)
 test_colour_index_DEPENDENCIES = ../../src/libgiza.la
+test_contour_SOURCES = test-contour.c
+test_contour_OBJECTS = test-contour.$(OBJEXT)
+test_contour_LDADD = $(LDADD)
+test_contour_DEPENDENCIES = ../../src/libgiza.la
 test_environment_SOURCES = test-environment.c
 test_environment_OBJECTS = test-environment.$(OBJEXT)
 test_environment_LDADD = $(LDADD)
@@ -195,6 +200,10 @@ test_rectangle_SOURCES = test-rectangle.c
 test_rectangle_OBJECTS = test-rectangle.$(OBJEXT)
 test_rectangle_LDADD = $(LDADD)
 test_rectangle_DEPENDENCIES = ../../src/libgiza.la
+test_render_SOURCES = test-render.c
+test_render_OBJECTS = test-render.$(OBJEXT)
+test_render_LDADD = $(LDADD)
+test_render_DEPENDENCIES = ../../src/libgiza.la
 test_set_line_width_SOURCES = test-set-line-width.c
 test_set_line_width_OBJECTS = test-set-line-width.$(OBJEXT)
 test_set_line_width_LDADD = $(LDADD)
@@ -230,14 +239,16 @@ am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-arrow.Po ./$(DEPDIR)/test-box.Po \
 	./$(DEPDIR)/test-cairo-xw.Po ./$(DEPDIR)/test-change-page.Po \
 	./$(DEPDIR)/test-circle.Po ./$(DEPDIR)/test-colour-index.Po \
-	./$(DEPDIR)/test-environment.Po ./$(DEPDIR)/test-error-bars.Po \
+	./$(DEPDIR)/test-contour.Po ./$(DEPDIR)/test-environment.Po \
+	./$(DEPDIR)/test-error-bars.Po \
 	./$(DEPDIR)/test-format-number.Po ./$(DEPDIR)/test-giza-xw.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
 	./$(DEPDIR)/test-openclose.Po ./$(DEPDIR)/test-pdf.Po \
 	./$(DEPDIR)/test-png.Po ./$(DEPDIR)/test-points.Po \
 	./$(DEPDIR)/test-qtext.Po ./$(DEPDIR)/test-rectangle.Po \
-	./$(DEPDIR)/test-set-line-width.Po ./$(DEPDIR)/test-svg.Po \
-	./$(DEPDIR)/test-vector.Po ./$(DEPDIR)/test-window.Po
+	./$(DEPDIR)/test-render.Po ./$(DEPDIR)/test-set-line-width.Po \
+	./$(DEPDIR)/test-svg.Po ./$(DEPDIR)/test-vector.Po \
+	./$(DEPDIR)/test-window.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -259,18 +270,19 @@ am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c test-cairo-xw.c \
 	test-change-page.c test-circle.c test-colour-index.c \
-	test-environment.c test-error-bars.c test-format-number.c \
-	test-giza-xw.c test-line-cap.c test-line-style.c \
-	test-openclose.c test-pdf.c test-png.c test-points.c \
-	test-qtext.c test-rectangle.c test-set-line-width.c test-svg.c \
-	test-vector.c test-window.c
-DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c \
-	test-cairo-xw.c test-change-page.c test-circle.c \
-	test-colour-index.c test-environment.c test-error-bars.c \
+	test-contour.c test-environment.c test-error-bars.c \
 	test-format-number.c test-giza-xw.c test-line-cap.c \
 	test-line-style.c test-openclose.c test-pdf.c test-png.c \
-	test-points.c test-qtext.c test-rectangle.c \
+	test-points.c test-qtext.c test-rectangle.c test-render.c \
 	test-set-line-width.c test-svg.c test-vector.c test-window.c
+DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c \
+	test-cairo-xw.c test-change-page.c test-circle.c \
+	test-colour-index.c test-contour.c test-environment.c \
+	test-error-bars.c test-format-number.c test-giza-xw.c \
+	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
+	test-png.c test-points.c test-qtext.c test-rectangle.c \
+	test-render.c test-set-line-width.c test-svg.c test-vector.c \
+	test-window.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -658,7 +670,7 @@ ctests = test-arrow test-box test-cairo-xw test-change-page \
 	test-error-bars test-format-number test-giza-xw test-line-cap \
 	test-line-style test-openclose test-pdf test-png test-points \
 	test-qtext test-rectangle test-set-line-width \
-	test-svg test-vector test-window test-XOpenDisplay # test-contour test-render
+	test-svg test-vector test-window test-XOpenDisplay test-contour test-render
 
 all: all-am
 
@@ -726,6 +738,10 @@ test-colour-index$(EXEEXT): $(test_colour_index_OBJECTS) $(test_colour_index_DEP
 	@rm -f test-colour-index$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_colour_index_OBJECTS) $(test_colour_index_LDADD) $(LIBS)
 
+test-contour$(EXEEXT): $(test_contour_OBJECTS) $(test_contour_DEPENDENCIES) $(EXTRA_test_contour_DEPENDENCIES) 
+	@rm -f test-contour$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_contour_OBJECTS) $(test_contour_LDADD) $(LIBS)
+
 test-environment$(EXEEXT): $(test_environment_OBJECTS) $(test_environment_DEPENDENCIES) $(EXTRA_test_environment_DEPENDENCIES) 
 	@rm -f test-environment$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_environment_OBJECTS) $(test_environment_LDADD) $(LIBS)
@@ -774,6 +790,10 @@ test-rectangle$(EXEEXT): $(test_rectangle_OBJECTS) $(test_rectangle_DEPENDENCIES
 	@rm -f test-rectangle$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_rectangle_OBJECTS) $(test_rectangle_LDADD) $(LIBS)
 
+test-render$(EXEEXT): $(test_render_OBJECTS) $(test_render_DEPENDENCIES) $(EXTRA_test_render_DEPENDENCIES) 
+	@rm -f test-render$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_render_OBJECTS) $(test_render_LDADD) $(LIBS)
+
 test-set-line-width$(EXEEXT): $(test_set_line_width_OBJECTS) $(test_set_line_width_DEPENDENCIES) $(EXTRA_test_set_line_width_DEPENDENCIES) 
 	@rm -f test-set-line-width$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_set_line_width_OBJECTS) $(test_set_line_width_LDADD) $(LIBS)
@@ -803,6 +823,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-change-page.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-circle.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-colour-index.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-contour.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-environment.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-error-bars.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-format-number.Po@am__quote@ # am--include-marker
@@ -815,6 +836,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-points.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-qtext.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-rectangle.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-render.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-set-line-width.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-svg.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-vector.Po@am__quote@ # am--include-marker
@@ -1232,6 +1254,20 @@ test-XOpenDisplay.log: test-XOpenDisplay$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-contour.log: test-contour$(EXEEXT)
+	@p='test-contour$(EXEEXT)'; \
+	b='test-contour'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-render.log: test-render$(EXEEXT)
+	@p='test-render$(EXEEXT)'; \
+	b='test-render'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -1332,6 +1368,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-change-page.Po
 	-rm -f ./$(DEPDIR)/test-circle.Po
 	-rm -f ./$(DEPDIR)/test-colour-index.Po
+	-rm -f ./$(DEPDIR)/test-contour.Po
 	-rm -f ./$(DEPDIR)/test-environment.Po
 	-rm -f ./$(DEPDIR)/test-error-bars.Po
 	-rm -f ./$(DEPDIR)/test-format-number.Po
@@ -1344,6 +1381,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-points.Po
 	-rm -f ./$(DEPDIR)/test-qtext.Po
 	-rm -f ./$(DEPDIR)/test-rectangle.Po
+	-rm -f ./$(DEPDIR)/test-render.Po
 	-rm -f ./$(DEPDIR)/test-set-line-width.Po
 	-rm -f ./$(DEPDIR)/test-svg.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
@@ -1400,6 +1438,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-change-page.Po
 	-rm -f ./$(DEPDIR)/test-circle.Po
 	-rm -f ./$(DEPDIR)/test-colour-index.Po
+	-rm -f ./$(DEPDIR)/test-contour.Po
 	-rm -f ./$(DEPDIR)/test-environment.Po
 	-rm -f ./$(DEPDIR)/test-error-bars.Po
 	-rm -f ./$(DEPDIR)/test-format-number.Po
@@ -1412,6 +1451,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-points.Po
 	-rm -f ./$(DEPDIR)/test-qtext.Po
 	-rm -f ./$(DEPDIR)/test-rectangle.Po
+	-rm -f ./$(DEPDIR)/test-render.Po
 	-rm -f ./$(DEPDIR)/test-set-line-width.Po
 	-rm -f ./$(DEPDIR)/test-svg.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po

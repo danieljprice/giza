@@ -49,7 +49,7 @@ main ()
 	}
     }
   
-  giza_contour (dimx, dimy, data1, 0, dimx - 1, 0, dimy - 1, ncont, cont1, affine1);
+  giza_contour (dimx, dimy, (double *) &data1, 0, dimx - 1, 0, dimy - 1, ncont, cont1,affine1);
   giza_box ("BNCT", 0., 0, "BCNT", 0., 0);
 
   giza_change_page ();
@@ -61,7 +61,7 @@ main ()
   double cont[5] = {-1., -.5, 0., .5, 1.};
   double affine[6] = {3./((double)dimx), 0., 0., 3./((double) dimy), -1.5, -1.5};
   double data[dimy][dimx];
-  double tmp1, tmp2, tmp3;
+  //double tmp1, tmp2, tmp3;
 
   for (i = 0; i < dimx; ++i)
     {
@@ -78,8 +78,8 @@ main ()
 	}
     }
 
-  giza_render (dimx, dimy, data, 0, dimx - 1, 0, dimy - 1, -1., 1., affine);
-  giza_contour (dimx, dimy, data, 0, dimx - 1, 0, dimy - 1, ncont, cont, affine);
+  giza_render (dimx, dimy, (double *) &data, 0, dimx - 1, 0, dimy - 1, -1., 1.,0,0,affine);
+  giza_contour (dimx, dimy, (double *) &data, 0, dimx - 1, 0, dimy - 1, ncont, cont,affine);
   giza_box ("BCNT", 0., 0, "BCNT", 0., 0);
   giza_close_device ();
 

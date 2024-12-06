@@ -33,10 +33,11 @@ main ()
   giza_box ("BCNTS", 0., 0, "BCNTS", 0., 0);
 
   double cp[2];
-  double r[2];
   cp[0] = 0.;
   cp[1] = 1.;
-  giza_set_colour_table (cp, cp, cp, cp, 2);
+  double contrast = 1.0;
+  double brightness = 0.5;
+  giza_set_colour_table (cp, cp, cp, cp, 2, contrast,brightness);
   giza_start_warnings ();
   double data[100][100], affine[6];
   int i, j;
@@ -44,7 +45,7 @@ main ()
     {
       for (j = 0; j < 10; j++)
 	{
-	  data[i][j] = 1;//i * .1;
+	  data[i][j] = i * .1;
 	}
     }
 
@@ -55,15 +56,15 @@ main ()
   affine[4] = 0.;
   affine[5] = 0.;
 
-  giza_render (10, 10, data, 0, 9, 0, 9, 0., 1., affine);
+  giza_render (10, 10, (double *) &data, 0, 9, 0, 9, 0., 1.,0,GIZA_FILTER_NEAREST,affine);
 
   giza_change_page ();
 
   double data2[2][2];
-  data[0][0] = 1.;
-  data[0][1] = 1.;
-  data[1][0] = 1.;
-  data[1][1] = 1.;
+  data[0][0] = 0.2;
+  data[0][1] = 0.3;
+  data[1][0] = 0.4;
+  data[1][1] = 0.5;
 
   giza_set_window (0., 1., 0., 1.);
   affine[4] = .5;
@@ -71,8 +72,8 @@ main ()
   
   cp[0] = 0.;
   cp[1] = 1.;
-  giza_set_colour_table (cp, cp, cp, cp, 2);
-  giza_render (2, 2, data2, 0, 1, 0, 1, 0., 1., affine);
+  giza_set_colour_table (cp, cp, cp, cp, 2, contrast, brightness);
+  giza_render (2, 2, (double *) &data2, 0, 1, 0, 1, 0., 1.,0,GIZA_FILTER_NEAREST,affine);
 
   giza_box ("BCNTS", 0., 0, "BCNTS", 0., 0);
   giza_flush_device ();
@@ -124,8 +125,8 @@ main ()
         }
     }
 
-  giza_set_colour_table (controlpoints, red, green, blue, 100);
-  giza_render (100, 100, data, 0, 99, 0, 99, 0, 100, affine);
+  giza_set_colour_table (controlpoints, red, green, blue, 5,contrast,brightness);
+  giza_render (100, 100, (double *) &data, 0, 99, 0, 99, 0, 100, 0,0,affine);
 
   giza_close_device ();
 }

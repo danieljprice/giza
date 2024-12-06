@@ -378,7 +378,8 @@ void cpggray(const float *a, int idim, int jdim, int i1, int i2, \
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-  giza_render_gray_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,GIZA_EXTEND_NONE,affine);
+  giza_render_gray_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg, \
+                         GIZA_EXTEND_NONE,GIZA_FILTER_NEAREST,affine);
 }
 
 /***************************************************************
@@ -420,7 +421,8 @@ void cpgimag(const float *a, int idim, int jdim, int i1, int i2, \
 {
   float affine[6];
   convert_tr_to_affine(tr,affine);
-  giza_render_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,a1,a2,GIZA_EXTEND_NONE,affine);
+  giza_render_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,a1,a2, \
+                    GIZA_EXTEND_NONE,GIZA_FILTER_NEAREST,affine);
 }
 
 /***************************************************************
@@ -568,7 +570,8 @@ void cpgpap(float width, float aspect)
 void cpgpixl(const int *ia, int idim, int jdim, int i1, int i2, \
  int j1, int j2, float x1, float x2, float y1, float y2)
 {
-  giza_draw_pixels_float(idim,jdim,ia,i1-1,i2-1,j1-1,j2-1,x1,x2,y1,y2,GIZA_EXTEND_NONE);
+  giza_draw_pixels_float(idim,jdim,ia,i1-1,i2-1,j1-1,j2-1,x1,x2,y1,y2,\
+                         GIZA_EXTEND_NONE,GIZA_FILTER_NEAREST);
 }
 
 /***************************************************************
