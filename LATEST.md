@@ -1,5 +1,7 @@
-Changes in v1.4.4
+Changes in v1.5.0
 -----------------
-- bug fix with missing dynamic libraries in v1.4.3 and v1.4.2 (#61; thanks to Ole Streicher)
-- bug fix with test suite using make -j (#62; thanks to Ole Streicher)
-
+- fixed issues needed for PGPLOT compatibility in heasoft (#48)
+- additional arguments to giza_render to specify the type of pixel interpolation desired
+- better compatibility with PGPLOT in settings for pixel interpolation, fixes issue with blurred images in heasoft
+- removed tabs from source code
+- test_contour and test_render now included in test suite
