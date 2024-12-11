@@ -36,8 +36,8 @@
 
 void
 giza_contour (int sizex, int sizey, const double* data, int i1,
-	      int i2, int j1, int j2, int ncont_in, const double* cont,
-	      const double *affine)
+             int i2, int j1, int j2, int ncont_in, const double* cont,
+             const double *affine)
 {
 #define xsect(p1,p2) (h[p2]*xh[p1]-h[p1]*xh[p2])/(h[p2]-h[p1])
 #define ysect(p1,p2) (h[p2]*yh[p1]-h[p1]*yh[p2])/(h[p2]-h[p1])
@@ -69,7 +69,7 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
-		     affine[4], affine[5]);
+                   affine[4], affine[5]);
   cairo_transform (Dev[id].context, &mat);
   cairo_get_matrix (Dev[id].context, &mat);
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -86,141 +86,141 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
   for (j = (j2 - 1); j >= j1; j--)
     {
       for (i = i1; i < i2; i++)
-	{
-	  /* find the minimum value at the corners of a 1x1 box */
-	  temp1 = MIN (data[j*sizex+i], data[(j + 1)*sizex+i]);
-	  temp2 = MIN (data[j*sizex+(i + 1)], data[(j + 1)*sizex+(i + 1)]);
-	  dmin = MIN (temp1, temp2);
+       {
+         /* find the minimum value at the corners of a 1x1 box */
+         temp1 = MIN (data[j*sizex+i], data[(j + 1)*sizex+i]);
+         temp2 = MIN (data[j*sizex+(i + 1)], data[(j + 1)*sizex+(i + 1)]);
+         dmin = MIN (temp1, temp2);
 
-	  /* find the max value at the corners of the 1x1 box */
-	  temp1 = MAX (data[j*sizex+i], data[(j + 1)*sizex+i]);
-	  temp2 = MAX (data[j*sizex+(i + 1)], data[(j + 1)*sizex+(i + 1)]);
-	  dmax = MAX (temp1, temp2);
+         /* find the max value at the corners of the 1x1 box */
+         temp1 = MAX (data[j*sizex+i], data[(j + 1)*sizex+i]);
+         temp2 = MAX (data[j*sizex+(i + 1)], data[(j + 1)*sizex+(i + 1)]);
+         dmax = MAX (temp1, temp2);
 
-	  /* Check it is in the range of a contour */
-	  if (dmax < cont[0] || dmin > cont[ncont - 1])
-	    continue;
+         /* Check it is in the range of a contour */
+         if (dmax < cont[0] || dmin > cont[ncont - 1])
+           continue;
 
-	  for (k = 0; k < ncont; ++k)
-	    {
-	      if (cont[k] < dmin || cont[k] > dmax)
-		continue;
-	      for (m = 4; m >= 0; m--)
-		{
-		  /* calculate the relative height of the four corners and centre of the square */
-		  /* (i, j)   (i+1, j) */
-		  /* (i, j+1) (i+1, j+1) */
-		  /* as well as their device co-ords */
-		  if (m > 0)
-		    {
-		      h[m] = data[(j + jm[m - 1])*sizex+(i + im[m - 1])] - cont[k];
-		      xh[m] = i + im[m - 1] + 0.5;
-		      yh[m] = j + jm[m - 1] + 0.5;
-		    }
-		  else
-		    {
-		      h[0] = 0.25 * (h[1] + h[2] + h[3] + h[4]);
-		      xh[0] = 0.5 * (i + i + 1) + 0.5;
-		      yh[0] = 0.5 * (j + j + 1) + 0.5;
-		    }
+         for (k = 0; k < ncont; ++k)
+           {
+             if (cont[k] < dmin || cont[k] > dmax)
+              continue;
+             for (m = 4; m >= 0; m--)
+              {
+                /* calculate the relative height of the four corners and centre of the square */
+                /* (i, j)   (i+1, j) */
+                /* (i, j+1) (i+1, j+1) */
+                /* as well as their device co-ords */
+                if (m > 0)
+                  {
+                    h[m] = data[(j + jm[m - 1])*sizex+(i + im[m - 1])] - cont[k];
+                    xh[m] = i + im[m - 1] + 0.5;
+                    yh[m] = j + jm[m - 1] + 0.5;
+                  }
+                else
+                  {
+                    h[0] = 0.25 * (h[1] + h[2] + h[3] + h[4]);
+                    xh[0] = 0.5 * (i + i + 1) + 0.5;
+                    yh[0] = 0.5 * (j + j + 1) + 0.5;
+                  }
 
-		  if (h[m] > 0.0)
-		    sh[m] = 1;
-		  else if (h[m] < 0.0)
-		    sh[m] = -1;
-		  else
-		    sh[m] = 0;
-		}
+                if (h[m] > 0.0)
+                  sh[m] = 1;
+                else if (h[m] < 0.0)
+                  sh[m] = -1;
+                else
+                  sh[m] = 0;
+              }
 
-	      for (m = 1; m <= 4; ++m)
-		{
-		  m1 = m;
-		  m2 = 0;
-		  if (m != 4)
-		    m3 = m + 1;
-		  else
-		    m3 = 1;
+             for (m = 1; m <= 4; ++m)
+              {
+                m1 = m;
+                m2 = 0;
+                if (m != 4)
+                  m3 = m + 1;
+                else
+                  m3 = 1;
 
-		  if ((case_value =
-		       castab[sh[m1] + 1][sh[m2] + 1][sh[m3] + 1]) == 0)
-		    continue;
+                if ((case_value =
+                     castab[sh[m1] + 1][sh[m2] + 1][sh[m3] + 1]) == 0)
+                  continue;
 
-		  switch (case_value)
-		    {
-		    case 1:	/* Line between (i, j) (i + 1, j) */
-		      x1 = xh[m1];
-		      y1 = yh[m1];
-		      x2 = xh[m2];
-		      y2 = yh[m2];
-		      break;
-		    case 2:	/* Line between (i + 1, j) (i + 1, j + 1) */
-		      x1 = xh[m2];
-		      y1 = yh[m2];
-		      x2 = xh[m3];
-		      y2 = yh[m3];
-		      break;
-		    case 3:	/* Line between (i, j) (i + 1, j + 1) */
-		      x1 = xh[m3];
-		      y1 = yh[m3];
-		      x2 = xh[m1];
-		      y2 = yh[m1];
-		      break;
-		    case 4:	/* Line between (i, j) and between (i + 1, j), (i + 1, j + 1) */
-		      x1 = xh[m1];
-		      y1 = yh[m1];
-		      x2 = xsect (m2, m3);
-		      y2 = ysect (m2, m3);
-		      break;
-		    case 5:	/* Line between (i + 1, j) and between (i, j), (i + 1, j + 1) */
-		      x1 = xh[m2];
-		      y1 = yh[m2];
-		      x2 = xsect (m3, m1);
-		      y2 = ysect (m3, m1);
-		      break;
-		    case 6:	/* Line between (i + 1, j + 1) and between (i, j), (i + 1, j + 1)  */
-		      x1 = xh[m3];
-		      y1 = yh[m3];
-		      x2 = xsect (m3, m2);
-		      y2 = ysect (m3, m2);
-		      break;
-		    case 7:	/* Line between sides 1-2 and 2-3  */
-		      x1 = xsect (m1, m2);
-		      y1 = ysect (m1, m2);
-		      x2 = xsect (m2, m3);
-		      y2 = ysect (m2, m3);
-		      break;
-		    case 8:	/* Line between sides 2-3 and 3-1 */
-		      x1 = xsect (m2, m3);
-		      y1 = ysect (m2, m3);
-		      x2 = xsect (m3, m1);
-		      y2 = ysect (m3, m1);
-		      break;
-		    case 9:	/* Line between sides 3-1 and 1-2 */
-		      x1 = xsect (m3, m1);
-		      y1 = ysect (m3, m1);
-		      x2 = xsect (m1, m2);
-		      y2 = ysect (m1, m2);
-		      break;
-		    default:
-		      break;
-		    }
+                switch (case_value)
+                  {
+                  case 1:       /* Line between (i, j) (i + 1, j) */
+                    x1 = xh[m1];
+                    y1 = yh[m1];
+                    x2 = xh[m2];
+                    y2 = yh[m2];
+                    break;
+                  case 2:       /* Line between (i + 1, j) (i + 1, j + 1) */
+                    x1 = xh[m2];
+                    y1 = yh[m2];
+                    x2 = xh[m3];
+                    y2 = yh[m3];
+                    break;
+                  case 3:       /* Line between (i, j) (i + 1, j + 1) */
+                    x1 = xh[m3];
+                    y1 = yh[m3];
+                    x2 = xh[m1];
+                    y2 = yh[m1];
+                    break;
+                  case 4:       /* Line between (i, j) and between (i + 1, j), (i + 1, j + 1) */
+                    x1 = xh[m1];
+                    y1 = yh[m1];
+                    x2 = xsect (m2, m3);
+                    y2 = ysect (m2, m3);
+                    break;
+                  case 5:       /* Line between (i + 1, j) and between (i, j), (i + 1, j + 1) */
+                    x1 = xh[m2];
+                    y1 = yh[m2];
+                    x2 = xsect (m3, m1);
+                    y2 = ysect (m3, m1);
+                    break;
+                  case 6:       /* Line between (i + 1, j + 1) and between (i, j), (i + 1, j + 1)  */
+                    x1 = xh[m3];
+                    y1 = yh[m3];
+                    x2 = xsect (m3, m2);
+                    y2 = ysect (m3, m2);
+                    break;
+                  case 7:       /* Line between sides 1-2 and 2-3  */
+                    x1 = xsect (m1, m2);
+                    y1 = ysect (m1, m2);
+                    x2 = xsect (m2, m3);
+                    y2 = ysect (m2, m3);
+                    break;
+                  case 8:       /* Line between sides 2-3 and 3-1 */
+                    x1 = xsect (m2, m3);
+                    y1 = ysect (m2, m3);
+                    x2 = xsect (m3, m1);
+                    y2 = ysect (m3, m1);
+                    break;
+                  case 9:       /* Line between sides 3-1 and 1-2 */
+                    x1 = xsect (m3, m1);
+                    y1 = ysect (m3, m1);
+                    x2 = xsect (m1, m2);
+                    y2 = ysect (m1, m2);
+                    break;
+                  default:
+                    break;
+                  }
                   /* compute what the line style should be */
                   newls = (auto_style ? (cont[k]<0 ? GIZA_LS_DOT : GIZA_LS_SOLID) : ls);
                   if( newls!=curls ) {
                       curls = newls;
                       giza_set_line_style (curls);
                   }
-		  /* draw the line */
+                /* draw the line */
                   cairo_matrix_transform_point (&mat, &x1, &y1);
                   cairo_matrix_transform_point (&mat, &x2, &y2);
                   /*printf ("In index: (x1, y1) = (%f, %f)\n", x1, y1); */
                   /*printf ("In coord: (x1, y1) = (%f, %f)\n", x1, y1); */
                   cairo_move_to (Dev[id].context, x1, y1);
-		  cairo_line_to (Dev[id].context, x2, y2);
-		  cairo_stroke (Dev[id].context);
-		}
-	    }
-	}
+                cairo_line_to (Dev[id].context, x2, y2);
+                cairo_stroke (Dev[id].context);
+              }
+           }
+       }
     }
 
   /* restore the transformation */
@@ -238,7 +238,7 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
 
 void
 giza_contour_float (int sizex, int sizey, const float* data, int i1,
-	      int i2, int j1, int j2, int ncont, const float* cont, const float *affine)
+             int i2, int j1, int j2, int ncont, const float* cont, const float *affine)
 {
   double ddata[sizey*sizex];
   double dcont[ncont];

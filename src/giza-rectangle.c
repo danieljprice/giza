@@ -115,7 +115,7 @@ giza_rectangle_rounded (double x1, double x2, double y1, double y2, double radiu
   cairo_arc (Dev[id].context,x + radius, y + radius, radius, M_PI, -0.5*M_PI);
   cairo_line_to (Dev[id].context,x + width - radius, y);
   cairo_arc (Dev[id].context,x + width - radius, y + radius, radius, -0.5*M_PI, 0.);
-  cairo_line_to	(Dev[id].context,x + width, y + height - radius);
+  cairo_line_to       (Dev[id].context,x + width, y + height - radius);
   cairo_arc (Dev[id].context,x + width - radius, y + height - radius, radius, 0., 0.5*M_PI);
   cairo_line_to (Dev[id].context,x + radius, y + height);
   cairo_arc (Dev[id].context,x + radius, y + height - radius, radius, 0.5*M_PI, M_PI);

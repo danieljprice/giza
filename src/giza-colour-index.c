@@ -55,15 +55,15 @@ giza_set_colour_index (int ci)
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
       _giza_warning ("giza_set_colour_index",
-		     "Invalid colour index, colour index not set");
+                   "Invalid colour index, colour index not set");
       return;
     }
 
   _giza_ci = ci;
 
   cairo_set_source_rgba (Dev[id].context, colourIndex[ci][0],
-			 colourIndex[ci][1], colourIndex[ci][2],
-			 colourIndex[ci][3]);
+                      colourIndex[ci][1], colourIndex[ci][2],
+                      colourIndex[ci][3]);
 }
 
 /**
@@ -129,7 +129,7 @@ giza_set_colour_representation_float (int ci, float red, float green, float blue
  */
 void
 giza_set_colour_representation_alpha (int ci, double red, double green,
-				      double blue, double alpha)
+                                  double blue, double alpha)
 {
   if (!_giza_check_device_ready ("giza_set_colour_representation"))
     return;
@@ -137,7 +137,7 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
       _giza_warning ("giza_set_colour_representation",
-		     "Invalid colour index, colour representation not set");
+                   "Invalid colour index, colour representation not set");
       return;
     }
 
@@ -168,10 +168,10 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
  */
 void
 giza_set_colour_representation_alpha_float (int ci, float red, float green,
-					    float blue, float alpha)
+                                       float blue, float alpha)
 {
   giza_set_colour_representation_alpha (ci, (double) red, (double) green,
-					(double) blue, (double) alpha);
+                                   (double) blue, (double) alpha);
 }
 
 /**
@@ -282,7 +282,7 @@ giza_set_colour_representation_rgba_float (int ci, int red, int green, int blue,
  */
 void
 giza_get_colour_representation (int ci, double *red, double *green,
-				double *blue)
+                            double *blue)
 {
   if (!_giza_check_device_ready ("giza_get_colour_representation"))
     {
@@ -295,7 +295,7 @@ giza_get_colour_representation (int ci, double *red, double *green,
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
       _giza_warning ("giza_get_colour_representation",
-		     "Invalid colour index");
+                   "Invalid colour index");
       return;
     }
 
@@ -311,7 +311,7 @@ giza_get_colour_representation (int ci, double *red, double *green,
  */
 void
 giza_get_colour_representation_float (int ci, float *red, float *green,
-				      float *blue)
+                                  float *blue)
 {
   if (!_giza_check_device_ready ("giza_get_colour_representation_float"))
     return;
@@ -319,7 +319,7 @@ giza_get_colour_representation_float (int ci, float *red, float *green,
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
       _giza_error ("giza_get_colour_representation_float",
-		   "Invalid colour index");
+                 "Invalid colour index");
       return;
     }
 
@@ -344,7 +344,7 @@ giza_get_colour_representation_float (int ci, float *red, float *green,
  */
 void
 giza_get_colour_representation_alpha (int ci, double *red, double *green,
-				      double *blue, double *alpha)
+                                  double *blue, double *alpha)
 {
   if (!_giza_check_device_ready ("giza_get_colour_representation"))
     {
@@ -358,7 +358,7 @@ giza_get_colour_representation_alpha (int ci, double *red, double *green,
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
       _giza_warning ("giza_get_colour_representation",
-		     "Invalid colour index");
+                   "Invalid colour index");
       return;
     }
 
@@ -377,7 +377,7 @@ giza_get_colour_representation_alpha (int ci, double *red, double *green,
  */
 void
 giza_get_colour_representation_alpha_float (int ci, float *red, float *green,
-					    float *blue, float *alpha)
+                                       float *blue, float *alpha)
 {
   if (!_giza_check_device_ready ("giza_get_colour_representation_float"))
     return;
@@ -385,7 +385,7 @@ giza_get_colour_representation_alpha_float (int ci, float *red, float *green,
   if (ci < GIZA_COLOUR_INDEX_MIN || ci > GIZA_COLOUR_INDEX_MAX)
     {
       _giza_error ("giza_get_colour_representation_float",
-		   "Invalid colour index");
+                 "Invalid colour index");
       return;
     }
 

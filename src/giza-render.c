@@ -107,7 +107,7 @@ giza_render_alpha (int sizex, int sizey, const double* data, const double* alpha
  */
 void
 _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
-	            int j1, int j2, double valMin, double valMax, const double *affine,
+                   int j1, int j2, double valMin, double valMax, const double *affine,
               int transparent, int extend, int filter, const double* datalpha)
 {
   if (!_giza_check_device_ready ("giza_render"))
@@ -143,7 +143,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
-		     affine[4], affine[5]);
+                   affine[4], affine[5]);
   cairo_transform (Dev[id].context, &mat);
 
   /* allocate data for the pixmap */
@@ -166,10 +166,10 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
-	  {
-	    _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax), datalpha[j*sizex + i]);
-	    pixnum = pixnum + 1;
-	  }
+         {
+           _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax), datalpha[j*sizex + i]);
+           pixnum = pixnum + 1;
+         }
       }
   } else if (transparent==1) {
     /* render each pixel, using transparent routine */
@@ -177,27 +177,27 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
-	  {
+         {
       idx = itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax);
-	    _giza_colour_pixel_index_alpha (pixdata, pixnum, idx, idx==cimin ? 0. : 1.);
-	    pixnum = pixnum + 1;
-	  }
+           _giza_colour_pixel_index_alpha (pixdata, pixnum, idx, idx==cimin ? 0. : 1.);
+           pixnum = pixnum + 1;
+         }
       }
   } else {
     /* render each pixel, usual routine */
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
-	  {
-	    _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin,cimax), 1.);
-	    pixnum = pixnum + 1;
-	  }
+         {
+           _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin,cimax), 1.);
+           pixnum = pixnum + 1;
+         }
       }
   }
 
   /* create the cairo surface from the pixmap */
   pixmap = cairo_image_surface_create_for_data (pixdata, format,
-						width, height, stride);
+                                          width, height, stride);
 
   /* paint the pixmap to the primary surface */
   cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
@@ -226,8 +226,8 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
  */
 void
 giza_render_float (int sizex, int sizey, const float* data, int i1,
-		  int i2, int j1, int j2, float valMin, float valMax,
-		  int extend, int filter, const float *affine)
+                int i2, int j1, int j2, float valMin, float valMax,
+                int extend, int filter, const float *affine)
 {
   _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,0,extend,filter,data);
 }
@@ -241,8 +241,8 @@ giza_render_float (int sizex, int sizey, const float* data, int i1,
  */
 void
 giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
-		  int i2, int j1, int j2, float valMin, float valMax,
-		  int extend, int filter, const float *affine)
+                int i2, int j1, int j2, float valMin, float valMax,
+                int extend, int filter, const float *affine)
 {
   _giza_render_float (sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,affine,1,extend,filter,data);
 }
@@ -256,7 +256,7 @@ giza_render_transparent_float (int sizex, int sizey, const float* data, int i1,
  */
 void
 giza_render_alpha_float (int sizex, int sizey, const float* data, const float* alpha, int i1, int i2,
-	    int j1, int j2, float valMin, float valMax, int extend, int filter, const float *affine)
+           int j1, int j2, float valMin, float valMax, int extend, int filter, const float *affine)
 {
    _giza_render_float (sizex, sizey, data,i1,i2,j1,j2,valMin,valMax,affine,2,extend,filter,alpha);
 }
@@ -266,8 +266,8 @@ giza_render_alpha_float (int sizex, int sizey, const float* data, const float* a
  */
 void
 _giza_render_float (int sizex, int sizey, const float* data, int i1,
-		    int i2, int j1, int j2, float valMin, float valMax,
-		    const float *affine, int transparent, int extend, int filter, const float* datalpha)
+                  int i2, int j1, int j2, float valMin, float valMax,
+                  const float *affine, int transparent, int extend, int filter, const float* datalpha)
 {
   if (!_giza_check_device_ready ("giza_render_float"))
     return;
@@ -275,13 +275,13 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   if (sizex < 1 || sizey < 1)
     {
       _giza_warning ("giza_render_float",
-		    "Invalid array size, skipping render.");
+                  "Invalid array size, skipping render.");
       return;
     }
   if (i1 < 0 || i2 < i1 || j1 < 0 || j2 < j1)
     {
       _giza_warning ("giza_render_float",
-		    "Invalid index range, skipping render.");
+                  "Invalid index range, skipping render.");
       return;
     }
 
@@ -303,8 +303,8 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
   cairo_matrix_init (&mat, (double) affine[0], (double) affine[1],
-		     (double) affine[2], (double) affine[3],
-		     (double) affine[4], (double) affine[5]);
+                   (double) affine[2], (double) affine[3],
+                   (double) affine[4], (double) affine[5]);
   cairo_transform (Dev[id].context, &mat);
 
 #if CAIRO_VERSION >= CAIRO_VERSION_ENCODE(1, 6, 0)
@@ -325,10 +325,10 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
-	  {
-	    _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax), datalpha[j*sizex + i]);
-	    pixnum = pixnum + 1;
-	  }
+         {
+           _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax), datalpha[j*sizex + i]);
+           pixnum = pixnum + 1;
+         }
       }
   } else if (transparent==1) {
     /* render each pixel, using transparent routine */
@@ -336,26 +336,26 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
-	  {
+         {
               idx = itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax);
               _giza_colour_pixel_index_alpha (pixdata, pixnum, idx, idx==cimin ? 0. : 1.);
               pixnum = pixnum + 1;
-	  }
+         }
       }
   } else {
     /* render each pixel, usual routine */
     for (j = j1; j <= j2; j++)
       {
         for (i = i1; i <= i2; i++)
-	  {
+         {
               _giza_colour_pixel_index_alpha (pixdata, pixnum, itf_idx(data[j*sizex + i], valMin, valMax, cimin, cimax), 1);
               pixnum = pixnum + 1;
-	  }
+         }
       }
   }
 
   pixmap = cairo_image_surface_create_for_data (pixdata, format,
-						width, height, stride);
+                                          width, height, stride);
 
   cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
   cairo_pattern_set_extend (cairo_get_source (Dev[id].context), cairoextendtype);
@@ -379,8 +379,8 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
  */
 void
 giza_render_gray (int sizex, int sizey, const double* data, int i1,
-		  int i2, int j1, int j2, double valMin, double valMax,
-		  int extend, int filter, const double *affine)
+                int i2, int j1, int j2, double valMin, double valMax,
+                int extend, int filter, const double *affine)
 {
   giza_save_colour_table();
   giza_set_colour_table_gray ();
@@ -397,8 +397,8 @@ giza_render_gray (int sizex, int sizey, const double* data, int i1,
  */
 void
 giza_render_gray_float (int sizex, int sizey, const float* data, int i1,
-		  int i2, int j1, int j2, float valMin, float valMax,
-		  int extend, int filter, const float *affine)
+                int i2, int j1, int j2, float valMin, float valMax,
+                int extend, int filter, const float *affine)
 {
   giza_save_colour_table();
   giza_set_colour_table_gray();
@@ -511,7 +511,7 @@ _giza_colour_pixel_index_alpha (unsigned char *array, int pixNum, int ci, double
  */
 void
 giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend, int filter)
+           int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend, int filter)
 {
   if (!_giza_check_device_ready ("giza_render_pixels"))
     return;
@@ -547,7 +547,7 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   double dxpix = (xmax - xmin)/((double) width);
   double dypix = (ymax - ymin)/((double) height);
   cairo_matrix_init (&mat, dxpix, 0.,0., dypix,
-		     xmin, ymin);
+                   xmin, ymin);
   cairo_transform (Dev[id].context, &mat);
 
   /* allocate data for the pixmap */
@@ -564,16 +564,16 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   for (j = j1; j <= j2; j++)
     {
       for (i = i1; i <= i2; i++)
-	{
-	  int ci = idata[j*sizex+i];
-	  _giza_colour_pixel_index (pixdata, pixnum, ci);
-	  pixnum = pixnum + 1;
-	}
+       {
+         int ci = idata[j*sizex+i];
+         _giza_colour_pixel_index (pixdata, pixnum, ci);
+         pixnum = pixnum + 1;
+       }
     }
 
   /* create the cairo surface from the pixmap */
   pixmap = cairo_image_surface_create_for_data (pixdata, format,
-						width, height, stride);
+                                          width, height, stride);
 
   /* paint the pixmap to the primary surface */
   cairo_set_source_surface (Dev[id].context, pixmap, 0, 0);
@@ -599,13 +599,13 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
  */
 void
 giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int i2,
-	    int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend, int filter)
+           int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend, int filter)
 {
   if (!_giza_check_device_ready ("giza_render_pixels_float"))
     return;
 
   giza_draw_pixels (sizex, sizey, idata, i1, i2,
-	    j1, j2, (double) xmin, (double) xmax, (double) ymin, (double) ymax, extend, filter);
+           j1, j2, (double) xmin, (double) xmax, (double) ymin, (double) ymax, extend, filter);
 
 }
 

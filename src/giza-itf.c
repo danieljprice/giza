@@ -46,9 +46,9 @@ int     _giza_itf_idx_log_f(const float pixelvalue, const float vmin, const floa
 int     _giza_itf_idx_sqrt_f(const float pixelvalue, const float vmin, const float vmax, const int cimin, const int cimax);
 
 /* We keep an array of three image transfer functions, use set_image_transfer_function to set
-	0: linear
-	1: log
-	2: sqrt 
+       0: linear
+       1: log
+       2: sqrt 
 */
 giza_itf_type       giza_itf[3]       = {_giza_itf_linear,       _giza_itf_log,       _giza_itf_sqrt};
 giza_itf_type_f     giza_itf_f[3]     = {_giza_itf_linear_f,     _giza_itf_log_f,     _giza_itf_sqrt_f};
@@ -62,7 +62,7 @@ void giza_set_image_transfer_function(int itf) {
   if (itf < 0 || itf > 2)
     {
       _giza_warning ("giza_set_image_transfer_function",
-		    "Invalid image transfer function, not set");
+                  "Invalid image transfer function, not set");
       return;
     }
   Dev[id].itf = itf;
@@ -77,20 +77,20 @@ void giza_get_image_transfer_function(int* itfp) {
 
 /*
  * Lifted from PGPLOT grimg2.f on how to handle the image transfer function:
-	
-	SFAC  = 65000.0
-	SFACL = LOG(1.0+SFAC)
-	...
+       
+       SFAC  = 65000.0
+       SFACL = LOG(1.0+SFAC)
+       ...
         IF (MODE.EQ.0) THEN
-        	IV = NINT((MININD*(A2-AV) + MAXIND*(AV-A1))/(A2-A1))
+               IV = NINT((MININD*(A2-AV) + MAXIND*(AV-A1))/(A2-A1))
         ELSE IF (MODE.EQ.1) THEN
-        	IV = MININD + NINT((MAXIND-MININD)*
-               			   LOG(1.0+SFAC*ABS((AV-A1)/(A2-A1)))/SFACL)
+               IV = MININD + NINT((MAXIND-MININD)*
+                                       LOG(1.0+SFAC*ABS((AV-A1)/(A2-A1)))/SFACL)
         ELSE IF (MODE.EQ.2) THEN
-        	IV = MININD + NINT((MAXIND-MININD)*
+               IV = MININD + NINT((MAXIND-MININD)*
                                    SQRT(ABS((AV-A1)/(A2-A1))))
         ELSE
-        	IV = MININD
+               IV = MININD
 */
 
 /* The linear transfer functions */

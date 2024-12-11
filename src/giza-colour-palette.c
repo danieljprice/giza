@@ -181,8 +181,8 @@ giza_set_colour_palette (int palette)
        nlinecolours = 16;
        break;
     default:
-       giza_set_colour_representation (0, 1., 1., 1.);	/* white */
-       giza_set_colour_representation (1, 0., 0., 0.);	/* black */
+       giza_set_colour_representation (0, 1., 1., 1.);       /* white */
+       giza_set_colour_representation (1, 0., 0., 0.);       /* black */
        /* red */
        giza_set_colour_representation (2, .933, 0.173, 0.173);
        /* green */

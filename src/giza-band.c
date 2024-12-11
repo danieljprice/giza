@@ -152,12 +152,12 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
            } else {
               cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
            }
-	   cairo_move_to (Band.box, xanc[0], yanc[0]);
+          cairo_move_to (Band.box, xanc[0], yanc[0]);
            for (i=1;i<=nanc-1;i++) {
-	      cairo_line_to (Band.box, xanc[i], yanc[i]);
+             cairo_line_to (Band.box, xanc[i], yanc[i]);
            }
-	   /*cairo_move_to (Band.box, x1, y1);*/
-	   cairo_line_to (Band.box, x2, y2);
+          /*cairo_move_to (Band.box, x1, y1);*/
+          cairo_line_to (Band.box, x2, y2);
            if (j==0) {
               cairo_close_path (Band.box);
               cairo_fill (Band.box);
@@ -165,7 +165,7 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
               cairo_stroke (Band.box);
            }
         }
-	break;
+       break;
       case 2: /* empty rectangle */
         /* Draw the band */
         cairo_set_source_rgba(Band.box,1.,1.,1.,0.2);
@@ -174,38 +174,38 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
         cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
         cairo_rectangle (Band.box, x1, y1, x2 - x1, y2 - y1);
         cairo_stroke(Band.box);
-	break;
+       break;
       case 3: /* Two horizontal lines */
         cairo_move_to (Band.box, 0., y1);
         cairo_line_to (Band.box, Band.maxWidth, y1);
         cairo_move_to (Band.box, 0., y2);
         cairo_line_to (Band.box, Band.maxWidth, y2);
         cairo_stroke (Band.box);
-	break;
+       break;
       case 4: /* Two vertical lines */
         cairo_move_to (Band.box, x1, 0.);
         cairo_line_to (Band.box, x1, Band.maxHeight);
         cairo_move_to (Band.box, x2, 0.);
         cairo_line_to (Band.box, x2, Band.maxHeight);
         cairo_stroke (Band.box);
-	break;
+       break;
       case 5: /* Single, horizontal line */
         cairo_move_to (Band.box, 0., y2);
         cairo_line_to (Band.box, Band.maxWidth, y2);
         cairo_stroke (Band.box);
-	break;
+       break;
       case 6: /* Single, vertical line */
         cairo_move_to (Band.box, x2, 0.);
         cairo_line_to (Band.box, x2, Band.maxHeight);
         cairo_stroke (Band.box);
-	break;
+       break;
       case 7: /* Crosshair */
         cairo_move_to (Band.box, 0., y2);
         cairo_line_to (Band.box, Band.maxWidth, y2);
         cairo_move_to (Band.box, x2, 0.);
         cairo_line_to (Band.box, x2, Band.maxHeight);
         cairo_stroke (Band.box);
-	break;
+       break;
       case 8: /* Circle */
         cairo_set_source_rgba(Band.box,1.,1.,1.,0.2);
         cairo_arc (Band.box, x1, y1, sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)), 0., 2 * M_PI);
@@ -213,10 +213,10 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
         cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
         cairo_arc (Band.box, x1, y1, sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)), 0., 2 * M_PI);
         cairo_stroke (Band.box);
-	break;
+       break;
       default:
         /* do not warn here (too verbose), instead warn in giza_band */
-	break;
+       break;
     }
 }
 

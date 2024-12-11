@@ -123,7 +123,7 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
       {
       case ('h'):
       case ('H'):
-	     draw_axis = 0;
+            draw_axis = 0;
         break;
       case ('t'):
       case ('T'):
@@ -206,9 +206,9 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
       intervalMaj = 7. * Dev[id].fontExtents.max_x_advance /
         ((Dev[id].VP.xmax - Dev[id].VP.xmin)*Dev[id].width);
       if (intervalMaj > 0.2)
-	      intervalMaj = 0.2;
+             intervalMaj = 0.2;
       if (intervalMaj < 0.05)
-	      intervalMaj = 0.05;
+             intervalMaj = 0.05;
       intervalMaj = intervalMaj * (v2 - v1);
       intervalMaj = giza_round (intervalMaj, &nMinTicks);
     }
@@ -269,11 +269,11 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
       nv = _giza_nint (intervalMaj/pow (10., np));
 
       for (i = i1; i <= i2; i++)
-	     {
-	       val = i * intervalMaj;
-	       ratio = (val - v1) / (v2 - v1);
+            {
+              val = i * intervalMaj;
+              ratio = (val - v1) / (v2 - v1);
           /* don't draw label if outside frame */
-	       if (ratio < 0. || ratio > 1.)
+              if (ratio < 0. || ratio > 1.)
              continue;
           if (draw_log)
             {
@@ -297,7 +297,7 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
           cairo_matrix_transform_point (&mat,&x,&y);
           giza_ptext (x, y, theta_deg + angle, 0.5, tmp);
 
-	}
+       }
       _giza_stroke ();
     }
 
@@ -306,15 +306,15 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
     {
       _giza_tick_intervals (v1, v2, intervalMin, &i1, &i2);
       for (i = i1 - 1; i <= i2; i++)
-	     {
-	     for (j = 1; j <= 4; j += 3)
-	       {
-	         val = (i + logTab[j]) * intervalMin;
-	         if (val <= v2 && val >= v1)
+            {
+            for (j = 1; j <= 4; j += 3)
               {
-		        ratio = (val - v1) / (v2 - v1);
-		        val = pow (10, val);
-		        giza_format_number (j+1, _giza_nint (i * intervalMin), number_format, tmp, sizeof(tmp));
+                val = (i + logTab[j]) * intervalMin;
+                if (val <= v2 && val >= v1)
+              {
+                      ratio = (val - v1) / (v2 - v1);
+                      val = pow (10, val);
+                      giza_format_number (j+1, _giza_nint (i * intervalMin), number_format, tmp, sizeof(tmp));
 
               /* write the label */
               x = dr * ratio;

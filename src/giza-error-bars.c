@@ -132,11 +132,11 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
                 cairo_line_to (Dev[id].context, xpts[i], ypts[i]);
               }
          }
-	 else
-	   {
-	      /* trace from top line to bottom one */
-	      cairo_line_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
-	   }
+        else
+          {
+             /* trace from top line to bottom one */
+             cairo_line_to (Dev[id].context, xpts[n-1], ypts[n-1] - error[n-1]);
+          }
       }
       
       if (dir == 8 || dir == 9) {
@@ -179,9 +179,9 @@ giza_error_bars (int dir, int n, const double *xpts, const double *ypts, const d
       for (i = 0; i < n; i++)
         {
           if (vert)
-	    _giza_error_bar_vert (xpts[i], ypts[i], error[i] * sign, term);
+           _giza_error_bar_vert (xpts[i], ypts[i], error[i] * sign, term);
           else
-	    _giza_error_bar_hori (xpts[i], ypts[i], error[i] * sign, term);
+           _giza_error_bar_hori (xpts[i], ypts[i], error[i] * sign, term);
         }
       _giza_stroke ();
     }
@@ -314,9 +314,9 @@ giza_error_bars_float (int dir, int n, const float *xpts, const float *ypts, con
       for (i = 0; i < n; i++)
         {
           if (vert)
-	    _giza_error_bar_vert ( (double) xpts[i], (double) ypts[i], (double) error[i] * sign, (double) term);
+           _giza_error_bar_vert ( (double) xpts[i], (double) ypts[i], (double) error[i] * sign, (double) term);
           else
-	    _giza_error_bar_hori ( (double) xpts[i], (double) ypts[i], (double) error[i] * sign, (double) term);
+           _giza_error_bar_hori ( (double) xpts[i], (double) ypts[i], (double) error[i] * sign, (double) term);
         }
       _giza_stroke ();
     }

@@ -63,7 +63,7 @@ _giza_open_device_png (double width, double height, int units)
 
   Dev[id].surface =
     cairo_image_surface_create (CAIRO_FORMAT_ARGB32, Dev[id].width,
-				Dev[id].height);
+                            Dev[id].height);
   if (!Dev[id].surface)
     {
       _giza_error ("_giza_open_device_png", "Could not create cairo surface");

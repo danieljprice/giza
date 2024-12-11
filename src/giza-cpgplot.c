@@ -801,7 +801,7 @@ void cpgqinf(const char *item, char *value, int *value_length)
  ***************************************************************/
 void cpgqitf(int *itf)
 {
-	giza_get_image_transfer_function(itf);
+       giza_get_image_transfer_function(itf);
 }
 
 /***************************************************************
@@ -1072,7 +1072,7 @@ void cpgshs(float angle, float sepn, float phase)
  ***************************************************************/
 void cpgsitf(int itf)
 {
-	giza_set_image_transfer_function(itf);
+       giza_set_image_transfer_function(itf);
 }
 
 /***************************************************************

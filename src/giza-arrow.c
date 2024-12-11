@@ -77,48 +77,48 @@ giza_arrow (double x1, double y1, double x2, double y2)
   if (chx > 0)
     {
       if (!(_giza_equal(dx,0.) && _giza_equal(dy,0.)))
-	{
-	  /* find a unit vector in the direction of the arrow */
-	  magnitude = sqrt (dx * dx + dy * dy);
-	  dxUnit = dx / magnitude;
-	  dyUnit = dy / magnitude;
+       {
+         /* find a unit vector in the direction of the arrow */
+         magnitude = sqrt (dx * dx + dy * dy);
+         dxUnit = dx / magnitude;
+         dyUnit = dy / magnitude;
 
-	  /* find a perpendicular unit vector */
-	  if (_giza_equal(dxUnit,0.))
-	    {
-	      dxPerp = 1.;
-	      dyPerp = 0.;
-	    }
-	  else if (_giza_equal(dyUnit,0.))
-	    {
-	      dxPerp = 0.;
-	      dyPerp = 1.;
-	    }
-	  else
-	    {
-	      dxPerp = 1.;
-	      dyPerp = -dxUnit / dyUnit;
-	      magnitude = sqrt(dxPerp * dxPerp + dyPerp * dyPerp);
-	      dxPerp = dxPerp / magnitude;
-	      dyPerp = dyPerp / magnitude;
-	    }
+         /* find a perpendicular unit vector */
+         if (_giza_equal(dxUnit,0.))
+           {
+             dxPerp = 1.;
+             dyPerp = 0.;
+           }
+         else if (_giza_equal(dyUnit,0.))
+           {
+             dxPerp = 0.;
+             dyPerp = 1.;
+           }
+         else
+           {
+             dxPerp = 1.;
+             dyPerp = -dxUnit / dyUnit;
+             magnitude = sqrt(dxPerp * dxPerp + dyPerp * dyPerp);
+             dxPerp = dxPerp / magnitude;
+             dyPerp = dyPerp / magnitude;
+           }
 
-	  if (magnitude > 0)
-	    {
-	      dx = dx/magnitude;
-	      dy = dy/magnitude;
-	    }
-	  else
-	    {
-	      dx = 1.;
-	      dy = 0.;
-	      magnitude = 1.0;
-	    }
+         if (magnitude > 0)
+           {
+             dx = dx/magnitude;
+             dy = dy/magnitude;
+           }
+         else
+           {
+             dx = 1.;
+             dy = 0.;
+             magnitude = 1.0;
+           }
 
-	  /* Calculate where the vertices of the arrow head are */
-	  /* The point */
-	  xpts[0] = x2;
-	  ypts[0] = y2;
+         /* Calculate where the vertices of the arrow head are */
+         /* The point */
+         xpts[0] = x2;
+         ypts[0] = y2;
 
           /* 'above' the unit vector
            * Note that we want the hypoteneuse of the arrow head
@@ -132,37 +132,37 @@ giza_arrow (double x1, double y1, double x2, double y2)
           sinangle = sin (0.5 * Arrow.angle * GIZA_DEG_TO_RAD);
           cosangle = cos (0.5 * Arrow.angle * GIZA_DEG_TO_RAD);
           xpts[1] = x2 - (dxUnit* cosangle + dxPerp * sinangle) * chx;
-	  ypts[1] = y2 - (dyUnit* cosangle + dyPerp * sinangle) * chy;
+         ypts[1] = y2 - (dyUnit* cosangle + dyPerp * sinangle) * chy;
 
           /* on the unit vector, the cutback */
-	  xpts[2] = x2 - (1. - Arrow.cutback) * chx * dxUnit * cosangle;
-	  ypts[2] = y2 - (1. - Arrow.cutback) * chy * dyUnit * cosangle;
+         xpts[2] = x2 - (1. - Arrow.cutback) * chx * dxUnit * cosangle;
+         ypts[2] = y2 - (1. - Arrow.cutback) * chy * dyUnit * cosangle;
 
-	  /* 'below' the unit vector */
-	  xpts[3] = x2 - (dxUnit* cosangle - dxPerp * sinangle) * chx ;
-	  ypts[3] = y2 - (dyUnit* cosangle - dyPerp * sinangle) * chy;
+         /* 'below' the unit vector */
+         xpts[3] = x2 - (dxUnit* cosangle - dxPerp * sinangle) * chx ;
+         ypts[3] = y2 - (dyUnit* cosangle - dyPerp * sinangle) * chy;
 
-	  /* draw the head */
-	  cairo_move_to (Dev[id].context, xpts[0], ypts[0]);
-	  cairo_line_to (Dev[id].context, xpts[1], ypts[1]);
-	  cairo_line_to (Dev[id].context, xpts[2], ypts[2]);
-	  cairo_line_to (Dev[id].context, xpts[3], ypts[3]);
-	  cairo_line_to (Dev[id].context, xpts[0], ypts[0]);
+         /* draw the head */
+         cairo_move_to (Dev[id].context, xpts[0], ypts[0]);
+         cairo_line_to (Dev[id].context, xpts[1], ypts[1]);
+         cairo_line_to (Dev[id].context, xpts[2], ypts[2]);
+         cairo_line_to (Dev[id].context, xpts[3], ypts[3]);
+         cairo_line_to (Dev[id].context, xpts[0], ypts[0]);
 
-	  /* fill it in! */
-	  double oldMiter = cairo_get_miter_limit (Dev[id].context);
-	  cairo_set_miter_limit (Dev[id].context, 0.);
-	  giza_set_fill (Arrow.fs);
-	  cairo_stroke_preserve (Dev[id].context);
-	  _giza_fill ();
-	  cairo_set_miter_limit (Dev[id].context, oldMiter);
+         /* fill it in! */
+         double oldMiter = cairo_get_miter_limit (Dev[id].context);
+         cairo_set_miter_limit (Dev[id].context, 0.);
+         giza_set_fill (Arrow.fs);
+         cairo_stroke_preserve (Dev[id].context);
+         _giza_fill ();
+         cairo_set_miter_limit (Dev[id].context, oldMiter);
 
-	  /* draw the tail */
-	  cairo_move_to (Dev[id].context, x1, y1);
-	  cairo_line_to (Dev[id].context, xpts[2], ypts[2]);
+         /* draw the tail */
+         cairo_move_to (Dev[id].context, x1, y1);
+         cairo_line_to (Dev[id].context, xpts[2], ypts[2]);
 
-	  _giza_stroke ();
-	}
+         _giza_stroke ();
+       }
     }
   _giza_set_trans (oldTrans);
 

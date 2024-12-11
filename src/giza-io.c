@@ -113,24 +113,24 @@ _giza_prompt_for_device (void)
              }
 
           if (!p)
-	    {
-	      _giza_error ("_giza_prompt_for_device", "Error reading input");
-	    }
+           {
+             _giza_error ("_giza_prompt_for_device", "Error reading input");
+           }
           else
-	    {
-	      char const *devTypeStr;
-	      _giza_split_device_string (input, &devTypeStr);
-	      devType = _giza_device_to_int (devTypeStr);
-	    }
+           {
+             char const *devTypeStr;
+             _giza_split_device_string (input, &devTypeStr);
+             devType = _giza_device_to_int (devTypeStr);
+           }
 
           if (devType == GIZA_DEVICE_IV)
-	    {
-	      _giza_display_devices ();
-	    }
+           {
+             _giza_display_devices ();
+           }
           else
-	    {
-	      break;
-	    }
+           {
+             break;
+           }
         }
       /* flush stdin here so we don't get repeated entries into fgets */
       fflush(stdin);

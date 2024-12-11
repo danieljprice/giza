@@ -74,16 +74,16 @@ giza_set_colour_table (const double *controlPoints, const double *red, const dou
         {
           /* check the control point is valid */
           if (controlPoints[i] >= 0.  && controlPoints[i] <= 1.)
-	    {
+           {
               if (tmpn > 0) iprev = tmpn - 1;
               if (tmpn <= 0 || controlPoints[i] > _giza_colour_table.controlPoints[iprev])
-	        {
-	          tmpn++;
-	          _giza_colour_table.controlPoints[tmpn-1] = contrast*controlPoints[i];
+               {
+                 tmpn++;
+                 _giza_colour_table.controlPoints[tmpn-1] = contrast*controlPoints[i];
                   _giza_colour_table.red[tmpn-1]   = _giza_set_in_range(red[i],0.,1.);
                   _giza_colour_table.green[tmpn-1] = _giza_set_in_range(green[i],0.,1.);
                   _giza_colour_table.blue[tmpn-1]  = _giza_set_in_range(blue[i],0.,1.);
-	        }
+               }
             }
         }
     }
@@ -93,16 +93,16 @@ giza_set_colour_table (const double *controlPoints, const double *red, const dou
         {
           /* check the control point is valid */
           if (controlPoints[i] >= 0.  && controlPoints[i] <= 1.)
-	    {
+           {
               if (tmpn > 0) iprev = tmpn - 1;
               if (tmpn <= 0 || (1. + contrast*controlPoints[i]) > _giza_colour_table.controlPoints[iprev])
-	        {
-	          tmpn++;
-	          _giza_colour_table.controlPoints[tmpn-1] = 1. + contrast*controlPoints[i];
+               {
+                 tmpn++;
+                 _giza_colour_table.controlPoints[tmpn-1] = 1. + contrast*controlPoints[i];
                   _giza_colour_table.red[tmpn-1]   = _giza_set_in_range(red[i],0.,1.);
                   _giza_colour_table.green[tmpn-1] = _giza_set_in_range(green[i],0.,1.);
                   _giza_colour_table.blue[tmpn-1]  = _giza_set_in_range(blue[i],0.,1.);
-	        }
+               }
             }
         }    
     }
@@ -201,27 +201,27 @@ giza_rgb_from_table (double pos, double *red, double *green, double *blue)
   for (i = 1; i < _giza_colour_table.n; i++)
     {
       if (pos < _giza_colour_table.controlPoints[i])
-	{
-	  double fraction, d_giza_colour_table;
-	  /* find where between the two control points pos lies */
-	  d_giza_colour_table = (_giza_colour_table.controlPoints[i] - _giza_colour_table.controlPoints[i - 1]);
-	  if (fabs (d_giza_colour_table) > GIZA_TINY)
-	    {
-	      fraction = (pos - _giza_colour_table.controlPoints[i - 1]) / d_giza_colour_table;
-	    }
-	  else
-	    {
-	      fraction = 1.;
-	    }
-	  /* set the r,g,b using this fraction */
-	  *red = _giza_colour_table.red[i - 1] + fraction * (_giza_colour_table.red[i] - _giza_colour_table.red[i - 1]);
-	  *green =
-	    _giza_colour_table.green[i - 1] + fraction * (_giza_colour_table.green[i] -
-					    _giza_colour_table.green[i - 1]);
-	  *blue =
-	    _giza_colour_table.blue[i - 1] + fraction * (_giza_colour_table.blue[i] - _giza_colour_table.blue[i - 1]);
-	  return;
-	}
+       {
+         double fraction, d_giza_colour_table;
+         /* find where between the two control points pos lies */
+         d_giza_colour_table = (_giza_colour_table.controlPoints[i] - _giza_colour_table.controlPoints[i - 1]);
+         if (fabs (d_giza_colour_table) > GIZA_TINY)
+           {
+             fraction = (pos - _giza_colour_table.controlPoints[i - 1]) / d_giza_colour_table;
+           }
+         else
+           {
+             fraction = 1.;
+           }
+         /* set the r,g,b using this fraction */
+         *red = _giza_colour_table.red[i - 1] + fraction * (_giza_colour_table.red[i] - _giza_colour_table.red[i - 1]);
+         *green =
+           _giza_colour_table.green[i - 1] + fraction * (_giza_colour_table.green[i] -
+                                       _giza_colour_table.green[i - 1]);
+         *blue =
+           _giza_colour_table.blue[i - 1] + fraction * (_giza_colour_table.blue[i] - _giza_colour_table.blue[i - 1]);
+         return;
+       }
     }
 
    /* this should never happen (but DOES if pos is NaN or otherwise ill-defined) */

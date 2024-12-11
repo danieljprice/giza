@@ -137,7 +137,7 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   static int didInit = 0;
 
   if( !didInit ) {
-	  giza_device_t* pDev;
+         giza_device_t* pDev;
       for(pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
           _giza_init_device_struct( pDev );
        didInit = 1;

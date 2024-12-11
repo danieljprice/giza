@@ -57,7 +57,7 @@
  */
 void
 giza_annotate (const char *side, double displacment, double coord,
-	      double justification, const char *string)
+             double justification, const char *string)
 {
   if (!_giza_check_device_ready ("giza_annotate"))
     {
@@ -66,7 +66,7 @@ giza_annotate (const char *side, double displacment, double coord,
   if (!side)
     {
       _giza_warning ("giza_annotate",
-		    "No side argument passed, skipping annotate");
+                  "No side argument passed, skipping annotate");
       return;
     }
 
@@ -104,58 +104,58 @@ giza_annotate (const char *side, double displacment, double coord,
   else if (strchr (side, 'L') || strchr (side, 'l'))
     {
       if (strchr (side, 'V') || strchr (side, 'v'))
-	{
-	  /* find the position on the y axis */
-	  y = Win.ymin + (Win.ymax - Win.ymin) * coord - ych * 0.25;
+       {
+         /* find the position on the y axis */
+         y = Win.ymin + (Win.ymax - Win.ymin) * coord - ych * 0.25;
 
-	  /* find the distance from the y axis */
-	  x = Win.xmin - (xch * displacment);
+         /* find the distance from the y axis */
+         x = Win.xmin - (xch * displacment);
 
-	  /* Set the angle */
-	  angle = 0;
-	}
+         /* Set the angle */
+         angle = 0;
+       }
       else
-	{
-	  /* find the position on the y axis to place text */
-	  y = Win.ymin + (Win.ymax - Win.ymin) * coord;
+       {
+         /* find the position on the y axis to place text */
+         y = Win.ymin + (Win.ymax - Win.ymin) * coord;
 
-	  /* shift the position of the text away from the viewport by displacement */
-	  x = Win.xmin - (xch * displacment);
+         /* shift the position of the text away from the viewport by displacement */
+         x = Win.xmin - (xch * displacment);
 
-	  /* set the angle */
-	  angle = 90;
-	}
+         /* set the angle */
+         angle = 90;
+       }
     }
   /* if drawing along the right */
   else if (strchr (side, 'R') || strchr (side, 'r'))
     {
       if (strchr (side, 'V') || strchr (side, 'v'))
-	{
-	  /* find the position on the y axis */
-	  y = Win.ymin + (Win.ymax - Win.ymin) * coord - ych * 0.25;
+       {
+         /* find the position on the y axis */
+         y = Win.ymin + (Win.ymax - Win.ymin) * coord - ych * 0.25;
 
-	  /* find the distance from the y axis */
-	  x = Win.xmax + (xch * displacment);
+         /* find the distance from the y axis */
+         x = Win.xmax + (xch * displacment);
 
-	  /* Set the angle */
-	  angle = 0;
-	}
+         /* Set the angle */
+         angle = 0;
+       }
       else
-	{
-	  /* find the position on the y axis to place text */
-	  y = Win.ymin + (Win.ymax - Win.ymin) * coord;
+       {
+         /* find the position on the y axis to place text */
+         y = Win.ymin + (Win.ymax - Win.ymin) * coord;
 
-	  /* shift the position of the text away from the view port by displacement */
-	  x = Win.xmax + (xch * displacment);
+         /* shift the position of the text away from the view port by displacement */
+         x = Win.xmax + (xch * displacment);
 
-	  /* set the angle */
-	  angle = 90;
-	}
+         /* set the angle */
+         angle = 90;
+       }
     }
   else
     {
       _giza_warning ("giza_annotate",
-		    "invalid side string, skipping annotate.");
+                  "invalid side string, skipping annotate.");
       return;
     }
 
@@ -174,8 +174,8 @@ giza_annotate (const char *side, double displacment, double coord,
  */
 void
 giza_annotate_float (const char *side, float displacment, float coord,
-		    float justification, const char *string)
+                  float justification, const char *string)
 {
   giza_annotate (side, (double) displacment, (double) coord,
-		(double) justification, string);
+              (double) justification, string);
 }

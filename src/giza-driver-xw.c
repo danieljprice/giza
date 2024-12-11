@@ -182,10 +182,10 @@ _giza_open_device_xw (double width, double height, int units)
 
   /* create the window */
   XW[id].window = XCreateSimpleWindow (XW[id].display,
-				   DefaultRootWindow (XW[id].display),/* make our new window a child of the entire display */
-				   50, 50,	/* origin */
-				   XW[id].width, XW[id].height, /* size */
-				   0, 0, white);
+                               DefaultRootWindow (XW[id].display),/* make our new window a child of the entire display */
+                               50, 50,       /* origin */
+                               XW[id].width, XW[id].height, /* size */
+                               0, 0, white);
   if (!XW[id].window)
     {
       _giza_error ("_giza_open_device", "Could not create X window");
@@ -227,7 +227,7 @@ _giza_open_device_xw (double width, double height, int units)
       XEvent e;
       XNextEvent(XW[id].display, &e);
       if (e.type == MapNotify)
-	  break;
+         break;
   }
 
   return 0;
@@ -405,29 +405,29 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
       break;
     case KeyPress: /* return pos and char */
       {
-	char buffer[10];
-	KeySym key;
-	int nret;
+       char buffer[10];
+       KeySym key;
+       int nret;
 
-	/* get the ascii of the pressed key */
-	nret = XLookupString((XKeyEvent *)&event, buffer,
-			     (int) (sizeof(buffer)/sizeof(char)), &key, NULL);
+       /* get the ascii of the pressed key */
+       nret = XLookupString((XKeyEvent *)&event, buffer,
+                          (int) (sizeof(buffer)/sizeof(char)), &key, NULL);
 
-	/* ignore irrelevant keys */
-	if(nret==1 && (key < XK_Shift_L || key > XK_Hyper_R)) {
-	  *x = event.xkey.x ;/*- GIZA_XW_MARGIN; */
-	  *y = event.xkey.y ;/*- GIZA_XW_MARGIN; */
+       /* ignore irrelevant keys */
+       if(nret==1 && (key < XK_Shift_L || key > XK_Hyper_R)) {
+         *x = event.xkey.x ;/*- GIZA_XW_MARGIN; */
+         *y = event.xkey.y ;/*- GIZA_XW_MARGIN; */
 
-	  if(key)
-	    *ch = buffer[0];
+         if(key)
+           *ch = buffer[0];
 
           _giza_destroy_band (mode);
           _giza_flush_xw_event_queue(&event);
           _giza_reset_clipping_xw();
-	  return;
-	};
+         return;
+       };
 
-	break;
+       break;
       }
     case ButtonPress:
       {
@@ -530,9 +530,9 @@ static void
 _giza_expose_xw (XEvent *event)
 {
   XCopyArea (XW[id].display, XW[id].pixmap, XW[id].window, XW[id].gc, event->xexpose.x,
-	     event->xexpose.y, (unsigned) event->xexpose.width,
-	     (unsigned) event->xexpose.height, event->xexpose.x,
-	     event->xexpose.y);
+            event->xexpose.y, (unsigned) event->xexpose.width,
+            (unsigned) event->xexpose.height, event->xexpose.x,
+            event->xexpose.y);
 
 /*  XFlush(XW[id].display); */
 }

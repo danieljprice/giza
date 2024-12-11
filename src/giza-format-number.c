@@ -91,9 +91,9 @@ giza_format_number (int mantissa, int power, int form, char *string, int maxchar
     {
       for (; power > 0 && numDigits < (int) (sizeof(tmp)-1); --power)
         {
-	  tmp[numDigits] = '0';
-	  ++numDigits;
-	}
+         tmp[numDigits] = '0';
+         ++numDigits;
+       }
     }
   /* Decimal without a power */
   else if (form != GIZA_NUMBER_FORMAT_EXP && digitsBeforePoint >= 1 && digitsBeforePoint <= 4 && digitsBeforePoint < numDigits)
@@ -101,8 +101,8 @@ giza_format_number (int mantissa, int power, int form, char *string, int maxchar
       int i;
       for (i = numDigits; i >= digitsBeforePoint ; --i)
         {
-	  tmp[i+1] = tmp[i];
-	}
+         tmp[i+1] = tmp[i];
+       }
       tmp[i+1] = '.';
       ++numDigits;
       power = 0;
@@ -113,37 +113,37 @@ giza_format_number (int mantissa, int power, int form, char *string, int maxchar
       power = power + numDigits - 1;
       if (form != GIZA_NUMBER_FORMAT_EXP && power == -1)
         {
-	  int i;
-	  for (i = numDigits; i >= 0; --i)
-	    {
-	      tmp[i+1] = tmp[i];
-	    }
-	  tmp[0] = '0';
-	  power = 0;
-	  ++numDigits;
-	}
+         int i;
+         for (i = numDigits; i >= 0; --i)
+           {
+             tmp[i+1] = tmp[i];
+           }
+         tmp[0] = '0';
+         power = 0;
+         ++numDigits;
+       }
       else if (form != GIZA_NUMBER_FORMAT_EXP && power == -2)
         {
-	  int i;
-	  for (i = numDigits; i >= 0; --i)
-	    {
-	      tmp[i+2] = tmp[i];
-	    }
-	  tmp[0] = '0';
-	  tmp[1] = '0';
-	  power = 0;
-	  numDigits += 2;
-	}
+         int i;
+         for (i = numDigits; i >= 0; --i)
+           {
+             tmp[i+2] = tmp[i];
+           }
+         tmp[0] = '0';
+         tmp[1] = '0';
+         power = 0;
+         numDigits += 2;
+       }
       if (numDigits > 1)
         {
-	  int i;
-	  for (i = numDigits; i > 0; --i)
-	    {
-	      tmp[i+1] = tmp[i];
-	    }
-	  tmp[1] = '.';
-	  ++numDigits;
-	}
+         int i;
+         for (i = numDigits; i > 0; --i)
+           {
+             tmp[i+1] = tmp[i];
+           }
+         tmp[1] = '.';
+         ++numDigits;
+       }
     }
   /* Put in a null character */
   tmp[numDigits] = '\0';

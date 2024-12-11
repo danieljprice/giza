@@ -45,7 +45,7 @@ giza_set_character_height (double ch)
   if (ch < 0)
     {
       _giza_warning ("giza_set_character_height",
-		    "Invalid character height, character height not set");
+                  "Invalid character height, character height not set");
       return;
     }
 
@@ -229,7 +229,7 @@ _giza_scale_character_size (double scalefac)
   if (scalefac < 0)
     {
       _giza_warning ("_giza_scale_character_size",
-		    "Invalid character size, character size not set");
+                  "Invalid character size, character size not set");
       return;
     }
 
