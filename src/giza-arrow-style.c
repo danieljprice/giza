@@ -7,10 +7,10 @@
  * it under the terms of the GNU General Public License
  * (GPL, see LICENSE file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 2a) of the GPLv2 states that:
+ * note section 5a) of the GPLv3 states that:
  *
- *  a) You must cause the modified files to carry prominent notices
- *     stating that you changed the files and the date of any change.
+ *  a) The work must carry prominent notices stating that you modified
+ *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
  * See the GPL for specific language governing rights and limitations.
