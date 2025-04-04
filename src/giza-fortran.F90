@@ -610,7 +610,7 @@ private
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,ncont
       real(kind=c_double),intent(in) :: data(sizex,sizey)
-      real(kind=c_double),intent(in) :: cont(ncont)
+      real(kind=c_double),intent(in) :: cont(*)
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_contour
 
@@ -618,7 +618,7 @@ private
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,ncont
       real(kind=c_float),intent(in) :: data(sizex,sizey)
-      real(kind=c_float),intent(in) :: cont(ncont)
+      real(kind=c_float),intent(in) :: cont(*)
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_contour_float
  end interface

@@ -27,6 +27,13 @@ jobs:
       with:
         compiler: gcc
 
+    # Set up Xvfb for graphical tests
+    - name: Install cairo and also Xvfb to pretend to launch X-windows in the workflow
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libcairo2-dev xvfb
+
     # check out the repository
     - uses: actions/checkout@v4
 
@@ -35,13 +42,6 @@ jobs:
         ./configure
         make
         sudo make install
-
-    # Set up Xvfb for graphical tests
-    - name: Install Xvfb to pretend to launch X-windows in the workflow
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y xvfb
 
     # Run tests
     - name: Run test programs, pressing enter to all prompts
