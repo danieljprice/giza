@@ -263,7 +263,7 @@ subroutine PGCONB (A, IDIM, JDIM, I1, I2, J1, J2, C, NC, TR, BLANK)
  real                :: affine(6)
 
  call convert_tr_to_affine(tr,affine)
- call giza_contour(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,abs(nc),C,affine)
+ call giza_contour(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,C,affine)
 
 end subroutine PGCONB
 

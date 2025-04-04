@@ -241,7 +241,7 @@ giza_contour_float (int sizex, int sizey, const float* data, int i1,
              int i2, int j1, int j2, int ncont, const float* cont, const float *affine)
 {
   double ddata[sizey*sizex];
-  double dcont[ncont];
+  double dcont[abs(ncont)];
   double daffine[6];
   int i, j;
 
