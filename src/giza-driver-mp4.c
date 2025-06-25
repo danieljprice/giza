@@ -64,8 +64,11 @@ _giza_close_device_mp4 (int last)
      /* construct ffmpeg command and repeat it to the user */
      int mylen = strlen(Dev[id].prefix) + strlen(flagsToUse) + strlen(fileName) + 50;
      char command[mylen + 1];
-     sprintf(command, "ffmpeg -i %s_%%04d.png %s %s", Dev[id].prefix,flagsToUse,fileName);
+     sprintf(command, "GIZA_FFMPEG_FLAGS='%s'", flagsToUse);
      _giza_message(command);
+     sprintf(command, "ffmpeg -i %s_%%04d.png $GIZA_FFMPEG_FLAGS %s", Dev[id].prefix,fileName);
+     _giza_message(command);
+     sprintf(command, "ffmpeg -i %s_%%04d.png %s %s", Dev[id].prefix,flagsToUse,fileName);
 
      /* issue command and check that it succeeded */
      int success = system(command);
