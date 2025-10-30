@@ -123,6 +123,14 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
       _giza_warning ("giza_render", "Invalid index range, skipping render.");
       return;
     }
+  /* Clamp indices to array bounds to avoid OOB reads */
+  if (i2 >= sizex) i2 = sizex - 1;
+  if (j2 >= sizey) j2 = sizey - 1;
+  if (i1 >= sizex || j1 >= sizey)
+    {
+      _giza_warning ("giza_render", "Index range outside array bounds, skipping render.");
+      return;
+    }
 
   unsigned char *pixdata;
   cairo_format_t format = CAIRO_FORMAT_ARGB32;
@@ -153,6 +161,13 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   stride = 4*width;
 #endif
   pixdata = malloc (stride * height);
+  if (!pixdata)
+    {
+      _giza_warning ("giza_render", "Allocation failed, skipping render.");
+      _giza_set_trans (oldTrans);
+      giza_set_colour_index (oldCi);
+      return;
+    }
 
   /* colour each pixel in the pixmap */
   int i, j;
@@ -161,6 +176,13 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   giza_get_colour_index_range(&cimin, &cimax);
   pixnum = 0;
   /* transparent if-statement is outside loop as optimisation */
+  if (transparent==2) {
+    if (!datalpha)
+      {
+        /* Fallback to opaque if alpha array not provided */
+        transparent = 0;
+      }
+  }
   if (transparent==2) {
     /* render each pixel, using transparent routine */
     for (j = j1; j <= j2; j++)
@@ -284,6 +306,14 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
                   "Invalid index range, skipping render.");
       return;
     }
+  /* Clamp indices to array bounds to avoid OOB reads */
+  if (i2 >= sizex) i2 = sizex - 1;
+  if (j2 >= sizey) j2 = sizey - 1;
+  if (i1 >= sizex || j1 >= sizey)
+    {
+      _giza_warning ("giza_render_float", "Index range outside array bounds, skipping render.");
+      return;
+    }
 
   unsigned char *pixdata;
   cairo_format_t format = CAIRO_FORMAT_ARGB32;
@@ -313,6 +343,13 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   stride = 4*width;
 #endif
   pixdata = malloc (stride * height);
+  if (!pixdata)
+    {
+      _giza_warning ("giza_render_float", "Allocation failed, skipping render.");
+      _giza_set_trans (oldTrans);
+      giza_set_colour_index (oldCi);
+      return;
+    }
 
   int i, j;
   giza_itf_idx_type_f itf_idx = giza_itf_idx_f[ Dev[id].itf ];
@@ -320,6 +357,12 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   giza_get_colour_index_range(&cimin, &cimax);
   pixnum = 0;
   /* transparent if-statement is outside loop as optimisation */
+  if (transparent==2) {
+    if (!datalpha)
+      {
+        transparent = 0;
+      }
+  }
   if (transparent==2) {
     /* render each pixel, using transparent routine */
     for (j = j1; j <= j2; j++)
@@ -525,6 +568,14 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
       _giza_warning ("giza_render_pixels", "Invalid index range, skipping render.");
       return;
     }
+  /* Clamp indices to array bounds to avoid OOB reads */
+  if (i2 >= sizex) i2 = sizex - 1;
+  if (j2 >= sizey) j2 = sizey - 1;
+  if (i1 >= sizex || j1 >= sizey)
+    {
+      _giza_warning ("giza_render_pixels", "Index range outside array bounds, skipping render.");
+      return;
+    }
 
   unsigned char *pixdata;
   cairo_format_t format = CAIRO_FORMAT_ARGB32;
@@ -557,7 +608,11 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   stride = 4*width;
 #endif
   pixdata = malloc (stride * height);
-
+  if (!pixdata)
+    {
+      _giza_warning ("giza_draw_pixels", "Allocation failed, skipping render.");
+      return;
+    }
   /* colour each pixel in the pixmap */
   int i, j;
   pixnum = 0;
