@@ -1,5 +1,5 @@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src test
-dist_doc_DATA = AUTHORS ChangeLog COPYING NEWS INSTALL README.md
+dist_doc_DATA = AUTHORS ChangeLog NEWS README.md
 
 README: README.md
