@@ -19,7 +19,7 @@ while (<FILE>) {
      {
      ($module,$desc) = m/^.*(cpg.*) -- (.*)/;
      ($link) = m/^.*c(pg.*) --/;
-     print STDOUT "<tr><td><a href=\"http://www.astro.caltech.edu/~tjp/pgplot/subroutines.html#$link\">$module</a></td>";
+     print STDOUT "<tr><td><a href=\"https://www.astro.caltech.edu/~tjp/pgplot/subroutines.html#$link\">$module</a></td>";
      }
   elsif ( m/(^.*Status:)/) 
      {

@@ -17,7 +17,7 @@ while (<FILE>) {
   if ( m/(^.*Module:)/) 
      {
      ($module,$desc) = m/^.*Module: (.*) -- (.*)/;
-     print STDOUT "<tr><td><a href=\"http://www.astro.caltech.edu/~tjp/pgplot/subroutines.html#$module\">$module</a></td>";
+     print STDOUT "<tr><td><a href=\"https://www.astro.caltech.edu/~tjp/pgplot/subroutines.html#$module\">$module</a></td>";
      }
   elsif ( m/(^.*Status:)/) 
      {
