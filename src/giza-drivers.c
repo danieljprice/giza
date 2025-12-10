@@ -1228,14 +1228,14 @@ void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, cha
   if (!strstr(lprefix,lextens)) {
   /* Add the device extension if prefix string does not already contain it */
      if (pgNum == 0 && lastpage != 0) {
-        sprintf (filename, "%s%s", prefixtrim, ext);
+        snprintf (filename, 4096, "%s%s", prefixtrim, ext);
      } else {
-        sprintf (filename, "%s_%04d%s", prefixtrim, pgNum, ext);
+        snprintf (filename, 4096, "%s_%04d%s", prefixtrim, pgNum, ext);
      }
   } else {
   /* Do not add the device extension if the prefix already contains it  */
      if (pgNum == 0 && lastpage != 0) {
-        sprintf (filename, "%s", prefixtrim);
+        snprintf (filename, 4096, "%s", prefixtrim);
      } else {
         /*
          * Here we need a number, but it should come BEFORE the device extension
@@ -1243,7 +1243,7 @@ void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, cha
          * before this position.
          */
         char *firstpart = strsep (&prefixtrim,".");
-        sprintf (filename, "%s_%04d%s", firstpart, pgNum, ext);
+        snprintf (filename, 4096, "%s_%04d%s", firstpart, pgNum, ext);
      }
   }
 }

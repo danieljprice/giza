@@ -279,11 +279,11 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
             {
               jtmp = _giza_nint(val);
               if (jtmp == 1) {
-                 sprintf (tmp, "10");
+                 snprintf (tmp, sizeof(tmp), "10");
               } else if (jtmp == 0) {
-                 sprintf (tmp, "1");
+                 snprintf (tmp, sizeof(tmp), "1");
               } else {
-                 sprintf (tmp, "10^{%i}", jtmp);
+                 snprintf (tmp, sizeof(tmp), "10^{%i}", jtmp);
               }
             }
           else

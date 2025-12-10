@@ -374,11 +374,11 @@ giza_box (const char *xopt, double xtick, int nxsub,
             {
               jtmp = _giza_nint(xval);
               if (jtmp == 1) {
-                 sprintf (tmp, "10");
+                 snprintf (tmp, sizeof(tmp), "10");
               } else if (jtmp == 0) {
-                 sprintf (tmp, "1");
+                 snprintf (tmp, sizeof(tmp), "1");
               } else {
-                 sprintf (tmp, "10^{%i}", jtmp);
+                 snprintf (tmp, sizeof(tmp), "10^{%i}", jtmp);
               }
             }
           else
@@ -523,11 +523,11 @@ giza_box (const char *xopt, double xtick, int nxsub,
             {
               jtmp = _giza_nint(yval);
               if (jtmp == 1) {
-                 sprintf (tmp, "10");
+                 snprintf (tmp, sizeof(tmp), "10");
               } else if (jtmp == 0) {
-                 sprintf (tmp, "1");
+                 snprintf (tmp, sizeof(tmp), "1");
               } else {
-                 sprintf (tmp, "10^{%i}", jtmp);
+                 snprintf (tmp, sizeof(tmp), "10^{%i}", jtmp);
               }
             }
           else
