@@ -59,7 +59,9 @@ giza_print_id (void)
   char date[20];
   strftime(date,sizeof(date)," %e-%h-%Y %H:%M",current);
   char *string = malloc(strlen(userid) + strlen(date) + 1);
-  sprintf(string, "%s%s",userid,date);
+  if (string) {
+    snprintf(string, strlen(userid) + strlen(date) + 1, "%s%s", userid, date);
+  }
 
   double ch,xch,ych;
   giza_get_character_height(&ch);

@@ -204,7 +204,7 @@ _giza_write_log_file (cairo_surface_t *surface)
    char msg[120];
    char string[80];
    _giza_get_log_file(string,sizeof(string));
-   sprintf(msg,"writing %s",string);
+   snprintf(msg, sizeof(msg), "writing %s", string);
    _giza_message(msg);
    cairo_status_t status;
    status = cairo_surface_write_to_png(surface,string);

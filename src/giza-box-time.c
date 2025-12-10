@@ -758,9 +758,9 @@ void _giza_tbx4(int doday, char const* suptyp, char axis, int convtl, int first,
                 axloc = "RV";
                 /* create string for length computation */
                 if( timestamps[0].asign!='-' && tmin*tmax<0 )
-                    sprintf(tmp, " -%s", text);
+                    snprintf(tmp, sizeof(tmp), " -%s", text);
                 else
-                    sprintf(tmp, " %s", text);
+                    snprintf(tmp, sizeof(tmp), " %s", text);
                 /* Can be either unit below because only interested in
                    ratio. So be sure to call with SAME unit */
                 giza_qtextlen_float(GIZA_UNITS_NORMALIZED, tmp, &xl, &yl);
@@ -1081,8 +1081,11 @@ void _giza_tbx7(char const* suptyp, char signf, char asign, int ival[3], double 
          * format */
         char const* fmt = (signf=='D' && asign!=' ') ? "%3$c%1$d%2$s" : "%1$d%2$s" ;
         *last  = *tlen;
-        nch   = sprintf(&text[*tlen], fmt, ival[0], suppnt[0], asign);
-        *tlen = *tlen + nch;
+        {
+          int rem = 80 - *tlen; if (rem < 0) rem = 0;
+          int n = (rem>0) ? snprintf(&text[*tlen], rem, fmt, ival[0], suppnt[0], asign) : 0;
+          if (n < 0) n = 0; if (n >= rem) n = (rem>0)?(rem-1):0; *tlen += n;
+        }
     }
 
     /* C   Hours field */
@@ -1096,8 +1099,11 @@ void _giza_tbx7(char const* suptyp, char signf, char asign, int ival[3], double 
             *tlen         = *tlen + 1;
         }
         /* print the number with or without fill zeroes */
-        nch   = sprintf(&text[*tlen], do2 ? "%02d%s" : "%d%s", ival[1], suppnt[1]);
-        *tlen = *tlen + nch;
+        {
+          int rem = 80 - *tlen; if (rem < 0) rem = 0;
+          int n = (rem>0) ? snprintf(&text[*tlen], rem, do2 ? "%02d%s" : "%d%s", ival[1], suppnt[1]) : 0;
+          if (n < 0) n = 0; if (n >= rem) n = (rem>0)?(rem-1):0; *tlen += n;
+        }
     }
     /* C   Minutes field */
     if( writ[2] ) {
@@ -1109,8 +1115,11 @@ void _giza_tbx7(char const* suptyp, char signf, char asign, int ival[3], double 
             *tlen         = *tlen + 1;
         }
         /* print the number with or without fill zeroes */
-        nch   = sprintf(&text[*tlen], do2 ? "%02d%s" : "%d%s", ival[2], suppnt[2]);
-        *tlen = *tlen + nch;
+        {
+          int rem = 80 - *tlen; if (rem < 0) rem = 0;
+          int n = (rem>0) ? snprintf(&text[*tlen], rem, do2 ? "%02d%s" : "%d%s", ival[2], suppnt[2]) : 0;
+          if (n < 0) n = 0; if (n >= rem) n = (rem>0)?(rem-1):0; *tlen += n;
+        }
     }
     /* C   Seconds field */
     if( writ[3] ) {
@@ -1130,10 +1139,10 @@ void _giza_tbx7(char const* suptyp, char signf, char asign, int ival[3], double 
             /* Now we can nicely format the before the decimal point, after
              * the decimal point /and/ (attempt to) make the superscript on
              * top of the decimal point */
-            sprintf(tmp, do2 ? "%02d.\\b%s%d" : "%d.\\b%s%d", (int)isec, suppnt[3], (int)ifrac);
+            snprintf(tmp, sizeof(tmp), do2 ? "%02d.\\b%s%d" : "%d.\\b%s%d", (int)isec, suppnt[3], (int)ifrac);
         } else {
             /* integer label */
-            sprintf(tmp, do2 ? "%02d%s" : "%d%s", (int)rint(rval), suppnt[3]);
+            snprintf(tmp, sizeof(tmp), do2 ? "%02d%s" : "%d%s", (int)rint(rval), suppnt[3]);
         }
         /* number was formatted according to spec, now write to output
          * label, first honouring the sign, if any */
@@ -1141,8 +1150,11 @@ void _giza_tbx7(char const* suptyp, char signf, char asign, int ival[3], double 
             text[ *tlen ] = asign;
             *tlen         = *tlen + 1;
         }
-        nch   = sprintf(&text[*tlen], "%s", tmp);
-        *tlen = *tlen + nch;
+        {
+          int rem = 80 - *tlen; if (rem < 0) rem = 0;
+          int n = (rem>0) ? snprintf(&text[*tlen], rem, "%s", tmp) : 0;
+          if (n < 0) n = 0; if (n >= rem) n = (rem>0)?(rem-1):0; *tlen += n;
+        }
     }
     /* C   A trailing blank will occur if no superscripting wanted */
     if( *tlen>=5 && strcmp(&text[*tlen - 5], super[2][0])==0 ) {
