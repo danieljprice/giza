@@ -10,13 +10,10 @@ TESTS = $(ftests)
 check_PROGRAMS = $(ftests)
 AM_DEFAULT_SOURCE_EXT = .f90
 
-# Ensure that the tests are built as part of the 'check' target
-check: $(ftests) check_output_files
-
 test_output_files = giza-test.png giza-test-2D.png
 
 # Custom target to check for the existence of expected output files from the Fortran tests
-check_output_files: $(ftests)
+check-local: check-TESTS
 	@echo "Checking for required png files..."
 	@for i in $(test_output_files); do \
 	    if [ ! -s $$i ]; then \
@@ -27,3 +24,5 @@ check_output_files: $(ftests)
 	    fi; \
 	done
 	@echo "All required png files exist."
+
+
