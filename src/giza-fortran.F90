@@ -1594,7 +1594,8 @@ private
  end interface
 
  interface giza_vector
-    subroutine giza_vector_double(sizex,sizey,horizontal,vertical,i1,i2,j1,j2,scale,position,affine,blank) bind(C, name="giza_vector")
+    subroutine giza_vector_double(sizex,sizey,horizontal,vertical,i1,i2,j1,j2,&
+                                  scale,position,affine,blank) bind(C, name="giza_vector")
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,position
       real(kind=c_double),intent(in) :: horizontal(sizex,sizey),vertical(sizex,sizey)
@@ -1602,7 +1603,8 @@ private
       real(kind=c_double),intent(in) :: affine(6)
     end subroutine giza_vector_double
 
-    subroutine giza_vector_float(sizex,sizey,horizontal,vertical,i1,i2,j1,j2,scale,position,affine,blank) bind(C)
+    subroutine giza_vector_float(sizex,sizey,horizontal,vertical,i1,i2,j1,j2,&
+                                 scale,position,affine,blank) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,position
       real(kind=c_float),intent(in) :: horizontal(sizex,sizey),vertical(sizex,sizey)
@@ -1685,7 +1687,8 @@ private
  end interface
 
  interface giza_set_window_equal_scale
-    subroutine giza_set_window_equal_scale_double(x1,x2,y1,y2) bind(C, name="giza_set_window_equal_scale")
+    subroutine giza_set_window_equal_scale_double(x1,x2,y1,y2) &
+               bind(C, name="giza_set_window_equal_scale")
       import
       real(kind=c_double), value, intent(in) :: x1,x2,y1,y2
     end subroutine giza_set_window_equal_scale_double
@@ -1897,7 +1900,8 @@ contains
     real,intent(in)             :: width,height
     integer, intent(in)         :: units
 
-    giza_intern_open_device_size = giza_open_device_size_c(cstring(dev),cstring(prefix),width,height,units)
+    giza_intern_open_device_size = giza_open_device_size_c(cstring(dev),&
+                                                           cstring(prefix),width,height,units)
 
   end function giza_intern_open_device_size
 
