@@ -1925,14 +1925,14 @@ contains
 
     !--cairo line widths are best as .5, 1.5 etc
     reallw = dble(lw) + 0.5d0
-    call giza_set_line_width_c(reallw)
+    call giza_set_line_width_double(reallw)
   end subroutine giza_intern_set_line_width_int
 
   subroutine giza_intern_get_line_width_int(lw)
     integer(kind=c_int),intent(out) :: lw
     real(kind=c_double) :: reallw
 
-    call giza_get_line_width_c(reallw)
+    call giza_get_line_width_double(reallw)
     lw = nint(reallw - 0.5d0)
 
   end subroutine giza_intern_get_line_width_int
@@ -1941,7 +1941,7 @@ contains
     real(kind=c_double),intent(in) :: x,y
     character(len=*),intent(in)    :: text
 
-    call giza_text_double_c(x,y,cstring(text))
+    call giza_text_double(x,y,cstring(text))
 
   end subroutine giza_intern_text_f2c
 
@@ -1949,7 +1949,7 @@ contains
     real(kind=c_float),intent(in) :: x,y
     character(len=*),intent(in)    :: text
 
-    call giza_text_float_c(x,y,cstring(text))
+    call giza_text_float(x,y,cstring(text))
 
   end subroutine giza_intern_text_float_f2c
 
