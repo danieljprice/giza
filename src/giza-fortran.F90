@@ -228,10 +228,10 @@ private
 !---------------------------------------------------------
 
  interface giza_arrow
-    subroutine giza_arrow(x1,y1,x2,y2) bind(C)
+    subroutine giza_arrow_double(x1,y1,x2,y2) bind(C, name="giza_arrow")
       import
       real(kind=c_double),intent(in),value :: x1,y1,x2,y2
-    end subroutine giza_arrow
+    end subroutine giza_arrow_double
 
     subroutine giza_arrow_float(x1,y1,x2,y2) bind(C)
       import
@@ -240,11 +240,11 @@ private
  end interface
 
  interface giza_set_arrow_style
-    subroutine giza_set_arrow_style(fillStyle,angle,cutback) bind(C)
+    subroutine giza_set_arrow_style_double(fillStyle,angle,cutback) bind(C, name="giza_set_arrow_style")
       import
       integer(kind=c_int),intent(in),value :: fillStyle
       real(kind=c_double),intent(in),value :: angle,cutback
-    end subroutine giza_set_arrow_style
+    end subroutine giza_set_arrow_style_double
 
     subroutine giza_set_arrow_style_float(fillStyle,angle,cutback) bind(C)
       import
@@ -254,11 +254,11 @@ private
  end interface
 
  interface giza_get_arrow_style
-    subroutine giza_get_arrow_style(fillStyle,angle,cutback) bind(C)
+    subroutine giza_get_arrow_style_double(fillStyle,angle,cutback) bind(C, name="giza_get_arrow_style")
       import
       integer(kind=c_int),intent(out) :: fillStyle
       real(kind=c_double),intent(out) :: angle,cutback
-    end subroutine giza_get_arrow_style
+    end subroutine giza_get_arrow_style_double
 
     subroutine giza_get_arrow_style_float(fillStyle,angle,cutback) bind(C)
       import
@@ -281,14 +281,14 @@ private
       integer(kind=c_int), value, intent(in) :: nsub
     end subroutine giza_axis_float_c
 
-    subroutine giza_axis_c(opt,x1,y1,x2,y2,v1,v2,&
+    subroutine giza_axis_double_c(opt,x1,y1,x2,y2,v1,v2,&
                tick,nsub,dmajl,dmajr,fmin,disp,angle) bind(C,name="giza_axis")
       import
       character(kind=c_char),dimension(*), intent(in) :: opt
       real(kind=c_double), value, intent(in)   :: x1,y1,x2,y2,v1,v2
       real(kind=c_double), value, intent(in)   :: tick,dmajl,dmajr,fmin,disp,angle
       integer(kind=c_int), value, intent(in)   :: nsub
-    end subroutine giza_axis_c
+    end subroutine giza_axis_double_c
  end interface
 
  interface giza_tick
@@ -304,24 +304,24 @@ private
      character(kind=c_char),dimension(*), intent(in) :: label
    end subroutine giza_tick_float_c
 
-   subroutine giza_tick_c(x1,y1,x2,y2,v,&
+   subroutine giza_tick_double_c(x1,y1,x2,y2,v,&
               tickl,tickr,disp,angle,label) bind(C,name="giza_tick")
      import
      real(kind=c_double), value, intent(in)   :: x1,y1,x2,y2,v
      real(kind=c_double), value, intent(in)   :: tickl,tickr,disp,angle
      character(kind=c_char),dimension(*), intent(in) :: label
-   end subroutine giza_tick_c
+   end subroutine giza_tick_double_c
  end interface
 
  interface giza_band
-    function giza_band(mode,moveCurs,xanc,yanc,x,y,ch) bind(C)
+    function giza_band_double(mode,moveCurs,xanc,yanc,x,y,ch) bind(C, name="giza_band")
       import
-      integer(kind=c_int)                  :: giza_band
+      integer(kind=c_int)                  :: giza_band_double
       integer(kind=c_int),intent(in),value :: mode,moveCurs
       real(kind=c_double),intent(in),value :: xanc,yanc
       real(kind=c_double),intent(inout)    :: x,y
       character(kind=c_char),intent(out)   :: ch
-    end function giza_band
+    end function giza_band_double
 
     function giza_band_float(mode,moveCurs,xanc,yanc,x,y,ch) bind(C)
       import
@@ -338,16 +338,16 @@ private
  end interface
 
  interface giza_annotate_c
-    subroutine giza_annotate_c (side,displacement,coord,justification,text) bind(C,name="giza_annotate")
+    subroutine giza_annotate_double_c(side,displacement,coord,justification,text) bind(C,name="giza_annotate")
       import
       character(kind=c_char),dimension(*),intent(in) :: side,text
-      real(kind=c_double),intent(in),value    ::displacement,coord,justification
-    end subroutine giza_annotate_c
+      real(kind=c_double),intent(in),value :: displacement,coord,justification
+    end subroutine giza_annotate_double_c
 
-    subroutine giza_annotate_float_c (side,displacement,coord,justification,text) bind(C,name="giza_annotate_float")
+    subroutine giza_annotate_float_c(side,displacement,coord,justification,text) bind(C,name="giza_annotate_float")
       import
       character(kind=c_char),dimension(*),intent(in) :: side,text
-      real(kind=c_float),intent(in),value     ::displacement,coord,justification
+      real(kind=c_float),intent(in),value :: displacement,coord,justification
     end subroutine giza_annotate_float_c
  end interface
 
@@ -367,12 +367,12 @@ private
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
     end subroutine giza_box_float_c
 
-    subroutine giza_box_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box")
+    subroutine giza_box_double_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box")
       import
       character(kind=c_char),dimension(*), intent(in) :: xopt,yopt
       real(kind=c_double), value, intent(in)   :: xtick,ytick
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
-    end subroutine giza_box_c
+    end subroutine giza_box_double_c
  end interface
 
  interface giza_box_time_c
@@ -383,34 +383,34 @@ private
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
     end subroutine giza_box_time_float_c
 
-    subroutine giza_box_time_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box_time")
+    subroutine giza_box_time_double_c(xopt,xtick,nxsub,yopt,ytick,nysub) bind(C,name="giza_box_time")
       import
       character(kind=c_char),dimension(*), intent(in) :: xopt,yopt
       real(kind=c_double), value, intent(in)   :: xtick,ytick
       integer(kind=c_int), value, intent(in)   :: nxsub,nysub
-    end subroutine giza_box_time_c
+    end subroutine giza_box_time_double_c
  end interface
 
  interface giza_begin_buffer
-    subroutine giza_begin_buffer() bind(C)
-    end subroutine giza_begin_buffer
+    subroutine giza_begin_buffer_c() bind(C, name="giza_begin_buffer")
+    end subroutine giza_begin_buffer_c
  end interface
 
  interface giza_end_buffer
-    subroutine giza_end_buffer() bind(C)
-    end subroutine giza_end_buffer
+    subroutine giza_end_buffer_c() bind(C, name="giza_end_buffer")
+    end subroutine giza_end_buffer_c
  end interface
 
  interface giza_flush_buffer
-    subroutine giza_flush_buffer() bind(C)
-    end subroutine giza_flush_buffer
+    subroutine giza_flush_buffer_c() bind(C, name="giza_flush_buffer")
+    end subroutine giza_flush_buffer_c
  end interface
 
  interface giza_circle
-    subroutine giza_circle(x,y,r) bind(C)
+    subroutine giza_circle_double(x,y,r) bind(C, name="giza_circle")
       import
       real(kind=c_double),intent(in),value :: x,y,r
-    end subroutine giza_circle
+    end subroutine giza_circle_double
 
     subroutine giza_circle_float(x,y,r) bind(C)
       import
@@ -419,10 +419,10 @@ private
  end interface
 
  interface giza_set_character_height
-    subroutine giza_set_character_height(ch) bind(C)
+    subroutine giza_set_character_height_double(ch) bind(C, name="giza_set_character_height")
       import
       real(kind=c_double),intent(in),value :: ch
-    end subroutine giza_set_character_height
+    end subroutine giza_set_character_height_double
 
     subroutine giza_set_character_height_float(ch) bind(C)
       import
@@ -431,10 +431,10 @@ private
  end interface
 
  interface giza_get_character_height
-    subroutine giza_get_character_height(ch) bind(C)
+    subroutine giza_get_character_height_double(ch) bind(C, name="giza_get_character_height")
       import
       real(kind=c_double),intent(out) :: ch
-    end subroutine giza_get_character_height
+    end subroutine giza_get_character_height_double
 
     subroutine giza_get_character_height_float(ch) bind(C)
       import
@@ -443,11 +443,11 @@ private
  end interface
 
  interface giza_get_character_size
-    subroutine giza_get_character_size(units,xch,ych) bind(C)
+    subroutine giza_get_character_size_double(units,xch,ych) bind(C, name="giza_get_character_size")
       import
       integer(kind=c_int),intent(in),value :: units
       real(kind=c_double),intent(out)      :: xch,ych
-    end subroutine giza_get_character_size
+    end subroutine giza_get_character_size_double
 
     subroutine giza_get_character_size_float(units,xch,ych) bind(C)
       import
@@ -457,17 +457,17 @@ private
  end interface
 
  interface giza_set_clipping
-    subroutine giza_set_clipping(clip) bind(C)
+    subroutine giza_set_clipping_c(clip) bind(C, name="giza_set_clipping")
       import
       integer(kind=c_int), value, intent(in) :: clip
-    end subroutine giza_set_clipping
+    end subroutine giza_set_clipping_c
  end interface
 
  interface giza_get_clipping
-    subroutine giza_get_clipping(clip) bind(C)
+    subroutine giza_get_clipping_c(clip) bind(C, name="giza_get_clipping")
       import
       integer(kind=c_int),intent(out) :: clip
-    end subroutine giza_get_clipping
+    end subroutine giza_get_clipping_c
  end interface
 
  interface giza_colour_bar
@@ -475,11 +475,11 @@ private
  end interface
 
  interface giza_colour_bar_c
-    subroutine giza_colour_bar_c(side,disp,width,valmin,valmax,label) bind(C,name="giza_colour_bar")
+    subroutine giza_colour_bar_double(side,disp,width,valmin,valmax,label) bind(C,name="giza_colour_bar")
       import
       character(kind=c_char), dimension(*), intent(in) :: side, label
       real(kind=c_double), value, intent(in) :: disp,width,valmin,valmax
-    end subroutine giza_colour_bar_c
+    end subroutine giza_colour_bar_double
 
     subroutine giza_colour_bar_float_c(side,disp,width,valmin,valmax,label) bind(C,name="giza_colour_bar_float")
       import
@@ -489,38 +489,38 @@ private
  end interface
 
  interface giza_set_colour_index
-    subroutine giza_set_colour_index(ci) bind(C)
+    subroutine giza_set_colour_index_c(ci) bind(C, name="giza_set_colour_index")
       import
       integer(kind=c_int), value, intent(in) :: ci
-    end subroutine giza_set_colour_index
+    end subroutine giza_set_colour_index_c
  end interface
 
  interface giza_get_colour_index
-    subroutine giza_get_colour_index(ci) bind(C)
+    subroutine giza_get_colour_index_c(ci) bind(C, name="giza_get_colour_index")
       import
       integer(kind=c_int),intent(out) :: ci
-    end subroutine giza_get_colour_index
+    end subroutine giza_get_colour_index_c
  end interface
 
  interface giza_set_colour_palette
-    subroutine giza_set_colour_palette(palette) bind(C)
+    subroutine giza_set_colour_palette_c(palette) bind(C, name="giza_set_colour_palette")
       import
       integer(kind=c_int), value, intent(in) :: palette
-    end subroutine giza_set_colour_palette
+    end subroutine giza_set_colour_palette_c
  end interface
 
  interface giza_set_colour_index_range
-    subroutine giza_set_colour_index_range(cimin,cimax) bind(C)
+    subroutine giza_set_colour_index_range_c(cimin,cimax) bind(C, name="giza_set_colour_index_range")
       import
       integer(kind=c_int), value, intent(in) :: cimin,cimax
-    end subroutine giza_set_colour_index_range
+    end subroutine giza_set_colour_index_range_c
  end interface
 
  interface giza_get_colour_index_range
-    subroutine giza_get_colour_index_range(cimin,cimax) bind(C)
+    subroutine giza_get_colour_index_range_c(cimin,cimax) bind(C, name="giza_get_colour_index_range")
       import
       integer(kind=c_int),intent(out) :: cimin,cimax
-    end subroutine giza_get_colour_index_range
+    end subroutine giza_get_colour_index_range_c
  end interface
 
  interface giza_set_colour_representation
@@ -530,11 +530,11 @@ private
       real(kind=c_float), value, intent(in)     :: red,green,blue
     end subroutine giza_set_colour_representation_float
 
-    subroutine giza_set_colour_representation(ci,red,green,blue) bind(C)
+    subroutine giza_set_colour_representation_double(ci,red,green,blue) bind(C, name="giza_set_colour_representation")
       import
       integer(kind=c_int), value, intent(in) :: ci
       real(kind=c_double), value, intent(in) :: red,green,blue
-    end subroutine giza_set_colour_representation
+    end subroutine giza_set_colour_representation_double
 
     subroutine giza_set_colour_representation_alpha_float(ci,red,green,blue,alpha) bind(C)
       import
@@ -550,11 +550,11 @@ private
  end interface
 
  interface giza_get_colour_representation
-    subroutine giza_get_colour_representation(ci,red,green,blue) bind(C)
+    subroutine giza_get_colour_representation_double(ci,red,green,blue) bind(C, name="giza_get_colour_representation")
       import
       integer(kind=c_int),intent(in),value       :: ci
       real(kind=c_double),intent(out) :: red,green,blue
-    end subroutine giza_get_colour_representation
+    end subroutine giza_get_colour_representation_double
 
     subroutine giza_get_colour_representation_float(ci,red,green,blue) bind(C)
       import
@@ -576,11 +576,11 @@ private
  end interface
 
  interface giza_set_colour_representation_hls
-    subroutine giza_set_colour_representation_hls(ci,hue,light,sat) bind(C)
+    subroutine giza_set_colour_representation_hls_double(ci,hue,light,sat) bind(C, name="giza_set_colour_representation_hls")
       import
       integer(kind=c_int),intent(in),value :: ci
       real(kind=c_double),intent(in),value :: hue,light,sat
-    end subroutine giza_set_colour_representation_hls
+    end subroutine giza_set_colour_representation_hls_double
 
     subroutine giza_set_colour_representation_hls_float(ci,hue,light,sat) bind(C)
       import
@@ -590,12 +590,12 @@ private
  end interface
 
  interface giza_set_colour_table
-    subroutine giza_set_colour_table(controlPoints,red,green,blue,n,cont,bright) bind(C)
+    subroutine giza_set_colour_table_double(controlPoints,red,green,blue,n,cont,bright) bind(C, name="giza_set_colour_table")
       import
       integer(kind=c_int),intent(in),value        :: n
       real(kind=c_double),intent(in),dimension(n) :: controlPoints,red,green,blue
       real(kind=c_double),intent(in),value        :: cont,bright
-    end subroutine giza_set_colour_table
+    end subroutine giza_set_colour_table_double
 
     subroutine giza_set_colour_table_float(controlPoints,red,green,blue,n,cont,bright) bind(C)
       import
@@ -606,13 +606,13 @@ private
  end interface
 
  interface giza_contour
-    subroutine giza_contour(sizex,sizey,data,i1,i2,j1,j2,ncont,cont,affine) bind(C)
+    subroutine giza_contour_double(sizex,sizey,data,i1,i2,j1,j2,ncont,cont,affine) bind(C, name="giza_contour")
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,ncont
       real(kind=c_double),intent(in) :: data(sizex,sizey)
       real(kind=c_double),intent(in) :: cont(*)
       real(kind=c_double),intent(in) :: affine(6)
-    end subroutine giza_contour
+    end subroutine giza_contour_double
 
     subroutine giza_contour_float(sizex,sizey,data,i1,i2,j1,j2,ncont,cont,affine) bind(C)
       import
@@ -624,10 +624,10 @@ private
  end interface
 
  interface giza_get_current_point
-    subroutine giza_get_current_point(xpt,ypt) bind(C)
+    subroutine giza_get_current_point_double(xpt,ypt) bind(C, name="giza_get_current_point")
       import
       real(kind=c_double),intent(out) :: xpt,ypt
-    end subroutine giza_get_current_point
+    end subroutine giza_get_current_point_double
 
     subroutine giza_get_current_point_float(xpt,ypt) bind(C)
       import
@@ -636,11 +636,11 @@ private
  end interface
 
  interface giza_rgb_from_table
-    subroutine giza_rgb_from_table(pos,r,g,b) bind(C)
+    subroutine giza_rgb_from_table_double(pos,r,g,b) bind(C, name="giza_rgb_from_table")
       import
       real(kind=c_double),intent(in),value :: pos
       real(kind=c_double),intent(out) :: r,g,b
-    end subroutine giza_rgb_from_table
+    end subroutine giza_rgb_from_table_double
 
     subroutine giza_rgb_from_table_float(pos,r,g,b) bind(C)
       import
@@ -650,8 +650,8 @@ private
  end interface
 
  interface giza_print_device_list
-    subroutine giza_print_device_list() bind(C)
-    end subroutine  giza_print_device_list
+    subroutine giza_print_device_list_c() bind(C, name="giza_print_device_list")
+    end subroutine giza_print_device_list_c
  end interface
 
  interface giza_open_device
@@ -659,10 +659,10 @@ private
  end interface
 
  interface giza_open_device_c
-    integer(kind=c_int) function giza_open_device_c (dev,prefix) bind(C,name="giza_open_device")
+    integer(kind=c_int) function giza_open_device_intern(dev,prefix) bind(C,name="giza_open_device")
       import
       character(kind=c_char),dimension(*),intent(in) :: dev,prefix
-    end function  giza_open_device_c
+    end function giza_open_device_intern
  end interface
 
 !--open device: requires string conversion
@@ -671,13 +671,13 @@ private
  end interface
 
  interface giza_open_device_size_c
-    integer(kind=c_int) function giza_open_device_size_c (dev,prefix,width,height,units) &
+    integer(kind=c_int) function giza_open_device_size_double_c(dev,prefix,width,height,units) &
                         bind(C,name="giza_open_device_size")
       import
       character(kind=c_char),dimension(*),intent(in) :: dev,prefix
       real(kind=c_double),intent(in),value    :: height,width
       integer(kind=c_int),intent(in),value    :: units
-    end function giza_open_device_size_c
+    end function giza_open_device_size_double_c
 
     integer(kind=c_int) function giza_open_device_size_float_c(dev,prefix,width,height,units) &
                         bind(C,name="giza_open_device_size_float")
@@ -702,41 +702,41 @@ private
  end interface
 
  interface giza_select_device
-    subroutine giza_select_device(devid) bind(C)
+    subroutine giza_select_device_c(devid) bind(C, name="giza_select_device")
       import
       integer(kind=c_int),intent(in),value :: devid
-    end subroutine giza_select_device
+    end subroutine giza_select_device_c
  end interface
 
  interface giza_get_device_id
-    subroutine giza_get_device_id(devid) bind(C)
+    subroutine giza_get_device_id_c(devid) bind(C, name="giza_get_device_id")
       import
       integer(kind=c_int),intent(out) :: devid
-    end subroutine giza_get_device_id
+    end subroutine giza_get_device_id_c
  end interface
 
  interface giza_flush_device
-    subroutine giza_flush_device() bind(C)
-    end subroutine giza_flush_device
+    subroutine giza_flush_device_c() bind(C, name="giza_flush_device")
+    end subroutine giza_flush_device_c
  end interface
 
  interface giza_change_page
-    subroutine giza_change_page() bind(C)
-    end subroutine giza_change_page
+    subroutine giza_change_page_c() bind(C, name="giza_change_page")
+    end subroutine giza_change_page_c
  end interface
 
  interface giza_close_device
-    subroutine giza_close_device() bind(C)
-    end subroutine giza_close_device
+    subroutine giza_close_device_c() bind(C, name="giza_close_device")
+    end subroutine giza_close_device_c
  end interface
 
  interface giza_get_key_press
-    function giza_get_key_press(x,y,ch) bind(C)
+    function giza_get_key_press_double_c(x,y,ch) bind(C, name="giza_get_key_press")
       import
-      integer(kind=c_int)                :: giza_get_key_press
+      integer(kind=c_int)                :: giza_get_key_press_double_c
       real(kind=c_double),intent(out)    :: x,y
       character(kind=c_char),intent(out) :: ch
-    end function giza_get_key_press
+    end function giza_get_key_press_double_c
 
     function giza_get_key_press_float(x,y,ch) bind(C)
       import
@@ -747,9 +747,9 @@ private
  end interface
 
  interface giza_set_motion_callback
-    function giza_set_motion_callback(func) bind(C)
+    function giza_set_motion_callback_c(func) bind(C,name="giza_set_motion_callback")
       import
-      integer(kind=c_int) :: giza_set_motion_callback
+      integer(kind=c_int) :: giza_set_motion_callback_c
       abstract interface
        subroutine func(x,y,mode) bind(c)
          import
@@ -757,21 +757,21 @@ private
          integer(c_int), intent(in) :: mode
        end subroutine
       end interface
-    end function giza_set_motion_callback
+    end function giza_set_motion_callback_c
  end interface
 
  interface giza_end_motion_callback
-    function giza_end_motion_callback() bind(C)
+    function giza_end_motion_callback_c() bind(C,name="giza_end_motion_callback")
       import
-      integer(kind=c_int) :: giza_end_motion_callback
-    end function giza_end_motion_callback
+      integer(kind=c_int) :: giza_end_motion_callback_c
+    end function giza_end_motion_callback_c
  end interface
 
  interface giza_draw
-    subroutine giza_draw(x,y) bind(C)
+    subroutine giza_draw_double(x,y) bind(C, name="giza_draw")
       import
       real(kind=c_double),intent(in),value :: x,y
-    end subroutine giza_draw
+    end subroutine giza_draw_double
 
     subroutine giza_draw_float(x,y) bind(C)
       import
@@ -780,16 +780,16 @@ private
  end interface
 
  interface giza_draw_background
-    subroutine giza_draw_background() bind(C)
-    end subroutine giza_draw_background
+    subroutine giza_draw_background_c() bind(C, name="giza_draw_background")
+    end subroutine giza_draw_background_c
  end interface
 
  interface giza_set_environment
-    subroutine giza_set_environment(xmin,xmax,ymin,ymax,just,axis) bind(C)
+    subroutine giza_set_environment_double(xmin,xmax,ymin,ymax,just,axis) bind(C, name="giza_set_environment")
       import
       real(kind=c_double),intent(in),value :: xmin,xmax,ymin,ymax
       integer(kind=c_int),intent(in),value :: just,axis
-    end subroutine giza_set_environment
+    end subroutine giza_set_environment_double
 
     subroutine giza_set_environment_float(xmin,xmax,ymin,ymax,just,axis) bind(C)
       import
@@ -799,12 +799,12 @@ private
  end interface
 
  interface giza_error_bars
-    subroutine giza_error_bars(dir,n,xpts,ypts,error,term) bind(C)
+    subroutine giza_error_bars_double(dir,n,xpts,ypts,error,term) bind(C, name="giza_error_bars")
       import
       integer(kind=c_int),intent(in),value :: dir,n
       real(kind=c_double),intent(in),value :: term
       real(kind=c_double),dimension(n),intent(in) :: xpts,ypts,error
-    end subroutine giza_error_bars
+    end subroutine giza_error_bars_double
 
     subroutine giza_error_bars_float(dir,n,xpts,ypts,error,term) bind(C)
       import
@@ -847,21 +847,21 @@ private
  end interface
 
  interface giza_set_fill
-    subroutine giza_set_fill(fs) bind(C)
+    subroutine giza_set_fill_c(fs) bind(C, name="giza_set_fill")
       import
       integer(kind=c_int),intent(in),value :: fs
-    end subroutine giza_set_fill
+    end subroutine giza_set_fill_c
  end interface
 
  interface giza_get_fill
-    subroutine giza_get_fill(fs) bind(C)
+    subroutine giza_get_fill_c(fs) bind(C, name="giza_get_fill")
       import
       integer(kind=c_int),intent(out) :: fs
-    end subroutine giza_get_fill
+    end subroutine giza_get_fill_c
  end interface
 
  interface giza_function_x
-    subroutine giza_function_x(func,n,xmin,xmax,flag) bind(C)
+    subroutine giza_function_x_double(func,n,xmin,xmax,flag) bind(C, name="giza_function_x")
       import
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_double),intent(in),value :: xmin,xmax
@@ -872,7 +872,7 @@ private
          real(c_double) :: func
        end function
       end interface
-    end subroutine giza_function_x
+    end subroutine giza_function_x_double
 
     subroutine giza_function_x_float(func,n,xmin,xmax,flag) bind(C)
       import
@@ -889,7 +889,7 @@ private
  end interface
 
  interface giza_function_y
-    subroutine giza_function_y(func,n,ymin,ymax,flag) bind(C)
+    subroutine giza_function_y_double(func,n,ymin,ymax,flag) bind(C, name="giza_function_y")
       import
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_double),intent(in),value :: ymin,ymax
@@ -900,7 +900,7 @@ private
          real(c_double) :: func
        end function
       end interface
-    end subroutine giza_function_y
+    end subroutine giza_function_y_double
 
     subroutine giza_function_y_float(func,n,ymin,ymax,flag) bind(C)
       import
@@ -917,7 +917,7 @@ private
  end interface
 
  interface giza_function_t
-    subroutine giza_function_t(funcx,funcy,n,tmin,tmax,flag) bind(C)
+    subroutine giza_function_t_double(funcx,funcy,n,tmin,tmax,flag) bind(C, name="giza_function_t")
       import
       integer(kind=c_int),intent(in),value :: n,flag
       real(kind=c_double),intent(in),value :: tmin,tmax
@@ -933,7 +933,7 @@ private
          real(c_double) :: funcy
        end function
       end interface
-    end subroutine giza_function_t
+    end subroutine giza_function_t_double
 
     subroutine giza_function_t_float(funcx,funcy,n,tmin,tmax,flag) bind(C)
       import
@@ -961,17 +961,17 @@ private
       real(kind=c_float),intent(out) :: x1,x2,y1,y2
     end subroutine giza_get_surface_size_float
 
-    subroutine giza_get_surface_size(x1,x2,y1,y2) bind(C)
+    subroutine giza_get_surface_size_double(x1,x2,y1,y2) bind(C, name="giza_get_surface_size")
       import
       real(kind=c_double),intent(out) :: x1,x2,y1,y2
-    end subroutine giza_get_surface_size
+    end subroutine giza_get_surface_size_double
  end interface
 
  interface giza_set_hatching_style
-    subroutine giza_set_hatching_style(angle,spacing,phase) bind(C)
+    subroutine giza_set_hatching_style_double(angle,spacing,phase) bind(C, name="giza_set_hatching_style")
       import
       real(kind=c_double),intent(in),value :: angle,spacing,phase
-    end subroutine giza_set_hatching_style
+    end subroutine giza_set_hatching_style_double
 
     subroutine giza_set_hatching_style_float(angle,spacing,phase) bind(C)
       import
@@ -980,10 +980,10 @@ private
  end interface giza_set_hatching_style
 
  interface giza_get_hatching_style
-    subroutine giza_get_hatching_style(angle,spacing,phase) bind(C)
+    subroutine giza_get_hatching_style_double(angle,spacing,phase) bind(C, name="giza_get_hatching_style")
       import
       real(kind=c_double),intent(out) :: angle,spacing,phase
-    end subroutine giza_get_hatching_style
+    end subroutine giza_get_hatching_style_double
 
     subroutine giza_get_hatching_style_float(angle,spacing,phase) bind(C)
       import
@@ -992,12 +992,12 @@ private
  end interface giza_get_hatching_style
 
  interface giza_histogram
-    subroutine giza_histogram(n,dat,min,max,nbin,flag) bind(C)
+    subroutine giza_histogram_double(n,dat,min,max,nbin,flag) bind(C, name="giza_histogram")
       import
       integer(kind=c_int),intent(in), value :: n,nbin,flag
       real(kind=c_double),intent(in) :: dat(*)
       real(kind=c_double),intent(in), value :: min,max
-    end subroutine giza_histogram
+    end subroutine giza_histogram_double
 
     subroutine giza_histogram_float(n,dat,min,max,nbin,flag) bind(C)
       import
@@ -1008,11 +1008,11 @@ private
  end interface
 
  interface giza_histogram_binned
-    subroutine giza_histogram_binned(nbin,x,dat,centre) bind(C)
+    subroutine giza_histogram_binned_double(nbin,x,dat,centre) bind(C, name="giza_histogram_binned")
       import
       integer(kind=c_int),intent(in), value :: nbin,centre
       real(kind=c_double),intent(in) :: x(*),dat(*)
-    end subroutine giza_histogram_binned
+    end subroutine giza_histogram_binned_double
 
     subroutine giza_histogram_binned_float(nbin,x,dat,centre) bind(C)
       import
@@ -1026,10 +1026,10 @@ private
  end interface
 
  interface giza_label_c
-    subroutine giza_label_c (labelx,labely,title) bind(C,name="giza_label")
+    subroutine giza_label_int (labelx,labely,title) bind(C,name="giza_label")
       import
       character(kind=c_char),dimension(*),intent(in) :: labelx,labely,title
-    end subroutine giza_label_c
+    end subroutine giza_label_int
  end interface giza_label_c
 
  interface giza_line
@@ -1039,18 +1039,18 @@ private
       real(kind=c_float),intent(in),dimension(n) :: xpts,ypts
     end subroutine giza_line_float
 
-    subroutine giza_line(n,xpts,ypts) bind(C)
+    subroutine giza_line_double(n,xpts,ypts) bind(C, name="giza_line")
       import
       integer(kind=c_int),value,intent(in)        :: n
       real(kind=c_double),intent(in),dimension(n) :: xpts,ypts
-    end subroutine giza_line
+    end subroutine giza_line_double
  end interface
 
  interface giza_set_line_width
-    subroutine giza_set_line_width(lw) bind(C)
+    subroutine giza_set_line_width_double(lw) bind(C, name="giza_set_line_width")
       import
       real(kind=c_double),intent(in), value :: lw
-    end subroutine giza_set_line_width
+    end subroutine giza_set_line_width_double
 
     subroutine giza_set_line_width_float(lw) bind(C)
       import
@@ -1061,10 +1061,10 @@ private
  end interface
 
  interface giza_get_line_width
-    subroutine giza_get_line_width(lw) bind(C)
+    subroutine giza_get_line_width_double(lw) bind(C, name="giza_get_line_width")
       import
       real(kind=c_double),intent(out) :: lw
-    end subroutine giza_get_line_width
+    end subroutine giza_get_line_width_double
 
     subroutine giza_get_line_width_float(lw) bind(C)
       import
@@ -1075,41 +1075,41 @@ private
  end interface
 
  interface giza_set_line_cap
-    subroutine giza_set_line_cap(lc) bind(C)
+    subroutine giza_set_line_cap_c(lc) bind(C, name="giza_set_line_cap")
       import
       integer(c_int),value,intent(in) :: lc
-    end subroutine giza_set_line_cap
+    end subroutine giza_set_line_cap_c
  end interface
 
  interface giza_get_line_cap
-    subroutine giza_get_line_cap(lc) bind(C)
+    subroutine giza_get_line_cap_c(lc) bind(C, name="giza_get_line_cap")
       import
       integer(c_int),intent(out) :: lc
-    end subroutine giza_get_line_cap
+    end subroutine giza_get_line_cap_c
  end interface
 
  interface giza_set_line_style
-    subroutine giza_set_line_style(ls) bind(C)
+    subroutine giza_set_line_style_c(ls) bind(C, name="giza_set_line_style")
       import
       integer(c_int),value,intent(in) :: ls
-    end subroutine giza_set_line_style
+    end subroutine giza_set_line_style_c
  end interface
 
  interface giza_get_line_style
-    subroutine giza_get_line_style(ls) bind(C)
+    subroutine giza_get_line_style_c(ls) bind(C, name="giza_get_line_style")
       import
       integer(c_int),intent(out) :: ls
-    end subroutine giza_get_line_style
+    end subroutine giza_get_line_style_c
  end interface
 
  interface giza_mark_line
-    subroutine giza_mark_line(maxpts,npts,xpts,ypts) bind(C)
+    subroutine giza_mark_line_double(maxpts,npts,xpts,ypts) bind(C, name="giza_mark_line")
       import
       integer(kind=c_int),intent(in),value :: maxpts
       integer(kind=c_int),intent(inout) :: npts
       real(kind=c_double), dimension(*), intent(inout) :: xpts
       real(kind=c_double), dimension(*), intent(inout) :: ypts
-    end subroutine giza_mark_line
+    end subroutine giza_mark_line_double
 
     subroutine giza_mark_line_float(maxpts,npts,xpts,ypts) bind(C)
       import
@@ -1139,13 +1139,13 @@ private
  end interface
 
  interface giza_mark_line_ordered
-    subroutine giza_mark_line_ordered(maxpts,npts,xpts,ypts) bind(C)
+    subroutine giza_mark_line_ordered_double(maxpts,npts,xpts,ypts) bind(C, name="giza_mark_line_ordered")
       import
       integer(kind=c_int),intent(in),value :: maxpts
       integer(kind=c_int),intent(inout) :: npts
       real(kind=c_double), dimension(*), intent(inout) :: xpts
       real(kind=c_double), dimension(*), intent(inout) :: ypts
-    end subroutine giza_mark_line_ordered
+    end subroutine giza_mark_line_ordered_double
 
     subroutine giza_mark_line_ordered_float(maxpts,npts,xpts,ypts) bind(C)
       import
@@ -1157,14 +1157,14 @@ private
  end interface
 
  interface giza_mark_points
-    subroutine giza_mark_points(maxpts,npts,xpts,ypts,symbol) bind(C)
+    subroutine giza_mark_points_double(maxpts,npts,xpts,ypts,symbol) bind(C, name="giza_mark_points")
       import
       integer(kind=c_int),intent(in),value :: maxpts
       integer(kind=c_int),intent(inout) :: npts
       real(kind=c_double), dimension(*), intent(inout) :: xpts
       real(kind=c_double), dimension(*), intent(inout) :: ypts
       integer(kind=c_int),intent(in),value :: symbol
-    end subroutine giza_mark_points
+    end subroutine giza_mark_points_double
 
     subroutine giza_mark_points_float(maxpts,npts,xpts,ypts,symbol) bind(C)
       import
@@ -1177,14 +1177,14 @@ private
  end interface
 
  interface giza_mark_points_ordered
-    subroutine giza_mark_points_ordered(maxpts,npts,xpts,ypts,symbol) bind(C)
+    subroutine giza_mark_points_ordered_double(maxpts,npts,xpts,ypts,symbol) bind(C, name="giza_mark_points_ordered")
       import
       integer(kind=c_int),intent(in),value :: maxpts
       integer(kind=c_int),intent(inout) :: npts
       real(kind=c_double), dimension(*), intent(inout) :: xpts
       real(kind=c_double), dimension(*), intent(inout) :: ypts
       integer(kind=c_int),intent(in),value :: symbol
-    end subroutine giza_mark_points_ordered
+    end subroutine giza_mark_points_ordered_double
 
     subroutine giza_mark_points_ordered_float(maxpts,npts,xpts,ypts,symbol) bind(C)
       import
@@ -1197,10 +1197,10 @@ private
  end interface
 
  interface giza_move
-    subroutine giza_move(x,y) bind(C)
+    subroutine giza_move_double(x,y) bind(C, name="giza_move")
       import
       real(kind=c_double),intent(in),value :: x,y
-    end subroutine giza_move
+    end subroutine giza_move_double
 
     subroutine giza_move_float(x,y) bind(C)
       import
@@ -1209,11 +1209,11 @@ private
  end interface
 
  interface giza_get_paper_size
-    subroutine giza_get_paper_size(units,width,height) bind(C)
+    subroutine giza_get_paper_size_double(units,width,height) bind(C, name="giza_get_paper_size")
       import
       integer(kind=c_int), intent(in),value :: units
       real(kind=c_double),intent(out) :: width,height
-    end subroutine giza_get_paper_size
+    end subroutine giza_get_paper_size_double
 
     subroutine giza_get_paper_size_float(units,width,height) bind(C)
       import
@@ -1223,11 +1223,11 @@ private
  end interface
 
  interface giza_set_paper_size
-    subroutine giza_set_paper_size(units,width,aspect) bind(C)
+    subroutine giza_set_paper_size_double(units,width,aspect) bind(C, name="giza_set_paper_size")
       import
       integer(kind=c_int), intent(in),value :: units
       real(kind=c_double), intent(in),value :: width,aspect
-    end subroutine giza_set_paper_size
+    end subroutine giza_set_paper_size_double
 
     subroutine giza_set_paper_size_float(units,width,aspect) bind(C)
       import
@@ -1237,11 +1237,11 @@ private
  end interface
 
  interface giza_points
-    subroutine giza_points(n,xpts,ypts,symbol) bind(C)
+    subroutine giza_points_double(n,xpts,ypts,symbol) bind(C, name="giza_points")
       import
       integer(kind=c_int), value, intent(in) :: n, symbol
       real(kind=c_double), dimension(n), intent(in) :: xpts,ypts
-    end subroutine giza_points
+    end subroutine giza_points_double
 
     subroutine giza_points_float(n,xpts,ypts,symbol) bind(C)
       import
@@ -1251,11 +1251,11 @@ private
  end interface
 
  interface giza_single_point
-    subroutine giza_single_point(x,y,symbol) bind(C)
+    subroutine giza_single_point_double(x,y,symbol) bind(C, name="giza_single_point")
       import
       real(kind=c_double), value, intent(in) :: x,y
       integer(kind=c_int), value, intent(in) :: symbol
-    end subroutine giza_single_point
+    end subroutine giza_single_point_double
 
     subroutine giza_single_point_float(x,y,symbol) bind(C)
       import
@@ -1265,11 +1265,11 @@ private
  end interface
 
  interface giza_polygon
-    subroutine giza_polygon(n,xpts,ypts) bind(C)
+    subroutine giza_polygon_double(n,xpts,ypts) bind(C, name="giza_polygon")
       import
       integer(kind=c_int), value, intent(in) :: n
       real(kind=c_double), dimension(n), intent(in) :: xpts,ypts
-    end subroutine giza_polygon
+    end subroutine giza_polygon_double
 
     subroutine giza_polygon_float(n,xpts,ypts) bind(C)
       import
@@ -1279,18 +1279,18 @@ private
  end interface
 
  interface giza_print_id
-    subroutine giza_print_id() bind(C)
-    end subroutine giza_print_id
+    subroutine giza_print_id_c() bind(C, name="giza_print_id")
+    end subroutine giza_print_id_c
  end interface
 
  interface giza_start_prompting
-    subroutine giza_start_prompting() bind(C)
-    end subroutine giza_start_prompting
+    subroutine giza_start_prompting_c() bind(C, name="giza_start_prompting")
+    end subroutine giza_start_prompting_c
  end interface
 
  interface giza_stop_prompting
-    subroutine giza_stop_prompting() bind(C)
-    end subroutine giza_stop_prompting
+    subroutine giza_stop_prompting_c() bind(C, name="giza_stop_prompting")
+    end subroutine giza_stop_prompting_c
  end interface
 
  interface giza_text
@@ -1299,31 +1299,31 @@ private
  end interface
 
  interface giza_set_text_background
-    subroutine giza_set_text_background(ci) bind(C)
+    subroutine giza_set_text_background_c(ci) bind(C, name="giza_set_text_background")
       import
       integer(kind=c_int), value, intent(in) :: ci
-    end subroutine giza_set_text_background
+    end subroutine giza_set_text_background_c
  end interface
 
  interface giza_get_text_background
-    subroutine giza_get_text_background(ci) bind(C)
+    subroutine giza_get_text_background_c(ci) bind(C, name="giza_get_text_background")
       import
       integer(kind=c_int), intent(out) :: ci
-    end subroutine giza_get_text_background
+    end subroutine giza_get_text_background_c
  end interface
 
  interface giza_text_c
-    subroutine giza_text_c(x,y,text) bind(C,name="giza_text")
+    subroutine giza_text_double(x,y,text) bind(C,name="giza_text")
       import
       real(kind=c_double),value,intent(in)    :: x,y
       character(kind=c_char),dimension(*),intent(in) :: text
-    end subroutine giza_text_c
+    end subroutine giza_text_double
 
-    subroutine giza_text_float_c(x,y,text) bind(C,name="giza_text_float")
+    subroutine giza_text_float(x,y,text) bind(C)
       import
       real(kind=c_float),value,intent(in)     :: x,y
       character(kind=c_char),dimension(*),intent(in) :: text
-    end subroutine giza_text_float_c
+    end subroutine giza_text_float
  end interface
 
  interface giza_open
@@ -1336,17 +1336,17 @@ private
  end interface
 
  interface giza_ptext_c
-    subroutine giza_ptext_c(x,y,angle,just,text) bind(C,name="giza_ptext")
+    subroutine giza_ptext_double(x,y,angle,just,text) bind(C,name="giza_ptext")
       import
       real(kind=c_double),value,intent(in)    :: x,y,angle,just
       character(kind=c_char),dimension(*),intent(in) :: text
-    end subroutine giza_ptext_c
+    end subroutine giza_ptext_double
 
-    subroutine giza_ptext_float_c(x,y,angle,just,text) bind(C,name="giza_ptext_float")
+    subroutine giza_ptext_float(x,y,angle,just,text) bind(C)
       import
       real(kind=c_float),value,intent(in)     :: x,y,angle,just
       character(kind=c_char),dimension(*),intent(in) :: text
-    end subroutine giza_ptext_float_c
+    end subroutine giza_ptext_float
  end interface
 
  interface giza_qtext
@@ -1355,19 +1355,19 @@ private
  end interface
 
  interface giza_qtext_c
-    subroutine giza_qtext_c(x,y,angle,just,text,xbox,ybox) bind(C,name="giza_qtext")
+    subroutine giza_qtext_double(x,y,angle,just,text,xbox,ybox) bind(C,name="giza_qtext")
       import
       real(kind=c_double),value,intent(in)    :: x,y,angle,just
       real(kind=c_double),intent(out)         :: xbox(4),ybox(4)
       character(kind=c_char),dimension(*),intent(in) :: text
-    end subroutine giza_qtext_c
+    end subroutine giza_qtext_double
 
-    subroutine giza_qtext_float_c(x,y,angle,just,text,xbox,ybox) bind(C,name="giza_qtext_float")
+    subroutine giza_qtext_float(x,y,angle,just,text,xbox,ybox) bind(C)
       import
       real(kind=c_float),value,intent(in)     :: x,y,angle,just
       real(kind=c_float),intent(out)          :: xbox(4),ybox(4)
       character(kind=c_char),dimension(*),intent(in) :: text
-    end subroutine giza_qtext_float_c
+    end subroutine giza_qtext_float
  end interface
 
  interface giza_qtextlen
@@ -1376,29 +1376,29 @@ private
  end interface
 
  interface giza_qtextlen_c
-    subroutine giza_qtextlen_c(units,text,xlen,ylen) bind(C,name="giza_qtextlen")
+    subroutine giza_qtextlen_double(units,text,xlen,ylen) bind(C,name="giza_qtextlen")
       import
       integer(kind=c_int),value,intent(in)    :: units
       character(kind=c_char),dimension(*),intent(in) :: text
       real(kind=c_double),intent(out)         :: xlen,ylen
-    end subroutine giza_qtextlen_c
+    end subroutine giza_qtextlen_double
 
-    subroutine giza_qtextlen_float_c(units,text,xlen,ylen) bind(C,name="giza_qtextlen_float")
+    subroutine giza_qtextlen_float(units,text,xlen,ylen) bind(C)
       import
       integer(kind=c_int),value,intent(in)    :: units
       character(kind=c_char),dimension(*),intent(in) :: text
       real(kind=c_float),intent(out)          :: xlen,ylen
-    end subroutine giza_qtextlen_float_c
+    end subroutine giza_qtextlen_float
  end interface
 
  interface giza_render
-    subroutine giza_render(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
+    subroutine giza_render_double(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C, name="giza_render")
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_double),intent(in) :: data(sizex,sizey)
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
-    end subroutine giza_render
+    end subroutine giza_render_double
 
     subroutine giza_render_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
       import
@@ -1426,15 +1426,17 @@ private
  end interface
 
  interface giza_render_transparent
-    subroutine giza_render_transparent(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
+    subroutine giza_render_transparent_double(sizex,sizey,data,i1,i2,j1,j2,&
+               valMin,valMax,extend,filter,affine) bind(C, name="giza_render_transparent")
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_double),intent(in) :: data(sizex,sizey)
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
-    end subroutine giza_render_transparent
+    end subroutine giza_render_transparent_double
 
-    subroutine giza_render_transparent_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
+    subroutine giza_render_transparent_float(sizex,sizey,data,i1,i2,j1,j2,&
+               valMin,valMax,extend,filter,affine) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_float),intent(in) :: data(sizex,sizey)
@@ -1444,15 +1446,17 @@ private
  end interface
 
  interface giza_render_gray
-    subroutine giza_render_gray(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
+    subroutine giza_render_gray_double(sizex,sizey,data,i1,i2,j1,j2,&
+               valMin,valMax,extend,filter,affine) bind(C, name="giza_render_gray")
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_double),intent(in) :: data(sizex,sizey)
       real(kind=c_double),intent(in),value :: valMin,valMax
       real(kind=c_double),intent(in) :: affine(6)
-    end subroutine giza_render_gray
+    end subroutine giza_render_gray_double
 
-    subroutine giza_render_gray_float(sizex,sizey,data,i1,i2,j1,j2,valMin,valMax,extend,filter,affine) bind(C)
+    subroutine giza_render_gray_float(sizex,sizey,data,i1,i2,j1,j2,&
+               valMin,valMax,extend,filter,affine) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       real(kind=c_float),intent(in) :: data(sizex,sizey)
@@ -1462,14 +1466,16 @@ private
  end interface
 
  interface giza_draw_pixels
-    subroutine giza_draw_pixels(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax,extend,filter) bind(C)
+    subroutine giza_draw_pixels_double(sizex,sizey,idata,i1,i2,j1,j2,&
+               xmin,xmax,ymin,ymax,extend,filter) bind(C, name="giza_draw_pixels")
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       integer(kind=c_int),intent(in) :: idata(sizex,sizey)
       real(kind=c_double),intent(in),value :: xmin,xmax,ymin,ymax
-    end subroutine giza_draw_pixels
+    end subroutine giza_draw_pixels_double
 
-    subroutine giza_draw_pixels_float(sizex,sizey,idata,i1,i2,j1,j2,xmin,xmax,ymin,ymax,extend,filter) bind(C)
+    subroutine giza_draw_pixels_float(sizex,sizey,idata,i1,i2,j1,j2,&
+               xmin,xmax,ymin,ymax,extend,filter) bind(C)
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
       integer(kind=c_int),intent(in) :: idata(sizex,sizey)
@@ -1478,10 +1484,10 @@ private
  end interface
 
  interface giza_rectangle
-    subroutine giza_rectangle(x1,x2,y1,y2) bind(C)
+    subroutine giza_rectangle_double(x1,x2,y1,y2) bind(C, name="giza_rectangle")
       import
       real(kind=c_double),intent(in),value :: x1,x2,y1,y2
-    end subroutine giza_rectangle
+    end subroutine giza_rectangle_double
 
     subroutine giza_rectangle_float(x1,x2,y1,y2) bind(C)
       import
@@ -1500,19 +1506,19 @@ private
  end interface giza_rectangle
 
  interface giza_restore
-    subroutine giza_restore() bind(C)
-    end subroutine giza_restore
+    subroutine giza_restore_c() bind(C, name="giza_restore")
+    end subroutine giza_restore_c
  end interface
 
  interface giza_round
-    function giza_round_db(x,nsub) bind(C,name="giza_round")
+    function giza_round_double(x,nsub) bind(C,name="giza_round")
       import
       real(kind=c_double), intent(in) :: x
       integer(kind=c_int), intent(out) :: nsub
-      real(kind=c_double) :: giza_round_db
-    end function giza_round_db
+      real(kind=c_double) :: giza_round_double
+    end function giza_round_double
 
-    function giza_round_float(x,nsub) bind(C,name="giza_round_float")
+    function giza_round_float(x,nsub) bind(C)
       import
       real(kind=c_float), intent(in) :: x
       integer(kind=c_int), intent(out) :: nsub
@@ -1521,8 +1527,8 @@ private
  end interface giza_round
 
  interface giza_save
-    subroutine giza_save() bind(C)
-    end subroutine giza_save
+    subroutine giza_save_c() bind(C, name="giza_save")
+    end subroutine giza_save_c
  end interface
 
  interface giza_set_font
@@ -1542,59 +1548,59 @@ private
  end interface
 
  interface giza_set_font_c
-    subroutine giza_set_font_c(font) bind(C,name="giza_set_font")
+    subroutine giza_set_font_intern(font) bind(C,name="giza_set_font")
       import
       character(kind=c_char),dimension(*),intent(in) :: font
-    end subroutine giza_set_font_c
+    end subroutine giza_set_font_intern
  end interface
  interface giza_set_font_bold_c
-    subroutine giza_set_font_bold_c(font) bind(C,name="giza_set_font_bold")
+    subroutine giza_set_font_bold_intern(font) bind(C,name="giza_set_font_bold")
       import
       character(kind=c_char),dimension(*),intent(in) :: font
-    end subroutine giza_set_font_bold_c
+    end subroutine giza_set_font_bold_intern
  end interface
  interface giza_set_font_italic_c
-    subroutine giza_set_font_italic_c(font) bind(C,name="giza_set_font_italic")
+    subroutine giza_set_font_italic_c_intern(font) bind(C,name="giza_set_font_italic")
       import
       character(kind=c_char),dimension(*),intent(in) :: font
-    end subroutine giza_set_font_italic_c
+    end subroutine giza_set_font_italic_c_intern
  end interface
  interface giza_set_font_bold_italic_c
-    subroutine giza_set_font_bold_italic_c(font) bind(C,name="giza_set_font_bold_italic")
+    subroutine giza_set_font_bold_italic_intern(font) bind(C,name="giza_set_font_bold_italic")
       import
       character(kind=c_char),dimension(*),intent(in) :: font
-    end subroutine giza_set_font_bold_italic_c
+    end subroutine giza_set_font_bold_italic_intern
  end interface
 
  interface giza_subpanel
-    subroutine giza_subpanel(nx,ny) bind(C)
+    subroutine giza_subpanel_c(nx,ny) bind(C, name="giza_subpanel")
       import
       integer(kind=c_int), intent(in),value :: nx,ny
-    end subroutine giza_subpanel
+    end subroutine giza_subpanel_c
  end interface
 
  interface giza_set_panel
-    subroutine giza_set_panel(ix,iy) bind(C)
+    subroutine giza_set_panel_c(ix,iy) bind(C, name="giza_set_panel")
       import
       integer(kind=c_int), intent(in),value :: ix,iy
-    end subroutine giza_set_panel
+    end subroutine giza_set_panel_c
  end interface
 
  interface giza_get_panel
-    subroutine giza_get_panel(ix,iy) bind(C)
+    subroutine giza_get_panel_c(ix,iy) bind(C, name="giza_get_panel")
       import
       integer(kind=c_int), intent(out) :: ix,iy
-    end subroutine giza_get_panel
+    end subroutine giza_get_panel_c
  end interface
 
  interface giza_vector
-    subroutine giza_vector(sizex,sizey,horizontal,vertical,i1,i2,j1,j2,scale,position,affine,blank) bind(C)
+    subroutine giza_vector_double(sizex,sizey,horizontal,vertical,i1,i2,j1,j2,scale,position,affine,blank) bind(C, name="giza_vector")
       import
       integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,position
       real(kind=c_double),intent(in) :: horizontal(sizex,sizey),vertical(sizex,sizey)
       real(kind=c_double),intent(in),value :: scale,blank
       real(kind=c_double),intent(in) :: affine(6)
-    end subroutine giza_vector
+    end subroutine giza_vector_double
 
     subroutine giza_vector_float(sizex,sizey,horizontal,vertical,i1,i2,j1,j2,scale,position,affine,blank) bind(C)
       import
@@ -1612,23 +1618,23 @@ private
       real(kind=c_float), value, intent(in) :: xleft,xright,ybot,ytop
     end subroutine giza_set_viewport_float
 
-    subroutine giza_set_viewport(xleft,xright,ybot,ytop) bind(C)
+    subroutine giza_set_viewport_double(xleft,xright,ybot,ytop) bind(C, name="giza_set_viewport")
       import
       real(kind=c_double), value, intent(in) :: xleft,xright,ybot,ytop
-    end subroutine giza_set_viewport
+    end subroutine giza_set_viewport_double
  end interface
 
  interface giza_set_viewport_default
-    subroutine giza_set_viewport_default() bind(C)
-    end subroutine giza_set_viewport_default
+    subroutine giza_set_viewport_default_c() bind(C, name="giza_set_viewport_default")
+    end subroutine giza_set_viewport_default_c
  end interface
 
  interface giza_get_viewport
-    subroutine giza_get_viewport(units,x1,x2,y1,y2) bind(C)
+    subroutine giza_get_viewport_double(units,x1,x2,y1,y2) bind(C, name="giza_get_viewport")
       import
       integer(kind=c_int), value, intent(in)  :: units
       real(kind=c_double),        intent(out) :: x1,x2,y1,y2
-    end subroutine giza_get_viewport
+    end subroutine giza_get_viewport_double
 
     subroutine giza_get_viewport_float(units,x1,x2,y1,y2) bind(C)
       import
@@ -1643,27 +1649,27 @@ private
       real(kind=c_float), value, intent(in) :: xleft,xright,ybot,ytop
     end subroutine giza_set_viewport_inches_float
 
-    subroutine giza_set_viewport_inches(xleft,xright,ybot,ytop) bind(C)
+    subroutine giza_set_viewport_inches_double(xleft,xright,ybot,ytop) bind(C, name="giza_set_viewport_inches")
       import
       real(kind=c_double), value, intent(in) :: xleft,xright,ybot,ytop
-    end subroutine giza_set_viewport_inches
+    end subroutine giza_set_viewport_inches_double
  end interface
 
  interface giza_version
-    subroutine giza_version(major,minor,micro) bind(C)
+    subroutine giza_version_c(major,minor,micro) bind(C, name="giza_version")
      import
      integer(kind=c_int), intent(out) :: major,minor,micro
-    end subroutine giza_version
+    end subroutine giza_version_c
  end interface
 
  interface giza_start_warnings
-    subroutine giza_start_warnings() bind(C)
-    end subroutine giza_start_warnings
+    subroutine giza_start_warnings_c() bind(C, name="giza_start_warnings")
+    end subroutine giza_start_warnings_c
  end interface
 
  interface giza_stop_warnings
-    subroutine giza_stop_warnings() bind(C)
-    end subroutine giza_stop_warnings
+    subroutine giza_stop_warnings_c() bind(C, name="giza_stop_warnings")
+    end subroutine giza_stop_warnings_c
  end interface
 
  interface giza_set_window
@@ -1672,17 +1678,17 @@ private
       real(kind=c_float), value, intent(in) :: x1,x2,y1,y2
     end subroutine giza_set_window_float
 
-    subroutine giza_set_window(x1,x2,y1,y2) bind(C)
+    subroutine giza_set_window_double(x1,x2,y1,y2) bind(C, name="giza_set_window")
       import
       real(kind=c_double), value, intent(in) :: x1,x2,y1,y2
-    end subroutine giza_set_window
+    end subroutine giza_set_window_double
  end interface
 
  interface giza_set_window_equal_scale
-    subroutine giza_set_window_equal_scale(x1,x2,y1,y2) bind(C)
+    subroutine giza_set_window_equal_scale_double(x1,x2,y1,y2) bind(C, name="giza_set_window_equal_scale")
       import
       real(kind=c_double), value, intent(in) :: x1,x2,y1,y2
-    end subroutine giza_set_window_equal_scale
+    end subroutine giza_set_window_equal_scale_double
 
     subroutine giza_set_window_equal_scale_float(x1,x2,y1,y2) bind(C)
       import
@@ -1691,10 +1697,10 @@ private
  end interface
 
  interface giza_get_window
-    subroutine giza_get_window(x1,x2,y1,y2) bind(C)
+    subroutine giza_get_window_double(x1,x2,y1,y2) bind(C, name="giza_get_window")
       import
       real(kind=c_double),intent(out) :: x1,x2,y1,y2
-    end subroutine giza_get_window
+    end subroutine giza_get_window_double
 
     subroutine giza_get_window_float(x1,x2,y1,y2) bind(C)
       import
@@ -1708,11 +1714,11 @@ private
 
  !private :: giza_format_number_c
  interface giza_format_number_c
-    subroutine giza_format_number_c(mantissa,power,iform,string,cstring_len) bind(C,name="giza_format_number")
+    subroutine giza_format_number_intern(mantissa,power,iform,string,cstring_len) bind(C,name="giza_format_number")
       import
       integer(kind=c_int),value,intent(in)    :: mantissa,power,iform,cstring_len
       character(kind=c_char),dimension(*),intent(out) :: string
-    end subroutine giza_format_number_c
+    end subroutine giza_format_number_intern
  end interface
 
  interface giza_query_device
@@ -1720,26 +1726,26 @@ private
  end interface
 
  interface giza_query_device_c
-    integer(kind=c_int) function giza_query_device_c(qtype,string,rval) bind(C,name="giza_query_device")
+    integer(kind=c_int) function giza_query_device_intern(qtype,string,rval) bind(C,name="giza_query_device")
       import
       character(kind=c_char),dimension(*),intent(in)  :: qtype
       character(kind=c_char),dimension(*),intent(out) :: string
       integer(kind=c_int),intent(out) :: rval
-    end function giza_query_device_c
+    end function giza_query_device_intern
  end interface
 
  interface giza_set_image_transfer_function
-    subroutine giza_set_image_transfer_function(itf) bind(C)
+    subroutine giza_set_image_transfer_function_c(itf) bind(C, name="giza_set_image_transfer_function")
       import
       integer(kind=c_int), value, intent(in) :: itf
-    end subroutine giza_set_image_transfer_function
+    end subroutine giza_set_image_transfer_function_c
  end interface
 
  interface giza_get_image_transfer_function
-    subroutine giza_get_image_transfer_function(itf) bind(C)
+    subroutine giza_get_image_transfer_function_c(itf) bind(C, name="giza_get_image_transfer_function")
       import
       integer(kind=c_int), intent(out) :: itf
-    end subroutine giza_get_image_transfer_function
+    end subroutine giza_get_image_transfer_function_c
  end interface
 
 !------------------ end of interfaces -----------------------
@@ -1760,7 +1766,7 @@ contains
     coord_c = coord
     justification_c = justification
 
-    call giza_annotate_c(cstring(trim(side)),displacement_c,coord_c,justification_c,cstring(text))
+    call giza_annotate_double_c(cstring(trim(side)),displacement_c,coord_c,justification_c,cstring(text))
   end subroutine giza_intern_annotate_f2c
 
   subroutine giza_intern_axis_f2c(opt,x1,y1,x2,y2,v1,v2,&
@@ -1883,7 +1889,7 @@ contains
   end subroutine giza_open_sub
 
   subroutine giza_close
-     call giza_close_device()
+     call giza_close_device_c()
   end subroutine giza_close
 
   integer function giza_intern_open_device_size(dev,prefix,width,height,units)
@@ -1915,14 +1921,14 @@ contains
 
     !--cairo line widths are best as .5, 1.5 etc
     reallw = dble(lw) + 0.5d0
-    call giza_set_line_width(reallw)
+    call giza_set_line_width_c(reallw)
   end subroutine giza_intern_set_line_width_int
 
   subroutine giza_intern_get_line_width_int(lw)
     integer(kind=c_int),intent(out) :: lw
     real(kind=c_double) :: reallw
 
-    call giza_get_line_width(reallw)
+    call giza_get_line_width_c(reallw)
     lw = nint(reallw - 0.5d0)
 
   end subroutine giza_intern_get_line_width_int
@@ -1931,7 +1937,7 @@ contains
     real(kind=c_double),intent(in) :: x,y
     character(len=*),intent(in)    :: text
 
-    call giza_text_c(x,y,cstring(text))
+    call giza_text_double_c(x,y,cstring(text))
 
   end subroutine giza_intern_text_f2c
 
@@ -1947,7 +1953,7 @@ contains
     real(kind=c_double),intent(in) :: x,y,angle,just
     character(len=*),intent(in)    :: text
 
-    call giza_ptext_c(x,y,angle,just,cstring(text))
+    call giza_ptext_double(x,y,angle,just,cstring(text))
 
   end subroutine giza_intern_ptext_f2c
 
@@ -1955,7 +1961,7 @@ contains
     real(kind=c_float),intent(in) :: x,y,angle,just
     character(len=*),intent(in)    :: text
 
-    call giza_ptext_float_c(x,y,angle,just,cstring(text))
+    call giza_ptext_float(x,y,angle,just,cstring(text))
 
   end subroutine giza_intern_ptext_float_f2c
 
@@ -1964,7 +1970,7 @@ contains
     real(kind=c_double),intent(out):: xbox(4),ybox(4)
     character(len=*),intent(in)    :: text
 
-    call giza_qtext_c(x,y,angle,just,cstring(text),xbox,ybox)
+    call giza_qtext_double(x,y,angle,just,cstring(text),xbox,ybox)
 
   end subroutine giza_intern_qtext_f2c
 
@@ -1973,7 +1979,7 @@ contains
     real(kind=c_float),intent(out):: xbox(4),ybox(4)
     character(len=*),intent(in)   :: text
 
-    call giza_qtext_float_c(x,y,angle,just,cstring(text),xbox,ybox)
+    call giza_qtext_float(x,y,angle,just,cstring(text),xbox,ybox)
 
   end subroutine giza_intern_qtext_float_f2c
 
@@ -1982,7 +1988,7 @@ contains
     character(len=*),intent(in)    :: text
     real(kind=c_double),intent(out):: xlen,ylen
 
-    call giza_qtextlen_c(units,cstring(text),xlen,ylen)
+    call giza_qtextlen_double(units,cstring(text),xlen,ylen)
 
   end subroutine giza_intern_qtextlen_f2c
 
@@ -1991,7 +1997,7 @@ contains
     character(len=*),intent(in)    :: text
     real(kind=c_float),intent(out) :: xlen,ylen
 
-    call giza_qtextlen_float_c(units,cstring(text),xlen,ylen)
+    call giza_qtextlen_float(units,cstring(text),xlen,ylen)
 
   end subroutine giza_intern_qtextlen_float_f2c
 
