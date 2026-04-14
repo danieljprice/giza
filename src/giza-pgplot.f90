@@ -359,10 +359,11 @@ subroutine PGCONX (A, IDIM, JDIM, I1, I2, J1, J2, C, NC, PLOT)
  data IM /0,1,1,0/
  data JM /0,0,1,1/
  ! castab(sh1+2, sh2+2, sh3+2) -- Fortran 1-based
+ ! castab(sh1+2,sh2+2,sh3+2) -- transposed from C row-major to Fortran column-major
  data CASTAB / &
-   0,0,9, 0,1,5, 8,2,0, &
-   0,3,6, 0,3,2, 0,3,0, &
-   8,4,7, 5,1,6, 0,4,9 /
+   0,0,9, 0,1,5, 7,4,8, &
+   0,3,6, 2,3,2, 6,3,0, &
+   8,4,7, 5,1,0, 9,0,0 /
 
  NCA = abs(NC)
  VIS0 = 0

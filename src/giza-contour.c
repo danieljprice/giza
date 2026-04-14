@@ -421,10 +421,17 @@ giza_contour_blanked_float (int sizex, int sizey, const float* data, int i1,
              int i2, int j1, int j2, int ncont, const float* cont,
              const float *affine, float blank)
 {
-  double ddata[sizey*sizex];
-  double dcont[abs(ncont)];
+  double *ddata = malloc(sizeof(double) * sizex * sizey);
+  double *dcont = malloc(sizeof(double) * abs(ncont));
   double daffine[6];
   int i, j;
+
+  if (!ddata || !dcont) {
+    _giza_warning("giza_contour_blanked_float", "memory allocation failed");
+    free(ddata);
+    free(dcont);
+    return;
+  }
 
   for (j=j1; j<=j2; j++) {
       for (i=i1; i<=i2; i++) {
@@ -442,6 +449,8 @@ giza_contour_blanked_float (int sizex, int sizey, const float* data, int i1,
 
   giza_contour_blanked (sizex, sizey, ddata, i1, i2, j1, j2, ncont, dcont, daffine,
                         (double) blank);
+  free(ddata);
+  free(dcont);
 }
 
 /*
@@ -583,9 +592,14 @@ void
 giza_contour_fill_float (int sizex, int sizey, const float* data, int i1,
              int i2, int j1, int j2, float c1, float c2, const float *affine)
 {
-  double ddata[sizey*sizex];
+  double *ddata = malloc(sizeof(double) * sizex * sizey);
   double daffine[6];
   int i, j;
+
+  if (!ddata) {
+    _giza_warning("giza_contour_fill_float", "memory allocation failed");
+    return;
+  }
 
   for (j=j1; j<=j2; j++) {
       for (i=i1; i<=i2; i++) {
@@ -599,6 +613,7 @@ giza_contour_fill_float (int sizex, int sizey, const float* data, int i1,
 
   giza_contour_fill (sizex, sizey, ddata, i1, i2, j1, j2,
                      (double) c1, (double) c2, daffine);
+  free(ddata);
 }
 
 /*
@@ -804,17 +819,10 @@ giza_contour_labelled (int sizex, int sizey, const double* data, int i1,
         cairo_stroke(Dev[id].context);
       }
 
-      /* Draw the label */
+      /* Draw the label.
+       * The affine maps grid -> world: world_x = affine[4] + affine[0]*lx + affine[2]*ly
+       * lx, ly are grid coords; giza_ptext expects world coords. */
       _giza_set_trans(GIZA_TRANS_WORLD);
-      /* Convert grid coords back to world coords by un-applying the affine */
-      /* We need the inverse affine */
-      cairo_matrix_t inv = mat;
-      /* Actually, lx,ly are in affine-input space. We need world coords.
-       * The mat transforms affine-input -> device. We need to go to world coords.
-       * Since we set GIZA_TRANS_WORLD, we need world coords for giza_ptext. */
-      /* The affine maps grid -> world. So world = affine * grid.
-       * lx, ly are grid coords. world_x = affine[4] + affine[0]*lx + affine[2]*ly
-       * etc. */
       double wx = affine[4] + affine[0]*lx + affine[2]*ly;
       double wy = affine[5] + affine[1]*lx + affine[3]*ly;
       giza_ptext(wx, wy, angle_deg, 0.5, label);
@@ -856,9 +864,14 @@ giza_contour_labelled_float (int sizex, int sizey, const float* data, int i1,
              const float *affine, const char *label,
              int intval, int minint)
 {
-  double ddata[sizey*sizex];
+  double *ddata = malloc(sizeof(double) * sizex * sizey);
   double daffine[6];
   int i, j;
+
+  if (!ddata) {
+    _giza_warning("giza_contour_labelled_float", "memory allocation failed");
+    return;
+  }
 
   for (j=j1; j<=j2; j++) {
       for (i=i1; i<=i2; i++) {
@@ -872,4 +885,5 @@ giza_contour_labelled_float (int sizex, int sizey, const float* data, int i1,
 
   giza_contour_labelled (sizex, sizey, ddata, i1, i2, j1, j2,
                          (double) c, daffine, label, intval, minint);
+  free(ddata);
 }

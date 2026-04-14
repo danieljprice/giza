@@ -931,9 +931,9 @@ void cpgqdt(int n, char *type, int *type_length, char *descr, \
       return;
     }
   int idx = n - 1;
-  strncpy(type, devs[idx].type, 64);
+  snprintf(type, 65, "%s", devs[idx].type);
   *type_length = strlen(devs[idx].type);
-  strncpy(descr, devs[idx].descr, 64);
+  snprintf(descr, 65, "%s", devs[idx].descr);
   *descr_length = strlen(devs[idx].descr);
   *inter = devs[idx].inter;
 }
