@@ -931,9 +931,14 @@ void cpgqdt(int n, char *type, int *type_length, char *descr, \
       return;
     }
   int idx = n - 1;
-  snprintf(type, 65, "%s", devs[idx].type);
+  /* Copy exactly strlen+1 bytes; avoids compiler optimizing a size-bounded
+   * call into strncpy with trailing zero-padding that would clobber small
+   * caller buffers. The pgplot cpgqdt API gives no buffer-size argument,
+   * so the caller is responsible for supplying an adequately sized buffer;
+   * our strings are short compile-time constants (max ~20 chars). */
+  strcpy(type, devs[idx].type);
   *type_length = strlen(devs[idx].type);
-  snprintf(descr, 65, "%s", devs[idx].descr);
+  strcpy(descr, devs[idx].descr);
   *descr_length = strlen(devs[idx].descr);
   *inter = devs[idx].inter;
 }
