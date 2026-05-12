@@ -150,6 +150,9 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   giza_get_colour_index (&oldCi);
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
+
+  cairo_save (Dev[id].context);
+
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
                    affine[4], affine[5]);
   cairo_transform (Dev[id].context, &mat);
@@ -164,6 +167,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   if (!pixdata)
     {
       _giza_warning ("giza_render", "Allocation failed, skipping render.");
+      cairo_restore (Dev[id].context);
       _giza_set_trans (oldTrans);
       giza_set_colour_index (oldCi);
       return;
@@ -231,6 +235,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   cairo_paint (Dev[id].context);
 
   /* clean up and restore settings */
+  cairo_restore (Dev[id].context);
   _giza_set_trans (oldTrans);
   giza_set_colour_index (oldCi);
   cairo_surface_destroy (pixmap);
@@ -332,6 +337,9 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   giza_get_colour_index (&oldCi);
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
+
+  cairo_save (Dev[id].context);
+
   cairo_matrix_init (&mat, (double) affine[0], (double) affine[1],
                    (double) affine[2], (double) affine[3],
                    (double) affine[4], (double) affine[5]);
@@ -346,6 +354,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   if (!pixdata)
     {
       _giza_warning ("giza_render_float", "Allocation failed, skipping render.");
+      cairo_restore (Dev[id].context);
       _giza_set_trans (oldTrans);
       giza_set_colour_index (oldCi);
       return;
@@ -406,6 +415,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
 
   cairo_paint (Dev[id].context);
 
+  cairo_restore (Dev[id].context);
   _giza_set_trans (oldTrans);
   giza_set_colour_index (oldCi);
   cairo_surface_destroy (pixmap);
@@ -595,6 +605,8 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
+  cairo_save (Dev[id].context);
+
   double dxpix = (xmax - xmin)/((double) width);
   double dypix = (ymax - ymin)/((double) height);
   cairo_matrix_init (&mat, dxpix, 0.,0., dypix,
@@ -611,6 +623,7 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   if (!pixdata)
     {
       _giza_warning ("giza_draw_pixels", "Allocation failed, skipping render.");
+      cairo_restore (Dev[id].context);
       return;
     }
   /* colour each pixel in the pixmap */
@@ -637,6 +650,7 @@ giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
   cairo_paint (Dev[id].context);
 
   /* clean up and restore settings */
+  cairo_restore (Dev[id].context);
   _giza_set_trans (oldTrans);
   giza_set_colour_index (oldCi);
   cairo_surface_destroy (pixmap);
