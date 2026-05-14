@@ -4,7 +4,16 @@ CLEANFILES = *.mod *.pc
 
 lib_LTLIBRARIES = libgiza.la libcpgplot.la
 
-# only compile libpglot.a and giza.mod if we have a working Fortran compiler
+if HAVE_OSXCOCOA
+lib_LTLIBRARIES += libgiza-osxcocoa-main.la
+libgiza_osxcocoa_main_la_SOURCES = giza-osxcocoa-main.m
+libgiza_osxcocoa_main_la_OBJCFLAGS = $(libgiza_la_OBJCFLAGS)
+libgiza_osxcocoa_main_la_LIBADD = libgiza.la
+libgiza_osxcocoa_main_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
+        $(OSXCOCOA_LIBS)
+endif
+
+# only compile libpgplot.a and giza.mod if we have a working Fortran compiler
 if HAVE_FC
 lib_LTLIBRARIES += libpgplot.la
 fmoddir = $(libdir)/$(FC)/modules
@@ -30,7 +39,7 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
        giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
        giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
-       giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c\
+       giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
        giza-arrow-style-private.h giza-driver-svg-private.h giza-stroke-private.h \
        giza-band-private.h giza-driver-xw-private.h giza-subpanel-private.h \
        giza-character-size-private.h giza-drivers-private.h giza-text-background-private.h \
@@ -42,12 +51,21 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-driver-png-private.h giza-driver-mp4-private.h giza-set-font-private.h giza-window-private.h \
        giza-driver-ps-private.h giza-shared.h giza.h giza-itf.h
 
-libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS)
+if HAVE_OSXCOCOA
+libgiza_la_SOURCES += giza-driver-osxcocoa.m giza-driver-osxcocoa-bridge.c \
+       giza-driver-osxcocoa-private.h
+endif
+
+libgiza_la_OBJCFLAGS = $(libgiza_la_CPPFLAGS) -fobjc-arc
+AM_LIBTOOLFLAGS = --tag=CC
+libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS) $(OSXCOCOA_CFLAGS)
 
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-       -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS)
+       -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS) $(OSXCOCOA_LIBS) \
+       -Wl,-rpath,$(abs_top_builddir)/src/.libs \
+       -Wl,-rpath,$(libdir)
 
 libcpgplot_la_SOURCES = giza-cpgplot.c
 
@@ -58,6 +76,9 @@ libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS)
 
 include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90
+if HAVE_OSXCOCOA
+include_HEADERS += giza-osxcocoa-main.h
+endif
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
