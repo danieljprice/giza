@@ -95,21 +95,15 @@ PKG_CHECK_MODULES([FC], [fontconfig], [], [AC_SUBST(FC_LIBS,$fc_libs_osx) AC_SUB
 # --- macOS native Quartz window driver ---
 OSXCOCOA_CFLAGS=""
 OSXCOCOA_LIBS=""
-AC_MSG_CHECKING([for cairo-quartz and Cocoa (macOS native driver)])
+AC_MSG_CHECKING([for Cocoa (macOS native driver)])
 case "$host_os" in
   darwin*)
     if pkg-config --exists cairo 2>/dev/null; then
-      _cairo_inc=$(pkg-config --variable=includedir cairo)
-      if test -f "$_cairo_inc/cairo/cairo-quartz.h"; then
-        OSXCOCOA_CFLAGS=$(pkg-config --cflags cairo)
-        OSXCOCOA_LIBS="-framework Cocoa -framework CoreGraphics -framework ApplicationServices"
-        AC_DEFINE([_GIZA_HAS_OSXCOCOA],[1],[macOS native Quartz window driver])
-        HAVE_OSXCOCOA=yes
-        AC_MSG_RESULT([yes (via pkg-config: $_cairo_inc)])
-      else
-        HAVE_OSXCOCOA=no
-        AC_MSG_RESULT([no (cairo-quartz.h not found in $_cairo_inc/cairo/)])
-      fi
+      OSXCOCOA_CFLAGS=$(pkg-config --cflags cairo)
+      OSXCOCOA_LIBS="-framework Cocoa -framework CoreGraphics -framework ApplicationServices"
+      AC_DEFINE([_GIZA_HAS_OSXCOCOA],[1],[macOS native Cocoa window driver])
+      HAVE_OSXCOCOA=yes
+      AC_MSG_RESULT([yes])
     else
       HAVE_OSXCOCOA=no
       AC_MSG_RESULT([no (cairo not found via pkg-config)])
