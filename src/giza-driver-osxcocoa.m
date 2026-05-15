@@ -64,7 +64,7 @@
 #endif
 
 #define GIZA_OSXCOCOA_TITLE   "giza"
-#define GIZA_MAX_DEV     8
+#define GIZA_MAX_DEV     8  /* must match GIZA_MAX_DEVICES in giza-private.h */
 
 /* ======================================================================== */
 /* GizaView                                                                  */
@@ -321,9 +321,7 @@ _giza_osxcocoa_start_app_if_needed(void)
         waited_ms += 10;
     }
     if (!_nsapp_running) {
-        /* Fallback: try to init on worker (will warn but may work) */
-                    if (!_app_started) _ensure_app();
-        _app_on_main = 0;
+        fprintf(stderr, "giza-driver-osxcocoa: NSApp not ready: link with -lgiza-osxcocoa-main\n");
     }
 }
 
@@ -423,14 +421,15 @@ _giza_osxcocoa_wait_for_event(int devId, float *x, float *y, char *ch)
         NSPoint pt = [view lastEventPoint];
         *x=(float)pt.x; *y=(float)pt.y; *ch=[view lastEventChar];
     } else {
-        __block BOOL done=NO;
         __block NSPoint pt=NSZeroPoint;
         __block char c=' ';
+        dispatch_semaphore_t sem = dispatch_semaphore_create(0);
         dispatch_async(dispatch_get_main_queue(), ^{
             [view waitForInputEvent];
-            pt=[view lastEventPoint]; c=[view lastEventChar]; done=YES;
+            pt=[view lastEventPoint]; c=[view lastEventChar];
+            dispatch_semaphore_signal(sem);
         });
-        while (!done) usleep(10000);
+        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
         *x=(float)pt.x; *y=(float)pt.y; *ch=c;
     }
 }

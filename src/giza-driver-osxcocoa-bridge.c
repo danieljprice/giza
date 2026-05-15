@@ -108,17 +108,7 @@ _giza_open_device_osxcocoa (double width, double height, int units)
         return 1;
     }
 
-    /* DEBUG: test cairo drawing directly */
-/*    {
-        cairo_t *cr = cairo_create(Dev[id].surface);
-        cairo_set_source_rgb(cr, 0.0, 0.0, 1.0);
-        cairo_rectangle(cr, 50, 50, 200, 200);
-        cairo_fill(cr);
-        cairo_surface_flush(Dev[id].surface);
-        cairo_destroy(cr);
-        fprintf(stderr, "DEBUG: cairo test rect drawn\n");
-    }
-*/
+
     Dev[id].width               = wwin;
     Dev[id].height              = hwin;
     Dev[id].deviceUnitsPermm    = GIZA_OSXCOCOA_UNITS_PER_MM;

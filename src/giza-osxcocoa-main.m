@@ -56,7 +56,10 @@ int main(int argc, char **argv)
     /* Now start worker thread */
     GizaMainArgs args = { argc, argv, 0 };
     pthread_t worker;
-    pthread_create(&worker, NULL, _giza_worker, &args);
+    if (pthread_create(&worker, NULL, _giza_worker, &args) != 0) {
+        fprintf(stderr, "giza-osxcocoa-main: failed to create worker thread\n");
+        return 1;
+    }
 
     /* Run AppKit event loop on main thread */
     [NSApp run];

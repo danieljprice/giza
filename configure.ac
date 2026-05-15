@@ -98,15 +98,21 @@ OSXCOCOA_LIBS=""
 AC_MSG_CHECKING([for cairo-quartz and Cocoa (macOS native driver)])
 case "$host_os" in
   darwin*)
-    if test -f "/opt/local/include/cairo/cairo-quartz.h"; then
-      OSXCOCOA_CFLAGS="-I/opt/local/include"
-      OSXCOCOA_LIBS="-framework Cocoa -framework CoreGraphics -framework ApplicationServices"
-      AC_DEFINE([_GIZA_HAS_OSXCOCOA],[1],[macOS native Quartz window driver])
-      HAVE_OSXCOCOA=yes
-      AC_MSG_RESULT([yes])
+    if pkg-config --exists cairo 2>/dev/null; then
+      _cairo_inc=$(pkg-config --variable=includedir cairo)
+      if test -f "$_cairo_inc/cairo/cairo-quartz.h"; then
+        OSXCOCOA_CFLAGS=$(pkg-config --cflags cairo)
+        OSXCOCOA_LIBS="-framework Cocoa -framework CoreGraphics -framework ApplicationServices"
+        AC_DEFINE([_GIZA_HAS_OSXCOCOA],[1],[macOS native Quartz window driver])
+        HAVE_OSXCOCOA=yes
+        AC_MSG_RESULT([yes (via pkg-config: $_cairo_inc)])
+      else
+        HAVE_OSXCOCOA=no
+        AC_MSG_RESULT([no (cairo-quartz.h not found in $_cairo_inc/cairo/)])
+      fi
     else
       HAVE_OSXCOCOA=no
-      AC_MSG_RESULT([no (cairo-quartz.h not found)])
+      AC_MSG_RESULT([no (cairo not found via pkg-config)])
     fi
     ;;
   *)
@@ -146,6 +152,4 @@ AC_MSG_NOTICE([PKG_CONFIG_PATH = $PKG_CONFIG_PATH])
 AC_MSG_NOTICE([================================])
 AS_IF([test "x$FC" = "x"],
     [AC_MSG_WARN([*** NO FORTRAN COMPILER FOUND: skipping compilation of libpglot and giza Fortran module *** ])])
-AM_LDFLAGS="-Wl,-rpath,\$(abs_top_builddir)/src/.libs"
-AC_SUBST([AM_LDFLAGS])
 AC_OUTPUT

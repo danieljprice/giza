@@ -391,7 +391,7 @@ giza_flush_device (void)
 #ifdef _GIZA_HAS_OSXCOCOA
       case GIZA_DEVICE_OSXCOCOA:
         _giza_flush_device_osxcocoa ();
-        return;
+        break;
 #endif
        default:
          if (!Dev[id].surface)
@@ -851,7 +851,8 @@ _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, cons
 #ifdef _GIZA_HAS_OSXCOCOA
     case GIZA_DEVICE_OSXCOCOA:
       _giza_get_key_press_osxcocoa (mode, moveCurs, nanc, xanch, yanch, x, y, ch);
-    return 0;
+      return 0;
+      break;
 #endif
 
 
@@ -1035,7 +1036,6 @@ _giza_int_to_device (int numDevice, char *DeviceName, int rval)
 #ifdef _GIZA_HAS_OSXCOCOA
     case GIZA_DEVICE_OSXCOCOA:
       strncpy(DeviceName,"/osxcocoa",max_chars);
-/*      rval = GIZA_DEVICE_OSXCOCOA; */
       break;
 #endif
 #ifdef _GIZA_HAS_EPS
