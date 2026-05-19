@@ -391,7 +391,7 @@ giza_flush_device (void)
 #ifdef _GIZA_HAS_OSXCOCOA
       case GIZA_DEVICE_OSXCOCOA:
         _giza_flush_device_osxcocoa ();
-        break;
+        return;
 #endif
        default:
          if (!Dev[id].surface)
@@ -851,8 +851,7 @@ _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, cons
 #ifdef _GIZA_HAS_OSXCOCOA
     case GIZA_DEVICE_OSXCOCOA:
       _giza_get_key_press_osxcocoa (mode, moveCurs, nanc, xanch, yanch, x, y, ch);
-      return 0;
-      break;
+    return 0;
 #endif
 
 
@@ -942,7 +941,12 @@ _giza_device_to_int (const char *newDeviceName)
     newDevice = GIZA_DEVICE_XW;
 #endif
 #ifdef _GIZA_HAS_OSXCOCOA
-  else if (!strcmp (devName, "/osxcocoa"))
+  /* /osx is the primary name; /osxcocoa, /cocoa, /mac, /macos are also accepted */
+  else if (!strcmp (devName, "/osx")
+        || !strcmp (devName, "/osxcocoa")
+        || !strcmp (devName, "/cocoa")
+        || !strcmp (devName, "/mac")
+        || !strcmp (devName, "/macos"))
     newDevice = GIZA_DEVICE_OSXCOCOA;
 #endif
   else if (!strcmp (devName, "/png"))
@@ -1035,7 +1039,7 @@ _giza_int_to_device (int numDevice, char *DeviceName, int rval)
 #endif
 #ifdef _GIZA_HAS_OSXCOCOA
     case GIZA_DEVICE_OSXCOCOA:
-      strncpy(DeviceName,"/osxcocoa",max_chars);
+      strncpy(DeviceName,"/osx",max_chars);
       break;
 #endif
 #ifdef _GIZA_HAS_EPS
@@ -1076,7 +1080,7 @@ _giza_init_device_list (char **deviceList)
   strcat (*deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
 #endif
 #ifdef _GIZA_HAS_OSXCOCOA
-  strcat (*deviceList, "\t/osxcocoa\t(macOS native Cocoa window)\n");
+  strcat (*deviceList, "\t/osx\t(macOS native Cocoa window)\n");
 #endif
   strcat (*deviceList, "Non-interactive file formats:\n");
   strcat (*deviceList, "\t/png or file.png   (Portable network graphics file)\n");

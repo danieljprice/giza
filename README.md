@@ -8,7 +8,7 @@ A 2D scientific plotting library built on cairo. Provides uniform output to pdf,
 Features
 --------
 - 2D plotting library
-- Output to png, ps, eps, pdf, svg, X-window and macOS native Cocoa window (/osxcocoa)
+- Output to png, ps, eps, pdf, svg, X-window and macOS native Cocoa window (/osx)
 - Interactivity via cursor calls (similar to PGCURS, PGBAND)
 - Includes PGPLOT interface that compiles replacement versions of libpgplot and libcpgplot with many backwards compatible features
 - most of PGPLOT API implemented
@@ -31,9 +31,10 @@ Type:
 make install
 ```
 You will need a C compiler, cairo and X11 development packages.
-On macOS, the native Cocoa window driver (/osxcocoa) is built automatically.
+On macOS, the native Cocoa window driver (/osx) is built automatically.
 To use it, rename your main() to giza_main() and link with -lgiza-osxcocoa-main
 in addition to -lgiza. See src/giza-osxcocoa-main.h for details.
+The device can also be opened as /osxcocoa, /cocoa, /mac or /macos.
 If they are
 ready to go the above should build giza using gcc,
 and "make install" should install under a Linux or Mac operating system.

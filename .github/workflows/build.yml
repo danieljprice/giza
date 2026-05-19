@@ -1,5 +1,4 @@
 name: build
-
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
@@ -7,7 +6,6 @@ on:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -15,34 +13,35 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
-
+        include:
+          - os: macos-latest
+            use-homebrew: true
     env:
       DISPLAY: :99
-
     steps:
-
     # make sure we have gfortran installed and linked
     - name: Install gfortran compiler
       uses: fortran-lang/setup-fortran@v1
       with:
         compiler: gcc
-
-    # Set up Xvfb for graphical tests
+    # Set up Xvfb for graphical tests on Linux
     - name: Install cairo and also Xvfb to pretend to launch X-windows in the workflow
       if: matrix.os == 'ubuntu-latest'
       run: |
         sudo apt-get update
         sudo apt-get install -y libcairo2-dev xvfb
-
+    # Install cairo via Homebrew on macOS
+    - name: Install cairo (macOS/Homebrew)
+      if: matrix.use-homebrew
+      run: brew install cairo
     # check out the repository
     - uses: actions/checkout@v4
-
     - name: compile and install giza
       run: |
+        autoreconf -fi
         ./configure
         make
         sudo make install
-
     # Run tests
     - name: Run test programs, pressing enter to all prompts
       if: matrix.os == 'ubuntu-latest'
@@ -50,4 +49,3 @@ jobs:
         Xvfb :99 -screen 0 1920x1080x24 &
         echo "Current DISPLAY: $DISPLAY"
         yes "" | make check || { echo "Tests failed. Printing test-suite.log..."; cat test/C/test-suite.log; cat test/F90/test-suite.log; exit 1; }
- 
