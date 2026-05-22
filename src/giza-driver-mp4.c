@@ -34,6 +34,7 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
 
 #define GIZA_DEVICE_EXTENSION ".mp4"
 #define GIZA_FFMPEG_FLAGS_DEFAULT "-r 10 -vb 50M -bt 100M -pix_fmt yuv420p -vf setpts=4.*PTS -loglevel quiet"
@@ -140,11 +141,8 @@ _giza_close_device_mp4 (int last)
          for (int i = 0; i <= Dev[id].pgNum; i++)
            {
              _giza_get_filename_for_device (fileName, Dev[id].prefix, i, ".png", 0);
-             if (access (fileName, F_OK) != -1)
-               {
-                 if (remove (fileName) != 0)
-                   printf ("Unable to delete %s \n", fileName);
-               }
+             if (remove (fileName) != 0 && errno != ENOENT)
+               printf ("Unable to delete %s \n", fileName);
            }
        }
      else
