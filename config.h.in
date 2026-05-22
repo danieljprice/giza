@@ -61,3 +61,6 @@
 
 /* Version number of package */
 #undef VERSION
+
+/* macOS native Cocoa window driver */
+#undef _GIZA_HAS_OSXCOCOA
