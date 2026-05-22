@@ -551,8 +551,8 @@ static void
 _giza_triangle(double x, double y, int fill, int updown, float scale, float offset_fraction)
 {
   cairo_new_sub_path (Dev[id].context);
-  cairo_move_to (Dev[id].context, x - markerHeight * scale, y - offset_fraction * updown * markerHeight * scale);
-  cairo_line_to (Dev[id].context, x + markerHeight * scale, y - offset_fraction * updown * markerHeight * scale);
+  cairo_move_to (Dev[id].context, x - markerHeight * scale, y - (double)offset_fraction * (double)updown * markerHeight * scale);
+  cairo_line_to (Dev[id].context, x + markerHeight * scale, y - (double)offset_fraction * (double)updown * markerHeight * scale);
   cairo_line_to (Dev[id].context, x, y + updown * markerHeight * scale);
   cairo_close_path (Dev[id].context);
   if (fill) { cairo_fill(Dev[id].context); }
