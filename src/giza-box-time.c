@@ -653,7 +653,7 @@ C 15-Jan-1995 - Add argument MOD24
 */
 void _giza_tbx4(int doday, char const* suptyp, char axis, int convtl, int first, double tmin, double tmax, int tscale,
             double tick, int do2, int dopara, int mod24) {
-    const int    maxtik = 1000;
+    enum { maxtik = 1000 };
 
     tmstamp      timestamps[maxtik], timel;
 
@@ -1062,7 +1062,6 @@ void _giza_tbx7(char const* suptyp, char signf, char asign, int ival[3], double 
                                 {"\\u\\(2199)\\d", "\\u\\(2729)\\d", "\\u\\(2727)\\d", "\\u\\(2728)\\d"},
                                 {"\\u \\d"       , "\\u \\d"       , "\\u \\d"       , "\\u \\d" }};
 
-    int          nch;
     char const** suppnt;
 
     if( strcmp(suptyp, "DHMS")==0 )
