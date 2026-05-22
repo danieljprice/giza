@@ -8,16 +8,16 @@ A 2D scientific plotting library built on cairo. Provides uniform output to pdf,
 Features
 --------
 - 2D plotting library
-- Output to png, ps, eps, pdf, svg, X-window and macOS native Cocoa window (/osx)
+- Output to png, ps, eps, pdf, svg, mp4, X-window and macOS native Cocoa window (/osx)
 - Interactivity via cursor calls (similar to PGCURS, PGBAND)
 - Includes PGPLOT interface that compiles replacement versions of libpgplot and libcpgplot with many backwards compatible features
 - most of PGPLOT API implemented
-- Minimal dependencies: depends only on very standard system libraries (cairo, png, X11)
+- Minimal dependencies: depends only on standard system libraries (cairo, png, X11)
 - Written in standard C with a Fortran 90/95/2003 interface
 - Compiles as a standalone library or can be incorporated into other codes
 - Interface routines handle both float and double precision input
 - Easily called from Fortran/C/C++ code
-- Originally written as a backend for SPLASH, in stable use now for more than 10 years
+- Originally written as a backend for SPLASH, in stable use now for more than 15 years
 
 Status
 ------
