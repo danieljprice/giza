@@ -222,8 +222,16 @@ _giza_free_font (void)
 }
 
 
+#ifdef GIZA_HAS_FT_FONT
+static void
+_giza_destroy_ft_face(void *data)
+{
+    FT_Done_Face((FT_Face) data);
+}
+#endif
+
 /*
- * Attempt to load the specified font, using FT or FontConfig - 
+ * Attempt to load the specified font, using FT or FontConfig -
  * whichever is enabled and works */
 cairo_font_face_t*
 _giza_resolve_font(const char* font, cairo_font_slant_t slant, cairo_font_weight_t weight)
@@ -256,7 +264,7 @@ _giza_resolve_font(const char* font, cairo_font_slant_t slant, cairo_font_weight
             if( (newFont=cairo_ft_font_face_create_for_ft_face(newFace, 0)) != NULL ) {
                 /* tie the lifetime of the FT_Face object to the
                  * cairo font object as per cairo documentation */
-                cairo_font_face_set_user_data(newFont, &key, newFace, (cairo_destroy_func_t) FT_Done_Face);
+                cairo_font_face_set_user_data(newFont, &key, newFace, _giza_destroy_ft_face);
             } else {
                 /* We got a FT_Face but not a cairo font */
                 _giza_error("giza_set_font", "FT_Face succeeded for font %s but cairo_font_face_create_for_ft failed", font);

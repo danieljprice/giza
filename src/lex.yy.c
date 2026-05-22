@@ -473,6 +473,7 @@ goto find_rule; \
 #line 1 "giza-scanner.l"
 /* A re-entrant scanner to recursively print text */
 /* Specify that it is re-entrant and doesn't use ywrap */
+#define YY_NO_INPUT 1
 /* Include the header and define tokens */
 #line 9 "giza-scanner.l"
 /* giza - a scientific plotting library built on cairo
@@ -546,16 +547,14 @@ static char const* const giza_greek_to_utf_data[] = {
     "\u03c1", "\u03c3", "\u03c4", "\u03c5", "\u03c6", "\u03c7", "\u03c8", "\u03c9"
 };
 
-/* Assume the caller has verified that letter is a /valid/ greek letter! */
-static char const*                       _giza_greek_to_utf(char letter);
 /* May return NULL if number is not a known Hershey symbol or the string in
   <special> is not found in the remapped token lookup table */
 static giza_hershey_to_utf_entry const*  _giza_lookup_hershey(int number);
 static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 
-#line 556 "lex.yy.c"
+#line 555 "lex.yy.c"
 
-#line 558 "lex.yy.c"
+#line 557 "lex.yy.c"
 
 #define INITIAL 0
 #define FONT 1
@@ -672,8 +671,6 @@ extern int yywrap ( yyscan_t yyscanner );
 #endif
 
 #ifndef YY_NO_UNPUT
-    
-    static void yyunput ( int c, char *buf_ptr  , yyscan_t yyscanner);
     
 #endif
 
@@ -812,10 +809,11 @@ YY_DECL
 #endif
 
         /* Create the reject buffer large enough to save one state per allowed character. */
-        if ( ! yyg->yy_state_buf )
+        if ( ! yyg->yy_state_buf ) {
             yyg->yy_state_buf = (yy_state_type *)yyalloc(YY_STATE_BUF_SIZE  , yyscanner);
             if ( ! yyg->yy_state_buf )
                 YY_FATAL_ERROR( "out of dynamic memory in yylex()" );
+        }
 
 		if ( ! yyg->yy_start )
 			yyg->yy_start = 1;	/* first start state */
@@ -836,10 +834,10 @@ YY_DECL
 		}
 
 	{
-#line 92 "giza-scanner.l"
+#line 90 "giza-scanner.l"
 
 
-#line 842 "lex.yy.c"
+#line 839 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -904,108 +902,108 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 94 "giza-scanner.l"
+#line 92 "giza-scanner.l"
 { return GIZA_TOKEN_RAISE; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 95 "giza-scanner.l"
+#line 93 "giza-scanner.l"
 { return GIZA_TOKEN_LOWER; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 96 "giza-scanner.l"
+#line 94 "giza-scanner.l"
 { return GIZA_TOKEN_BACKSPACE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 98 "giza-scanner.l"
+#line 96 "giza-scanner.l"
 { BEGIN(FONT); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 99 "giza-scanner.l"
+#line 97 "giza-scanner.l"
 { BEGIN(INITIAL); return GIZA_TOKEN_FONT; };
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 100 "giza-scanner.l"
+#line 98 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid font specifier '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 102 "giza-scanner.l"
+#line 100 "giza-scanner.l"
 { BEGIN(HERSHEY); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 103 "giza-scanner.l"
+#line 101 "giza-scanner.l"
 { if( _giza_lookup_hershey(atoi(yytext)) ) { BEGIN(INITIAL); return GIZA_TOKEN_HERSHEY; } REJECT; }
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 104 "giza-scanner.l"
+#line 102 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid Hershey code '%s'", yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 106 "giza-scanner.l"
+#line 104 "giza-scanner.l"
 { BEGIN(MARKER); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 107 "giza-scanner.l"
+#line 105 "giza-scanner.l"
 { const int marker = atoi(yytext); if( marker>=1 && marker<=31 ) { BEGIN(INITIAL); return GIZA_TOKEN_MARKER; } REJECT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 108 "giza-scanner.l"
+#line 106 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid marker '%s'", yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 110 "giza-scanner.l"
+#line 108 "giza-scanner.l"
 { BEGIN(GREEK); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 111 "giza-scanner.l"
+#line 109 "giza-scanner.l"
 { BEGIN(INITIAL); return GIZA_TOKEN_GREEK; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 112 "giza-scanner.l"
+#line 110 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid greek letter '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 114 "giza-scanner.l"
+#line 112 "giza-scanner.l"
 { if( _giza_remap_token(yytext) ) { return GIZA_TOKEN_REMAP; } REJECT; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 116 "giza-scanner.l"
+#line 114 "giza-scanner.l"
 { return GIZA_TOKEN_SUPER; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 117 "giza-scanner.l"
+#line 115 "giza-scanner.l"
 { return GIZA_TOKEN_SUB; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 118 "giza-scanner.l"
+#line 116 "giza-scanner.l"
 { return GIZA_TOKEN_OB; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 119 "giza-scanner.l"
+#line 117 "giza-scanner.l"
 { return GIZA_TOKEN_CB; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 121 "giza-scanner.l"
+#line 119 "giza-scanner.l"
 { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
@@ -1013,15 +1011,15 @@ case YY_STATE_EOF(FONT):
 case YY_STATE_EOF(HERSHEY):
 case YY_STATE_EOF(MARKER):
 case YY_STATE_EOF(GREEK):
-#line 123 "giza-scanner.l"
+#line 121 "giza-scanner.l"
 { return GIZA_TOKEN_END; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 125 "giza-scanner.l"
+#line 123 "giza-scanner.l"
 ECHO;
 	YY_BREAK
-#line 1024 "lex.yy.c"
+#line 1021 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1247,7 +1245,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
 
-	if ((yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+	if ((yy_size_t)(yyg->yy_n_chars + number_to_move) > (yy_size_t)YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
 		yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc(
@@ -1323,44 +1321,6 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 }
 
 #ifndef YY_NO_UNPUT
-
-    static void yyunput (int c, char * yy_bp , yyscan_t yyscanner)
-{
-	char *yy_cp;
-    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
-
-    yy_cp = yyg->yy_c_buf_p;
-
-	/* undo effects of setting up yytext */
-	*yy_cp = yyg->yy_hold_char;
-
-	if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-		{ /* need to shift things up to make room */
-		/* +2 for EOB chars. */
-		yy_size_t number_to_move = yyg->yy_n_chars + 2;
-		char *dest = &YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[
-					YY_CURRENT_BUFFER_LVALUE->yy_buf_size + 2];
-		char *source =
-				&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move];
-
-		while ( source > YY_CURRENT_BUFFER_LVALUE->yy_ch_buf )
-			*--dest = *--source;
-
-		yy_cp += (int) (dest - source);
-		yy_bp += (int) (dest - source);
-		YY_CURRENT_BUFFER_LVALUE->yy_n_chars =
-			yyg->yy_n_chars = (int) YY_CURRENT_BUFFER_LVALUE->yy_buf_size;
-
-		if ( yy_cp < YY_CURRENT_BUFFER_LVALUE->yy_ch_buf + 2 )
-			YY_FATAL_ERROR( "flex scanner push-back overflow" );
-		}
-
-	*--yy_cp = (char) c;
-
-	yyg->yytext_ptr = yy_bp;
-	yyg->yy_hold_char = *yy_cp;
-	yyg->yy_c_buf_p = yy_cp;
-}
 
 #endif
 
@@ -2161,7 +2121,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 125 "giza-scanner.l"
+#line 123 "giza-scanner.l"
 
 
 
@@ -2227,10 +2187,11 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   double               sina = sin(Dev[id].fontAngle);
   double               cosa = cos(Dev[id].fontAngle);
   char const*          token_txt;
-  ob_state_type        ob_super[MAX_NFONT], *cur_super = &ob_super[-1];/* keep track of superscript state */
-  ob_state_type        ob_sub[MAX_NFONT],   *cur_sub   = &ob_sub[-1]; /* keep track of subscript state */
+  ob_state_type        ob_super[MAX_NFONT]; /* keep track of superscript state */
+  ob_state_type        ob_sub[MAX_NFONT];   /* keep track of subscript state */
   glyph_pos_type       positions[lenstr+1];  /* keep track of each glyph's x,y position (for backing up characters) */
-  font_change_type     oldfont[MAX_NFONT],  *cur_font = &oldfont[-1]; /* keep track of font change state */
+  font_change_type     oldfont[MAX_NFONT];  /* keep track of font change state */
+  int                  isuper = -1, isub = -1, ifont = -1;
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -2260,19 +2221,19 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
          lasts only for the current glyph (if any)  [single character super-/subscript],
          for font change we only keep a stack of nested font changes, not
          'globals', which only last until the closing bracket of the current top-of-stack (if any) */
-      if( (cur_super>=ob_super) && cur_super->wait_for_token==0 )
-          cur_super->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
-      if( cur_sub>=ob_sub   && cur_sub->wait_for_token==0 )
-          cur_sub->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+      if( isuper>=0 && ob_super[isuper].wait_for_token==0 )
+          ob_super[isuper].wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+      if( isub>=0 && ob_sub[isub].wait_for_token==0 )
+          ob_sub[isub].wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
 
-      if( cur_font>=oldfont && cur_font->wait_for_token==0 ) {
-          cur_font->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+      if( ifont>=0 && oldfont[ifont].wait_for_token==0 ) {
+          oldfont[ifont].wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
           /* check if we need to 'forget' this font change state; if it was 'global' */
-          if( cur_font->wait_for_token==-1 /*it was a 'global font change'*/ &&
-              cur_font>oldfont /* there exists at least a previous state */ &&
-              (cur_font-1)->wait_for_token==GIZA_TOKEN_CB /* and that one is waiting for close bracket*/ )
+          if( oldfont[ifont].wait_for_token==-1 /*it was a 'global font change'*/ &&
+              ifont>0 /* there exists at least a previous state */ &&
+              oldfont[ifont-1].wait_for_token==GIZA_TOKEN_CB /* and that one is waiting for close bracket*/ )
                 /* basically forget current font state */
-                cur_font--;
+                ifont--;
       }
 
       switch(token)
@@ -2284,10 +2245,10 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
               ob--;
               /* font change remains in effect until end of string or until close bracket, the latter only if the first token after
                  font change was open bracket  */
-              if( (cur_font>=oldfont) && cur_font->wait_for_token==GIZA_TOKEN_CB && ob<=cur_font->ob_level ) {
+              if( ifont>=0 && oldfont[ifont].wait_for_token==GIZA_TOKEN_CB && ob<=oldfont[ifont].ob_level ) {
                   /* OK go back to old font */
-                  giza_set_font(cur_font->font);
-                  cur_font--;
+                  giza_set_font(oldfont[ifont].font);
+                  ifont--;
               }
               /* Actual processing of closing bracket for super/sub is /after/ the switch statement
                  because then it can be shared with single-token super/sub handling */
@@ -2307,20 +2268,20 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* Start of super/sub script. Mark the current level as waiting to check the next token;
              if it's not open bracket, we must drop the superscript immediately after the first token */
           case GIZA_TOKEN_SUPER:
-              if( cur_super<&ob_super[MAX_NFONT-1] ) {
-                  cur_super++;
-                  cur_super->ob_level       = ob;
-                  cur_super->wait_for_token = 0;
+              if( isuper<MAX_NFONT-1 ) {
+                  isuper++;
+                  ob_super[isuper].ob_level       = ob;
+                  ob_super[isuper].wait_for_token = 0;
                   _giza_start_super ();
               } else {
                   _giza_error("giza_parse_string", "Too many levels of super-script");
               }
               break;
           case GIZA_TOKEN_SUB:
-              if( cur_sub<&ob_sub[MAX_NFONT-1] ) {
-                  cur_sub++;
-                  cur_sub->ob_level       = ob;
-                  cur_sub->wait_for_token = 0;
+              if( isub<MAX_NFONT-1 ) {
+                  isub++;
+                  ob_sub[isub].ob_level       = ob;
+                  ob_sub[isub].wait_for_token = 0;
                   _giza_start_sub ();
               } else {
                   _giza_error("giza_parse_string", "Too many levels of sub-script");
@@ -2371,14 +2332,14 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
           /* Handle change of font! The lexer already verified it's a /valid/ font specifier */
           case GIZA_TOKEN_FONT:
-              if ( cur_font<&oldfont[MAX_NFONT-1] )
+              if ( ifont<MAX_NFONT-1 )
               {
                   /* new font change state */
-                  cur_font++;
-                  cur_font->ob_level       = ob;
-                  cur_font->wait_for_token = 0;
+                  ifont++;
+                  oldfont[ifont].ob_level       = ob;
+                  oldfont[ifont].wait_for_token = 0;
                   /* save font */
-                  giza_get_font(cur_font->font, GIZA_FONT_LEN);
+                  giza_get_font(oldfont[ifont].font, GIZA_FONT_LEN);
               } else {
                   _giza_error("giza_parse_string", "Too many nested levels of font changes");
                   break;
@@ -2456,14 +2417,14 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
       /* After having dealt with a token check if we need to drop super/sub/font immediately */
       /* did the closing bracket mark end-of-superscript?
          wait_for_token == CLOSE_BRACKET? then wait for level to fall below that, if == -1, drop immediately */
-      if( (cur_super>=ob_super) && ((cur_super->wait_for_token==GIZA_TOKEN_CB && ob<=cur_super->ob_level) || cur_super->wait_for_token==-1) ) {
+      if( isuper>=0 && ((ob_super[isuper].wait_for_token==GIZA_TOKEN_CB && ob<=ob_super[isuper].ob_level) || ob_super[isuper].wait_for_token==-1) ) {
           _giza_stop_super();
-          cur_super--;
+          isuper--;
       }
       /* did the closing bracket mark end-of-subscript? */
-      if( (cur_sub>=ob_sub) && ((cur_sub->wait_for_token==GIZA_TOKEN_CB && ob<=cur_sub->ob_level) || cur_sub->wait_for_token==-1) ) {
+      if( isub>=0 && ((ob_sub[isub].wait_for_token==GIZA_TOKEN_CB && ob<=ob_sub[isub].ob_level) || ob_sub[isub].wait_for_token==-1) ) {
           _giza_stop_sub();
-          cur_sub--;
+          isub--;
       }
       /* Move on to next 'glyph' position */
       nGlyph++;
@@ -2474,7 +2435,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
   /* In case we broke from the loop but there's font change still in effect
      switch back to the font we started with */
-  if( cur_font>=oldfont )
+  if( ifont>=0 )
       giza_set_font( oldfont[0].font );
 }
 

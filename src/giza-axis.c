@@ -112,6 +112,7 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
   int nMinTicks, major;
   double majTickL_l, subTickL_l, currentTickL_l;
   double majTickL_r, subTickL_r, currentTickL_r;
+  double tick_sign;
   char tmp[100];
   int i, i1, i2, j, jmax, jtmp;
   double x,y,theta,theta_deg,dr;
@@ -195,6 +196,9 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
   subTickL_l = majTickL_l * fmin;
   subTickL_r = majTickL_r * fmin;
 
+  /* draw_invert<0 is default; >0 means option I was specified (see giza_box) */
+  tick_sign = (draw_invert > 0) ? -1.0 : 1.0;
+
   /* Choose x tick intervals */
   if (draw_log)
     {
@@ -254,7 +258,7 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
                 continue;
 
               /* draw tick, rotate as necessary */
-              _giza_draw_tick(mat,ratio,dr,currentTickL_l,currentTickL_r);
+              _giza_draw_tick(mat,ratio,dr,tick_sign*currentTickL_l,tick_sign*currentTickL_r);
 
             }
         }
