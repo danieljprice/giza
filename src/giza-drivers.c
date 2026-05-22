@@ -28,6 +28,7 @@
 #include "giza-driver-png-private.h"
 #include "giza-driver-mp4-private.h"
 #include "giza-driver-pdf-private.h"
+#include "giza-driver-osxcocoa-private.h"
 #include "giza-driver-ps-private.h"
 #include "giza-driver-eps-private.h"
 #include "giza-driver-svg-private.h"
@@ -200,6 +201,13 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
       success = _giza_open_device_xw (width, height, units);
       break;
 #endif
+
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      success = _giza_open_device_osxcocoa (width, height, units);
+      break;
+#endif
+
     case GIZA_DEVICE_MP4:
     case GIZA_DEVICE_PNG:
       success = _giza_open_device_png (width, height, units);
@@ -380,6 +388,11 @@ giza_flush_device (void)
          _giza_flush_device_xw ();
          break;
 #endif
+#ifdef _GIZA_HAS_OSXCOCOA
+      case GIZA_DEVICE_OSXCOCOA:
+        _giza_flush_device_osxcocoa ();
+        return;
+#endif
        default:
          if (!Dev[id].surface)
            {
@@ -448,6 +461,11 @@ giza_change_page (void)
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_change_page_xw ();
+      break;
+#endif
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      _giza_change_page_osxcocoa ();
       break;
 #endif
     case GIZA_DEVICE_MP4:
@@ -573,6 +591,11 @@ _giza_close_device_unchecked (void) {
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_close_device_xw ();
+      break;
+#endif
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      _giza_close_device_osxcocoa ();
       break;
 #endif
     case GIZA_DEVICE_MP4:
@@ -824,6 +847,14 @@ _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, cons
       return 0;
       break;
 #endif
+
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      _giza_get_key_press_osxcocoa (mode, moveCurs, nanc, xanch, yanch, x, y, ch);
+    return 0;
+#endif
+
+
     case GIZA_DEVICE_IV:
     default:
       _giza_error ("giza_get_key_press", "Unknown device");
@@ -908,6 +939,15 @@ _giza_device_to_int (const char *newDeviceName)
         || !strcmp (devName, "/xwindow")
         || !strcmp (devName, "/xwin"))
     newDevice = GIZA_DEVICE_XW;
+#endif
+#ifdef _GIZA_HAS_OSXCOCOA
+  /* /osx is the primary name; /osxcocoa, /cocoa, /mac, /macos are also accepted */
+  else if (!strcmp (devName, "/osx")
+        || !strcmp (devName, "/osxcocoa")
+        || !strcmp (devName, "/cocoa")
+        || !strcmp (devName, "/mac")
+        || !strcmp (devName, "/macos"))
+    newDevice = GIZA_DEVICE_OSXCOCOA;
 #endif
   else if (!strcmp (devName, "/png"))
     newDevice = GIZA_DEVICE_PNG;
@@ -997,6 +1037,11 @@ _giza_int_to_device (int numDevice, char *DeviceName, int rval)
       strncpy(DeviceName,"/xw",max_chars);
       break;
 #endif
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      strncpy(DeviceName,"/osx",max_chars);
+      break;
+#endif
 #ifdef _GIZA_HAS_EPS
     case GIZA_DEVICE_EPS:
       strncpy(DeviceName,"/eps",max_chars);
@@ -1033,6 +1078,9 @@ _giza_init_device_list (char **deviceList)
   *deviceList[0] = '\0';
 #ifdef _GIZA_HAS_XW
   strcat (*deviceList, "Interactive devices:\n\t/xw\t(X Window)\n");
+#endif
+#ifdef _GIZA_HAS_OSXCOCOA
+  strcat (*deviceList, "\t/osx\t(macOS native Cocoa window)\n");
 #endif
   strcat (*deviceList, "Non-interactive file formats:\n");
   strcat (*deviceList, "\t/png or file.png   (Portable network graphics file)\n");
@@ -1082,6 +1130,11 @@ _giza_init_norm (void)
       _giza_init_norm_xw ();
       break;
 #endif
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      _giza_init_norm_osxcocoa ();
+      break;
+#endif
     default:
     /*
      * The cairo transformations are:
@@ -1123,6 +1176,11 @@ _giza_expand_clipping (void)
       _giza_expand_clipping_xw ();
       break;
 #endif
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      _giza_expand_clipping_osxcocoa ();
+      break;
+#endif
     default:
       _giza_set_trans (GIZA_TRANS_IDEN);
       cairo_reset_clip (Dev[id].context);
@@ -1162,6 +1220,15 @@ _giza_init_band (int mode)
         success = _giza_init_band_xw ();
         break;
 #endif
+
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      success = _giza_init_band_osxcocoa ();
+      break;
+#endif
+
+
+
       default:
         _giza_error ("_giza_init_band", "band not implemented for this device");
         break;

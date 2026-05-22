@@ -11,7 +11,22 @@ AM_INIT_AUTOMAKE([1.11 -Wall -Werror -Wno-extra-portability])
 m4_ifdef([AM_SILENT_RULES],[AM_SILENT_RULES([yes])])
 AC_CONFIG_MACRO_DIRS([m4])
 AM_MAINTAINER_MODE([disable])
+AC_CANONICAL_HOST
 AC_PROG_CC
+
+# ObjC support for macOS driver
+# AC_PROG_OBJC looks for gobjc which does not exist on macOS/Xcode;
+# force OBJC=clang before calling it so automake gets a working compiler.
+case "$host_os" in
+  darwin*)
+    if test -z "$OBJC"; then
+      OBJC="clang"
+      OBJCFLAGS="-fobjc-arc"
+    fi
+    ;;
+esac
+AC_PROG_OBJC
+
 AC_PROG_FC
 AC_CONFIG_HEADERS([config.h])
 #
@@ -41,6 +56,14 @@ AC_SUBST(LT_CURRENT, 2)
 AC_SUBST(LT_REVISION, 0)
 AC_SUBST(LT_AGE, 0)
 LT_INIT([shared])
+
+# macOS: install_name is based on  @rpath , not hard-coding to avoid including exsiting /usr/local/lib 
+case "$host_os" in
+  darwin*)
+    hardcode_into_libs=no
+    ;;
+esac
+
 #
 # cairo and X11 libraries. Use pkg-config if available but provide fallback options if not (OS/X)
 #
@@ -68,6 +91,33 @@ PKG_CHECK_MODULES([CAIRO], [cairo],
 PKG_CHECK_MODULES([X11], [x11], [], [AC_SUBST(X11_LIBS,$x11_libs)])
 PKG_CHECK_MODULES([FT], [freetype2], [], [AC_SUBST(FT_LIBS,$ft_libs_osx)  AC_SUBST(FT_CFLAGS,$ft_cflags_osx)])
 PKG_CHECK_MODULES([FC], [fontconfig], [], [AC_SUBST(FC_LIBS,$fc_libs_osx) AC_SUBST(FC_CFLAGS,$fc_cflags_osx)])
+
+# --- macOS native Quartz window driver ---
+OSXCOCOA_CFLAGS=""
+OSXCOCOA_LIBS=""
+AC_MSG_CHECKING([for Cocoa (macOS native driver)])
+case "$host_os" in
+  darwin*)
+    if pkg-config --exists cairo 2>/dev/null; then
+      OSXCOCOA_CFLAGS=$(pkg-config --cflags cairo)
+      OSXCOCOA_LIBS="-framework Cocoa -framework CoreGraphics -framework ApplicationServices"
+      AC_DEFINE([_GIZA_HAS_OSXCOCOA],[1],[macOS native Cocoa window driver])
+      HAVE_OSXCOCOA=yes
+      AC_MSG_RESULT([yes])
+    else
+      HAVE_OSXCOCOA=no
+      AC_MSG_RESULT([no (cairo not found via pkg-config)])
+    fi
+    ;;
+  *)
+    HAVE_OSXCOCOA=no
+    AC_MSG_RESULT([no (not macOS)])
+    ;;
+esac
+AC_SUBST(OSXCOCOA_CFLAGS)
+AC_SUBST(OSXCOCOA_LIBS)
+AM_CONDITIONAL([HAVE_OSXCOCOA],[test "x$HAVE_OSXCOCOA" = "xyes"])
+
 AC_CONFIG_FILES([
  Makefile
  src/Makefile
@@ -79,7 +129,6 @@ AC_CONFIG_FILES([
  test/C/Makefile
  test/F90/Makefile
 ])
-
 AC_MSG_NOTICE([====== Compilation flags being used ======])
 AC_MSG_NOTICE([CFLAGS = $CFLAGS])
 AC_MSG_NOTICE([CPPFLAGS = $CPPFLAGS])
@@ -91,9 +140,10 @@ AC_MSG_NOTICE([FT_CFLAGS = $FT_CFLAGS])
 AC_MSG_NOTICE([FT_LIBS = $FT_LIBS])
 AC_MSG_NOTICE([FC_CFLAGS = $FC_CFLAGS])
 AC_MSG_NOTICE([FC_LIBS = $FC_LIBS])
+AC_MSG_NOTICE([OSXCOCOA_CFLAGS = $OSXCOCOA_CFLAGS])
+AC_MSG_NOTICE([OSXCOCOA_LIBS = $OSXCOCOA_LIBS])
 AC_MSG_NOTICE([PKG_CONFIG_PATH = $PKG_CONFIG_PATH])
 AC_MSG_NOTICE([================================])
 AS_IF([test "x$FC" = "x"],
     [AC_MSG_WARN([*** NO FORTRAN COMPILER FOUND: skipping compilation of libpglot and giza Fortran module *** ])])
-
 AC_OUTPUT

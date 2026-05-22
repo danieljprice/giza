@@ -39,6 +39,9 @@ void cpgcons(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr);
 void cpgcont(const float *a, int idim, int jdim, int i1, int i2, \
  int j1, int j2, const float *c, int nc, const float *tr);
+void cpgconx(const float *a, int idim, int jdim, int i1, int i2, \
+ int j1, int j2, const float *c, int nc, \
+ void (*plot)(int *visble, float *x, float *y, float *z));
 void cpgctab(const float *l, const float *r, const float *g, \
  const float *b, int nc, float contra, float bright);
 int cpgcurs(float *x, float *y, char *ch_scalar);

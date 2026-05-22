@@ -141,6 +141,25 @@ void giza_contour (int sizex, int sizey, const double* data,
 void giza_contour_float (int sizex, int sizey, const float* data, int i1,
 	      int i2, int j1, int j2, int ncont, const float* cont, const float *affine);
 
+void giza_contour_blanked (int sizex, int sizey, const double* data, int i1,
+	      int i2, int j1, int j2, int ncont, const double* cont,
+	      const double *affine, double blank);
+void giza_contour_blanked_float (int sizex, int sizey, const float* data, int i1,
+	      int i2, int j1, int j2, int ncont, const float* cont,
+	      const float *affine, float blank);
+
+void giza_contour_fill (int sizex, int sizey, const double* data, int i1,
+	      int i2, int j1, int j2, double c1, double c2, const double *affine);
+void giza_contour_fill_float (int sizex, int sizey, const float* data, int i1,
+	      int i2, int j1, int j2, float c1, float c2, const float *affine);
+
+void giza_contour_labelled (int sizex, int sizey, const double* data, int i1,
+	      int i2, int j1, int j2, double c,
+	      const double *affine, const char *label, int intval, int minint);
+void giza_contour_labelled_float (int sizex, int sizey, const float* data, int i1,
+	      int i2, int j1, int j2, float c,
+	      const float *affine, const char *label, int intval, int minint);
+
 void giza_get_current_point (double *xpt, double *ypt);
 void giza_get_current_point_float (float *xpt, float *ypt);
 

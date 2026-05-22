@@ -4,10 +4,15 @@ LDADD = ../../src/libpgplot.la
 
 CLEANFILES = *.png
 
-ftests = test-2D test-fortran test-pgaxis #test-pgncur
+# Tests that run non-interactively (file-based devices only)
+auto_ftests = test-2D test-fortran \
+	test-pgpnts test-pgconb test-pgconf test-pgconl test-pgconx test-pghi2d test-pgscrl
 
-TESTS = $(ftests)
-check_PROGRAMS = $(ftests)
+# Tests that need an X display
+interactive_ftests = test-pgaxis
+
+TESTS = $(auto_ftests)
+check_PROGRAMS = $(auto_ftests) $(interactive_ftests)
 AM_DEFAULT_SOURCE_EXT = .f90
 
 test_output_files = giza-test.png giza-test-2D.png

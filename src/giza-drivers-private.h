@@ -33,6 +33,8 @@
 #define GIZA_DEVICE_EPS    8
 #define GIZA_DEVICE_SVG    9
 #define GIZA_DEVICE_MP4    10
+#define GIZA_DEVICE_AQT    11
+#define GIZA_DEVICE_OSXCOCOA    20
 
 #define GIZA_DEFAULT_PREFIX "giza"
 

@@ -252,10 +252,10 @@ end subroutine PGCLOS
 
 !------------------------------------------------------------------------
 ! Module: PGCONB -- contour map of a 2D data array, with blanking
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGCONB (A, IDIM, JDIM, I1, I2, J1, J2, C, NC, TR, BLANK)
- use giza,       only:giza_contour
+ use giza,       only:giza_contour_blanked
  use gizapgplot, only:convert_tr_to_affine
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2, NC
@@ -263,39 +263,43 @@ subroutine PGCONB (A, IDIM, JDIM, I1, I2, J1, J2, C, NC, TR, BLANK)
  real                :: affine(6)
 
  call convert_tr_to_affine(tr,affine)
- call giza_contour(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,C,affine)
+ call giza_contour_blanked(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,C,affine,blank)
 
 end subroutine PGCONB
 
 !------------------------------------------------------------------------
 ! Module: PGCONF -- fill between two contours
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGCONF (A, IDIM, JDIM, I1, I2, J1, J2, C1, C2, TR)
+ use giza,       only:giza_contour_fill
+ use gizapgplot, only:convert_tr_to_affine
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2
  real,    intent(in) :: A(IDIM,JDIM), C1, C2, TR(6)
+ real                :: affine(6)
+
+ call convert_tr_to_affine(tr,affine)
+ call giza_contour_fill(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,c1,c2,affine)
 
 end subroutine PGCONF
 
 !------------------------------------------------------------------------
 ! Module: PGCONL -- label contour map of a 2D data array
-! Status: PARTIALLY IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGCONL (A, IDIM, JDIM, I1, I2, J1, J2, C, TR, LABEL, INTVAL, MININT)
- use giza,       only:giza_contour
+ use giza,       only:giza_contour_labelled
  use gizapgplot, only:convert_tr_to_affine
  implicit none
  integer,       intent(in) :: IDIM, JDIM, I1, J1, I2, J2, INTVAL, MININT
  real,          intent(in) :: A(IDIM,JDIM), C, TR(6)
  character*(*), intent(in) :: LABEL
  real                      :: affine(6)
- integer, parameter  :: nc = 1
- real, dimension(nc) :: cc
 
- cc(1) = C
  call convert_tr_to_affine(tr,affine)
- call giza_contour(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,nc,cc,affine)
+ call giza_contour_labelled(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,c,affine, &
+      trim(LABEL),intval,minint)
 
 end subroutine PGCONL
 
@@ -335,15 +339,125 @@ end subroutine PGCONT
 
 !------------------------------------------------------------------------
 ! Module: PGCONX -- contour map of a 2D data array (non rectangular)
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGCONX (A, IDIM, JDIM, I1, I2, J1, J2, C, NC, PLOT)
- use giza,       only:giza_contour
- use gizapgplot, only:convert_tr_to_affine
  implicit none
- integer, intent(in) :: IDIM, JDIM, I1, J1, I2, J2, NC
+ integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2, NC
  real,    intent(in) :: A(IDIM,JDIM), C(*)
  external :: PLOT
+
+ integer :: IM(4), JM(4)
+ integer :: CASTAB(3,3,3)
+ integer :: SH(0:4)
+ real    :: H(0:4), XH(0:4), YH(0:4)
+ real    :: TEMP1, TEMP2, DMIN, DMAX
+ real    :: X1, X2, Y1, Y2, Z
+ integer :: I, J, K, M, M1, M2, M3, CASVAL, NCA
+ integer :: VIS0, VIS1
+
+ data IM /0,1,1,0/
+ data JM /0,0,1,1/
+ ! castab(sh1+2, sh2+2, sh3+2) -- Fortran 1-based
+ ! castab(sh1+2,sh2+2,sh3+2) -- transposed from C row-major to Fortran column-major
+ data CASTAB / &
+   0,0,9, 0,1,5, 7,4,8, &
+   0,3,6, 2,3,2, 6,3,0, &
+   8,4,7, 5,1,0, 9,0,0 /
+
+ NCA = abs(NC)
+ VIS0 = 0
+ VIS1 = 1
+
+ do J = J2-1, J1, -1
+    do I = I1, I2-1
+       TEMP1 = min(A(I,J), A(I,J+1))
+       TEMP2 = min(A(I+1,J), A(I+1,J+1))
+       DMIN = min(TEMP1, TEMP2)
+
+       TEMP1 = max(A(I,J), A(I,J+1))
+       TEMP2 = max(A(I+1,J), A(I+1,J+1))
+       DMAX = max(TEMP1, TEMP2)
+
+       if (DMAX < C(1) .or. DMIN > C(NCA)) cycle
+
+       do K = 1, NCA
+          if (C(K) < DMIN .or. C(K) > DMAX) cycle
+
+          do M = 4, 0, -1
+             if (M > 0) then
+                H(M) = A(I+IM(M), J+JM(M)) - C(K)
+                XH(M) = real(I + IM(M))
+                YH(M) = real(J + JM(M))
+             else
+                H(0) = 0.25 * (H(1) + H(2) + H(3) + H(4))
+                XH(0) = 0.5 * real(2*I + 1)
+                YH(0) = 0.5 * real(2*J + 1)
+             endif
+             if (H(M) > 0.0) then
+                SH(M) = 1
+             else if (H(M) < 0.0) then
+                SH(M) = -1
+             else
+                SH(M) = 0
+             endif
+          enddo
+
+          do M = 1, 4
+             M1 = M
+             M2 = 0
+             if (M /= 4) then
+                M3 = M + 1
+             else
+                M3 = 1
+             endif
+
+             CASVAL = CASTAB(SH(M1)+2, SH(M2)+2, SH(M3)+2)
+             if (CASVAL == 0) cycle
+
+             select case (CASVAL)
+             case (1)
+                X1=XH(M1); Y1=YH(M1); X2=XH(M2); Y2=YH(M2)
+             case (2)
+                X1=XH(M2); Y1=YH(M2); X2=XH(M3); Y2=YH(M3)
+             case (3)
+                X1=XH(M3); Y1=YH(M3); X2=XH(M1); Y2=YH(M1)
+             case (4)
+                X1=XH(M1); Y1=YH(M1)
+                X2=(H(M2)*XH(M3)-H(M3)*XH(M2))/(H(M2)-H(M3))
+                Y2=(H(M2)*YH(M3)-H(M3)*YH(M2))/(H(M2)-H(M3))
+             case (5)
+                X1=XH(M2); Y1=YH(M2)
+                X2=(H(M3)*XH(M1)-H(M1)*XH(M3))/(H(M3)-H(M1))
+                Y2=(H(M3)*YH(M1)-H(M1)*YH(M3))/(H(M3)-H(M1))
+             case (6)
+                X1=XH(M3); Y1=YH(M3)
+                X2=(H(M3)*XH(M2)-H(M2)*XH(M3))/(H(M3)-H(M2))
+                Y2=(H(M3)*YH(M2)-H(M2)*YH(M3))/(H(M3)-H(M2))
+             case (7)
+                X1=(H(M1)*XH(M2)-H(M2)*XH(M1))/(H(M1)-H(M2))
+                Y1=(H(M1)*YH(M2)-H(M2)*YH(M1))/(H(M1)-H(M2))
+                X2=(H(M2)*XH(M3)-H(M3)*XH(M2))/(H(M2)-H(M3))
+                Y2=(H(M2)*YH(M3)-H(M3)*YH(M2))/(H(M2)-H(M3))
+             case (8)
+                X1=(H(M2)*XH(M3)-H(M3)*XH(M2))/(H(M2)-H(M3))
+                Y1=(H(M2)*YH(M3)-H(M3)*YH(M2))/(H(M2)-H(M3))
+                X2=(H(M3)*XH(M1)-H(M1)*XH(M3))/(H(M3)-H(M1))
+                Y2=(H(M3)*YH(M1)-H(M1)*YH(M3))/(H(M3)-H(M1))
+             case (9)
+                X1=(H(M3)*XH(M1)-H(M1)*XH(M3))/(H(M3)-H(M1))
+                Y1=(H(M3)*YH(M1)-H(M1)*YH(M3))/(H(M3)-H(M1))
+                X2=(H(M1)*XH(M2)-H(M2)*XH(M1))/(H(M1)-H(M2))
+                Y2=(H(M1)*YH(M2)-H(M2)*YH(M1))/(H(M1)-H(M2))
+             end select
+
+             Z = C(K)
+             call PLOT(VIS0, X1, Y1, Z)
+             call PLOT(VIS1, X2, Y2, Z)
+          enddo
+       enddo
+    enddo
+ enddo
 
 end subroutine PGCONX
 
@@ -577,16 +691,58 @@ end subroutine PGGRAY
 
 !------------------------------------------------------------------------
 ! Module: PGHI2D -- cross-sections through a 2D data array
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGHI2D (DATA, NXV, NYV, IX1, IX2, IY1, IY2, X, IOFF, BIAS, CENTER, YLIMS)
+ use giza, only:giza_move,giza_draw
  implicit none
- integer, intent(in) :: NXV, NYV, IX1, IX2, IY1, IY2
- real,    intent(in) :: DATA(NXV,NYV)
- real,    intent(in) :: X(IX2-IX1+1), YLIMS(IX2-IX1+1)
- integer, intent(in) :: IOFF
- real,    intent(in) :: BIAS
- logical, intent(in) :: CENTER
+ integer, intent(in)    :: NXV, NYV, IX1, IX2, IY1, IY2
+ real,    intent(in)    :: DATA(NXV,NYV)
+ real,    intent(in)    :: X(*)
+ integer, intent(in)    :: IOFF
+ real,    intent(in)    :: BIAS
+ logical, intent(in)    :: CENTER
+ real,    intent(inout) :: YLIMS(*)
+
+ integer :: NX, I, IY, HI
+ real    :: YOFF, XOFF, VAL, XI
+ logical :: STARTED
+
+ NX = IX2 - IX1 + 1
+ if (NX < 1 .or. IY1 > IY2) return
+
+ ! Initialize horizon
+ do I = 1, NX
+    YLIMS(I) = -1.0E30
+ enddo
+
+ do IY = IY1, IY2
+    YOFF = BIAS * real(IY - IY1)
+    if (CENTER) then
+       XOFF = real(IOFF) * real(IY - IY1) * 0.5
+    else
+       XOFF = real(IOFF) * real(IY - IY1)
+    endif
+
+    STARTED = .false.
+    do I = IX1, IX2
+       VAL = DATA(I, IY) + YOFF
+       XI = X(I) + XOFF
+       HI = I - IX1 + 1
+
+       if (VAL > YLIMS(HI)) then
+          if (.not. STARTED) then
+             call giza_move(XI, VAL)
+             STARTED = .true.
+          else
+             call giza_draw(XI, VAL)
+          endif
+          YLIMS(HI) = VAL
+       else
+          STARTED = .false.
+       endif
+    enddo
+ enddo
 
 end subroutine PGHI2D
 
@@ -854,13 +1010,24 @@ end subroutine PGPIXL
 
 !------------------------------------------------------------------------
 ! Module: PGPNTS -- draw several graph markers, not all the same
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGPNTS (N, X, Y, SYMBOL, NS)
+ use giza, only:giza_single_point
  implicit none
  integer, intent(in) :: N, NS
  real,    intent(in) :: X(*), Y(*)
  integer, intent(in) :: SYMBOL(*)
+ integer :: I, ISYM
+
+ do I = 1, N
+    if (I <= NS) then
+       ISYM = SYMBOL(I)
+    else
+       ISYM = SYMBOL(NS)
+    endif
+    call giza_single_point(X(I), Y(I), ISYM)
+ enddo
 
 end subroutine PGPNTS
 
@@ -1052,13 +1219,48 @@ end subroutine PGQCS
 
 !------------------------------------------------------------------------
 ! Module: PGQDT -- inquire name of nth available device type
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQDT(N, TYPE, TLEN, DESCR, DLEN, INTER)
  implicit none
  integer, intent(in) :: N
  character*(*), intent(out) :: TYPE, DESCR
  integer, intent(out) :: TLEN, DLEN, INTER
+
+ ! Device table must match giza-cpgplot.c cpgqdt
+ integer, parameter :: NDEVS = 9
+ character(len=8),  dimension(NDEVS) :: DTYPES
+ character(len=32), dimension(NDEVS) :: DDESCR
+ integer,           dimension(NDEVS) :: DINTER
+
+ DTYPES = (/ '/xw     ', '/png    ', '/pdf    ', '/vpdf   ', &
+             '/ps     ', '/vps    ', '/svg    ', '/eps    ', &
+             '/null   ' /)
+ DDESCR = (/ 'X Window (interactive)          ', &
+             'PNG file                        ', &
+             'PDF file                        ', &
+             'PDF file (portrait)             ', &
+             'PostScript file                 ', &
+             'PostScript (portrait)           ', &
+             'SVG file                        ', &
+             'Encapsulated PS file            ', &
+             'Null device                     ' /)
+ DINTER = (/ 1, 0, 0, 0, 0, 0, 0, 0, 0 /)
+
+ if (N < 1 .or. N > NDEVS) then
+    TYPE = ' '
+    TLEN = 0
+    DESCR = ' '
+    DLEN = 0
+    INTER = 0
+    return
+ endif
+
+ TYPE = trim(DTYPES(N))
+ TLEN = len_trim(DTYPES(N))
+ DESCR = trim(DDESCR(N))
+ DLEN = len_trim(DDESCR(N))
+ INTER = DINTER(N)
 
 end subroutine PGQDT
 
@@ -1193,13 +1395,14 @@ end subroutine PGQLW
 
 !------------------------------------------------------------------------
 ! Module: PGQNDT -- inquire number of available device types
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGQNDT(N)
  implicit none
  integer, intent(out) :: N
 
- N = 1
+ ! Must match NDEVS in PGQDT
+ N = 9
 
 end subroutine PGQNDT
 
@@ -1469,23 +1672,81 @@ end subroutine PGSCR
 
 !------------------------------------------------------------------------
 ! Module: PGSCRL -- scroll window
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSCRL (DX, DY)
+ use giza, only:giza_get_window,giza_set_window
  implicit none
  real, intent(in) :: DX, DY
+ real :: X1, X2, Y1, Y2
+
+ call giza_get_window(X1, X2, Y1, Y2)
+ call giza_set_window(X1 + DX, X2 + DX, Y1 + DY, Y2 + DY)
 
 end subroutine PGSCRL
 
 !------------------------------------------------------------------------
 ! Module: PGSCRN -- set color representation by name
-! Status: NOT IMPLEMENTED
+! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGSCRN(CI, NAME, IER)
+ use giza, only:giza_set_colour_representation
  implicit none
  integer,       intent(in)  :: CI
  character*(*), intent(in)  :: NAME
  integer,       intent(out) :: IER
+
+ character(len=32) :: LNAME
+ integer :: I
+
+ ! Convert to lowercase for comparison
+ LNAME = ' '
+ do I = 1, min(len_trim(NAME), 32)
+    LNAME(I:I) = NAME(I:I)
+    if (LNAME(I:I) >= 'A' .and. LNAME(I:I) <= 'Z') &
+       LNAME(I:I) = char(ichar(LNAME(I:I)) + 32)
+ enddo
+ LNAME = trim(LNAME)
+
+ IER = 0
+ select case(LNAME)
+ case('black')
+    call giza_set_colour_representation(CI, 0.0, 0.0, 0.0)
+ case('white')
+    call giza_set_colour_representation(CI, 1.0, 1.0, 1.0)
+ case('red')
+    call giza_set_colour_representation(CI, 1.0, 0.0, 0.0)
+ case('green')
+    call giza_set_colour_representation(CI, 0.0, 1.0, 0.0)
+ case('blue')
+    call giza_set_colour_representation(CI, 0.0, 0.0, 1.0)
+ case('cyan')
+    call giza_set_colour_representation(CI, 0.0, 1.0, 1.0)
+ case('magenta')
+    call giza_set_colour_representation(CI, 1.0, 0.0, 1.0)
+ case('yellow')
+    call giza_set_colour_representation(CI, 1.0, 1.0, 0.0)
+ case('orange')
+    call giza_set_colour_representation(CI, 1.0, 0.65, 0.0)
+ case('gray', 'grey')
+    call giza_set_colour_representation(CI, 0.5, 0.5, 0.5)
+ case('darkgray', 'darkgrey')
+    call giza_set_colour_representation(CI, 0.33, 0.33, 0.33)
+ case('lightgray', 'lightgrey')
+    call giza_set_colour_representation(CI, 0.75, 0.75, 0.75)
+ case('brown')
+    call giza_set_colour_representation(CI, 0.65, 0.16, 0.16)
+ case('pink')
+    call giza_set_colour_representation(CI, 1.0, 0.75, 0.80)
+ case('purple')
+    call giza_set_colour_representation(CI, 0.5, 0.0, 0.5)
+ case('darkgreen')
+    call giza_set_colour_representation(CI, 0.0, 0.39, 0.0)
+ case('skyblue')
+    call giza_set_colour_representation(CI, 0.53, 0.81, 0.92)
+ case default
+    IER = 1
+ end select
 
 end subroutine PGSCRN
 

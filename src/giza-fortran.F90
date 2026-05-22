@@ -61,6 +61,9 @@ module giza
       giza_set_colour_representation_hls, &
       giza_set_colour_table, &
       giza_contour, &
+      giza_contour_blanked, &
+      giza_contour_fill, &
+      giza_contour_labelled, &
       giza_get_current_point, &
       giza_rgb_from_table, &
       giza_print_device_list, &
@@ -621,6 +624,73 @@ private
       real(kind=c_float),intent(in) :: cont(*)
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_contour_float
+ end interface
+
+ interface giza_contour_blanked
+    subroutine giza_contour_blanked_double(sizex,sizey,data,i1,i2,j1,j2,ncont,cont,affine,blank) &
+               bind(C, name="giza_contour_blanked")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,ncont
+      real(kind=c_double),intent(in) :: data(sizex,sizey)
+      real(kind=c_double),intent(in) :: cont(*)
+      real(kind=c_double),intent(in) :: affine(6)
+      real(kind=c_double),intent(in),value :: blank
+    end subroutine giza_contour_blanked_double
+
+    subroutine giza_contour_blanked_float(sizex,sizey,data,i1,i2,j1,j2,ncont,cont,affine,blank) bind(C)
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,ncont
+      real(kind=c_float),intent(in) :: data(sizex,sizey)
+      real(kind=c_float),intent(in) :: cont(*)
+      real(kind=c_float),intent(in) :: affine(6)
+      real(kind=c_float),intent(in),value :: blank
+    end subroutine giza_contour_blanked_float
+ end interface
+
+ interface giza_contour_fill
+    subroutine giza_contour_fill_double(sizex,sizey,data,i1,i2,j1,j2,c1,c2,affine) &
+               bind(C, name="giza_contour_fill")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      real(kind=c_double),intent(in) :: data(sizex,sizey)
+      real(kind=c_double),intent(in),value :: c1,c2
+      real(kind=c_double),intent(in) :: affine(6)
+    end subroutine giza_contour_fill_double
+
+    subroutine giza_contour_fill_float(sizex,sizey,data,i1,i2,j1,j2,c1,c2,affine) bind(C)
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      real(kind=c_float),intent(in) :: data(sizex,sizey)
+      real(kind=c_float),intent(in),value :: c1,c2
+      real(kind=c_float),intent(in) :: affine(6)
+    end subroutine giza_contour_fill_float
+ end interface
+
+ interface giza_contour_labelled
+    module procedure giza_intern_contour_labelled_f2c
+    module procedure giza_intern_contour_labelled_float_f2c
+ end interface
+
+ interface giza_contour_labelled_c
+    subroutine giza_contour_labelled_double(sizex,sizey,data,i1,i2,j1,j2,c, &
+               affine,label,intval,minint) bind(C, name="giza_contour_labelled")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,intval,minint
+      real(kind=c_double),intent(in) :: data(sizex,sizey)
+      real(kind=c_double),intent(in),value :: c
+      real(kind=c_double),intent(in) :: affine(6)
+      character(kind=c_char),intent(in) :: label(*)
+    end subroutine giza_contour_labelled_double
+
+    subroutine giza_contour_labelled_float(sizex,sizey,data,i1,i2,j1,j2,c, &
+               affine,label,intval,minint) bind(C)
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,intval,minint
+      real(kind=c_float),intent(in) :: data(sizex,sizey)
+      real(kind=c_float),intent(in),value :: c
+      real(kind=c_float),intent(in) :: affine(6)
+      character(kind=c_char),intent(in) :: label(*)
+    end subroutine giza_contour_labelled_float
  end interface
 
  interface giza_get_current_point
@@ -2341,5 +2411,27 @@ subroutine giza_plot(y,x,img,dev,prefix,width,height,units,&
  call giza_close()
 
 end subroutine giza_plot
+
+ subroutine giza_intern_contour_labelled_f2c(sizex,sizey,data,i1,i2,j1,j2,c,affine,label,intval,minint)
+    integer(kind=c_int),intent(in) :: sizex,sizey,i1,i2,j1,j2,intval,minint
+    real(kind=c_double),intent(in) :: data(sizex,sizey)
+    real(kind=c_double),intent(in) :: c
+    real(kind=c_double),intent(in) :: affine(6)
+    character(len=*),intent(in)    :: label
+
+    call giza_contour_labelled_double(sizex,sizey,data,i1,i2,j1,j2,c,affine,cstring(label),intval,minint)
+
+ end subroutine giza_intern_contour_labelled_f2c
+
+ subroutine giza_intern_contour_labelled_float_f2c(sizex,sizey,data,i1,i2,j1,j2,c,affine,label,intval,minint)
+    integer(kind=c_int),intent(in) :: sizex,sizey,i1,i2,j1,j2,intval,minint
+    real(kind=c_float),intent(in)  :: data(sizex,sizey)
+    real(kind=c_float),intent(in)  :: c
+    real(kind=c_float),intent(in)  :: affine(6)
+    character(len=*),intent(in)    :: label
+
+    call giza_contour_labelled_float(sizex,sizey,data,i1,i2,j1,j2,c,affine,cstring(label),intval,minint)
+
+ end subroutine giza_intern_contour_labelled_float_f2c
 
 end module giza
