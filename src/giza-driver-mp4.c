@@ -104,8 +104,8 @@ _giza_close_device_mp4 (int last)
      _giza_get_filename_for_device(fileName, Dev[id].prefix, 0, GIZA_DEVICE_EXTENSION, 1);
 
      /* delete the existing mp4 file if it exists */
-     if (access(fileName, F_OK) != -1)
-       remove(fileName);
+     if (remove(fileName) != 0 && errno != ENOENT)
+       _giza_message("Warning: could not remove existing mp4 file");
 
      if (!_giza_mp4_ok (Dev[id].prefix, 1) || !_giza_mp4_ok (fileName, 1))
        {
