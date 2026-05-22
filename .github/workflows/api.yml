@@ -1,5 +1,7 @@
 name: Update API docs
 on: push
+permissions:
+  contents: write
 jobs:
   report:
     runs-on: ubuntu-latest
