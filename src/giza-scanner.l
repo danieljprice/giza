@@ -1,7 +1,7 @@
 /* A re-entrant scanner to recursively print text */
 
 /* Specify that it is re-entrant and doesn't use ywrap */
-%option reentrant noyywrap
+%option reentrant noyywrap nounput noinput
 
 /* Include the header and define tokens */
 
@@ -77,8 +77,6 @@ static char const* const giza_greek_to_utf_data[] = {
     "\u03c1", "\u03c3", "\u03c4", "\u03c5", "\u03c6", "\u03c7", "\u03c8", "\u03c9"
 };
 
-/* Assume the caller has verified that letter is a /valid/ greek letter! */
-static char const*                       _giza_greek_to_utf(char letter);
 /* May return NULL if number is not a known Hershey symbol or the string in
   <special> is not found in the remapped token lookup table */
 static giza_hershey_to_utf_entry const*  _giza_lookup_hershey(int number);
@@ -187,10 +185,11 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   double               sina = sin(Dev[id].fontAngle);
   double               cosa = cos(Dev[id].fontAngle);
   char const*          token_txt;
-  ob_state_type        ob_super[MAX_NFONT], *cur_super = &ob_super[-1];/* keep track of superscript state */
-  ob_state_type        ob_sub[MAX_NFONT],   *cur_sub   = &ob_sub[-1]; /* keep track of subscript state */
+  ob_state_type        ob_super[MAX_NFONT]; /* keep track of superscript state */
+  ob_state_type        ob_sub[MAX_NFONT];   /* keep track of subscript state */
   glyph_pos_type       positions[lenstr+1];  /* keep track of each glyph's x,y position (for backing up characters) */
-  font_change_type     oldfont[MAX_NFONT],  *cur_font = &oldfont[-1]; /* keep track of font change state */
+  font_change_type     oldfont[MAX_NFONT];  /* keep track of font change state */
+  int                  isuper = -1, isub = -1, ifont = -1;
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -220,19 +219,19 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
          lasts only for the current glyph (if any)  [single character super-/subscript],
          for font change we only keep a stack of nested font changes, not
          'globals', which only last until the closing bracket of the current top-of-stack (if any) */
-      if( (cur_super>=ob_super) && cur_super->wait_for_token==0 )
-          cur_super->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
-      if( cur_sub>=ob_sub   && cur_sub->wait_for_token==0 )
-          cur_sub->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+      if( isuper>=0 && ob_super[isuper].wait_for_token==0 )
+          ob_super[isuper].wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+      if( isub>=0 && ob_sub[isub].wait_for_token==0 )
+          ob_sub[isub].wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
 
-      if( cur_font>=oldfont && cur_font->wait_for_token==0 ) {
-          cur_font->wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
+      if( ifont>=0 && oldfont[ifont].wait_for_token==0 ) {
+          oldfont[ifont].wait_for_token = (token == GIZA_TOKEN_OB ? GIZA_TOKEN_CB : -1);
           /* check if we need to 'forget' this font change state; if it was 'global' */
-          if( cur_font->wait_for_token==-1 /*it was a 'global font change'*/ &&
-              cur_font>oldfont /* there exists at least a previous state */ &&
-              (cur_font-1)->wait_for_token==GIZA_TOKEN_CB /* and that one is waiting for close bracket*/ )
+          if( oldfont[ifont].wait_for_token==-1 /*it was a 'global font change'*/ &&
+              ifont>0 /* there exists at least a previous state */ &&
+              oldfont[ifont-1].wait_for_token==GIZA_TOKEN_CB /* and that one is waiting for close bracket*/ )
                 /* basically forget current font state */
-                cur_font--;
+                ifont--;
       }
 
       switch(token)
@@ -244,10 +243,10 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
               ob--;
               /* font change remains in effect until end of string or until close bracket, the latter only if the first token after
                  font change was open bracket  */
-              if( (cur_font>=oldfont) && cur_font->wait_for_token==GIZA_TOKEN_CB && ob<=cur_font->ob_level ) {
+              if( ifont>=0 && oldfont[ifont].wait_for_token==GIZA_TOKEN_CB && ob<=oldfont[ifont].ob_level ) {
                   /* OK go back to old font */
-                  giza_set_font(cur_font->font);
-                  cur_font--;
+                  giza_set_font(oldfont[ifont].font);
+                  ifont--;
               }
               /* Actual processing of closing bracket for super/sub is /after/ the switch statement
                  because then it can be shared with single-token super/sub handling */
@@ -267,20 +266,20 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
           /* Start of super/sub script. Mark the current level as waiting to check the next token;
              if it's not open bracket, we must drop the superscript immediately after the first token */
           case GIZA_TOKEN_SUPER:
-              if( cur_super<&ob_super[MAX_NFONT-1] ) {
-                  cur_super++;
-                  cur_super->ob_level       = ob;
-                  cur_super->wait_for_token = 0;
+              if( isuper<MAX_NFONT-1 ) {
+                  isuper++;
+                  ob_super[isuper].ob_level       = ob;
+                  ob_super[isuper].wait_for_token = 0;
                   _giza_start_super ();
               } else {
                   _giza_error("giza_parse_string", "Too many levels of super-script");
               }
               break;
           case GIZA_TOKEN_SUB:
-              if( cur_sub<&ob_sub[MAX_NFONT-1] ) {
-                  cur_sub++;
-                  cur_sub->ob_level       = ob;
-                  cur_sub->wait_for_token = 0;
+              if( isub<MAX_NFONT-1 ) {
+                  isub++;
+                  ob_sub[isub].ob_level       = ob;
+                  ob_sub[isub].wait_for_token = 0;
                   _giza_start_sub ();
               } else {
                   _giza_error("giza_parse_string", "Too many levels of sub-script");
@@ -331,14 +330,14 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
           /* Handle change of font! The lexer already verified it's a /valid/ font specifier */
           case GIZA_TOKEN_FONT:
-              if ( cur_font<&oldfont[MAX_NFONT-1] )
+              if ( ifont<MAX_NFONT-1 )
               {
                   /* new font change state */
-                  cur_font++;
-                  cur_font->ob_level       = ob;
-                  cur_font->wait_for_token = 0;
+                  ifont++;
+                  oldfont[ifont].ob_level       = ob;
+                  oldfont[ifont].wait_for_token = 0;
                   /* save font */
-                  giza_get_font(cur_font->font, GIZA_FONT_LEN);
+                  giza_get_font(oldfont[ifont].font, GIZA_FONT_LEN);
               } else {
                   _giza_error("giza_parse_string", "Too many nested levels of font changes");
                   break;
@@ -416,14 +415,14 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
       /* After having dealt with a token check if we need to drop super/sub/font immediately */
       /* did the closing bracket mark end-of-superscript?
          wait_for_token == CLOSE_BRACKET? then wait for level to fall below that, if == -1, drop immediately */
-      if( (cur_super>=ob_super) && ((cur_super->wait_for_token==GIZA_TOKEN_CB && ob<=cur_super->ob_level) || cur_super->wait_for_token==-1) ) {
+      if( isuper>=0 && ((ob_super[isuper].wait_for_token==GIZA_TOKEN_CB && ob<=ob_super[isuper].ob_level) || ob_super[isuper].wait_for_token==-1) ) {
           _giza_stop_super();
-          cur_super--;
+          isuper--;
       }
       /* did the closing bracket mark end-of-subscript? */
-      if( (cur_sub>=ob_sub) && ((cur_sub->wait_for_token==GIZA_TOKEN_CB && ob<=cur_sub->ob_level) || cur_sub->wait_for_token==-1) ) {
+      if( isub>=0 && ((ob_sub[isub].wait_for_token==GIZA_TOKEN_CB && ob<=ob_sub[isub].ob_level) || ob_sub[isub].wait_for_token==-1) ) {
           _giza_stop_sub();
-          cur_sub--;
+          isub--;
       }
       /* Move on to next 'glyph' position */
       nGlyph++;
@@ -434,7 +433,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
 
   /* In case we broke from the loop but there's font change still in effect
      switch back to the font we started with */
-  if( cur_font>=oldfont )
+  if( ifont>=0 )
       giza_set_font( oldfont[0].font );
 }
 
