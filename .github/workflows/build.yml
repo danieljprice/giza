@@ -30,15 +30,14 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libcairo2-dev xvfb
-    # Install cairo and autoconf via Homebrew on macOS
+    # Install cairo via Homebrew on macOS
     - name: Install dependencies (macOS/Homebrew)
       if: matrix.use-homebrew
-      run: brew install cairo autoconf automake libtool
+      run: brew install cairo
     # check out the repository
     - uses: actions/checkout@v4
     - name: compile and install giza
       run: |
-        autoreconf -fi
         ./configure
         make
         sudo make install
