@@ -163,7 +163,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
 #else
   stride = 4*width;
 #endif
-  pixdata = malloc (stride * height);
+  pixdata = malloc ((size_t) stride * (size_t) height);
   if (!pixdata)
     {
       _giza_warning ("giza_render", "Allocation failed, skipping render.");
