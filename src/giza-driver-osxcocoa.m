@@ -658,7 +658,6 @@ _giza_osxcocoa_wait_for_event_band(int devId, int mode,
     GizaView *view = _osxcocoa_view[devId];
     __block NSPoint pt = NSZeroPoint;
     __block char c = ' ';
-    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     _run_on_main(^{
         NSPoint anc = NSMakePoint(xancSurface, yancSurface);
         [view attachBandViewMode:mode anchorSurfacePt:anc];
