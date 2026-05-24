@@ -213,6 +213,9 @@ _giza_get_key_press_osxcocoa (int mode, int moveCurs,
     float fx, fy;
     /* attach + wait + detach をmainスレッドで一括処理してデッドロック回避 */
     if (mode > 0) {
+        /* Convert anchor world coords → device (surface) coords for the band overlay */
+        double axd = xanc[0], ayd = yanc[0];
+        cairo_user_to_device(Dev[id].context, &axd, &ayd);
         _giza_osxcocoa_wait_for_event_band(id, mode, (float)axd, (float)ayd, &fx, &fy, ch);
     } else {
         _giza_osxcocoa_wait_for_event(id, &fx, &fy, ch);
@@ -237,6 +240,7 @@ _giza_init_band_osxcocoa (void)
     int w = Dev[id].width  > 0 ? Dev[id].width  : 1;
     int h = Dev[id].height > 0 ? Dev[id].height : 1;
     cairo_surface_t *dummy = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
+    if (cairo_surface_status(dummy) != CAIRO_STATUS_SUCCESS) return 0;
     Band.onscreen = dummy;
     Band.box      = cairo_create(dummy);
     Band.restore  = cairo_create(dummy);
