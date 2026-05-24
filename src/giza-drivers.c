@@ -850,8 +850,10 @@ _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, cons
 
 #ifdef _GIZA_HAS_OSXCOCOA
     case GIZA_DEVICE_OSXCOCOA:
+      _giza_init_band (mode);
       _giza_get_key_press_osxcocoa (mode, moveCurs, nanc, xanch, yanch, x, y, ch);
-    return 0;
+      _giza_destroy_band (mode);
+      return 0;
 #endif
 
 
