@@ -102,6 +102,7 @@
 <dd><a href="#giza_render_gray_float">giza_render_gray_float</a></dd>
 <dd><a href="#giza_draw_pixels">giza_draw_pixels</a></dd>
 <dd><a href="#giza_draw_pixels_float">giza_draw_pixels_float</a></dd>
+<dd><a href="#giza_set_window_title">giza_set_window_title</a></dd>
 <dd><a href="#giza_tick">giza_tick</a></dd>
 <dd><a href="#giza_tick_float">giza_tick_float</a></dd>
 <dd><a href="#giza_vector">giza_vector</a></dd>
@@ -949,7 +950,10 @@
 </tr></table><h4>See Also:</h4><p><a href="#giza_render">giza_render</a> <a href="#giza_draw_pixels_float">giza_draw_pixels_float</a> </p><h3><a name="giza_draw_pixels_float">giza_draw_pixels_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_draw_pixels_float</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend, int filter) ;</tr></table><p>Same as giza_draw_pixels, but takes floats</p>
-<h4>See Also:</h4><p><a href="#giza_draw_pixels">giza_draw_pixels</a> </p><h3><a name="giza_tick">giza_tick</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_draw_pixels">giza_draw_pixels</a> </p><h3><a name="giza_set_window_title">giza_set_window_title</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_set_window_title</td><td> (const char *title) ;</tr></table><p>Set the device prefix and, for interactive devices, the window title shown to the user.</p>
+<h3><a name="giza_tick">giza_tick</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_tick</td><td> (double x1, double y1, double x2, double y2, double v, double tickl, double tickr, double disp, double angle, const char *label) ;</tr></table><p>Draw a single tick along an axis. The axis extends from (x1,y1) to (x2,y2) and the tick is drawn perpendicular to the axis which is not drawn by this routine. Optional text label drawn parallel to the axis if the orientation angle is zero</p>
 <h4>Input:</h4>
