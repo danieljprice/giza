@@ -1,0 +1,19 @@
+# Process this file with autoconf to produce a pkg-config metadata file.
+# Copyright 2026 Daniel Price
+#
+# This file is free software; as a special exception the author gives
+# unlimited permission to copy and/or distribute it, with or without
+# modifications, as long as this notice is preserved.
+
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Mgo
+Description: Lick-Mongo Fortran interface for giza
+URL: http://giza.sourceforge.net
+Version: @VERSION@
+Libs: -L${libdir} -lmgo
+Requires: giza
+Cflags: -I${includedir}

@@ -171,6 +171,7 @@ int giza_open_device_size_float (const char *newDeviceName, const char *newPrefi
 				 float width, float height, int units);
 void giza_select_device (int devid);
 void giza_get_device_id (int *devid);
+void giza_set_window_title (const char *title);
 void giza_flush_device (void);
 void giza_change_page (void);
 void giza_close_devices (void);

@@ -95,11 +95,12 @@ host_triplet = @host@
 @HAVE_OSXCOCOA_TRUE@am__append_1 = libgiza-osxcocoa-main.la
 
 # only compile libpgplot.a and giza.mod if we have a working Fortran compiler
-@HAVE_FC_TRUE@am__append_2 = libpgplot.la
+@HAVE_FC_TRUE@am__append_2 = libpgplot.la libmgo.la
 @HAVE_OSXCOCOA_TRUE@am__append_3 = giza-driver-osxcocoa.m giza-driver-osxcocoa-bridge.c \
 @HAVE_OSXCOCOA_TRUE@       giza-driver-osxcocoa-private.h
 
 @HAVE_OSXCOCOA_TRUE@am__append_4 = giza-osxcocoa-main.h
+@HAVE_FC_TRUE@am__append_5 = mgo.pc
 subdir = src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -112,7 +113,8 @@ DIST_COMMON = $(srcdir)/Makefile.am $(am__include_HEADERS_DIST) \
 	$(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES = cpgplot.pc giza.pc pgplot.pc giza-version.h
+CONFIG_CLEAN_FILES = cpgplot.pc giza.pc pgplot.pc mgo.pc \
+	giza-version.h
 CONFIG_CLEAN_VPATH_FILES =
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
 am__vpath_adj = case $$p in \
@@ -183,8 +185,9 @@ am__libgiza_la_SOURCES_DIST = giza-annotate.c giza-arrow-style.c \
 	giza-line-style.c giza-line-width.c giza-line.c giza-move.c \
 	giza-paper.c giza-points.c giza-polygon.c giza-print-id.c \
 	giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
-	giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
-	giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
+	giza-render.c giza-save.c giza-set-font.c \
+	giza-set-window-title.c giza-stroke.c giza-subpanel.c \
+	giza-text-background.c giza-text.c giza-tick.c \
 	giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
 	giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
 	giza-arrow-style-private.h giza-driver-svg-private.h \
@@ -239,17 +242,24 @@ am_libgiza_la_OBJECTS = libgiza_la-giza-annotate.lo \
 	libgiza_la-giza-ptext.lo libgiza_la-giza-qtext.lo \
 	libgiza_la-giza-rectangle.lo libgiza_la-giza-render.lo \
 	libgiza_la-giza-save.lo libgiza_la-giza-set-font.lo \
-	libgiza_la-giza-stroke.lo libgiza_la-giza-subpanel.lo \
-	libgiza_la-giza-text-background.lo libgiza_la-giza-text.lo \
-	libgiza_la-giza-tick.lo libgiza_la-giza-transforms.lo \
-	libgiza_la-giza-vector.lo libgiza_la-giza-viewport.lo \
-	libgiza_la-giza-version.lo libgiza_la-giza-warnings.lo \
-	libgiza_la-giza-window.lo libgiza_la-giza.lo \
-	libgiza_la-lex.yy.lo libgiza_la-giza-itf.lo $(am__objects_1)
+	libgiza_la-giza-set-window-title.lo libgiza_la-giza-stroke.lo \
+	libgiza_la-giza-subpanel.lo libgiza_la-giza-text-background.lo \
+	libgiza_la-giza-text.lo libgiza_la-giza-tick.lo \
+	libgiza_la-giza-transforms.lo libgiza_la-giza-vector.lo \
+	libgiza_la-giza-viewport.lo libgiza_la-giza-version.lo \
+	libgiza_la-giza-warnings.lo libgiza_la-giza-window.lo \
+	libgiza_la-giza.lo libgiza_la-lex.yy.lo libgiza_la-giza-itf.lo \
+	$(am__objects_1)
 libgiza_la_OBJECTS = $(am_libgiza_la_OBJECTS)
 libgiza_la_LINK = $(LIBTOOL) $(AM_V_lt) $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(OBJCLD) $(libgiza_la_OBJCFLAGS) \
 	$(OBJCFLAGS) $(libgiza_la_LDFLAGS) $(LDFLAGS) -o $@
+am_libmgo_la_OBJECTS = giza-mongo.lo
+libmgo_la_OBJECTS = $(am_libmgo_la_OBJECTS)
+libmgo_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=FC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(FCLD) $(AM_FCFLAGS) $(FCFLAGS) \
+	$(libmgo_la_LDFLAGS) $(LDFLAGS) -o $@
+@HAVE_FC_TRUE@am_libmgo_la_rpath = -rpath $(libdir)
 libpgplot_la_LIBADD =
 am_libpgplot_la_OBJECTS = giza-fortran.lo giza-pgplot.lo
 libpgplot_la_OBJECTS = $(am_libpgplot_la_OBJECTS)
@@ -334,6 +344,7 @@ am__depfiles_remade = ./$(DEPDIR)/libcpgplot_la-giza-cpgplot.Plo \
 	./$(DEPDIR)/libgiza_la-giza-render.Plo \
 	./$(DEPDIR)/libgiza_la-giza-save.Plo \
 	./$(DEPDIR)/libgiza_la-giza-set-font.Plo \
+	./$(DEPDIR)/libgiza_la-giza-set-window-title.Plo \
 	./$(DEPDIR)/libgiza_la-giza-stroke.Plo \
 	./$(DEPDIR)/libgiza_la-giza-subpanel.Plo \
 	./$(DEPDIR)/libgiza_la-giza-text-background.Plo \
@@ -411,10 +422,12 @@ am__v_OBJCLD_ = $(am__v_OBJCLD_@AM_DEFAULT_V@)
 am__v_OBJCLD_0 = @echo "  OBJCLD  " $@;
 am__v_OBJCLD_1 = 
 SOURCES = $(libcpgplot_la_SOURCES) $(libgiza_osxcocoa_main_la_SOURCES) \
-	$(libgiza_la_SOURCES) $(libpgplot_la_SOURCES)
+	$(libgiza_la_SOURCES) $(libmgo_la_SOURCES) \
+	$(libpgplot_la_SOURCES)
 DIST_SOURCES = $(libcpgplot_la_SOURCES) \
 	$(am__libgiza_osxcocoa_main_la_SOURCES_DIST) \
-	$(am__libgiza_la_SOURCES_DIST) $(libpgplot_la_SOURCES)
+	$(am__libgiza_la_SOURCES_DIST) $(libmgo_la_SOURCES) \
+	$(libpgplot_la_SOURCES)
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -443,7 +456,8 @@ am__define_uniq_tagged_files = \
   done | $(am__uniquify_input)`
 am__DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/cpgplot.pc.in \
 	$(srcdir)/giza-version.h.in $(srcdir)/giza.pc.in \
-	$(srcdir)/pgplot.pc.in $(top_srcdir)/build/depcomp
+	$(srcdir)/mgo.pc.in $(srcdir)/pgplot.pc.in \
+	$(top_srcdir)/build/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
 AMTAR = @AMTAR@
@@ -478,6 +492,7 @@ FCFLAGS = @FCFLAGS@
 FC_CFLAGS = @FC_CFLAGS@
 FC_LIBS = @FC_LIBS@
 FGREP = @FGREP@
+FILECMD = @FILECMD@
 FT_CFLAGS = @FT_CFLAGS@
 FT_LIBS = @FT_LIBS@
 GIZA_VERSION_MAJOR = @GIZA_VERSION_MAJOR@
@@ -620,8 +635,9 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
 	giza-line-style.c giza-line-width.c giza-line.c giza-move.c \
 	giza-paper.c giza-points.c giza-polygon.c giza-print-id.c \
 	giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
-	giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
-	giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
+	giza-render.c giza-save.c giza-set-font.c \
+	giza-set-window-title.c giza-stroke.c giza-subpanel.c \
+	giza-text-background.c giza-text.c giza-tick.c \
 	giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
 	giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
 	giza-arrow-style-private.h giza-driver-svg-private.h \
@@ -653,10 +669,14 @@ libcpgplot_la_SOURCES = giza-cpgplot.c
 libcpgplot_la_LDFLAGS = $(libgiza_la_LDFLAGS) -lgiza
 libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS)
+libmgo_la_SOURCES = giza-mongo.f90
+libmgo_la_LIBADD = libpgplot.la
+libmgo_la_DEPENDENCIES = libpgplot.la libgiza.la
+libmgo_la_LDFLAGS = $(libpgplot_la_LDFLAGS)
 include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h \
 	giza-fortran.F90 $(am__append_4)
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
+pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc $(am__append_5)
 all: all-am
 
 .SUFFIXES:
@@ -695,6 +715,8 @@ cpgplot.pc: $(top_builddir)/config.status $(srcdir)/cpgplot.pc.in
 giza.pc: $(top_builddir)/config.status $(srcdir)/giza.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 pgplot.pc: $(top_builddir)/config.status $(srcdir)/pgplot.pc.in
+	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
+mgo.pc: $(top_builddir)/config.status $(srcdir)/mgo.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 giza-version.h: $(top_builddir)/config.status $(srcdir)/giza-version.h.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
@@ -740,6 +762,9 @@ libgiza-osxcocoa-main.la: $(libgiza_osxcocoa_main_la_OBJECTS) $(libgiza_osxcocoa
 
 libgiza.la: $(libgiza_la_OBJECTS) $(libgiza_la_DEPENDENCIES) $(EXTRA_libgiza_la_DEPENDENCIES) 
 	$(AM_V_OBJCLD)$(libgiza_la_LINK) -rpath $(libdir) $(libgiza_la_OBJECTS) $(libgiza_la_LIBADD) $(LIBS)
+
+libmgo.la: $(libmgo_la_OBJECTS) $(libmgo_la_DEPENDENCIES) $(EXTRA_libmgo_la_DEPENDENCIES) 
+	$(AM_V_FCLD)$(libmgo_la_LINK) $(am_libmgo_la_rpath) $(libmgo_la_OBJECTS) $(libmgo_la_LIBADD) $(LIBS)
 
 libpgplot.la: $(libpgplot_la_OBJECTS) $(libpgplot_la_DEPENDENCIES) $(EXTRA_libpgplot_la_DEPENDENCIES) 
 	$(AM_V_FCLD)$(libpgplot_la_LINK) $(am_libpgplot_la_rpath) $(libpgplot_la_OBJECTS) $(libpgplot_la_LIBADD) $(LIBS)
@@ -812,6 +837,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-render.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-save.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-set-font.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-set-window-title.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-stroke.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-subpanel.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-text-background.Plo@am__quote@ # am--include-marker
@@ -1276,6 +1302,13 @@ libgiza_la-giza-set-font.lo: giza-set-font.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgiza_la-giza-set-font.lo `test -f 'giza-set-font.c' || echo '$(srcdir)/'`giza-set-font.c
 
+libgiza_la-giza-set-window-title.lo: giza-set-window-title.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgiza_la-giza-set-window-title.lo -MD -MP -MF $(DEPDIR)/libgiza_la-giza-set-window-title.Tpo -c -o libgiza_la-giza-set-window-title.lo `test -f 'giza-set-window-title.c' || echo '$(srcdir)/'`giza-set-window-title.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgiza_la-giza-set-window-title.Tpo $(DEPDIR)/libgiza_la-giza-set-window-title.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='giza-set-window-title.c' object='libgiza_la-giza-set-window-title.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgiza_la-giza-set-window-title.lo `test -f 'giza-set-window-title.c' || echo '$(srcdir)/'`giza-set-window-title.c
+
 libgiza_la-giza-stroke.lo: giza-stroke.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgiza_la-giza-stroke.lo -MD -MP -MF $(DEPDIR)/libgiza_la-giza-stroke.Tpo -c -o libgiza_la-giza-stroke.lo `test -f 'giza-stroke.c' || echo '$(srcdir)/'`giza-stroke.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgiza_la-giza-stroke.Tpo $(DEPDIR)/libgiza_la-giza-stroke.Plo
@@ -1685,6 +1718,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-render.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-save.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-set-font.Plo
+	-rm -f ./$(DEPDIR)/libgiza_la-giza-set-window-title.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-stroke.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-subpanel.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-text-background.Plo
@@ -1807,6 +1841,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-render.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-save.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-set-font.Plo
+	-rm -f ./$(DEPDIR)/libgiza_la-giza-set-window-title.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-stroke.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-subpanel.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-text-background.Plo

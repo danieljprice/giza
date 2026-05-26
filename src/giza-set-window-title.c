@@ -1,7 +1,7 @@
 /* giza - a scientific plotting library built on cairo
  *
  * Copyright (c) 2010      James Wetter and Daniel Price
- * Copyright (c) 2010-2012 Daniel Price
+ * Copyright (c) 2010-2022 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU General Public License
@@ -21,20 +21,34 @@
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
-#ifdef CAIRO_HAS_XLIB_SURFACE
-#define _GIZA_HAS_XW 1
 
-int _giza_open_device_xw (double width, double height, int units);
-void _giza_init_norm_xw (void);
-void _giza_flush_device_xw (void);
-void _giza_change_page_xw (void);
-void _giza_close_device_xw (void);
-void _giza_expand_clipping_xw (void);
-void _giza_reset_clipping_xw (void);
-void _giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xanc, const double *yanch,
-                             double *x, double *y, char *ch);
-int _giza_init_band_xw (void);
-int _giza_select_xw(int devid);
-void _giza_set_window_title_xw (const char *title);
+#include "giza-private.h"
+#include "giza-drivers-private.h"
+#include "giza-driver-xw-private.h"
+#include <giza.h>
+#include <stddef.h>
 
+/**
+ * Drawing: giza_set_window_title
+ *
+ * Synopsis: Set the device prefix and, for interactive devices, the
+ *           window title shown to the user.
+ */
+void
+giza_set_window_title (const char *title)
+{
+  if (!_giza_check_device_ready ("giza_set_window_title"))
+    return;
+
+  if (title == NULL || title[0] == '\0')
+    return;
+
+  _giza_set_prefix (title);
+
+#ifdef _GIZA_HAS_XW
+  if (Dev[id].type == GIZA_DEVICE_XW)
+    _giza_set_window_title_xw (title);
 #endif
+
+  return;
+}

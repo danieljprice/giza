@@ -253,6 +253,22 @@ _giza_flush_device_xw (void)
 }
 
 /**
+ * Update the title of an open X window (Lick Mongo winname compatibility).
+ */
+void
+_giza_set_window_title_xw (const char *title)
+{
+  if (title == NULL || title[0] == '\0')
+    return;
+
+  if (!XW[id].display || !XW[id].window)
+    return;
+
+  XStoreName (XW[id].display, XW[id].window, title);
+  XFlush (XW[id].display);
+}
+
+/**
  * Advances the X window device to the next page.
  * If resize was set upon function entry, resize the window accordingly.
  * If, otoh, we detect the window was resized, take appropriate action and

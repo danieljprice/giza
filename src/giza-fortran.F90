@@ -72,6 +72,7 @@ module giza
       giza_open_device_size, &
       giza_get_device_id, &
       giza_select_device, &
+      giza_set_window_title, &
       giza_flush_device, &
       giza_change_page, &
       giza_close_device, &
@@ -783,6 +784,17 @@ private
       import
       integer(kind=c_int),intent(out) :: devid
     end subroutine giza_get_device_id_c
+ end interface
+
+ interface giza_set_window_title
+    module procedure giza_intern_set_window_title_f2c
+ end interface
+
+ interface giza_set_window_title_c
+    subroutine giza_set_window_title_intern(title) bind(C, name="giza_set_window_title")
+      import
+      character(kind=c_char), intent(in) :: title(*)
+    end subroutine giza_set_window_title_intern
  end interface
 
  interface giza_flush_device
@@ -1974,6 +1986,13 @@ contains
                                                            cstring(prefix),width,height,units)
 
   end function giza_intern_open_device_size
+
+  subroutine giza_intern_set_window_title_f2c(title)
+    character(len=*),intent(in) :: title
+
+    call giza_set_window_title_intern(cstring(title))
+
+  end subroutine giza_intern_set_window_title_f2c
 
   ! So cursor functionality can be queried as logical
   logical function giza_intern_device_has_cursor()

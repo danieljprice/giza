@@ -105,6 +105,8 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__EXEEXT_1 = test-2D$(EXEEXT) test-fortran$(EXEEXT) \
+	test-mongo-basic$(EXEEXT) test-mongo-batch$(EXEEXT) \
+	test-mongo-label$(EXEEXT) test-mongo-kepler$(EXEEXT) \
 	test-pgpnts$(EXEEXT) test-pgconb$(EXEEXT) test-pgconf$(EXEEXT) \
 	test-pgconl$(EXEEXT) test-pgconx$(EXEEXT) test-pghi2d$(EXEEXT) \
 	test-pgscrl$(EXEEXT)
@@ -121,6 +123,18 @@ test_fortran_SOURCES = test-fortran.f90
 test_fortran_OBJECTS = test-fortran.$(OBJEXT)
 test_fortran_LDADD = $(LDADD)
 test_fortran_DEPENDENCIES = ../../src/libpgplot.la
+test_mongo_basic_SOURCES = test-mongo-basic.f90
+test_mongo_basic_OBJECTS = test-mongo-basic.$(OBJEXT)
+test_mongo_basic_DEPENDENCIES = ../../src/libmgo.la
+test_mongo_batch_SOURCES = test-mongo-batch.f90
+test_mongo_batch_OBJECTS = test-mongo-batch.$(OBJEXT)
+test_mongo_batch_DEPENDENCIES = ../../src/libmgo.la
+test_mongo_kepler_SOURCES = test-mongo-kepler.f90
+test_mongo_kepler_OBJECTS = test-mongo-kepler.$(OBJEXT)
+test_mongo_kepler_DEPENDENCIES = ../../src/libmgo.la
+test_mongo_label_SOURCES = test-mongo-label.f90
+test_mongo_label_OBJECTS = test-mongo-label.$(OBJEXT)
+test_mongo_label_DEPENDENCIES = ../../src/libmgo.la
 test_pgaxis_SOURCES = test-pgaxis.f90
 test_pgaxis_OBJECTS = test-pgaxis.$(OBJEXT)
 test_pgaxis_LDADD = $(LDADD)
@@ -181,13 +195,16 @@ AM_V_FCLD = $(am__v_FCLD_@AM_V@)
 am__v_FCLD_ = $(am__v_FCLD_@AM_DEFAULT_V@)
 am__v_FCLD_0 = @echo "  FCLD    " $@;
 am__v_FCLD_1 = 
-SOURCES = test-2D.f90 test-fortran.f90 test-pgaxis.f90 test-pgconb.f90 \
+SOURCES = test-2D.f90 test-fortran.f90 test-mongo-basic.f90 \
+	test-mongo-batch.f90 test-mongo-kepler.f90 \
+	test-mongo-label.f90 test-pgaxis.f90 test-pgconb.f90 \
 	test-pgconf.f90 test-pgconl.f90 test-pgconx.f90 \
 	test-pghi2d.f90 test-pgpnts.f90 test-pgscrl.f90
-DIST_SOURCES = test-2D.f90 test-fortran.f90 test-pgaxis.f90 \
-	test-pgconb.f90 test-pgconf.f90 test-pgconl.f90 \
-	test-pgconx.f90 test-pghi2d.f90 test-pgpnts.f90 \
-	test-pgscrl.f90
+DIST_SOURCES = test-2D.f90 test-fortran.f90 test-mongo-basic.f90 \
+	test-mongo-batch.f90 test-mongo-kepler.f90 \
+	test-mongo-label.f90 test-pgaxis.f90 test-pgconb.f90 \
+	test-pgconf.f90 test-pgconl.f90 test-pgconx.f90 \
+	test-pghi2d.f90 test-pgpnts.f90 test-pgscrl.f90
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -456,6 +473,7 @@ FCFLAGS = @FCFLAGS@
 FC_CFLAGS = @FC_CFLAGS@
 FC_LIBS = @FC_LIBS@
 FGREP = @FGREP@
+FILECMD = @FILECMD@
 FT_CFLAGS = @FT_CFLAGS@
 FT_LIBS = @FT_LIBS@
 GIZA_VERSION_MAJOR = @GIZA_VERSION_MAJOR@
@@ -573,17 +591,22 @@ top_srcdir = @top_srcdir@
 AM_FCFLAGS = $(WERROR_CFLAGS) $(WARN_CFLAGS) -I../../src
 AM_LDFLAGS = -no-install
 LDADD = ../../src/libpgplot.la
-CLEANFILES = *.png
+test_mongo_basic_LDADD = ../../src/libmgo.la
+test_mongo_batch_LDADD = ../../src/libmgo.la
+test_mongo_label_LDADD = ../../src/libmgo.la
+test_mongo_kepler_LDADD = ../../src/libmgo.la
+CLEANFILES = *.png giza-mongo-kepler.ps giza-mongo-kepler.ps_0001
 
 # Tests that run non-interactively (file-based devices only)
-auto_ftests = test-2D test-fortran \
-	test-pgpnts test-pgconb test-pgconf test-pgconl test-pgconx test-pghi2d test-pgscrl
+auto_ftests = test-2D test-fortran test-mongo-basic test-mongo-batch test-mongo-label \
+	test-mongo-kepler test-pgpnts test-pgconb test-pgconf test-pgconl test-pgconx \
+	test-pghi2d test-pgscrl
 
 
 # Tests that need an X display
 interactive_ftests = test-pgaxis
 AM_DEFAULT_SOURCE_EXT = .f90
-test_output_files = giza-test.png giza-test-2D.png
+test_output_files = giza-test.png giza-test-2D.png giza.png
 all: all-am
 
 .SUFFIXES:
@@ -629,6 +652,22 @@ test-2D$(EXEEXT): $(test_2D_OBJECTS) $(test_2D_DEPENDENCIES) $(EXTRA_test_2D_DEP
 test-fortran$(EXEEXT): $(test_fortran_OBJECTS) $(test_fortran_DEPENDENCIES) $(EXTRA_test_fortran_DEPENDENCIES) 
 	@rm -f test-fortran$(EXEEXT)
 	$(AM_V_FCLD)$(FCLINK) $(test_fortran_OBJECTS) $(test_fortran_LDADD) $(LIBS)
+
+test-mongo-basic$(EXEEXT): $(test_mongo_basic_OBJECTS) $(test_mongo_basic_DEPENDENCIES) $(EXTRA_test_mongo_basic_DEPENDENCIES) 
+	@rm -f test-mongo-basic$(EXEEXT)
+	$(AM_V_FCLD)$(FCLINK) $(test_mongo_basic_OBJECTS) $(test_mongo_basic_LDADD) $(LIBS)
+
+test-mongo-batch$(EXEEXT): $(test_mongo_batch_OBJECTS) $(test_mongo_batch_DEPENDENCIES) $(EXTRA_test_mongo_batch_DEPENDENCIES) 
+	@rm -f test-mongo-batch$(EXEEXT)
+	$(AM_V_FCLD)$(FCLINK) $(test_mongo_batch_OBJECTS) $(test_mongo_batch_LDADD) $(LIBS)
+
+test-mongo-kepler$(EXEEXT): $(test_mongo_kepler_OBJECTS) $(test_mongo_kepler_DEPENDENCIES) $(EXTRA_test_mongo_kepler_DEPENDENCIES) 
+	@rm -f test-mongo-kepler$(EXEEXT)
+	$(AM_V_FCLD)$(FCLINK) $(test_mongo_kepler_OBJECTS) $(test_mongo_kepler_LDADD) $(LIBS)
+
+test-mongo-label$(EXEEXT): $(test_mongo_label_OBJECTS) $(test_mongo_label_DEPENDENCIES) $(EXTRA_test_mongo_label_DEPENDENCIES) 
+	@rm -f test-mongo-label$(EXEEXT)
+	$(AM_V_FCLD)$(FCLINK) $(test_mongo_label_OBJECTS) $(test_mongo_label_LDADD) $(LIBS)
 
 test-pgaxis$(EXEEXT): $(test_pgaxis_OBJECTS) $(test_pgaxis_DEPENDENCIES) $(EXTRA_test_pgaxis_DEPENDENCIES) 
 	@rm -f test-pgaxis$(EXEEXT)
@@ -911,6 +950,34 @@ test-2D.log: test-2D$(EXEEXT)
 test-fortran.log: test-fortran$(EXEEXT)
 	@p='test-fortran$(EXEEXT)'; \
 	b='test-fortran'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-mongo-basic.log: test-mongo-basic$(EXEEXT)
+	@p='test-mongo-basic$(EXEEXT)'; \
+	b='test-mongo-basic'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-mongo-batch.log: test-mongo-batch$(EXEEXT)
+	@p='test-mongo-batch$(EXEEXT)'; \
+	b='test-mongo-batch'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-mongo-label.log: test-mongo-label$(EXEEXT)
+	@p='test-mongo-label$(EXEEXT)'; \
+	b='test-mongo-label'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-mongo-kepler.log: test-mongo-kepler$(EXEEXT)
+	@p='test-mongo-kepler$(EXEEXT)'; \
+	b='test-mongo-kepler'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \

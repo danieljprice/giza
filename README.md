@@ -106,3 +106,25 @@ make test-pgaxis test-pgncur
 ./test-pgaxis
 ./test-pgncur
 ```
+
+Kepler / Lick-Mongo replacement usage
+-------------------------------------
+giza also builds ``libmgo``, a Fortran library that implements the Lick Mongo
+``libmgo`` routines used by Kepler ``plotmongo.f90`` (``setlim``, ``abox``,
+``connect``, ``mongo(...)``, polygon fill routines, etc.) on top of giza.
+Link Kepler with ``-lmgo`` (via ``pkg-config --libs mgo``) instead of the
+legacy Mongo libraries.
+
+Regression tests:
+```
+cd giza/test/F90
+make test-mongo-basic test-mongo-batch test-mongo-label test-mongo-kepler
+./test-mongo-basic
+./test-mongo-batch
+./test-mongo-label
+./test-mongo-kepler
+```
+The basic tests write ``giza.png`` in the current directory.
+
+Optional symbol audit against a reference ``libmgo.a``:
+``perl scripts/mongo_status.pl [reference.a] [src/.libs/libmgo.a]``

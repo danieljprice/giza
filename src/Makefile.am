@@ -15,7 +15,7 @@ endif
 
 # only compile libpgplot.a and giza.mod if we have a working Fortran compiler
 if HAVE_FC
-lib_LTLIBRARIES += libpgplot.la
+lib_LTLIBRARIES += libpgplot.la libmgo.la
 fmoddir = $(libdir)/$(FC)/modules
 fmod_DATA = giza.mod
 endif
@@ -36,7 +36,7 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-line-style.c giza-line-width.c giza-line.c giza-move.c \
        giza-paper.c giza-points.c giza-polygon.c giza-print-id.c \
        giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
-       giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
+       giza-render.c giza-save.c giza-set-font.c giza-set-window-title.c giza-stroke.c \
        giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
        giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
        giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
@@ -75,6 +75,11 @@ libpgplot_la_SOURCES = giza-fortran.F90 giza-pgplot.f90
 
 libpgplot_la_LDFLAGS = $(libcpgplot_la_LDFLAGS)
 
+libmgo_la_SOURCES = giza-mongo.f90
+libmgo_la_LIBADD = libpgplot.la
+libmgo_la_DEPENDENCIES = libpgplot.la libgiza.la
+libmgo_la_LDFLAGS = $(libpgplot_la_LDFLAGS)
+
 include_HEADERS = cpgplot.h giza.h giza-shared.h giza-version.h giza-fortran.F90
 if HAVE_OSXCOCOA
 include_HEADERS += giza-osxcocoa-main.h
@@ -82,3 +87,6 @@ endif
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = cpgplot.pc giza.pc pgplot.pc
+if HAVE_FC
+pkgconfig_DATA += mgo.pc
+endif

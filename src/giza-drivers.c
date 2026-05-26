@@ -57,7 +57,6 @@
 
 #define GIZA_DEFAULT_MARGIN 0
 
-static void _giza_set_prefix (const char *prefix);
 static int _giza_get_internal_id(int devid);
 static void _giza_close_device_unchecked (void);
 static void _giza_init_device_struct(giza_device_t*);

@@ -124,6 +124,7 @@ AC_CONFIG_FILES([
  src/cpgplot.pc
  src/giza.pc
  src/pgplot.pc
+ src/mgo.pc
  src/giza-version.h
  test/Makefile
  test/C/Makefile

@@ -2,11 +2,17 @@ AM_FCFLAGS = $(WERROR_CFLAGS) $(WARN_CFLAGS) -I../../src
 AM_LDFLAGS = -no-install
 LDADD = ../../src/libpgplot.la
 
-CLEANFILES = *.png
+test_mongo_basic_LDADD = ../../src/libmgo.la
+test_mongo_batch_LDADD = ../../src/libmgo.la
+test_mongo_label_LDADD = ../../src/libmgo.la
+test_mongo_kepler_LDADD = ../../src/libmgo.la
+
+CLEANFILES = *.png giza-mongo-kepler.ps giza-mongo-kepler.ps_0001
 
 # Tests that run non-interactively (file-based devices only)
-auto_ftests = test-2D test-fortran \
-	test-pgpnts test-pgconb test-pgconf test-pgconl test-pgconx test-pghi2d test-pgscrl
+auto_ftests = test-2D test-fortran test-mongo-basic test-mongo-batch test-mongo-label \
+	test-mongo-kepler test-pgpnts test-pgconb test-pgconf test-pgconl test-pgconx \
+	test-pghi2d test-pgscrl
 
 # Tests that need an X display
 interactive_ftests = test-pgaxis
@@ -15,7 +21,7 @@ TESTS = $(auto_ftests)
 check_PROGRAMS = $(auto_ftests) $(interactive_ftests)
 AM_DEFAULT_SOURCE_EXT = .f90
 
-test_output_files = giza-test.png giza-test-2D.png
+test_output_files = giza-test.png giza-test-2D.png giza.png
 
 # Custom target to check for the existence of expected output files from the Fortran tests
 check-local: check-TESTS
