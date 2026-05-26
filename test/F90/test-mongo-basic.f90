@@ -12,7 +12,7 @@ program test_mongo_basic
  call device(5)
  call tsetup
  call setlim(0.d0, -1.2d0, 5.d0, 1.2d0)
- call abox(1, 2, 0, -1)
+ call abox(1, 2, 0, 0)
  call xlabel(3, 'x')
  call ylabel(3, 'y')
  call setcolor(2)

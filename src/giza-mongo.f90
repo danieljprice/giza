@@ -71,6 +71,7 @@ integer :: mongo_ltype = 1
  logical :: ps_landscape = .false.
  integer :: psfmode = 1
  logical :: physical_init = .false.
+ logical :: mongo_custom_viewport = .false.
  logical :: mongo_movie_mode = .false.
 
  real(dp) :: expand = 1.d0
@@ -186,27 +187,33 @@ contains
   end if
  end subroutine mongo_dev_to_world
 
+ subroutine mongo_sync_giza_default_viewport()
+  ! Match Mongo device plot area (gx, gy) to giza's PGPLOT-style default viewport.
+  real(dp) :: vp1, vp2, vp3, vp4, denomx, denomy
+  call giza_set_viewport_default()
+  call giza_get_viewport(giza_units_normalized, vp1, vp2, vp3, vp4)
+  denomx = max(lx2 - lx1 + 1.d0, 1.d0)
+  denomy = max(ly2 - ly1 + 1.d0, 1.d0)
+  gx1 = lx1 + vp1 * denomx
+  gx2 = lx1 + vp2 * denomx
+  gy1 = ly1 + vp3 * denomy
+  gy2 = ly1 + vp4 * denomy
+  old_gx1 = gx1
+  old_gx2 = gx2
+  old_gy1 = gy1
+  old_gy2 = gy2
+ end subroutine mongo_sync_giza_default_viewport
+
  subroutine mongo_init_physical()
   real :: px1, px2, py1, py2
-  real(dp) :: rm, lm, bm, tm
   if (physical_init) return
   call giza_get_surface_size(px1, px2, py1, py2)
   lx1 = 0.d0
   ly1 = 0.d0
   lx2 = max(1.d0, real(px2 - px1, kind=dp))
   ly2 = max(1.d0, real(py2 - py1, kind=dp))
-  rm = 0.10d0
-  lm = 0.05d0
-  bm = 0.10d0
-  tm = 0.05d0
-  gx1 = lx1 + lm * (lx2 - lx1 + 1.d0)
-  gx2 = lx2 - rm * (lx2 - lx1 + 1.d0)
-  gy1 = ly1 + bm * (ly2 - ly1 + 1.d0)
-  gy2 = ly2 - tm * (ly2 - ly1 + 1.d0)
-  old_gx1 = gx1
-  old_gx2 = gx2
-  old_gy1 = gy1
-  old_gy2 = gy2
+  mongo_custom_viewport = .false.
+  call mongo_sync_giza_default_viewport()
   old_expand = expand
   physical_init = .true.
  end subroutine mongo_init_physical
@@ -214,6 +221,10 @@ contains
  subroutine mongo_apply_viewport()
   real(dp) :: vp1, vp2, vp3, vp4, denomx, denomy
   if (.not. physical_init) call mongo_init_physical
+  if (.not. mongo_custom_viewport) then
+     call mongo_sync_giza_default_viewport()
+     return
+  end if
   denomx = max(lx2 - lx1 + 1.d0, 1.d0)
   denomy = max(ly2 - ly1 + 1.d0, 1.d0)
   if (gx2 <= gx1 .or. gy2 <= gy1) return
@@ -259,43 +270,88 @@ contains
   call giza_set_window(wxmin, wxmax, wymin, wymax)
  end subroutine mongo_apply_window
 
- subroutine mongo_build_box_opts(ixlab, iylab, ixnum, iynum, xopt, yopt)
+ subroutine mongo_build_frame_opts(ixlab, iylab, ixnum, iynum, xopt, yopt)
   integer, intent(in) :: ixlab, iylab, ixnum, iynum
   character(len=16), intent(out) :: xopt, yopt
-  xopt = 'BC'
-  yopt = 'LC'
-  if (abs(ixnum) > 0) xopt = trim(xopt)//'N'
-  if (abs(iynum) > 0) yopt = trim(yopt)//'N'
-  if (ixlab == 2) xopt = 'TC'//trim(xopt(2:))
-  if (iylab == 2) yopt = 'RC'//trim(yopt(2:))
-  if (ixnum < 0 .or. ixlab < 0) xopt = trim(xopt)//'I'
-  if (iynum < 0 .or. iylab < 0) yopt = trim(yopt)//'I'
+  ! Frame and ticks only (no numeric labels).  giza_box N/M apply to all
+  ! numbers on an axis, so numeric labels are drawn in separate passes.
+  xopt = ''
+  yopt = ''
+  if (ixlab >= 0) xopt = trim(xopt)//'B'
+  if (ixnum >= 0) xopt = trim(xopt)//'C'
+  if (iylab >= 0) yopt = trim(yopt)//'B'
+  if (iynum >= 0) yopt = trim(yopt)//'C'
+  if (len_trim(xopt) > 0) xopt = trim(xopt)//'TS'
+  if (len_trim(yopt) > 0) yopt = trim(yopt)//'TS'
   if (xlog) xopt = trim(xopt)//'L'
   if (ylog) yopt = trim(yopt)//'L'
-  xopt = trim(xopt)//'TS'
-  yopt = trim(yopt)//'TS'
- end subroutine mongo_build_box_opts
+  if (len_trim(xopt) == 0) xopt = ' '
+  if (len_trim(yopt) == 0) yopt = ' '
+ end subroutine mongo_build_frame_opts
 
  subroutine mongo_draw_box(ixlab, iylab, ixnum, iynum)
   integer, intent(in) :: ixlab, iylab, ixnum, iynum
   character(len=16) :: xopt, yopt
-  real(dp) :: xmaj, ymaj
+  real(dp) :: xmaj, ymaj, saved_lw
+  logical :: split_x, split_y
+  integer :: saved_ci
   call mongo_ensure_device
   call mongo_apply_window
-  call mongo_build_box_opts(ixlab, iylab, ixnum, iynum, xopt, yopt)
   xmaj = tick_xmaj
   ymaj = tick_ymaj
   if (abigx /= 0.d0) xmaj = abigx
   if (abigy /= 0.d0) ymaj = abigy
   if (asmallx < 0.d0) xlog = .true.
   if (asmally < 0.d0) ylog = .true.
+  split_x = (ixlab >= 0 .and. ixnum >= 0)
+  split_y = (iylab >= 0 .and. iynum >= 0)
+  saved_ci = mongo_colour
+  call giza_set_colour_index(1)
+  call giza_get_line_width(saved_lw)
+  call giza_set_line_width(1.d0)
+  call mongo_build_frame_opts(ixlab, iylab, ixnum, iynum, xopt, yopt)
+  if (.not. split_x) then
+     if (ixlab >= 0) xopt = trim(xopt)//'N'
+     if (ixnum >= 0) xopt = trim(xopt)//'M'
+  end if
+  if (.not. split_y) then
+     if (iylab >= 0) yopt = trim(yopt)//'N'
+     if (iynum >= 0) yopt = trim(yopt)//'M'
+  end if
   call giza_box(trim(xopt), real(xmaj), 0, trim(yopt), real(ymaj), 0)
+  if (split_x) then
+     if (ixlab >= 0) then
+        xopt = 'N'
+        if (xlog) xopt = trim(xopt)//'L'
+        call giza_box(trim(xopt), real(xmaj), 0, ' ', 0., 0)
+     end if
+     if (ixnum >= 0) then
+        xopt = 'M'
+        if (xlog) xopt = trim(xopt)//'L'
+        call giza_box(trim(xopt), real(xmaj), 0, ' ', 0., 0)
+     end if
+  end if
+  if (split_y) then
+     if (iylab >= 0) then
+        yopt = 'N'
+        if (ylog) yopt = trim(yopt)//'L'
+        call giza_box(' ', 0., 0, trim(yopt), real(ymaj), 0)
+     end if
+     if (iynum >= 0) then
+        yopt = 'M'
+        if (ylog) yopt = trim(yopt)//'L'
+        call giza_box(' ', 0., 0, trim(yopt), real(ymaj), 0)
+     end if
+  end if
   if (len_trim(label_x) > 0 .or. len_trim(label_y) > 0 .or. len_trim(label_t) > 0) then
      call giza_label(trim(label_x), trim(label_y), trim(label_t))
   end if
   if (len_trim(label_r) > 0) then
      call giza_ptext(1.02d0, 0.5d0, 90.d0, 0.d0, trim(label_r))
   end if
+  call giza_set_line_width(saved_lw)
+  call giza_set_colour_index(saved_ci)
+  mongo_colour = saved_ci
  end subroutine mongo_draw_box
 
  subroutine mongo_parse_limits(cmd, xmin, xmax)
@@ -367,6 +423,10 @@ end subroutine mongo_auto_limits
      call window(1, 1, 1)
      call setlweight(1)
      call setcolor(1)
+     if (device_open) then
+        mongo_custom_viewport = .false.
+        call mongo_sync_giza_default_viewport()
+     end if
   case ('delete')
      ! no-op
   case ('data')
@@ -1032,6 +1092,7 @@ subroutine softphysical(x1, y1, x2, y2, m1, m2, m3, m4)
  old_gx2 = gx2
  old_gy1 = gy1
  old_gy2 = gy2
+ mongo_custom_viewport = .true.
  physical_init = .true.
  call mongo_apply_viewport
 end subroutine softphysical
@@ -1046,6 +1107,7 @@ subroutine setloc(x1, y1, x2, y2)
  gy1 = y1
  gx2 = x2
  gy2 = y2
+ mongo_custom_viewport = .true.
  call mongo_ensure_device
  call mongo_apply_viewport
 end subroutine setloc
