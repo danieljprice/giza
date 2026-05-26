@@ -70,6 +70,156 @@
 /* GizaView                                                                  */
 /* ======================================================================== */
 
+/* ======================================================================== */
+/* GizaBandView — transparent overlay that draws rubber-band shapes         */
+/* using CoreGraphics. Lives on top of GizaView; only exists during         */
+/* a giza_band() / PGBAND call.                                              */
+/* ======================================================================== */
+
+@interface GizaBandView : NSView
+{
+    int     _mode;       /* GIZA_BAND_* mode */
+    NSPoint _anchor;     /* anchor point in surface coords */
+    NSPoint _cursor;     /* current cursor in surface coords */
+    int     _surfW;      /* source surface size (for full-width lines) */
+    int     _surfH;
+    CGRect  _displayRect;/* same letterbox rect as parent GizaView */
+}
+- (instancetype)initWithFrame:(NSRect)frame
+                         mode:(int)mode
+                       anchor:(NSPoint)anc
+                      surfaceSize:(NSSize)ss
+                      displayRect:(CGRect)dr;
+- (void)updateCursor:(NSPoint)surfPt displayRect:(CGRect)dr;
+@end
+
+@implementation GizaBandView
+
+- (instancetype)initWithFrame:(NSRect)frame
+                         mode:(int)mode
+                       anchor:(NSPoint)anc
+                      surfaceSize:(NSSize)ss
+                      displayRect:(CGRect)dr
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        _mode = mode;
+        _anchor = anc;
+        _cursor = anc;
+        _surfW  = (int)ss.width;
+        _surfH  = (int)ss.height;
+        _displayRect = dr;
+    }
+    return self;
+}
+
+- (BOOL)isOpaque { return NO; }
+- (BOOL)acceptsFirstResponder { return NO; }  /* events handled by GizaView */
+
+/* Convert a surface-space point to view-space for drawing */
+- (CGPoint)_viewPtFromSurface:(NSPoint)sp
+{
+    if (_surfW <= 0 || _surfH <= 0 || _displayRect.size.width < 1)
+        return CGPointMake(sp.x, sp.y);
+    CGFloat sx = _displayRect.origin.x + sp.x / _surfW * _displayRect.size.width;
+    CGFloat sy = _displayRect.origin.y + sp.y / _surfH * _displayRect.size.height;
+    return CGPointMake(sx, sy);
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+    CGContextRef ctx = [[NSGraphicsContext currentContext] CGContext];
+    CGContextClearRect(ctx, NSRectToCGRect(self.bounds));
+
+    if (_mode <= 0) return;
+
+    /* Style: white line with 40% opacity fill for area modes */
+    CGContextSetLineWidth(ctx, 1.5);
+    CGContextSetRGBStrokeColor(ctx, 0.9, 0.9, 0.9, 1.0);
+    CGContextSetRGBFillColor  (ctx, 1.0, 1.0, 1.0, 0.15);
+
+    CGPoint a = [self _viewPtFromSurface:_anchor];
+    CGPoint c = [self _viewPtFromSurface:_cursor];
+
+    /* full-width / full-height extent in view coords */
+    CGPoint tl = [self _viewPtFromSurface:NSMakePoint(0,0)];
+    CGPoint br = [self _viewPtFromSurface:NSMakePoint(_surfW,_surfH)];
+
+    switch (_mode) {
+        case 1: /* line anchor → cursor */
+            CGContextMoveToPoint(ctx, a.x, a.y);
+            CGContextAddLineToPoint(ctx, c.x, c.y);
+            CGContextStrokePath(ctx);
+            break;
+        case 2: /* hollow rectangle */
+            {
+                CGRect r = CGRectMake(fmin(a.x,c.x), fmin(a.y,c.y),
+                                      fabs(c.x-a.x), fabs(c.y-a.y));
+                CGContextFillRect(ctx, r);
+                CGContextStrokeRect(ctx, r);
+            }
+            break;
+        case 3: /* two horizontal lines */
+            CGContextMoveToPoint(ctx, tl.x, a.y);
+            CGContextAddLineToPoint(ctx, br.x, a.y);
+            CGContextMoveToPoint(ctx, tl.x, c.y);
+            CGContextAddLineToPoint(ctx, br.x, c.y);
+            CGContextStrokePath(ctx);
+            break;
+        case 4: /* two vertical lines */
+            CGContextMoveToPoint(ctx, a.x, tl.y);
+            CGContextAddLineToPoint(ctx, a.x, br.y);
+            CGContextMoveToPoint(ctx, c.x, tl.y);
+            CGContextAddLineToPoint(ctx, c.x, br.y);
+            CGContextStrokePath(ctx);
+            break;
+        case 5: /* single horizontal line */
+            CGContextMoveToPoint(ctx, tl.x, c.y);
+            CGContextAddLineToPoint(ctx, br.x, c.y);
+            CGContextStrokePath(ctx);
+            break;
+        case 6: /* single vertical line */
+            CGContextMoveToPoint(ctx, c.x, tl.y);
+            CGContextAddLineToPoint(ctx, c.x, br.y);
+            CGContextStrokePath(ctx);
+            break;
+        case 7: /* crosshair */
+            CGContextMoveToPoint(ctx, tl.x, c.y);
+            CGContextAddLineToPoint(ctx, br.x, c.y);
+            CGContextMoveToPoint(ctx, c.x, tl.y);
+            CGContextAddLineToPoint(ctx, c.x, br.y);
+            CGContextStrokePath(ctx);
+            break;
+        case 8: /* circle centred on anchor */
+            {
+                CGFloat dx = c.x - a.x, dy = c.y - a.y;
+                CGFloat r  = sqrt(dx*dx + dy*dy);
+                CGContextBeginPath(ctx);
+                CGContextAddArc(ctx, a.x, a.y, r, 0, 2*M_PI, 0);
+                CGContextFillPath(ctx);
+                CGContextBeginPath(ctx);
+                CGContextAddArc(ctx, a.x, a.y, r, 0, 2*M_PI, 0);
+                CGContextStrokePath(ctx);
+            }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)updateCursor:(NSPoint)surfPt displayRect:(CGRect)dr
+{
+    _cursor = surfPt;
+    _displayRect = dr;
+    [self setNeedsDisplay:YES];
+}
+
+@end
+
+/* ======================================================================== */
+/* GizaView                                                                  */
+/* ======================================================================== */
+
 @interface GizaView : NSView
 {
     CGLayerRef     _layer;
@@ -83,16 +233,25 @@
     int            _pixelStride;
     /* リサイズ表示用: drawRect が描画する実際の矩形 (letterbox/pillarbox) */
     CGRect         _displayRect;
+    /* rubber-band overlay */
+    GizaBandView  *_bandView;
+    BOOL           _bandActive;
+    NSPoint        _bandMovePt;   /* most recent mouse-moved surface point */
+    BOOL           _gotMouseMove;
 }
 - (instancetype)initWithFrame:(NSRect)frame devId:(int)devId;
 - (CGLayerRef)cgLayer;
 - (void)rebuildLayerSize:(NSSize)sz;
 - (void)waitForInputEvent;
+- (void)waitForInputEventWithBand;
 - (NSPoint)lastEventPoint;
 - (char)lastEventChar;
 - (void)setPixelData:(unsigned char*)data width:(int)w height:(int)h stride:(int)s;
 /* view 座標 → cairo surface 座標への逆変換 */
 - (NSPoint)surfacePointFromViewPoint:(NSPoint)vp;
+/* band control */
+- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc;
+- (void)detachBandView;
 @end
 
 @implementation GizaView
@@ -104,6 +263,8 @@
         _devId = devId; _layer = NULL; _gotEvent = NO; _eventCh = ' ';
         _pixelData = NULL; _pixelWidth = _pixelHeight = _pixelStride = 0;
         _displayRect = CGRectZero;
+        _bandView = nil; _bandActive = NO;
+        _bandMovePt = NSZeroPoint; _gotMouseMove = NO;
     }
     return self;
 }
@@ -225,6 +386,59 @@
                                            dequeue:YES];
         if (ev) [NSApp sendEvent:ev];
     }
+}
+
+/* Band-aware event loop: also handles mouse-moved events to update band */
+- (void)waitForInputEventWithBand {
+    _gotEvent = NO;
+    [[self window] setAcceptsMouseMovedEvents:YES];
+    while (!_gotEvent) {
+        /* distantFutureでブロックするとdispatch_asyncブロック内でRunLoopが詰まる。
+         * 短いタイムアウトでRunLoopを回し続けることで回避する。 */
+        [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode
+                                 beforeDate:[NSDate dateWithTimeIntervalSinceNow:0.05]];
+        NSEvent *ev;
+        while ((ev = [NSApp nextEventMatchingMask:NSEventMaskAny
+                                       untilDate:[NSDate distantPast]
+                                          inMode:NSDefaultRunLoopMode
+                                         dequeue:YES])) {
+            if (ev.type == NSEventTypeMouseMoved ||
+                ev.type == NSEventTypeLeftMouseDragged) {
+                NSPoint vp = [self convertPoint:[ev locationInWindow] fromView:nil];
+                NSPoint sp = [self surfacePointFromViewPoint:vp];
+                [_bandView updateCursor:sp displayRect:_displayRect];
+                [_bandView displayIfNeeded];
+            } else {
+                [NSApp sendEvent:ev];
+            }
+        }
+    }
+    [[self window] setAcceptsMouseMovedEvents:NO];
+}
+
+/* Attach a GizaBandView overlay */
+- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc
+{
+    [self detachBandView];
+    NSSize ss = NSMakeSize(_pixelWidth > 0 ? _pixelWidth : (int)self.bounds.size.width,
+                           _pixelHeight > 0 ? _pixelHeight : (int)self.bounds.size.height);
+    _bandView = [[GizaBandView alloc]
+                    initWithFrame:self.bounds
+                             mode:mode
+                           anchor:anc
+                      surfaceSize:ss
+                      displayRect:_displayRect];
+    [self addSubview:_bandView];
+    _bandActive = YES;
+}
+
+- (void)detachBandView
+{
+    if (_bandView) {
+        [_bandView removeFromSuperview];
+        _bandView = nil;
+    }
+    _bandActive = NO;
 }
 
 - (NSPoint)surfacePointFromViewPoint:(NSPoint)vp
@@ -432,6 +646,27 @@ _giza_osxcocoa_wait_for_event(int devId, float *x, float *y, char *ch)
         dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
         *x=(float)pt.x; *y=(float)pt.y; *ch=c;
     }
+}
+
+/* attach + wait + detach を全てmainスレッドで一括実行することでデッドロックを回避 */
+void
+_giza_osxcocoa_wait_for_event_band(int devId, int mode,
+                                   float xancSurface, float yancSurface,
+                                   float *x, float *y, char *ch)
+{
+    if (!_osxcocoa_inuse[devId]) { *ch='q'; return; }
+    GizaView *view = _osxcocoa_view[devId];
+    __block NSPoint pt = NSZeroPoint;
+    __block char c = ' ';
+    _run_on_main(^{
+        NSPoint anc = NSMakePoint(xancSurface, yancSurface);
+        [view attachBandViewMode:mode anchorSurfacePt:anc];
+        [view waitForInputEventWithBand];
+        pt = [view lastEventPoint];
+        c  = [view lastEventChar];
+        [view detachBandView];
+    });
+    *x = (float)pt.x; *y = (float)pt.y; *ch = c;
 }
 
 #endif /* CAIRO_HAS_QUARTZ_SURFACE */

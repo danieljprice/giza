@@ -22,7 +22,8 @@ interactive_ctests = test-arrow test-box test-cairo-xw test-change-page \
 	test-error-bars test-giza-xw test-line-cap \
 	test-line-style test-openclose test-points \
 	test-qtext test-rectangle test-set-line-width \
-	test-vector test-window test-XOpenDisplay test-contour test-render
+	test-vector test-window test-XOpenDisplay test-contour test-render \
+	test-band
 
 TESTS = $(auto_ctests)
 check_PROGRAMS = $(auto_ctests) $(interactive_ctests)

@@ -34,6 +34,7 @@
 #include "giza-io-private.h" /* for _giza_error() */
 #include "giza-driver-xw-private.h"
 #include "giza-driver-eps-private.h"
+#include "giza-driver-osxcocoa-private.h"
 #include "cpgplot.h"
 #include <string.h>
 #include <strings.h> /* for strcasecmp */
@@ -906,6 +907,9 @@ void cpgqdt(int n, char *type, int *type_length, char *descr, \
   static const struct { const char *type; const char *descr; int inter; } devs[] = {
 #ifdef _GIZA_HAS_XW
     {"/xw",   "X Window (interactive)", 1},
+#endif
+#ifdef _GIZA_HAS_OSXCOCOA
+    {"/osx",  "macOS native window (interactive)", 1},
 #endif
     {"/png",  "PNG file",               0},
     {"/pdf",  "PDF file",               0},

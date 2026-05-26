@@ -58,6 +58,9 @@ GizaCGContextRef _giza_osxcocoa_clear_and_get_context(int devId, int width, int 
 void         _giza_osxcocoa_close_window         (int devId);
 void         _giza_osxcocoa_wait_for_event       (int devId,
                                              float *x, float *y, char *ch);
+void         _giza_osxcocoa_wait_for_event_band  (int devId, int mode,
+                                             float xancSurface, float yancSurface,
+                                             float *x, float *y, char *ch);
 
 /* ---- resize callback (implemented in giza-driver-osxcocoa-bridge.c) ---------- */
 /* Called by GizaView -setFrameSize: */
