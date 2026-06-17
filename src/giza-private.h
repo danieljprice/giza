@@ -94,6 +94,9 @@ typedef struct
   int CurrentTrans;
   double defaultBackgroundAlpha;
   int deviceOpen;  /* Indicates if a device is open and ready to be drawn to. */
+  int external_cairo; /* Caller owns context/surface (GIZA_DEVICE_CAIRO) */
+  int cairo_context_bound; /* cairo_save active on external context */
+  int cairo_deferred_init; /* context-dependent init pending first bind */
   int drawn;       /* Flag if anything has been drawn yet */
   int resize;      /* Flag that device has been resized */
   int prompting;   /* Turn prompting on/off for interactive device */
@@ -143,6 +146,7 @@ typedef struct
 
 extern giza_settings_t Sets;
 
+int _giza_check_device_open (char *source);
 int _giza_check_device_ready (char *source);
 void _giza_init_character_height (void);
 void _giza_scale_character_size (double scalefac);

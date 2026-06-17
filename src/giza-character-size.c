@@ -23,9 +23,11 @@
  */
 
 #include "giza-private.h"
+#include "giza-drivers-private.h"
 #include "giza-io-private.h"
 #include "giza-transforms-private.h"
 #include <giza.h>
+#include <stddef.h>
 
 /**
  * Settings: giza_set_character_height
@@ -85,7 +87,7 @@ giza_set_character_height_float (float ch)
 void
 giza_get_character_height (double *ch)
 {
-  if (!_giza_check_device_ready ("giza_get_character_height"))
+  if (!_giza_check_device_open ("giza_get_character_height"))
     {
       *ch = 1.;
       return;
@@ -133,8 +135,18 @@ giza_get_character_height_float (float *ch)
 void
 giza_get_character_size (int units, double *heightx, double *heighty)
 {
-  if (!_giza_check_device_ready ("giza_get_character_height"))
+  if (!_giza_check_device_open ("giza_get_character_size"))
     return;
+
+  /* font metrics need a bound context on external cairo devices */
+  if (Dev[id].type == GIZA_DEVICE_CAIRO && Dev[id].context == NULL)
+    {
+      double nominal = Dev[id].ch * 0.027;
+
+      *heightx = nominal;
+      *heighty = nominal;
+      return;
+    }
 
   int oldTrans = _giza_get_trans ();
 

@@ -40,7 +40,7 @@
 void
 giza_get_surface_size (double *x1, double *x2, double *y1, double *y2)
 {
-  if (!_giza_check_device_ready ("giza_get_surface_size"))
+  if (!_giza_check_device_open ("giza_get_surface_size"))
     return;
 
   *x1 = 0.;
@@ -59,7 +59,7 @@ giza_get_surface_size (double *x1, double *x2, double *y1, double *y2)
 void
 giza_get_surface_size_float (float *x1, float *x2, float *y1, float *y2)
 {
-  if (!_giza_check_device_ready ("giza_get_surface_size_float"))
+  if (!_giza_check_device_open ("giza_get_surface_size_float"))
     return;
 
   *x1 = 0.;

@@ -107,10 +107,10 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__EXEEXT_1 = test-format-number$(EXEEXT) test-pdf$(EXEEXT) \
 	test-png$(EXEEXT) test-svg$(EXEEXT) test-unicode$(EXEEXT) \
-	test-cpgpnts$(EXEEXT) test-cpgconb$(EXEEXT) \
-	test-cpgconf$(EXEEXT) test-cpgconl$(EXEEXT) \
-	test-cpgconx$(EXEEXT) test-cpghi2d$(EXEEXT) \
-	test-cpgscrl$(EXEEXT)
+	test-cairo-device$(EXEEXT) test-cpgpnts$(EXEEXT) \
+	test-cpgconb$(EXEEXT) test-cpgconf$(EXEEXT) \
+	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
+	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT)
 am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
 	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
@@ -142,6 +142,9 @@ test_box_SOURCES = test-box.c
 test_box_OBJECTS = test-box.$(OBJEXT)
 test_box_LDADD = $(LDADD)
 test_box_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_cairo_device_SOURCES = test-cairo-device.c
+test_cairo_device_OBJECTS = test-cairo-device.$(OBJEXT)
+test_cairo_device_DEPENDENCIES = $(LDADD) $(am__DEPENDENCIES_1)
 test_cairo_xw_SOURCES = test-cairo-xw.c
 test_cairo_xw_OBJECTS = test-cairo-xw.$(OBJEXT)
 test_cairo_xw_DEPENDENCIES = $(LDADD) $(am__DEPENDENCIES_1) \
@@ -273,14 +276,14 @@ depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-arrow.Po ./$(DEPDIR)/test-band.Po \
-	./$(DEPDIR)/test-box.Po ./$(DEPDIR)/test-cairo-xw.Po \
-	./$(DEPDIR)/test-change-page.Po ./$(DEPDIR)/test-circle.Po \
-	./$(DEPDIR)/test-colour-index.Po ./$(DEPDIR)/test-contour.Po \
-	./$(DEPDIR)/test-cpgconb.Po ./$(DEPDIR)/test-cpgconf.Po \
-	./$(DEPDIR)/test-cpgconl.Po ./$(DEPDIR)/test-cpgconx.Po \
-	./$(DEPDIR)/test-cpghi2d.Po ./$(DEPDIR)/test-cpgpnts.Po \
-	./$(DEPDIR)/test-cpgscrl.Po ./$(DEPDIR)/test-environment.Po \
-	./$(DEPDIR)/test-error-bars.Po \
+	./$(DEPDIR)/test-box.Po ./$(DEPDIR)/test-cairo-device.Po \
+	./$(DEPDIR)/test-cairo-xw.Po ./$(DEPDIR)/test-change-page.Po \
+	./$(DEPDIR)/test-circle.Po ./$(DEPDIR)/test-colour-index.Po \
+	./$(DEPDIR)/test-contour.Po ./$(DEPDIR)/test-cpgconb.Po \
+	./$(DEPDIR)/test-cpgconf.Po ./$(DEPDIR)/test-cpgconl.Po \
+	./$(DEPDIR)/test-cpgconx.Po ./$(DEPDIR)/test-cpghi2d.Po \
+	./$(DEPDIR)/test-cpgpnts.Po ./$(DEPDIR)/test-cpgscrl.Po \
+	./$(DEPDIR)/test-environment.Po ./$(DEPDIR)/test-error-bars.Po \
 	./$(DEPDIR)/test-format-number.Po ./$(DEPDIR)/test-giza-xw.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
 	./$(DEPDIR)/test-openclose.Po ./$(DEPDIR)/test-pdf.Po \
@@ -309,25 +312,27 @@ am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
 SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
-	test-cairo-xw.c test-change-page.c test-circle.c \
-	test-colour-index.c test-contour.c test-cpgconb.c \
-	test-cpgconf.c test-cpgconl.c test-cpgconx.c test-cpghi2d.c \
-	test-cpgpnts.c test-cpgscrl.c test-environment.c \
-	test-error-bars.c test-format-number.c test-giza-xw.c \
-	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
-	test-png.c test-points.c test-qtext.c test-rectangle.c \
-	test-render.c test-set-line-width.c test-svg.c test-unicode.c \
-	test-vector.c test-window.c
+	test-cairo-device.c test-cairo-xw.c test-change-page.c \
+	test-circle.c test-colour-index.c test-contour.c \
+	test-cpgconb.c test-cpgconf.c test-cpgconl.c test-cpgconx.c \
+	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
+	test-environment.c test-error-bars.c test-format-number.c \
+	test-giza-xw.c test-line-cap.c test-line-style.c \
+	test-openclose.c test-pdf.c test-png.c test-points.c \
+	test-qtext.c test-rectangle.c test-render.c \
+	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
+	test-window.c
 DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
-	test-cairo-xw.c test-change-page.c test-circle.c \
-	test-colour-index.c test-contour.c test-cpgconb.c \
-	test-cpgconf.c test-cpgconl.c test-cpgconx.c test-cpghi2d.c \
-	test-cpgpnts.c test-cpgscrl.c test-environment.c \
-	test-error-bars.c test-format-number.c test-giza-xw.c \
-	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
-	test-png.c test-points.c test-qtext.c test-rectangle.c \
-	test-render.c test-set-line-width.c test-svg.c test-unicode.c \
-	test-vector.c test-window.c
+	test-cairo-device.c test-cairo-xw.c test-change-page.c \
+	test-circle.c test-colour-index.c test-contour.c \
+	test-cpgconb.c test-cpgconf.c test-cpgconl.c test-cpgconx.c \
+	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
+	test-environment.c test-error-bars.c test-format-number.c \
+	test-giza-xw.c test-line-cap.c test-line-style.c \
+	test-openclose.c test-pdf.c test-png.c test-points.c \
+	test-qtext.c test-rectangle.c test-render.c \
+	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
+	test-window.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -718,7 +723,7 @@ CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
 CLEANFILES = *.png *.pdf *.svg
 
 # Tests that run non-interactively (file-based devices only)
-auto_ctests = test-format-number test-pdf test-png test-svg test-unicode \
+auto_ctests = test-format-number test-pdf test-png test-svg test-unicode test-cairo-device \
 	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl
 
 
@@ -740,6 +745,7 @@ test_cpgconx_LDADD = $(CPGPLOT_LDADD)
 test_cpghi2d_LDADD = $(CPGPLOT_LDADD)
 test_cpgscrl_LDADD = $(CPGPLOT_LDADD)
 test_cairo_xw_LDADD = $(LDADD) $(CAIRO_LIBS) $(X11_LIBS)
+test_cairo_device_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_XOpenDisplay_LDADD = $(LDADD) $(X11_LIBS)
 all: all-am
 
@@ -794,6 +800,10 @@ test-band$(EXEEXT): $(test_band_OBJECTS) $(test_band_DEPENDENCIES) $(EXTRA_test_
 test-box$(EXEEXT): $(test_box_OBJECTS) $(test_box_DEPENDENCIES) $(EXTRA_test_box_DEPENDENCIES) 
 	@rm -f test-box$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_box_OBJECTS) $(test_box_LDADD) $(LIBS)
+
+test-cairo-device$(EXEEXT): $(test_cairo_device_OBJECTS) $(test_cairo_device_DEPENDENCIES) $(EXTRA_test_cairo_device_DEPENDENCIES) 
+	@rm -f test-cairo-device$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_cairo_device_OBJECTS) $(test_cairo_device_LDADD) $(LIBS)
 
 test-cairo-xw$(EXEEXT): $(test_cairo_xw_OBJECTS) $(test_cairo_xw_DEPENDENCIES) $(EXTRA_test_cairo_xw_DEPENDENCIES) 
 	@rm -f test-cairo-xw$(EXEEXT)
@@ -925,6 +935,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-arrow.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-band.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-box.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-cairo-device.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-cairo-xw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-change-page.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-circle.Po@am__quote@ # am--include-marker
@@ -1242,6 +1253,13 @@ test-unicode.log: test-unicode$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-cairo-device.log: test-cairo-device$(EXEEXT)
+	@p='test-cairo-device$(EXEEXT)'; \
+	b='test-cairo-device'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 test-cpgpnts.log: test-cpgpnts$(EXEEXT)
 	@p='test-cpgpnts$(EXEEXT)'; \
 	b='test-cpgpnts'; \
@@ -1389,6 +1407,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-arrow.Po
 	-rm -f ./$(DEPDIR)/test-band.Po
 	-rm -f ./$(DEPDIR)/test-box.Po
+	-rm -f ./$(DEPDIR)/test-cairo-device.Po
 	-rm -f ./$(DEPDIR)/test-cairo-xw.Po
 	-rm -f ./$(DEPDIR)/test-change-page.Po
 	-rm -f ./$(DEPDIR)/test-circle.Po
@@ -1468,6 +1487,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-arrow.Po
 	-rm -f ./$(DEPDIR)/test-band.Po
 	-rm -f ./$(DEPDIR)/test-box.Po
+	-rm -f ./$(DEPDIR)/test-cairo-device.Po
 	-rm -f ./$(DEPDIR)/test-cairo-xw.Po
 	-rm -f ./$(DEPDIR)/test-change-page.Po
 	-rm -f ./$(DEPDIR)/test-circle.Po
