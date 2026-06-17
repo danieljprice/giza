@@ -33,6 +33,7 @@
 #include "giza-driver-eps-private.h"
 #include "giza-driver-svg-private.h"
 #include "giza-driver-null-private.h"
+#include "giza-driver-cairo-private.h"
 #include "giza-io-private.h"
 #include "giza-viewport-private.h"
 #include "giza-window-private.h"
@@ -59,8 +60,25 @@
 
 static void _giza_set_prefix (const char *prefix);
 static int _giza_get_internal_id(int devid);
-static void _giza_close_device_unchecked (void);
-static void _giza_init_device_struct(giza_device_t*);
+void _giza_close_device_unchecked (void);
+void _giza_init_device_struct(giza_device_t*);
+
+/**
+ * One-time initialisation of the Dev[] array (shared by all open paths).
+ */
+void
+_giza_init_all_devices_once (void)
+{
+  static int didInit = 0;
+
+  if (didInit)
+    return;
+
+  giza_device_t *pDev;
+  for (pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
+    _giza_init_device_struct (pDev);
+  didInit = 1;
+}
 
 /* global settings */
 giza_settings_t Sets;
@@ -135,14 +153,7 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
 int
 giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
 {
-  static int didInit = 0;
-
-  if( !didInit ) {
-         giza_device_t* pDev;
-      for(pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
-          _giza_init_device_struct( pDev );
-       didInit = 1;
-  }
+  _giza_init_all_devices_once ();
 
   if( !newDeviceName || !strlen(newDeviceName) ) {
       _giza_error("giza_open_device", newDeviceName==NULL ? "(nullptr devicename)" : "empty device name");
@@ -267,6 +278,18 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   /* Do the rest of the initialization.
    * These routines check for Dev[id].deviceOpen so we must set that */
   Dev[id].deviceOpen = 1;
+  return _giza_complete_device_open (1);
+}
+
+/**
+ * Shared tail of giza_open_device_size and giza_open_device_cairo.
+ * draw_background is zero if no cairo context is bound yet.
+ */
+int
+_giza_complete_device_open (int draw_background)
+{
+  const int defer_cairo = (Dev[id].type == GIZA_DEVICE_CAIRO && Dev[id].context == NULL);
+
   Dev[id].defaultBackgroundAlpha = 1.;
   Dev[id].motion_callback = NULL;
 
@@ -275,28 +298,47 @@ giza_open_device_size (const char *newDeviceName, const char *newPrefix, double 
   _giza_init_subpanel ();
   _giza_init_arrow_style ();
   _giza_init_line_style ();
-  _giza_init_colour_index ();
 
-  giza_draw_background ();
-  _giza_init_colour_table ();
-  _giza_set_trans (GIZA_TRANS_IDEN);
+  if (!defer_cairo)
+    _giza_init_colour_index ();
+
+  if (draw_background)
+    giza_draw_background ();
+
+  if (Dev[id].type == GIZA_DEVICE_CAIRO && Dev[id].context == NULL)
+    Dev[id].cairo_deferred_init = 1;
+
+  if (!defer_cairo)
+    _giza_init_colour_table ();
+
+  if (!defer_cairo)
+    _giza_set_trans (GIZA_TRANS_IDEN);
+
   _giza_init_norm ();
 
-  /* font and character height initialisations
-     need to come before set_viewport_default */
-  _giza_init_character_height (); /* must come BEFORE init_font */
-  _giza_init_font ();
-  _giza_init_text_background();
+  _giza_init_character_height ();
 
-  _giza_init_window (); /* call init_window BEFORE set_viewport */
-  giza_set_viewport_default ();
-  giza_set_line_width (1);
+  if (!defer_cairo)
+    _giza_init_font ();
 
-  _giza_init_fill ();
-  _giza_init_band_style ();
-  _giza_init_save ();
-  giza_set_clipping(1);
-  return id+1;
+  if (!defer_cairo)
+    _giza_init_text_background ();
+
+  _giza_init_window ();
+
+  if (!defer_cairo)
+    giza_set_viewport_default ();
+
+  if (!defer_cairo)
+    {
+      giza_set_line_width (1);
+      _giza_init_fill ();
+      _giza_init_band_style ();
+      _giza_init_save ();
+      giza_set_clipping (1);
+    }
+
+  return id + 1;
 }
 
 /**
@@ -374,7 +416,7 @@ giza_select_device (int devid)
 void
 giza_flush_device (void)
 {
-  if (!_giza_check_device_ready ("giza_flush_device"))
+  if (!_giza_check_device_open ("giza_flush_device"))
     return;
 
   Dev[id].drawn = 1;
@@ -431,7 +473,8 @@ giza_change_page (void)
   if (!Dev[id].drawn && !Dev[id].resize) {
 
     /* if nothing has changed, safe to redraw/reset the background colour */
-    giza_draw_background ();
+    if (Dev[id].type != GIZA_DEVICE_CAIRO || Dev[id].context != NULL)
+      giza_draw_background ();
 
     /* do nothing */
     return;
@@ -485,6 +528,9 @@ giza_change_page (void)
       break;
     case GIZA_DEVICE_NULL:
       _giza_change_page_null ();
+      break;
+    case GIZA_DEVICE_CAIRO:
+      _giza_change_page_cairo ();
       break;
 #ifdef _GIZA_HAS_EPS
     case GIZA_DEVICE_EPS:
@@ -541,7 +587,7 @@ giza_close_devices (void)
 void
 giza_close_device (void)
 {
-  if (!_giza_check_device_ready ("giza_close_device"))
+  if (!_giza_check_device_open ("giza_close_device"))
     return;
 
   if (Dev[id].prompting && Dev[id].isInteractive)
@@ -582,9 +628,19 @@ giza_close_device (void)
  */
 void
 _giza_close_device_unchecked (void) {
-  /* destroy the cairo context */
-  if (Dev[id].context)
+  /* restore caller cairo state if still bound */
+  if (Dev[id].type == GIZA_DEVICE_CAIRO && Dev[id].cairo_context_bound && Dev[id].context)
+    {
+      cairo_restore (Dev[id].context);
+      Dev[id].cairo_context_bound = 0;
+    }
+
+  /* destroy the cairo context unless caller-owned */
+  if (Dev[id].context && !Dev[id].external_cairo)
       cairo_destroy(Dev[id].context);
+
+  if (Dev[id].external_cairo)
+    _giza_unbind_cairo_context ();
 
   switch (Dev[id].type)
     {
@@ -617,6 +673,9 @@ _giza_close_device_unchecked (void) {
       break;
     case GIZA_DEVICE_NULL:
       _giza_close_device_null ();
+      break;
+    case GIZA_DEVICE_CAIRO:
+      _giza_close_device_cairo ();
       break;
 #ifdef _GIZA_HAS_EPS
     case GIZA_DEVICE_EPS:
@@ -768,7 +827,7 @@ giza_query_device (const char *querytype, char *returnval, int* rlen)
 int
 giza_set_motion_callback (void (*func)(double *x, double *y, int *mode))
 {
-  if (!_giza_check_device_ready ("giza_set_motion_callback"))
+  if (!_giza_check_device_open ("giza_set_motion_callback"))
     return 1;
 
   /* assign the motion pointer callback */
@@ -788,7 +847,7 @@ giza_set_motion_callback (void (*func)(double *x, double *y, int *mode))
 int
 giza_end_motion_callback (void)
 {
-  if (!_giza_check_device_ready ("giza_end_motion_callback"))
+  if (!_giza_check_device_open ("giza_end_motion_callback"))
     return 1;
 
   if (Dev[id].motion_callback != NULL)
@@ -826,7 +885,7 @@ giza_end_motion_callback (void)
 int
 _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, const double *yanch, double *x, double *y, char *ch)
 {
-  if (!_giza_check_device_ready ("_giza_get_key_press"))
+  if (!_giza_check_device_open ("_giza_get_key_press"))
     return 1;
 
   switch (Dev[id].type)
@@ -971,6 +1030,12 @@ _giza_device_to_int (const char *newDeviceName)
   else if (!strcmp (devName, "/eps"))
     newDevice = GIZA_DEVICE_EPS;
 #endif
+  else if (!strcmp (devName, "/cairo"))
+    {
+      _giza_error ("giza_open_device",
+                   "Device /cairo cannot be opened with giza_open_device; use giza_open_device_cairo instead");
+      newDevice = GIZA_DEVICE_IV;
+    }
   else
     {
 /*
@@ -1116,7 +1181,7 @@ _giza_free_device_list (char *deviceList)
 void
 _giza_init_norm (void)
 {
-  if (!_giza_check_device_ready ("_giza_init_norm"))
+  if (!_giza_check_device_open ("_giza_init_norm"))
     return;
 
   double xx,yy,x0,y0;
@@ -1157,7 +1222,8 @@ _giza_init_norm (void)
       x0 = GIZA_DEFAULT_MARGIN;
       y0 = (double) Dev[id].height - GIZA_DEFAULT_MARGIN;
       cairo_matrix_init (&(Dev[id].Win.normCoords), xx, 0, 0, yy, x0, y0);
-      _giza_set_trans (GIZA_TRANS_NORM);
+      if (Dev[id].context)
+        _giza_set_trans (GIZA_TRANS_NORM);
       break;
     }
 }

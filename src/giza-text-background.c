@@ -37,7 +37,7 @@
 void
 giza_set_text_background (int colourIndex)
 {
-  if (!_giza_check_device_ready ("giza_set_text_background"))
+  if (!_giza_check_device_open ("giza_set_text_background"))
      return;
 
   Dev[id].text_background = colourIndex;
@@ -54,7 +54,7 @@ giza_set_text_background (int colourIndex)
 void
 giza_get_text_background (int *colourIndex)
 {
-  if (!_giza_check_device_ready ("giza_get_text_background"))
+  if (!_giza_check_device_open ("giza_get_text_background"))
      return;
 
   *colourIndex = Dev[id].text_background;

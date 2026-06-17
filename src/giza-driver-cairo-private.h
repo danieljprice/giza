@@ -22,49 +22,12 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
-#include "giza-private.h"
-#include "giza-io-private.h"
-#include <giza.h>
-
-/**
- * Settings: giza_start_prompting
- *
- * Synopsis: Turns on prompting for current device, i.e. the user will be 
- * prompted before a page change or a device being closed.
- *
- * See Also: giza_stop_prompting
- */
-void
-giza_start_prompting (void)
-{
-  if (!_giza_check_device_open ("giza_start_prompting"))
-    return;
-
-  Dev[id].prompting = 1;
-}
-
-/**
- * Settings: giza_stop_prompting
- *
- * Synopsis: Turns off prompting, i.e. the user will not be prompted
- * before a page change or a device being closed.
- *
- * See Also: giza_start_prompting
- */
-void
-giza_stop_prompting (void)
-{
-  if (!_giza_check_device_open ("giza_stop_prompting"))
-    return;
-
-  Dev[id].prompting = 0;
-}
-
-int
-_giza_get_prompting (void)
-{
-  if (!_giza_check_device_open ("giza_set_prompting"))
-    return 0;
-
-  return Dev[id].prompting;
-}
+int _giza_open_device_cairo (double width, double height, int units);
+void _giza_bind_cairo_context (cairo_t *cr);
+void _giza_unbind_cairo_context (void);
+void _giza_flush_device_cairo (void);
+void _giza_change_page_cairo (void);
+void _giza_close_device_cairo (void);
+int _giza_complete_device_open (int draw_background);
+void _giza_init_device_struct (giza_device_t *ptrDev);
+void _giza_close_device_unchecked (void);

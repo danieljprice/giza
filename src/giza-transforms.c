@@ -74,7 +74,7 @@ _giza_set_trans (int trans)
 int
 _giza_get_trans (void)
 {
-  if (!_giza_check_device_ready ("_giza_get_trans"))
+  if (!_giza_check_device_open ("_giza_get_trans"))
     return -1;
 
   return Dev[id].CurrentTrans;

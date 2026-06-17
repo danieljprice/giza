@@ -46,7 +46,7 @@
 void
 giza_subpanel (int nx, int ny)
 {
-  if (!_giza_check_device_ready ("giza_subpanel"))
+  if (!_giza_check_device_open ("giza_subpanel"))
     return;
 
   /* query viewport */
@@ -90,7 +90,7 @@ giza_subpanel (int nx, int ny)
 void
 giza_set_panel (int ix, int iy)
 {
-  if (!_giza_check_device_ready ("giza_select_panel"))
+  if (!_giza_check_device_open ("giza_select_panel"))
     return;
 
   if (ix < 1 || ix > Dev[id].nx) {
@@ -123,7 +123,7 @@ giza_set_panel (int ix, int iy)
 void
 giza_get_panel (int *ix, int *iy)
 {
-  if (!_giza_check_device_ready ("giza_query_panel"))
+  if (!_giza_check_device_open ("giza_query_panel"))
     return;
 
   *ix = Dev[id].ix;
@@ -140,7 +140,7 @@ giza_get_panel (int *ix, int *iy)
 void
 _giza_init_subpanel ()
 {
-  if (!_giza_check_device_ready ("_giza_init_subpanel"))
+  if (!_giza_check_device_open ("_giza_init_subpanel"))
     return;
 
   Dev[id].nx = 1;

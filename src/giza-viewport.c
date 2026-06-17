@@ -23,11 +23,13 @@
  */
 
 #include "giza-private.h"
+#include "giza-drivers-private.h"
 #include "giza-viewport-private.h"
 #include "giza-io-private.h"
 #include "giza-transforms-private.h"
 #include "giza-window-private.h"
 #include <giza.h>
+#include <stddef.h>
 #include <stdio.h>
 
 /**
@@ -47,7 +49,7 @@ void
 giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
 {
   double xmin, xmax, ymin, ymax;
-  if (!_giza_check_device_ready ("giza_set_viewport"))
+  if (!_giza_check_device_open ("giza_set_viewport"))
     return;
 
   if (_giza_equal(xleft,xright) || _giza_equal(ybottom,ytop))
@@ -87,6 +89,14 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
       Dev[id].VP.ymin = ymin;
       Dev[id].VP.ymax = ymax;
 
+    }
+
+  /* defer cairo clipping until an external context is bound */
+  if (Dev[id].type == GIZA_DEVICE_CAIRO && Dev[id].context == NULL)
+    {
+      giza_set_window (Dev[id].Win.xmin, Dev[id].Win.xmax,
+                       Dev[id].Win.ymin, Dev[id].Win.ymax);
+      return;
     }
 
   _giza_set_trans (GIZA_TRANS_NORM);
@@ -145,7 +155,7 @@ giza_set_viewport_float (float xleft, float xright, float ybottom, float ytop)
 void
 giza_get_viewport (int units, double *x1, double *x2, double *y1, double *y2)
 {
-  if(!_giza_check_device_ready("giza_get_viewport")) {
+  if(!_giza_check_device_open("giza_get_viewport")) {
      *x1 = 0.; *x2 = 1.; *y1 = 0; *y2 = 1.; /* avoid compiler warning */
      return;
   }
@@ -241,7 +251,7 @@ giza_get_viewport_float (int units, float *x1, float *x2, float *y1, float *y2)
 void
 giza_set_viewport_default (void)
 {
-  if(!_giza_check_device_ready("giza_set_viewport_default")) return;
+  if(!_giza_check_device_open("giza_set_viewport_default")) return;
 
   double xmin, xmax, ymin, ymax;
   _giza_get_default_viewport(&xmin,&xmax,&ymin,&ymax);

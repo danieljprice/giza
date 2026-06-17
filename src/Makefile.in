@@ -173,18 +173,19 @@ am__libgiza_la_SOURCES_DIST = giza-annotate.c giza-arrow-style.c \
 	giza-colour-bar.c giza-colour-index.c giza-colour-palette.c \
 	giza-colour-table.c giza-contour.c giza-cursor-routines.c \
 	giza-device-has-cursor.c giza-draw-background.c giza-draw.c \
-	giza-driver-eps.c giza-driver-null.c giza-driver-pdf.c \
-	giza-driver-png.c giza-driver-mp4.c giza-driver-ps.c \
-	giza-driver-svg.c giza-driver-xw.c giza-drivers.c \
-	giza-environment.c giza-error-bars.c giza-fill.c \
-	giza-format-number.c giza-function-t.c giza-function-x.c \
-	giza-function-y.c giza-get-key-press.c giza-get-surface-size.c \
-	giza-io.c giza-histogram.c giza-label.c giza-line-cap.c \
-	giza-line-style.c giza-line-width.c giza-line.c giza-move.c \
-	giza-paper.c giza-points.c giza-polygon.c giza-print-id.c \
-	giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
-	giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
-	giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
+	giza-driver-eps.c giza-driver-null.c giza-driver-cairo.c \
+	giza-driver-pdf.c giza-driver-png.c giza-driver-mp4.c \
+	giza-driver-ps.c giza-driver-svg.c giza-driver-xw.c \
+	giza-drivers.c giza-environment.c giza-error-bars.c \
+	giza-fill.c giza-format-number.c giza-function-t.c \
+	giza-function-x.c giza-function-y.c giza-get-key-press.c \
+	giza-get-surface-size.c giza-io.c giza-histogram.c \
+	giza-label.c giza-line-cap.c giza-line-style.c \
+	giza-line-width.c giza-line.c giza-move.c giza-paper.c \
+	giza-points.c giza-polygon.c giza-print-id.c giza-prompting.c \
+	giza-ptext.c giza-qtext.c giza-rectangle.c giza-render.c \
+	giza-save.c giza-set-font.c giza-stroke.c giza-subpanel.c \
+	giza-text-background.c giza-text.c giza-tick.c \
 	giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
 	giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
 	giza-arrow-style-private.h giza-driver-svg-private.h \
@@ -196,14 +197,14 @@ am__libgiza_la_SOURCES_DIST = giza-annotate.c giza-arrow-style.c \
 	giza-io-private.h giza-tick-private.h \
 	giza-transforms-private.h giza-driver-eps-private.h \
 	giza-line-style-private.h giza-version.h \
-	giza-driver-null-private.h giza-private.h \
-	giza-viewport-private.h giza-driver-pdf-private.h \
-	giza-render-private.h giza-warnings-private.h \
-	giza-driver-png-private.h giza-driver-mp4-private.h \
-	giza-set-font-private.h giza-window-private.h \
-	giza-driver-ps-private.h giza-shared.h giza.h giza-itf.h \
-	giza-driver-osxcocoa.m giza-driver-osxcocoa-bridge.c \
-	giza-driver-osxcocoa-private.h
+	giza-driver-null-private.h giza-driver-cairo-private.h \
+	giza-private.h giza-viewport-private.h \
+	giza-driver-pdf-private.h giza-render-private.h \
+	giza-warnings-private.h giza-driver-png-private.h \
+	giza-driver-mp4-private.h giza-set-font-private.h \
+	giza-window-private.h giza-driver-ps-private.h giza-shared.h \
+	giza.h giza-itf.h giza-driver-osxcocoa.m \
+	giza-driver-osxcocoa-bridge.c giza-driver-osxcocoa-private.h
 @HAVE_OSXCOCOA_TRUE@am__objects_1 =  \
 @HAVE_OSXCOCOA_TRUE@	libgiza_la-giza-driver-osxcocoa.lo \
 @HAVE_OSXCOCOA_TRUE@	libgiza_la-giza-driver-osxcocoa-bridge.lo
@@ -221,14 +222,14 @@ am_libgiza_la_OBJECTS = libgiza_la-giza-annotate.lo \
 	libgiza_la-giza-device-has-cursor.lo \
 	libgiza_la-giza-draw-background.lo libgiza_la-giza-draw.lo \
 	libgiza_la-giza-driver-eps.lo libgiza_la-giza-driver-null.lo \
-	libgiza_la-giza-driver-pdf.lo libgiza_la-giza-driver-png.lo \
-	libgiza_la-giza-driver-mp4.lo libgiza_la-giza-driver-ps.lo \
-	libgiza_la-giza-driver-svg.lo libgiza_la-giza-driver-xw.lo \
-	libgiza_la-giza-drivers.lo libgiza_la-giza-environment.lo \
-	libgiza_la-giza-error-bars.lo libgiza_la-giza-fill.lo \
-	libgiza_la-giza-format-number.lo libgiza_la-giza-function-t.lo \
-	libgiza_la-giza-function-x.lo libgiza_la-giza-function-y.lo \
-	libgiza_la-giza-get-key-press.lo \
+	libgiza_la-giza-driver-cairo.lo libgiza_la-giza-driver-pdf.lo \
+	libgiza_la-giza-driver-png.lo libgiza_la-giza-driver-mp4.lo \
+	libgiza_la-giza-driver-ps.lo libgiza_la-giza-driver-svg.lo \
+	libgiza_la-giza-driver-xw.lo libgiza_la-giza-drivers.lo \
+	libgiza_la-giza-environment.lo libgiza_la-giza-error-bars.lo \
+	libgiza_la-giza-fill.lo libgiza_la-giza-format-number.lo \
+	libgiza_la-giza-function-t.lo libgiza_la-giza-function-x.lo \
+	libgiza_la-giza-function-y.lo libgiza_la-giza-get-key-press.lo \
 	libgiza_la-giza-get-surface-size.lo libgiza_la-giza-io.lo \
 	libgiza_la-giza-histogram.lo libgiza_la-giza-label.lo \
 	libgiza_la-giza-line-cap.lo libgiza_la-giza-line-style.lo \
@@ -294,6 +295,7 @@ am__depfiles_remade = ./$(DEPDIR)/libcpgplot_la-giza-cpgplot.Plo \
 	./$(DEPDIR)/libgiza_la-giza-device-has-cursor.Plo \
 	./$(DEPDIR)/libgiza_la-giza-draw-background.Plo \
 	./$(DEPDIR)/libgiza_la-giza-draw.Plo \
+	./$(DEPDIR)/libgiza_la-giza-driver-cairo.Plo \
 	./$(DEPDIR)/libgiza_la-giza-driver-eps.Plo \
 	./$(DEPDIR)/libgiza_la-giza-driver-mp4.Plo \
 	./$(DEPDIR)/libgiza_la-giza-driver-null.Plo \
@@ -610,13 +612,13 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
 	giza-colour-index.c giza-colour-palette.c giza-colour-table.c \
 	giza-contour.c giza-cursor-routines.c giza-device-has-cursor.c \
 	giza-draw-background.c giza-draw.c giza-driver-eps.c \
-	giza-driver-null.c giza-driver-pdf.c giza-driver-png.c \
-	giza-driver-mp4.c giza-driver-ps.c giza-driver-svg.c \
-	giza-driver-xw.c giza-drivers.c giza-environment.c \
-	giza-error-bars.c giza-fill.c giza-format-number.c \
-	giza-function-t.c giza-function-x.c giza-function-y.c \
-	giza-get-key-press.c giza-get-surface-size.c giza-io.c \
-	giza-histogram.c giza-label.c giza-line-cap.c \
+	giza-driver-null.c giza-driver-cairo.c giza-driver-pdf.c \
+	giza-driver-png.c giza-driver-mp4.c giza-driver-ps.c \
+	giza-driver-svg.c giza-driver-xw.c giza-drivers.c \
+	giza-environment.c giza-error-bars.c giza-fill.c \
+	giza-format-number.c giza-function-t.c giza-function-x.c \
+	giza-function-y.c giza-get-key-press.c giza-get-surface-size.c \
+	giza-io.c giza-histogram.c giza-label.c giza-line-cap.c \
 	giza-line-style.c giza-line-width.c giza-line.c giza-move.c \
 	giza-paper.c giza-points.c giza-polygon.c giza-print-id.c \
 	giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
@@ -633,13 +635,13 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
 	giza-io-private.h giza-tick-private.h \
 	giza-transforms-private.h giza-driver-eps-private.h \
 	giza-line-style-private.h giza-version.h \
-	giza-driver-null-private.h giza-private.h \
-	giza-viewport-private.h giza-driver-pdf-private.h \
-	giza-render-private.h giza-warnings-private.h \
-	giza-driver-png-private.h giza-driver-mp4-private.h \
-	giza-set-font-private.h giza-window-private.h \
-	giza-driver-ps-private.h giza-shared.h giza.h giza-itf.h \
-	$(am__append_3)
+	giza-driver-null-private.h giza-driver-cairo-private.h \
+	giza-private.h giza-viewport-private.h \
+	giza-driver-pdf-private.h giza-render-private.h \
+	giza-warnings-private.h giza-driver-png-private.h \
+	giza-driver-mp4-private.h giza-set-font-private.h \
+	giza-window-private.h giza-driver-ps-private.h giza-shared.h \
+	giza.h giza-itf.h $(am__append_3)
 libgiza_la_OBJCFLAGS = $(libgiza_la_CPPFLAGS) -fobjc-arc
 AM_LIBTOOLFLAGS = --tag=CC
 libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS) $(OSXCOCOA_CFLAGS)
@@ -772,6 +774,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-device-has-cursor.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-draw-background.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-draw.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-driver-cairo.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-driver-eps.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-driver-mp4.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-driver-null.Plo@am__quote@ # am--include-marker
@@ -1030,6 +1033,13 @@ libgiza_la-giza-driver-null.lo: giza-driver-null.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='giza-driver-null.c' object='libgiza_la-giza-driver-null.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgiza_la-giza-driver-null.lo `test -f 'giza-driver-null.c' || echo '$(srcdir)/'`giza-driver-null.c
+
+libgiza_la-giza-driver-cairo.lo: giza-driver-cairo.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgiza_la-giza-driver-cairo.lo -MD -MP -MF $(DEPDIR)/libgiza_la-giza-driver-cairo.Tpo -c -o libgiza_la-giza-driver-cairo.lo `test -f 'giza-driver-cairo.c' || echo '$(srcdir)/'`giza-driver-cairo.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgiza_la-giza-driver-cairo.Tpo $(DEPDIR)/libgiza_la-giza-driver-cairo.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='giza-driver-cairo.c' object='libgiza_la-giza-driver-cairo.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgiza_la-giza-driver-cairo.lo `test -f 'giza-driver-cairo.c' || echo '$(srcdir)/'`giza-driver-cairo.c
 
 libgiza_la-giza-driver-pdf.lo: giza-driver-pdf.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgiza_la-giza-driver-pdf.lo -MD -MP -MF $(DEPDIR)/libgiza_la-giza-driver-pdf.Tpo -c -o libgiza_la-giza-driver-pdf.lo `test -f 'giza-driver-pdf.c' || echo '$(srcdir)/'`giza-driver-pdf.c
@@ -1645,6 +1655,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-device-has-cursor.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-draw-background.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-draw.Plo
+	-rm -f ./$(DEPDIR)/libgiza_la-giza-driver-cairo.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-driver-eps.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-driver-mp4.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-driver-null.Plo
@@ -1767,6 +1778,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-device-has-cursor.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-draw-background.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-draw.Plo
+	-rm -f ./$(DEPDIR)/libgiza_la-giza-driver-cairo.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-driver-eps.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-driver-mp4.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-driver-null.Plo

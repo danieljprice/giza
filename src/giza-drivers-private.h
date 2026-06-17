@@ -35,6 +35,7 @@
 #define GIZA_DEVICE_MP4    10
 #define GIZA_DEVICE_AQT    11
 #define GIZA_DEVICE_OSXCOCOA    20
+#define GIZA_DEVICE_CAIRO       21
 
 #define GIZA_DEFAULT_PREFIX "giza"
 
@@ -51,3 +52,5 @@ void _giza_lowercase(const char *string, char *lowerstring);
 void _giza_trim(char *str);
 void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension, int lastpage);
 void _giza_get_specified_size(double paperwidth, double paperheight, int paperunits, int *width, int *height);
+int _giza_complete_device_open (int draw_background);
+void _giza_init_all_devices_once (void);

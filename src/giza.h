@@ -23,6 +23,7 @@
  */
 
 #include <giza-shared.h>
+#include <cairo/cairo.h>
 
 
 void giza_arrow (double x1, double y1, double x2, double y2);
@@ -169,6 +170,13 @@ int giza_open_device_size (const char *newDeviceName, const char *newPrefix, dou
 			   double height, int units);
 int giza_open_device_size_float (const char *newDeviceName, const char *newPrefix,
 				 float width, float height, int units);
+int giza_open_device_cairo (void);
+int giza_open_device_size_cairo (double width, double height, int units);
+int giza_open_device_size_cairo_float (float width, float height, int units);
+int giza_set_cairo_context (cairo_t *cr);
+int giza_release_cairo_context (void);
+int giza_resize_device_cairo (double width, double height, int units);
+cairo_surface_t *giza_get_cairo_surface (void);
 void giza_select_device (int devid);
 void giza_get_device_id (int *devid);
 void giza_flush_device (void);
