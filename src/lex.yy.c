@@ -1,5 +1,6 @@
+#line 1 "lex.yy.c"
 
-#line 2 "lex.yy.c"
+#line 3 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -339,8 +340,8 @@ static void yynoreturn yy_fatal_error ( const char* msg , yyscan_t yyscanner );
 	yyg->yy_hold_char = *yy_cp; \
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
-#define YY_NUM_RULES 22
-#define YY_END_OF_BUFFER 23
+#define YY_NUM_RULES 30
+#define YY_END_OF_BUFFER 31
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -348,23 +349,27 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_acclist[55] =
+static const flex_int16_t yy_acclist[79] =
     {   0,
-        9,    9,   23,   21,   22,   22,   21,   22,   17,   21,
-       22,   18,   21,   22,   19,   21,   22,   20,   21,   22,
-        6,   22,    5,    6,   22,    9,   22,    9,   22,   12,
-       22,   11,   12,   22,   15,   22,   14,   15,   22,    7,
-        3,    2,    4,   13,   10,    1,    9,    9,   11,   16,
-        9,   16,    9,    8
+        9,    9,   31,   29,   30,   30,   29,   30,   17,   29,
+       30,   18,   29,   30,   19,   29,   30,   20,   29,   30,
+       29,   30,   29,   30,   29,   30,   29,   30,   29,   30,
+       29,   30,   29,   30,   29,   30,    6,   30,    5,    6,
+       30,    9,   30,    9,   30,   12,   30,   11,   12,   30,
+       15,   30,   14,   15,   30,    7,    3,    2,    4,   13,
+       10,    1,   28,    9,    9,   11,   16,   24,   25,   27,
+       26,    9,   16,   21,   22,   23,    9,    8
     } ;
 
-static const flex_int16_t yy_accept[45] =
+static const flex_int16_t yy_accept[71] =
     {   0,
         1,    1,    1,    1,    1,    2,    3,    3,    3,    3,
         3,    4,    6,    7,    9,   12,   15,   18,   21,   23,
-       26,   28,   30,   32,   35,   37,   40,   41,   41,   42,
-       43,   44,   45,   46,   47,   48,   49,   50,   51,   52,
-       53,   54,   55,   55
+       25,   27,   29,   31,   33,   35,   37,   39,   42,   44,
+       46,   48,   51,   53,   56,   57,   57,   58,   59,   60,
+       61,   62,   63,   64,   64,   64,   64,   64,   64,   64,
+       64,   65,   66,   67,   68,   69,   70,   71,   72,   72,
+       72,   72,   73,   74,   75,   76,   77,   78,   79,   79
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -382,81 +387,98 @@ static const YY_CHAR yy_ec[256] =
 
         6,    9,   10,    6,   11,   12,    6,    6,   13,   11,
         6,    6,    6,   11,   11,    6,   14,   12,    6,    6,
-        6,    6,   18,    1,   19,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        6,    6,   18,    1,   19,    1,    1,   20,   20,   20,
+       20,   20,   20,   20,   20,   20,   20,   20,   20,   20,
+       20,   20,   20,   21,   21,   21,   21,   21,   21,   21,
+       21,   21,   21,   21,   21,   21,   21,   21,   21,   22,
+       22,   22,   22,   22,   22,   22,   22,   22,   22,   22,
+       22,   22,   22,   22,   22,   22,   22,   22,   22,   22,
+       22,   22,   22,   22,   22,   22,   22,   22,   22,   22,
+       22,    1,    1,   23,   23,   23,   23,   23,   23,   23,
 
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+       23,   23,   23,   23,   23,   23,   23,   23,   23,   23,
+       23,   23,   23,   23,   23,   23,   23,   23,   23,   23,
+       23,   23,   23,   24,   25,   25,   25,   25,   25,   25,
+       25,   25,   25,   25,   25,   25,   26,   27,   27,   28,
+       29,   29,   29,   30,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[20] =
+static const YY_CHAR yy_meta[31] =
     {   0,
         1,    1,    1,    2,    1,    3,    3,    3,    3,    3,
-        3,    3,    3,    3,    1,    1,    1,    1,    1
+        3,    3,    3,    3,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1
     } ;
 
-static const flex_int16_t yy_base[51] =
+static const flex_int16_t yy_base[77] =
     {   0,
-        0,   18,   36,   46,    0,    2,    6,    7,   57,    0,
-       24,  104,  104,   74,  104,  104,  104,  104,  104,  104,
-        0,   18,  104,   17,  104,  104,  104,    0,    0,    0,
-        0,    0,    0,    0,    0,   16,  104,    0,    9,    0,
-        9,  104,  104,   88,   91,   94,   97,  100,    7,    0
+        0,    0,   29,   30,   29,   34,   40,   41,   45,   58,
+      142,  143,  143,   70,  143,  143,  143,  143,   28,  119,
+       41,   54,   65,   67,   70,  120,  143,  143,    0,  134,
+      143,  133,  143,  143,  143,    0,    0,    0,    0,    0,
+        0,    0,  143,   73,   76,   79,   82,   85,   88,   91,
+        0,  131,  143,    0,  143,  143,  143,  143,   94,   97,
+      100,   65,    0,  143,  143,  143,   53,  143,  143,  122,
+      125,  128,  131,  134,   41,   32
     } ;
 
-static const flex_int16_t yy_def[51] =
+static const flex_int16_t yy_def[77] =
     {   0,
-       44,   44,   45,   45,   46,   46,   47,   47,   43,    9,
-       43,   43,   43,   43,   43,   43,   43,   43,   43,   43,
-       48,   48,   43,   43,   43,   43,   43,   49,   49,   49,
-       49,   49,   49,   49,   48,   48,   43,   50,   48,   50,
-       48,   43,    0,   43,   43,   43,   43,   43,   43,   43
+       69,    1,   70,   70,   71,   71,   72,   72,   73,   73,
+       69,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69,   69,   69,   69,   69,   69,   74,   74,
+       69,   69,   69,   69,   69,   75,   75,   75,   75,   75,
+       75,   75,   69,   69,   69,   69,   69,   69,   69,   69,
+       74,   74,   69,   76,   69,   69,   69,   69,   69,   69,
+       69,   74,   76,   69,   69,   69,   74,   69,    0,   69,
+       69,   69,   69,   69,   69,   69
     } ;
 
-static const flex_int16_t yy_nxt[124] =
+static const flex_int16_t yy_nxt[174] =
     {   0,
-       43,   13,   40,   13,   22,   13,   22,   13,   13,   38,
-       24,   24,   42,   41,   14,   15,   16,   17,   18,   13,
-       39,   37,   36,   43,   43,   43,   43,   43,   43,   43,
-       43,   43,   14,   15,   16,   17,   18,   13,   43,   43,
-       43,   43,   20,   43,   43,   43,   20,   13,   43,   43,
-       43,   43,   20,   43,   43,   43,   20,   25,   13,   25,
-       25,   25,   26,   26,   26,   26,   26,   26,   25,   26,
-       26,   25,   25,   25,   25,   25,   27,   43,   43,   28,
-       29,   30,   31,   32,   28,   28,   33,   34,   12,   12,
-       12,   19,   19,   19,   21,   21,   21,   23,   23,   23,
+       12,   13,   12,   12,   12,   12,   12,   12,   12,   12,
+       12,   12,   12,   12,   14,   15,   16,   17,   18,   12,
+       12,   12,   19,   20,   21,   22,   23,   24,   25,   26,
+       13,   13,   13,   30,   63,   28,   28,   13,   30,   28,
+       28,   13,   13,   54,   32,   32,   13,   43,   43,   43,
+       34,   34,   34,   34,   34,   34,   68,   34,   34,   13,
+       45,   45,   45,   34,   34,   34,   34,   34,   34,   67,
+       34,   34,   35,   46,   46,   36,   37,   38,   39,   40,
+       36,   36,   41,   42,   47,   47,   47,   48,   48,   49,
+       49,   49,   55,   55,   55,   56,   56,   56,   57,   57,
 
-       35,   43,   35,   11,   43,   43,   43,   43,   43,   43,
-       43,   43,   43,   43,   43,   43,   43,   43,   43,   43,
-       43,   43,   43
+       57,   58,   58,   58,   59,   59,   59,   60,   60,   60,
+       61,   61,   61,   64,   64,   64,   65,   65,   65,   66,
+       66,   66,   27,   27,   27,   29,   29,   29,   31,   31,
+       31,   33,   33,   33,   51,   62,   51,   53,   52,   50,
+       44,   69,   11,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69
     } ;
 
-static const flex_int16_t yy_chk[124] =
+static const flex_int16_t yy_chk[174] =
     {   0,
-        0,    1,   50,    5,    5,    6,    6,    7,    8,   49,
-        7,    8,   41,   39,    1,    1,    1,    1,    1,    2,
-       36,   24,   22,   11,    0,    0,    0,    0,    0,    0,
-        0,    0,    2,    2,    2,    2,    2,    3,    0,    0,
-        0,    0,    3,    0,    0,    0,    3,    4,    0,    0,
-        0,    0,    4,    0,    0,    0,    4,    9,    9,    9,
-        9,    9,    9,    9,    9,    9,    9,    9,    9,    9,
-        9,    9,    9,    9,    9,    9,   14,    0,    0,   14,
-       14,   14,   14,   14,   14,   14,   14,   14,   44,   44,
-       44,   45,   45,   45,   46,   46,   46,   47,   47,   47,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        3,    4,    5,    5,   76,    3,    4,    6,    6,    3,
+        4,    7,    8,   75,    7,    8,    9,   19,   19,   19,
+        9,    9,    9,    9,    9,    9,   67,    9,    9,   10,
+       21,   21,   21,   10,   10,   10,   10,   10,   10,   62,
+       10,   10,   14,   22,   22,   14,   14,   14,   14,   14,
+       14,   14,   14,   14,   23,   23,   23,   24,   24,   25,
+       25,   25,   44,   44,   44,   45,   45,   45,   46,   46,
 
-       48,    0,   48,   43,   43,   43,   43,   43,   43,   43,
-       43,   43,   43,   43,   43,   43,   43,   43,   43,   43,
-       43,   43,   43
+       46,   47,   47,   47,   48,   48,   48,   49,   49,   49,
+       50,   50,   50,   59,   59,   59,   60,   60,   60,   61,
+       61,   61,   70,   70,   70,   71,   71,   71,   72,   72,
+       72,   73,   73,   73,   74,   52,   74,   32,   30,   26,
+       20,   11,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69,   69,   69,   69,   69,   69,   69,   69,
+       69,   69,   69
     } ;
 
 #define REJECT \
@@ -507,6 +529,8 @@ goto find_rule; \
 #include "giza-hershey-to-utf.h"
 #include "giza.h"
 #include <string.h>
+#include <stdlib.h>
+#include <limits.h>
 #include <math.h>
 #include <ctype.h>
 
@@ -552,9 +576,13 @@ static char const* const giza_greek_to_utf_data[] = {
 static giza_hershey_to_utf_entry const*  _giza_lookup_hershey(int number);
 static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 
-#line 555 "lex.yy.c"
+/* UTF-8 multibyte sequences (RFC 3629) are matched before the catch-all "."
+   rule so codepoints are passed intact to Cairo. Invalid lead bytes and
+   overlong encodings are rejected and fall through to single-byte handling. */
 
-#line 557 "lex.yy.c"
+#line 583 "lex.yy.c"
+
+#line 585 "lex.yy.c"
 
 #define INITIAL 0
 #define FONT 1
@@ -809,11 +837,10 @@ YY_DECL
 #endif
 
         /* Create the reject buffer large enough to save one state per allowed character. */
-        if ( ! yyg->yy_state_buf ) {
+        if ( ! yyg->yy_state_buf )
             yyg->yy_state_buf = (yy_state_type *)yyalloc(YY_STATE_BUF_SIZE  , yyscanner);
             if ( ! yyg->yy_state_buf )
                 YY_FATAL_ERROR( "out of dynamic memory in yylex()" );
-        }
 
 		if ( ! yyg->yy_start )
 			yyg->yy_start = 1;	/* first start state */
@@ -834,10 +861,10 @@ YY_DECL
 		}
 
 	{
-#line 90 "giza-scanner.l"
+#line 96 "giza-scanner.l"
 
 
-#line 839 "lex.yy.c"
+#line 867 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -863,14 +890,14 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 44 )
+				if ( yy_current_state >= 70 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			*yyg->yy_state_ptr++ = yy_current_state;
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 104 );
+		while ( yy_base[yy_current_state] != 143 );
 
 yy_find_action:
 		yy_current_state = *--yyg->yy_state_ptr;
@@ -902,108 +929,148 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 92 "giza-scanner.l"
+#line 98 "giza-scanner.l"
 { return GIZA_TOKEN_RAISE; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 93 "giza-scanner.l"
+#line 99 "giza-scanner.l"
 { return GIZA_TOKEN_LOWER; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 94 "giza-scanner.l"
+#line 100 "giza-scanner.l"
 { return GIZA_TOKEN_BACKSPACE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 96 "giza-scanner.l"
+#line 102 "giza-scanner.l"
 { BEGIN(FONT); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 97 "giza-scanner.l"
+#line 103 "giza-scanner.l"
 { BEGIN(INITIAL); return GIZA_TOKEN_FONT; };
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 98 "giza-scanner.l"
+#line 104 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid font specifier '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 100 "giza-scanner.l"
+#line 106 "giza-scanner.l"
 { BEGIN(HERSHEY); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 101 "giza-scanner.l"
+#line 107 "giza-scanner.l"
 { if( _giza_lookup_hershey(atoi(yytext)) ) { BEGIN(INITIAL); return GIZA_TOKEN_HERSHEY; } REJECT; }
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 102 "giza-scanner.l"
+#line 108 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid Hershey code '%s'", yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 104 "giza-scanner.l"
+#line 110 "giza-scanner.l"
 { BEGIN(MARKER); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 105 "giza-scanner.l"
+#line 111 "giza-scanner.l"
 { const int marker = atoi(yytext); if( marker>=1 && marker<=31 ) { BEGIN(INITIAL); return GIZA_TOKEN_MARKER; } REJECT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 106 "giza-scanner.l"
+#line 112 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid marker '%s'", yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 108 "giza-scanner.l"
+#line 114 "giza-scanner.l"
 { BEGIN(GREEK); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 109 "giza-scanner.l"
+#line 115 "giza-scanner.l"
 { BEGIN(INITIAL); return GIZA_TOKEN_GREEK; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 110 "giza-scanner.l"
+#line 116 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid greek letter '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 112 "giza-scanner.l"
+#line 118 "giza-scanner.l"
 { if( _giza_remap_token(yytext) ) { return GIZA_TOKEN_REMAP; } REJECT; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 114 "giza-scanner.l"
+#line 120 "giza-scanner.l"
 { return GIZA_TOKEN_SUPER; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 115 "giza-scanner.l"
+#line 121 "giza-scanner.l"
 { return GIZA_TOKEN_SUB; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 116 "giza-scanner.l"
+#line 122 "giza-scanner.l"
 { return GIZA_TOKEN_OB; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 117 "giza-scanner.l"
+#line 123 "giza-scanner.l"
 { return GIZA_TOKEN_CB; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 119 "giza-scanner.l"
+#line 125 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case 22:
+YY_RULE_SETUP
+#line 126 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case 23:
+YY_RULE_SETUP
+#line 127 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case 24:
+YY_RULE_SETUP
+#line 128 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case 25:
+YY_RULE_SETUP
+#line 129 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case 26:
+YY_RULE_SETUP
+#line 130 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case 27:
+YY_RULE_SETUP
+#line 131 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case 28:
+YY_RULE_SETUP
+#line 132 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
+	YY_BREAK
+case 29:
+YY_RULE_SETUP
+#line 134 "giza-scanner.l"
 { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
@@ -1011,15 +1078,15 @@ case YY_STATE_EOF(FONT):
 case YY_STATE_EOF(HERSHEY):
 case YY_STATE_EOF(MARKER):
 case YY_STATE_EOF(GREEK):
-#line 121 "giza-scanner.l"
+#line 136 "giza-scanner.l"
 { return GIZA_TOKEN_END; }
 	YY_BREAK
-case 22:
+case 30:
 YY_RULE_SETUP
-#line 123 "giza-scanner.l"
+#line 138 "giza-scanner.l"
 ECHO;
 	YY_BREAK
-#line 1021 "lex.yy.c"
+#line 1089 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -1245,7 +1312,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
 
-	if ((yy_size_t)(yyg->yy_n_chars + number_to_move) > (yy_size_t)YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+	if ((yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
 		yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc(
@@ -1284,7 +1351,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 44 )
+			if ( yy_current_state >= 70 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1308,11 +1375,11 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 44 )
+		if ( yy_current_state >= 70 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 43);
+	yy_is_jam = (yy_current_state == 69);
 	if ( ! yy_is_jam )
 		*yyg->yy_state_ptr++ = yy_current_state;
 
@@ -2121,7 +2188,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 123 "giza-scanner.l"
+#line 138 "giza-scanner.l"
 
 
 
@@ -2174,7 +2241,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
       return;
   }
 
-  const int            lenstr = strlen(text);
+  const size_t         lenstr = strlen(text);
   if( lenstr==0 )
       return;
 
@@ -2189,9 +2256,20 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   char const*          token_txt;
   ob_state_type        ob_super[MAX_NFONT]; /* keep track of superscript state */
   ob_state_type        ob_sub[MAX_NFONT];   /* keep track of subscript state */
-  glyph_pos_type       positions[lenstr+1];  /* keep track of each glyph's x,y position (for backing up characters) */
+  glyph_pos_type*      positions;
   font_change_type     oldfont[MAX_NFONT];  /* keep track of font change state */
   int                  isuper = -1, isub = -1, ifont = -1;
+
+  /* Heap allocation: allow for PGPLOT markup tokens as well as UTF-8 bytes */
+  if (lenstr > (SIZE_MAX - 64) / 2) {
+      _giza_error("giza_parse_string", "Input string too long");
+      return;
+  }
+  positions = (glyph_pos_type*)malloc((2 * lenstr + 64) * sizeof(*positions));
+  if (positions == NULL) {
+      _giza_error("giza_parse_string", "Out of memory allocating glyph positions");
+      return;
+  }
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -2430,6 +2508,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
       nGlyph++;
   }
   yylex_destroy (scanner);
+  free(positions);
 
   _giza_set_trans (oldTrans);
 

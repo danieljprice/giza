@@ -106,10 +106,11 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__EXEEXT_1 = test-format-number$(EXEEXT) test-pdf$(EXEEXT) \
-	test-png$(EXEEXT) test-svg$(EXEEXT) test-cpgpnts$(EXEEXT) \
-	test-cpgconb$(EXEEXT) test-cpgconf$(EXEEXT) \
-	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
-	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT)
+	test-png$(EXEEXT) test-svg$(EXEEXT) test-unicode$(EXEEXT) \
+	test-cpgpnts$(EXEEXT) test-cpgconb$(EXEEXT) \
+	test-cpgconf$(EXEEXT) test-cpgconl$(EXEEXT) \
+	test-cpgconx$(EXEEXT) test-cpghi2d$(EXEEXT) \
+	test-cpgscrl$(EXEEXT)
 am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
 	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
@@ -120,7 +121,7 @@ am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-rectangle$(EXEEXT) test-set-line-width$(EXEEXT) \
 	test-vector$(EXEEXT) test-window$(EXEEXT) \
 	test-XOpenDisplay$(EXEEXT) test-contour$(EXEEXT) \
-	test-render$(EXEEXT)
+	test-render$(EXEEXT) test-band$(EXEEXT)
 test_XOpenDisplay_SOURCES = test-XOpenDisplay.c
 test_XOpenDisplay_OBJECTS = test-XOpenDisplay.$(OBJEXT)
 am__DEPENDENCIES_1 =
@@ -133,6 +134,10 @@ test_arrow_SOURCES = test-arrow.c
 test_arrow_OBJECTS = test-arrow.$(OBJEXT)
 test_arrow_LDADD = $(LDADD)
 test_arrow_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_band_SOURCES = test-band.c
+test_band_OBJECTS = test-band.$(OBJEXT)
+test_band_LDADD = $(LDADD)
+test_band_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
 test_box_SOURCES = test-box.c
 test_box_OBJECTS = test-box.$(OBJEXT)
 test_box_LDADD = $(LDADD)
@@ -239,6 +244,10 @@ test_svg_SOURCES = test-svg.c
 test_svg_OBJECTS = test-svg.$(OBJEXT)
 test_svg_LDADD = $(LDADD)
 test_svg_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_unicode_SOURCES = test-unicode.c
+test_unicode_OBJECTS = test-unicode.$(OBJEXT)
+test_unicode_LDADD = $(LDADD)
+test_unicode_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
 test_vector_SOURCES = test-vector.c
 test_vector_OBJECTS = test-vector.$(OBJEXT)
 test_vector_LDADD = $(LDADD)
@@ -263,22 +272,23 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
-	./$(DEPDIR)/test-arrow.Po ./$(DEPDIR)/test-box.Po \
-	./$(DEPDIR)/test-cairo-xw.Po ./$(DEPDIR)/test-change-page.Po \
-	./$(DEPDIR)/test-circle.Po ./$(DEPDIR)/test-colour-index.Po \
-	./$(DEPDIR)/test-contour.Po ./$(DEPDIR)/test-cpgconb.Po \
-	./$(DEPDIR)/test-cpgconf.Po ./$(DEPDIR)/test-cpgconl.Po \
-	./$(DEPDIR)/test-cpgconx.Po ./$(DEPDIR)/test-cpghi2d.Po \
-	./$(DEPDIR)/test-cpgpnts.Po ./$(DEPDIR)/test-cpgscrl.Po \
-	./$(DEPDIR)/test-environment.Po ./$(DEPDIR)/test-error-bars.Po \
+	./$(DEPDIR)/test-arrow.Po ./$(DEPDIR)/test-band.Po \
+	./$(DEPDIR)/test-box.Po ./$(DEPDIR)/test-cairo-xw.Po \
+	./$(DEPDIR)/test-change-page.Po ./$(DEPDIR)/test-circle.Po \
+	./$(DEPDIR)/test-colour-index.Po ./$(DEPDIR)/test-contour.Po \
+	./$(DEPDIR)/test-cpgconb.Po ./$(DEPDIR)/test-cpgconf.Po \
+	./$(DEPDIR)/test-cpgconl.Po ./$(DEPDIR)/test-cpgconx.Po \
+	./$(DEPDIR)/test-cpghi2d.Po ./$(DEPDIR)/test-cpgpnts.Po \
+	./$(DEPDIR)/test-cpgscrl.Po ./$(DEPDIR)/test-environment.Po \
+	./$(DEPDIR)/test-error-bars.Po \
 	./$(DEPDIR)/test-format-number.Po ./$(DEPDIR)/test-giza-xw.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
 	./$(DEPDIR)/test-openclose.Po ./$(DEPDIR)/test-pdf.Po \
 	./$(DEPDIR)/test-png.Po ./$(DEPDIR)/test-points.Po \
 	./$(DEPDIR)/test-qtext.Po ./$(DEPDIR)/test-rectangle.Po \
 	./$(DEPDIR)/test-render.Po ./$(DEPDIR)/test-set-line-width.Po \
-	./$(DEPDIR)/test-svg.Po ./$(DEPDIR)/test-vector.Po \
-	./$(DEPDIR)/test-window.Po
+	./$(DEPDIR)/test-svg.Po ./$(DEPDIR)/test-unicode.Po \
+	./$(DEPDIR)/test-vector.Po ./$(DEPDIR)/test-window.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -298,16 +308,7 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c test-cairo-xw.c \
-	test-change-page.c test-circle.c test-colour-index.c \
-	test-contour.c test-cpgconb.c test-cpgconf.c test-cpgconl.c \
-	test-cpgconx.c test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
-	test-environment.c test-error-bars.c test-format-number.c \
-	test-giza-xw.c test-line-cap.c test-line-style.c \
-	test-openclose.c test-pdf.c test-png.c test-points.c \
-	test-qtext.c test-rectangle.c test-render.c \
-	test-set-line-width.c test-svg.c test-vector.c test-window.c
-DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c \
+SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cairo-xw.c test-change-page.c test-circle.c \
 	test-colour-index.c test-contour.c test-cpgconb.c \
 	test-cpgconf.c test-cpgconl.c test-cpgconx.c test-cpghi2d.c \
@@ -315,8 +316,18 @@ DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c \
 	test-error-bars.c test-format-number.c test-giza-xw.c \
 	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
 	test-png.c test-points.c test-qtext.c test-rectangle.c \
-	test-render.c test-set-line-width.c test-svg.c test-vector.c \
-	test-window.c
+	test-render.c test-set-line-width.c test-svg.c test-unicode.c \
+	test-vector.c test-window.c
+DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
+	test-cairo-xw.c test-change-page.c test-circle.c \
+	test-colour-index.c test-contour.c test-cpgconb.c \
+	test-cpgconf.c test-cpgconl.c test-cpgconx.c test-cpghi2d.c \
+	test-cpgpnts.c test-cpgscrl.c test-environment.c \
+	test-error-bars.c test-format-number.c test-giza-xw.c \
+	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
+	test-png.c test-points.c test-qtext.c test-rectangle.c \
+	test-render.c test-set-line-width.c test-svg.c test-unicode.c \
+	test-vector.c test-window.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -707,7 +718,7 @@ CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
 CLEANFILES = *.png *.pdf *.svg
 
 # Tests that run non-interactively (file-based devices only)
-auto_ctests = test-format-number test-pdf test-png test-svg \
+auto_ctests = test-format-number test-pdf test-png test-svg test-unicode \
 	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl
 
 
@@ -718,7 +729,8 @@ interactive_ctests = test-arrow test-box test-cairo-xw test-change-page \
 	test-error-bars test-giza-xw test-line-cap \
 	test-line-style test-openclose test-points \
 	test-qtext test-rectangle test-set-line-width \
-	test-vector test-window test-XOpenDisplay test-contour test-render
+	test-vector test-window test-XOpenDisplay test-contour test-render \
+	test-band
 
 test_cpgpnts_LDADD = $(CPGPLOT_LDADD)
 test_cpgconb_LDADD = $(CPGPLOT_LDADD)
@@ -774,6 +786,10 @@ test-XOpenDisplay$(EXEEXT): $(test_XOpenDisplay_OBJECTS) $(test_XOpenDisplay_DEP
 test-arrow$(EXEEXT): $(test_arrow_OBJECTS) $(test_arrow_DEPENDENCIES) $(EXTRA_test_arrow_DEPENDENCIES) 
 	@rm -f test-arrow$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_arrow_OBJECTS) $(test_arrow_LDADD) $(LIBS)
+
+test-band$(EXEEXT): $(test_band_OBJECTS) $(test_band_DEPENDENCIES) $(EXTRA_test_band_DEPENDENCIES) 
+	@rm -f test-band$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_band_OBJECTS) $(test_band_LDADD) $(LIBS)
 
 test-box$(EXEEXT): $(test_box_OBJECTS) $(test_box_DEPENDENCIES) $(EXTRA_test_box_DEPENDENCIES) 
 	@rm -f test-box$(EXEEXT)
@@ -887,6 +903,10 @@ test-svg$(EXEEXT): $(test_svg_OBJECTS) $(test_svg_DEPENDENCIES) $(EXTRA_test_svg
 	@rm -f test-svg$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_svg_OBJECTS) $(test_svg_LDADD) $(LIBS)
 
+test-unicode$(EXEEXT): $(test_unicode_OBJECTS) $(test_unicode_DEPENDENCIES) $(EXTRA_test_unicode_DEPENDENCIES) 
+	@rm -f test-unicode$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_unicode_OBJECTS) $(test_unicode_LDADD) $(LIBS)
+
 test-vector$(EXEEXT): $(test_vector_OBJECTS) $(test_vector_DEPENDENCIES) $(EXTRA_test_vector_DEPENDENCIES) 
 	@rm -f test-vector$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_vector_OBJECTS) $(test_vector_LDADD) $(LIBS)
@@ -903,6 +923,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-XOpenDisplay.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-arrow.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-band.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-box.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-cairo-xw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-change-page.Po@am__quote@ # am--include-marker
@@ -931,6 +952,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-render.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-set-line-width.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-svg.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-unicode.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-vector.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-window.Po@am__quote@ # am--include-marker
 
@@ -1213,6 +1235,13 @@ test-svg.log: test-svg$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-unicode.log: test-unicode$(EXEEXT)
+	@p='test-unicode$(EXEEXT)'; \
+	b='test-unicode'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 test-cpgpnts.log: test-cpgpnts$(EXEEXT)
 	@p='test-cpgpnts$(EXEEXT)'; \
 	b='test-cpgpnts'; \
@@ -1358,6 +1387,7 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
 distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-XOpenDisplay.Po
 	-rm -f ./$(DEPDIR)/test-arrow.Po
+	-rm -f ./$(DEPDIR)/test-band.Po
 	-rm -f ./$(DEPDIR)/test-box.Po
 	-rm -f ./$(DEPDIR)/test-cairo-xw.Po
 	-rm -f ./$(DEPDIR)/test-change-page.Po
@@ -1386,6 +1416,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-render.Po
 	-rm -f ./$(DEPDIR)/test-set-line-width.Po
 	-rm -f ./$(DEPDIR)/test-svg.Po
+	-rm -f ./$(DEPDIR)/test-unicode.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
 	-rm -f ./$(DEPDIR)/test-window.Po
 	-rm -f Makefile
@@ -1435,6 +1466,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-XOpenDisplay.Po
 	-rm -f ./$(DEPDIR)/test-arrow.Po
+	-rm -f ./$(DEPDIR)/test-band.Po
 	-rm -f ./$(DEPDIR)/test-box.Po
 	-rm -f ./$(DEPDIR)/test-cairo-xw.Po
 	-rm -f ./$(DEPDIR)/test-change-page.Po
@@ -1463,6 +1495,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-render.Po
 	-rm -f ./$(DEPDIR)/test-set-line-width.Po
 	-rm -f ./$(DEPDIR)/test-svg.Po
+	-rm -f ./$(DEPDIR)/test-unicode.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
 	-rm -f ./$(DEPDIR)/test-window.Po
 	-rm -f Makefile

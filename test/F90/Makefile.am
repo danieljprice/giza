@@ -5,7 +5,7 @@ LDADD = ../../src/libpgplot.la
 CLEANFILES = *.png
 
 # Tests that run non-interactively (file-based devices only)
-auto_ftests = test-2D test-fortran \
+auto_ftests = test-2D test-fortran test-unicode \
 	test-pgpnts test-pgconb test-pgconf test-pgconl test-pgconx test-pghi2d test-pgscrl
 
 # Tests that need an X display
@@ -15,7 +15,7 @@ TESTS = $(auto_ftests)
 check_PROGRAMS = $(auto_ftests) $(interactive_ftests)
 AM_DEFAULT_SOURCE_EXT = .f90
 
-test_output_files = giza-test.png giza-test-2D.png
+test_output_files = giza-test.png giza-test-2D.png test-unicode-f90.png
 
 # Custom target to check for the existence of expected output files from the Fortran tests
 check-local: check-TESTS

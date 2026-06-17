@@ -105,9 +105,9 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__EXEEXT_1 = test-2D$(EXEEXT) test-fortran$(EXEEXT) \
-	test-pgpnts$(EXEEXT) test-pgconb$(EXEEXT) test-pgconf$(EXEEXT) \
-	test-pgconl$(EXEEXT) test-pgconx$(EXEEXT) test-pghi2d$(EXEEXT) \
-	test-pgscrl$(EXEEXT)
+	test-unicode$(EXEEXT) test-pgpnts$(EXEEXT) \
+	test-pgconb$(EXEEXT) test-pgconf$(EXEEXT) test-pgconl$(EXEEXT) \
+	test-pgconx$(EXEEXT) test-pghi2d$(EXEEXT) test-pgscrl$(EXEEXT)
 am__EXEEXT_2 = test-pgaxis$(EXEEXT)
 test_2D_SOURCES = test-2D.f90
 test_2D_OBJECTS = test-2D.$(OBJEXT)
@@ -153,6 +153,10 @@ test_pgscrl_SOURCES = test-pgscrl.f90
 test_pgscrl_OBJECTS = test-pgscrl.$(OBJEXT)
 test_pgscrl_LDADD = $(LDADD)
 test_pgscrl_DEPENDENCIES = ../../src/libpgplot.la
+test_unicode_SOURCES = test-unicode.f90
+test_unicode_OBJECTS = test-unicode.$(OBJEXT)
+test_unicode_LDADD = $(LDADD)
+test_unicode_DEPENDENCIES = ../../src/libpgplot.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -183,11 +187,12 @@ am__v_FCLD_0 = @echo "  FCLD    " $@;
 am__v_FCLD_1 = 
 SOURCES = test-2D.f90 test-fortran.f90 test-pgaxis.f90 test-pgconb.f90 \
 	test-pgconf.f90 test-pgconl.f90 test-pgconx.f90 \
-	test-pghi2d.f90 test-pgpnts.f90 test-pgscrl.f90
+	test-pghi2d.f90 test-pgpnts.f90 test-pgscrl.f90 \
+	test-unicode.f90
 DIST_SOURCES = test-2D.f90 test-fortran.f90 test-pgaxis.f90 \
 	test-pgconb.f90 test-pgconf.f90 test-pgconl.f90 \
 	test-pgconx.f90 test-pghi2d.f90 test-pgpnts.f90 \
-	test-pgscrl.f90
+	test-pgscrl.f90 test-unicode.f90
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -576,14 +581,14 @@ LDADD = ../../src/libpgplot.la
 CLEANFILES = *.png
 
 # Tests that run non-interactively (file-based devices only)
-auto_ftests = test-2D test-fortran \
+auto_ftests = test-2D test-fortran test-unicode \
 	test-pgpnts test-pgconb test-pgconf test-pgconl test-pgconx test-pghi2d test-pgscrl
 
 
 # Tests that need an X display
 interactive_ftests = test-pgaxis
 AM_DEFAULT_SOURCE_EXT = .f90
-test_output_files = giza-test.png giza-test-2D.png
+test_output_files = giza-test.png giza-test-2D.png test-unicode-f90.png
 all: all-am
 
 .SUFFIXES:
@@ -661,6 +666,10 @@ test-pgpnts$(EXEEXT): $(test_pgpnts_OBJECTS) $(test_pgpnts_DEPENDENCIES) $(EXTRA
 test-pgscrl$(EXEEXT): $(test_pgscrl_OBJECTS) $(test_pgscrl_DEPENDENCIES) $(EXTRA_test_pgscrl_DEPENDENCIES) 
 	@rm -f test-pgscrl$(EXEEXT)
 	$(AM_V_FCLD)$(FCLINK) $(test_pgscrl_OBJECTS) $(test_pgscrl_LDADD) $(LIBS)
+
+test-unicode$(EXEEXT): $(test_unicode_OBJECTS) $(test_unicode_DEPENDENCIES) $(EXTRA_test_unicode_DEPENDENCIES) 
+	@rm -f test-unicode$(EXEEXT)
+	$(AM_V_FCLD)$(FCLINK) $(test_unicode_OBJECTS) $(test_unicode_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -911,6 +920,13 @@ test-2D.log: test-2D$(EXEEXT)
 test-fortran.log: test-fortran$(EXEEXT)
 	@p='test-fortran$(EXEEXT)'; \
 	b='test-fortran'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-unicode.log: test-unicode$(EXEEXT)
+	@p='test-unicode$(EXEEXT)'; \
+	b='test-unicode'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
