@@ -6,3 +6,25 @@
 *.dylib
 include/*
 lib/*
+
+# Disable output from "make check" in test/C and test/F90
+# Automake test logs (one .log and .trs per test, plus test-suite.log)
+test/C/*.log
+test/C/*.trs
+test/C/test-suite.log
+test/F90/*.log
+test/F90/*.trs
+test/F90/test-suite.log
+
+# Plot files written by tests (see CLEANFILES in test/*/Makefile.am)
+test/C/*.png
+test/C/*.pdf
+test/C/*.svg
+test/F90/*.png
+test/F90/*.ps
+
+# check_PROGRAMS binaries (sources are test-*.c and test-*.f90)
+test/C/test-*
+!test/C/test-*.c
+test/F90/test-*
+!test/F90/test-*.f90

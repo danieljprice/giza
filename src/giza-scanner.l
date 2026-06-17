@@ -37,6 +37,8 @@
 #include "giza-hershey-to-utf.h"
 #include "giza.h"
 #include <string.h>
+#include <stdlib.h>
+#include <limits.h>
 #include <math.h>
 #include <ctype.h>
 
@@ -82,8 +84,9 @@ static char const* const giza_greek_to_utf_data[] = {
 static giza_hershey_to_utf_entry const*  _giza_lookup_hershey(int number);
 static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 
-/* UTF-8 multibyte sequences are matched in the rules section before the
-   catch-all "." rule so that codepoints are passed intact to Cairo. */
+/* UTF-8 multibyte sequences (RFC 3629) are matched before the catch-all "."
+   rule so codepoints are passed intact to Cairo. Invalid lead bytes and
+   overlong encodings are rejected and fall through to single-byte handling. */
 
 %}
 
@@ -119,9 +122,14 @@ static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 <INITIAL>"{"          { return GIZA_TOKEN_OB; }
 <INITIAL>"}"          { return GIZA_TOKEN_CB; }
 
-<INITIAL>[\360-\367][\200-\277][\200-\277][\200-\277] { return GIZA_TOKEN_TEXT; }
-<INITIAL>[\340-\357][\200-\277][\200-\277]             { return GIZA_TOKEN_TEXT; }
-<INITIAL>[\300-\337][\200-\277]                       { return GIZA_TOKEN_TEXT; }
+<INITIAL>\360[\220-\277][\200-\277][\200-\277]         { return GIZA_TOKEN_TEXT; }
+<INITIAL>[\361-\363][\200-\277][\200-\277][\200-\277]  { return GIZA_TOKEN_TEXT; }
+<INITIAL>\364[\200-\217][\200-\277][\200-\277]         { return GIZA_TOKEN_TEXT; }
+<INITIAL>\340[\240-\277][\200-\277]                    { return GIZA_TOKEN_TEXT; }
+<INITIAL>[\341-\354][\200-\277][\200-\277]             { return GIZA_TOKEN_TEXT; }
+<INITIAL>[\356-\357][\200-\277][\200-\277]             { return GIZA_TOKEN_TEXT; }
+<INITIAL>\355[\200-\237][\200-\277]                    { return GIZA_TOKEN_TEXT; }
+<INITIAL>[\302-\337][\200-\277]                        { return GIZA_TOKEN_TEXT; }
 
 <INITIAL>.            { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 
@@ -179,7 +187,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
       return;
   }
 
-  const int            lenstr = strlen(text);
+  const size_t         lenstr = strlen(text);
   if( lenstr==0 )
       return;
 
@@ -194,10 +202,20 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   char const*          token_txt;
   ob_state_type        ob_super[MAX_NFONT]; /* keep track of superscript state */
   ob_state_type        ob_sub[MAX_NFONT];   /* keep track of subscript state */
-  /* Allow for PGPLOT markup tokens as well as UTF-8 bytes in the input */
-  glyph_pos_type       positions[2 * lenstr + 64];
+  glyph_pos_type*      positions;
   font_change_type     oldfont[MAX_NFONT];  /* keep track of font change state */
   int                  isuper = -1, isub = -1, ifont = -1;
+
+  /* Heap allocation: allow for PGPLOT markup tokens as well as UTF-8 bytes */
+  if (lenstr > (SIZE_MAX - 64) / 2) {
+      _giza_error("giza_parse_string", "Input string too long");
+      return;
+  }
+  positions = (glyph_pos_type*)malloc((2 * lenstr + 64) * sizeof(*positions));
+  if (positions == NULL) {
+      _giza_error("giza_parse_string", "Out of memory allocating glyph positions");
+      return;
+  }
 
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_IDEN);
@@ -436,6 +454,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
       nGlyph++;
   }
   yylex_destroy (scanner);
+  free(positions);
 
   _giza_set_trans (oldTrans);
 
