@@ -155,16 +155,9 @@ giza_open_device_cairo (void)
 int
 giza_open_device_size_cairo (double width, double height, int units)
 {
-  static int didInit = 0;
   int newId;
 
-  if (!didInit)
-    {
-      giza_device_t *pDev;
-      for (pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
-        _giza_init_device_struct (pDev);
-      didInit = 1;
-    }
+  _giza_init_all_devices_once ();
 
   for (newId = 0; newId < GIZA_MAX_DEVICES; newId++)
     if (Dev[newId].deviceOpen == 0)
@@ -225,6 +218,14 @@ giza_set_cairo_context (cairo_t *cr)
   if (cr == NULL)
     {
       _giza_error ("giza_set_cairo_context", "cairo context must not be NULL");
+      return -1;
+    }
+
+  status = cairo_status (cr);
+  if (status != CAIRO_STATUS_SUCCESS)
+    {
+      _giza_error ("giza_set_cairo_context", "Invalid cairo context (%s)",
+                   cairo_status_to_string (status));
       return -1;
     }
 
@@ -298,6 +299,8 @@ giza_release_cairo_context (void)
 int
 giza_resize_device_cairo (double width, double height, int units)
 {
+  int prevTrans;
+
   if (!_giza_check_cairo_device_open ("giza_resize_device_cairo"))
     return -1;
 
@@ -307,11 +310,12 @@ giza_resize_device_cairo (double width, double height, int units)
       return -1;
     }
 
+  prevTrans = Dev[id].CurrentTrans;
   _giza_get_specified_size (width, height, units, &Dev[id].width, &Dev[id].height);
   _giza_init_norm ();
 
   if (Dev[id].context != NULL)
-    _giza_set_trans (Dev[id].CurrentTrans);
+    _giza_set_trans (prevTrans);
 
   return 0;
 }

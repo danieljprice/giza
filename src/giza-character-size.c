@@ -141,7 +141,7 @@ giza_get_character_size (int units, double *heightx, double *heighty)
   /* font metrics need a bound context on external cairo devices */
   if (Dev[id].type == GIZA_DEVICE_CAIRO && Dev[id].context == NULL)
     {
-      double nominal = Dev[id].ch * 0.027;
+      double nominal = Dev[id].ch * (1.0 / 37.0);
 
       *heightx = nominal;
       *heighty = nominal;

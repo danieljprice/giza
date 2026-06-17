@@ -63,6 +63,23 @@ static int _giza_get_internal_id(int devid);
 void _giza_close_device_unchecked (void);
 void _giza_init_device_struct(giza_device_t*);
 
+/**
+ * One-time initialisation of the Dev[] array (shared by all open paths).
+ */
+void
+_giza_init_all_devices_once (void)
+{
+  static int didInit = 0;
+
+  if (didInit)
+    return;
+
+  giza_device_t *pDev;
+  for (pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
+    _giza_init_device_struct (pDev);
+  didInit = 1;
+}
+
 /* global settings */
 giza_settings_t Sets;
 int id;
@@ -136,14 +153,7 @@ giza_open_device (const char *newDeviceName, const char *newPrefix)
 int
 giza_open_device_size (const char *newDeviceName, const char *newPrefix, double width, double height, int units)
 {
-  static int didInit = 0;
-
-  if( !didInit ) {
-         giza_device_t* pDev;
-      for(pDev = &Dev[0]; pDev < &Dev[GIZA_MAX_DEVICES]; pDev++)
-          _giza_init_device_struct( pDev );
-       didInit = 1;
-  }
+  _giza_init_all_devices_once ();
 
   if( !newDeviceName || !strlen(newDeviceName) ) {
       _giza_error("giza_open_device", newDeviceName==NULL ? "(nullptr devicename)" : "empty device name");
