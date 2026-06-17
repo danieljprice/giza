@@ -48,10 +48,10 @@ main (void)
 
   giza_start_warnings ();
 
-  id = giza_open_device_cairo (NULL, 400., 300., GIZA_UNITS_PIXELS);
+  id = giza_open_device_size_cairo (400., 300., GIZA_UNITS_PIXELS);
   if (id <= 0)
     {
-      fprintf (stderr, "Error: deferred giza_open_device_cairo failed\n");
+      fprintf (stderr, "Error: giza_open_device_size_cairo failed\n");
       return 1;
     }
 

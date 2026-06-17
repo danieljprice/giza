@@ -135,11 +135,25 @@ static int _giza_check_cairo_device_open (const char *source)
 /**
  * Device: giza_open_device_cairo
  *
- * Synopsis: Opens a device that draws into a caller-owned cairo_t context.
- * Use giza_set_cairo_context before plotting if cr is NULL at open time.
+ * Synopsis: Opens an external cairo device with default logical size (800x600 px).
+ * Call giza_set_cairo_context before plotting.
+ *
+ * See Also: giza_open_device_size_cairo, giza_set_cairo_context
  */
 int
-giza_open_device_cairo (cairo_t *cr, double width, double height, int units)
+giza_open_device_cairo (void)
+{
+  return giza_open_device_size_cairo (0., 0., 0);
+}
+
+/**
+ * Device: giza_open_device_size_cairo
+ *
+ * Synopsis: Opens an external cairo device with the given logical size.
+ * Call giza_set_cairo_context before plotting.
+ */
+int
+giza_open_device_size_cairo (double width, double height, int units)
 {
   static int didInit = 0;
   int newId;
@@ -157,7 +171,7 @@ giza_open_device_cairo (cairo_t *cr, double width, double height, int units)
       break;
   if (newId >= GIZA_MAX_DEVICES)
     {
-      _giza_error ("giza_open_device_cairo", "No more free devices (%d in use). Close some first.", GIZA_MAX_DEVICES);
+      _giza_error ("giza_open_device_size_cairo", "No more free devices (%d in use). Close some first.", GIZA_MAX_DEVICES);
       return -1;
     }
 
@@ -177,14 +191,20 @@ giza_open_device_cairo (cairo_t *cr, double width, double height, int units)
 
   Dev[id].deviceOpen = 1;
 
-  if (cr != NULL && giza_set_cairo_context (cr) != 0)
-    {
-      _giza_close_device_unchecked ();
-      id = prevId;
-      return -1;
-    }
+  return _giza_complete_device_open (0);
+}
 
-  return _giza_complete_device_open (cr != NULL);
+/**
+ * Device: giza_open_device_size_cairo_float
+ *
+ * Synopsis: Same as giza_open_device_size_cairo but takes floats.
+ *
+ * See Also: giza_open_device_size_cairo
+ */
+int
+giza_open_device_size_cairo_float (float width, float height, int units)
+{
+  return giza_open_device_size_cairo ((double) width, (double) height, units);
 }
 
 /**
