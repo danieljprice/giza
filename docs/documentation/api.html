@@ -28,6 +28,8 @@
   <dl class="toc"><dt><a href="#Device_management">Device Management</a></dt>
 <dd><a href="#giza_device_has_cursor">giza_device_has_cursor</a></dd>
 <dd><a href="#giza_open_device_cairo">giza_open_device_cairo</a></dd>
+<dd><a href="#giza_open_device_size_cairo">giza_open_device_size_cairo</a></dd>
+<dd><a href="#giza_open_device_size_cairo_float">giza_open_device_size_cairo_float</a></dd>
 <dd><a href="#giza_set_cairo_context">giza_set_cairo_context</a></dd>
 <dd><a href="#giza_release_cairo_context">giza_release_cairo_context</a></dd>
 <dd><a href="#giza_resize_device_cairo">giza_resize_device_cairo</a></dd>
@@ -233,8 +235,14 @@
 <td>1 :</td><td>If the device is interactive.</td>
 </tr></table><h3><a name="giza_open_device_cairo">giza_open_device_cairo</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>int</td><td width=20%>giza_open_device_cairo</td><td> (cairo_t *cr, double width, double height, int units) ;</tr></table><p>Opens a device that draws into a caller-owned cairo_t context. Use giza_set_cairo_context before plotting if cr is NULL at open time.</p>
-<h3><a name="giza_set_cairo_context">giza_set_cairo_context</a><hr></h3>
+<tr><td width=10%>int</td><td width=20%>giza_open_device_cairo</td><td> (void) ;</tr></table><p>Opens an external cairo device with default logical size (800x600 px). Call giza_set_cairo_context before plotting.</p>
+<h4>See Also:</h4><p><a href="#giza_open_device_size_cairo">giza_open_device_size_cairo</a> <a href="#giza_set_cairo_context">giza_set_cairo_context</a> </p><h3><a name="giza_open_device_size_cairo">giza_open_device_size_cairo</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_open_device_size_cairo</td><td> (double width, double height, int units) ;</tr></table><p>Opens an external cairo device with the given logical size. Call giza_set_cairo_context before plotting.</p>
+<h3><a name="giza_open_device_size_cairo_float">giza_open_device_size_cairo_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>int</td><td width=20%>giza_open_device_size_cairo_float</td><td> (float width, float height, int units) ;</tr></table><p>Same as giza_open_device_size_cairo but takes floats.</p>
+<h4>See Also:</h4><p><a href="#giza_open_device_size_cairo">giza_open_device_size_cairo</a> </p><h3><a name="giza_set_cairo_context">giza_set_cairo_context</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>int</td><td width=20%>giza_set_cairo_context</td><td> (cairo_t *cr) ;</tr></table><p>Bind a caller-owned cairo_t for the current frame. Performs cairo_save so giza_release_cairo_context can restore GTK state.</p>
 <h3><a name="giza_release_cairo_context">giza_release_cairo_context</a><hr></h3>
