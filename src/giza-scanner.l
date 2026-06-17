@@ -119,9 +119,9 @@ static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 <INITIAL>"{"          { return GIZA_TOKEN_OB; }
 <INITIAL>"}"          { return GIZA_TOKEN_CB; }
 
-<INITIAL>[\360-\367][\200-\277][\200-\277][\200-\277] { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
-<INITIAL>[\340-\357][\200-\277][\200-\277]             { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
-<INITIAL>[\300-\337][\200-\277]                       { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
+<INITIAL>[\360-\367][\200-\277][\200-\277][\200-\277] { return GIZA_TOKEN_TEXT; }
+<INITIAL>[\340-\357][\200-\277][\200-\277]             { return GIZA_TOKEN_TEXT; }
+<INITIAL>[\300-\337][\200-\277]                       { return GIZA_TOKEN_TEXT; }
 
 <INITIAL>.            { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 

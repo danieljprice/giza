@@ -1,6 +1,6 @@
-#line 1 "lex.yy.c.new"
+#line 1 "lex.yy.c"
 
-#line 3 "lex.yy.c.new"
+#line 3 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -558,9 +558,12 @@ static char const* const giza_greek_to_utf_data[] = {
 static giza_hershey_to_utf_entry const*  _giza_lookup_hershey(int number);
 static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 
-#line 561 "lex.yy.c.new"
+/* UTF-8 multibyte sequences are matched in the rules section before the
+   catch-all "." rule so that codepoints are passed intact to Cairo. */
 
-#line 563 "lex.yy.c.new"
+#line 564 "lex.yy.c"
+
+#line 566 "lex.yy.c"
 
 #define INITIAL 0
 #define FONT 1
@@ -839,10 +842,10 @@ YY_DECL
 		}
 
 	{
-#line 90 "giza-scanner.l"
+#line 93 "giza-scanner.l"
 
 
-#line 845 "lex.yy.c.new"
+#line 848 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -907,123 +910,123 @@ do_action:	/* This label is used only to access EOF actions. */
 	{ /* beginning of action switch */
 case 1:
 YY_RULE_SETUP
-#line 92 "giza-scanner.l"
+#line 95 "giza-scanner.l"
 { return GIZA_TOKEN_RAISE; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 93 "giza-scanner.l"
+#line 96 "giza-scanner.l"
 { return GIZA_TOKEN_LOWER; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 94 "giza-scanner.l"
+#line 97 "giza-scanner.l"
 { return GIZA_TOKEN_BACKSPACE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 96 "giza-scanner.l"
+#line 99 "giza-scanner.l"
 { BEGIN(FONT); }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 97 "giza-scanner.l"
+#line 100 "giza-scanner.l"
 { BEGIN(INITIAL); return GIZA_TOKEN_FONT; };
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 98 "giza-scanner.l"
+#line 101 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid font specifier '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 100 "giza-scanner.l"
+#line 103 "giza-scanner.l"
 { BEGIN(HERSHEY); }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 101 "giza-scanner.l"
+#line 104 "giza-scanner.l"
 { if( _giza_lookup_hershey(atoi(yytext)) ) { BEGIN(INITIAL); return GIZA_TOKEN_HERSHEY; } REJECT; }
 	YY_BREAK
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 102 "giza-scanner.l"
+#line 105 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid Hershey code '%s'", yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 104 "giza-scanner.l"
+#line 107 "giza-scanner.l"
 { BEGIN(MARKER); }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 105 "giza-scanner.l"
+#line 108 "giza-scanner.l"
 { const int marker = atoi(yytext); if( marker>=1 && marker<=31 ) { BEGIN(INITIAL); return GIZA_TOKEN_MARKER; } REJECT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 106 "giza-scanner.l"
+#line 109 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid marker '%s'", yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 108 "giza-scanner.l"
+#line 111 "giza-scanner.l"
 { BEGIN(GREEK); }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 109 "giza-scanner.l"
+#line 112 "giza-scanner.l"
 { BEGIN(INITIAL); return GIZA_TOKEN_GREEK; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 110 "giza-scanner.l"
+#line 113 "giza-scanner.l"
 { BEGIN(INITIAL); _giza_warning("giza_parse_string", "invalid greek letter '%c'", *yytext); return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 112 "giza-scanner.l"
+#line 115 "giza-scanner.l"
 { if( _giza_remap_token(yytext) ) { return GIZA_TOKEN_REMAP; } REJECT; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 114 "giza-scanner.l"
+#line 117 "giza-scanner.l"
 { return GIZA_TOKEN_SUPER; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 115 "giza-scanner.l"
+#line 118 "giza-scanner.l"
 { return GIZA_TOKEN_SUB; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 116 "giza-scanner.l"
+#line 119 "giza-scanner.l"
 { return GIZA_TOKEN_OB; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 117 "giza-scanner.l"
+#line 120 "giza-scanner.l"
 { return GIZA_TOKEN_CB; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 119 "giza-scanner.l"
-{ return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
+#line 122 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 120 "giza-scanner.l"
-{ return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
+#line 123 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 121 "giza-scanner.l"
-{ return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
+#line 124 "giza-scanner.l"
+{ return GIZA_TOKEN_TEXT; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 123 "giza-scanner.l"
+#line 126 "giza-scanner.l"
 { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
@@ -1031,15 +1034,15 @@ case YY_STATE_EOF(FONT):
 case YY_STATE_EOF(HERSHEY):
 case YY_STATE_EOF(MARKER):
 case YY_STATE_EOF(GREEK):
-#line 125 "giza-scanner.l"
+#line 128 "giza-scanner.l"
 { return GIZA_TOKEN_END; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 127 "giza-scanner.l"
+#line 130 "giza-scanner.l"
 ECHO;
 	YY_BREAK
-#line 1042 "lex.yy.c.new"
+#line 1045 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2141,7 +2144,7 @@ void yyfree (void * ptr , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 127 "giza-scanner.l"
+#line 130 "giza-scanner.l"
 
 
 
