@@ -28,8 +28,19 @@
 #include "giza-transforms-private.h"
 #include <giza.h>
 #include <math.h>
-#include <stdio.h>
 #include <string.h>
+
+static void
+_giza_check_cairo_text_status (const char *routine, const char *text)
+{
+  cairo_status_t status = cairo_status (Dev[id].context);
+
+  if (status == CAIRO_STATUS_SUCCESS)
+    return;
+
+  _giza_warning (routine, "cairo text error for '%s': %s",
+                 text, cairo_status_to_string (status));
+}
 
 void _giza_action_get_size (const char *text, double *width, double *height)
 {
@@ -38,6 +49,7 @@ void _giza_action_get_size (const char *text, double *width, double *height)
   cairo_get_current_point (Dev[id].context, &dummy, &newHeight);
   cairo_text_extents_t extents;
   cairo_text_extents (Dev[id].context, text, &extents);
+  _giza_check_cairo_text_status ("giza_text_extents", text);
 
   dummy = newHeight;
   *width += extents.x_advance;
@@ -49,6 +61,7 @@ void _giza_action_print (const char *text, double *width, double *height)
 {
   if (strlen(text) > 0) {
      cairo_show_text (Dev[id].context, text);
+     _giza_check_cairo_text_status ("giza_show_text", text);
   }
   *width = -1.;
   *height = -1.;

@@ -82,6 +82,9 @@ static char const* const giza_greek_to_utf_data[] = {
 static giza_hershey_to_utf_entry const*  _giza_lookup_hershey(int number);
 static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 
+/* UTF-8 multibyte sequences are matched in the rules section before the
+   catch-all "." rule so that codepoints are passed intact to Cairo. */
+
 %}
 
 
@@ -115,6 +118,10 @@ static giza_remapped_token_entry const*  _giza_remap_token(char const* special);
 <INITIAL>"_"          { return GIZA_TOKEN_SUB; }
 <INITIAL>"{"          { return GIZA_TOKEN_OB; }
 <INITIAL>"}"          { return GIZA_TOKEN_CB; }
+
+<INITIAL>[\360-\367][\200-\277][\200-\277][\200-\277] { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
+<INITIAL>[\340-\357][\200-\277][\200-\277]             { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
+<INITIAL>[\300-\337][\200-\277]                       { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; }
 
 <INITIAL>.            { return _giza_remap_token(yytext) ? GIZA_TOKEN_REMAP : GIZA_TOKEN_TEXT; /* single character escape sequence or ordinary escaped character meaning */ }
 
@@ -187,7 +194,8 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
   char const*          token_txt;
   ob_state_type        ob_super[MAX_NFONT]; /* keep track of superscript state */
   ob_state_type        ob_sub[MAX_NFONT];   /* keep track of subscript state */
-  glyph_pos_type       positions[lenstr+1];  /* keep track of each glyph's x,y position (for backing up characters) */
+  /* Allow for PGPLOT markup tokens as well as UTF-8 bytes in the input */
+  glyph_pos_type       positions[2 * lenstr + 64];
   font_change_type     oldfont[MAX_NFONT];  /* keep track of font change state */
   int                  isuper = -1, isub = -1, ifont = -1;
 
