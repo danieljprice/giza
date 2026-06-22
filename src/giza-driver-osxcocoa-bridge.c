@@ -62,6 +62,14 @@
 /* Internal: create cairo-quartz surface from CGContext                      */
 /* ======================================================================== */
 
+/* Plot area (Dev[id].width/height) plus margins — matches XW[id].width/height */
+static void
+_osxcocoa_surface_size (int *wwin, int *hwin)
+{
+    *wwin = Dev[id].width  + 2 * GIZA_OSXCOCOA_MARGIN;
+    *hwin = Dev[id].height + 2 * GIZA_OSXCOCOA_MARGIN;
+}
+
 static int
 _osxcocoa_create_surface (GizaCGContextRef cgctx, int width, int height)
 {
@@ -84,17 +92,22 @@ _osxcocoa_create_surface (GizaCGContextRef cgctx, int width, int height)
 int
 _giza_open_device_osxcocoa (double width, double height, int units)
 {
-    int wpx, hpx;
-    if (width > 1.0 && height > 1.0)
-        _giza_get_specified_size(width, height, units, &wpx, &hpx);
+    int wwin, hwin;
+
+    Dev[id].deviceUnitsPermm    = GIZA_OSXCOCOA_UNITS_PER_MM;
+    Dev[id].deviceUnitsPerPixel = GIZA_OSXCOCOA_UNITS_PER_PIXEL;
+    Dev[id].isInteractive       = 1;
+    Dev[id].defaultBackgroundAlpha = 1.0;
+
+    /* Match /xw: Dev[id].width/height is the plot area; surface adds margins */
+    if (width > 0. && height > 0. && units > 0)
+        _giza_get_specified_size(width, height, units, &Dev[id].width, &Dev[id].height);
     else {
-        wpx = GIZA_OSXCOCOA_DEFAULT_WIDTH;
-        hpx = GIZA_OSXCOCOA_DEFAULT_HEIGHT;
+        Dev[id].width  = GIZA_OSXCOCOA_DEFAULT_WIDTH;
+        Dev[id].height = GIZA_OSXCOCOA_DEFAULT_HEIGHT;
     }
 
-    /* total window size includes margin */
-    int wwin = wpx + 2 * GIZA_OSXCOCOA_MARGIN;
-    int hwin = hpx + 2 * GIZA_OSXCOCOA_MARGIN;
+    _osxcocoa_surface_size(&wwin, &hwin);
 
     _giza_osxcocoa_start_app_if_needed();
 
@@ -108,14 +121,6 @@ _giza_open_device_osxcocoa (double width, double height, int units)
         _giza_osxcocoa_close_window(id);
         return 1;
     }
-
-
-    Dev[id].width               = wwin;
-    Dev[id].height              = hwin;
-    Dev[id].deviceUnitsPermm    = GIZA_OSXCOCOA_UNITS_PER_MM;
-    Dev[id].deviceUnitsPerPixel = GIZA_OSXCOCOA_UNITS_PER_PIXEL;
-    Dev[id].isInteractive       = 1;
-    Dev[id].defaultBackgroundAlpha = 1.0;
 
     return 0;
 }
@@ -139,8 +144,14 @@ _giza_flush_device_osxcocoa (void)
 void
 _giza_change_page_osxcocoa (void)
 {
-    int wwin = Dev[id].width;
-    int hwin = Dev[id].height;
+    int wwin, hwin;
+
+    if (Dev[id].resize)
+        _giza_osxcocoa_resize_window(id,
+                                   Dev[id].width  + 2 * GIZA_OSXCOCOA_MARGIN,
+                                   Dev[id].height + 2 * GIZA_OSXCOCOA_MARGIN);
+
+    _osxcocoa_surface_size(&wwin, &hwin);
 
     /* destroy old cairo objects */
     if (Dev[id].context) {
@@ -176,11 +187,12 @@ _giza_close_device_osxcocoa (void)
 void
 _giza_init_norm_osxcocoa (void)
 {
+    /* Same layout as _giza_init_norm_xw: norm coords map to the plot area */
     cairo_matrix_init(&(Dev[id].Win.normCoords),
-                      (double)  Dev[id].width,  0.0,
+                      (double) Dev[id].width, 0.0,
                       0.0, (double) -Dev[id].height,
-                      (double)  GIZA_OSXCOCOA_MARGIN,
-                      (double) (Dev[id].height - GIZA_OSXCOCOA_MARGIN));
+                      (double) GIZA_OSXCOCOA_MARGIN,
+                      (double) (Dev[id].height + GIZA_OSXCOCOA_MARGIN));
     _giza_set_trans(GIZA_TRANS_NORM);
 }
 
@@ -189,9 +201,12 @@ _giza_init_norm_osxcocoa (void)
 void
 _giza_expand_clipping_osxcocoa (void)
 {
+    int wwin, hwin;
+
+    _osxcocoa_surface_size(&wwin, &hwin);
     _giza_set_trans(GIZA_TRANS_IDEN);
     cairo_reset_clip(Dev[id].context);
-    cairo_rectangle(Dev[id].context, 0, 0, Dev[id].width, Dev[id].height);
+    cairo_rectangle(Dev[id].context, 0, 0, wwin, hwin);
     cairo_clip(Dev[id].context);
 }
 
@@ -206,14 +221,10 @@ _giza_get_key_press_osxcocoa (int mode, int moveCurs,
     int oldTrans = _giza_get_trans();
     _giza_set_trans(GIZA_TRANS_WORLD);
 
-    /* Convert anchor world coords → device (surface) coords for the band overlay */
-    double axd = xanc[0], ayd = yanc[0];
-    cairo_user_to_device(Dev[id].context, &axd, &ayd);
-
     float fx, fy;
-    /* attach + wait + detach をmainスレッドで一括処理してデッドロック回避 */
+    /* attach + wait + detach on main thread to avoid deadlock */
     if (mode > 0) {
-        /* Convert anchor world coords → device (surface) coords for the band overlay */
+        /* Convert anchor world coords to device (surface) coords for band overlay */
         double axd = xanc[0], ayd = yanc[0];
         cairo_user_to_device(Dev[id].context, &axd, &ayd);
         _giza_osxcocoa_wait_for_event_band(id, mode, (float)axd, (float)ayd, &fx, &fy, ch);
@@ -237,8 +248,10 @@ _giza_init_band_osxcocoa (void)
      * Instead GizaBandView draws directly via CoreGraphics.
      * However _giza_init_band() in giza-drivers.c will try to use Band.box
      * after calling us, so we must provide a valid (dummy) cairo context. */
-    int w = Dev[id].width  > 0 ? Dev[id].width  : 1;
-    int h = Dev[id].height > 0 ? Dev[id].height : 1;
+    int wwin, hwin;
+    _osxcocoa_surface_size(&wwin, &hwin);
+    int w = wwin > 0 ? wwin : 1;
+    int h = hwin > 0 ? hwin : 1;
     cairo_surface_t *dummy = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, w, h);
     if (cairo_surface_status(dummy) != CAIRO_STATUS_SUCCESS) return 0;
     Band.onscreen = dummy;

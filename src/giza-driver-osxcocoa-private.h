@@ -55,6 +55,7 @@ void         _giza_osxcocoa_flush_pixels         (int devId,
                                              int width, int height,
                                              int stride);
 GizaCGContextRef _giza_osxcocoa_clear_and_get_context(int devId, int width, int height);
+void         _giza_osxcocoa_resize_window        (int devId, int width, int height);
 void         _giza_osxcocoa_close_window         (int devId);
 void         _giza_osxcocoa_wait_for_event       (int devId,
                                              float *x, float *y, char *ch);

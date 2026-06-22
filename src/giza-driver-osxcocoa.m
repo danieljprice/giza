@@ -593,12 +593,27 @@ _giza_osxcocoa_clear_and_get_context(int devId, int width, int height)
     __block CGContextRef result = NULL;
     _run_on_main(^{
         GizaView *view = _osxcocoa_view[devId];
+        [view setFrameSize:NSMakeSize(width, height)];
         [view rebuildLayerSize:NSMakeSize(width,height)];
         [view setNeedsDisplay:YES];
         CGLayerRef layer = [view cgLayer];
         result = layer ? CGLayerGetContext(layer) : NULL;
     });
     return result;
+}
+
+void
+_giza_osxcocoa_resize_window(int devId, int width, int height)
+{
+    if (!_osxcocoa_inuse[devId]) return;
+    _run_on_main(^{
+        NSWindow *win = _osxcocoa_win[devId];
+        GizaView *view = _osxcocoa_view[devId];
+        [win setContentSize:NSMakeSize(width, height)];
+        [view setFrameSize:NSMakeSize(width, height)];
+        [view rebuildLayerSize:NSMakeSize(width, height)];
+        [view setNeedsDisplay:YES];
+    });
 }
 
 void
