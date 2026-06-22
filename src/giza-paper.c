@@ -146,6 +146,10 @@ giza_get_paper_size (int units, double *width, double *height)
       return;
     }
 
+  /* Interactive drivers sync window size here so paper-size queries (e.g.
+   * splash plot_qvsz in setpage2) see the current dimensions. */
+  _giza_prepare_interactive_draw ();
+
   switch(units)
      {
      case GIZA_UNITS_MM:

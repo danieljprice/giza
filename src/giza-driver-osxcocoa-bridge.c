@@ -59,10 +59,12 @@
 #define GIZA_OSXCOCOA_MARGIN          20
 
 /* ======================================================================== */
-/* Internal: create cairo-quartz surface from CGContext                      */
+/* Internal: cairo image surface helpers                                   */
 /* ======================================================================== */
 
-/* Plot area (Dev[id].width/height) plus margins — matches XW[id].width/height */
+/**
+ * Full window size (plot area plus margins), matching XW[id].width/height.
+ */
 static void
 _osxcocoa_surface_size (int *wwin, int *hwin)
 {
@@ -70,6 +72,11 @@ _osxcocoa_surface_size (int *wwin, int *hwin)
     *hwin = Dev[id].height + 2 * GIZA_OSXCOCOA_MARGIN;
 }
 
+/**
+ * Allocate a new cairo image surface for the plot buffer.
+ *
+ * Return value: 0 on success, 1 on failure.
+ */
 static int
 _osxcocoa_create_surface (GizaCGContextRef cgctx, int width, int height)
 {
@@ -83,6 +90,79 @@ _osxcocoa_create_surface (GizaCGContextRef cgctx, int width, int height)
         return 1;
     }
     return 0;
+}
+
+/**
+ * If the user resized the NSWindow, update Dev[id] plot size to match /xw.
+ *
+ * Return value: 1 if Dev[id] was updated, 0 if already in sync.
+ */
+static int
+_osxcocoa_sync_device_to_view (void)
+{
+    int viewW, viewH;
+    int surfW = 0, surfH = 0;
+
+    _giza_osxcocoa_get_view_size(id, &viewW, &viewH);
+    if (viewW <= 0 || viewH <= 0)
+        return 0;
+
+    /* Compare NSWindow size to the cairo buffer (full window incl. margins) */
+    if (Dev[id].surface) {
+        surfW = cairo_image_surface_get_width(Dev[id].surface);
+        surfH = cairo_image_surface_get_height(Dev[id].surface);
+    } else {
+        _osxcocoa_surface_size(&surfW, &surfH);
+    }
+
+    if (viewW == surfW && viewH == surfH)
+        return 0;
+
+    Dev[id].width  = viewW;
+    Dev[id].height = viewH;
+    /* take care of margin - if there's room for that */
+    if (Dev[id].width > 2 * GIZA_OSXCOCOA_MARGIN)
+        Dev[id].width -= 2 * GIZA_OSXCOCOA_MARGIN;
+    if (Dev[id].height > 2 * GIZA_OSXCOCOA_MARGIN)
+        Dev[id].height -= 2 * GIZA_OSXCOCOA_MARGIN;
+    if (Dev[id].width < 1)
+        Dev[id].width = 1;
+    if (Dev[id].height < 1)
+        Dev[id].height = 1;
+
+    /* adjust panel size for resized surface */
+    _giza_init_norm_osxcocoa();
+    Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
+    Dev[id].panelheight = Dev[id].height / Dev[id].ny;
+    return 1;
+}
+
+/**
+ * Destroy and recreate the cairo image surface at the current plot size.
+ */
+static void
+_osxcocoa_recreate_surface (void)
+{
+    int wwin, hwin;
+
+    _osxcocoa_surface_size(&wwin, &hwin);
+
+    /* destroy old cairo objects */
+    if (Dev[id].context) {
+        cairo_destroy(Dev[id].context);
+        Dev[id].context = NULL;
+    }
+    if (Dev[id].surface) {
+        cairo_surface_finish(Dev[id].surface);
+        cairo_surface_destroy(Dev[id].surface);
+        Dev[id].surface = NULL;
+    }
+
+    /* clear backing layer and get new CGContext */
+    GizaCGContextRef cgctx = _giza_osxcocoa_clear_and_get_context(id, wwin, hwin);
+    if (!cgctx) return;
+    if (_osxcocoa_create_surface(cgctx, wwin, hwin) != 0) return;
+    Dev[id].context = cairo_create(Dev[id].surface);
 }
 
 /* ======================================================================== */
@@ -127,6 +207,21 @@ _giza_open_device_osxcocoa (double width, double height, int units)
 
 /* ---------------------------------------------------------------------- */
 
+/**
+ * Sync NSWindow size to Dev[id] and recreate the cairo surface if needed.
+ *
+ * Called via _giza_prepare_interactive_draw from giza_get_paper_size and
+ * giza_set_viewport (before splash queries aspect ratio in setpage2).
+ */
+void
+_giza_osxcocoa_prepare_draw (void)
+{
+    if (_osxcocoa_sync_device_to_view())
+        _osxcocoa_recreate_surface();
+}
+
+/* ---------------------------------------------------------------------- */
+
 void
 _giza_flush_device_osxcocoa (void)
 {
@@ -144,32 +239,16 @@ _giza_flush_device_osxcocoa (void)
 void
 _giza_change_page_osxcocoa (void)
 {
-    int wwin, hwin;
-
     if (Dev[id].resize)
         _giza_osxcocoa_resize_window(id,
                                    Dev[id].width  + 2 * GIZA_OSXCOCOA_MARGIN,
                                    Dev[id].height + 2 * GIZA_OSXCOCOA_MARGIN);
+    else
+        /* user may have resized the NSWindow behind our backs */
+        _osxcocoa_sync_device_to_view();
 
-    _osxcocoa_surface_size(&wwin, &hwin);
-
-    /* destroy old cairo objects */
-    if (Dev[id].context) {
-        cairo_destroy(Dev[id].context);
-        Dev[id].context = NULL;
-    }
-    if (Dev[id].surface) {
-        cairo_surface_finish(Dev[id].surface);
-        cairo_surface_destroy(Dev[id].surface);
-        Dev[id].surface = NULL;
-    }
-
-    /* clear backing layer and get new CGContext */
-    GizaCGContextRef cgctx = _giza_osxcocoa_clear_and_get_context(id, wwin, hwin);
-    if (!cgctx) return;
-
-    if (_osxcocoa_create_surface(cgctx, wwin, hwin) != 0) return;
-    Dev[id].context = cairo_create(Dev[id].surface);
+    /* new page means new cairo surface (like /xw pixmap recreation) */
+    _osxcocoa_recreate_surface();
 }
 
 /* ---------------------------------------------------------------------- */
@@ -218,6 +297,9 @@ _giza_get_key_press_osxcocoa (int mode, int moveCurs,
                           const double *xanc, const double *yanc,
                           double *x, double *y, char *ch)
 {
+    (void) moveCurs;
+    (void) nanc;
+
     int oldTrans = _giza_get_trans();
     _giza_set_trans(GIZA_TRANS_WORLD);
 
@@ -260,20 +342,6 @@ _giza_init_band_osxcocoa (void)
     Band.maxWidth  = w;
     Band.maxHeight = h;
     return 1; /* success */
-}
-
-/* ---------------------------------------------------------------------- */
-
-/*
- * _giza_osxcocoa_handle_resize — 表示スケーリング方式では surface を再生成しない。
- * setFrameSize: は drawRect でのスケーリングに任せる。
- * この関数は参照が残っている場合のために stub として保持。
- */
-void
-_giza_osxcocoa_handle_resize (int devId, int width, int height)
-{
-    (void)devId; (void)width; (void)height;
-    /* no-op: display scaling is handled in GizaView -drawRect: */
 }
 
 #endif /* _GIZA_HAS_OSXCOCOA */

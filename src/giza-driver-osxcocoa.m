@@ -336,8 +336,7 @@
 - (void)setFrameSize:(NSSize)sz
 {
     [super setFrameSize:sz];
-    /* surface サイズは変えない。drawRect でスケーリングするだけ。
-     * _displayRect は drawRect 内で再計算されるので更新不要。 */
+    /* Cairo surface sync happens on replot via _giza_prepare_interactive_draw */
     [self setNeedsDisplay:YES];
 }
 
@@ -598,18 +597,6 @@ _giza_osxcocoa_open_window(int devId, int width, int height)
     return result;
 }
 
-void
-_giza_osxcocoa_flush(int devId)
-{
-    if (!_osxcocoa_inuse[devId]) return;
-    _run_on_main(^{
-        GizaView *view = _osxcocoa_view[devId];
-        [view setNeedsDisplay:YES];
-        [view displayIfNeeded];
-        if (!_app_on_main) _drain_events();
-    });
-}
-
 CGContextRef
 _giza_osxcocoa_clear_and_get_context(int devId, int width, int height)
 {
@@ -626,6 +613,13 @@ _giza_osxcocoa_clear_and_get_context(int devId, int width, int height)
     return result;
 }
 
+/* ======================================================================== */
+/* _giza_osxcocoa_resize_window                                              */
+/* ======================================================================== */
+
+/**
+ * Resize the NSWindow and GizaView to the given pixel dimensions.
+ */
 void
 _giza_osxcocoa_resize_window(int devId, int width, int height)
 {
@@ -638,6 +632,33 @@ _giza_osxcocoa_resize_window(int devId, int width, int height)
         [view rebuildLayerSize:NSMakeSize(width, height)];
         [view setNeedsDisplay:YES];
     });
+}
+
+/* ======================================================================== */
+/* _giza_osxcocoa_get_view_size                                              */
+/* ======================================================================== */
+
+/**
+ * Return the current GizaView size in pixels (main-thread safe).
+ */
+void
+_giza_osxcocoa_get_view_size(int devId, int *width, int *height)
+{
+    if (width)  *width  = 0;
+    if (height) *height = 0;
+    if (!width || !height) return;
+    if (devId < 0 || devId >= GIZA_MAX_DEV || !_osxcocoa_inuse[devId]) return;
+
+    __block int w = 0, h = 0;
+    _run_on_main(^{
+        GizaView *view = _osxcocoa_view[devId];
+        if (!view) return;
+        NSSize sz = [view bounds].size;
+        w = (int)(sz.width  + 0.5);
+        h = (int)(sz.height + 0.5);
+    });
+    *width  = w;
+    *height = h;
 }
 
 void

@@ -39,6 +39,7 @@ void _giza_change_page_osxcocoa     (void);
 void _giza_close_device_osxcocoa    (void);
 void _giza_init_norm_osxcocoa       (void);
 void _giza_expand_clipping_osxcocoa (void);
+void _giza_osxcocoa_prepare_draw       (void);
 void _giza_get_key_press_osxcocoa   (int mode, int moveCurs,
                                  int nanc,
                                  const double *xanc, const double *yanc,
@@ -49,23 +50,19 @@ int  _giza_init_band_osxcocoa       (void);
 void         _giza_osxcocoa_start_app_if_needed (void);
 void         _giza_osxcocoa_mark_app_ready       (void);
 GizaCGContextRef _giza_osxcocoa_open_window          (int devId, int width, int height);
-void         _giza_osxcocoa_flush               (int devId);
 void         _giza_osxcocoa_flush_pixels         (int devId,
                                              unsigned char *data,
                                              int width, int height,
                                              int stride);
 GizaCGContextRef _giza_osxcocoa_clear_and_get_context(int devId, int width, int height);
 void         _giza_osxcocoa_resize_window        (int devId, int width, int height);
+void         _giza_osxcocoa_get_view_size        (int devId, int *width, int *height);
 void         _giza_osxcocoa_close_window         (int devId);
 void         _giza_osxcocoa_wait_for_event       (int devId,
                                              float *x, float *y, char *ch);
 void         _giza_osxcocoa_wait_for_event_band  (int devId, int mode,
                                              float xancSurface, float yancSurface,
                                              float *x, float *y, char *ch);
-
-/* ---- resize callback (implemented in giza-driver-osxcocoa-bridge.c) ---------- */
-/* Called by GizaView -setFrameSize: */
-void _giza_osxcocoa_handle_resize (int devId, int width, int height);
 
 #endif /* __APPLE__ */
 #endif /* GIZA_DRIVER_OSXCOCOA_PRIVATE_H */

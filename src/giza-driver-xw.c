@@ -253,6 +253,100 @@ _giza_flush_device_xw (void)
 }
 
 /**
+ * Query the current X window outer size in pixels.
+ */
+static void
+_xw_query_window_size (unsigned int *wwin, unsigned int *hwin)
+{
+  int          x_return, y_return;
+  Window       root_return;
+  unsigned int border_width_return, depth_return;
+
+  XGetGeometry (XW[id].display, XW[id].window, &root_return,
+                &x_return, &y_return, wwin, hwin,
+                &border_width_return, &depth_return);
+}
+
+/**
+ * Update Dev[id] plot area from full window dimensions (margins excluded).
+ */
+static void
+_xw_sync_device_to_window (unsigned int wwin, unsigned int hwin)
+{
+  XW[id].width  = wwin;
+  XW[id].height = hwin;
+  Dev[id].width  = (int) wwin;
+  Dev[id].height = (int) hwin;
+  /* take care of margin - if there's room for that */
+  if (Dev[id].width > 2 * GIZA_XW_MARGIN)
+    Dev[id].width -= 2 * GIZA_XW_MARGIN;
+  if (Dev[id].height > 2 * GIZA_XW_MARGIN)
+    Dev[id].height -= 2 * GIZA_XW_MARGIN;
+  if (Dev[id].width < 1)
+    Dev[id].width = 1;
+  if (Dev[id].height < 1)
+    Dev[id].height = 1;
+
+  /* adjust panel size for resized surface */
+  _giza_init_norm_xw ();
+  Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
+  Dev[id].panelheight = Dev[id].height / Dev[id].ny;
+}
+
+/**
+ * Destroy and recreate the X pixmap and cairo surface at the current size.
+ */
+static void
+_xw_recreate_surface (void)
+{
+  if (!Dev[id].surface)
+    return;
+
+  /* This function is called for each new page, so new page means new pixmap */
+  cairo_destroy (Dev[id].context);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+    _giza_error ("_xw_recreate_surface", cairo_status_to_string (status));
+
+  cairo_surface_destroy (Dev[id].surface);
+  XFreePixmap (XW[id].display, XW[id].pixmap);
+
+  /* New page means new pixmap */
+  XW[id].pixmap = XCreatePixmap (XW[id].display, XW[id].window,
+                                 (unsigned) XW[id].width,
+                                 (unsigned) XW[id].height,
+                                 (unsigned) XW[id].depth);
+  /* New pixmap means new cairo surface */
+  Dev[id].surface = cairo_xlib_surface_create (XW[id].display, XW[id].pixmap,
+                                               XW[id].visual,
+                                               XW[id].width, XW[id].height);
+  Dev[id].context = cairo_create (Dev[id].surface);
+}
+
+/**
+ * Sync X window size to Dev[id] and recreate the cairo surface if needed.
+ *
+ * Called via _giza_prepare_interactive_draw before paper-size queries and
+ * viewport setup (e.g. after the user resizes the window interactively).
+ */
+void
+_giza_prepare_draw_xw (void)
+{
+  unsigned int width_return, height_return;
+
+  _xw_query_window_size (&width_return, &height_return);
+
+  /* already in sync — nothing to do */
+  if ((unsigned int) XW[id].width == width_return
+      && (unsigned int) XW[id].height == height_return)
+    return;
+
+  _xw_sync_device_to_window (width_return, height_return);
+  _xw_recreate_surface ();
+}
+
+/**
  * Advances the X window device to the next page.
  * If resize was set upon function entry, resize the window accordingly.
  * If, otoh, we detect the window was resized, take appropriate action and
@@ -261,12 +355,10 @@ _giza_flush_device_xw (void)
 void
 _giza_change_page_xw (void)
 {
-  int          x_return, y_return;
-  Window       root_return;
-  unsigned int width_return, height_return, border_width_return, depth_return;
+  unsigned int width_return, height_return;
 
   /* Enquire current geometry to see if it's changed */
-  XGetGeometry(XW[id].display, XW[id].window, &root_return, &x_return, &y_return, &width_return, &height_return, &border_width_return, &depth_return);
+  _xw_query_window_size (&width_return, &height_return);
   /* interactive logging feature */
   if (Sets.autolog && Dev[id].drawn) _giza_write_log_file(Dev[id].surface);
 
@@ -279,36 +371,10 @@ _giza_change_page_xw (void)
      XResizeWindow(XW[id].display, XW[id].window, (unsigned) XW[id].width, (unsigned) XW[id].height);
   } else if( (unsigned int)XW[id].width!=width_return || (unsigned int)XW[id].height!=height_return ) {
       /* Oh. Someone probably resized the XWindow behind our backs. Handle that here */
-      XW[id].width  = Dev[id].width  = width_return;
-      XW[id].height = Dev[id].height = height_return;
-
-      /* take care of margin - if there's room for that */
-      if( Dev[id].width > 2*GIZA_XW_MARGIN )
-          Dev[id].width -= 2*GIZA_XW_MARGIN;
-      if( Dev[id].height > 2*GIZA_XW_MARGIN )
-          Dev[id].height -= 2*GIZA_XW_MARGIN;
-      /* Do stuff needed to reflect changed window size, notably adjust panel size in case of resized surface*/
-      _giza_init_norm();
-      Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
-      Dev[id].panelheight = Dev[id].height / Dev[id].ny;
+      _xw_sync_device_to_window (width_return, height_return);
   }
 
-  /* This function is called for each new page, so new page means new pixmap */
-  cairo_destroy(Dev[id].context);
-  cairo_surface_finish (Dev[id].surface);
-  cairo_status_t status = cairo_surface_status (Dev[id].surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-     _giza_error("giza_change_page_xw",cairo_status_to_string(status));
-
-  cairo_surface_destroy (Dev[id].surface);
-  XFreePixmap (XW[id].display, XW[id].pixmap);
-
-  /* New page means new pixmap */
-  XW[id].pixmap = XCreatePixmap (XW[id].display, XW[id].window, (unsigned) XW[id].width, (unsigned) XW[id].height, (unsigned) XW[id].depth);
-
-  /* New pixmap means new cairo surface */
-  Dev[id].surface = cairo_xlib_surface_create (XW[id].display, XW[id].pixmap, XW[id].visual, XW[id].width, XW[id].height);
-  Dev[id].context = cairo_create (Dev[id].surface);
+  _xw_recreate_surface ();
 }
 
 /**

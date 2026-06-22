@@ -52,6 +52,9 @@ giza_set_viewport (double xleft, double xright, double ybottom, double ytop)
   if (!_giza_check_device_open ("giza_set_viewport"))
     return;
 
+  /* sync interactive window size before viewport math (see giza_get_paper_size) */
+  _giza_prepare_interactive_draw ();
+
   if (_giza_equal(xleft,xright) || _giza_equal(ybottom,ytop))
     {
       printf("giza_viewport: xmin %f xmax %f ymin %f ymax %f \n",xleft,xright,ybottom,ytop);
