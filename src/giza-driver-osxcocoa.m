@@ -459,7 +459,8 @@
 {
     NSSize bs = self.bounds.size;
     /* _displayRect が未計算なら view サイズから等倍で変換 */
-    if (_pixelWidth <= 0 || _pixelHeight <= 0 || _displayRect.size.width < 1) {
+    if (_pixelWidth <= 0 || _pixelHeight <= 0
+        || _displayRect.size.width < 1 || _displayRect.size.height < 1) {
         if (bs.width > 0 && bs.height > 0) {
             CGFloat sx = vp.x / bs.width  * (_pixelWidth  > 0 ? _pixelWidth  : bs.width);
             CGFloat sy = (bs.height - vp.y) / bs.height
@@ -600,7 +601,7 @@ _giza_osxcocoa_open_window(int devId, int width, int height)
 CGContextRef
 _giza_osxcocoa_clear_and_get_context(int devId, int width, int height)
 {
-    if (!_osxcocoa_inuse[devId]) return NULL;
+    if (devId < 0 || devId >= GIZA_MAX_DEV || !_osxcocoa_inuse[devId]) return NULL;
     __block CGContextRef result = NULL;
     _run_on_main(^{
         GizaView *view = _osxcocoa_view[devId];
@@ -623,7 +624,7 @@ _giza_osxcocoa_clear_and_get_context(int devId, int width, int height)
 void
 _giza_osxcocoa_resize_window(int devId, int width, int height)
 {
-    if (!_osxcocoa_inuse[devId]) return;
+    if (devId < 0 || devId >= GIZA_MAX_DEV || !_osxcocoa_inuse[devId]) return;
     _run_on_main(^{
         NSWindow *win = _osxcocoa_win[devId];
         GizaView *view = _osxcocoa_view[devId];

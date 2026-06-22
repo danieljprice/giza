@@ -275,13 +275,8 @@ _xw_sync_device_to_window (unsigned int wwin, unsigned int hwin)
 {
   XW[id].width  = wwin;
   XW[id].height = hwin;
-  Dev[id].width  = (int) wwin;
-  Dev[id].height = (int) hwin;
-  /* take care of margin - if there's room for that */
-  if (Dev[id].width > 2 * GIZA_XW_MARGIN)
-    Dev[id].width -= 2 * GIZA_XW_MARGIN;
-  if (Dev[id].height > 2 * GIZA_XW_MARGIN)
-    Dev[id].height -= 2 * GIZA_XW_MARGIN;
+  Dev[id].width  = (int) wwin - 2 * GIZA_XW_MARGIN;
+  Dev[id].height = (int) hwin - 2 * GIZA_XW_MARGIN;
   if (Dev[id].width < 1)
     Dev[id].width = 1;
   if (Dev[id].height < 1)
@@ -302,6 +297,30 @@ _xw_recreate_surface (void)
   if (!Dev[id].surface)
     return;
 
+  /* create new pixmap and cairo objects before destroying the old ones */
+  Pixmap new_pixmap = XCreatePixmap (XW[id].display, XW[id].window,
+                                     (unsigned) XW[id].width,
+                                     (unsigned) XW[id].height,
+                                     (unsigned) XW[id].depth);
+  cairo_surface_t *new_surf = cairo_xlib_surface_create (XW[id].display, new_pixmap,
+                                                         XW[id].visual,
+                                                         XW[id].width, XW[id].height);
+  if (!new_surf || cairo_surface_status (new_surf) != CAIRO_STATUS_SUCCESS) {
+    _giza_error ("_xw_recreate_surface", "could not create cairo xlib surface");
+    XFreePixmap (XW[id].display, new_pixmap);
+    return;
+  }
+
+  cairo_t *new_ctx = cairo_create (new_surf);
+  if (!new_ctx || cairo_status (new_ctx) != CAIRO_STATUS_SUCCESS) {
+    _giza_error ("_xw_recreate_surface", "could not create cairo context");
+    if (new_ctx)
+      cairo_destroy (new_ctx);
+    cairo_surface_destroy (new_surf);
+    XFreePixmap (XW[id].display, new_pixmap);
+    return;
+  }
+
   /* This function is called for each new page, so new page means new pixmap */
   cairo_destroy (Dev[id].context);
   cairo_surface_finish (Dev[id].surface);
@@ -312,16 +331,9 @@ _xw_recreate_surface (void)
   cairo_surface_destroy (Dev[id].surface);
   XFreePixmap (XW[id].display, XW[id].pixmap);
 
-  /* New page means new pixmap */
-  XW[id].pixmap = XCreatePixmap (XW[id].display, XW[id].window,
-                                 (unsigned) XW[id].width,
-                                 (unsigned) XW[id].height,
-                                 (unsigned) XW[id].depth);
-  /* New pixmap means new cairo surface */
-  Dev[id].surface = cairo_xlib_surface_create (XW[id].display, XW[id].pixmap,
-                                               XW[id].visual,
-                                               XW[id].width, XW[id].height);
-  Dev[id].context = cairo_create (Dev[id].surface);
+  XW[id].pixmap = new_pixmap;
+  Dev[id].surface = new_surf;
+  Dev[id].context = new_ctx;
 }
 
 /**

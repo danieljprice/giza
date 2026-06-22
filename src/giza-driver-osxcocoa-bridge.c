@@ -115,16 +115,18 @@ _osxcocoa_sync_device_to_view (void)
         _osxcocoa_surface_size(&surfW, &surfH);
     }
 
-    if (viewW == surfW && viewH == surfH)
-        return 0;
+    /* minimum surface fits plot area (1px) plus both margins */
+    {
+        int minSurf = 2 * GIZA_OSXCOCOA_MARGIN + 1;
+        int expectedSurfW = viewW < minSurf ? minSurf : viewW;
+        int expectedSurfH = viewH < minSurf ? minSurf : viewH;
 
-    Dev[id].width  = viewW;
-    Dev[id].height = viewH;
-    /* take care of margin - if there's room for that */
-    if (Dev[id].width > 2 * GIZA_OSXCOCOA_MARGIN)
-        Dev[id].width -= 2 * GIZA_OSXCOCOA_MARGIN;
-    if (Dev[id].height > 2 * GIZA_OSXCOCOA_MARGIN)
-        Dev[id].height -= 2 * GIZA_OSXCOCOA_MARGIN;
+        if (surfW == expectedSurfW && surfH == expectedSurfH)
+            return 0;
+    }
+
+    Dev[id].width  = viewW - 2 * GIZA_OSXCOCOA_MARGIN;
+    Dev[id].height = viewH - 2 * GIZA_OSXCOCOA_MARGIN;
     if (Dev[id].width < 1)
         Dev[id].width = 1;
     if (Dev[id].height < 1)
@@ -144,25 +146,44 @@ static void
 _osxcocoa_recreate_surface (void)
 {
     int wwin, hwin;
+    cairo_surface_t *old_surf = Dev[id].surface;
+    cairo_t         *old_ctx  = Dev[id].context;
 
     _osxcocoa_surface_size(&wwin, &hwin);
 
-    /* destroy old cairo objects */
-    if (Dev[id].context) {
-        cairo_destroy(Dev[id].context);
-        Dev[id].context = NULL;
-    }
-    if (Dev[id].surface) {
-        cairo_surface_finish(Dev[id].surface);
-        cairo_surface_destroy(Dev[id].surface);
-        Dev[id].surface = NULL;
-    }
-
-    /* clear backing layer and get new CGContext */
+    /* resize backing layer first; keep old cairo objects if this fails */
     GizaCGContextRef cgctx = _giza_osxcocoa_clear_and_get_context(id, wwin, hwin);
     if (!cgctx) return;
-    if (_osxcocoa_create_surface(cgctx, wwin, hwin) != 0) return;
-    Dev[id].context = cairo_create(Dev[id].surface);
+
+    cairo_surface_t *new_surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                                           wwin, hwin);
+    if (!new_surf ||
+        cairo_surface_status(new_surf) != CAIRO_STATUS_SUCCESS) {
+        _giza_error("giza-driver-osxcocoa", "could not create cairo image surface");
+        if (new_surf)
+            cairo_surface_destroy(new_surf);
+        return;
+    }
+
+    cairo_t *new_ctx = cairo_create(new_surf);
+    if (!new_ctx || cairo_status(new_ctx) != CAIRO_STATUS_SUCCESS) {
+        _giza_error("giza-driver-osxcocoa", "could not create cairo context");
+        if (new_ctx)
+            cairo_destroy(new_ctx);
+        cairo_surface_destroy(new_surf);
+        return;
+    }
+
+    /* destroy old cairo objects */
+    if (old_ctx)
+        cairo_destroy(old_ctx);
+    if (old_surf) {
+        cairo_surface_finish(old_surf);
+        cairo_surface_destroy(old_surf);
+    }
+
+    Dev[id].surface = new_surf;
+    Dev[id].context = new_ctx;
 }
 
 /* ======================================================================== */
