@@ -116,13 +116,15 @@
 - (BOOL)isOpaque { return NO; }
 - (BOOL)acceptsFirstResponder { return NO; }  /* events handled by GizaView */
 
-/* Convert a surface-space point to view-space for drawing */
+/* Convert cairo surface coords to view coords for drawing.
+ * GizaView is not flipped (AppKit origin bottom-left, y up); cairo uses y down. */
 - (CGPoint)_viewPtFromSurface:(NSPoint)sp
 {
     if (_surfW <= 0 || _surfH <= 0 || _displayRect.size.width < 1)
         return CGPointMake(sp.x, sp.y);
     CGFloat sx = _displayRect.origin.x + sp.x / _surfW * _displayRect.size.width;
-    CGFloat sy = _displayRect.origin.y + sp.y / _surfH * _displayRect.size.height;
+    CGFloat sy = _displayRect.origin.y + _displayRect.size.height
+               - (sp.y / _surfH * _displayRect.size.height);
     return CGPointMake(sx, sy);
 }
 
@@ -249,6 +251,7 @@
 - (void)setPixelData:(unsigned char*)data width:(int)w height:(int)h stride:(int)s;
 /* view 座標 → cairo surface 座標への逆変換 */
 - (NSPoint)surfacePointFromViewPoint:(NSPoint)vp;
+- (NSPoint)currentMouseViewPoint;
 /* band control */
 - (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc;
 - (void)detachBandView;
@@ -351,8 +354,18 @@
         case 27:                      _eventCh='q'; break;
         default: _eventCh=(char)(c&0x7F);
     }
-    _eventPt = NSMakePoint(self.bounds.size.width/2,self.bounds.size.height/2);
+    /* Return cursor position at key press, not the view centre (matches /xw). */
+    _eventPt = [self surfacePointFromViewPoint:[self currentMouseViewPoint]];
     _gotEvent = YES;
+}
+
+/* Mouse position in this view's coordinate system */
+- (NSPoint)currentMouseViewPoint
+{
+    NSWindow *win = [self window];
+    if (win)
+        return [self convertPoint:[win mouseLocationOutsideOfEventStream] fromView:nil];
+    return NSMakePoint(self.bounds.size.width / 2, self.bounds.size.height / 2);
 }
 
 - (void)_recordButton:(NSEvent *)ev ch:(char)ch {
@@ -379,6 +392,7 @@
 
 - (void)waitForInputEvent {
     _gotEvent = NO;
+    [[self window] setAcceptsMouseMovedEvents:YES];
     while (!_gotEvent) {
         NSEvent *ev = [NSApp nextEventMatchingMask:NSEventMaskAny
                                          untilDate:[NSDate distantFuture]
@@ -386,6 +400,7 @@
                                            dequeue:YES];
         if (ev) [NSApp sendEvent:ev];
     }
+    [[self window] setAcceptsMouseMovedEvents:NO];
 }
 
 /* Band-aware event loop: also handles mouse-moved events to update band */
@@ -443,12 +458,21 @@
 
 - (NSPoint)surfacePointFromViewPoint:(NSPoint)vp
 {
-    /* _displayRect が未計算なら等倍で返す */
-    if (_pixelWidth <= 0 || _pixelHeight <= 0 || _displayRect.size.width < 1)
-        return vp;
-    /* view 座標 → surface 座標 */
+    NSSize bs = self.bounds.size;
+    /* _displayRect が未計算なら view サイズから等倍で変換 */
+    if (_pixelWidth <= 0 || _pixelHeight <= 0 || _displayRect.size.width < 1) {
+        if (bs.width > 0 && bs.height > 0) {
+            CGFloat sx = vp.x / bs.width  * (_pixelWidth  > 0 ? _pixelWidth  : bs.width);
+            CGFloat sy = (bs.height - vp.y) / bs.height
+                     * (_pixelHeight > 0 ? _pixelHeight : bs.height);
+            return NSMakePoint(sx, sy);
+        }
+        return NSMakePoint(vp.x, bs.height - vp.y);
+    }
+    /* view 座標 (y up) → cairo surface 座標 (y down) */
     CGFloat sx = (vp.x - _displayRect.origin.x) / _displayRect.size.width  * _pixelWidth;
-    CGFloat sy = (vp.y - _displayRect.origin.y) / _displayRect.size.height * _pixelHeight;
+    CGFloat sy = (_displayRect.origin.y + _displayRect.size.height - vp.y)
+               / _displayRect.size.height * _pixelHeight;
     return NSMakePoint(sx, sy);
 }
 
