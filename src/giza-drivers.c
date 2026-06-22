@@ -80,6 +80,36 @@ _giza_init_all_devices_once (void)
   didInit = 1;
 }
 
+/**
+ * Sync interactive window size with the cairo surface before drawing.
+ *
+ * Dispatches to the /xw or /osx driver when the user may have resized the
+ * window. Called from giza_get_paper_size and giza_set_viewport so paper-
+ * size queries (e.g. splash plot_qvsz in setpage2) see current dimensions.
+ */
+void
+_giza_prepare_interactive_draw (void)
+{
+  if (!Dev[id].deviceOpen || !Dev[id].isInteractive)
+    return;
+
+  switch (Dev[id].type)
+    {
+#ifdef _GIZA_HAS_XW
+    case GIZA_DEVICE_XW:
+      _giza_prepare_draw_xw ();
+      break;
+#endif
+#ifdef _GIZA_HAS_OSXCOCOA
+    case GIZA_DEVICE_OSXCOCOA:
+      _giza_osxcocoa_prepare_draw ();
+      break;
+#endif
+    default:
+      break;
+    }
+}
+
 /* global settings */
 giza_settings_t Sets;
 int id;
