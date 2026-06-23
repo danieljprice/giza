@@ -1,0 +1,19 @@
+--- a/pgfun.c	2024-10-07 12:30:58
++++ b/pgfun.c	2026-06-23 20:27:49
+@@ -63,11 +63,16 @@
+ }
+ 
+ 
++/* giza (and modern cpgplot.h) already declare/implement cpgconx; the XS
++ * layer calls cpgconx(..., pgfunplot) directly.  Omit this legacy stub
++ * that forwarded to Fortran pgconx_ to avoid a conflicting declaration. */
++#if 0
+ void cpgconx ( float* a, int idim, int jdim, int i1, int i2,
+           int j1, int j2, float* c, int nc, void pgfunplot()) {
+ 
+    PGCONX(a,&idim,&jdim,&i1,&i2,&j1,&j2,c,&nc,pgfunplot);
+ }
++#endif
+ 
+ /* The functions we actually pass to f77 - these call back
+    to the correct perl function whose names(s) are passed
