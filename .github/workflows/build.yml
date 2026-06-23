@@ -54,3 +54,13 @@ jobs:
           done
           exit 1
         }
+    # Test the upstream CPAN PGPLOT Perl bindings against installed giza.
+    # Ubuntu only for now
+    - name: Run perl-PGPLOT tests
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get install -y \
+          libcairo2-dev libx11-dev pkg-config curl \
+          perl libextutils-f77-perl libdevel-checklib-perl \
+          libtest-simple-perl libtest-harness-perl
+        ./scripts/run-perl-pgplot-tests.sh
