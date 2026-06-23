@@ -40,6 +40,9 @@ jobs:
         ./configure
         make
         sudo make install
+        if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+          sudo ldconfig
+        fi
     # Run all non-interactive tests (test/C/auto_ctests + test/F90/auto_ftests).
     # Interactive /xw tests are built but excluded from TESTS in the Makefiles.
     - name: Run non-interactive tests
