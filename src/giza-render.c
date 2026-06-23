@@ -32,6 +32,26 @@
 #include <math.h>
 
 /**
+ * Restrict drawing to the current world-coordinate window (PGPLOT window
+ * clipping). Viewport clipping alone does not crop cairo image paints correctly.
+ */
+static void
+_giza_clip_to_window (void)
+{
+  int clip;
+
+  giza_get_clipping (&clip);
+  if (!clip)
+    return;
+
+  cairo_rectangle (Dev[id].context,
+                   Dev[id].Win.xmin, Dev[id].Win.ymin,
+                   Dev[id].Win.xmax - Dev[id].Win.xmin,
+                   Dev[id].Win.ymax - Dev[id].Win.ymin);
+  cairo_clip (Dev[id].context);
+}
+
+/**
  * Drawing: giza_render
  *
  * Synopsis: Renders data to the device.
@@ -152,6 +172,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   cairo_save (Dev[id].context);
+  _giza_clip_to_window ();
 
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
                    affine[4], affine[5]);
@@ -339,6 +360,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   cairo_save (Dev[id].context);
+  _giza_clip_to_window ();
 
   cairo_matrix_init (&mat, (double) affine[0], (double) affine[1],
                    (double) affine[2], (double) affine[3],
