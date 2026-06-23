@@ -40,6 +40,9 @@ jobs:
         ./configure
         make
         sudo make install
+        if [ "${{ matrix.os }}" = "ubuntu-latest" ]; then
+          sudo ldconfig
+        fi
     # Run all non-interactive tests (test/C/auto_ctests + test/F90/auto_ftests).
     # Interactive /xw tests are built but excluded from TESTS in the Makefiles.
     - name: Run non-interactive tests
@@ -54,3 +57,13 @@ jobs:
           done
           exit 1
         }
+    # Test the upstream CPAN PGPLOT Perl bindings against installed giza.
+    # Ubuntu only for now
+    - name: Run perl-PGPLOT tests
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        sudo apt-get install -y \
+          libcairo2-dev libx11-dev pkg-config curl \
+          perl libextutils-f77-perl libdevel-checklib-perl \
+          libtest-simple-perl libtest-harness-perl
+        ./scripts/run-perl-pgplot-tests.sh
