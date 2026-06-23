@@ -74,6 +74,9 @@ giza_set_colour_palette (int palette)
   switch(palette)
   {
     case GIZA_COLOUR_PALETTE_PGPLOT:
+    /* Classic PGPLOT: index 0 = background (black), 1 = foreground (white) */
+       giza_set_colour_representation (0,0.0,0.0,0.0);
+       giza_set_colour_representation (1,1.0,1.0,1.0);
     /* Installs the standard PGPLOT colour table */
        giza_set_colour_representation (2,1.0,0.0,0.0);
        giza_set_colour_representation (3,0.0,1.0,0.0);

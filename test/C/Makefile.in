@@ -110,7 +110,8 @@ am__EXEEXT_1 = test-format-number$(EXEEXT) test-pdf$(EXEEXT) \
 	test-cairo-device$(EXEEXT) test-cpgpnts$(EXEEXT) \
 	test-cpgconb$(EXEEXT) test-cpgconf$(EXEEXT) \
 	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
-	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT)
+	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT) \
+	test-pggray$(EXEEXT)
 am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
 	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
@@ -218,6 +219,9 @@ test_pdf_SOURCES = test-pdf.c
 test_pdf_OBJECTS = test-pdf.$(OBJEXT)
 test_pdf_LDADD = $(LDADD)
 test_pdf_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_pggray_SOURCES = test-pggray.c
+test_pggray_OBJECTS = test-pggray.$(OBJEXT)
+test_pggray_DEPENDENCIES = $(CPGPLOT_LDADD)
 test_png_SOURCES = test-png.c
 test_png_OBJECTS = test-png.$(OBJEXT)
 test_png_LDADD = $(LDADD)
@@ -287,11 +291,12 @@ am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-format-number.Po ./$(DEPDIR)/test-giza-xw.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
 	./$(DEPDIR)/test-openclose.Po ./$(DEPDIR)/test-pdf.Po \
-	./$(DEPDIR)/test-png.Po ./$(DEPDIR)/test-points.Po \
-	./$(DEPDIR)/test-qtext.Po ./$(DEPDIR)/test-rectangle.Po \
-	./$(DEPDIR)/test-render.Po ./$(DEPDIR)/test-set-line-width.Po \
-	./$(DEPDIR)/test-svg.Po ./$(DEPDIR)/test-unicode.Po \
-	./$(DEPDIR)/test-vector.Po ./$(DEPDIR)/test-window.Po
+	./$(DEPDIR)/test-pggray.Po ./$(DEPDIR)/test-png.Po \
+	./$(DEPDIR)/test-points.Po ./$(DEPDIR)/test-qtext.Po \
+	./$(DEPDIR)/test-rectangle.Po ./$(DEPDIR)/test-render.Po \
+	./$(DEPDIR)/test-set-line-width.Po ./$(DEPDIR)/test-svg.Po \
+	./$(DEPDIR)/test-unicode.Po ./$(DEPDIR)/test-vector.Po \
+	./$(DEPDIR)/test-window.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -318,8 +323,8 @@ SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
 	test-giza-xw.c test-line-cap.c test-line-style.c \
-	test-openclose.c test-pdf.c test-png.c test-points.c \
-	test-qtext.c test-rectangle.c test-render.c \
+	test-openclose.c test-pdf.c test-pggray.c test-png.c \
+	test-points.c test-qtext.c test-rectangle.c test-render.c \
 	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
 	test-window.c
 DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
@@ -329,8 +334,8 @@ DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
 	test-giza-xw.c test-line-cap.c test-line-style.c \
-	test-openclose.c test-pdf.c test-png.c test-points.c \
-	test-qtext.c test-rectangle.c test-render.c \
+	test-openclose.c test-pdf.c test-pggray.c test-png.c \
+	test-points.c test-qtext.c test-rectangle.c test-render.c \
 	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
 	test-window.c
 am__can_run_installinfo = \
@@ -724,7 +729,7 @@ CLEANFILES = *.png *.pdf *.svg
 
 # Tests that run non-interactively (file-based devices only)
 auto_ctests = test-format-number test-pdf test-png test-svg test-unicode test-cairo-device \
-	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl
+	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray
 
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
@@ -744,6 +749,7 @@ test_cpgconl_LDADD = $(CPGPLOT_LDADD)
 test_cpgconx_LDADD = $(CPGPLOT_LDADD)
 test_cpghi2d_LDADD = $(CPGPLOT_LDADD)
 test_cpgscrl_LDADD = $(CPGPLOT_LDADD)
+test_pggray_LDADD = $(CPGPLOT_LDADD)
 test_cairo_xw_LDADD = $(LDADD) $(CAIRO_LIBS) $(X11_LIBS)
 test_cairo_device_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_XOpenDisplay_LDADD = $(LDADD) $(X11_LIBS)
@@ -885,6 +891,10 @@ test-pdf$(EXEEXT): $(test_pdf_OBJECTS) $(test_pdf_DEPENDENCIES) $(EXTRA_test_pdf
 	@rm -f test-pdf$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_pdf_OBJECTS) $(test_pdf_LDADD) $(LIBS)
 
+test-pggray$(EXEEXT): $(test_pggray_OBJECTS) $(test_pggray_DEPENDENCIES) $(EXTRA_test_pggray_DEPENDENCIES) 
+	@rm -f test-pggray$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_pggray_OBJECTS) $(test_pggray_LDADD) $(LIBS)
+
 test-png$(EXEEXT): $(test_png_OBJECTS) $(test_png_DEPENDENCIES) $(EXTRA_test_png_DEPENDENCIES) 
 	@rm -f test-png$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_png_OBJECTS) $(test_png_LDADD) $(LIBS)
@@ -956,6 +966,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-style.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-openclose.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pdf.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pggray.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-png.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-points.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-qtext.Po@am__quote@ # am--include-marker
@@ -1309,6 +1320,13 @@ test-cpgscrl.log: test-cpgscrl$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-pggray.log: test-pggray$(EXEEXT)
+	@p='test-pggray$(EXEEXT)'; \
+	b='test-pggray'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -1428,6 +1446,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-line-style.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
 	-rm -f ./$(DEPDIR)/test-pdf.Po
+	-rm -f ./$(DEPDIR)/test-pggray.Po
 	-rm -f ./$(DEPDIR)/test-png.Po
 	-rm -f ./$(DEPDIR)/test-points.Po
 	-rm -f ./$(DEPDIR)/test-qtext.Po
@@ -1508,6 +1527,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-line-style.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
 	-rm -f ./$(DEPDIR)/test-pdf.Po
+	-rm -f ./$(DEPDIR)/test-pggray.Po
 	-rm -f ./$(DEPDIR)/test-png.Po
 	-rm -f ./$(DEPDIR)/test-points.Po
 	-rm -f ./$(DEPDIR)/test-qtext.Po

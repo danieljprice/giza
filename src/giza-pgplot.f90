@@ -677,7 +677,7 @@ end subroutine PGFUNY
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
- use giza,       only:giza_render_gray,giza_extend_none,giza_filter_nearest
+ use giza,       only:giza_render_gray_shade,giza_extend_none,giza_filter_nearest
  use gizapgplot, only:convert_tr_to_affine
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2
@@ -685,7 +685,7 @@ subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
  real, dimension(6)  :: affine
 
  call convert_tr_to_affine(tr,affine)
- call giza_render_gray(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,giza_extend_none,giza_filter_nearest,affine)
+ call giza_render_gray_shade(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,giza_extend_none,giza_filter_nearest,affine)
 
 end subroutine PGGRAY
 
@@ -941,7 +941,7 @@ end subroutine PGOLIN
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 integer function PGOPEN (DEVICE)
- use giza, only:giza_open_device,giza_set_colour_palette,giza_colour_palette_pgplot
+ use giza, only:giza_open_device,giza_set_colour_palette,giza_colour_palette_pgplot,giza_draw_background
 ! use giza, only:giza_open_device_size,giza_units_mm,giza_units_inches
  implicit none
  character*(*), intent(in) :: DEVICE
@@ -951,6 +951,7 @@ integer function PGOPEN (DEVICE)
  pgopen = giza_open_device(device,'giza')
 
  call giza_set_colour_palette(giza_colour_palette_pgplot)
+ call giza_draw_background()
 
 end function PGOPEN
 
@@ -2018,7 +2019,7 @@ subroutine PGWEDG(SIDE, DISP, WIDTH, FG, BG, LABEL)
  character *(*), intent(in) :: SIDE,LABEL
  real,           intent(in) :: DISP, WIDTH, FG, BG
 
- call giza_colour_bar(SIDE, DISP, WIDTH, FG, BG, LABEL)
+ call giza_colour_bar(SIDE, DISP, WIDTH, BG, FG, LABEL)
 
 end subroutine PGWEDG
 

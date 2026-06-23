@@ -328,6 +328,18 @@ giza_set_colour_table_gray (void)
 }
 
 /**
+ * (Re)sets the colour table to a simple white->black ramp (inverted grey)
+ */
+int
+giza_set_colour_table_gray_inverted (void)
+{
+  double cp[2], r[2], g[2], b[2];
+  cp[0] = 0.; r[0] = 0.; g[0] = 0.; b[0] = 0.;
+  cp[1] = 1.; r[1] = 1.; g[1] = 1.; b[1] = 1.;
+  return giza_set_colour_table (cp, r, g, b, 2, -1., 0.5);
+}
+
+/**
  * Sets rgb colours for the colour indices in the given range
  * as a linear ramp based on the current giza colour table
  */

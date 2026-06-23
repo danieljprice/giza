@@ -460,6 +460,50 @@ giza_render_gray_float (int sizex, int sizey, const float* data, int i1,
 }
 
 /**
+ * Drawing: giza_render_gray_shade
+ *
+ * Synopsis: Greyscale image with explicit foreground and background data levels.
+ *           BG maps to the dark end of the ramp, FG to the light end.
+ *           When FG < BG the grey ramp is reversed automatically.
+ *
+ * See Also: giza_render_gray, giza_render_gray_shade_float
+ */
+void
+giza_render_gray_shade (int sizex, int sizey, const double* data, int i1,
+                int i2, int j1, int j2, double fg, double bg,
+                int extend, int filter, const double *affine)
+{
+  giza_save_colour_table();
+  if (fg >= bg)
+    giza_set_colour_table_gray ();
+  else
+    giza_set_colour_table_gray_inverted ();
+  giza_render (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+  giza_restore_colour_table();
+}
+
+/**
+ * Drawing: giza_render_gray_shade_float
+ *
+ * Synopsis: Same as giza_render_gray_shade but with float data
+ *
+ * See Also: giza_render_gray_shade
+ */
+void
+giza_render_gray_shade_float (int sizex, int sizey, const float* data, int i1,
+                int i2, int j1, int j2, float fg, float bg,
+                int extend, int filter, const float *affine)
+{
+  giza_save_colour_table();
+  if (fg >= bg)
+    giza_set_colour_table_gray();
+  else
+    giza_set_colour_table_gray_inverted();
+  giza_render_float (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+  giza_restore_colour_table();
+}
+
+/**
  * Sets the rgb for a given pixel, given position in the colour table.
  *
  * Input:

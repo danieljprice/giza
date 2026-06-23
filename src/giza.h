@@ -129,6 +129,7 @@ int giza_set_colour_table (const double *controlPoints, const double *red, const
 int giza_set_colour_table_float (const float *controlPoints, const float *red,
 				 const float *green, const float *blue, int n, float contrast, float brightness);
 int giza_set_colour_table_gray (void);
+int giza_set_colour_table_gray_inverted (void);
 void giza_save_colour_table (void);
 void giza_restore_colour_table (void);
 void giza_rgb_from_table (double pos, double *red, double *green,
@@ -343,6 +344,12 @@ void giza_render_gray (int sizex, int sizey, const double* data, int i1,
 void giza_render_gray_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
 			float valMax, int extend, int filter, const float *affine);
+void giza_render_gray_shade (int sizex, int sizey, const double* data, int i1,
+		  int i2, int j1, int j2, double fg, double bg, int extend,
+		  int filter, const double *affine);
+void giza_render_gray_shade_float (int sizex, int sizey, const float* data,
+			int i1, int i2, int j1, int j2, float fg, float bg,
+			int extend, int filter, const float *affine);
 void giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
 	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend, int filter);
 void giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int i2,

@@ -506,7 +506,7 @@ void cpggray(const float *a, int idim, int jdim, int i1, int i2, \
   affine[3] = tr[5];
   affine[4] = tr[0] + tr[1]*(i1 - 0.5f) + tr[2]*(j1 - 0.5f);
   affine[5] = tr[3] + tr[4]*(i1 - 0.5f) + tr[5]*(j1 - 0.5f);
-  giza_render_gray_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg, \
+  giza_render_gray_shade_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg, \
                          GIZA_EXTEND_NONE,GIZA_FILTER_NEAREST,affine);
 }
 
@@ -719,6 +719,11 @@ void cpgolin(int maxpt, int *npt, float *x, float *y, int symbol)
 int cpgopen(const char *device)
 {
   int pgopen = giza_open_device(device,"giza");
+  if (pgopen > 0)
+    {
+      giza_set_colour_palette(GIZA_COLOUR_PALETTE_PGPLOT);
+      giza_draw_background();
+    }
   return pgopen;
 }
 
@@ -1538,7 +1543,7 @@ void cpgvstd(void)
 void cpgwedg(const char *side, float disp, float width, \
  float fg, float bg, const char *label)
 {
-  giza_colour_bar_float(side,disp,width,fg,bg,label);
+  giza_colour_bar_float(side,disp,width,bg,fg,label);
 }
 
 /***************************************************************
