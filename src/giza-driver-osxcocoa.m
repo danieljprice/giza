@@ -10,9 +10,9 @@
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU Lesser General Public License
- * (LGPL, see COPYING file for details) and the provision that
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the LGPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.

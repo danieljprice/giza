@@ -4,15 +4,10 @@
  *
  * Copyright (c) 2026      Shugo Suwazono
  *
+ * LGPL v3 or later; see COPYING.LESSER.
+ *
  * macOS native window driver — public header for giza-osxcocoa-main.m;
  * include this and rename main() to giza_main() for full interactive support.
- *
- * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU Lesser General Public License
- * (LGPL, see COPYING file for details).
- *
- * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the LGPL for specific language governing rights and limitations.
  *
  * Include this header and link with -lgiza-osxcocoa-main to use the /osxcocoa device
  * without beachball cursor issues.

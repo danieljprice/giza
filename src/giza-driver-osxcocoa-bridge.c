@@ -10,7 +10,7 @@
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU Lesser General Public License
- * (LGPL, see COPYING file for details).
+ * (LGPL, see COPYING.LESSER file for details).
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
  *
