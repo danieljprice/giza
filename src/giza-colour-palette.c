@@ -46,7 +46,7 @@
  *  -0 or GIZA_COLOUR_PALETTE_DEFAULT :- default giza palette
  *  -1 or GIZA_COLOUR_PALETTE_PGPLOT  :- default PGPLOT palette
  *  -2 to 4 :- various experimental line palettes
- *  -5 :- colourblind safe palette from http://jfly.iam.u-tokyo.ac.jp/color/
+ *  -5 :- colourblind safe palette from https://jfly.uni-koeln.de/color/
  *  -6 :- optimum palette from http://web.media.mit.edu/~wad/color/palette.html
  *  -7 :- graph-a-licious
  * See Also: giza_set_colour_index, giza_set_colour_table
@@ -124,7 +124,7 @@ giza_set_colour_palette (int palette)
        giza_set_colour_representation_rgb (8, 249, 223, 11); /* desert sun */
        nlinecolours = 9;
        break;
-    case 5: /* Colourblind-safe palette from http://jfly.iam.u-tokyo.ac.jp/color/ */
+    case 5: /* Colourblind-safe palette from https://jfly.uni-koeln.de/color/ */
        giza_set_colour_representation (2, 0.9, 0.6, 0.); /* orange */
        giza_set_colour_representation (3, 0.35, 0.7, 0.9); /* sky blue */
        giza_set_colour_representation (4, 0., 0.6, 0.5);  /* bluish green */
