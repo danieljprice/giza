@@ -106,3 +106,10 @@ make test-pgaxis test-pgncur
 ./test-pgaxis
 ./test-pgncur
 ```
+
+License
+-------
+giza is free software licensed under the GNU Lesser General Public License
+version 3 or later (LGPL-3.0+). See COPYING.LESSER for the full LGPL text;
+COPYING contains the GNU General Public License, which applies to combined
+works as specified in section 3 of the LGPL.

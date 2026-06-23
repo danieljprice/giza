@@ -1,3 +1,7 @@
+! giza test program — see COPYING.LESSER in the top-level directory.
+! This library is free software; redistribute under the terms of the
+! GNU Lesser General Public License (LGPL, see COPYING.LESSER for details).
+!
 program test_pgconf
 ! Test PGCONF (filled contours) with PGCONT overlay
  implicit none

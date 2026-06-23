@@ -1,3 +1,7 @@
+! giza test program — see COPYING.LESSER in the top-level directory.
+! This library is free software; redistribute under the terms of the
+! GNU Lesser General Public License (LGPL, see COPYING.LESSER for details).
+!
 program test_pgaxis
  implicit none
  real :: x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient

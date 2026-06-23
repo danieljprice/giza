@@ -8,9 +8,11 @@
  * giza_main() on a worker thread so that NSApp runs on the main thread.*
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU Lesser General Public License (LGPL).
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details).
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
+ * See the LGPL for specific language governing rights and limitations.
  */
 
 #ifdef __APPLE__
