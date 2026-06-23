@@ -689,8 +689,8 @@ _giza_tick_intervals (double xmin, double xmax, double xinterval, int *i1,
 }
 
 /**
- * Finds the smallest 'round' number larger than x, where round is defined
- * as 1, 2 or 5 times a power of ten.
+ * Finds the smallest 'round' number not less than |x|, where round is
+ * defined as 2, 5, or 10 times a power of ten.
  *
  * Input:
  *  -x    :- The number to be rounded
@@ -720,10 +720,12 @@ giza_round (double x, int *nsub)
     ilog = ilog - 1;
   pwr = pow (10.0, ilog);
   frac = xx / pwr;
+
+  /* Inclusive comparisons; nice tick multiples are 2, 5, and 10. */
   i = 2;
-  if (frac < nice[1])
+  if (frac <= nice[1])
     i = 1;
-  if (frac < nice[0])
+  if (frac <= nice[0])
     i = 0;
   *nsub = 5;
   if (i == 0)
