@@ -13,6 +13,7 @@
 #   PKG_CONFIG_PATH  Where to find giza's pgplot.pc / cpgplot.pc
 #   WORKDIR          Build directory (default: mktemp under $TMPDIR)
 #   KEEP_WORKDIR     If set to 1, do not delete WORKDIR on exit
+#   VERBOSE          If set to 1, show full make output (default: silent make)
 #
 # Prerequisites (Ubuntu):
 #   sudo apt-get install perl cpanminus libextutils-f77-perl \
@@ -51,6 +52,11 @@ find_giza_paths() {
     pc_paths="/opt/homebrew/lib/pkgconfig:/usr/local/lib/pkgconfig:${pc_paths}"
   fi
   export PKG_CONFIG_PATH="${PKG_CONFIG_PATH:-${pc_paths}}"
+
+  if ! command -v pkg-config >/dev/null 2>&1; then
+    echo "error: pkg-config is required but not installed." >&2
+    exit 1
+  fi
 
   if ! pkg-config --exists cpgplot 2>/dev/null; then
     echo "error: cpgplot not found via pkg-config." >&2
@@ -125,9 +131,12 @@ build_module() {
   perl Makefile.PL "LDIR=${GIZA_LDIR}" "IDIR=${GIZA_IDIR}"
 
   echo "Building Perl PGPLOT..."
-  if ! make -s 2>&1; then
-    echo "error: make failed (re-run with VERBOSE=1 for full output)" >&2
-    [[ "${VERBOSE:-0}" == "1" ]] || make
+  local make_silent="-s"
+  if [[ "${VERBOSE:-0}" == "1" ]]; then
+    make_silent=""
+  fi
+  if ! make ${make_silent} 2>&1; then
+    echo "error: make failed" >&2
     exit 1
   fi
 
