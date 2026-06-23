@@ -14,6 +14,7 @@
 #   WORKDIR          Build directory (default: mktemp under $TMPDIR)
 #   KEEP_WORKDIR     If set to 1, do not delete WORKDIR on exit
 #   VERBOSE          If set to 1, show full make output (default: silent make)
+#   PGPLOT_SHA256    Expected SHA256 of the CPAN tarball (default: PGPLOT-2.35)
 #
 # Prerequisites (Ubuntu):
 #   sudo apt-get install perl cpanminus libextutils-f77-perl \
@@ -28,6 +29,9 @@ set -euo pipefail
 PGPLOT_VERSION="${PGPLOT_VERSION:-2.35}"
 PGPLOT_DEV="${PGPLOT_DEV:-/NULL}"
 KEEP_WORKDIR="${KEEP_WORKDIR:-0}"
+# SHA256 of PGPLOT-2.35.tar.gz from MetaCPAN (update if PGPLOT_VERSION changes).
+PGPLOT_SHA256="${PGPLOT_SHA256:-89d18b0157f26c309197411912361357b66e19f978556d0e181019dce754ea3c}"
+WORKDIR_CREATED_BY_SCRIPT=0
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PATCH_FILE="${SCRIPT_DIR}/patches/perl-pgplot-giza-cpgconx.patch"
@@ -36,7 +40,8 @@ TARBALL="PGPLOT-${PGPLOT_VERSION}.tar.gz"
 SRCDIR="PGPLOT-${PGPLOT_VERSION}"
 
 cleanup() {
-  if [[ "${KEEP_WORKDIR}" != "1" && -n "${WORKDIR:-}" && -d "${WORKDIR}" ]]; then
+  if [[ "${KEEP_WORKDIR}" != "1" && "${WORKDIR_CREATED_BY_SCRIPT}" == "1" \
+        && -n "${WORKDIR:-}" && -d "${WORKDIR}" ]]; then
     rm -rf "${WORKDIR}"
   fi
 }
@@ -93,8 +98,21 @@ check_perl_deps() {
 # ---------------------------------------------------------------------------
 # Download, patch, build
 # ---------------------------------------------------------------------------
+verify_tarball_sha256() {
+  local file="$1" expected="$2"
+  echo "Verifying SHA256 of ${file}..."
+  if command -v sha256sum >/dev/null 2>&1; then
+    echo "${expected}  ${file}" | sha256sum -c -
+  else
+    echo "${expected}  ${file}" | shasum -a 256 -c -
+  fi
+}
+
 prepare_source() {
-  WORKDIR="${WORKDIR:-$(mktemp -d "${TMPDIR:-/tmp}/pgplot-perl-XXXXXX")}"
+  if [[ -z "${WORKDIR:-}" ]]; then
+    WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/pgplot-perl-XXXXXX")"
+    WORKDIR_CREATED_BY_SCRIPT=1
+  fi
   echo "Working directory: ${WORKDIR}"
   cd "${WORKDIR}"
 
@@ -102,6 +120,7 @@ prepare_source() {
     echo "Downloading PGPLOT-${PGPLOT_VERSION} from CPAN..."
     curl -fsSL "${CPAN_URL}" -o "${TARBALL}"
   fi
+  verify_tarball_sha256 "${TARBALL}" "${PGPLOT_SHA256}"
 
   if [[ ! -d "${SRCDIR}" ]]; then
     tar xzf "${TARBALL}"
