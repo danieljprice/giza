@@ -17,6 +17,16 @@ $fh = new IO::File "> api.html";
 @Drawing = ();
 @Interactive = ();
 
+# Escape characters that would break HTML in generated text
+sub htmlEscape
+{
+  my ($s) = @_;
+  $s =~ s/&/&amp;/g;
+  $s =~ s/</&lt;/g;
+  $s =~ s/>/&gt;/g;
+  return $s;
+}
+
 # Subroutine for parsing individual comments
 sub processComment
 {
@@ -135,9 +145,9 @@ sub processComment
   # Name
   push @$File, "<h3><a name=\"$name\">$name</a><hr></h3>\n";
   # Prototype
-  push @$File, "<table class=\"proto\">\n<tr><td width=10%>" . shift (@prototype) . "</td><td width=20%>" . shift (@prototype) . "</td><td>" . shift (@prototype) . ";</tr></table>";
+  push @$File, "<table class=\"proto\">\n<tr><td width=10%>" . shift (@prototype) . "</td><td width=20%>" . shift (@prototype) . "</td><td>" . shift (@prototype) . ";</td></tr></table>";
   # Description
-  push @$File, "<p>$description</p>\n";
+  push @$File, "<p>" . htmlEscape($description) . "</p>\n";
   # Lists
   foreach $item (@lists)
   {
@@ -148,8 +158,8 @@ sub processComment
     # Table contents
     while (@$item)
     {
-      push @$File, "<tr>\n<td>" . shift (@$item) . ":</td>";
-      push @$File, "<td>" . shift (@$item) . "</td>\n</tr>";
+      push @$File, "<tr>\n<td>" . htmlEscape(shift (@$item)) . ":</td>";
+      push @$File, "<td>" . htmlEscape(shift (@$item)) . "</td>\n</tr>";
     }
     # Table postamble
     push @$File, "</table>";
