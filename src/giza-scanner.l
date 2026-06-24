@@ -388,29 +388,14 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
               }
               break;
 
-          /* Draw PGPLOT marker \mnn The lexer already verified it's a /valid/ marker number,
+          /* Draw marker \mnn. The lexer already verified a valid marker number,
              i.e. 1 <= nn <= 31 */
           case GIZA_TOKEN_MARKER:
               {
-                  /* get current marker height */
-                  double markerHeight;
-                  _giza_get_markerheight(&markerHeight);
-
-                  /* extract the symbol number following the \m */
                   int const number = atoi( token_txt );
 
-                  /* either draw the symbol or increment the width */
-                  if (*width < 0.) {
-                      double dx = 1.0*markerHeight;
-                      double dy = -0.5*markerHeight;
-                      _giza_draw_symbol_device(positions[nGlyph].x + dx*cosa + dy*sina,
-                                               positions[nGlyph].y + dx*sina + dy*cosa,
-                                               number);
-                      cairo_move_to(Dev[id].context, positions[nGlyph].x + 2.*dx*cosa, positions[nGlyph].y + 2.*dx*sina); /* restore pen position */
-                  } else {
-                      /* return width if action is _giza_action_get_size */
-                      *width = *width + 2.*markerHeight;
-                  }
+                  _giza_draw_marker_at_pen(positions[nGlyph].x, positions[nGlyph].y,
+                                           cosa, sina, number, width);
               }
               break;
 

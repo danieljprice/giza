@@ -28,6 +28,9 @@
 #define GIZA_LOWER_SUBS   0.2
 #define GIZA_FONT_LEN     24
 
+#include <stddef.h>
+#include <stdint.h>
+
 void _giza_parse_string (const char *text, double *width, double *height, void(*action)(const char *, double *, double *));
 void _giza_get_text_width (double *width, char *text);
 void _giza_set_default_font (void);
@@ -41,4 +44,13 @@ void _giza_stop_super (void);
 void _giza_start_sub (void);
 void _giza_stop_sub (void);
 void _giza_switch_font (int fonttype);
+
+void _giza_glyph_cache_invalidate (void);
+int _giza_font_has_glyph (uint32_t unicode_value);
+int _giza_try_marker_fallback (const char *input_text, int *marker_number);
+const char *_giza_apply_glyph_fallback (const char *input_text, char *output_text,
+                                        size_t output_size);
+void _giza_draw_marker_at_pen (double pen_x, double pen_y,
+                               double cos_angle, double sin_angle,
+                               int marker_number, double *width);
 

@@ -106,12 +106,13 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__EXEEXT_1 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
-	test-pdf$(EXEEXT) test-png$(EXEEXT) test-svg$(EXEEXT) \
-	test-unicode$(EXEEXT) test-cairo-device$(EXEEXT) \
-	test-cpgpnts$(EXEEXT) test-cpgconb$(EXEEXT) \
-	test-cpgconf$(EXEEXT) test-cpgconl$(EXEEXT) \
-	test-cpgconx$(EXEEXT) test-cpghi2d$(EXEEXT) \
-	test-cpgscrl$(EXEEXT) test-pggray$(EXEEXT)
+	test-glyph-fallback$(EXEEXT) test-pdf$(EXEEXT) \
+	test-png$(EXEEXT) test-svg$(EXEEXT) test-unicode$(EXEEXT) \
+	test-cairo-device$(EXEEXT) test-cpgpnts$(EXEEXT) \
+	test-cpgconb$(EXEEXT) test-cpgconf$(EXEEXT) \
+	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
+	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT) \
+	test-pggray$(EXEEXT)
 am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
 	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
@@ -207,6 +208,11 @@ test_giza_xw_SOURCES = test-giza-xw.c
 test_giza_xw_OBJECTS = test-giza-xw.$(OBJEXT)
 test_giza_xw_LDADD = $(LDADD)
 test_giza_xw_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_glyph_fallback_SOURCES = test-glyph-fallback.c
+test_glyph_fallback_OBJECTS = test-glyph-fallback.$(OBJEXT)
+test_glyph_fallback_LDADD = $(LDADD)
+test_glyph_fallback_DEPENDENCIES = ../../src/libgiza.la \
+	$(am__append_1)
 test_line_cap_SOURCES = test-line-cap.c
 test_line_cap_OBJECTS = test-line-cap.$(OBJEXT)
 test_line_cap_LDADD = $(LDADD)
@@ -294,6 +300,7 @@ am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-environment.Po ./$(DEPDIR)/test-error-bars.Po \
 	./$(DEPDIR)/test-format-number.Po \
 	./$(DEPDIR)/test-giza-round.Po ./$(DEPDIR)/test-giza-xw.Po \
+	./$(DEPDIR)/test-glyph-fallback.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
 	./$(DEPDIR)/test-openclose.Po ./$(DEPDIR)/test-pdf.Po \
 	./$(DEPDIR)/test-pggray.Po ./$(DEPDIR)/test-png.Po \
@@ -327,22 +334,22 @@ SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cpgconb.c test-cpgconf.c test-cpgconl.c test-cpgconx.c \
 	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
-	test-giza-round.c test-giza-xw.c test-line-cap.c \
-	test-line-style.c test-openclose.c test-pdf.c test-pggray.c \
-	test-png.c test-points.c test-qtext.c test-rectangle.c \
-	test-render.c test-set-line-width.c test-svg.c test-unicode.c \
-	test-vector.c test-window.c
+	test-giza-round.c test-giza-xw.c test-glyph-fallback.c \
+	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
+	test-pggray.c test-png.c test-points.c test-qtext.c \
+	test-rectangle.c test-render.c test-set-line-width.c \
+	test-svg.c test-unicode.c test-vector.c test-window.c
 DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cairo-device.c test-cairo-xw.c test-change-page.c \
 	test-circle.c test-colour-index.c test-contour.c \
 	test-cpgconb.c test-cpgconf.c test-cpgconl.c test-cpgconx.c \
 	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
-	test-giza-round.c test-giza-xw.c test-line-cap.c \
-	test-line-style.c test-openclose.c test-pdf.c test-pggray.c \
-	test-png.c test-points.c test-qtext.c test-rectangle.c \
-	test-render.c test-set-line-width.c test-svg.c test-unicode.c \
-	test-vector.c test-window.c
+	test-giza-round.c test-giza-xw.c test-glyph-fallback.c \
+	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
+	test-pggray.c test-png.c test-points.c test-qtext.c \
+	test-rectangle.c test-render.c test-set-line-width.c \
+	test-svg.c test-unicode.c test-vector.c test-window.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -733,7 +740,7 @@ CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
 CLEANFILES = *.png *.pdf *.svg
 
 # Tests that run non-interactively (file-based devices only)
-auto_ctests = test-format-number test-giza-round test-pdf test-png test-svg test-unicode test-cairo-device \
+auto_ctests = test-format-number test-giza-round test-glyph-fallback test-pdf test-png test-svg test-unicode test-cairo-device \
 	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray
 
 
@@ -884,6 +891,10 @@ test-giza-xw$(EXEEXT): $(test_giza_xw_OBJECTS) $(test_giza_xw_DEPENDENCIES) $(EX
 	@rm -f test-giza-xw$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_giza_xw_OBJECTS) $(test_giza_xw_LDADD) $(LIBS)
 
+test-glyph-fallback$(EXEEXT): $(test_glyph_fallback_OBJECTS) $(test_glyph_fallback_DEPENDENCIES) $(EXTRA_test_glyph_fallback_DEPENDENCIES) 
+	@rm -f test-glyph-fallback$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_glyph_fallback_OBJECTS) $(test_glyph_fallback_LDADD) $(LIBS)
+
 test-line-cap$(EXEEXT): $(test_line_cap_OBJECTS) $(test_line_cap_DEPENDENCIES) $(EXTRA_test_line_cap_DEPENDENCIES) 
 	@rm -f test-line-cap$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_line_cap_OBJECTS) $(test_line_cap_LDADD) $(LIBS)
@@ -972,6 +983,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-format-number.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-giza-round.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-giza-xw.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-glyph-fallback.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-cap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-style.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-openclose.Po@am__quote@ # am--include-marker
@@ -1253,6 +1265,13 @@ test-giza-round.log: test-giza-round$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-glyph-fallback.log: test-glyph-fallback$(EXEEXT)
+	@p='test-glyph-fallback$(EXEEXT)'; \
+	b='test-glyph-fallback'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 test-pdf.log: test-pdf$(EXEEXT)
 	@p='test-pdf$(EXEEXT)'; \
 	b='test-pdf'; \
@@ -1460,6 +1479,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-format-number.Po
 	-rm -f ./$(DEPDIR)/test-giza-round.Po
 	-rm -f ./$(DEPDIR)/test-giza-xw.Po
+	-rm -f ./$(DEPDIR)/test-glyph-fallback.Po
 	-rm -f ./$(DEPDIR)/test-line-cap.Po
 	-rm -f ./$(DEPDIR)/test-line-style.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
@@ -1542,6 +1562,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-format-number.Po
 	-rm -f ./$(DEPDIR)/test-giza-round.Po
 	-rm -f ./$(DEPDIR)/test-giza-xw.Po
+	-rm -f ./$(DEPDIR)/test-glyph-fallback.Po
 	-rm -f ./$(DEPDIR)/test-line-cap.Po
 	-rm -f ./$(DEPDIR)/test-line-style.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
