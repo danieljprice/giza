@@ -721,8 +721,12 @@ int cpgopen(const char *device)
   int pgopen = giza_open_device(device,"giza");
   if (pgopen > 0)
     {
+      char is_hardcopy[16];
+      int len = sizeof(is_hardcopy);
       giza_set_colour_palette(GIZA_COLOUR_PALETTE_PGPLOT);
-      giza_draw_background();
+      giza_query_device("hardcopy", is_hardcopy, &len);
+      if (strcmp(is_hardcopy, "YES") != 0)
+        giza_draw_background();
     }
   return pgopen;
 }

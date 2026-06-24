@@ -496,10 +496,9 @@ giza_render_gray_shade (int sizex, int sizey, const double* data, int i1,
                 int extend, int filter, const double *affine)
 {
   giza_save_colour_table();
-  if (fg >= bg)
-    giza_set_colour_table_gray ();
-  else
-    giza_set_colour_table_gray_inverted ();
+  giza_set_colour_table_gray ();
+  /* giza_render maps valMin (bg) to index 0 and valMax (fg) to index 99,
+   * so an inverted image (fg < bg) is handled without inverting the table */
   giza_render (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
   giza_restore_colour_table();
 }
@@ -517,10 +516,7 @@ giza_render_gray_shade_float (int sizex, int sizey, const float* data, int i1,
                 int extend, int filter, const float *affine)
 {
   giza_save_colour_table();
-  if (fg >= bg)
-    giza_set_colour_table_gray();
-  else
-    giza_set_colour_table_gray_inverted();
+  giza_set_colour_table_gray();
   giza_render_float (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
   giza_restore_colour_table();
 }

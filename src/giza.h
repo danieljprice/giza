@@ -129,7 +129,6 @@ int giza_set_colour_table (const double *controlPoints, const double *red, const
 int giza_set_colour_table_float (const float *controlPoints, const float *red,
 				 const float *green, const float *blue, int n, float contrast, float brightness);
 int giza_set_colour_table_gray (void);
-int giza_set_colour_table_gray_inverted (void);
 void giza_save_colour_table (void);
 void giza_restore_colour_table (void);
 void giza_rgb_from_table (double pos, double *red, double *green,

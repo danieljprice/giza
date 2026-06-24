@@ -941,17 +941,23 @@ end subroutine PGOLIN
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 integer function PGOPEN (DEVICE)
- use giza, only:giza_open_device,giza_set_colour_palette,giza_colour_palette_pgplot,giza_draw_background
+ use giza, only:giza_open_device,giza_set_colour_palette,giza_colour_palette_pgplot,giza_draw_background,giza_query_device
 ! use giza, only:giza_open_device_size,giza_units_mm,giza_units_inches
  implicit none
  character*(*), intent(in) :: DEVICE
+ character(len=16) :: is_hardcopy
 
 ! print*,'giza units mm = ',giza_units_mm
 ! pgopen = giza_open_device_size(device,'giza',11.0,8.5,giza_units_inches)
  pgopen = giza_open_device(device,'giza')
 
- call giza_set_colour_palette(giza_colour_palette_pgplot)
- call giza_draw_background()
+ if (pgopen > 0) then
+    call giza_set_colour_palette(giza_colour_palette_pgplot)
+    call giza_query_device('hardcopy', is_hardcopy)
+    if (trim(is_hardcopy) /= 'YES') then
+       call giza_draw_background()
+    endif
+ endif
 
 end function PGOPEN
 
