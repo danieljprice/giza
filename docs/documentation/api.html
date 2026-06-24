@@ -107,6 +107,8 @@
 <dd><a href="#giza_render_alpha_float">giza_render_alpha_float</a></dd>
 <dd><a href="#giza_render_gray">giza_render_gray</a></dd>
 <dd><a href="#giza_render_gray_float">giza_render_gray_float</a></dd>
+<dd><a href="#giza_render_gray_shade">giza_render_gray_shade</a></dd>
+<dd><a href="#giza_render_gray_shade_float">giza_render_gray_shade_float</a></dd>
 <dd><a href="#giza_draw_pixels">giza_draw_pixels</a></dd>
 <dd><a href="#giza_draw_pixels_float">giza_draw_pixels_float</a></dd>
 <dd><a href="#giza_tick">giza_tick</a></dd>
@@ -630,14 +632,14 @@
 <tr><td width=10%>void</td><td width=20%>giza_get_clipping</td><td> (int *clip) ;</tr></table><p>Query whether or not clipping at edge of viewport is enabled or disabled</p>
 <h4>See Also:</h4><p><a href="#giza_move">giza_move</a> </p><h3><a name="giza_colour_bar">giza_colour_bar</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_colour_bar</td><td> (const char *side, double disp, double width,  double valMin, double valMax, const char *label) ;</tr></table><p>Draws a colour bar (wedge) using the current colour ramp</p>
+<tr><td width=10%>void</td><td width=20%>giza_colour_bar</td><td> (const char *side, double disp, double width, double valMin, double valMax, const char *label) ;</tr></table><p>Draws a colour bar (wedge) using the current colour ramp</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>side    :</td><td>edge of viewport to draw colour bar relative to, either 'B' (bottom), 'T' (top), 'L' (left) or 'R' (right)</td>
 </tr><tr>
 <td>disp    :</td><td>displacement of the bar in character heights from the specified edge</td>
 </tr><tr>
-<td>width   :</td><td>width of the colour bar in character heights</td>
+<td>width   :</td><td>total outward extent of the colour bar in character heights, including room for tick labels and an optional units label</td>
 </tr><tr>
 <td>valMin  :</td><td>The value in data that gets assigned the colour corresponding to zero on the colour ramp (The ramp is set by giza_set_colour_table)</td>
 </tr><tr>
@@ -646,7 +648,7 @@
 <td>label   :</td><td>Text label to annotate colour bar with</td>
 </tr></table><h4>See Also:</h4><p><a href="#giza_render">giza_render</a> <a href="#giza_colour_bar_float">giza_colour_bar_float</a> <a href="#giza_set_colour_table">giza_set_colour_table</a> </p><h3><a name="giza_colour_bar_float">giza_colour_bar_float</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_colour_bar_float</td><td> (const char *side, float disp, float width,  float valMin, float valMax, const char *label) ;</tr></table><p>Same functionality as giza_colour_bar, but takes floats</p>
+<tr><td width=10%>void</td><td width=20%>giza_colour_bar_float</td><td> (const char *side, float disp, float width, float valMin, float valMax, const char *label) ;</tr></table><p>Same functionality as giza_colour_bar, but takes floats</p>
 <h4>See Also:</h4><p><a href="#giza_colour_bar">giza_colour_bar</a> </p><h3><a name="giza_draw_background">giza_draw_background</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_draw_background</td><td> (void) ;</tr></table><p>Redraws the background of the currently open device (erase)</p>
@@ -944,7 +946,13 @@
 <h4>See Also:</h4><p><a href="#giza_render">giza_render</a> </p><h3><a name="giza_render_gray_float">giza_render_gray_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_render_gray_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float valMin, float valMax, int extend, int filter, const float *affine) ;</tr></table><p>Same functionality as giza_render_gray but renders in grayscale</p>
-<h4>See Also:</h4><p><a href="#giza_render_gray">giza_render_gray</a> <a href="#giza_render">giza_render</a> </p><h3><a name="giza_draw_pixels">giza_draw_pixels</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_render_gray">giza_render_gray</a> <a href="#giza_render">giza_render</a> </p><h3><a name="giza_render_gray_shade">giza_render_gray_shade</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_gray_shade</td><td> (int sizex, int sizey, const double* data, int i1, int i2, int j1, int j2, double fg, double bg, int extend, int filter, const double *affine) ;</tr></table><p>Greyscale image with explicit foreground and background data levels. BG maps to the dark end of the ramp, FG to the light end. When FG < BG the grey ramp is reversed automatically.</p>
+<h4>See Also:</h4><p><a href="#giza_render_gray">giza_render_gray</a> <a href="#giza_render_gray_shade_float">giza_render_gray_shade_float</a> </p><h3><a name="giza_render_gray_shade_float">giza_render_gray_shade_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_render_gray_shade_float</td><td> (int sizex, int sizey, const float* data, int i1, int i2, int j1, int j2, float fg, float bg, int extend, int filter, const float *affine) ;</tr></table><p>Same as giza_render_gray_shade but with float data</p>
+<h4>See Also:</h4><p><a href="#giza_render_gray_shade">giza_render_gray_shade</a> </p><h3><a name="giza_draw_pixels">giza_draw_pixels</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_draw_pixels</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend, int filter) ;</tr></table><p>Renders an array of pixels according to a colour index defined for each pixel</p>
 <h4>Input:</h4>
