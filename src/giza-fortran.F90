@@ -126,6 +126,7 @@ module giza
       giza_rectangle, &
       giza_render, &
       giza_render_gray, &
+      giza_render_gray_shade, &
       giza_render_transparent, &
       giza_draw_pixels, &
       giza_restore, &
@@ -1533,6 +1534,26 @@ private
       real(kind=c_float),intent(in),value :: valMin,valMax
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_render_gray_float
+ end interface
+
+ interface giza_render_gray_shade
+    subroutine giza_render_gray_shade_double(sizex,sizey,data,i1,i2,j1,j2,&
+               fg,bg,extend,filter,affine) bind(C, name="giza_render_gray_shade")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
+      real(kind=c_double),intent(in) :: data(sizex,sizey)
+      real(kind=c_double),intent(in),value :: fg,bg
+      real(kind=c_double),intent(in) :: affine(6)
+    end subroutine giza_render_gray_shade_double
+
+    subroutine giza_render_gray_shade_float(sizex,sizey,data,i1,i2,j1,j2,&
+               fg,bg,extend,filter,affine) bind(C, name="giza_render_gray_shade_float")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
+      real(kind=c_float),intent(in) :: data(sizex,sizey)
+      real(kind=c_float),intent(in),value :: fg,bg
+      real(kind=c_float),intent(in) :: affine(6)
+    end subroutine giza_render_gray_shade_float
  end interface
 
  interface giza_draw_pixels

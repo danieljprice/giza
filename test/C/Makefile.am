@@ -12,8 +12,8 @@ LDADD += ../../src/libgiza-osxcocoa-main.la
 endif
 
 # Tests that run non-interactively (file-based devices only)
-auto_ctests = test-format-number test-pdf test-png test-svg test-unicode test-cairo-device \
-	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl
+auto_ctests = test-format-number test-giza-round test-pdf test-png test-svg test-unicode test-cairo-device \
+	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
 interactive_ctests = test-arrow test-box test-cairo-xw test-change-page \
@@ -35,6 +35,7 @@ test_cpgconl_LDADD = $(CPGPLOT_LDADD)
 test_cpgconx_LDADD = $(CPGPLOT_LDADD)
 test_cpghi2d_LDADD = $(CPGPLOT_LDADD)
 test_cpgscrl_LDADD = $(CPGPLOT_LDADD)
+test_pggray_LDADD = $(CPGPLOT_LDADD)
 
 test_cairo_xw_LDADD = $(LDADD) $(CAIRO_LIBS) $(X11_LIBS)
 test_cairo_device_LDADD = $(LDADD) $(CAIRO_LIBS)

@@ -26,6 +26,30 @@
 #include <giza.h>
 #include <string.h>
 
+/* Fraction of total width reserved for tick labels and units text. */
+static double const annotation_fraction = 0.6;
+
+/* Displacement of the units label from the wedge viewport edge (character heights). */
+static double const label_separation = 2.2;
+
+/* Grey ramp occupies this band on the cross-axis world window (plot-adjacent edge). */
+static double const ramp_band_inner = 0.9;
+static double const ramp_band_outer = 1.1;
+
+static int
+_giza_label_is_blank (const char *label)
+{
+  if (!label)
+    return 1;
+  while (*label)
+    {
+      if (*label != ' ' && *label != '\t')
+        return 0;
+      label++;
+    }
+  return 1;
+}
+
 /**
  * Drawing: giza_colour_bar
  *
@@ -34,7 +58,8 @@
  * Input:
  *  -side    :- edge of viewport to draw colour bar relative to, either 'B' (bottom), 'T' (top), 'L' (left) or 'R' (right)
  *  -disp    :- displacement of the bar in character heights from the specified edge
- *  -width   :- width of the colour bar in character heights
+ *  -width   :- total outward extent of the colour bar in character heights, including
+ *              room for tick labels and an optional units label
  *  -valMin  :- The value in data that gets assigned the colour corresponding to zero on the
  *              colour ramp (The ramp is set by giza_set_colour_table)
  *  -valMax  :- The value in data that gets assigned the colour corresponding to one on the
@@ -44,31 +69,32 @@
  * See Also: giza_render, giza_colour_bar_float, giza_set_colour_table
  */
 void
-giza_colour_bar (const char *side, double disp, double width, 
+giza_colour_bar (const char *side, double disp, double width,
                  double valMin, double valMax, const char *label)
 {
-  /* query current window, viewport and character height settings */
-  double xmin,xmax,ymin,ymax;
-  double vptxmin,vptxmax,vptymin,vptymax;
-  double xch,ych;
-  giza_get_window(&xmin,&xmax,&ymin,&ymax);
-  giza_get_viewport(GIZA_UNITS_NORMALIZED,&vptxmin,&vptxmax,&vptymin,&vptymax);
-  giza_get_character_size(GIZA_UNITS_NORMALIZED,&xch,&ych);
+  double xmin, xmax, ymin, ymax;
+  double vptxmin, vptxmax, vptymin, vptymax;
+  double xch, ych;
+  double old_ch, wedge_ch, label_width_ch;
+  double wedge_xmin, wedge_xmax, wedge_ymin, wedge_ymax;
+  double ch_cross, ch_along;
+  int npixwedg = 100;
+  double sample[100];
+  double vmin, vmax, dx;
+  int i;
+  int bottom = 0, top = 0, left = 0, right = 0;
+  int greyscale = 0;
+  double affine[6] = { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
 
-  /* setup affine matrix for call to giza_render */
-  double affine[6];
-  affine[0] = 1.0;
-  affine[1] = 0.0;
-  affine[2] = 0.0;
-  affine[3] = 1.0;
-  affine[4] = 0.0;
-  affine[5] = 0.0;
+  if (!_giza_check_device_ready ("giza_colour_bar"))
+    return;
 
-  /* fill an array with values from valMin to valMax */
-  int npixwedg = 400;
-  double sample[npixwedg];
-  double vmin,vmax;
-  if (valMax < valMin) 
+  giza_get_window (&xmin, &xmax, &ymin, &ymax);
+  giza_get_viewport (GIZA_UNITS_NORMALIZED, &vptxmin, &vptxmax, &vptymin, &vptymax);
+  giza_get_character_size (GIZA_UNITS_NORMALIZED, &xch, &ych);
+  giza_get_character_height (&old_ch);
+
+  if (valMax < valMin)
     {
       vmin = valMax;
       vmax = valMin;
@@ -78,108 +104,107 @@ giza_colour_bar (const char *side, double disp, double width,
       vmin = valMin;
       vmax = valMax;
     }
-  double dx = (vmax - vmin)/((double) (npixwedg-1));
-  
-  int i;
+
+  dx = (vmax - vmin) / ((double) (npixwedg - 1));
   for (i = 0; i < npixwedg; i++)
-     {
-        sample[i] = vmin + i*dx;
-     }
+    sample[i] = vmin + i * dx;
 
-  double vptxmini = vptxmin;
-  double vptxmaxi = vptxmax;
-  double vptymini = vptymin;
-  double vptymaxi = vptymax;
-  
-  int bottom = 0, top = 0, left = 0, right = 0;
-  if (strchr(side,'B') || strchr(side,'b'))      { bottom = 1; }
-  else if (strchr(side,'T') || strchr(side,'t')) { top = 1; }
-  else if (strchr(side,'L') || strchr(side,'l')) { left = 1; }
-  else if (strchr(side,'R') || strchr(side,'r')) { right = 1; }
-  
-  int greyscale = 0;
-  if (strchr(side,'G') || strchr(side,'g')) { greyscale = 1; }
-  
-  if (bottom || top) 
+  wedge_ch = width * (1.0 - annotation_fraction);
+  if (wedge_ch <= 0.)
+    wedge_ch = width;
+
+  label_width_ch = label_separation;
+  if (!_giza_label_is_blank (label))
+    label_width_ch += 1.0;
+
+  giza_set_character_height (annotation_fraction * width * old_ch / label_width_ch);
+
+  if (strchr (side, 'B') || strchr (side, 'b'))
+    bottom = 1;
+  else if (strchr (side, 'T') || strchr (side, 't'))
+    top = 1;
+  else if (strchr (side, 'L') || strchr (side, 'l'))
+    left = 1;
+  else if (strchr (side, 'R') || strchr (side, 'r'))
+    right = 1;
+
+  if (strchr (side, 'G') || strchr (side, 'g'))
+    greyscale = 1;
+
+  wedge_xmin = vptxmin;
+  wedge_xmax = vptxmax;
+  wedge_ymin = vptymin;
+  wedge_ymax = vptymax;
+
+  if (bottom || top)
     {
-       if (bottom)
-         { 
-           vptymaxi = vptymini - disp*ych;
-           vptymini = vptymaxi - width*xch;
-         }
-       else
-         {
-           vptymini = vptymaxi + disp*ych;
-           vptymaxi = vptymini + width*xch;         
-         }
+      ch_cross = ych;
+      ch_along = ych;
 
-       giza_set_viewport(vptxmini,vptxmaxi,vptymini,vptymaxi);
-       giza_set_window(1.0,(double) npixwedg, 0.0, 1.0);
-       if (greyscale)
-         {
-           giza_render_gray(npixwedg,1,sample,0,npixwedg-1,0,0,valMin,valMax,
-                       GIZA_EXTEND_PAD,GIZA_FILTER_DEFAULT,affine);
-         }
-       else
-         {
-           giza_render(npixwedg,1,sample,0,npixwedg-1,0,0,valMin,valMax,
-                       GIZA_EXTEND_PAD,GIZA_FILTER_DEFAULT,affine);
-         }
+      if (bottom)
+        {
+          wedge_ymax = wedge_ymin - disp * ch_along;
+          wedge_ymin = wedge_ymax - wedge_ch * ch_cross;
+        }
+      else
+        {
+          wedge_ymin = wedge_ymax + disp * ch_along;
+          wedge_ymax = wedge_ymin + wedge_ch * ch_cross;
+        }
 
-       giza_set_window(vmin,vmax,0.0,1.0);
+      giza_set_viewport (wedge_xmin, wedge_xmax, wedge_ymin, wedge_ymax);
+      giza_set_window (1.0, (double) npixwedg, ramp_band_inner, ramp_band_outer);
+      if (greyscale)
+        giza_render_gray (npixwedg, 1, sample, 0, npixwedg - 1, 0, 0, valMin, valMax,
+                         GIZA_EXTEND_PAD, GIZA_FILTER_DEFAULT, affine);
+      else
+        giza_render (npixwedg, 1, sample, 0, npixwedg - 1, 0, 0, valMin, valMax,
+                     GIZA_EXTEND_PAD, GIZA_FILTER_DEFAULT, affine);
 
-       if (bottom)
-         {
-           giza_box("BCNST",0.0,0,"BC",0.0,0);
-         }
-       else
-         {
-           giza_box("BCMST",0.0,0,"BC",0.0,0);         
-         }
+      giza_set_window (vmin, vmax, 0.0, 1.0);
+      if (bottom)
+        giza_box ("BCNST", 0.0, 0, "BC", 0.0, 0);
+      else
+        giza_box ("BCMST", 0.0, 0, "BC", 0.0, 0);
     }
   else if (left || right)
     {
-       if (left)
-         { 
-           vptxmaxi = vptxmini - disp*xch;
-           vptxmini = vptxmaxi - width*xch;
-         }
-       else
-         {
-           vptxmini = vptxmaxi + disp*xch;
-           vptxmaxi = vptxmini + width*xch;
-         }
+      ch_cross = xch;
+      ch_along = xch;
 
-       giza_set_viewport(vptxmini,vptxmaxi,vptymini,vptymaxi);
-       giza_set_window(0.0, 1.0, 1.0,(double) npixwedg);
-       if (greyscale)
-         {
-           giza_render_gray(1,npixwedg,sample,0,0,0,npixwedg-1,valMin,valMax,
-                       GIZA_EXTEND_PAD,GIZA_FILTER_DEFAULT,affine);
-         }
-       else
-         {
-           giza_render(1,npixwedg,sample,0,0,0,npixwedg-1,valMin,valMax,
-                       GIZA_EXTEND_PAD,GIZA_FILTER_DEFAULT,affine);
-         }
+      if (left)
+        {
+          wedge_xmax = wedge_xmin - disp * ch_along;
+          wedge_xmin = wedge_xmax - wedge_ch * ch_cross;
+        }
+      else
+        {
+          wedge_xmin = wedge_xmax + disp * ch_along;
+          wedge_xmax = wedge_xmin + wedge_ch * ch_cross;
+        }
 
-       giza_set_window(0.0,1.0,vmin,vmax);
+      giza_set_viewport (wedge_xmin, wedge_xmax, wedge_ymin, wedge_ymax);
+      giza_set_window (ramp_band_inner, ramp_band_outer, 1.0, (double) npixwedg);
+      if (greyscale)
+        giza_render_gray (1, npixwedg, sample, 0, 0, 0, npixwedg - 1, valMin, valMax,
+                         GIZA_EXTEND_PAD, GIZA_FILTER_DEFAULT, affine);
+      else
+        giza_render (1, npixwedg, sample, 0, 0, 0, npixwedg - 1, valMin, valMax,
+                     GIZA_EXTEND_PAD, GIZA_FILTER_DEFAULT, affine);
 
-       if (left)
-         {
-           giza_box("BC",0.0,0,"BCNST",0.0,0);
-         }
-       else
-         {
-           giza_box("BC",0.0,0,"BCMST",0.0,0);         
-         }
+      giza_set_window (0.0, 1.0, vmin, vmax);
+      if (left)
+        giza_box ("BC", 0.0, 0, "BCNST", 0.0, 0);
+      else
+        giza_box ("BC", 0.0, 0, "BCMST", 0.0, 0);
     }
 
-  giza_annotate(side,2.8,1.0,1.0,label);
+  if (!_giza_label_is_blank (label))
+    giza_annotate (side, label_separation, 1.0, 1.0, label);
 
-  /* reset window and viewport */
-  giza_set_viewport(vptxmin,vptxmax,vptymin,vptymax);
-  giza_set_window(xmin,xmax,ymin,ymax);
+  giza_set_viewport (vptxmin, vptxmax, vptymin, vptymax);
+  giza_set_window (xmin, xmax, ymin, ymax);
+  giza_set_character_height (old_ch);
 
   giza_flush_device ();
 }
@@ -192,7 +217,7 @@ giza_colour_bar (const char *side, double disp, double width,
  * See Also: giza_colour_bar
  */
 void
-giza_colour_bar_float (const char *side, float disp, float width, 
+giza_colour_bar_float (const char *side, float disp, float width,
                        float valMin, float valMax, const char *label)
 {
   giza_colour_bar (side, (double) disp, (double) width,

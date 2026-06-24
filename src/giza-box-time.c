@@ -251,12 +251,12 @@ int _giza_npl(int nmax, int n) {
           do2 = 0;
 
       mod24  = 0;
-      if( strchr(xopt_cp, 'X') )
+      if( strchr(yopt_cp, 'X') )
           mod24 = 1;
 
-      if( strchr(xopt_cp, 'N') )
+      if( strchr(yopt_cp, 'N') )
           _giza_tbx4(dodayy, suptyp, 'Y', 1, first, Dev[id].Win.ymin, Dev[id].Win.ymax, tscaly, ytickd, do2, dopara, mod24);
-      if( strchr(xopt_cp, 'M') )
+      if( strchr(yopt_cp, 'M') )
           _giza_tbx4(dodayy, suptyp, 'Y', 0, first, Dev[id].Win.ymin, Dev[id].Win.ymax, tscaly, ytickd, do2, dopara, mod24);
   }
   free(xopt_cp);

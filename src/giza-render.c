@@ -32,6 +32,26 @@
 #include <math.h>
 
 /**
+ * Restrict drawing to the current world-coordinate window (PGPLOT window
+ * clipping). Viewport clipping alone does not crop cairo image paints correctly.
+ */
+static void
+_giza_clip_to_window (void)
+{
+  int clip;
+
+  giza_get_clipping (&clip);
+  if (!clip)
+    return;
+
+  cairo_rectangle (Dev[id].context,
+                   Dev[id].Win.xmin, Dev[id].Win.ymin,
+                   Dev[id].Win.xmax - Dev[id].Win.xmin,
+                   Dev[id].Win.ymax - Dev[id].Win.ymin);
+  cairo_clip (Dev[id].context);
+}
+
+/**
  * Drawing: giza_render
  *
  * Synopsis: Renders data to the device.
@@ -152,6 +172,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   cairo_save (Dev[id].context);
+  _giza_clip_to_window ();
 
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
                    affine[4], affine[5]);
@@ -339,6 +360,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   cairo_save (Dev[id].context);
+  _giza_clip_to_window ();
 
   cairo_matrix_init (&mat, (double) affine[0], (double) affine[1],
                    (double) affine[2], (double) affine[3],
@@ -456,6 +478,46 @@ giza_render_gray_float (int sizex, int sizey, const float* data, int i1,
   giza_save_colour_table();
   giza_set_colour_table_gray();
   giza_render_float (sizex, sizey, data, i1, i2, j1, j2, valMin, valMax, extend, filter, affine);
+  giza_restore_colour_table();
+}
+
+/**
+ * Drawing: giza_render_gray_shade
+ *
+ * Synopsis: Greyscale image with explicit foreground and background data levels.
+ *           BG maps to the dark end of the ramp, FG to the light end.
+ *           When FG < BG the grey ramp is reversed automatically.
+ *
+ * See Also: giza_render_gray, giza_render_gray_shade_float
+ */
+void
+giza_render_gray_shade (int sizex, int sizey, const double* data, int i1,
+                int i2, int j1, int j2, double fg, double bg,
+                int extend, int filter, const double *affine)
+{
+  giza_save_colour_table();
+  giza_set_colour_table_gray ();
+  /* giza_render maps valMin (bg) to index 0 and valMax (fg) to index 99,
+   * so an inverted image (fg < bg) is handled without inverting the table */
+  giza_render (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+  giza_restore_colour_table();
+}
+
+/**
+ * Drawing: giza_render_gray_shade_float
+ *
+ * Synopsis: Same as giza_render_gray_shade but with float data
+ *
+ * See Also: giza_render_gray_shade
+ */
+void
+giza_render_gray_shade_float (int sizex, int sizey, const float* data, int i1,
+                int i2, int j1, int j2, float fg, float bg,
+                int extend, int filter, const float *affine)
+{
+  giza_save_colour_table();
+  giza_set_colour_table_gray();
+  giza_render_float (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
   giza_restore_colour_table();
 }
 

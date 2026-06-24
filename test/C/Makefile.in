@@ -105,12 +105,13 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__EXEEXT_1 = test-format-number$(EXEEXT) test-pdf$(EXEEXT) \
-	test-png$(EXEEXT) test-svg$(EXEEXT) test-unicode$(EXEEXT) \
-	test-cairo-device$(EXEEXT) test-cpgpnts$(EXEEXT) \
-	test-cpgconb$(EXEEXT) test-cpgconf$(EXEEXT) \
-	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
-	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT)
+am__EXEEXT_1 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
+	test-pdf$(EXEEXT) test-png$(EXEEXT) test-svg$(EXEEXT) \
+	test-unicode$(EXEEXT) test-cairo-device$(EXEEXT) \
+	test-cpgpnts$(EXEEXT) test-cpgconb$(EXEEXT) \
+	test-cpgconf$(EXEEXT) test-cpgconl$(EXEEXT) \
+	test-cpgconx$(EXEEXT) test-cpghi2d$(EXEEXT) \
+	test-cpgscrl$(EXEEXT) test-pggray$(EXEEXT)
 am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
 	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
@@ -198,6 +199,10 @@ test_format_number_SOURCES = test-format-number.c
 test_format_number_OBJECTS = test-format-number.$(OBJEXT)
 test_format_number_LDADD = $(LDADD)
 test_format_number_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_giza_round_SOURCES = test-giza-round.c
+test_giza_round_OBJECTS = test-giza-round.$(OBJEXT)
+test_giza_round_LDADD = $(LDADD)
+test_giza_round_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
 test_giza_xw_SOURCES = test-giza-xw.c
 test_giza_xw_OBJECTS = test-giza-xw.$(OBJEXT)
 test_giza_xw_LDADD = $(LDADD)
@@ -218,6 +223,9 @@ test_pdf_SOURCES = test-pdf.c
 test_pdf_OBJECTS = test-pdf.$(OBJEXT)
 test_pdf_LDADD = $(LDADD)
 test_pdf_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_pggray_SOURCES = test-pggray.c
+test_pggray_OBJECTS = test-pggray.$(OBJEXT)
+test_pggray_DEPENDENCIES = $(CPGPLOT_LDADD)
 test_png_SOURCES = test-png.c
 test_png_OBJECTS = test-png.$(OBJEXT)
 test_png_LDADD = $(LDADD)
@@ -284,14 +292,16 @@ am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-cpgconx.Po ./$(DEPDIR)/test-cpghi2d.Po \
 	./$(DEPDIR)/test-cpgpnts.Po ./$(DEPDIR)/test-cpgscrl.Po \
 	./$(DEPDIR)/test-environment.Po ./$(DEPDIR)/test-error-bars.Po \
-	./$(DEPDIR)/test-format-number.Po ./$(DEPDIR)/test-giza-xw.Po \
+	./$(DEPDIR)/test-format-number.Po \
+	./$(DEPDIR)/test-giza-round.Po ./$(DEPDIR)/test-giza-xw.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
 	./$(DEPDIR)/test-openclose.Po ./$(DEPDIR)/test-pdf.Po \
-	./$(DEPDIR)/test-png.Po ./$(DEPDIR)/test-points.Po \
-	./$(DEPDIR)/test-qtext.Po ./$(DEPDIR)/test-rectangle.Po \
-	./$(DEPDIR)/test-render.Po ./$(DEPDIR)/test-set-line-width.Po \
-	./$(DEPDIR)/test-svg.Po ./$(DEPDIR)/test-unicode.Po \
-	./$(DEPDIR)/test-vector.Po ./$(DEPDIR)/test-window.Po
+	./$(DEPDIR)/test-pggray.Po ./$(DEPDIR)/test-png.Po \
+	./$(DEPDIR)/test-points.Po ./$(DEPDIR)/test-qtext.Po \
+	./$(DEPDIR)/test-rectangle.Po ./$(DEPDIR)/test-render.Po \
+	./$(DEPDIR)/test-set-line-width.Po ./$(DEPDIR)/test-svg.Po \
+	./$(DEPDIR)/test-unicode.Po ./$(DEPDIR)/test-vector.Po \
+	./$(DEPDIR)/test-window.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -317,22 +327,22 @@ SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cpgconb.c test-cpgconf.c test-cpgconl.c test-cpgconx.c \
 	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
-	test-giza-xw.c test-line-cap.c test-line-style.c \
-	test-openclose.c test-pdf.c test-png.c test-points.c \
-	test-qtext.c test-rectangle.c test-render.c \
-	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
-	test-window.c
+	test-giza-round.c test-giza-xw.c test-line-cap.c \
+	test-line-style.c test-openclose.c test-pdf.c test-pggray.c \
+	test-png.c test-points.c test-qtext.c test-rectangle.c \
+	test-render.c test-set-line-width.c test-svg.c test-unicode.c \
+	test-vector.c test-window.c
 DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cairo-device.c test-cairo-xw.c test-change-page.c \
 	test-circle.c test-colour-index.c test-contour.c \
 	test-cpgconb.c test-cpgconf.c test-cpgconl.c test-cpgconx.c \
 	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
-	test-giza-xw.c test-line-cap.c test-line-style.c \
-	test-openclose.c test-pdf.c test-png.c test-points.c \
-	test-qtext.c test-rectangle.c test-render.c \
-	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
-	test-window.c
+	test-giza-round.c test-giza-xw.c test-line-cap.c \
+	test-line-style.c test-openclose.c test-pdf.c test-pggray.c \
+	test-png.c test-points.c test-qtext.c test-rectangle.c \
+	test-render.c test-set-line-width.c test-svg.c test-unicode.c \
+	test-vector.c test-window.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -723,8 +733,8 @@ CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
 CLEANFILES = *.png *.pdf *.svg
 
 # Tests that run non-interactively (file-based devices only)
-auto_ctests = test-format-number test-pdf test-png test-svg test-unicode test-cairo-device \
-	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl
+auto_ctests = test-format-number test-giza-round test-pdf test-png test-svg test-unicode test-cairo-device \
+	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray
 
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
@@ -744,6 +754,7 @@ test_cpgconl_LDADD = $(CPGPLOT_LDADD)
 test_cpgconx_LDADD = $(CPGPLOT_LDADD)
 test_cpghi2d_LDADD = $(CPGPLOT_LDADD)
 test_cpgscrl_LDADD = $(CPGPLOT_LDADD)
+test_pggray_LDADD = $(CPGPLOT_LDADD)
 test_cairo_xw_LDADD = $(LDADD) $(CAIRO_LIBS) $(X11_LIBS)
 test_cairo_device_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_XOpenDisplay_LDADD = $(LDADD) $(X11_LIBS)
@@ -865,6 +876,10 @@ test-format-number$(EXEEXT): $(test_format_number_OBJECTS) $(test_format_number_
 	@rm -f test-format-number$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_format_number_OBJECTS) $(test_format_number_LDADD) $(LIBS)
 
+test-giza-round$(EXEEXT): $(test_giza_round_OBJECTS) $(test_giza_round_DEPENDENCIES) $(EXTRA_test_giza_round_DEPENDENCIES) 
+	@rm -f test-giza-round$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_giza_round_OBJECTS) $(test_giza_round_LDADD) $(LIBS)
+
 test-giza-xw$(EXEEXT): $(test_giza_xw_OBJECTS) $(test_giza_xw_DEPENDENCIES) $(EXTRA_test_giza_xw_DEPENDENCIES) 
 	@rm -f test-giza-xw$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_giza_xw_OBJECTS) $(test_giza_xw_LDADD) $(LIBS)
@@ -884,6 +899,10 @@ test-openclose$(EXEEXT): $(test_openclose_OBJECTS) $(test_openclose_DEPENDENCIES
 test-pdf$(EXEEXT): $(test_pdf_OBJECTS) $(test_pdf_DEPENDENCIES) $(EXTRA_test_pdf_DEPENDENCIES) 
 	@rm -f test-pdf$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_pdf_OBJECTS) $(test_pdf_LDADD) $(LIBS)
+
+test-pggray$(EXEEXT): $(test_pggray_OBJECTS) $(test_pggray_DEPENDENCIES) $(EXTRA_test_pggray_DEPENDENCIES) 
+	@rm -f test-pggray$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_pggray_OBJECTS) $(test_pggray_LDADD) $(LIBS)
 
 test-png$(EXEEXT): $(test_png_OBJECTS) $(test_png_DEPENDENCIES) $(EXTRA_test_png_DEPENDENCIES) 
 	@rm -f test-png$(EXEEXT)
@@ -951,11 +970,13 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-environment.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-error-bars.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-format-number.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-giza-round.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-giza-xw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-cap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-style.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-openclose.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pdf.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pggray.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-png.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-points.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-qtext.Po@am__quote@ # am--include-marker
@@ -1225,6 +1246,13 @@ test-format-number.log: test-format-number$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-giza-round.log: test-giza-round$(EXEEXT)
+	@p='test-giza-round$(EXEEXT)'; \
+	b='test-giza-round'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 test-pdf.log: test-pdf$(EXEEXT)
 	@p='test-pdf$(EXEEXT)'; \
 	b='test-pdf'; \
@@ -1305,6 +1333,13 @@ test-cpghi2d.log: test-cpghi2d$(EXEEXT)
 test-cpgscrl.log: test-cpgscrl$(EXEEXT)
 	@p='test-cpgscrl$(EXEEXT)'; \
 	b='test-cpgscrl'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-pggray.log: test-pggray$(EXEEXT)
+	@p='test-pggray$(EXEEXT)'; \
+	b='test-pggray'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -1423,11 +1458,13 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-environment.Po
 	-rm -f ./$(DEPDIR)/test-error-bars.Po
 	-rm -f ./$(DEPDIR)/test-format-number.Po
+	-rm -f ./$(DEPDIR)/test-giza-round.Po
 	-rm -f ./$(DEPDIR)/test-giza-xw.Po
 	-rm -f ./$(DEPDIR)/test-line-cap.Po
 	-rm -f ./$(DEPDIR)/test-line-style.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
 	-rm -f ./$(DEPDIR)/test-pdf.Po
+	-rm -f ./$(DEPDIR)/test-pggray.Po
 	-rm -f ./$(DEPDIR)/test-png.Po
 	-rm -f ./$(DEPDIR)/test-points.Po
 	-rm -f ./$(DEPDIR)/test-qtext.Po
@@ -1503,11 +1540,13 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-environment.Po
 	-rm -f ./$(DEPDIR)/test-error-bars.Po
 	-rm -f ./$(DEPDIR)/test-format-number.Po
+	-rm -f ./$(DEPDIR)/test-giza-round.Po
 	-rm -f ./$(DEPDIR)/test-giza-xw.Po
 	-rm -f ./$(DEPDIR)/test-line-cap.Po
 	-rm -f ./$(DEPDIR)/test-line-style.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
 	-rm -f ./$(DEPDIR)/test-pdf.Po
+	-rm -f ./$(DEPDIR)/test-pggray.Po
 	-rm -f ./$(DEPDIR)/test-png.Po
 	-rm -f ./$(DEPDIR)/test-points.Po
 	-rm -f ./$(DEPDIR)/test-qtext.Po
