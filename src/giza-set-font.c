@@ -23,6 +23,7 @@
  */
 
 #include "giza-private.h"
+#include "giza-text-private.h"
 #include "giza-io-private.h"
 #include "giza-set-font-private.h"
 #include <giza.h>
@@ -159,6 +160,8 @@ _giza_set_font (const char *font, cairo_font_slant_t slant, cairo_font_weight_t 
 
    /* restore font matrix */
    cairo_set_font_matrix (Dev[id].context, &mat);
+
+   _giza_glyph_cache_invalidate ();
 }
 
 /**
