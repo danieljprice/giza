@@ -62,8 +62,6 @@
 <dd><a href="#giza_arrow_float">giza_arrow_float</a></dd>
 <dd><a href="#giza_axis">giza_axis</a></dd>
 <dd><a href="#giza_axis_float">giza_axis_float</a></dd>
-<dd><a href="#giza_box">giza_box</a></dd>
-<dd><a href="#giza_box_float">giza_box_float</a></dd>
 <dd><a href="#giza_box_time">giza_box_time</a></dd>
 <dd><a href="#giza_box_time_float">giza_box_time_float</a></dd>
 <dd><a href="#giza_box">giza_box</a></dd>
@@ -530,53 +528,7 @@
 </tr></table><h4>See Also:</h4><p><a href="#giza_axis_float">giza_axis_float</a> <a href="#giza_box">giza_box</a> <a href="#giza_tick">giza_tick</a> <a href="#giza_box_time">giza_box_time</a> </p><h3><a name="giza_axis_float">giza_axis_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_axis_float</td><td> (const char *opt, float x1, float y1, float x2, float y2, float v1, float v2, float step, int nsub, float dmajl, float dmajr, float fmin, float disp, float angle) ;</td></tr></table><p>Same functionality as giza_axis but takes floats instead of doubles.</p>
-<h4>See Also:</h4><p><a href="#giza_axis">giza_axis</a> </p><h3><a name="giza_box">giza_box</a><hr></h3>
-<table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_box</td><td> (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</td></tr></table><p>Annotates the viewport with labelled axis/frame</p>
-<h4>Input:</h4>
-<table class="api"><tr>
-<td>xopt  :</td><td>String of options for the x-axis. The options may be in any order. See below for details</td>
-</tr><tr>
-<td>xtick :</td><td>The distance, in world coordinates, between major ticks on the x-axis. If 0.0 the interval is chosen by giza_box.</td>
-</tr><tr>
-<td>nxsub :</td><td>The number of minor ticks to be placed between each major tick. If 0 the number is chosen by giza_box.</td>
-</tr><tr>
-<td>yopt  :</td><td>Similar to xopt but for the y-axis.</td>
-</tr><tr>
-<td>ytick :</td><td>Similar to xtick but for the y-axis.</td>
-</tr><tr>
-<td>nysub :</td><td>Similar to nxsub but for the y-axis.</td>
-</tr></table><h4>Options:</h4>
-<table class="api"><tr>
-<td>A :</td><td>Draw the axis.</td>
-</tr><tr>
-<td>B :</td><td>Draw the bottom or left edge of the frame.</td>
-</tr><tr>
-<td>C :</td><td>Draw the top or right edge of the frame.</td>
-</tr><tr>
-<td>T :</td><td>Draw major ticks.</td>
-</tr><tr>
-<td>S :</td><td>Draw minor ticks.</td>
-</tr><tr>
-<td>N :</td><td>Label the axis (conventional, below/left viewport)</td>
-</tr><tr>
-<td>M :</td><td>Put labels in the unconvential location (above/right viewport)</td>
-</tr><tr>
-<td>V :</td><td>Orient numeric y labels vertically (only applies to left and right axis).</td>
-</tr><tr>
-<td>G :</td><td>Draw grid lines at major intervals</td>
-</tr><tr>
-<td>M :</td><td>Write numeric labels above x-axis or to right of y-axis instead of usual position</td>
-</tr><tr>
-<td>L :</td><td>Label axis logarithmically</td>
-</tr><tr>
-<td>I :</td><td>'Invert' tick marks, draw them outside the viewport</td>
-</tr><tr>
-<td>P :</td><td>extend ("Project") major tick marks outside the box (ignored if option I is specified).</td>
-</tr></table><h3><a name="giza_box_float">giza_box_float</a><hr></h3>
-<table class="proto">
-<tr><td width=10%>void</td><td width=20%>giza_box_float</td><td> (const char *xopt, float xtick, int nxsub, const char *yopt, float ytick, int nysub) ;</td></tr></table><p>Same functionality as giza_box but takes floats instead of doubles.</p>
-<h4>See Also:</h4><p><a href="#giza_box">giza_box</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_axis">giza_axis</a> </p><h3><a name="giza_box_time">giza_box_time</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>    void</td><td width=20%></td><td>     giza_box_time (const char *xopt, double xtick, int nxsub, const char *yopt, double ytick, int nysub) ;</td></tr></table><p>Same as giza_box, but labels axes with time-style labels i.e. DD HH MM SS as used in RA - DEC plots for Astronomy. If this option is used then giza_set_window should have been called with min/max given in seconds of time.</p>
 <h4>Input:</h4>
