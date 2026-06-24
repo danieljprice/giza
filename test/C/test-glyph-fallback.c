@@ -27,23 +27,20 @@ test_text_fallback (uint32_t unicode_value, const char *utf8_input,
   char output_text[64];
   char input_text[16];
   const char *result;
+  const char *expected;
 
   if (strlen (utf8_input) >= sizeof input_text)
     return 0;
   strcpy (input_text, utf8_input);
 
-  if (_giza_font_has_glyph (unicode_value))
-    {
-      printf ("Skipping U+%04X: glyph present in Times\n", (unsigned) unicode_value);
-      return 1;
-    }
+  expected = _giza_font_has_glyph (unicode_value) ? input_text : expected_fallback;
 
   result = _giza_apply_glyph_fallback (input_text, output_text, sizeof output_text);
-  if (strcmp (result, expected_fallback) != 0)
+  if (strcmp (result, expected) != 0)
     {
       fprintf (stderr,
                "U+%04X fallback: got \"%s\", expected \"%s\"\n",
-               (unsigned) unicode_value, result, expected_fallback);
+               (unsigned) unicode_value, result, expected);
       return 0;
     }
   return 1;
@@ -55,15 +52,14 @@ test_degree_fallback_chained (void)
   char output_text[64];
   const char *result;
   const char *expected;
+  const char *input_text = "\xc2\xb0";
 
   if (_giza_font_has_glyph (0x00b0))
-    {
-      printf ("Skipping degree chain: U+00B0 present in Times\n");
-      return 1;
-    }
+    expected = input_text;
+  else
+    expected = _giza_font_has_glyph (0x1d52) ? "\xe1\xb5\x92" : "o";
 
-  expected = _giza_font_has_glyph (0x1d52) ? "\u1d52" : "o";
-  result = _giza_apply_glyph_fallback ("\xc2\xb0", output_text, sizeof output_text);
+  result = _giza_apply_glyph_fallback (input_text, output_text, sizeof output_text);
   if (strcmp (result, expected) != 0)
     {
       fprintf (stderr,
@@ -84,8 +80,13 @@ test_marker_fallback (uint32_t unicode_value, const char *utf8_input,
 
   if (_giza_font_has_glyph (unicode_value))
     {
-      printf ("Skipping U+%04X marker fallback: glyph present in Times\n",
-              (unsigned) unicode_value);
+      if (_giza_try_marker_fallback (utf8_input, &marker_number))
+        {
+          fprintf (stderr,
+                   "U+%04X: unexpected marker fallback when glyph present\n",
+                   (unsigned) unicode_value);
+          return 0;
+        }
       return 1;
     }
 

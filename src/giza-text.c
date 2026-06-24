@@ -171,9 +171,9 @@ _giza_glyph_fallback_buffer_overflow (const char *input_text, char *output_text,
 {
   _giza_warning ("_giza_apply_glyph_fallback",
                  "Output buffer too small; text unchanged");
-  strncpy (output_text, input_text, output_size - 1);
-  output_text[output_size - 1] = '\0';
-  return output_text;
+  (void) output_text;
+  (void) output_size;
+  return input_text;
 }
 
 static size_t
@@ -451,17 +451,25 @@ _giza_action_marker_fallback (const char *text, double *width, double *height)
   int marker_number;
   double pen_x, pen_y;
   double cos_angle, sin_angle;
-
-  (void) height;
+  int measuring;
 
   if (!_giza_try_marker_fallback (text, &marker_number))
     return 0;
 
+  measuring = (*width >= 0.);
   cairo_get_current_point (Dev[id].context, &pen_x, &pen_y);
   cos_angle = cos (Dev[id].fontAngle);
   sin_angle = sin (Dev[id].fontAngle);
   _giza_draw_marker_at_pen (pen_x, pen_y, cos_angle, sin_angle,
                             marker_number, width);
+  if (measuring)
+    {
+      double marker_height;
+
+      _giza_get_markerheight (&marker_height);
+      if (marker_height > *height)
+        *height = marker_height;
+    }
   return 1;
 }
 
