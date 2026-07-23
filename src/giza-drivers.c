@@ -357,9 +357,6 @@ _giza_complete_device_open (int draw_background)
   _giza_init_window ();
 
   if (!defer_cairo)
-    giza_set_viewport_default ();
-
-  if (!defer_cairo)
     {
       giza_set_line_width (1);
       _giza_init_fill ();
@@ -367,6 +364,9 @@ _giza_complete_device_open (int draw_background)
       _giza_init_save ();
       giza_set_clipping (1);
     }
+
+  if (!defer_cairo)
+    giza_set_viewport_default ();
 
   return id + 1;
 }
