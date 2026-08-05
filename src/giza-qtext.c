@@ -178,18 +178,18 @@ giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
       *ylen = *ylen / Dev[id].height;
       break;
     case GIZA_UNITS_PIXELS:
-      *xlen = *xlen * Dev[id].deviceUnitsPerPixel;
-      *ylen = *ylen * Dev[id].deviceUnitsPerPixel;
+      *xlen = *xlen / Dev[id].deviceUnitsPerPixel;
+      *ylen = *ylen / Dev[id].deviceUnitsPerPixel;
       break;
     case GIZA_UNITS_DEVICE:
       break;
     case GIZA_UNITS_MM:
-      *xlen = *xlen * Dev[id].deviceUnitsPermm;
-      *ylen = *ylen * Dev[id].deviceUnitsPermm;
+      *xlen = *xlen / Dev[id].deviceUnitsPermm;
+      *ylen = *ylen / Dev[id].deviceUnitsPermm;
       break;
     case GIZA_UNITS_INCHES:
-      *xlen = *xlen * Dev[id].deviceUnitsPermm/25.4;
-      *ylen = *ylen * Dev[id].deviceUnitsPermm/25.4;
+      *xlen = *xlen / Dev[id].deviceUnitsPermm / 25.4;
+      *ylen = *ylen / Dev[id].deviceUnitsPermm / 25.4;
       break;
     case GIZA_UNITS_WORLD:
       _giza_set_trans (GIZA_TRANS_NORM);

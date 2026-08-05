@@ -184,16 +184,16 @@ giza_get_character_size (int units, double *heightx, double *heighty)
    switch (units)
    {
    case GIZA_UNITS_PIXELS:
-      *heightx = *heightx * Dev[id].deviceUnitsPerPixel;
-      *heighty = *heighty * Dev[id].deviceUnitsPerPixel;
+      *heightx = *heightx / Dev[id].deviceUnitsPerPixel;
+      *heighty = *heighty / Dev[id].deviceUnitsPerPixel;
       break;
    case GIZA_UNITS_MM:
-      *heightx = *heightx * Dev[id].deviceUnitsPermm;
-      *heighty = *heighty * Dev[id].deviceUnitsPermm;
+      *heightx = *heightx / Dev[id].deviceUnitsPermm;
+      *heighty = *heighty / Dev[id].deviceUnitsPermm;
       break;
    case GIZA_UNITS_INCHES:
-      *heightx = *heightx * Dev[id].deviceUnitsPermm/25.4;
-      *heighty = *heighty * Dev[id].deviceUnitsPermm/25.4;
+      *heightx = *heightx / Dev[id].deviceUnitsPermm / 25.4;
+      *heighty = *heighty / Dev[id].deviceUnitsPermm / 25.4;
       break;
    default:
      break;
