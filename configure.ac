@@ -92,6 +92,22 @@ PKG_CHECK_MODULES([X11], [x11], [], [AC_SUBST(X11_LIBS,$x11_libs)])
 PKG_CHECK_MODULES([FT], [freetype2], [], [AC_SUBST(FT_LIBS,$ft_libs_osx)  AC_SUBST(FT_CFLAGS,$ft_cflags_osx)])
 PKG_CHECK_MODULES([FC], [fontconfig], [], [AC_SUBST(FC_LIBS,$fc_libs_osx) AC_SUBST(FC_CFLAGS,$fc_cflags_osx)])
 
+# --- X window driver ---
+# Check for the Cairo X11 backend
+AC_MSG_CHECKING([for cairo xlib backend])
+giza_save_CPPFLAGS=$CPPFLAGS
+CPPFLAGS="$CPPFLAGS $CAIRO_CFLAGS $X11_CFLAGS"
+AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([[#include <cairo/cairo-xlib.h>
+#include <X11/Xlib.h>]],
+                     [[cairo_surface_t *s = cairo_xlib_surface_create (NULL, 0, NULL, 1, 1);
+(void) s;]])],
+    [HAVE_CAIRO_XLIB=yes],
+    [HAVE_CAIRO_XLIB=no])
+CPPFLAGS=$giza_save_CPPFLAGS
+AC_MSG_RESULT([$HAVE_CAIRO_XLIB])
+AM_CONDITIONAL([HAVE_CAIRO_XLIB],[test "x$HAVE_CAIRO_XLIB" = "xyes"])
+
 # --- macOS native Quartz window driver ---
 OSXCOCOA_CFLAGS=""
 OSXCOCOA_LIBS=""
