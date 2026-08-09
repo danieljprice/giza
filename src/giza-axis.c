@@ -227,8 +227,11 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
               val = (i + logTab[j]) * intervalMin;
               ratio = (val - v1) / (v2 - v1);
 
-              /* don't draw outside the box */
-              if ((val >= v2) || (val <= v1))
+              /* don't draw outside the axis range, but DO draw ticks at
+               * the endpoints themselves, as PGPLOT's pgaxis.f does */
+              double vtol = 1.e-10 * fabs (v2 - v1);
+              if ((val > ((v1 > v2) ? v1 : v2) + vtol) ||
+                  (val < ((v1 < v2) ? v1 : v2) - vtol))
                 continue;
               /* are we supposed to draw this tick anyway? */
               if ( !((major && draw_majticks) || draw_minticks) )

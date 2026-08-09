@@ -31,6 +31,7 @@
 #include "giza-tick-private.h"
 #include <giza.h>
 #include <math.h>
+#include <stdio.h>
 
 /**
  * Drawing: giza_tick
@@ -102,6 +103,13 @@ giza_tick (double x1, double y1, double x2, double y2, double v,
     {
       cairo_move_to (Dev[id].context, x - tickr*tikx, y - tickr*tiky);
       cairo_line_to (Dev[id].context, x + tickl*tikx, y + tickl*tiky);
+      /* stroke immediately: giza_ptext below resets the cairo path, so
+       * a deferred stroke would lose the tick whenever a label is given */
+      int lc0;
+      giza_get_line_cap (&lc0);
+      giza_set_line_cap (CAIRO_LINE_CAP_SQUARE);
+      _giza_stroke ();
+      giza_set_line_cap (lc0);
     }
 
   /* write the label, with PGPLOT's justification and displacement
