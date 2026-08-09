@@ -1,0 +1,20 @@
+libgiza_la-giza-character-size.lo: giza-character-size.c giza-private.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-version.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-features.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-deprecated.h \
+ giza-drivers-private.h giza-io-private.h giza-transforms-private.h \
+ giza.h giza-shared.h giza-version.h \
+ /usr/local/gfortran/lib/gcc/aarch64-apple-darwin24/14.2.0/include/stddef.h
+giza-private.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-version.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-features.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-deprecated.h:
+giza-drivers-private.h:
+giza-io-private.h:
+giza-transforms-private.h:
+giza.h:
+giza-shared.h:
+giza-version.h:
+/usr/local/gfortran/lib/gcc/aarch64-apple-darwin24/14.2.0/include/stddef.h:

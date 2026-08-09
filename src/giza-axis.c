@@ -178,6 +178,9 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
     {
       cairo_move_to (Dev[id].context, x1, y1);
       cairo_line_to (Dev[id].context, x2, y2);
+      /* stroke immediately: giza_ptext below resets the cairo path,
+       * so a deferred stroke would lose the axis line */
+      _giza_stroke ();
     }
 
   /* set major tick length in pixels */

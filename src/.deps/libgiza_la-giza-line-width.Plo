@@ -1,0 +1,17 @@
+libgiza_la-giza-line-width.lo: giza-line-width.c giza-private.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-version.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-features.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-deprecated.h \
+ giza-transforms-private.h giza-io-private.h giza.h giza-shared.h \
+ giza-version.h
+giza-private.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-version.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-features.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-deprecated.h:
+giza-transforms-private.h:
+giza-io-private.h:
+giza.h:
+giza-shared.h:
+giza-version.h:

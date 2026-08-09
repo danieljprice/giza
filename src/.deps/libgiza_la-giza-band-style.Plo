@@ -1,0 +1,17 @@
+libgiza_la-giza-band-style.lo: giza-band-style.c giza-private.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-version.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-features.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-deprecated.h \
+ giza-io-private.h giza-band-private.h giza.h giza-shared.h \
+ giza-version.h
+giza-private.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-version.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-features.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-deprecated.h:
+giza-io-private.h:
+giza-band-private.h:
+giza.h:
+giza-shared.h:
+giza-version.h:
