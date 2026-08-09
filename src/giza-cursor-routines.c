@@ -126,9 +126,10 @@ _giza_mark_with_cursor (int maxpts, int *npts, double* xpts, double* ypts,
              }
              if (mode == GIZA_BAND_LINE && *npts > 1)
                {
-                 /*giza_move(xpts[*npts-2],ypts[*npts-2]);
+                 /* draw the committed segment, as PGPLOT PGLCUR does
+                  * ("a line is drawn joining each point to the previous") */
+                 giza_move(xpts[*npts-2],ypts[*npts-2]);
                  giza_draw(xpts[*npts-1],ypts[*npts-1]);
-                */
                } else {
                  giza_single_point(x,y,symbol);
                }
