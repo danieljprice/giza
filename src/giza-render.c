@@ -496,10 +496,24 @@ giza_render_gray_shade (int sizex, int sizey, const double* data, int i1,
                 int extend, int filter, const double *affine)
 {
   giza_save_colour_table();
-  giza_set_colour_table_gray ();
-  /* giza_render maps valMin (bg) to index 0 and valMax (fg) to index 99,
-   * so an inverted image (fg < bg) is handled without inverting the table */
-  giza_render (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+  if (fg >= bg)
+    {
+      giza_set_colour_table_gray ();
+      giza_render (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+    }
+  else
+    {
+      /* fg < bg requests a negative image (PGGRAY interpolates the shade
+       * from bg to fg, so swapped levels invert). The value normalisation
+       * in giza-itf.c is symmetric under min/max exchange, so the
+       * inversion cannot come from swapping valMin/valMax - use a
+       * white->black ramp with the levels in ascending order instead */
+      double cp[2], ramp[2];
+      cp[0] = 0.; ramp[0] = 1.;
+      cp[1] = 1.; ramp[1] = 0.;
+      giza_set_colour_table (cp, ramp, ramp, ramp, 2, 1., 0.5);
+      giza_render (sizex, sizey, data, i1, i2, j1, j2, fg, bg, extend, filter, affine);
+    }
   giza_restore_colour_table();
 }
 
@@ -516,8 +530,20 @@ giza_render_gray_shade_float (int sizex, int sizey, const float* data, int i1,
                 int extend, int filter, const float *affine)
 {
   giza_save_colour_table();
-  giza_set_colour_table_gray();
-  giza_render_float (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+  if (fg >= bg)
+    {
+      giza_set_colour_table_gray();
+      giza_render_float (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+    }
+  else
+    {
+      /* negative image: see giza_render_gray_shade */
+      double cp[2], ramp[2];
+      cp[0] = 0.; ramp[0] = 1.;
+      cp[1] = 1.; ramp[1] = 0.;
+      giza_set_colour_table (cp, ramp, ramp, ramp, 2, 1., 0.5);
+      giza_render_float (sizex, sizey, data, i1, i2, j1, j2, fg, bg, extend, filter, affine);
+    }
   giza_restore_colour_table();
 }
 
