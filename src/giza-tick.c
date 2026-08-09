@@ -85,9 +85,12 @@ giza_tick (double x1, double y1, double x2, double y2, double v,
 
   /* (tikx,tiky): world-coordinate displacement of one character height
    * perpendicular to the axis, pointing to the screen-left of the
-   * direction of travel (x1,y1) -> (x2,y2), as in pgtick.f */
-  double xch, ych;
-  giza_get_character_size (GIZA_UNITS_DEVICE, &xch, &ych);
+   * direction of travel (x1,y1) -> (x2,y2), as in pgtick.f.
+   * PGPLOT's "character height" unit here is PGQCS/PGYSP = the line
+   * spacing, which pgsch.f defines geometrically as ch x height/40 of
+   * the view surface - NOT a font metric (cairo font extents vary by
+   * device, PGPLOT's unit must not) */
+  double ych = Dev[id].ch * Dev[id].panelheight / 40.;
   double tikx = ddy/dlen * ych;
   double tiky = -ddx/dlen * ych;
   cairo_device_to_user_distance (Dev[id].context, &tikx, &tiky);
