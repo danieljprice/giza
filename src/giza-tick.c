@@ -65,45 +65,72 @@ giza_tick (double x1, double y1, double x2, double y2, double v,
 
   _giza_expand_clipping ();
 
-  double currentTickL_l;
-  double currentTickL_r;
-  double x,y,theta,theta_deg,dr;
-
-  theta = atan2(y2-y1,x2-x1);
-  theta_deg = theta / GIZA_DEG_TO_RAD;
-  dr = sqrt(pow(x2-x1,2) + pow(y2-y1,2));
-
-  cairo_matrix_t mat;
-  cairo_matrix_init_translate(&mat,x1,y1);
-  cairo_matrix_rotate(&mat,theta);
-
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
+  /* This routine follows PGPLOT's pgtick.f closely so that tick sides,
+   * label position, justification and rotation agree with PGPLOT in
+   * every window orientation (including mirrored x or y axes). */
+
+  /* axis direction in device coords (device y runs down) */
+  double ddx = x2 - x1, ddy = y2 - y1;
+  cairo_user_to_device_distance (Dev[id].context, &ddx, &ddy);
+  double dlen = sqrt (ddx*ddx + ddy*ddy);
+  if (_giza_equal (dlen, 0.))
+    {
+      _giza_set_trans (oldTrans);
+      return;
+    }
+  double theta_screen_deg = -atan2 (ddy, ddx) / GIZA_DEG_TO_RAD;
+
+  /* (tikx,tiky): world-coordinate displacement of one character height
+   * perpendicular to the axis, pointing to the screen-left of the
+   * direction of travel (x1,y1) -> (x2,y2), as in pgtick.f */
   double xch, ych;
-  giza_get_character_size (GIZA_UNITS_WORLD, &xch, &ych);
+  giza_get_character_size (GIZA_UNITS_DEVICE, &xch, &ych);
+  double tikx = ddy/dlen * ych;
+  double tiky = -ddx/dlen * ych;
+  cairo_device_to_user_distance (Dev[id].context, &tikx, &tiky);
 
-  /* set major tick length in pixels */
-  currentTickL_l = Dev[id].fontExtents.max_x_advance * tickl;
-  currentTickL_r = Dev[id].fontExtents.max_x_advance * tickr;
-  double TickL_l_tmp = 0.;
-  double TickL_r_tmp = 0.;
+  /* draw the tick mark at fraction v along the axis */
+  double x = x1 + v*(x2 - x1);
+  double y = y1 + v*(y2 - y1);
+  if (!(_giza_equal(tickl,0.) && _giza_equal(tickr,0.)))
+    {
+      cairo_move_to (Dev[id].context, x - tickr*tikx, y - tickr*tiky);
+      cairo_line_to (Dev[id].context, x + tickl*tikx, y + tickl*tiky);
+    }
 
-  /* convert to world coords */
-  cairo_device_to_user_distance (Dev[id].context, &TickL_l_tmp, &currentTickL_l);
-  cairo_device_to_user_distance (Dev[id].context, &TickL_r_tmp, &currentTickL_r);
-  currentTickL_l = -currentTickL_l;
-  currentTickL_r = -currentTickL_r;
-
-  _giza_draw_tick(mat,v,dr,currentTickL_l,currentTickL_r);
-
-  /* write the label */
-  x = dr * v;
-  y = ych * disp;
-  cairo_matrix_transform_point (&mat,&x,&y);
-  giza_ptext (x, y, theta_deg + angle, 0.5, label);
-
-  /*_giza_stroke ();*/
+  /* write the label, with PGPLOT's justification and displacement
+   * rules for each quadrant of the orientation angle */
+  if (label && label[0] != '\0')
+    {
+      double d = disp;
+      double lang = theta_screen_deg;
+      double just;
+      double or = fmod (angle, 360.);
+      if (or < 0.) or += 360.;
+      if (or > 45. && or <= 135.)
+        {
+          just = (d < 0.) ? 1. : 0.;
+        }
+      else if (or > 135. && or <= 225.)
+        {
+          just = 0.5;
+          if (d < 0.) d = d - 1.;
+        }
+      else if (or > 225. && or <= 315.)
+        {
+          lang = lang + 90.;
+          just = (d < 0.) ? 0. : 1.;
+        }
+      else
+        {
+          just = 0.5;
+          if (d > 0.) d = d + 1.;
+        }
+      giza_ptext (x - d*tikx, y - d*tiky, lang - or, just, label);
+    }
 
   /* stroke all the paths */
   int lc;
