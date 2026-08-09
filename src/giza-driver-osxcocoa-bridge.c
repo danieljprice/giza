@@ -319,7 +319,6 @@ _giza_get_key_press_osxcocoa (int mode, int moveCurs,
                           double *x, double *y, char *ch)
 {
     (void) moveCurs;
-    (void) nanc;
 
     int oldTrans = _giza_get_trans();
     _giza_set_trans(GIZA_TRANS_WORLD);
@@ -327,10 +326,19 @@ _giza_get_key_press_osxcocoa (int mode, int moveCurs,
     float fx, fy;
     /* attach + wait + detach on main thread to avoid deadlock */
     if (mode > 0) {
-        /* Convert anchor world coords to device (surface) coords for band overlay */
-        double axd = xanc[0], ayd = yanc[0];
+        /* Convert anchor world coords to device (surface) coords for band
+         * overlay. Use the LAST anchor: for polyline entry (pglcur) the
+         * anchors are all committed points and the elastic line must
+         * connect to the most recent one, as the xw driver does. */
+        double axd = xanc[nanc-1], ayd = yanc[nanc-1];
         cairo_user_to_device(Dev[id].context, &axd, &ayd);
-        _giza_osxcocoa_wait_for_event_band(id, mode, (float)axd, (float)ayd, &fx, &fy, ch);
+        /* band drawn in the current colour index, as PGPLOT does */
+        int bandci;
+        double bandr, bandg, bandb;
+        giza_get_colour_index (&bandci);
+        giza_get_colour_representation (bandci, &bandr, &bandg, &bandb);
+        _giza_osxcocoa_wait_for_event_band(id, mode, (float)axd, (float)ayd,
+                                           (float)bandr, (float)bandg, (float)bandb, &fx, &fy, ch);
     } else {
         _giza_osxcocoa_wait_for_event(id, &fx, &fy, ch);
     }

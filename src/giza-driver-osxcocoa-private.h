@@ -62,6 +62,7 @@ void         _giza_osxcocoa_wait_for_event       (int devId,
                                              float *x, float *y, char *ch);
 void         _giza_osxcocoa_wait_for_event_band  (int devId, int mode,
                                              float xancSurface, float yancSurface,
+                                             float bandR, float bandG, float bandB,
                                              float *x, float *y, char *ch);
 
 #endif /* __APPLE__ */
