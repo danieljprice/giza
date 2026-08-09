@@ -30,6 +30,7 @@
 #include "giza-transforms-private.h"
 #include "giza-character-size-private.h"
 #include "giza-band-private.h"
+#include <X11/cursorfont.h>
 
 #ifdef _GIZA_HAS_XW
 
@@ -458,6 +459,10 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
   _giza_init_band (mode);
   _giza_expand_clipping_xw();
 
+  /* show a live crosshair cursor while waiting for input, as PGPLOT does */
+  Cursor livecursor = XCreateFontCursor (XW[id].display, XC_crosshair);
+  XDefineCursor (XW[id].display, XW[id].window, livecursor);
+
  while(1) {
 
     /* wait for key press/expose (avoid using XNextEvent as breaks older systems) */
@@ -472,11 +477,14 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
     case ClientMessage: /* catch close window event */
       *ch = 'q';
        if ((Atom)event.xclient.data.l[0] == wmDeleteMessage) {
+          XUndefineCursor (XW[id].display, XW[id].window);
+          XFreeCursor (XW[id].display, livecursor);
           return;
        }
        break;
     case DestroyNotify:
       *ch = 'q';
+      XFreeCursor (XW[id].display, livecursor);
       return;
     case Expose: /* redraw */
       _giza_expose_xw (&event);
@@ -502,6 +510,8 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
           _giza_destroy_band (mode);
           _giza_flush_xw_event_queue(&event);
           _giza_reset_clipping_xw();
+          XUndefineCursor (XW[id].display, XW[id].window);
+          XFreeCursor (XW[id].display, livecursor);
          return;
        };
 
@@ -544,6 +554,8 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
         _giza_destroy_band (mode);
         _giza_flush_xw_event_queue(&event);
         _giza_reset_clipping_xw();
+        XUndefineCursor (XW[id].display, XW[id].window);
+        XFreeCursor (XW[id].display, livecursor);
         return;
       }
     case MotionNotify:

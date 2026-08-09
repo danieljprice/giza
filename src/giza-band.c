@@ -112,6 +112,13 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
   if (mode <= 0 || mode > GIZA_MAX_BAND_MODES) return;
   if (nanc <= 0) return;
 
+  /* draw the band in the current foreground colour, as PGPLOT does */
+  int bandci;
+  double bandr, bandg, bandb;
+  giza_get_colour_index (&bandci);
+  giza_get_colour_representation (bandci, &bandr, &bandg, &bandb);
+  cairo_set_source_rgba (Band.box, bandr, bandg, bandb, 1.);
+
   /* Draw over the old band */
   cairo_paint (Band.restore);
   giza_flush_device();
@@ -148,9 +155,9 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
        /* Draw the band */
         for (j=0;j<=1;j++) {
            if (j==0) {
-              cairo_set_source_rgba (Band.box,1.,1.,1.,0.2);
+              cairo_set_source_rgba (Band.box, bandr, bandg, bandb, 0.2);
            } else {
-              cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
+              cairo_set_source_rgba (Band.box, bandr, bandg, bandb, 1.0);
            }
           cairo_move_to (Band.box, xanc[0], yanc[0]);
            for (i=1;i<=nanc-1;i++) {
@@ -171,7 +178,7 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
         cairo_set_source_rgba(Band.box,1.,1.,1.,0.2);
         cairo_rectangle (Band.box, x1, y1, x2 - x1, y2 - y1);
         cairo_fill(Band.box);
-        cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
+        cairo_set_source_rgba (Band.box, bandr, bandg, bandb, 1.0);
         cairo_rectangle (Band.box, x1, y1, x2 - x1, y2 - y1);
         cairo_stroke(Band.box);
        break;
@@ -210,7 +217,7 @@ _giza_refresh_band (int mode, int nanc, const int *xanc, const int *yanc, int x2
         cairo_set_source_rgba(Band.box,1.,1.,1.,0.2);
         cairo_arc (Band.box, x1, y1, sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)), 0., 2 * M_PI);
         cairo_fill(Band.box);
-        cairo_set_source_rgba (Band.box, 0.6, 0.6, 0.6, 1.0);
+        cairo_set_source_rgba (Band.box, bandr, bandg, bandb, 1.0);
         cairo_arc (Band.box, x1, y1, sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)), 0., 2 * M_PI);
         cairo_stroke (Band.box);
        break;
