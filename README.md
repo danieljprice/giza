@@ -16,6 +16,7 @@ Features
 - Written in standard C with a Fortran 90/95/2003 interface
 - Compiles as a standalone library or can be incorporated into other codes
 - Interface routines handle both float and double precision input
+- Streamplot of 2D vector fields
 - Easily called from Fortran/C/C++ code
 - Originally written as a backend for SPLASH, in stable use now for more than 15 years
 
