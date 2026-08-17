@@ -384,6 +384,15 @@ giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
 		   int i1, int i2, int j1, int j2, float scale, int position,
 		   const float* affine, float blank);
 
+void
+giza_streamplot (int n, int m, const double *u, const double *v,
+		 int i1, int i2, int j1, int j2, double density,
+		 const double *affine, double blank);
+void
+giza_streamplot_float (int n, int m, const float *u, const float *v,
+		       int i1, int i2, int j1, int j2, float density,
+		       const float *affine, float blank);
+
 void giza_set_viewport (double xleft, double xright, double ybottom,
 			double ytop);
 void giza_set_viewport_float (float xleft, float xright, float ybottom,
