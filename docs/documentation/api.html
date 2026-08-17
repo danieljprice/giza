@@ -113,6 +113,8 @@
 <dd><a href="#giza_draw_pixels_float">giza_draw_pixels_float</a></dd>
 <dd><a href="#giza_streamplot">giza_streamplot</a></dd>
 <dd><a href="#giza_streamplot_float">giza_streamplot_float</a></dd>
+<dd><a href="#_giza_streamplot_core">_giza_streamplot_core</a></dd>
+<dd><a href="#_giza_stream_draw">_giza_stream_draw</a></dd>
 <dd><a href="#giza_tick">giza_tick</a></dd>
 <dd><a href="#giza_tick_float">giza_tick_float</a></dd>
 <dd><a href="#giza_vector">giza_vector</a></dd>
@@ -1012,7 +1014,33 @@
 </tr></table><h4>See Also:</h4><p><a href="#giza_streamplot_float">giza_streamplot_float</a> <a href="#giza_vector">giza_vector</a> <a href="#giza_arrow">giza_arrow</a> <a href="#giza_line">giza_line</a> </p><h3><a name="giza_streamplot_float">giza_streamplot_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_streamplot_float</td><td> (int n, int m, const float *u, const float *v, int i1, int i2, int j1, int j2, float density, const float *affine, float blank) ;</td></tr></table><p>Same as giza_streamplot but takes floats</p>
-<h4>See Also:</h4><p><a href="#giza_streamplot">giza_streamplot</a> </p><h3><a name="giza_tick">giza_tick</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_streamplot">giza_streamplot</a> </p><h3><a name="_giza_streamplot_core">_giza_streamplot_core</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>static void</td><td width=20%>_giza_streamplot_core</td><td> (int n, int m, const double *u, const double *v, int i1, int i2, int j1, int j2, double density, const double *affine, double blank) ;</td></tr></table><p>Build an occupancy mask, seed streamlines from the centre outward, integrate each candidate in both directions, and draw those that exceed the minimum length.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n, m     :</td><td>Grid dimensions</td>
+</tr><tr>
+<td>u, v     :</td><td>Vector field components</td>
+</tr><tr>
+<td>i1, i2   :</td><td>Inclusive x index range</td>
+</tr><tr>
+<td>j1, j2   :</td><td>Inclusive y index range</td>
+</tr><tr>
+<td>density  :</td><td>Line spacing control</td>
+</tr><tr>
+<td>affine   :</td><td>Pixel-to-world transform</td>
+</tr><tr>
+<td>blank    :</td><td>Sentinel for empty cells</td>
+</tr></table><h3><a name="_giza_stream_draw">_giza_stream_draw</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>static void</td><td width=20%>_giza_stream_draw</td><td> (giza_stream_t *s, const double *xg, const double *yg, int npts) ;</td></tr></table><p>Transform grid coordinates to world space, draw the streamline with giza_line, and add a direction arrow with giza_arrow.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>s              :</td><td>Streamplot context (affine transform)</td>
+</tr><tr>
+<td>xg, yg, npts   :</td><td>Polyline in fractional grid coordinates</td>
+</tr></table><h3><a name="giza_tick">giza_tick</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_tick</td><td> (double x1, double y1, double x2, double y2, double v, double tickl, double tickr, double disp, double angle, const char *label) ;</td></tr></table><p>Draw a single tick along an axis. The axis extends from (x1,y1) to (x2,y2) and the tick is drawn perpendicular to the axis which is not drawn by this routine. Optional text label drawn parallel to the axis if the orientation angle is zero</p>
 <h4>Input:</h4>
