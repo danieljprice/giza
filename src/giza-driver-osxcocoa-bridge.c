@@ -237,6 +237,10 @@ _giza_open_device_osxcocoa (double width, double height, int units)
 void
 _giza_osxcocoa_prepare_draw (void)
 {
+    /* Keep programmatic paper size until change_page applies the resize. */
+    if (Dev[id].resize)
+        return;
+
     if (_osxcocoa_sync_device_to_view())
         _osxcocoa_recreate_surface();
 }

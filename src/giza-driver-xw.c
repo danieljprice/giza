@@ -63,6 +63,9 @@ struct GIZA_XWindow
   int pixelsize;
   int screensize;
   int in_use;
+  /* Set when XResizeWindow is issued; cleared once window geometry matches.
+   * Stops prepare_draw from treating async resize lag as a user resize. */
+  int resize_pending;
 } XW[GIZA_MAX_DEVICES];
 
 #define GIZA_DEFAULT_WIDTH 800
@@ -353,10 +356,21 @@ _giza_prepare_draw_xw (void)
   /* already in sync — nothing to do */
   if ((unsigned int) XW[id].width == width_return
       && (unsigned int) XW[id].height == height_return)
+    {
+      XW[id].resize_pending = 0;
+      return;
+    }
+
+  /* Programmatic paper-size change: XResizeWindow is asynchronous. Until the
+   * window catches up, keep the requested size rather than reverting Dev from
+   * stale geometry (breaks splash Hollywood mode resize / background). */
+  if (Dev[id].resize || XW[id].resize_pending)
     return;
 
   _xw_sync_device_to_window (width_return, height_return);
   _xw_recreate_surface ();
+  /* Surface recreate wipes the page; restore background colour immediately. */
+  giza_draw_background ();
 }
 
 /**
@@ -380,8 +394,9 @@ _giza_change_page_xw (void)
      XW[id].width  = Dev[id].width + 2 * GIZA_XW_MARGIN;
      XW[id].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
 
-     /* Request window to be resized */
+     /* Request window to be resized (async; see resize_pending in prepare_draw) */
      XResizeWindow(XW[id].display, XW[id].window, (unsigned) XW[id].width, (unsigned) XW[id].height);
+     XW[id].resize_pending = 1;
   } else if( (unsigned int)XW[id].width!=width_return || (unsigned int)XW[id].height!=height_return ) {
       /* Oh. Someone probably resized the XWindow behind our backs. Handle that here */
       _xw_sync_device_to_window (width_return, height_return);
