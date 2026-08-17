@@ -84,6 +84,7 @@
     int     _surfW;      /* source surface size (for full-width lines) */
     int     _surfH;
     CGRect  _displayRect;/* same letterbox rect as parent GizaView */
+    float   _bandR, _bandG, _bandB; /* band colour (current colour index) */
 }
 - (instancetype)initWithFrame:(NSRect)frame
                          mode:(int)mode
@@ -91,6 +92,7 @@
                       surfaceSize:(NSSize)ss
                       displayRect:(CGRect)dr;
 - (void)updateCursor:(NSPoint)surfPt displayRect:(CGRect)dr;
+- (void)setBandColorR:(float)r G:(float)g B:(float)b;
 @end
 
 @implementation GizaBandView
@@ -109,6 +111,7 @@
         _surfW  = (int)ss.width;
         _surfH  = (int)ss.height;
         _displayRect = dr;
+        _bandR = 0.9f; _bandG = 0.9f; _bandB = 0.9f;
     }
     return self;
 }
@@ -131,14 +134,16 @@
 - (void)drawRect:(NSRect)dirtyRect
 {
     CGContextRef ctx = [[NSGraphicsContext currentContext] CGContext];
-    CGContextClearRect(ctx, NSRectToCGRect(self.bounds));
-
+    /* NOTE: no CGContextClearRect here. On a non-layer-backed transparent
+     * view it punches through the composited backing store to the window
+     * background (white), blanking the whole plot during cursor input.
+     * AppKit has already composited the views beneath us. */
     if (_mode <= 0) return;
 
-    /* Style: white line with 40% opacity fill for area modes */
+    /* Style: current colour index, translucent fill for area modes */
     CGContextSetLineWidth(ctx, 1.5);
-    CGContextSetRGBStrokeColor(ctx, 0.9, 0.9, 0.9, 1.0);
-    CGContextSetRGBFillColor  (ctx, 1.0, 1.0, 1.0, 0.15);
+    CGContextSetRGBStrokeColor(ctx, _bandR, _bandG, _bandB, 1.0);
+    CGContextSetRGBFillColor  (ctx, _bandR, _bandG, _bandB, 0.15);
 
     CGPoint a = [self _viewPtFromSurface:_anchor];
     CGPoint c = [self _viewPtFromSurface:_cursor];
@@ -216,6 +221,11 @@
     [self setNeedsDisplay:YES];
 }
 
+- (void)setBandColorR:(float)r G:(float)g B:(float)b
+{
+    _bandR = r; _bandG = g; _bandB = b;
+}
+
 @end
 
 /* ======================================================================== */
@@ -253,7 +263,7 @@
 - (NSPoint)surfacePointFromViewPoint:(NSPoint)vp;
 - (NSPoint)currentMouseViewPoint;
 /* band control */
-- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc;
+- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc colorR:(float)r G:(float)g B:(float)b;
 - (void)detachBandView;
 @end
 
@@ -431,7 +441,7 @@
 }
 
 /* Attach a GizaBandView overlay */
-- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc
+- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc colorR:(float)r G:(float)g B:(float)b
 {
     [self detachBandView];
     NSSize ss = NSMakeSize(_pixelWidth > 0 ? _pixelWidth : (int)self.bounds.size.width,
@@ -442,6 +452,7 @@
                            anchor:anc
                       surfaceSize:ss
                       displayRect:_displayRect];
+    [_bandView setBandColorR:r G:g B:b];
     [self addSubview:_bandView];
     _bandActive = YES;
 }
@@ -713,6 +724,7 @@ _giza_osxcocoa_wait_for_event(int devId, float *x, float *y, char *ch)
 void
 _giza_osxcocoa_wait_for_event_band(int devId, int mode,
                                    float xancSurface, float yancSurface,
+                                   float bandR, float bandG, float bandB,
                                    float *x, float *y, char *ch)
 {
     if (!_osxcocoa_inuse[devId]) { *ch='q'; return; }
@@ -721,7 +733,7 @@ _giza_osxcocoa_wait_for_event_band(int devId, int mode,
     __block char c = ' ';
     _run_on_main(^{
         NSPoint anc = NSMakePoint(xancSurface, yancSurface);
-        [view attachBandViewMode:mode anchorSurfacePt:anc];
+        [view attachBandViewMode:mode anchorSurfacePt:anc colorR:bandR G:bandG B:bandB];
         [view waitForInputEventWithBand];
         pt = [view lastEventPoint];
         c  = [view lastEventChar];
