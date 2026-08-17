@@ -659,10 +659,14 @@ HAVE_OSXCOCOA_FALSE
 HAVE_OSXCOCOA_TRUE
 OSXCOCOA_LIBS
 OSXCOCOA_CFLAGS
+HAVE_CAIRO_XLIB_FALSE
+HAVE_CAIRO_XLIB_TRUE
 FC_LIBS
 FC_CFLAGS
 FT_LIBS
 FT_CFLAGS
+HAVE_X11_FALSE
+HAVE_X11_TRUE
 X11_LIBS
 X11_CFLAGS
 CAIRO_LIBS
@@ -18290,6 +18294,7 @@ esac
 # cairo and X11 libraries. Use pkg-config if available but provide fallback options if not (OS/X)
 #
 x11_libs="-L/usr/X11/lib -lX11"
+x11_cflags_osx="-I/usr/X11/include"
 cairo_libs_osx="-L/usr/X11/lib -lcairo"
 cairo_cflags_osx="-I/usr/X11/include"
 ft_libs_osx="-L/usr/X11/lib -lfreetype"
@@ -18580,11 +18585,13 @@ fi
         echo "$X11_PKG_ERRORS" >&5
 
         X11_LIBS=$x11_libs
+ X11_CFLAGS=$x11_cflags_osx
 
 elif test $pkg_failed = untried; then
         { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
 printf "%s\n" "no" >&6; }
         X11_LIBS=$x11_libs
+ X11_CFLAGS=$x11_cflags_osx
 
 else
         X11_CFLAGS=$pkg_cv_X11_CFLAGS
@@ -18593,6 +18600,47 @@ else
 printf "%s\n" "yes" >&6; }
 
 fi
+
+# --- X11 library support ---
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for X11" >&5
+printf %s "checking for X11... " >&6; }
+giza_save_CPPFLAGS=$CPPFLAGS
+giza_save_LIBS=$LIBS
+CPPFLAGS="$CPPFLAGS $X11_CFLAGS"
+LIBS="$X11_LIBS $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <X11/Xlib.h>
+int
+main (void)
+{
+Display *d = XOpenDisplay(NULL); (void)d;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+  HAVE_X11=yes
+else case e in #(
+  e) HAVE_X11=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS=$giza_save_CPPFLAGS
+LIBS=$giza_save_LIBS
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $HAVE_X11" >&5
+printf "%s\n" "$HAVE_X11" >&6; }
+ if test "x$HAVE_X11" = "xyes"; then
+  HAVE_X11_TRUE=
+  HAVE_X11_FALSE='#'
+else
+  HAVE_X11_TRUE='#'
+  HAVE_X11_FALSE=
+fi
+
+
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for freetype2" >&5
@@ -18743,6 +18791,49 @@ else
 printf "%s\n" "yes" >&6; }
 
 fi
+
+# --- X window driver ---
+# Check for the Cairo X11 backend
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for cairo xlib backend" >&5
+printf %s "checking for cairo xlib backend... " >&6; }
+giza_save_CPPFLAGS=$CPPFLAGS
+giza_save_LIBS=$LIBS
+CPPFLAGS="$CPPFLAGS $CAIRO_CFLAGS $X11_CFLAGS"
+LIBS="$CAIRO_LIBS $X11_LIBS $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <cairo/cairo-xlib.h>
+#include <X11/Xlib.h>
+int
+main (void)
+{
+cairo_surface_t *s = cairo_xlib_surface_create (NULL, 0, NULL, 1, 1);
+(void) s;
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"
+then :
+  HAVE_CAIRO_XLIB=yes
+else case e in #(
+  e) HAVE_CAIRO_XLIB=no ;;
+esac
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam \
+    conftest$ac_exeext conftest.$ac_ext
+CPPFLAGS=$giza_save_CPPFLAGS
+LIBS=$giza_save_LIBS
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $HAVE_CAIRO_XLIB" >&5
+printf "%s\n" "$HAVE_CAIRO_XLIB" >&6; }
+ if test "x$HAVE_CAIRO_XLIB" = "xyes"; then
+  HAVE_CAIRO_XLIB_TRUE=
+  HAVE_CAIRO_XLIB_FALSE='#'
+else
+  HAVE_CAIRO_XLIB_TRUE='#'
+  HAVE_CAIRO_XLIB_FALSE=
+fi
+
 
 # --- macOS native Quartz window driver ---
 OSXCOCOA_CFLAGS=""
@@ -18975,6 +19066,14 @@ Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_FC_TRUE}" && test -z "${HAVE_FC_FALSE}"; then
   as_fn_error $? "conditional \"HAVE_FC\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_X11_TRUE}" && test -z "${HAVE_X11_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_X11\" was never defined.
+Usually this means the macro was only invoked conditionally." "$LINENO" 5
+fi
+if test -z "${HAVE_CAIRO_XLIB_TRUE}" && test -z "${HAVE_CAIRO_XLIB_FALSE}"; then
+  as_fn_error $? "conditional \"HAVE_CAIRO_XLIB\" was never defined.
 Usually this means the macro was only invoked conditionally." "$LINENO" 5
 fi
 if test -z "${HAVE_OSXCOCOA_TRUE}" && test -z "${HAVE_OSXCOCOA_FALSE}"; then

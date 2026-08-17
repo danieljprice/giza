@@ -90,8 +90,10 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @HAVE_OSXCOCOA_TRUE@am__append_1 = ../../src/libgiza-osxcocoa-main.la
+@HAVE_CAIRO_XLIB_TRUE@am__append_2 = test-cairo-xw
+@HAVE_X11_TRUE@am__append_3 = test-XOpenDisplay
 TESTS = $(am__EXEEXT_1)
-check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2)
+check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_4)
 subdir = test/C
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -114,17 +116,19 @@ am__EXEEXT_1 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
 	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT) \
 	test-pggray$(EXEEXT) test-page-semantics$(EXEEXT) \
 	test-streamplot$(EXEEXT)
-am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
-	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
-	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
-	test-environment$(EXEEXT) test-error-bars$(EXEEXT) \
-	test-giza-xw$(EXEEXT) test-line-cap$(EXEEXT) \
-	test-line-style$(EXEEXT) test-openclose$(EXEEXT) \
-	test-points$(EXEEXT) test-qtext$(EXEEXT) \
-	test-rectangle$(EXEEXT) test-set-line-width$(EXEEXT) \
-	test-vector$(EXEEXT) test-window$(EXEEXT) \
-	test-XOpenDisplay$(EXEEXT) test-contour$(EXEEXT) \
-	test-render$(EXEEXT) test-band$(EXEEXT)
+@HAVE_CAIRO_XLIB_TRUE@am__EXEEXT_2 = test-cairo-xw$(EXEEXT)
+@HAVE_X11_TRUE@am__EXEEXT_3 = test-XOpenDisplay$(EXEEXT)
+am__EXEEXT_4 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
+	test-change-page$(EXEEXT) test-circle$(EXEEXT) \
+	test-colour-index$(EXEEXT) test-environment$(EXEEXT) \
+	test-error-bars$(EXEEXT) test-giza-xw$(EXEEXT) \
+	test-line-cap$(EXEEXT) test-line-style$(EXEEXT) \
+	test-openclose$(EXEEXT) test-points$(EXEEXT) \
+	test-qtext$(EXEEXT) test-rectangle$(EXEEXT) \
+	test-set-line-width$(EXEEXT) test-vector$(EXEEXT) \
+	test-window$(EXEEXT) test-contour$(EXEEXT) \
+	test-render$(EXEEXT) test-band$(EXEEXT) $(am__EXEEXT_2) \
+	$(am__EXEEXT_3)
 test_XOpenDisplay_SOURCES = test-XOpenDisplay.c
 test_XOpenDisplay_OBJECTS = test-XOpenDisplay.$(OBJEXT)
 am__DEPENDENCIES_1 =
@@ -749,7 +753,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CFLAGS = $(WERROR_CFLAGS) $(WARN_CFLAGS)
 AM_CPPFLAGS = -I../../src -I../../include $(CAIRO_CFLAGS) $(X11_CFLAGS)
-AM_LDFLAGS = -no-install -lm -lX11
+AM_LDFLAGS = -no-install -lm
 LDADD = ../../src/libgiza.la $(am__append_1)
 CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
 CLEANFILES = *.png *.pdf *.svg
@@ -761,15 +765,12 @@ auto_ctests = test-format-number test-giza-round test-glyph-fallback test-pdf te
 
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
-interactive_ctests = test-arrow test-box test-cairo-xw test-change-page \
-	test-circle test-colour-index \
-	test-environment \
-	test-error-bars test-giza-xw test-line-cap \
-	test-line-style test-openclose test-points \
-	test-qtext test-rectangle test-set-line-width \
-	test-vector test-window test-XOpenDisplay test-contour test-render \
-	test-band
-
+interactive_ctests = test-arrow test-box test-change-page test-circle \
+	test-colour-index test-environment test-error-bars \
+	test-giza-xw test-line-cap test-line-style test-openclose \
+	test-points test-qtext test-rectangle test-set-line-width \
+	test-vector test-window test-contour test-render test-band \
+	$(am__append_2) $(am__append_3)
 test_cpgpnts_LDADD = $(CPGPLOT_LDADD)
 test_cpgconb_LDADD = $(CPGPLOT_LDADD)
 test_cpgconf_LDADD = $(CPGPLOT_LDADD)
