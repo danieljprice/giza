@@ -68,6 +68,7 @@ esac
 # cairo and X11 libraries. Use pkg-config if available but provide fallback options if not (OS/X)
 #
 x11_libs="-L/usr/X11/lib -lX11"
+x11_cflags_osx="-I/usr/X11/include"
 cairo_libs_osx="-L/usr/X11/lib -lcairo"
 cairo_cflags_osx="-I/usr/X11/include"
 ft_libs_osx="-L/usr/X11/lib -lfreetype"
@@ -88,7 +89,24 @@ PKG_CHECK_MODULES([CAIRO], [cairo],
         AC_SUBST(CAIRO_LIBS,$cairo_libs_osx)
         AC_SUBST(CAIRO_CFLAGS,$cairo_cflags_osx)
     ])
-PKG_CHECK_MODULES([X11], [x11], [], [AC_SUBST(X11_LIBS,$x11_libs)])
+PKG_CHECK_MODULES([X11], [x11], [], [AC_SUBST(X11_LIBS,$x11_libs) AC_SUBST(X11_CFLAGS,$x11_cflags_osx)])
+
+# --- X11 library support ---
+AC_MSG_CHECKING([for X11])
+giza_save_CPPFLAGS=$CPPFLAGS
+giza_save_LIBS=$LIBS
+CPPFLAGS="$CPPFLAGS $X11_CFLAGS"
+LIBS="$X11_LIBS $LIBS"
+AC_LINK_IFELSE(
+    [AC_LANG_PROGRAM([[#include <X11/Xlib.h>]],
+                     [[Display *d = XOpenDisplay(NULL); (void)d;]])],
+    [HAVE_X11=yes],
+    [HAVE_X11=no])
+CPPFLAGS=$giza_save_CPPFLAGS
+LIBS=$giza_save_LIBS
+AC_MSG_RESULT([$HAVE_X11])
+AM_CONDITIONAL([HAVE_X11],[test "x$HAVE_X11" = "xyes"])
+
 PKG_CHECK_MODULES([FT], [freetype2], [], [AC_SUBST(FT_LIBS,$ft_libs_osx)  AC_SUBST(FT_CFLAGS,$ft_cflags_osx)])
 PKG_CHECK_MODULES([FC], [fontconfig], [], [AC_SUBST(FC_LIBS,$fc_libs_osx) AC_SUBST(FC_CFLAGS,$fc_cflags_osx)])
 
