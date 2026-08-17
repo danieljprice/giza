@@ -112,7 +112,7 @@ am__EXEEXT_1 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
 	test-cpgconb$(EXEEXT) test-cpgconf$(EXEEXT) \
 	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
 	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT) \
-	test-pggray$(EXEEXT)
+	test-pggray$(EXEEXT) test-page-semantics$(EXEEXT)
 am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
 	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
@@ -225,6 +225,11 @@ test_openclose_SOURCES = test-openclose.c
 test_openclose_OBJECTS = test-openclose.$(OBJEXT)
 test_openclose_LDADD = $(LDADD)
 test_openclose_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_page_semantics_SOURCES = test-page-semantics.c
+test_page_semantics_OBJECTS = test-page-semantics.$(OBJEXT)
+test_page_semantics_LDADD = $(LDADD)
+test_page_semantics_DEPENDENCIES = ../../src/libgiza.la \
+	$(am__append_1)
 test_pdf_SOURCES = test-pdf.c
 test_pdf_OBJECTS = test-pdf.$(OBJEXT)
 test_pdf_LDADD = $(LDADD)
@@ -302,7 +307,8 @@ am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-giza-round.Po ./$(DEPDIR)/test-giza-xw.Po \
 	./$(DEPDIR)/test-glyph-fallback.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
-	./$(DEPDIR)/test-openclose.Po ./$(DEPDIR)/test-pdf.Po \
+	./$(DEPDIR)/test-openclose.Po \
+	./$(DEPDIR)/test-page-semantics.Po ./$(DEPDIR)/test-pdf.Po \
 	./$(DEPDIR)/test-pggray.Po ./$(DEPDIR)/test-png.Po \
 	./$(DEPDIR)/test-points.Po ./$(DEPDIR)/test-qtext.Po \
 	./$(DEPDIR)/test-rectangle.Po ./$(DEPDIR)/test-render.Po \
@@ -335,10 +341,11 @@ SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
 	test-giza-round.c test-giza-xw.c test-glyph-fallback.c \
-	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
-	test-pggray.c test-png.c test-points.c test-qtext.c \
-	test-rectangle.c test-render.c test-set-line-width.c \
-	test-svg.c test-unicode.c test-vector.c test-window.c
+	test-line-cap.c test-line-style.c test-openclose.c \
+	test-page-semantics.c test-pdf.c test-pggray.c test-png.c \
+	test-points.c test-qtext.c test-rectangle.c test-render.c \
+	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
+	test-window.c
 DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cairo-device.c test-cairo-xw.c test-change-page.c \
 	test-circle.c test-colour-index.c test-contour.c \
@@ -346,10 +353,11 @@ DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
 	test-giza-round.c test-giza-xw.c test-glyph-fallback.c \
-	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
-	test-pggray.c test-png.c test-points.c test-qtext.c \
-	test-rectangle.c test-render.c test-set-line-width.c \
-	test-svg.c test-unicode.c test-vector.c test-window.c
+	test-line-cap.c test-line-style.c test-openclose.c \
+	test-page-semantics.c test-pdf.c test-pggray.c test-png.c \
+	test-points.c test-qtext.c test-rectangle.c test-render.c \
+	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
+	test-window.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -618,6 +626,7 @@ FCFLAGS = @FCFLAGS@
 FC_CFLAGS = @FC_CFLAGS@
 FC_LIBS = @FC_LIBS@
 FGREP = @FGREP@
+FILECMD = @FILECMD@
 FT_CFLAGS = @FT_CFLAGS@
 FT_LIBS = @FT_LIBS@
 GIZA_VERSION_MAJOR = @GIZA_VERSION_MAJOR@
@@ -741,7 +750,8 @@ CLEANFILES = *.png *.pdf *.svg
 
 # Tests that run non-interactively (file-based devices only)
 auto_ctests = test-format-number test-giza-round test-glyph-fallback test-pdf test-png test-svg test-unicode test-cairo-device \
-	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray
+	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray \
+	test-page-semantics
 
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
@@ -907,6 +917,10 @@ test-openclose$(EXEEXT): $(test_openclose_OBJECTS) $(test_openclose_DEPENDENCIES
 	@rm -f test-openclose$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_openclose_OBJECTS) $(test_openclose_LDADD) $(LIBS)
 
+test-page-semantics$(EXEEXT): $(test_page_semantics_OBJECTS) $(test_page_semantics_DEPENDENCIES) $(EXTRA_test_page_semantics_DEPENDENCIES) 
+	@rm -f test-page-semantics$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_page_semantics_OBJECTS) $(test_page_semantics_LDADD) $(LIBS)
+
 test-pdf$(EXEEXT): $(test_pdf_OBJECTS) $(test_pdf_DEPENDENCIES) $(EXTRA_test_pdf_DEPENDENCIES) 
 	@rm -f test-pdf$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_pdf_OBJECTS) $(test_pdf_LDADD) $(LIBS)
@@ -987,6 +1001,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-cap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-style.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-openclose.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-page-semantics.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pdf.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pggray.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-png.Po@am__quote@ # am--include-marker
@@ -1363,6 +1378,13 @@ test-pggray.log: test-pggray$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-page-semantics.log: test-page-semantics$(EXEEXT)
+	@p='test-page-semantics$(EXEEXT)'; \
+	b='test-page-semantics'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -1483,6 +1505,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-line-cap.Po
 	-rm -f ./$(DEPDIR)/test-line-style.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
+	-rm -f ./$(DEPDIR)/test-page-semantics.Po
 	-rm -f ./$(DEPDIR)/test-pdf.Po
 	-rm -f ./$(DEPDIR)/test-pggray.Po
 	-rm -f ./$(DEPDIR)/test-png.Po
@@ -1566,6 +1589,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-line-cap.Po
 	-rm -f ./$(DEPDIR)/test-line-style.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
+	-rm -f ./$(DEPDIR)/test-page-semantics.Po
 	-rm -f ./$(DEPDIR)/test-pdf.Po
 	-rm -f ./$(DEPDIR)/test-pggray.Po
 	-rm -f ./$(DEPDIR)/test-png.Po

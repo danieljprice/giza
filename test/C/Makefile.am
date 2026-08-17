@@ -13,7 +13,8 @@ endif
 
 # Tests that run non-interactively (file-based devices only)
 auto_ctests = test-format-number test-giza-round test-glyph-fallback test-pdf test-png test-svg test-unicode test-cairo-device \
-	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray
+	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray \
+	test-page-semantics
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
 interactive_ctests = test-arrow test-box test-cairo-xw test-change-page \
