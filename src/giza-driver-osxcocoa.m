@@ -351,14 +351,13 @@
 - (void)setFrameSize:(NSSize)sz
 {
     [super setFrameSize:sz];
-    /* Cairo surface sync happens on replot via _giza_prepare_interactive_draw,
-     * or when live resize ends (onWindowDidEndLiveResize). */
+    /* Cairo surface sync happens on replot via _giza_prepare_interactive_draw */
     [self setNeedsDisplay:YES];
 }
 
 /**
- * User finished dragging the window. Sync giza Dev size; if splash registered
- * a motion callback, deliver 'r' so interactive mode replots automatically.
+ * User finished dragging the window. If a motion callback is registered,
+ * deliver 'r' so interactive mode can replot; prepare_draw syncs the surface then.
  */
 - (void)onWindowDidEndLiveResize:(NSNotification *)note
 {

@@ -69,6 +69,10 @@ struct GIZA_XWindow
   int resize_pending;
   /* User resized the window (ConfigureNotify); replot when mouse button released */
   int resize_dirty;
+  /* Cached window background from last successful XAllocColor (ci 0) */
+  int bg_cached;
+  double bg_r, bg_g, bg_b;
+  unsigned long bg_pixel;
 } XW[GIZA_MAX_DEVICES];
 
 #define GIZA_DEFAULT_WIDTH 800
@@ -289,6 +293,14 @@ _xw_sync_window_background (void)
     return;
 
   giza_get_colour_representation_alpha (0, &r, &g, &b, &a);
+
+  if (XW[id].bg_cached
+      && XW[id].bg_r == r && XW[id].bg_g == g && XW[id].bg_b == b)
+    {
+      XSetWindowBackground (XW[id].display, XW[id].window, XW[id].bg_pixel);
+      return;
+    }
+
   xc.red   = (unsigned short) (r * 65535.0 + 0.5);
   xc.green = (unsigned short) (g * 65535.0 + 0.5);
   xc.blue  = (unsigned short) (b * 65535.0 + 0.5);
@@ -300,16 +312,13 @@ _xw_sync_window_background (void)
   if (!XAllocColor (XW[id].display, XW[id].colormap, &xc))
     return;
 
-  XSetWindowBackground (XW[id].display, XW[id].window, xc.pixel);
-}
+  XW[id].bg_cached = 1;
+  XW[id].bg_r = r;
+  XW[id].bg_g = g;
+  XW[id].bg_b = b;
+  XW[id].bg_pixel = xc.pixel;
 
-/**
- * Public wrapper so colour-index updates can refresh the window background.
- */
-void
-_giza_sync_window_background_xw (void)
-{
-  _xw_sync_window_background ();
+  XSetWindowBackground (XW[id].display, XW[id].window, xc.pixel);
 }
 
 /**
@@ -426,14 +435,13 @@ _xw_recreate_surface (void)
 }
 
 /**
- * Apply a reported window size: sync Dev, recreate surface, redraw background.
+ * Apply a reported window size: sync Dev, recreate surface (fills background).
  */
 static void
 _xw_apply_window_size (unsigned int wwin, unsigned int hwin)
 {
   _xw_sync_device_to_window (wwin, hwin);
   _xw_recreate_surface ();
-  giza_draw_background ();
   XW[id].resize_pending = 0;
 }
 
@@ -601,7 +609,7 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
  * Update: do not recreate the cairo pixmap whilst waiting for key press
  *         (neither does PGPLOT) — Expose keeps copying the old pixel map so
  *         the previous plot stays visible during a drag-resize.  When a motion
- *         callback is set (splash), return 'r' after the user releases the
+ *         callback is set, return 'r' after the user releases the
  *         mouse so the application can replot at the final size.
  */
 static void
@@ -644,6 +652,9 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
            && event.xclient.format == 32
            && (Atom) event.xclient.data.l[0] == wmDeleteMessage) {
           *ch = 'q';
+          _giza_destroy_band (mode);
+          _giza_flush_xw_event_queue (&event);
+          _giza_reset_clipping_xw ();
           XUndefineCursor (XW[id].display, XW[id].window);
           XFreeCursor (XW[id].display, livecursor);
           XFlush (XW[id].display);
@@ -652,6 +663,8 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
        break;
     case DestroyNotify:
       *ch = 'q';
+      _giza_destroy_band (mode);
+      _giza_reset_clipping_xw ();
       XFreeCursor (XW[id].display, livecursor);
       return;
     case Expose: /* redraw */
@@ -676,16 +689,24 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
           }
 
         /*
+         * Programmatic / pending paper-size change: adopt final geometry later
+         * via prepare_draw; never schedule an automatic 'r' from this path.
+         */
+        if (XW[id].resize_pending || Dev[id].resize)
+          break;
+
+        /*
          * User drag-resize: do not recreate/clear the cairo pixmap here.
          * Expose keeps blitting the old pixel map until the mouse is released;
-         * then splash gets 'r' and prepare_draw syncs to the final size.
+         * then return 'r' (if a motion callback is set) so the client can
+         * replot and prepare_draw syncs to the final size.
          */
         if (Dev[id].motion_callback != NULL)
           XW[id].resize_dirty = 1;
         break;
       }
     case ButtonRelease:
-      /* End of resize drag: button up after ConfigureNotify (splash) */
+      /* End of resize drag: button up after ConfigureNotify */
       if (XW[id].resize_dirty && Dev[id].motion_callback != NULL)
         {
           XW[id].resize_dirty = 0;

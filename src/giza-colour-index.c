@@ -26,7 +26,6 @@
 #include "giza-private.h"
 #include "giza-io-private.h"
 #include "giza-drivers-private.h"
-#include "giza-driver-xw-private.h"
 #include <stdio.h>
 #include <giza.h>
 #include <math.h>
@@ -151,12 +150,6 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
      make the change teke effect immediately
    */
   if (ci == _giza_ci) giza_set_colour_index(ci);
-
-  /* Keep X window Expose margins matching the plot background */
-#ifdef _GIZA_HAS_XW
-  if (ci == 0 && Dev[id].type == GIZA_DEVICE_XW)
-    _giza_sync_window_background_xw ();
-#endif
 }
 
 /**
