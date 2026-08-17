@@ -45,6 +45,7 @@ typedef struct
   double blank;
   int mask_nx, mask_ny;
   unsigned char *mask;
+  unsigned char *cur;
   cairo_matrix_t mat;
 } giza_stream_t;
 
@@ -60,7 +61,6 @@ static int _giza_stream_sample (const giza_stream_t *s, double x, double y,
 static int _giza_stream_in_mask (const giza_stream_t *s, double x, double y,
                                  int *mx, int *my);
 static int _giza_seed_cmp (const void *a, const void *b);
-static int _giza_occ_contains (const int *occ, int nocc, int k);
 static int _giza_stream_integrate (giza_stream_t *s, double x0, double y0,
                                    int direction, double maxlength,
                                    double *xpts, double *ypts, int *npts,
@@ -117,7 +117,7 @@ giza_streamplot_float (int n, int m, const float *u, const float *v,
                        int i1, int i2, int j1, int j2, float density,
                        const float *affine, float blank)
 {
-  int np, i;
+  size_t np, i;
   double *ud, *vd, affd[6];
 
   if (!_giza_check_device_ready ("giza_streamplot"))
@@ -126,9 +126,9 @@ giza_streamplot_float (int n, int m, const float *u, const float *v,
   if (n <= 0 || m <= 0)
     return;
 
-  np = n * m;
-  ud = malloc ((size_t) np * sizeof (double));
-  vd = malloc ((size_t) np * sizeof (double));
+  np = (size_t) n * (size_t) m;
+  ud = malloc (np * sizeof (double));
+  vd = malloc (np * sizeof (double));
   if (ud == NULL || vd == NULL)
     {
       _giza_error ("giza_streamplot", "memory allocation failed");
@@ -152,6 +152,22 @@ giza_streamplot_float (int n, int m, const float *u, const float *v,
   free (vd);
 }
 
+/**
+ * Drawing: _giza_streamplot_core
+ *
+ * Synopsis: Build an occupancy mask, seed streamlines from the centre
+ * outward, integrate each candidate in both directions, and draw those
+ * that exceed the minimum length.
+ *
+ * Input:
+ *  -n, m     :- Grid dimensions
+ *  -u, v     :- Vector field components
+ *  -i1, i2   :- Inclusive x index range
+ *  -j1, j2   :- Inclusive y index range
+ *  -density  :- Line spacing control
+ *  -affine   :- Pixel-to-world transform
+ *  -blank    :- Sentinel for empty cells
+ */
 static void
 _giza_streamplot_core (int n, int m, const double *u, const double *v,
                        int i1, int i2, int j1, int j2, double density,
@@ -161,10 +177,9 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
   giza_seed_t *seeds;
   int mx, my, nback, nfwd, ntot, i, nseed, iseed, nocc, oldBuf;
   double x0, y0, minlength, maxlength, length, cx, cy, dx, dy;
-  double xback[STREAM_MAX_PTS], yback[STREAM_MAX_PTS];
-  double xfwd[STREAM_MAX_PTS], yfwd[STREAM_MAX_PTS];
-  double xline[STREAM_MAX_PTS], yline[STREAM_MAX_PTS];
-  int occ[STREAM_MAX_PTS];
+  double *xback, *yback, *xfwd, *yfwd, *xline, *yline;
+  int *occ;
+  size_t nbuf;
 
   if (i1 < 0 || i2 >= n || i1 > i2)
     {
@@ -200,11 +215,38 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
                      affine[4], affine[5]);
 
   s.mask = calloc ((size_t) s.mask_nx * (size_t) s.mask_ny, 1);
+  s.cur = calloc ((size_t) s.mask_nx * (size_t) s.mask_ny, 1);
   seeds = malloc ((size_t) s.mask_nx * (size_t) s.mask_ny * sizeof (giza_seed_t));
-  if (s.mask == NULL || seeds == NULL)
+  if (s.mask == NULL || s.cur == NULL || seeds == NULL)
     {
       _giza_error ("giza_streamplot", "memory allocation failed");
       free (s.mask);
+      free (s.cur);
+      free (seeds);
+      return;
+    }
+
+  nbuf = (size_t) STREAM_MAX_PTS;
+  xback = malloc (nbuf * sizeof (double));
+  yback = malloc (nbuf * sizeof (double));
+  xfwd = malloc (nbuf * sizeof (double));
+  yfwd = malloc (nbuf * sizeof (double));
+  xline = malloc (nbuf * sizeof (double));
+  yline = malloc (nbuf * sizeof (double));
+  occ = malloc (nbuf * sizeof (int));
+  if (xback == NULL || yback == NULL || xfwd == NULL || yfwd == NULL
+      || xline == NULL || yline == NULL || occ == NULL)
+    {
+      _giza_error ("giza_streamplot", "memory allocation failed");
+      free (xback);
+      free (yback);
+      free (xfwd);
+      free (yfwd);
+      free (xline);
+      free (yline);
+      free (occ);
+      free (s.mask);
+      free (s.cur);
       free (seeds);
       return;
     }
@@ -298,16 +340,39 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
             s.mask[occ[i]] = 1;
           _giza_stream_draw (&s, xline, yline, ntot);
         }
+
+      /* clear per-trajectory markers for the next seed attempt */
+      for (i = 0; i < nocc; i++)
+        s.cur[occ[i]] = 0;
     }
 
   if (!oldBuf)
     giza_end_buffer ();
 
   giza_flush_device ();
+  free (xback);
+  free (yback);
+  free (xfwd);
+  free (yfwd);
+  free (xline);
+  free (yline);
+  free (occ);
   free (s.mask);
+  free (s.cur);
   free (seeds);
 }
 
+/**
+ * Internal: _giza_seed_cmp
+ *
+ * Synopsis: qsort comparator for seed points: sort by squared distance
+ * from the mask centre, then by mx and my for deterministic tie-breaking.
+ *
+ * Input:
+ *  -a, b :- Pointers to giza_seed_t records
+ *
+ * Returns: -1, 0, or 1 for qsort ordering
+ */
 static int
 _giza_seed_cmp (const void *a, const void *b)
 {
@@ -324,19 +389,18 @@ _giza_seed_cmp (const void *a, const void *b)
   return pa->my - pb->my;
 }
 
-static int
-_giza_occ_contains (const int *occ, int nocc, int k)
-{
-  int i;
-
-  for (i = 0; i < nocc; i++)
-    {
-      if (occ[i] == k)
-        return 1;
-    }
-  return 0;
-}
-
+/**
+ * Internal: _giza_stream_blank
+ *
+ * Synopsis: Return 1 if grid cell (i,j) is outside the plot range or both
+ * components equal the blank sentinel.
+ *
+ * Input:
+ *  -s   :- Streamplot context (grid bounds, u/v arrays, blank value)
+ *  -i,j :- Grid indices
+ *
+ * Returns: 1 if blank/unusable, 0 otherwise
+ */
 static int
 _giza_stream_blank (const giza_stream_t *s, int i, int j)
 {
@@ -349,6 +413,19 @@ _giza_stream_blank (const giza_stream_t *s, int i, int j)
   return (_giza_equal (ui, s->blank) && _giza_equal (vi, s->blank));
 }
 
+/**
+ * Internal: _giza_stream_sample
+ *
+ * Synopsis: Bilinear interpolation of u and v at fractional grid
+ * coordinates (x,y).
+ *
+ * Input:
+ *  -s           :- Streamplot context
+ *  -x, y        :- Fractional grid coordinates
+ *  -uout, vout  :- Output interpolated components
+ *
+ * Returns: 1 on success, 0 if out of range or any corner is blank
+ */
 static int
 _giza_stream_sample (const giza_stream_t *s, double x, double y,
                      double *uout, double *vout)
@@ -407,6 +484,19 @@ _giza_stream_sample (const giza_stream_t *s, double x, double y,
   return 1;
 }
 
+/**
+ * Internal: _giza_stream_in_mask
+ *
+ * Synopsis: Map fractional grid coordinates to the occupancy mask cell
+ * indices (mx, my), clamped to the mask bounds.
+ *
+ * Input:
+ *  -s        :- Streamplot context
+ *  -x, y     :- Fractional grid coordinates
+ *  -mx, my   :- Output mask cell indices
+ *
+ * Returns: 1 (always succeeds after clamping)
+ */
 static int
 _giza_stream_in_mask (const giza_stream_t *s, double x, double y,
                       int *mx, int *my)
@@ -424,6 +514,24 @@ _giza_stream_in_mask (const giza_stream_t *s, double x, double y,
   return 1;
 }
 
+/**
+ * Internal: _giza_stream_integrate
+ *
+ * Synopsis: Integrate one streamline half with adaptive RK2 (Heun) steps
+ * along the given direction, tracking occupancy cells in occ[] and cur[].
+ *
+ * Input:
+ *  -s          :- Streamplot context
+ *  -x0, y0     :- Starting position in grid coordinates
+ *  -direction  :- +1 forward or -1 backward along the field
+ *  -maxlength  :- Maximum arc length in grid units
+ *  -xpts, ypts :- Output trajectory coordinates
+ *  -npts       :- Number of points written (updated)
+ *  -occ, nocc  :- Mask cells visited on this trajectory
+ *  -noccmax    :- Maximum occ[] entries
+ *
+ * Returns: final npts value
+ */
 static int
 _giza_stream_integrate (giza_stream_t *s, double x0, double y0, int direction,
                         double maxlength, double *xpts, double *ypts,
@@ -469,11 +577,13 @@ _giza_stream_integrate (giza_stream_t *s, double x0, double y0, int direction,
         {
           /* stop on a cell already used by this trajectory or a previous
            * line, otherwise closed orbits retrace themselves until maxlength */
-          if (*npts > 0
-              && (s->mask[k] || _giza_occ_contains (occ, *nocc, k)))
+          if (*npts > 0 && (s->mask[k] || s->cur[k]))
             break;
-          if (!_giza_occ_contains (occ, *nocc, k) && *nocc < noccmax)
-            occ[(*nocc)++] = k;
+          if (!s->cur[k] && *nocc < noccmax)
+            {
+              s->cur[k] = 1;
+              occ[(*nocc)++] = k;
+            }
           mxprev = mx;
           myprev = my;
         }
@@ -532,6 +642,20 @@ _giza_stream_integrate (giza_stream_t *s, double x0, double y0, int direction,
   return *npts;
 }
 
+/**
+ * Internal: _giza_stream_arrow_index
+ *
+ * Synopsis: Choose the segment index for the direction arrow using
+ * arc length along the drawn line, with a per-seed phase hash so nested
+ * orbits do not align their arrows radially.
+ *
+ * Input:
+ *  -xw, yw :- World-coordinate polyline
+ *  -npts   :- Number of vertices
+ *  -x0, y0 :- Seed position in grid coordinates (for phase hash)
+ *
+ * Returns: segment index imid with 1 <= imid < npts
+ */
 static int
 _giza_stream_arrow_index (const double *xw, const double *yw, int npts,
                           double x0, double y0)
@@ -567,13 +691,33 @@ _giza_stream_arrow_index (const double *xw, const double *yw, int npts,
   return imid;
 }
 
+/**
+ * Drawing: _giza_stream_draw
+ *
+ * Synopsis: Transform grid coordinates to world space, draw the
+ * streamline with giza_line, and add a direction arrow with giza_arrow.
+ *
+ * Input:
+ *  -s              :- Streamplot context (affine transform)
+ *  -xg, yg, npts   :- Polyline in fractional grid coordinates
+ */
 static void
 _giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
                    int npts)
 {
-  double xw[STREAM_MAX_PTS], yw[STREAM_MAX_PTS];
+  double *xw, *yw;
   double xa, ya, xb, yb, dx, dy, len, alen, ux, uy;
   int i, imid;
+
+  xw = malloc ((size_t) npts * sizeof (double));
+  yw = malloc ((size_t) npts * sizeof (double));
+  if (xw == NULL || yw == NULL)
+    {
+      _giza_error ("giza_streamplot", "memory allocation failed");
+      free (xw);
+      free (yw);
+      return;
+    }
 
   for (i = 0; i < npts; i++)
     {
@@ -589,7 +733,11 @@ _giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
   dy = yw[imid] - yw[imid - 1];
   len = hypot (dx, dy);
   if (len < GIZA_ZERO_DOUBLE)
-    return;
+    {
+      free (xw);
+      free (yw);
+      return;
+    }
   ux = dx / len;
   uy = dy / len;
   /* arrow length of about 0.8 data-cell widths in world coordinates */
@@ -601,4 +749,7 @@ _giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
   xb = xw[imid] + 0.5 * alen * ux;
   yb = yw[imid] + 0.5 * alen * uy;
   giza_arrow (xa, ya, xb, yb);
+
+  free (xw);
+  free (yw);
 }
