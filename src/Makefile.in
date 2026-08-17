@@ -186,15 +186,15 @@ am__libgiza_la_SOURCES_DIST = giza-annotate.c giza-arrow-style.c \
 	giza-ptext.c giza-qtext.c giza-rectangle.c giza-render.c \
 	giza-save.c giza-set-font.c giza-stroke.c giza-subpanel.c \
 	giza-text-background.c giza-text.c giza-tick.c \
-	giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
-	giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
-	giza-arrow-style-private.h giza-driver-svg-private.h \
-	giza-stroke-private.h giza-band-private.h \
-	giza-driver-xw-private.h giza-subpanel-private.h \
-	giza-character-size-private.h giza-drivers-private.h \
-	giza-text-background-private.h giza-colour-private.h \
-	giza-fill-private.h giza-text-private.h giza-cursor-private.h \
-	giza-io-private.h giza-tick-private.h \
+	giza-transforms.c giza-vector.c giza-streamplot.c \
+	giza-viewport.c giza-version.c giza-warnings.c giza-window.c \
+	giza.c lex.yy.c giza-itf.c giza-arrow-style-private.h \
+	giza-driver-svg-private.h giza-stroke-private.h \
+	giza-band-private.h giza-driver-xw-private.h \
+	giza-subpanel-private.h giza-character-size-private.h \
+	giza-drivers-private.h giza-text-background-private.h \
+	giza-colour-private.h giza-fill-private.h giza-text-private.h \
+	giza-cursor-private.h giza-io-private.h giza-tick-private.h \
 	giza-transforms-private.h giza-driver-eps-private.h \
 	giza-line-style-private.h giza-version.h \
 	giza-driver-null-private.h giza-driver-cairo-private.h \
@@ -243,10 +243,11 @@ am_libgiza_la_OBJECTS = libgiza_la-giza-annotate.lo \
 	libgiza_la-giza-stroke.lo libgiza_la-giza-subpanel.lo \
 	libgiza_la-giza-text-background.lo libgiza_la-giza-text.lo \
 	libgiza_la-giza-tick.lo libgiza_la-giza-transforms.lo \
-	libgiza_la-giza-vector.lo libgiza_la-giza-viewport.lo \
-	libgiza_la-giza-version.lo libgiza_la-giza-warnings.lo \
-	libgiza_la-giza-window.lo libgiza_la-giza.lo \
-	libgiza_la-lex.yy.lo libgiza_la-giza-itf.lo $(am__objects_1)
+	libgiza_la-giza-vector.lo libgiza_la-giza-streamplot.lo \
+	libgiza_la-giza-viewport.lo libgiza_la-giza-version.lo \
+	libgiza_la-giza-warnings.lo libgiza_la-giza-window.lo \
+	libgiza_la-giza.lo libgiza_la-lex.yy.lo libgiza_la-giza-itf.lo \
+	$(am__objects_1)
 libgiza_la_OBJECTS = $(am_libgiza_la_OBJECTS)
 libgiza_la_LINK = $(LIBTOOL) $(AM_V_lt) $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(OBJCLD) $(libgiza_la_OBJCFLAGS) \
@@ -336,6 +337,7 @@ am__depfiles_remade = ./$(DEPDIR)/libcpgplot_la-giza-cpgplot.Plo \
 	./$(DEPDIR)/libgiza_la-giza-render.Plo \
 	./$(DEPDIR)/libgiza_la-giza-save.Plo \
 	./$(DEPDIR)/libgiza_la-giza-set-font.Plo \
+	./$(DEPDIR)/libgiza_la-giza-streamplot.Plo \
 	./$(DEPDIR)/libgiza_la-giza-stroke.Plo \
 	./$(DEPDIR)/libgiza_la-giza-subpanel.Plo \
 	./$(DEPDIR)/libgiza_la-giza-text-background.Plo \
@@ -625,15 +627,15 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
 	giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
 	giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
 	giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
-	giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
-	giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
-	giza-arrow-style-private.h giza-driver-svg-private.h \
-	giza-stroke-private.h giza-band-private.h \
-	giza-driver-xw-private.h giza-subpanel-private.h \
-	giza-character-size-private.h giza-drivers-private.h \
-	giza-text-background-private.h giza-colour-private.h \
-	giza-fill-private.h giza-text-private.h giza-cursor-private.h \
-	giza-io-private.h giza-tick-private.h \
+	giza-transforms.c giza-vector.c giza-streamplot.c \
+	giza-viewport.c giza-version.c giza-warnings.c giza-window.c \
+	giza.c lex.yy.c giza-itf.c giza-arrow-style-private.h \
+	giza-driver-svg-private.h giza-stroke-private.h \
+	giza-band-private.h giza-driver-xw-private.h \
+	giza-subpanel-private.h giza-character-size-private.h \
+	giza-drivers-private.h giza-text-background-private.h \
+	giza-colour-private.h giza-fill-private.h giza-text-private.h \
+	giza-cursor-private.h giza-io-private.h giza-tick-private.h \
 	giza-transforms-private.h giza-driver-eps-private.h \
 	giza-line-style-private.h giza-version.h \
 	giza-driver-null-private.h giza-driver-cairo-private.h \
@@ -816,6 +818,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-render.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-save.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-set-font.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-streamplot.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-stroke.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-subpanel.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libgiza_la-giza-text-background.Plo@am__quote@ # am--include-marker
@@ -1336,6 +1339,13 @@ libgiza_la-giza-vector.lo: giza-vector.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgiza_la-giza-vector.lo `test -f 'giza-vector.c' || echo '$(srcdir)/'`giza-vector.c
 
+libgiza_la-giza-streamplot.lo: giza-streamplot.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgiza_la-giza-streamplot.lo -MD -MP -MF $(DEPDIR)/libgiza_la-giza-streamplot.Tpo -c -o libgiza_la-giza-streamplot.lo `test -f 'giza-streamplot.c' || echo '$(srcdir)/'`giza-streamplot.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgiza_la-giza-streamplot.Tpo $(DEPDIR)/libgiza_la-giza-streamplot.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='giza-streamplot.c' object='libgiza_la-giza-streamplot.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o libgiza_la-giza-streamplot.lo `test -f 'giza-streamplot.c' || echo '$(srcdir)/'`giza-streamplot.c
+
 libgiza_la-giza-viewport.lo: giza-viewport.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(libgiza_la_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -MT libgiza_la-giza-viewport.lo -MD -MP -MF $(DEPDIR)/libgiza_la-giza-viewport.Tpo -c -o libgiza_la-giza-viewport.lo `test -f 'giza-viewport.c' || echo '$(srcdir)/'`giza-viewport.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/libgiza_la-giza-viewport.Tpo $(DEPDIR)/libgiza_la-giza-viewport.Plo
@@ -1697,6 +1707,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-render.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-save.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-set-font.Plo
+	-rm -f ./$(DEPDIR)/libgiza_la-giza-streamplot.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-stroke.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-subpanel.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-text-background.Plo
@@ -1820,6 +1831,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-render.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-save.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-set-font.Plo
+	-rm -f ./$(DEPDIR)/libgiza_la-giza-streamplot.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-stroke.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-subpanel.Plo
 	-rm -f ./$(DEPDIR)/libgiza_la-giza-text-background.Plo

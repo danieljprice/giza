@@ -141,6 +141,7 @@ module giza
       giza_get_panel, &
       giza_tick, &
       giza_vector, &
+      giza_streamplot, &
       giza_set_viewport_default, &
       giza_set_viewport, &
       giza_get_viewport, &
@@ -1702,6 +1703,26 @@ private
       real(kind=c_float),intent(in),value :: scale,blank
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_vector_float
+ end interface
+
+ interface giza_streamplot
+    subroutine giza_streamplot_double(sizex,sizey,u,v,i1,i2,j1,j2,&
+                                      density,affine,blank) bind(C, name="giza_streamplot")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      real(kind=c_double),intent(in) :: u(sizex,sizey),v(sizex,sizey)
+      real(kind=c_double),intent(in),value :: density,blank
+      real(kind=c_double),intent(in) :: affine(6)
+    end subroutine giza_streamplot_double
+
+    subroutine giza_streamplot_float(sizex,sizey,u,v,i1,i2,j1,j2,&
+                                     density,affine,blank) bind(C)
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      real(kind=c_float),intent(in) :: u(sizex,sizey),v(sizex,sizey)
+      real(kind=c_float),intent(in),value :: density,blank
+      real(kind=c_float),intent(in) :: affine(6)
+    end subroutine giza_streamplot_float
  end interface
 
 

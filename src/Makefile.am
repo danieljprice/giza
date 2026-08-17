@@ -38,7 +38,7 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
        giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
        giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
-       giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
+       giza-transforms.c giza-vector.c giza-streamplot.c giza-viewport.c giza-version.c \
        giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
        giza-arrow-style-private.h giza-driver-svg-private.h giza-stroke-private.h \
        giza-band-private.h giza-driver-xw-private.h giza-subpanel-private.h \

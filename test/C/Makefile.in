@@ -112,7 +112,8 @@ am__EXEEXT_1 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
 	test-cpgconb$(EXEEXT) test-cpgconf$(EXEEXT) \
 	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
 	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT) \
-	test-pggray$(EXEEXT) test-page-semantics$(EXEEXT)
+	test-pggray$(EXEEXT) test-page-semantics$(EXEEXT) \
+	test-streamplot$(EXEEXT)
 am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
 	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
@@ -262,6 +263,10 @@ test_set_line_width_OBJECTS = test-set-line-width.$(OBJEXT)
 test_set_line_width_LDADD = $(LDADD)
 test_set_line_width_DEPENDENCIES = ../../src/libgiza.la \
 	$(am__append_1)
+test_streamplot_SOURCES = test-streamplot.c
+test_streamplot_OBJECTS = test-streamplot.$(OBJEXT)
+test_streamplot_LDADD = $(LDADD)
+test_streamplot_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
 test_svg_SOURCES = test-svg.c
 test_svg_OBJECTS = test-svg.$(OBJEXT)
 test_svg_LDADD = $(LDADD)
@@ -312,7 +317,8 @@ am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-pggray.Po ./$(DEPDIR)/test-png.Po \
 	./$(DEPDIR)/test-points.Po ./$(DEPDIR)/test-qtext.Po \
 	./$(DEPDIR)/test-rectangle.Po ./$(DEPDIR)/test-render.Po \
-	./$(DEPDIR)/test-set-line-width.Po ./$(DEPDIR)/test-svg.Po \
+	./$(DEPDIR)/test-set-line-width.Po \
+	./$(DEPDIR)/test-streamplot.Po ./$(DEPDIR)/test-svg.Po \
 	./$(DEPDIR)/test-unicode.Po ./$(DEPDIR)/test-vector.Po \
 	./$(DEPDIR)/test-window.Po
 am__mv = mv -f
@@ -344,8 +350,8 @@ SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-line-cap.c test-line-style.c test-openclose.c \
 	test-page-semantics.c test-pdf.c test-pggray.c test-png.c \
 	test-points.c test-qtext.c test-rectangle.c test-render.c \
-	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
-	test-window.c
+	test-set-line-width.c test-streamplot.c test-svg.c \
+	test-unicode.c test-vector.c test-window.c
 DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cairo-device.c test-cairo-xw.c test-change-page.c \
 	test-circle.c test-colour-index.c test-contour.c \
@@ -356,8 +362,8 @@ DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-line-cap.c test-line-style.c test-openclose.c \
 	test-page-semantics.c test-pdf.c test-pggray.c test-png.c \
 	test-points.c test-qtext.c test-rectangle.c test-render.c \
-	test-set-line-width.c test-svg.c test-unicode.c test-vector.c \
-	test-window.c
+	test-set-line-width.c test-streamplot.c test-svg.c \
+	test-unicode.c test-vector.c test-window.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -751,7 +757,7 @@ CLEANFILES = *.png *.pdf *.svg
 # Tests that run non-interactively (file-based devices only)
 auto_ctests = test-format-number test-giza-round test-glyph-fallback test-pdf test-png test-svg test-unicode test-cairo-device \
 	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray \
-	test-page-semantics
+	test-page-semantics test-streamplot
 
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
@@ -953,6 +959,10 @@ test-set-line-width$(EXEEXT): $(test_set_line_width_OBJECTS) $(test_set_line_wid
 	@rm -f test-set-line-width$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_set_line_width_OBJECTS) $(test_set_line_width_LDADD) $(LIBS)
 
+test-streamplot$(EXEEXT): $(test_streamplot_OBJECTS) $(test_streamplot_DEPENDENCIES) $(EXTRA_test_streamplot_DEPENDENCIES) 
+	@rm -f test-streamplot$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_streamplot_OBJECTS) $(test_streamplot_LDADD) $(LIBS)
+
 test-svg$(EXEEXT): $(test_svg_OBJECTS) $(test_svg_DEPENDENCIES) $(EXTRA_test_svg_DEPENDENCIES) 
 	@rm -f test-svg$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_svg_OBJECTS) $(test_svg_LDADD) $(LIBS)
@@ -1010,6 +1020,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-rectangle.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-render.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-set-line-width.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-streamplot.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-svg.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-unicode.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-vector.Po@am__quote@ # am--include-marker
@@ -1385,6 +1396,13 @@ test-page-semantics.log: test-page-semantics$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-streamplot.log: test-streamplot$(EXEEXT)
+	@p='test-streamplot$(EXEEXT)'; \
+	b='test-streamplot'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -1514,6 +1532,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-rectangle.Po
 	-rm -f ./$(DEPDIR)/test-render.Po
 	-rm -f ./$(DEPDIR)/test-set-line-width.Po
+	-rm -f ./$(DEPDIR)/test-streamplot.Po
 	-rm -f ./$(DEPDIR)/test-svg.Po
 	-rm -f ./$(DEPDIR)/test-unicode.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
@@ -1598,6 +1617,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-rectangle.Po
 	-rm -f ./$(DEPDIR)/test-render.Po
 	-rm -f ./$(DEPDIR)/test-set-line-width.Po
+	-rm -f ./$(DEPDIR)/test-streamplot.Po
 	-rm -f ./$(DEPDIR)/test-svg.Po
 	-rm -f ./$(DEPDIR)/test-unicode.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
