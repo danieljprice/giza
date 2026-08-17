@@ -232,13 +232,47 @@ _giza_open_device_osxcocoa (double width, double height, int units)
  * Sync NSWindow size to Dev[id] and recreate the cairo surface if needed.
  *
  * Called via _giza_prepare_interactive_draw from giza_get_paper_size and
- * giza_set_viewport (before splash queries aspect ratio in setpage2).
+ * giza_set_viewport (so paper-size / viewport queries see current dimensions).
  */
 void
 _giza_osxcocoa_prepare_draw (void)
 {
+    /* Keep programmatic paper size until change_page applies the resize. */
+    if (Dev[id].resize)
+        return;
+
     if (_osxcocoa_sync_device_to_view())
         _osxcocoa_recreate_surface();
+}
+
+/**
+ * User finished dragging the NSWindow.
+ * Do not recreate the cairo surface here (that would free the buffer while
+ * GizaView still holds _pixelData). Match /xw: keep old pixels until replot
+ * or prepare_draw. Return 1 if a motion callback is set so ObjC
+ * can deliver 'r'.
+ */
+int
+_giza_osxcocoa_on_live_resize_end (int devId)
+{
+    int saved_id;
+    int should_replot;
+
+    if (devId < 0 || devId >= GIZA_MAX_DEVICES)
+        return 0;
+
+    saved_id = id;
+    id = devId;
+
+    if (!Dev[id].deviceOpen || Dev[id].resize)
+      {
+        id = saved_id;
+        return 0;
+      }
+
+    should_replot = (Dev[id].motion_callback != NULL);
+    id = saved_id;
+    return should_replot;
 }
 
 /* ---------------------------------------------------------------------- */

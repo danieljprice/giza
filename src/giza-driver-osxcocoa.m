@@ -265,6 +265,7 @@
 /* band control */
 - (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc colorR:(float)r G:(float)g B:(float)b;
 - (void)detachBandView;
+- (void)onWindowDidEndLiveResize:(NSNotification *)note;
 @end
 
 @implementation GizaView
@@ -282,7 +283,11 @@
     return self;
 }
 
-- (void)dealloc { if (_layer) { CGLayerRelease(_layer); _layer = NULL; } }
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (_layer) { CGLayerRelease(_layer); _layer = NULL; }
+}
 - (BOOL)acceptsFirstResponder { return YES; }
 - (BOOL)isFlipped             { return NO; }
 - (CGLayerRef)cgLayer         { return _layer; }
@@ -348,6 +353,23 @@
     [super setFrameSize:sz];
     /* Cairo surface sync happens on replot via _giza_prepare_interactive_draw */
     [self setNeedsDisplay:YES];
+}
+
+/**
+ * User finished dragging the window. If a motion callback is registered,
+ * deliver 'r' so interactive mode can replot; prepare_draw syncs the surface then.
+ */
+- (void)onWindowDidEndLiveResize:(NSNotification *)note
+{
+    (void)note;
+    if (!_giza_osxcocoa_on_live_resize_end(_devId))
+        return;
+    /* Only interrupt an active cursor wait */
+    if (!_gotEvent) {
+        _eventPt = [self surfacePointFromViewPoint:[self currentMouseViewPoint]];
+        _eventCh = 'r';
+        _gotEvent = YES;
+    }
 }
 
 - (void)keyDown:(NSEvent *)ev
@@ -599,6 +621,11 @@ _giza_osxcocoa_open_window(int devId, int width, int height)
         [view rebuildLayerSize:NSMakeSize(width,height)];
         [win setContentView:view];
         [win makeFirstResponder:view];
+        [[NSNotificationCenter defaultCenter]
+            addObserver:view
+               selector:@selector(onWindowDidEndLiveResize:)
+                   name:NSWindowDidEndLiveResizeNotification
+                 object:win];
         [win makeKeyAndOrderFront:nil];
         [NSApp activateIgnoringOtherApps:YES];
         _osxcocoa_win[devId]=win; _osxcocoa_view[devId]=view; _osxcocoa_inuse[devId]=1;

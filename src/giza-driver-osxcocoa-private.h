@@ -64,6 +64,9 @@ void         _giza_osxcocoa_wait_for_event_band  (int devId, int mode,
                                              float xancSurface, float yancSurface,
                                              float bandR, float bandG, float bandB,
                                              float *x, float *y, char *ch);
+/* Called from ObjC when user finishes a live window resize; returns 1 if the
+ * client registered a motion callback and should receive 'r'. */
+int          _giza_osxcocoa_on_live_resize_end   (int devId);
 
 #endif /* __APPLE__ */
 #endif /* GIZA_DRIVER_OSXCOCOA_PRIVATE_H */

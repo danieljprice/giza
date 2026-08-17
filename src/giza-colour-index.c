@@ -150,13 +150,6 @@ giza_set_colour_representation_alpha (int ci, double red, double green,
      make the change teke effect immediately
    */
   if (ci == _giza_ci) giza_set_colour_index(ci);
-/*  if (ci == 0) {
-     printf("in scr ci = %i rgb = %f %f %f %f drawn = %i \n",ci,red,green,blue,alpha,Dev[id].drawn);
-     giza_draw_background();
-     _giza_stroke();
-     giza_flush_device();
-  }
-*/
 }
 
 /**
