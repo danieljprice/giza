@@ -479,6 +479,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
        if ((Atom)event.xclient.data.l[0] == wmDeleteMessage) {
           XUndefineCursor (XW[id].display, XW[id].window);
           XFreeCursor (XW[id].display, livecursor);
+          XFlush (XW[id].display);
           return;
        }
        break;
@@ -512,6 +513,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
           _giza_reset_clipping_xw();
           XUndefineCursor (XW[id].display, XW[id].window);
           XFreeCursor (XW[id].display, livecursor);
+          XFlush (XW[id].display);
          return;
        };
 
@@ -556,6 +558,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
         _giza_reset_clipping_xw();
         XUndefineCursor (XW[id].display, XW[id].window);
         XFreeCursor (XW[id].display, livecursor);
+        XFlush (XW[id].display);
         return;
       }
     case MotionNotify:
