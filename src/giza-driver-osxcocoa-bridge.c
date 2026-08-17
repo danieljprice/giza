@@ -245,6 +245,37 @@ _giza_osxcocoa_prepare_draw (void)
         _osxcocoa_recreate_surface();
 }
 
+/**
+ * User finished dragging the NSWindow. Sync Dev/surface to the view size.
+ * Return 1 if a motion callback is set (splash) so ObjC can deliver 'r'.
+ */
+int
+_giza_osxcocoa_on_live_resize_end (int devId)
+{
+    int saved_id;
+    int should_replot;
+
+    if (devId < 0 || devId >= GIZA_MAX_DEVICES)
+        return 0;
+
+    saved_id = id;
+    id = devId;
+
+    if (!Dev[id].deviceOpen)
+      {
+        id = saved_id;
+        return 0;
+      }
+
+    /* Skip while a programmatic paper-size change is pending */
+    if (!Dev[id].resize && _osxcocoa_sync_device_to_view())
+        _osxcocoa_recreate_surface();
+
+    should_replot = (Dev[id].motion_callback != NULL);
+    id = saved_id;
+    return should_replot;
+}
+
 /* ---------------------------------------------------------------------- */
 
 void

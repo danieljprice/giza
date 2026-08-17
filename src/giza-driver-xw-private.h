@@ -36,5 +36,6 @@ void _giza_get_key_press_xw (int mode, int moveCurs, int nanc, const double *xan
 int _giza_init_band_xw (void);
 int _giza_select_xw(int devid);
 void _giza_prepare_draw_xw (void);
+void _giza_sync_window_background_xw (void);
 
 #endif

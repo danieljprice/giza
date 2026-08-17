@@ -39,6 +39,7 @@
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
 #include <string.h>
+
 /**
  * Global variables specific to X.
  */
@@ -66,6 +67,8 @@ struct GIZA_XWindow
   /* Set when XResizeWindow is issued; cleared once window geometry matches.
    * Stops prepare_draw from treating async resize lag as a user resize. */
   int resize_pending;
+  /* User resized the window (ConfigureNotify); replot when mouse button released */
+  int resize_dirty;
 } XW[GIZA_MAX_DEVICES];
 
 #define GIZA_DEFAULT_WIDTH 800
@@ -79,9 +82,42 @@ static void _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anch
 static void _giza_expose_xw (XEvent *event);
 static void _giza_flush_xw_event_queue (XEvent *event);
 static int _giza_errors_xw (Display *display, XErrorEvent *error);
+static void _xw_sync_window_background (void);
+static Bool _xw_event_pending (Display *dpy, XEvent *ev, XPointer arg);
 
 static Atom wmDeleteMessage;
+static Atom wmProtocols;
 /*static int giza_xw_debug = 0;*/
+
+/**
+ * XIfEvent predicate: events for our window that the interactive loop handles.
+ * ClientMessage (WM_DELETE_WINDOW) has no event-mask bit, so XWindowEvent
+ * never returns it — that is why the close button appeared dead on macOS/XQuartz.
+ */
+static Bool
+_xw_event_pending (Display *dpy, XEvent *ev, XPointer arg)
+{
+  Window w = *(Window *) arg;
+
+  (void) dpy;
+  if (ev->xany.window != w)
+    return False;
+
+  switch (ev->type)
+    {
+    case ClientMessage:
+    case DestroyNotify:
+    case Expose:
+    case ConfigureNotify:
+    case ButtonPress:
+    case ButtonRelease:
+    case KeyPress:
+    case MotionNotify:
+      return True;
+    default:
+      return False;
+    }
+}
 
 /**
  * Opens an XWindow device for drawing to.
@@ -201,7 +237,8 @@ _giza_open_device_xw (double width, double height, int units)
   XMapWindow (XW[id].display, XW[id].window);
 
    /* register interest in the delete window message */
-  wmDeleteMessage = XInternAtom(XW[id].display, "WM_DELETE_WINDOW", 0);
+  wmDeleteMessage = XInternAtom(XW[id].display, "WM_DELETE_WINDOW", False);
+  wmProtocols = XInternAtom(XW[id].display, "WM_PROTOCOLS", False);
   XSetWMProtocols(XW[id].display, XW[id].window, &wmDeleteMessage, 1);
 
   /* register the routine to handle non-fatal X errors */
@@ -238,6 +275,44 @@ _giza_open_device_xw (double width, double height, int units)
 }
 
 /**
+ * Keep the X window background pixel in sync with colour index 0.
+ * Newly exposed regions (Hollywood expand, drag-resize) then match the
+ * plot background instead of the default white pixel used at create time.
+ */
+static void
+_xw_sync_window_background (void)
+{
+  XColor xc;
+  double r, g, b, a;
+
+  if (!XW[id].display || !XW[id].window)
+    return;
+
+  giza_get_colour_representation_alpha (0, &r, &g, &b, &a);
+  xc.red   = (unsigned short) (r * 65535.0 + 0.5);
+  xc.green = (unsigned short) (g * 65535.0 + 0.5);
+  xc.blue  = (unsigned short) (b * 65535.0 + 0.5);
+  xc.flags = DoRed | DoGreen | DoBlue;
+
+  if (!XW[id].colormap)
+    XW[id].colormap = DefaultColormap (XW[id].display, XW[id].screennum);
+
+  if (!XAllocColor (XW[id].display, XW[id].colormap, &xc))
+    return;
+
+  XSetWindowBackground (XW[id].display, XW[id].window, xc.pixel);
+}
+
+/**
+ * Public wrapper so colour-index updates can refresh the window background.
+ */
+void
+_giza_sync_window_background_xw (void)
+{
+  _xw_sync_window_background ();
+}
+
+/**
  * Flushes the X device.
  */
 void
@@ -245,6 +320,9 @@ _giza_flush_device_xw (void)
 {
   /* flush the offscreen surface */
   cairo_surface_flush (Dev[id].surface);
+
+  /* ensure expand/Expose margins match colour index 0 */
+  _xw_sync_window_background ();
 
   /* move the offscreen surface to the onscreen one */
   XCopyArea (XW[id].display, XW[id].pixmap, XW[id].window, XW[id].gc, 0, 0, (unsigned) XW[id].width, (unsigned) XW[id].height, 0, 0);
@@ -338,6 +416,45 @@ _xw_recreate_surface (void)
   XW[id].pixmap = new_pixmap;
   Dev[id].surface = new_surf;
   Dev[id].context = new_ctx;
+
+  /*
+   * XCreatePixmap leaves undefined contents (often white). Fill with the
+   * plot background immediately so Expose/XCopyArea never blit a white
+   * rectangle that is later "chased" by giza_draw_background.
+   */
+  giza_draw_background ();
+}
+
+/**
+ * Apply a reported window size: sync Dev, recreate surface, redraw background.
+ */
+static void
+_xw_apply_window_size (unsigned int wwin, unsigned int hwin)
+{
+  _xw_sync_device_to_window (wwin, hwin);
+  _xw_recreate_surface ();
+  giza_draw_background ();
+  XW[id].resize_pending = 0;
+}
+
+/**
+ * Non-blocking drain of ConfigureNotify; returns 1 if at least one was seen.
+ * On success, wwin and hwin hold the last reported size.
+ */
+static int
+_xw_drain_configure_notify (unsigned int *wwin, unsigned int *hwin)
+{
+  XEvent e;
+  int saw = 0;
+
+  while (XCheckTypedWindowEvent (XW[id].display, XW[id].window,
+                                 ConfigureNotify, &e))
+    {
+      *wwin = (unsigned int) e.xconfigure.width;
+      *hwin = (unsigned int) e.xconfigure.height;
+      saw = 1;
+    }
+  return saw;
 }
 
 /**
@@ -361,16 +478,25 @@ _giza_prepare_draw_xw (void)
       return;
     }
 
-  /* Programmatic paper-size change: XResizeWindow is asynchronous. Until the
-   * window catches up, keep the requested size rather than reverting Dev from
-   * stale geometry (breaks splash Hollywood mode resize / background). */
+  /* Programmatic paper-size change: XResizeWindow is asynchronous. Keep the
+   * requested size until ConfigureNotify (or matching geometry) arrives;
+   * otherwise prepare_draw would revert Dev and wipe the new background. */
   if (Dev[id].resize || XW[id].resize_pending)
-    return;
+    {
+      unsigned int cfg_w = width_return, cfg_h = height_return;
 
-  _xw_sync_device_to_window (width_return, height_return);
-  _xw_recreate_surface ();
-  /* Surface recreate wipes the page; restore background colour immediately. */
-  giza_draw_background ();
+      if (_xw_drain_configure_notify (&cfg_w, &cfg_h))
+        {
+          /* WM answered (possibly with a constrained size) — adopt it */
+          _xw_query_window_size (&cfg_w, &cfg_h);
+          _xw_apply_window_size (cfg_w, cfg_h);
+          return;
+        }
+      /* Still lagging behind our XResizeWindow request */
+      return;
+    }
+
+  _xw_apply_window_size (width_return, height_return);
 }
 
 /**
@@ -394,6 +520,9 @@ _giza_change_page_xw (void)
      XW[id].width  = Dev[id].width + 2 * GIZA_XW_MARGIN;
      XW[id].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
 
+     /* Match window bg before resize so newly exposed margins are not white */
+     _xw_sync_window_background ();
+
      /* Request window to be resized (async; see resize_pending in prepare_draw) */
      XResizeWindow(XW[id].display, XW[id].window, (unsigned) XW[id].width, (unsigned) XW[id].height);
      XW[id].resize_pending = 1;
@@ -403,6 +532,19 @@ _giza_change_page_xw (void)
   }
 
   _xw_recreate_surface ();
+
+  /*
+   * Push the blank (background-coloured) page to the window now so that
+   * an animated XResizeWindow expand shows black/white margins matching
+   * ci 0, not an uninitialised or stale white frame.
+   */
+  if (Dev[id].resize || XW[id].resize_pending)
+    {
+      cairo_surface_flush (Dev[id].surface);
+      XCopyArea (XW[id].display, XW[id].pixmap, XW[id].window, XW[id].gc,
+                 0, 0, (unsigned) XW[id].width, (unsigned) XW[id].height, 0, 0);
+      XFlush (XW[id].display);
+    }
 }
 
 /**
@@ -456,12 +598,18 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
  * Loops indefinitely, redrawing the window as necessary until a key is pressed.
  * Returns the x and y position of the cursor (in device coords) and the key pressed.
  *
- * Update: do not /actively/ honour resizing of the window (neither does
- *         PGPLOT) whilst waiting for key press.
+ * Update: do not recreate the cairo pixmap whilst waiting for key press
+ *         (neither does PGPLOT) — Expose keeps copying the old pixel map so
+ *         the previous plot stays visible during a drag-resize.  When a motion
+ *         callback is set (splash), return 'r' after the user releases the
+ *         mouse so the application can replot at the final size.
  */
 static void
 _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const int *anchory, int *x, int *y, char *ch)
 {
+  long event_mask = ExposureMask | KeyPressMask | ButtonPressMask
+                  | ButtonReleaseMask | PointerMotionMask | StructureNotifyMask;
+
   /* move the cursor to the given position */
   if (moveCurs)
     {
@@ -469,7 +617,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
     }
 
   XEvent event;
-  XSelectInput (XW[id].display, XW[id].window, ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask | StructureNotifyMask );
+  XSelectInput (XW[id].display, XW[id].window, event_mask);
 
   _giza_init_band (mode);
   _giza_expand_clipping_xw();
@@ -480,18 +628,22 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 
  while(1) {
 
-    /* wait for key press/expose (avoid using XNextEvent as breaks older systems) */
-    XWindowEvent(XW[id].display, XW[id].window,
-       (long) (ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask | StructureNotifyMask), &event);
-    /*XNextEvent(XW[id].display, &event);*/
+    /*
+     * Wait for the next interactive event.  Prefer XIfEvent over XWindowEvent:
+     * the latter cannot return ClientMessage (no mask bit), so WM_DELETE_WINDOW
+     * from the close button never woke the loop.
+     */
+    XIfEvent (XW[id].display, &event, _xw_event_pending, (XPointer) &XW[id].window);
 
     /* always return x, y values for safety */
     *x = 0;
     *y = 0;
     switch  (event.type) {
-    case ClientMessage: /* catch close window event */
-      *ch = 'q';
-       if ((Atom)event.xclient.data.l[0] == wmDeleteMessage) {
+    case ClientMessage: /* red close-box / WM_DELETE_WINDOW → same as 'q' */
+       if (event.xclient.message_type == wmProtocols
+           && event.xclient.format == 32
+           && (Atom) event.xclient.data.l[0] == wmDeleteMessage) {
+          *ch = 'q';
           XUndefineCursor (XW[id].display, XW[id].window);
           XFreeCursor (XW[id].display, livecursor);
           XFlush (XW[id].display);
@@ -504,6 +656,50 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
       return;
     case Expose: /* redraw */
       _giza_expose_xw (&event);
+      break;
+    case ConfigureNotify:
+      {
+        unsigned int cfg_w, cfg_h;
+        int old_w = XW[id].width;
+        int old_h = XW[id].height;
+
+        cfg_w = (unsigned int) event.xconfigure.width;
+        cfg_h = (unsigned int) event.xconfigure.height;
+        _xw_drain_configure_notify (&cfg_w, &cfg_h);
+        _xw_query_window_size (&cfg_w, &cfg_h);
+
+        /* Echo of our own XResizeWindow (already matching) — no replot */
+        if ((int) cfg_w == old_w && (int) cfg_h == old_h)
+          {
+            XW[id].resize_pending = 0;
+            break;
+          }
+
+        /*
+         * User drag-resize: do not recreate/clear the cairo pixmap here.
+         * Expose keeps blitting the old pixel map until the mouse is released;
+         * then splash gets 'r' and prepare_draw syncs to the final size.
+         */
+        if (Dev[id].motion_callback != NULL)
+          XW[id].resize_dirty = 1;
+        break;
+      }
+    case ButtonRelease:
+      /* End of resize drag: button up after ConfigureNotify (splash) */
+      if (XW[id].resize_dirty && Dev[id].motion_callback != NULL)
+        {
+          XW[id].resize_dirty = 0;
+          *x = event.xbutton.x;
+          *y = event.xbutton.y;
+          *ch = 'r';
+          _giza_destroy_band (mode);
+          _giza_flush_xw_event_queue (&event);
+          _giza_reset_clipping_xw ();
+          XUndefineCursor (XW[id].display, XW[id].window);
+          XFreeCursor (XW[id].display, livecursor);
+          XFlush (XW[id].display);
+          return;
+        }
       break;
     case KeyPress: /* return pos and char */
       {
@@ -523,6 +719,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
          if(key)
            *ch = buffer[0];
 
+          XW[id].resize_dirty = 0;
           _giza_destroy_band (mode);
           _giza_flush_xw_event_queue(&event);
           _giza_reset_clipping_xw();
@@ -568,6 +765,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
            *ch = GIZA_OTHER_CLICK;
            break;
         }
+        XW[id].resize_dirty = 0;
         _giza_destroy_band (mode);
         _giza_flush_xw_event_queue(&event);
         _giza_reset_clipping_xw();
@@ -582,6 +780,26 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
         while(XCheckWindowEvent(XW[id].display, XW[id].window,
                               (long)(PointerMotionMask), &event) == True);
 
+        /*
+         * After a WM resize, ButtonRelease often never reaches the client.
+         * Motion with no buttons held means the user has let go — replot.
+         */
+        if (XW[id].resize_dirty && Dev[id].motion_callback != NULL
+            && !(event.xmotion.state & (Button1Mask | Button2Mask | Button3Mask)))
+          {
+            XW[id].resize_dirty = 0;
+            *x = event.xmotion.x;
+            *y = event.xmotion.y;
+            *ch = 'r';
+            _giza_destroy_band (mode);
+            _giza_flush_xw_event_queue (&event);
+            _giza_reset_clipping_xw ();
+            XUndefineCursor (XW[id].display, XW[id].window);
+            XFreeCursor (XW[id].display, livecursor);
+            XFlush (XW[id].display);
+            return;
+          }
+
         /* if a callback function is set to do things while the cursor is moving, call it */
         if (Dev[id].motion_callback != NULL) {
            double xpt = (double) event.xmotion.x;
@@ -595,6 +813,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 
         _giza_refresh_band (mode, nanc, anchorx, anchory, event.xmotion.x, event.xmotion.y);
         _giza_flush_xw_event_queue(&event);
+        break;
       }
     default:
       break;
