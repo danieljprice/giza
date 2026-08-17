@@ -111,6 +111,8 @@
 <dd><a href="#giza_render_gray_shade_float">giza_render_gray_shade_float</a></dd>
 <dd><a href="#giza_draw_pixels">giza_draw_pixels</a></dd>
 <dd><a href="#giza_draw_pixels_float">giza_draw_pixels_float</a></dd>
+<dd><a href="#giza_streamplot">giza_streamplot</a></dd>
+<dd><a href="#giza_streamplot_float">giza_streamplot_float</a></dd>
 <dd><a href="#giza_tick">giza_tick</a></dd>
 <dd><a href="#giza_tick_float">giza_tick_float</a></dd>
 <dd><a href="#giza_vector">giza_vector</a></dd>
@@ -985,7 +987,32 @@
 </tr></table><h4>See Also:</h4><p><a href="#giza_render">giza_render</a> <a href="#giza_draw_pixels_float">giza_draw_pixels_float</a> </p><h3><a name="giza_draw_pixels_float">giza_draw_pixels_float</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_draw_pixels_float</td><td> (int sizex, int sizey, const int* idata, int i1, int i2, int j1, int j2, float xmin, float xmax, float ymin, float ymax, int extend, int filter) ;</td></tr></table><p>Same as giza_draw_pixels, but takes floats</p>
-<h4>See Also:</h4><p><a href="#giza_draw_pixels">giza_draw_pixels</a> </p><h3><a name="giza_tick">giza_tick</a><hr></h3>
+<h4>See Also:</h4><p><a href="#giza_draw_pixels">giza_draw_pixels</a> </p><h3><a name="giza_streamplot">giza_streamplot</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_streamplot</td><td> (int n, int m, const double *u, const double *v, int i1, int i2, int j1, int j2, double density, const double *affine, double blank) ;</td></tr></table><p>Plot evenly-spaced streamlines of a 2D vector field. Trajectories are integrated with RK2 on the supplied regular grid and spaced using an occupancy mask.</p>
+<h4>Input:</h4>
+<table class="api"><tr>
+<td>n        :</td><td>The dimensions of data in the x-direction</td>
+</tr><tr>
+<td>m        :</td><td>The dimensions of data in the y-direction</td>
+</tr><tr>
+<td>u        :</td><td>The x-component of the vector field</td>
+</tr><tr>
+<td>v        :</td><td>The y-component of the vector field</td>
+</tr><tr>
+<td>i1, i2   :</td><td>Inclusive range of data to use in the x dimension</td>
+</tr><tr>
+<td>j1, j2   :</td><td>Inclusive range of data to use in the y dimension</td>
+</tr><tr>
+<td>density  :</td><td>Line density (1.0 is about 30 occupancy cells)</td>
+</tr><tr>
+<td>affine   :</td><td>Affine transformation from pixel indices to world coordinates</td>
+</tr><tr>
+<td>blank    :</td><td>Value of u and v that marks an empty cell (no streamline)</td>
+</tr></table><h4>See Also:</h4><p><a href="#giza_streamplot_float">giza_streamplot_float</a> <a href="#giza_vector">giza_vector</a> <a href="#giza_arrow">giza_arrow</a> <a href="#giza_line">giza_line</a> </p><h3><a name="giza_streamplot_float">giza_streamplot_float</a><hr></h3>
+<table class="proto">
+<tr><td width=10%>void</td><td width=20%>giza_streamplot_float</td><td> (int n, int m, const float *u, const float *v, int i1, int i2, int j1, int j2, float density, const float *affine, float blank) ;</td></tr></table><p>Same as giza_streamplot but takes floats</p>
+<h4>See Also:</h4><p><a href="#giza_streamplot">giza_streamplot</a> </p><h3><a name="giza_tick">giza_tick</a><hr></h3>
 <table class="proto">
 <tr><td width=10%>void</td><td width=20%>giza_tick</td><td> (double x1, double y1, double x2, double y2, double v, double tickl, double tickr, double disp, double angle, const char *label) ;</td></tr></table><p>Draw a single tick along an axis. The axis extends from (x1,y1) to (x2,y2) and the tick is drawn perpendicular to the axis which is not drawn by this routine. Optional text label drawn parallel to the axis if the orientation angle is zero</p>
 <h4>Input:</h4>
