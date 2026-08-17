@@ -109,7 +109,13 @@ sub processComment
     }
   } while (shift);
 
-  # Add to the index and description lists 
+  # Skip internal helpers not part of the public API
+  if ($name =~ m/^_/ || (defined $prototype[0] && $prototype[0] =~ m/\bstatic\b/))
+  {
+    return;
+  }
+
+  # Add to the index and description lists
   if ($type eq "Text")
   {
     $IFile = \@IText;

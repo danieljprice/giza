@@ -152,21 +152,10 @@ giza_streamplot_float (int n, int m, const float *u, const float *v,
   free (vd);
 }
 
-/**
- * Drawing: _giza_streamplot_core
- *
- * Synopsis: Build an occupancy mask, seed streamlines from the centre
- * outward, integrate each candidate in both directions, and draw those
- * that exceed the minimum length.
- *
- * Input:
- *  -n, m     :- Grid dimensions
- *  -u, v     :- Vector field components
- *  -i1, i2   :- Inclusive x index range
- *  -j1, j2   :- Inclusive y index range
- *  -density  :- Line spacing control
- *  -affine   :- Pixel-to-world transform
- *  -blank    :- Sentinel for empty cells
+/*
+ * Build an occupancy mask, seed streamlines from the centre outward,
+ * integrate each candidate in both directions, and draw those that
+ * exceed the minimum length.
  */
 static void
 _giza_streamplot_core (int n, int m, const double *u, const double *v,
@@ -691,15 +680,9 @@ _giza_stream_arrow_index (const double *xw, const double *yw, int npts,
   return imid;
 }
 
-/**
- * Drawing: _giza_stream_draw
- *
- * Synopsis: Transform grid coordinates to world space, draw the
- * streamline with giza_line, and add a direction arrow with giza_arrow.
- *
- * Input:
- *  -s              :- Streamplot context (affine transform)
- *  -xg, yg, npts   :- Polyline in fractional grid coordinates
+/*
+ * Transform grid coordinates to world space, draw the streamline with
+ * giza_line, and add a direction arrow with giza_arrow.
  */
 static void
 _giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
