@@ -1,6 +1,6 @@
 AM_CFLAGS = $(WERROR_CFLAGS) $(WARN_CFLAGS)
 AM_CPPFLAGS = -I../../src -I../../include $(CAIRO_CFLAGS) $(X11_CFLAGS)
-AM_LDFLAGS = -no-install -lm -lX11
+AM_LDFLAGS = -no-install -lm
 LDADD = ../../src/libgiza.la
 
 CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
@@ -17,14 +17,22 @@ auto_ctests = test-format-number test-giza-round test-glyph-fallback test-pdf te
 	test-page-semantics test-streamplot
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
-interactive_ctests = test-arrow test-box test-cairo-xw test-change-page \
+interactive_ctests = test-arrow test-box test-change-page \
 	test-circle test-colour-index \
 	test-environment \
 	test-error-bars test-giza-xw test-line-cap \
 	test-line-style test-openclose test-points \
 	test-qtext test-rectangle test-set-line-width \
-	test-vector test-window test-XOpenDisplay test-contour test-render \
+	test-vector test-window test-contour test-render \
 	test-band
+
+if HAVE_CAIRO_XLIB
+interactive_ctests += test-cairo-xw
+endif
+
+if HAVE_X11
+interactive_ctests += test-XOpenDisplay
+endif
 
 TESTS = $(auto_ctests)
 check_PROGRAMS = $(auto_ctests) $(interactive_ctests)
