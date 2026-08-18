@@ -611,8 +611,9 @@ _giza_stream_integrate (giza_stream_t *s, double x0, double y0, int direction,
           myprev = my;
           nsame = 0;
         }
-      else
+      else if (nreject == 0)
         {
+          /* count accepted steps that stay in this cell, not rejected retries */
           nsame++;
           if (nsame > STREAM_MAX_SAME_CELL)
             break;
