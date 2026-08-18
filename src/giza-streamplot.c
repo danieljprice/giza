@@ -22,6 +22,7 @@
 
 #include "giza-io-private.h"
 #include "giza-private.h"
+#include "giza-stroke-private.h"
 #include "giza-transforms-private.h"
 #include <giza.h>
 #include <math.h>
@@ -36,6 +37,8 @@
 #define STREAM_MAXERROR 0.003
 #define STREAM_MAXDS_AXES 0.1
 #define STREAM_MAX_REJECT 50
+/* noisy/null fields can loop inside one occupancy cell; stop after a few steps */
+#define STREAM_MAX_SAME_CELL 4
 
 typedef struct
 {
@@ -67,8 +70,9 @@ static int _giza_stream_integrate (giza_stream_t *s, double x0, double y0,
                                    int *occ, int *nocc, int noccmax);
 static int _giza_stream_arrow_index (const double *xw, const double *yw,
                                      int npts, double x0, double y0);
-static void _giza_stream_draw (giza_stream_t *s, const double *xg,
-                               const double *yg, int npts);
+static int _giza_stream_add_line (giza_stream_t *s, const double *xg,
+                                  const double *yg, int npts, double *xa,
+                                  double *ya, double *xb, double *yb);
 static void _giza_streamplot_core (int n, int m, const double *u,
                                    const double *v, int i1, int i2, int j1,
                                    int j2, double density, const double *affine,
@@ -164,9 +168,10 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
 {
   giza_stream_t s;
   giza_seed_t *seeds;
-  int mx, my, nback, nfwd, ntot, i, nseed, iseed, nocc, oldBuf;
+  int mx, my, nback, nfwd, ntot, i, nseed, iseed, nocc, oldBuf, narrow, oldTrans;
   double x0, y0, minlength, maxlength, length, cx, cy, dx, dy;
   double *xback, *yback, *xfwd, *yfwd, *xline, *yline;
+  double *ax1, *ay1, *ax2, *ay2;
   int *occ;
   size_t nbuf;
 
@@ -223,8 +228,13 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
   xline = malloc (nbuf * sizeof (double));
   yline = malloc (nbuf * sizeof (double));
   occ = malloc (nbuf * sizeof (int));
+  ax1 = malloc ((size_t) s.mask_nx * (size_t) s.mask_ny * sizeof (double));
+  ay1 = malloc ((size_t) s.mask_nx * (size_t) s.mask_ny * sizeof (double));
+  ax2 = malloc ((size_t) s.mask_nx * (size_t) s.mask_ny * sizeof (double));
+  ay2 = malloc ((size_t) s.mask_nx * (size_t) s.mask_ny * sizeof (double));
   if (xback == NULL || yback == NULL || xfwd == NULL || yfwd == NULL
-      || xline == NULL || yline == NULL || occ == NULL)
+      || xline == NULL || yline == NULL || occ == NULL
+      || ax1 == NULL || ay1 == NULL || ax2 == NULL || ay2 == NULL)
     {
       _giza_error ("giza_streamplot", "memory allocation failed");
       free (xback);
@@ -234,6 +244,10 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
       free (xline);
       free (yline);
       free (occ);
+      free (ax1);
+      free (ay1);
+      free (ax2);
+      free (ay2);
       free (s.mask);
       free (s.cur);
       free (seeds);
@@ -262,8 +276,13 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
     }
   qsort (seeds, (size_t) nseed, sizeof (giza_seed_t), _giza_seed_cmp);
 
+  /* cairo-xlib pays for every cairo_stroke; append all lines then stroke once.
+   * /osx rasterises locally so a per-line giza_line stroke is cheap there. */
   giza_get_buffering (&oldBuf);
   giza_begin_buffer ();
+  oldTrans = _giza_get_trans ();
+  _giza_set_trans (GIZA_TRANS_WORLD);
+  narrow = 0;
 
   for (iseed = 0; iseed < nseed; iseed++)
     {
@@ -327,13 +346,21 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
            * stubs do not leave holes */
           for (i = 0; i < nocc; i++)
             s.mask[occ[i]] = 1;
-          _giza_stream_draw (&s, xline, yline, ntot);
+          if (_giza_stream_add_line (&s, xline, yline, ntot,
+                                     &ax1[narrow], &ay1[narrow],
+                                     &ax2[narrow], &ay2[narrow]))
+            narrow++;
         }
 
       /* clear per-trajectory markers for the next seed attempt */
       for (i = 0; i < nocc; i++)
         s.cur[occ[i]] = 0;
     }
+
+  _giza_stroke ();
+  _giza_set_trans (oldTrans);
+  for (i = 0; i < narrow; i++)
+    giza_arrow (ax1[i], ay1[i], ax2[i], ay2[i]);
 
   if (!oldBuf)
     giza_end_buffer ();
@@ -346,6 +373,10 @@ _giza_streamplot_core (int n, int m, const double *u, const double *v,
   free (xline);
   free (yline);
   free (occ);
+  free (ax1);
+  free (ay1);
+  free (ax2);
+  free (ay2);
   free (s.mask);
   free (s.cur);
   free (seeds);
@@ -528,7 +559,7 @@ _giza_stream_integrate (giza_stream_t *s, double x0, double y0, int direction,
 {
   double x, y, u, v, speed, k1x, k1y, k2x, k2y, length;
   double ds, maxds, dsmin, error, dx1, dy1, dx2, dy2, nx, ny;
-  int mx, my, k, mxprev, myprev, nreject;
+  int mx, my, k, mxprev, myprev, nreject, nsame;
 
   /* cap the step at one occupancy cell so trajectories cannot skip mask cells */
   nx = (double) s->nx;
@@ -540,9 +571,11 @@ _giza_stream_integrate (giza_stream_t *s, double x0, double y0, int direction,
     maxds = STREAM_MAXDS_AXES * MIN (nx, ny);
   if (maxds < 1.0e-6)
     maxds = 1.0e-6;
-  dsmin = 1.0e-6 * MAX (nx, ny);
-  if (dsmin > 0.01 * maxds)
-    dsmin = 0.01 * maxds;
+  /* keep steps a reasonable fraction of an occupancy cell; tiny adaptive
+   * steps on noisy fields pack thousands of segments into one cell */
+  dsmin = 0.25 * maxds;
+  if (dsmin < 1.0e-6)
+    dsmin = 1.0e-6;
   ds = maxds;
 
   x = x0;
@@ -551,6 +584,7 @@ _giza_stream_integrate (giza_stream_t *s, double x0, double y0, int direction,
   mxprev = -1;
   myprev = -1;
   nreject = 0;
+  nsame = 0;
 
   while (*npts < STREAM_MAX_PTS && length < maxlength)
     {
@@ -575,6 +609,13 @@ _giza_stream_integrate (giza_stream_t *s, double x0, double y0, int direction,
             }
           mxprev = mx;
           myprev = my;
+          nsame = 0;
+        }
+      else
+        {
+          nsame++;
+          if (nsame > STREAM_MAX_SAME_CELL)
+            break;
         }
 
       /* record this position once; rejected steps retry from the same point */
@@ -680,17 +721,32 @@ _giza_stream_arrow_index (const double *xw, const double *yw, int npts,
   return imid;
 }
 
-/*
- * Transform grid coordinates to world space, draw the streamline with
- * giza_line, and add a direction arrow with giza_arrow.
+/**
+ * Internal: _giza_stream_add_line
+ *
+ * Synopsis: Transform a grid-coordinate polyline to world space, append it
+ * as a cairo subpath (not stroked), and optionally return a direction arrow.
+ * Callers should stroke once after all lines are appended: cairo-xlib is
+ * dominated by cairo_stroke, not by giza's XFlush buffering.
+ *
+ * Input:
+ *  -s          :- Streamplot context (affine matrix)
+ *  -xg, yg     :- Trajectory in grid coordinates
+ *  -npts       :- Number of vertices
+ *  -xa,ya,xb,yb:- Output arrow endpoints in world coordinates
+ *
+ * Returns: 1 if an arrow should be drawn, 0 otherwise
  */
-static void
-_giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
-                   int npts)
+static int
+_giza_stream_add_line (giza_stream_t *s, const double *xg, const double *yg,
+                       int npts, double *xa, double *ya, double *xb, double *yb)
 {
   double *xw, *yw;
-  double xa, ya, xb, yb, dx, dy, len, alen, ux, uy;
+  double dx, dy, len, alen, ux, uy;
   int i, imid;
+
+  if (npts < 2)
+    return 0;
 
   xw = malloc ((size_t) npts * sizeof (double));
   yw = malloc ((size_t) npts * sizeof (double));
@@ -699,7 +755,7 @@ _giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
       _giza_error ("giza_streamplot", "memory allocation failed");
       free (xw);
       free (yw);
-      return;
+      return 0;
     }
 
   for (i = 0; i < npts; i++)
@@ -709,7 +765,9 @@ _giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
       cairo_matrix_transform_point (&s->mat, &xw[i], &yw[i]);
     }
 
-  giza_line (npts, xw, yw);
+  cairo_move_to (Dev[id].context, xw[0], yw[0]);
+  for (i = 1; i < npts; i++)
+    cairo_line_to (Dev[id].context, xw[i], yw[i]);
 
   imid = _giza_stream_arrow_index (xw, yw, npts, xg[0], yg[0]);
   dx = xw[imid] - xw[imid - 1];
@@ -719,7 +777,7 @@ _giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
     {
       free (xw);
       free (yw);
-      return;
+      return 0;
     }
   ux = dx / len;
   uy = dy / len;
@@ -727,12 +785,12 @@ _giza_stream_draw (giza_stream_t *s, const double *xg, const double *yg,
   alen = 0.8 * hypot (s->mat.xx, s->mat.yx);
   if (alen < GIZA_ZERO_DOUBLE)
     alen = len;
-  xa = xw[imid] - 0.5 * alen * ux;
-  ya = yw[imid] - 0.5 * alen * uy;
-  xb = xw[imid] + 0.5 * alen * ux;
-  yb = yw[imid] + 0.5 * alen * uy;
-  giza_arrow (xa, ya, xb, yb);
+  *xa = xw[imid] - 0.5 * alen * ux;
+  *ya = yw[imid] - 0.5 * alen * uy;
+  *xb = xw[imid] + 0.5 * alen * ux;
+  *yb = yw[imid] + 0.5 * alen * uy;
 
   free (xw);
   free (yw);
+  return 1;
 }
