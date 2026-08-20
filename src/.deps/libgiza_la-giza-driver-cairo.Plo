@@ -1,0 +1,81 @@
+libgiza_la-giza-driver-cairo.lo: giza-driver-cairo.c giza-private.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-version.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-features.h \
+ /opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-deprecated.h \
+ giza-io-private.h giza-drivers-private.h giza-driver-cairo-private.h \
+ giza-transforms-private.h giza-viewport-private.h giza-window-private.h \
+ giza-character-size-private.h giza-text-private.h \
+ /usr/local/gfortran/lib/gcc/aarch64-apple-darwin24/14.2.0/include/stddef.h \
+ /usr/local/gfortran/lib/gcc/aarch64-apple-darwin24/14.2.0/include/stdint.h \
+ /usr/local/gfortran/lib/gcc/aarch64-apple-darwin24/14.2.0/include-fixed/stdint.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int8_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int16_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int32_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int64_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uint8_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uint16_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uint32_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uint64_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/cdefs.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_symbol_aliasing.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_posix_availability.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/machine/_types.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/arm/_types.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_pthread/_pthread_types.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_intptr_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_uintptr_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_intmax_t.h \
+ /Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uintmax_t.h \
+ giza-set-font-private.h giza-colour-private.h giza-arrow-style-private.h \
+ giza-fill-private.h giza-line-style-private.h giza-band-private.h \
+ giza-stroke-private.h giza-subpanel-private.h \
+ giza-text-background-private.h giza.h giza-shared.h giza-version.h
+giza-private.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-version.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-features.h:
+/opt/homebrew/Cellar/cairo/1.18.4/include/cairo/cairo-deprecated.h:
+giza-io-private.h:
+giza-drivers-private.h:
+giza-driver-cairo-private.h:
+giza-transforms-private.h:
+giza-viewport-private.h:
+giza-window-private.h:
+giza-character-size-private.h:
+giza-text-private.h:
+/usr/local/gfortran/lib/gcc/aarch64-apple-darwin24/14.2.0/include/stddef.h:
+/usr/local/gfortran/lib/gcc/aarch64-apple-darwin24/14.2.0/include/stdint.h:
+/usr/local/gfortran/lib/gcc/aarch64-apple-darwin24/14.2.0/include-fixed/stdint.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int8_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int16_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int32_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_int64_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uint8_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uint16_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uint32_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uint64_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/cdefs.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_symbol_aliasing.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_posix_availability.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/machine/_types.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/arm/_types.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_pthread/_pthread_types.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_intptr_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/sys/_types/_uintptr_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_intmax_t.h:
+/Library/Developer/CommandLineTools/SDKs/MacOSX15.sdk/usr/include/_types/_uintmax_t.h:
+giza-set-font-private.h:
+giza-colour-private.h:
+giza-arrow-style-private.h:
+giza-fill-private.h:
+giza-line-style-private.h:
+giza-band-private.h:
+giza-stroke-private.h:
+giza-subpanel-private.h:
+giza-text-background-private.h:
+giza.h:
+giza-shared.h:
+giza-version.h:
