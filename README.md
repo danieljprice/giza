@@ -20,6 +20,18 @@ Features
 - Easily called from Fortran/C/C++ code
 - Originally written as a backend for SPLASH, in stable use now for more than 15 years
 
+Differences from PGPLOT
+-----------------------
+- Colour table changes are not retroactive. giza renders in immediate-mode
+  truecolour via cairo, so PGCTAB / giza_set_colour_table affects only
+  images drawn afterwards. Legacy code that calls PGCTAB *after* PGIMAG -
+  relying on the indexed-colour behaviour of 8-bit displays, where
+  rewriting the colormap retroactively recoloured whatever was already on
+  screen - must set the colour table first. Colormap-animation tricks are
+  likewise unsupported. (Modern PGPLOT has the same limitation on TrueColor
+  X visuals; the retroactive behaviour now survives only in PGPLOT's
+  indexed PNG files.)
+
 Status
 ------
 ![build](https://github.com/danieljprice/giza/workflows/build/badge.svg)
