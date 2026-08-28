@@ -29,11 +29,14 @@ typedef struct
 
 static int count_ink_rect (cairo_surface_t *surface,
                            int x0, int y0, int x1, int y1);
-static int find_frame_row (cairo_surface_t *surface, int top);
-static int find_frame_col (cairo_surface_t *surface, int left);
-static int ticks_inward_horizontal (cairo_surface_t *surface, int top);
-static int ticks_inward_vertical (cairo_surface_t *surface, int left);
-static int ticks_symmetric_on_axis (cairo_surface_t *surface);
+static int probe_horizontal_edge (cairo_surface_t *surface, int frame_y,
+                                  int inward_dy, int x0, int x1);
+static int probe_vertical_edge (cairo_surface_t *surface, int frame_x,
+                                int inward_dx, int y0, int y1);
+static int ticks_symmetric_on_axis (cairo_surface_t *surface,
+                                    double axis_world_y);
+static int run_probes (cairo_surface_t *surface, int probes,
+                       double axis_world_y);
 static int run_case (cairo_t *cr, const mirror_case_t *test);
 static void draw_case (const mirror_case_t *test);
 
@@ -79,111 +82,21 @@ count_ink_rect (cairo_surface_t *surface, int x0, int y0, int x1, int y1)
 }
 
 static int
-find_frame_row (cairo_surface_t *surface, int top)
+probe_horizontal_edge (cairo_surface_t *surface, int frame_y, int inward_dy,
+                     int x0, int x1)
 {
-  int width, height, x0, x1, y, y0, y1, step, best_y, best_ink, ink_count;
+  int x, inward_ink, outward_ink;
 
-  width = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-  x0 = width / 4;
-  x1 = 3 * width / 4;
-  best_y = top ? 0 : height - 1;
-  best_ink = 0;
-
-  if (top)
-    {
-      y0 = 0;
-      y1 = height / 3;
-      step = 1;
-    }
-  else
-    {
-      y0 = 2 * height / 3;
-      y1 = height - 1;
-      step = 1;
-    }
-
-  for (y = y0; y <= y1; y += step)
-    {
-      ink_count = count_ink_rect (surface, x0, y, x1, y);
-      if (ink_count > best_ink)
-        {
-          best_ink = ink_count;
-          best_y = y;
-        }
-    }
-
-  return best_y;
-}
-
-static int
-find_frame_col (cairo_surface_t *surface, int left)
-{
-  int width, height, y0, y1, x, x0, x1, step, best_x, best_ink, ink_count;
-
-  width = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-  y0 = height / 4;
-  y1 = 3 * height / 4;
-  best_x = left ? 0 : width - 1;
-  best_ink = 0;
-
-  if (left)
-    {
-      x0 = 0;
-      x1 = width / 3;
-      step = 1;
-    }
-  else
-    {
-      x0 = 2 * width / 3;
-      x1 = width - 1;
-      step = 1;
-    }
-
-  for (x = x0; x <= x1; x += step)
-    {
-      ink_count = count_ink_rect (surface, x, y0, x, y1);
-      if (ink_count > best_ink)
-        {
-          best_ink = ink_count;
-          best_x = x;
-        }
-    }
-
-  return best_x;
-}
-
-/* Scan along a horizontal frame edge for a tick whose ink extends toward
- * the plot interior rather than away from it. */
-static int
-ticks_inward_horizontal (cairo_surface_t *surface, int top)
-{
-  int width, height, center_y, frame_y, x, x0, x1, inward_sign;
-  int inward_ink, outward_ink;
-
-  width = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-  center_y = height / 2;
-  frame_y = find_frame_row (surface, top);
-  inward_sign = top ? 1 : -1;
-  if (frame_y > center_y)
-    inward_sign = -1;
-  else if (frame_y < center_y)
-    inward_sign = 1;
-
-  x0 = width / 4;
-  x1 = 3 * width / 4;
   for (x = x0; x <= x1; x++)
     {
       inward_ink = count_ink_rect (surface, x - 2,
-                                   frame_y + inward_sign,
+                                   frame_y + inward_dy,
                                    x + 2,
-                                   frame_y + inward_sign * INK_PROBE);
+                                   frame_y + inward_dy * INK_PROBE);
       outward_ink = count_ink_rect (surface, x - 2,
-                                    frame_y - inward_sign,
+                                    frame_y - inward_dy,
                                     x + 2,
-                                    frame_y - inward_sign * INK_PROBE);
+                                    frame_y - inward_dy * INK_PROBE);
       if (inward_ink > outward_ink + INK_THRESH && inward_ink > INK_THRESH)
         return 1;
     }
@@ -191,32 +104,18 @@ ticks_inward_horizontal (cairo_surface_t *surface, int top)
   return 0;
 }
 
-/* Scan along a vertical frame edge for a tick whose ink extends toward
- * the plot interior rather than away from it. */
 static int
-ticks_inward_vertical (cairo_surface_t *surface, int left)
+probe_vertical_edge (cairo_surface_t *surface, int frame_x, int inward_dx,
+                     int y0, int y1)
 {
-  int width, height, center_x, frame_x, y, y0, y1, inward_sign;
-  int inward_ink, outward_ink;
+  int y, inward_ink, outward_ink;
 
-  width = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-  center_x = width / 2;
-  frame_x = find_frame_col (surface, left);
-  inward_sign = left ? 1 : -1;
-  if (frame_x < center_x)
-    inward_sign = 1;
-  else if (frame_x > center_x)
-    inward_sign = -1;
-
-  y0 = height / 4;
-  y1 = 3 * height / 4;
   for (y = y0; y <= y1; y++)
     {
-      inward_ink = count_ink_rect (surface, frame_x + inward_sign, y - 2,
-                                   frame_x + inward_sign * INK_PROBE, y + 2);
-      outward_ink = count_ink_rect (surface, frame_x - inward_sign, y - 2,
-                                    frame_x - inward_sign * INK_PROBE, y + 2);
+      inward_ink = count_ink_rect (surface, frame_x + inward_dx, y - 2,
+                                   frame_x + inward_dx * INK_PROBE, y + 2);
+      outward_ink = count_ink_rect (surface, frame_x - inward_dx, y - 2,
+                                    frame_x - inward_dx * INK_PROBE, y + 2);
       if (inward_ink > outward_ink + INK_THRESH && inward_ink > INK_THRESH)
         return 1;
     }
@@ -225,16 +124,83 @@ ticks_inward_vertical (cairo_surface_t *surface, int left)
 }
 
 static int
-ticks_symmetric_on_axis (cairo_surface_t *surface)
+world_y_to_pixel (double vp_y1, double vp_y2, double win_y1, double win_y2,
+                  double world_y)
 {
-  int width, height, axis_y, tick_x, x, above_ink, below_ink, diff;
+  double ratio;
+
+  if (win_y2 == win_y1)
+    return (int) (0.5 * (vp_y1 + vp_y2));
+
+  ratio = (world_y - win_y1) / (win_y2 - win_y1);
+  return (int) (vp_y2 + ratio * (vp_y1 - vp_y2));
+}
+
+static int
+run_probes (cairo_surface_t *surface, int probes, double axis_world_y)
+{
+  double vp_x1, vp_x2, vp_y1, vp_y2;
+  double win_x1, win_x2, win_y1, win_y2;
+  int x0, x1, y0, y1, failed;
+
+  failed = 0;
+  giza_get_viewport (GIZA_UNITS_PIXELS, &vp_x1, &vp_x2, &vp_y1, &vp_y2);
+  giza_get_window (&win_x1, &win_x2, &win_y1, &win_y2);
+
+  if (vp_x1 > vp_x2)
+    {
+      double tmp = vp_x1;
+      vp_x1 = vp_x2;
+      vp_x2 = tmp;
+    }
+  if (vp_y1 < vp_y2)
+    {
+      double tmp = vp_y1;
+      vp_y1 = vp_y2;
+      vp_y2 = tmp;
+    }
+
+  x0 = (int) (vp_x1 + 0.25 * (vp_x2 - vp_x1));
+  x1 = (int) (vp_x1 + 0.75 * (vp_x2 - vp_x1));
+  y0 = (int) (vp_y2 + 0.25 * (vp_y1 - vp_y2));
+  y1 = (int) (vp_y2 + 0.75 * (vp_y1 - vp_y2));
+
+  if ((probes & PROBE_BOTTOM)
+      && !probe_horizontal_edge (surface, (int) vp_y1, -1, x0, x1))
+    failed = 1;
+
+  if ((probes & PROBE_TOP)
+      && !probe_horizontal_edge (surface, (int) vp_y2, 1, x0, x1))
+    failed = 1;
+
+  if ((probes & PROBE_LEFT)
+      && !probe_vertical_edge (surface, (int) vp_x1, 1, y0, y1))
+    failed = 1;
+
+  if ((probes & PROBE_AXIS)
+      && !ticks_symmetric_on_axis (surface, axis_world_y))
+    failed = 1;
+
+  return failed;
+}
+
+static int
+ticks_symmetric_on_axis (cairo_surface_t *surface, double axis_world_y)
+{
+  double vp_x1, vp_x2, vp_y1, vp_y2;
+  double win_x1, win_x2, win_y1, win_y2;
+  int width, axis_y, tick_x, x, x0, x1, above_ink, below_ink, diff;
+
+  giza_get_viewport (GIZA_UNITS_PIXELS, &vp_x1, &vp_x2, &vp_y1, &vp_y2);
+  giza_get_window (&win_x1, &win_x2, &win_y1, &win_y2);
+  axis_y = world_y_to_pixel (vp_y1, vp_y2, win_y1, win_y2, axis_world_y);
 
   width = cairo_image_surface_get_width (surface);
-  height = cairo_image_surface_get_height (surface);
-  axis_y = height / 2;
+  x0 = width / 4;
+  x1 = 3 * width / 4;
   tick_x = -1;
 
-  for (x = width / 4; x < 3 * width / 4; x++)
+  for (x = x0; x <= x1; x++)
     {
       if (count_ink_rect (surface, x, axis_y - INK_PROBE, x, axis_y + INK_PROBE)
           > INK_THRESH)
@@ -292,6 +258,8 @@ run_case (cairo_t *cr, const mirror_case_t *test)
     }
 
   draw_case (test);
+  cairo_surface_flush (surface);
+  failed = run_probes (surface, test->probes, 0.);
   giza_release_cairo_context ();
   cairo_surface_flush (surface);
 
@@ -302,32 +270,20 @@ run_case (cairo_t *cr, const mirror_case_t *test)
       cairo_surface_write_to_png (surface, pngname);
     }
 
-  if ((test->probes & PROBE_BOTTOM) && !ticks_inward_horizontal (surface, 0))
+  if (failed)
     {
-      fprintf (stderr, "%s: bottom ticks do not point toward plot interior\n",
-               test->name);
-      failed = 1;
-    }
-
-  if ((test->probes & PROBE_TOP) && !ticks_inward_horizontal (surface, 1))
-    {
-      fprintf (stderr, "%s: top ticks do not point toward plot interior\n",
-               test->name);
-      failed = 1;
-    }
-
-  if ((test->probes & PROBE_LEFT) && !ticks_inward_vertical (surface, 1))
-    {
-      fprintf (stderr, "%s: left ticks do not point toward plot interior\n",
-               test->name);
-      failed = 1;
-    }
-
-  if ((test->probes & PROBE_AXIS) && !ticks_symmetric_on_axis (surface))
-    {
-      fprintf (stderr, "%s: internal axis ticks are not symmetric\n",
-               test->name);
-      failed = 1;
+      if (test->probes & PROBE_BOTTOM)
+        fprintf (stderr, "%s: bottom ticks do not point toward plot interior\n",
+                 test->name);
+      if (test->probes & PROBE_TOP)
+        fprintf (stderr, "%s: top ticks do not point toward plot interior\n",
+                 test->name);
+      if (test->probes & PROBE_LEFT)
+        fprintf (stderr, "%s: left ticks do not point toward plot interior\n",
+                 test->name);
+      if (test->probes & PROBE_AXIS)
+        fprintf (stderr, "%s: internal axis ticks are not symmetric\n",
+                 test->name);
     }
 
   return failed;
