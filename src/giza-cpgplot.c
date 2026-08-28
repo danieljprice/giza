@@ -118,7 +118,11 @@ void cpgaxis(const char *opt, float x1, float y1, float x2, float y2, \
              float v1, float v2, float step, int nsub, float dmajl, \
              float dmajr, float fmin, float disp, float orient)
 {
-   giza_axis_float(opt,x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient);
+   /* PGPLOT PGAXIS has no tick options and always draws ticks (lengths set
+    * by dmajl/dmajr/fmin); giza_axis requires T/S, so request them here */
+   char giza_opt[32];
+   snprintf(giza_opt, sizeof(giza_opt), "%sTS", opt);
+   giza_axis_float(giza_opt,x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient);
 }
 
 /***************************************************************
