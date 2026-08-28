@@ -42,17 +42,11 @@ static double
 _giza_box_inward_sign (double x, double y, double tick_perp_x, double tick_perp_y,
                        double win_cx, double win_cy, int draw_invert)
 {
-  double to_center_x, to_center_y, perp_x, perp_y, inward_sign;
+  double to_center_x, to_center_y, inward_sign;
 
   to_center_x = win_cx - x;
   to_center_y = win_cy - y;
-  /* compare directions in device space so anisotropic scaling cannot flip
-   * the sign relative to the on-screen tick perpendicular */
-  cairo_user_to_device_distance (Dev[id].context, &to_center_x, &to_center_y);
-  perp_x = tick_perp_x;
-  perp_y = tick_perp_y;
-  cairo_user_to_device_distance (Dev[id].context, &perp_x, &perp_y);
-  inward_sign = (perp_x * to_center_x + perp_y * to_center_y > 0.) ?
+  inward_sign = (tick_perp_x * to_center_x + tick_perp_y * to_center_y > 0.) ?
     1. : -1.;
   if (draw_invert > 0)
     inward_sign = -inward_sign;

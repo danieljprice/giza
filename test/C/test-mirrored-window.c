@@ -9,15 +9,13 @@
 #include <cairo/cairo.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SURFACE_SIZE 400
 #define INK_PROBE    20
 #define INK_THRESH   4
 
-#define PROBE_BOTTOM 1
-#define PROBE_TOP    2
-#define PROBE_LEFT   4
-#define PROBE_AXIS   8
+#define PROBE_AXIS 1
 
 typedef struct
 {
@@ -29,14 +27,28 @@ typedef struct
 
 static int count_ink_rect (cairo_surface_t *surface,
                            int x0, int y0, int x1, int y1);
+static int option_has (const char *opt, char letter);
+static int world_x_to_pixel (double vp_x1, double vp_x2,
+                             double win_x1, double win_x2, double world_x);
+static int world_y_to_pixel (double vp_y1, double vp_y2,
+                             double win_y1, double win_y2, double world_y);
 static int probe_horizontal_edge (cairo_surface_t *surface, int frame_y,
                                   int inward_dy, int x0, int x1);
 static int probe_vertical_edge (cairo_surface_t *surface, int frame_x,
                                 int inward_dx, int y0, int y1);
+static int probe_world_y_edge (cairo_surface_t *surface, double world_y,
+                               double vp_x1, double vp_x2,
+                               double vp_y1, double vp_y2,
+                               double win_x1, double win_x2,
+                               double win_y1, double win_y2);
+static int probe_world_x_edge (cairo_surface_t *surface, double world_x,
+                               double vp_x1, double vp_x2,
+                               double vp_y1, double vp_y2,
+                               double win_x1, double win_x2,
+                               double win_y1, double win_y2);
 static int ticks_symmetric_on_axis (cairo_surface_t *surface,
                                     double axis_world_y);
-static int run_probes (cairo_surface_t *surface, int probes,
-                       double axis_world_y);
+static int run_probes (const mirror_case_t *test, cairo_surface_t *surface);
 static int run_case (cairo_t *cr, const mirror_case_t *test);
 static void draw_case (const mirror_case_t *test);
 
@@ -82,8 +94,47 @@ count_ink_rect (cairo_surface_t *surface, int x0, int y0, int x1, int y1)
 }
 
 static int
+option_has (const char *opt, char letter)
+{
+  if (!opt)
+    return 0;
+
+  for (; *opt; opt++)
+    if (*opt == letter)
+      return 1;
+
+  return 0;
+}
+
+static int
+world_x_to_pixel (double vp_x1, double vp_x2, double win_x1, double win_x2,
+                  double world_x)
+{
+  double ratio;
+
+  if (win_x2 == win_x1)
+    return (int) (0.5 * (vp_x1 + vp_x2));
+
+  ratio = (world_x - win_x1) / (win_x2 - win_x1);
+  return (int) (vp_x1 + ratio * (vp_x2 - vp_x1));
+}
+
+static int
+world_y_to_pixel (double vp_y1, double vp_y2, double win_y1, double win_y2,
+                  double world_y)
+{
+  double ratio;
+
+  if (win_y2 == win_y1)
+    return (int) (0.5 * (vp_y1 + vp_y2));
+
+  ratio = (world_y - win_y1) / (win_y2 - win_y1);
+  return (int) (vp_y1 + ratio * (vp_y2 - vp_y1));
+}
+
+static int
 probe_horizontal_edge (cairo_surface_t *surface, int frame_y, int inward_dy,
-                     int x0, int x1)
+                       int x0, int x1)
 {
   int x, inward_ink, outward_ink;
 
@@ -124,64 +175,35 @@ probe_vertical_edge (cairo_surface_t *surface, int frame_x, int inward_dx,
 }
 
 static int
-world_y_to_pixel (double vp_y1, double vp_y2, double win_y1, double win_y2,
-                  double world_y)
+probe_world_y_edge (cairo_surface_t *surface, double world_y,
+                    double vp_x1, double vp_x2, double vp_y1, double vp_y2,
+                    double win_x1, double win_x2, double win_y1, double win_y2)
 {
-  double ratio;
+  int frame_y, vp_cy, inward_dy, x0, x1;
 
-  if (win_y2 == win_y1)
-    return (int) (0.5 * (vp_y1 + vp_y2));
+  frame_y = world_y_to_pixel (vp_y1, vp_y2, win_y1, win_y2, world_y);
+  vp_cy = (int) (0.5 * (vp_y1 + vp_y2));
+  inward_dy = (frame_y > vp_cy) ? -1 : 1;
+  x0 = (int) (vp_x1 + 0.25 * (vp_x2 - vp_x1));
+  x1 = (int) (vp_x1 + 0.75 * (vp_x2 - vp_x1));
 
-  ratio = (world_y - win_y1) / (win_y2 - win_y1);
-  return (int) (vp_y2 + ratio * (vp_y1 - vp_y2));
+  return probe_horizontal_edge (surface, frame_y, inward_dy, x0, x1);
 }
 
 static int
-run_probes (cairo_surface_t *surface, int probes, double axis_world_y)
+probe_world_x_edge (cairo_surface_t *surface, double world_x,
+                    double vp_x1, double vp_x2, double vp_y1, double vp_y2,
+                    double win_x1, double win_x2, double win_y1, double win_y2)
 {
-  double vp_x1, vp_x2, vp_y1, vp_y2;
-  double win_x1, win_x2, win_y1, win_y2;
-  int x0, x1, y0, y1, failed;
+  int frame_x, vp_cx, inward_dx, y0, y1;
 
-  failed = 0;
-  giza_get_viewport (GIZA_UNITS_PIXELS, &vp_x1, &vp_x2, &vp_y1, &vp_y2);
-  giza_get_window (&win_x1, &win_x2, &win_y1, &win_y2);
-
-  if (vp_x1 > vp_x2)
-    {
-      double tmp = vp_x1;
-      vp_x1 = vp_x2;
-      vp_x2 = tmp;
-    }
-  if (vp_y1 < vp_y2)
-    {
-      double tmp = vp_y1;
-      vp_y1 = vp_y2;
-      vp_y2 = tmp;
-    }
-
-  x0 = (int) (vp_x1 + 0.25 * (vp_x2 - vp_x1));
-  x1 = (int) (vp_x1 + 0.75 * (vp_x2 - vp_x1));
+  frame_x = world_x_to_pixel (vp_x1, vp_x2, win_x1, win_x2, world_x);
+  vp_cx = (int) (0.5 * (vp_x1 + vp_x2));
+  inward_dx = (frame_x < vp_cx) ? 1 : -1;
   y0 = (int) (vp_y2 + 0.25 * (vp_y1 - vp_y2));
   y1 = (int) (vp_y2 + 0.75 * (vp_y1 - vp_y2));
 
-  if ((probes & PROBE_BOTTOM)
-      && !probe_horizontal_edge (surface, (int) vp_y1, -1, x0, x1))
-    failed = 1;
-
-  if ((probes & PROBE_TOP)
-      && !probe_horizontal_edge (surface, (int) vp_y2, 1, x0, x1))
-    failed = 1;
-
-  if ((probes & PROBE_LEFT)
-      && !probe_vertical_edge (surface, (int) vp_x1, 1, y0, y1))
-    failed = 1;
-
-  if ((probes & PROBE_AXIS)
-      && !ticks_symmetric_on_axis (surface, axis_world_y))
-    failed = 1;
-
-  return failed;
+  return probe_vertical_edge (surface, frame_x, inward_dx, y0, y1);
 }
 
 static int
@@ -227,6 +249,59 @@ ticks_symmetric_on_axis (cairo_surface_t *surface, double axis_world_y)
   return diff * 3 < above_ink + below_ink;
 }
 
+static int
+run_probes (const mirror_case_t *test, cairo_surface_t *surface)
+{
+  double vp_x1, vp_x2, vp_y1, vp_y2;
+  double win_x1, win_x2, win_y1, win_y2;
+  int failed;
+
+  failed = 0;
+  giza_get_viewport (GIZA_UNITS_PIXELS, &vp_x1, &vp_x2, &vp_y1, &vp_y2);
+  giza_get_window (&win_x1, &win_x2, &win_y1, &win_y2);
+
+  if (vp_x1 > vp_x2)
+    {
+      double tmp = vp_x1;
+      vp_x1 = vp_x2;
+      vp_x2 = tmp;
+    }
+  if (vp_y1 < vp_y2)
+    {
+      double tmp = vp_y1;
+      vp_y1 = vp_y2;
+      vp_y2 = tmp;
+    }
+
+  /* xopt B/C and yopt B/C attach ticks to world edges (pWin limits), which
+   * may lie on either screen side when the window is mirrored. */
+  if (option_has (test->xopt, 'B')
+      && !probe_world_y_edge (surface, win_y1, vp_x1, vp_x2, vp_y1, vp_y2,
+                              win_x1, win_x2, win_y1, win_y2))
+    failed = 1;
+
+  if (option_has (test->xopt, 'C')
+      && !probe_world_y_edge (surface, win_y2, vp_x1, vp_x2, vp_y1, vp_y2,
+                              win_x1, win_x2, win_y1, win_y2))
+    failed = 1;
+
+  if (option_has (test->yopt, 'B')
+      && !probe_world_x_edge (surface, win_x1, vp_x1, vp_x2, vp_y1, vp_y2,
+                              win_x1, win_x2, win_y1, win_y2))
+    failed = 1;
+
+  if (option_has (test->yopt, 'C')
+      && !probe_world_x_edge (surface, win_x2, vp_x1, vp_x2, vp_y1, vp_y2,
+                              win_x1, win_x2, win_y1, win_y2))
+    failed = 1;
+
+  if ((test->probes & PROBE_AXIS)
+      && !ticks_symmetric_on_axis (surface, 0.))
+    failed = 1;
+
+  return failed;
+}
+
 static void
 draw_case (const mirror_case_t *test)
 {
@@ -259,7 +334,7 @@ run_case (cairo_t *cr, const mirror_case_t *test)
 
   draw_case (test);
   cairo_surface_flush (surface);
-  failed = run_probes (surface, test->probes, 0.);
+  failed = run_probes (test, surface);
   giza_release_cairo_context ();
   cairo_surface_flush (surface);
 
@@ -271,20 +346,8 @@ run_case (cairo_t *cr, const mirror_case_t *test)
     }
 
   if (failed)
-    {
-      if (test->probes & PROBE_BOTTOM)
-        fprintf (stderr, "%s: bottom ticks do not point toward plot interior\n",
-                 test->name);
-      if (test->probes & PROBE_TOP)
-        fprintf (stderr, "%s: top ticks do not point toward plot interior\n",
-                 test->name);
-      if (test->probes & PROBE_LEFT)
-        fprintf (stderr, "%s: left ticks do not point toward plot interior\n",
-                 test->name);
-      if (test->probes & PROBE_AXIS)
-        fprintf (stderr, "%s: internal axis ticks are not symmetric\n",
-                 test->name);
-    }
+    fprintf (stderr, "%s: tick marks do not point toward plot interior\n",
+             test->name);
 
   return failed;
 }
@@ -294,10 +357,10 @@ main (void)
 {
   static mirror_case_t const cases[] = {
     /* giza_box y-axis: B=left, C=right, L=log (not "left") */
-    { "normal", 0., 1., 0., 1., "BT", "", PROBE_BOTTOM },
-    { "mirror_x", 1., 0., 0., 1., "", "BCT", PROBE_LEFT },
-    { "mirror_y", 0., 1., 1., 0., "BCT", "", PROBE_TOP },
-    { "mirror_xy", 1., 0., 1., 0., "BCT", "BCT", PROBE_TOP | PROBE_LEFT },
+    { "normal", 0., 1., 0., 1., "BT", "", 0 },
+    { "mirror_x", 1., 0., 0., 1., "", "BCT", 0 },
+    { "mirror_y", 0., 1., 1., 0., "BCT", "", 0 },
+    { "mirror_xy", 1., 0., 1., 0., "BCT", "BCT", 0 },
     { "axis_symmetric", 0., 1., -1., 1., "AT", "", PROBE_AXIS },
   };
   cairo_surface_t *surface;
