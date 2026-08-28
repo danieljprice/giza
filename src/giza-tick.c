@@ -28,8 +28,98 @@
 #include "giza-window-private.h"
 #include "giza-viewport-private.h"
 #include "giza-drivers-private.h"
+#include "giza-axis-private.h"
+#include "giza-tick-private.h"
 #include <giza.h>
 #include <math.h>
+
+/**
+ * Return one character height in device pixels (font cap height).
+ */
+double
+_giza_character_height_device (void)
+{
+  return Dev[id].fontExtents.ascent;
+}
+
+/**
+ * Label angle, justification and displacement for a tick label, following
+ * the on-screen axis direction and the requested orientation angle.
+ */
+void
+_giza_tick_label_style (double theta_deg, double disp, double angle,
+                        double *label_angle, double *justification,
+                        double *displacement)
+{
+  double orientation;
+
+  *displacement = disp;
+  *label_angle = theta_deg;
+  orientation = fmod (angle, 360.);
+  if (orientation < 0.) orientation += 360.;
+  if (orientation > 45. && orientation <= 135.)
+    {
+      *justification = (*displacement < 0.) ? 1. : 0.;
+    }
+  else if (orientation > 135. && orientation <= 225.)
+    {
+      *justification = 0.5;
+      if (*displacement < 0.) *displacement = *displacement - 1.;
+    }
+  else if (orientation > 225. && orientation <= 315.)
+    {
+      *label_angle = *label_angle + 90.;
+      *justification = (*displacement < 0.) ? 0. : 1.;
+    }
+  else
+    {
+      *justification = 0.5;
+      if (*displacement > 0.) *displacement = *displacement + 1.;
+    }
+}
+
+/**
+ * Draw one tick mark and optional label along an axis segment.
+ * Caller must have GIZA_TRANS_WORLD active and must supply the precomputed
+ * tick vectors from _giza_axis_tick_vectors.
+ */
+void
+_giza_draw_tick_mark (double x1, double y1, double x2, double y2,
+                      double ratio, double tickl, double tickr,
+                      double disp, double angle, const char *label,
+                      double theta_deg, double tick_perp_x, double tick_perp_y)
+{
+  int old_line_cap;
+  double x, y, displacement, label_angle, justification, orientation;
+
+  x = x1 + ratio * (x2 - x1);
+  y = y1 + ratio * (y2 - y1);
+
+  if (!(_giza_equal (tickl, 0.) && _giza_equal (tickr, 0.)))
+    {
+      cairo_move_to (Dev[id].context, x - tickr * tick_perp_x,
+                     y - tickr * tick_perp_y);
+      cairo_line_to (Dev[id].context, x + tickl * tick_perp_x,
+                     y + tickl * tick_perp_y);
+      /* stroke immediately: giza_ptext below resets the cairo path, so
+       * a deferred stroke would lose the tick whenever a label is given */
+      giza_get_line_cap (&old_line_cap);
+      giza_set_line_cap (CAIRO_LINE_CAP_SQUARE);
+      _giza_stroke ();
+      giza_set_line_cap (old_line_cap);
+    }
+
+  if (label && label[0] != '\0')
+    {
+      _giza_tick_label_style (theta_deg, disp, angle, &label_angle,
+                              &justification, &displacement);
+      orientation = fmod (angle, 360.);
+      if (orientation < 0.) orientation += 360.;
+      giza_ptext (x - displacement * tick_perp_x,
+                  y - displacement * tick_perp_y,
+                  label_angle - orientation, justification, label);
+    }
+}
 
 /**
  * Drawing: giza_tick
@@ -60,20 +150,7 @@ giza_tick (double x1, double y1, double x2, double y2, double v,
            double tickl, double tickr, double disp, double angle, const char *label)
 {
   int oldTrans;
-  int lc0;
-  double ddx;
-  double ddy;
-  double dlen;
-  double theta_screen_deg;
-  double ych;
-  double tikx;
-  double tiky;
-  double x;
-  double y;
-  double d;
-  double lang;
-  double just;
-  double or;
+  double theta_deg, tick_perp_x, tick_perp_y;
 
   if (!_giza_check_device_ready ("giza_tick"))
     return;
@@ -83,84 +160,25 @@ giza_tick (double x1, double y1, double x2, double y2, double v,
   oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  /* Tick sides, label position, justification and rotation follow the
-   * on-screen axis direction so mirrored x or y windows are handled
-   * correctly. */
-
-  /* axis direction in device coords (device y runs down) */
-  ddx = x2 - x1;
-  ddy = y2 - y1;
-  cairo_user_to_device_distance (Dev[id].context, &ddx, &ddy);
-  dlen = sqrt (ddx*ddx + ddy*ddy);
-  if (_giza_equal (dlen, 0.))
+  if (!_giza_axis_tick_vectors (x1, y1, x2, y2,
+                                &theta_deg, &tick_perp_x, &tick_perp_y))
     {
       _giza_set_trans (oldTrans);
-      giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);
+      giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax,
+                         Dev[id].VP.ymin, Dev[id].VP.ymax);
       return;
     }
-  theta_screen_deg = -atan2 (ddy, ddx) / GIZA_DEG_TO_RAD;
 
-  /* (tikx,tiky): world-coordinate displacement of one character line
-   * spacing perpendicular to the axis, pointing to the screen-left of
-   * the direction of travel (x1,y1) -> (x2,y2).  The unit is ch times
-   * panelheight/40 of the view surface (geometric line spacing, not a
-   * font metric). */
-  ych = Dev[id].ch * Dev[id].panelheight / 40.;
-  tikx = ddy/dlen * ych;
-  tiky = -ddx/dlen * ych;
-  cairo_device_to_user_distance (Dev[id].context, &tikx, &tiky);
-
-  /* draw the tick mark at fraction v along the axis */
-  x = x1 + v*(x2 - x1);
-  y = y1 + v*(y2 - y1);
-  if (!(_giza_equal(tickl,0.) && _giza_equal(tickr,0.)))
-    {
-      cairo_move_to (Dev[id].context, x - tickr*tikx, y - tickr*tiky);
-      cairo_line_to (Dev[id].context, x + tickl*tikx, y + tickl*tiky);
-      /* stroke immediately: giza_ptext below resets the cairo path, so
-       * a deferred stroke would lose the tick whenever a label is given */
-      giza_get_line_cap (&lc0);
-      giza_set_line_cap (CAIRO_LINE_CAP_SQUARE);
-      _giza_stroke ();
-      giza_set_line_cap (lc0);
-    }
-
-  /* write the label, with per-quadrant justification and displacement
-   * rules for the orientation angle */
-  if (label && label[0] != '\0')
-    {
-      d = disp;
-      lang = theta_screen_deg;
-      or = fmod (angle, 360.);
-      if (or < 0.) or += 360.;
-      if (or > 45. && or <= 135.)
-        {
-          just = (d < 0.) ? 1. : 0.;
-        }
-      else if (or > 135. && or <= 225.)
-        {
-          just = 0.5;
-          if (d < 0.) d = d - 1.;
-        }
-      else if (or > 225. && or <= 315.)
-        {
-          lang = lang + 90.;
-          just = (d < 0.) ? 0. : 1.;
-        }
-      else
-        {
-          just = 0.5;
-          if (d > 0.) d = d + 1.;
-        }
-      giza_ptext (x - d*tikx, y - d*tiky, lang - or, just, label);
-    }
+  _giza_draw_tick_mark (x1, y1, x2, y2, v, tickl, tickr, disp, angle, label,
+                        theta_deg, tick_perp_x, tick_perp_y);
 
   _giza_set_trans (oldTrans);
 
   giza_flush_device ();
 
   /* Restore clipping */
-  giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);
+  giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax,
+                     Dev[id].VP.ymin, Dev[id].VP.ymax);
 }
 
 /**
@@ -177,7 +195,7 @@ giza_tick_float (float x1, float y1, float x2, float y2, float v,
   if (!_giza_check_device_ready ("giza_tick"))
     return;
 
-  giza_tick((double) x1, (double) y1, (double) x2, (double) y2, (double) v,
-            (double) tickl, (double) tickr, (double) disp, (double) angle, label);
+  giza_tick ((double) x1, (double) y1, (double) x2, (double) y2, (double) v,
+             (double) tickl, (double) tickr, (double) disp, (double) angle, label);
 
 }

@@ -29,10 +29,60 @@
 #include "giza-window-private.h"
 #include "giza-viewport-private.h"
 #include "giza-drivers-private.h"
+#include "giza-axis-private.h"
 #include "giza-tick-private.h"
 #include <giza.h>
 #include <math.h>
 #include <stdio.h>
+
+/**
+ * Draw major and minor tick marks along an axis segment.
+ */
+static void
+_giza_axis_draw_ticks (double x1, double y1, double x2, double y2,
+                       double v1, double v2, double intervalMin, int nMinTicks,
+                       int draw_majticks, int draw_minticks, int draw_log,
+                       const double *logTab, double dmajl, double dmajr,
+                       double fmin, double tick_sign, double angle,
+                       double theta_deg, double tick_perp_x, double tick_perp_y)
+{
+  int i, i1, i2, j, jmax, major;
+  double val, ratio, vtol, currentTickL_l, currentTickL_r;
+
+  _giza_tick_intervals (v1, v2, intervalMin, &i1, &i2);
+  jmax = 0;
+  if (draw_log) jmax = 8;
+
+  for (i = i1; i <= i2; i++)
+    {
+      for (j = 0; j <= jmax; j++)
+        {
+          major = (i % nMinTicks == 0) && draw_majticks && (j == 0);
+          currentTickL_l = dmajl * fmin;
+          currentTickL_r = dmajr * fmin;
+          if (major)
+            {
+              currentTickL_l = dmajl;
+              currentTickL_r = dmajr;
+            }
+          val = (i + logTab[j]) * intervalMin;
+          ratio = (val - v1) / (v2 - v1);
+
+          vtol = 1.e-10 * fabs (v2 - v1);
+          if ((val > ((v1 > v2) ? v1 : v2) + vtol) ||
+              (val < ((v1 < v2) ? v1 : v2) - vtol))
+            continue;
+          if (!((major && draw_majticks) || draw_minticks))
+            continue;
+
+          _giza_draw_tick_mark (x1, y1, x2, y2, ratio,
+                                tick_sign * currentTickL_l,
+                                tick_sign * currentTickL_r,
+                                0., angle, "",
+                                theta_deg, tick_perp_x, tick_perp_y);
+        }
+    }
+}
 
 /**
  * Drawing: giza_axis
@@ -109,12 +159,11 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
 
   double intervalMaj, intervalMin, val, ratio;
   int nv, np;
-  int nMinTicks, major;
-  double currentTickL_l, currentTickL_r;
+  int nMinTicks;
   double tick_sign;
-  double vtol;
+  double theta_deg, tick_perp_x, tick_perp_y;
   char tmp[100];
-  int i, i1, i2, j, jmax, jtmp;
+  int i, i1, i2, j, jtmp;
 
   /* set x-options */
   for (i = 0; opt[i]; i++)
@@ -170,13 +219,10 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
       _giza_stroke ();
     }
 
-  /* Tick geometry, labels, justification and rotation are delegated
-   * to giza_tick for each tick position along the axis */
-
   /* draw_invert<0 is default; >0 means option I was specified (see giza_box) */
   tick_sign = (draw_invert > 0) ? -1.0 : 1.0;
 
-  /* Choose x tick intervals */
+  /* Choose tick intervals */
   if (draw_log)
     {
       nMinTicks = 1;
@@ -201,108 +247,78 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
     }
   intervalMin = intervalMaj / (double) nMinTicks;
 
-  /* Only enter tick drawing if (1) any of the ticks/grid must be drawn AND
-     (2) at least one of top, bottom or axis must be drawn because the ticks
-     can only be drawn on any/all of these lines */
-  if (draw_majticks || draw_minticks)
+  if (_giza_axis_tick_vectors (x1, y1, x2, y2,
+                               &theta_deg, &tick_perp_x, &tick_perp_y))
     {
-      _giza_tick_intervals (v1, v2, intervalMin, &i1, &i2);
-      jmax = 0;
-      /* If log axis ticks always have 9 minor ticks */
-      if (draw_log) jmax = 8;
-
-      for (i = i1; i <= i2; i++)
+      /* Only enter tick drawing if (1) any of the ticks/grid must be drawn AND
+       * (2) at least one of top, bottom or axis must be drawn because the ticks
+       * can only be drawn on any/all of these lines */
+      if (draw_majticks || draw_minticks)
         {
-          for (j = 0; j <= jmax; j++)
-            {
-              /* log axis ticks are major when j = 0 */
-              major = (i % nMinTicks == 0) && draw_majticks && (j == 0);
-              currentTickL_l = dmajl * fmin;
-              currentTickL_r = dmajr * fmin;
-              if (major)
-                 {
-                 currentTickL_l = dmajl;
-                 currentTickL_r = dmajr;
-                 }
-              val = (i + logTab[j]) * intervalMin;
-              ratio = (val - v1) / (v2 - v1);
-
-              /* don't draw outside the axis range, but do draw ticks at
-               * the endpoints themselves */
-              vtol = 1.e-10 * fabs (v2 - v1);
-              if ((val > ((v1 > v2) ? v1 : v2) + vtol) ||
-                  (val < ((v1 < v2) ? v1 : v2) - vtol))
-                continue;
-              /* are we supposed to draw this tick anyway? */
-              if ( !((major && draw_majticks) || draw_minticks) )
-                continue;
-
-              /* draw tick (lengths in units of character height) */
-              giza_tick (x1, y1, x2, y2, ratio,
-                         tick_sign*currentTickL_l, tick_sign*currentTickL_r,
-                         0., angle, "");
-
-            }
+          _giza_axis_draw_ticks (x1, y1, x2, y2, v1, v2, intervalMin, nMinTicks,
+                                 draw_majticks, draw_minticks, draw_log, logTab,
+                                 dmajl, dmajr, fmin, tick_sign, angle,
+                                 theta_deg, tick_perp_x, tick_perp_y);
+          _giza_stroke ();
         }
-      _giza_stroke ();
-    }
 
-  /* labels */
-  if (draw_labels)
-    {
-      _giza_tick_intervals (v1, v2, intervalMaj, &i1, &i2);
-      np = (int) floor (log10 (fabs (intervalMaj)));
-      nv = _giza_nint (intervalMaj/pow (10., np));
+      /* labels */
+      if (draw_labels)
+        {
+          _giza_tick_intervals (v1, v2, intervalMaj, &i1, &i2);
+          np = (int) floor (log10 (fabs (intervalMaj)));
+          nv = _giza_nint (intervalMaj/pow (10., np));
 
-      for (i = i1; i <= i2; i++)
+          for (i = i1; i <= i2; i++)
             {
               val = i * intervalMaj;
               ratio = (val - v1) / (v2 - v1);
-          /* don't draw label if outside frame */
+              /* don't draw label if outside frame */
               if (ratio < 0. || ratio > 1.)
-             continue;
-          if (draw_log)
-            {
-              jtmp = _giza_nint(val);
-              if (jtmp == 1) {
-                 snprintf (tmp, sizeof(tmp), "10");
-              } else if (jtmp == 0) {
-                 snprintf (tmp, sizeof(tmp), "1");
-              } else {
-                 snprintf (tmp, sizeof(tmp), "10^{%i}", jtmp);
-              }
+                continue;
+              if (draw_log)
+                {
+                  jtmp = _giza_nint(val);
+                  if (jtmp == 1) {
+                     snprintf (tmp, sizeof(tmp), "10");
+                  } else if (jtmp == 0) {
+                     snprintf (tmp, sizeof(tmp), "1");
+                  } else {
+                     snprintf (tmp, sizeof(tmp), "10^{%i}", jtmp);
+                  }
+                }
+              else
+                {
+                  giza_format_number (i*nv, np, number_format, tmp, sizeof(tmp));
+                }
+
+              _giza_draw_tick_mark (x1, y1, x2, y2, ratio, 0., 0., disp, angle, tmp,
+                                    theta_deg, tick_perp_x, tick_perp_y);
+
             }
-          else
+          _giza_stroke ();
+        }
+
+      /* extra labels for log axis */
+      if (draw_labels && draw_log && (v2 - v1 < 2.))
+        {
+          _giza_tick_intervals (v1, v2, intervalMin, &i1, &i2);
+          for (i = i1 - 1; i <= i2; i++)
             {
-              giza_format_number (i*nv, np, number_format, tmp, sizeof(tmp));
-            }
-
-          /* write the label (giza_tick applies orientation-based justification) */
-          giza_tick (x1, y1, x2, y2, ratio, 0., 0., disp, angle, tmp);
-
-       }
-      _giza_stroke ();
-    }
-
-  /* extra labels for log axis */
-  if (draw_labels && draw_log && (v2 - v1 < 2.))
-    {
-      _giza_tick_intervals (v1, v2, intervalMin, &i1, &i2);
-      for (i = i1 - 1; i <= i2; i++)
-            {
-            for (j = 1; j <= 4; j += 3)
-              {
-                val = (i + logTab[j]) * intervalMin;
-                if (val <= v2 && val >= v1)
-              {
+              for (j = 1; j <= 4; j += 3)
+                {
+                  val = (i + logTab[j]) * intervalMin;
+                  if (val <= v2 && val >= v1)
+                    {
                       ratio = (val - v1) / (v2 - v1);
                       val = pow (10, val);
                       giza_format_number (j+1, _giza_nint (i * intervalMin), number_format, tmp, sizeof(tmp));
 
-              /* write the label */
-              giza_tick (x1, y1, x2, y2, ratio, 0., 0., disp, angle, tmp);
-              }
-           }
+                      _giza_draw_tick_mark (x1, y1, x2, y2, ratio, 0., 0., disp, angle, tmp,
+                                            theta_deg, tick_perp_x, tick_perp_y);
+                    }
+                }
+            }
         }
     }
 
@@ -324,6 +340,33 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
 
   /* Restore clipping */
   giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);
+}
+
+/**
+ * Compute on-screen axis direction and a perpendicular unit step of one
+ * character height in world coordinates.  Returns 1 on success, 0 if the
+ * axis segment has zero length in device space.
+ */
+int
+_giza_axis_tick_vectors (double x1, double y1, double x2, double y2,
+                         double *theta_deg,
+                         double *tick_perp_x, double *tick_perp_y)
+{
+  double axis_dx, axis_dy, axis_length, character_height;
+
+  axis_dx = x2 - x1;
+  axis_dy = y2 - y1;
+  cairo_user_to_device_distance (Dev[id].context, &axis_dx, &axis_dy);
+  axis_length = sqrt (axis_dx * axis_dx + axis_dy * axis_dy);
+  if (_giza_equal (axis_length, 0.))
+    return 0;
+
+  *theta_deg = -atan2 (axis_dy, axis_dx) / GIZA_DEG_TO_RAD;
+  character_height = _giza_character_height_device ();
+  *tick_perp_x = axis_dy / axis_length * character_height;
+  *tick_perp_y = -axis_dx / axis_length * character_height;
+  cairo_device_to_user_distance (Dev[id].context, tick_perp_x, tick_perp_y);
+  return 1;
 }
 
 /**

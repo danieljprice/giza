@@ -21,3 +21,22 @@
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
+
+#ifndef GIZA_TICK_PRIVATE_H
+#define GIZA_TICK_PRIVATE_H
+
+/* one character height in device pixels (cap height of the current font) */
+double _giza_character_height_device (void);
+
+void _giza_tick_label_style (double theta_deg, double disp, double angle,
+                             double *label_angle, double *justification,
+                             double *displacement);
+
+/* draw one tick mark and optional label; GIZA_TRANS_WORLD must be active */
+void _giza_draw_tick_mark (double x1, double y1, double x2, double y2,
+                           double ratio, double tickl, double tickr,
+                           double disp, double angle, const char *label,
+                           double theta_deg, double tick_perp_x,
+                           double tick_perp_y);
+
+#endif
