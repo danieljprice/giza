@@ -154,17 +154,17 @@ find_frame_col (cairo_surface_t *surface, int left)
   return best_x;
 }
 
+/* Scan along a horizontal frame edge for a tick whose ink extends toward
+ * the plot interior rather than away from it. */
 static int
 ticks_inward_horizontal (cairo_surface_t *surface, int top)
 {
-  int width, height, center_x, center_y, frame_x, frame_y;
-  int inward_ink, outward_ink, inward_sign;
+  int width, height, center_y, frame_y, x, x0, x1, inward_sign;
+  int inward_ink, outward_ink;
 
   width = cairo_image_surface_get_width (surface);
   height = cairo_image_surface_get_height (surface);
-  center_x = width / 2;
   center_y = height / 2;
-  frame_x = center_x;
   frame_y = find_frame_row (surface, top);
   inward_sign = top ? 1 : -1;
   if (frame_y > center_y)
@@ -172,29 +172,36 @@ ticks_inward_horizontal (cairo_surface_t *surface, int top)
   else if (frame_y < center_y)
     inward_sign = 1;
 
-  inward_ink = count_ink_rect (surface, frame_x - 2,
-                               frame_y + inward_sign,
-                               frame_x + 2,
-                               frame_y + inward_sign * INK_PROBE);
-  outward_ink = count_ink_rect (surface, frame_x - 2,
-                                frame_y - inward_sign,
-                                frame_x + 2,
-                                frame_y - inward_sign * INK_PROBE);
+  x0 = width / 4;
+  x1 = 3 * width / 4;
+  for (x = x0; x <= x1; x++)
+    {
+      inward_ink = count_ink_rect (surface, x - 2,
+                                   frame_y + inward_sign,
+                                   x + 2,
+                                   frame_y + inward_sign * INK_PROBE);
+      outward_ink = count_ink_rect (surface, x - 2,
+                                    frame_y - inward_sign,
+                                    x + 2,
+                                    frame_y - inward_sign * INK_PROBE);
+      if (inward_ink > outward_ink + INK_THRESH && inward_ink > INK_THRESH)
+        return 1;
+    }
 
-  return inward_ink > outward_ink + INK_THRESH;
+  return 0;
 }
 
+/* Scan along a vertical frame edge for a tick whose ink extends toward
+ * the plot interior rather than away from it. */
 static int
 ticks_inward_vertical (cairo_surface_t *surface, int left)
 {
-  int width, height, center_x, center_y, frame_x, frame_y;
-  int inward_ink, outward_ink, inward_sign;
+  int width, height, center_x, frame_x, y, y0, y1, inward_sign;
+  int inward_ink, outward_ink;
 
   width = cairo_image_surface_get_width (surface);
   height = cairo_image_surface_get_height (surface);
   center_x = width / 2;
-  center_y = height / 2;
-  frame_y = center_y;
   frame_x = find_frame_col (surface, left);
   inward_sign = left ? 1 : -1;
   if (frame_x < center_x)
@@ -202,12 +209,19 @@ ticks_inward_vertical (cairo_surface_t *surface, int left)
   else if (frame_x > center_x)
     inward_sign = -1;
 
-  inward_ink = count_ink_rect (surface, frame_x + inward_sign, frame_y - 2,
-                               frame_x + inward_sign * INK_PROBE, frame_y + 2);
-  outward_ink = count_ink_rect (surface, frame_x - inward_sign, frame_y - 2,
-                                frame_x - inward_sign * INK_PROBE, frame_y + 2);
+  y0 = height / 4;
+  y1 = 3 * height / 4;
+  for (y = y0; y <= y1; y++)
+    {
+      inward_ink = count_ink_rect (surface, frame_x + inward_sign, y - 2,
+                                   frame_x + inward_sign * INK_PROBE, y + 2);
+      outward_ink = count_ink_rect (surface, frame_x - inward_sign, y - 2,
+                                    frame_x - inward_sign * INK_PROBE, y + 2);
+      if (inward_ink > outward_ink + INK_THRESH && inward_ink > INK_THRESH)
+        return 1;
+    }
 
-  return inward_ink > outward_ink + INK_THRESH;
+  return 0;
 }
 
 static int
@@ -324,7 +338,7 @@ main (void)
 {
   static mirror_case_t const cases[] = {
     /* giza_box y-axis: B=left, C=right, L=log (not "left") */
-    { "normal", 0., 1., 0., 1., "BCT", "", PROBE_BOTTOM },
+    { "normal", 0., 1., 0., 1., "BT", "", PROBE_BOTTOM },
     { "mirror_x", 1., 0., 0., 1., "", "BCT", PROBE_LEFT },
     { "mirror_y", 0., 1., 1., 0., "BCT", "", PROBE_TOP },
     { "mirror_xy", 1., 0., 1., 0., "BCT", "BCT", PROBE_TOP | PROBE_LEFT },
