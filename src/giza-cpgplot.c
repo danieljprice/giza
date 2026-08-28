@@ -731,11 +731,12 @@ int cpgopen(const char *device)
       giza_set_colour_palette(GIZA_COLOUR_PALETTE_PGPLOT);
       giza_query_device("hardcopy", is_hardcopy, &len);
       if (strcmp(is_hardcopy, "YES") != 0
+          || Dev[id].type == GIZA_DEVICE_NULL
           || Dev[id].type == GIZA_DEVICE_PNG || Dev[id].type == GIZA_DEVICE_MP4)
         {
-          /* interactive devices and raster files: PGPLOT screen convention
-           * (black background, white foreground - matching PGPLOT's PNG
-           * driver, which renders white-on-black like /xw) */
+          /* interactive devices, null device, and raster files: PGPLOT screen
+           * convention (black background, white foreground - matching
+           * PGPLOT's PNG driver, which renders white-on-black like /xw) */
           giza_set_colour_representation(GIZA_BACKGROUND_COLOUR, 0., 0., 0.);
           giza_set_colour_representation(GIZA_FOREGROUND_COLOUR, 1., 1., 1.);
           giza_draw_background();
