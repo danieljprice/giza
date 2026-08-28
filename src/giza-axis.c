@@ -112,6 +112,7 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
   int nMinTicks, major;
   double currentTickL_l, currentTickL_r;
   double tick_sign;
+  double vtol;
   char tmp[100];
   int i, i1, i2, j, jmax, jtmp;
 
@@ -169,9 +170,8 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
       _giza_stroke ();
     }
 
-  /* Tick geometry, label position, justification and rotation are all
-   * delegated to giza_tick, which follows PGPLOT's pgtick.f - PGPLOT
-   * implements PGAXIS as repeated calls to PGTICK in the same way */
+  /* Tick geometry, labels, justification and rotation are delegated
+   * to giza_tick for each tick position along the axis */
 
   /* draw_invert<0 is default; >0 means option I was specified (see giza_box) */
   tick_sign = (draw_invert > 0) ? -1.0 : 1.0;
@@ -227,9 +227,9 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
               val = (i + logTab[j]) * intervalMin;
               ratio = (val - v1) / (v2 - v1);
 
-              /* don't draw outside the axis range, but DO draw ticks at
-               * the endpoints themselves, as PGPLOT's pgaxis.f does */
-              double vtol = 1.e-10 * fabs (v2 - v1);
+              /* don't draw outside the axis range, but do draw ticks at
+               * the endpoints themselves */
+              vtol = 1.e-10 * fabs (v2 - v1);
               if ((val > ((v1 > v2) ? v1 : v2) + vtol) ||
                   (val < ((v1 < v2) ? v1 : v2) - vtol))
                 continue;
@@ -237,7 +237,7 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
               if ( !((major && draw_majticks) || draw_minticks) )
                 continue;
 
-              /* draw tick (lengths in character heights, as PGTICK) */
+              /* draw tick (lengths in units of character height) */
               giza_tick (x1, y1, x2, y2, ratio,
                          tick_sign*currentTickL_l, tick_sign*currentTickL_r,
                          0., angle, "");
@@ -277,7 +277,7 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
               giza_format_number (i*nv, np, number_format, tmp, sizeof(tmp));
             }
 
-          /* write the label (giza_tick applies PGPLOT justification rules) */
+          /* write the label (giza_tick applies orientation-based justification) */
           giza_tick (x1, y1, x2, y2, ratio, 0., 0., disp, angle, tmp);
 
        }

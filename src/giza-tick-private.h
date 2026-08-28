@@ -21,6 +21,3 @@
  *      James Wetter <wetter.j@gmail.com>
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
-void
-_giza_draw_tick(cairo_matrix_t mat, double ratio, double dr,
-                double currentTickL_l, double currentTickL_r);
