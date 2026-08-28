@@ -80,6 +80,7 @@ giza_tick (double x1, double y1, double x2, double y2, double v,
   if (_giza_equal (dlen, 0.))
     {
       _giza_set_trans (oldTrans);
+      giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);
       return;
     }
   double theta_screen_deg = -atan2 (ddy, ddx) / GIZA_DEG_TO_RAD;
