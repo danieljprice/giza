@@ -736,6 +736,8 @@ int cpgopen(const char *device)
           /* interactive devices and raster files: PGPLOT screen convention
            * (black background, white foreground - matching PGPLOT's PNG
            * driver, which renders white-on-black like /xw) */
+          giza_set_colour_representation(GIZA_BACKGROUND_COLOUR, 0., 0., 0.);
+          giza_set_colour_representation(GIZA_FOREGROUND_COLOUR, 1., 1., 1.);
           giza_draw_background();
         }
       else
