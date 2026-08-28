@@ -58,7 +58,7 @@ _giza_box_inward_sign (double x, double y, double tick_perp_x, double tick_perp_
  */
 static void
 _giza_box_draw_tick (double x, double y, double tick_length, int major,
-                     int draw_invert, double draw_project,
+                     int draw_invert, double draw_project, int draw_symmetric,
                      double tick_perp_x, double tick_perp_y,
                      double win_cx, double win_cy)
 {
@@ -76,7 +76,9 @@ _giza_box_draw_tick (double x, double y, double tick_length, int major,
                                        win_cx, win_cy, draw_invert);
   tick_left = inward_sign * tick_world_length / perp_length;
   tick_right = 0.;
-  if (major && !_giza_equal (draw_project, 0.))
+  if (draw_symmetric)
+    tick_right = tick_left;
+  else if (major && !_giza_equal (draw_project, 0.))
     tick_right = -draw_project * inward_sign * tick_world_length / perp_length;
 
   cairo_move_to (Dev[id].context, x - tick_right * tick_perp_x,
@@ -433,7 +435,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
               if (xdraw_bottom && xedge_bottom)
                 {
                   _giza_box_draw_tick (xval, win_y_bottom, currentTickL, major,
-                                       xdraw_invert, (major ? xdraw_project : 0.),
+                                       xdraw_invert, (major ? xdraw_project : 0.), 0,
                                        xtick_x_bottom, xtick_y_bottom,
                                        win_cx, win_cy);
                 }
@@ -447,7 +449,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
               else if (xdraw_axis && xedge_axis)
                 {
                   _giza_box_draw_tick (xval, 0., currentTickL, major,
-                                       xdraw_invert, 0.,
+                                       xdraw_invert, 0., 1,
                                        xtick_x_ax, xtick_y_ax,
                                        win_cx, win_cy);
                 }
@@ -455,7 +457,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
               if (xdraw_top && xedge_top)
                 {
                   _giza_box_draw_tick (xval, win_y_top, currentTickL, major,
-                                       xdraw_invert, (major ? xdraw_project : 0.),
+                                       xdraw_invert, (major ? xdraw_project : 0.), 0,
                                        xtick_x_top, xtick_y_top,
                                        win_cx, win_cy);
                 }
@@ -588,7 +590,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
               if (ydraw_left && yedge_left)
                 {
                   _giza_box_draw_tick (win_x_left, yval, currentTickL, major,
-                                       ydraw_invert, (major ? ydraw_project : 0.),
+                                       ydraw_invert, (major ? ydraw_project : 0.), 0,
                                        ytick_x_left, ytick_y_left,
                                        win_cx, win_cy);
                 }
@@ -602,7 +604,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
               else if (ydraw_axis && yedge_axis)
                 {
                   _giza_box_draw_tick (0., yval, currentTickL, major,
-                                       ydraw_invert, 0.,
+                                       ydraw_invert, 0., 1,
                                        ytick_x_ax, ytick_y_ax,
                                        win_cx, win_cy);
                 }
@@ -610,7 +612,7 @@ giza_box (const char *xopt, double xtick, int nxsub,
               if (ydraw_right && yedge_right)
                 {
                   _giza_box_draw_tick (win_x_right, yval, currentTickL, major,
-                                       ydraw_invert, (major ? ydraw_project : 0.),
+                                       ydraw_invert, (major ? ydraw_project : 0.), 0,
                                        ytick_x_right, ytick_y_right,
                                        win_cx, win_cy);
                 }

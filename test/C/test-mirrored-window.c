@@ -17,6 +17,7 @@
 #define PROBE_BOTTOM 1
 #define PROBE_TOP    2
 #define PROBE_LEFT   4
+#define PROBE_AXIS   8
 
 typedef struct
 {
@@ -32,6 +33,7 @@ static int find_frame_row (cairo_surface_t *surface, int top);
 static int find_frame_col (cairo_surface_t *surface, int left);
 static int ticks_inward_horizontal (cairo_surface_t *surface, int top);
 static int ticks_inward_vertical (cairo_surface_t *surface, int left);
+static int ticks_symmetric_on_axis (cairo_surface_t *surface);
 static int run_case (cairo_t *cr, const mirror_case_t *test);
 static void draw_case (const mirror_case_t *test);
 
@@ -208,6 +210,43 @@ ticks_inward_vertical (cairo_surface_t *surface, int left)
   return inward_ink > outward_ink + INK_THRESH;
 }
 
+static int
+ticks_symmetric_on_axis (cairo_surface_t *surface)
+{
+  int width, height, axis_y, tick_x, x, above_ink, below_ink, diff;
+
+  width = cairo_image_surface_get_width (surface);
+  height = cairo_image_surface_get_height (surface);
+  axis_y = height / 2;
+  tick_x = -1;
+
+  for (x = width / 4; x < 3 * width / 4; x++)
+    {
+      if (count_ink_rect (surface, x, axis_y - INK_PROBE, x, axis_y + INK_PROBE)
+          > INK_THRESH)
+        {
+          tick_x = x;
+          break;
+        }
+    }
+
+  if (tick_x < 0)
+    return 0;
+
+  above_ink = count_ink_rect (surface, tick_x - 1, axis_y + 1,
+                              tick_x + 1, axis_y + INK_PROBE);
+  below_ink = count_ink_rect (surface, tick_x - 1, axis_y - INK_PROBE,
+                              tick_x + 1, axis_y - 1);
+  if (above_ink <= INK_THRESH || below_ink <= INK_THRESH)
+    return 0;
+
+  diff = above_ink - below_ink;
+  if (diff < 0)
+    diff = -diff;
+
+  return diff * 3 < above_ink + below_ink;
+}
+
 static void
 draw_case (const mirror_case_t *test)
 {
@@ -270,6 +309,13 @@ run_case (cairo_t *cr, const mirror_case_t *test)
       failed = 1;
     }
 
+  if ((test->probes & PROBE_AXIS) && !ticks_symmetric_on_axis (surface))
+    {
+      fprintf (stderr, "%s: internal axis ticks are not symmetric\n",
+               test->name);
+      failed = 1;
+    }
+
   return failed;
 }
 
@@ -282,6 +328,7 @@ main (void)
     { "mirror_x", 1., 0., 0., 1., "", "BCT", PROBE_LEFT },
     { "mirror_y", 0., 1., 1., 0., "BCT", "", PROBE_TOP },
     { "mirror_xy", 1., 0., 1., 0., "BCT", "BCT", PROBE_TOP | PROBE_LEFT },
+    { "axis_symmetric", 0., 1., -1., 1., "AT", "", PROBE_AXIS },
   };
   cairo_surface_t *surface;
   cairo_t *cr;

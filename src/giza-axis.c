@@ -212,11 +212,15 @@ giza_axis (const char *opt, double x1, double y1, double x2, double y2,
   /* draw the line */
   if (draw_axis)
     {
+      int oldCap;
       cairo_move_to (Dev[id].context, x1, y1);
       cairo_line_to (Dev[id].context, x2, y2);
       /* stroke immediately: giza_ptext below resets the cairo path,
        * so a deferred stroke would lose the axis line */
+      giza_get_line_cap (&oldCap);
+      giza_set_line_cap (CAIRO_LINE_CAP_SQUARE);
       _giza_stroke ();
+      giza_set_line_cap (oldCap);
     }
 
   /* draw_invert<0 is default; >0 means option I was specified (see giza_box) */
