@@ -31,6 +31,7 @@
 
 #include "giza.h"
 #include "giza-private.h"
+#include "giza-drivers-private.h"
 #include "giza-io-private.h" /* for _giza_error() */
 #include "giza-driver-xw-private.h"
 #include "giza-driver-eps-private.h"
@@ -118,7 +119,11 @@ void cpgaxis(const char *opt, float x1, float y1, float x2, float y2, \
              float v1, float v2, float step, int nsub, float dmajl, \
              float dmajr, float fmin, float disp, float orient)
 {
-   giza_axis_float(opt,x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient);
+   /* PGPLOT PGAXIS has no tick options and always draws ticks (lengths set
+    * by dmajl/dmajr/fmin); giza_axis requires T/S, so request them here */
+   char giza_opt[32];
+   snprintf(giza_opt, sizeof(giza_opt), "%sTS", opt);
+   giza_axis_float(giza_opt,x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient);
 }
 
 /***************************************************************
@@ -725,8 +730,27 @@ int cpgopen(const char *device)
       int len = sizeof(is_hardcopy);
       giza_set_colour_palette(GIZA_COLOUR_PALETTE_PGPLOT);
       giza_query_device("hardcopy", is_hardcopy, &len);
-      if (strcmp(is_hardcopy, "YES") != 0)
-        giza_draw_background();
+      if (strcmp(is_hardcopy, "YES") != 0
+          || Dev[id].type == GIZA_DEVICE_NULL
+          || Dev[id].type == GIZA_DEVICE_PNG || Dev[id].type == GIZA_DEVICE_MP4)
+        {
+          /* interactive devices, null device, and raster files: PGPLOT screen
+           * convention (black background, white foreground - matching
+           * PGPLOT's PNG driver, which renders white-on-black like /xw) */
+          giza_set_colour_representation(GIZA_BACKGROUND_COLOUR, 0., 0., 0.);
+          giza_set_colour_representation(GIZA_FOREGROUND_COLOUR, 1., 1., 1.);
+          giza_draw_background();
+        }
+      else
+        {
+          /* vector hardcopy (ps/eps/pdf/svg): PGPLOT paper convention -
+           * white background with BLACK foreground, as the classic PS
+           * driver. Without this the PGPLOT palette leaves the foreground
+           * white on giza's white page: invisible ink */
+          giza_set_colour_representation(GIZA_BACKGROUND_COLOUR, 1., 1., 1.);
+          giza_set_colour_representation(GIZA_FOREGROUND_COLOUR, 0., 0., 0.);
+          giza_draw_background();
+        }
     }
   return pgopen;
 }

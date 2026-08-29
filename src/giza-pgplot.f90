@@ -131,7 +131,7 @@ subroutine PGAXIS (OPT, X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, 
  real, intent(in) :: ORIENT
  integer, intent(in) :: NSUB
 
- call giza_axis(OPT, X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, DISP, ORIENT)
+ call giza_axis(OPT//'TS', X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, DISP, ORIENT)
 
 end subroutine PGAXIS
 

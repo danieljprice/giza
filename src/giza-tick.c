@@ -28,9 +28,156 @@
 #include "giza-window-private.h"
 #include "giza-viewport-private.h"
 #include "giza-drivers-private.h"
+#include "giza-axis-private.h"
 #include "giza-tick-private.h"
 #include <giza.h>
 #include <math.h>
+
+/**
+ * Return one character height in device pixels (font cap height).
+ */
+double
+_giza_character_height_device (void)
+{
+  return Dev[id].fontExtents.ascent;
+}
+
+/**
+ * Label angle, justification and displacement for a tick label, following
+ * the on-screen axis direction and the requested orientation angle.
+ */
+void
+_giza_tick_label_style (double theta_deg, double disp, double angle,
+                        double *label_angle, double *justification,
+                        double *displacement)
+{
+  double orientation;
+
+  *displacement = disp;
+  *label_angle = theta_deg;
+  orientation = fmod (angle, 360.);
+  if (orientation < 0.) orientation += 360.;
+  if (orientation > 45. && orientation <= 135.)
+    {
+      *justification = (*displacement < 0.) ? 1. : 0.;
+    }
+  else if (orientation > 135. && orientation <= 225.)
+    {
+      *justification = 0.5;
+      if (*displacement < 0.) *displacement = *displacement - 1.;
+    }
+  else if (orientation > 225. && orientation <= 315.)
+    {
+      *label_angle = *label_angle + 90.;
+      *justification = (*displacement < 0.) ? 0. : 1.;
+    }
+  else
+    {
+      *justification = 0.5;
+      if (*displacement > 0.) *displacement = *displacement + 1.;
+    }
+}
+
+/**
+ * Sign for drawing a tick toward the window interior, relative to the
+ * perpendicular tick vector.  Uses device-space directions so mirrored
+ * windows are handled correctly.
+ */
+static double
+_giza_tick_inward_sign (double x, double y, double tick_perp_x, double tick_perp_y,
+                        double win_cx, double win_cy, int draw_invert)
+{
+  double to_center_x, to_center_y, perp_x, perp_y, inward_sign;
+
+  cairo_user_to_device (Dev[id].context, &x, &y);
+  cairo_user_to_device (Dev[id].context, &win_cx, &win_cy);
+  to_center_x = win_cx - x;
+  to_center_y = win_cy - y;
+  perp_x = tick_perp_x;
+  perp_y = tick_perp_y;
+  cairo_user_to_device_distance (Dev[id].context, &perp_x, &perp_y);
+  inward_sign = (perp_x * to_center_x + perp_y * to_center_y > 0.) ? 1. : -1.;
+  if (draw_invert > 0)
+    inward_sign = -inward_sign;
+  return inward_sign;
+}
+
+/**
+ * Append one giza_box tick to the current path (caller strokes later).
+ */
+void
+_giza_box_draw_tick (double x, double y, double tick_length, int major,
+                     int draw_invert, double draw_project, int draw_symmetric,
+                     double tick_perp_x, double tick_perp_y,
+                     double win_cx, double win_cy)
+{
+  double tick_left, tick_right, inward_sign, perp_length, tick_world_length;
+
+  tick_world_length = fabs (tick_length);
+  if (_giza_equal (tick_world_length, 0.))
+    return;
+
+  perp_length = hypot (tick_perp_x, tick_perp_y);
+  if (_giza_equal (perp_length, 0.))
+    return;
+
+  inward_sign = _giza_tick_inward_sign (x, y, tick_perp_x, tick_perp_y,
+                                        win_cx, win_cy, draw_invert);
+  tick_left = inward_sign * tick_world_length / perp_length;
+  tick_right = 0.;
+  if (draw_symmetric)
+    tick_right = tick_left;
+  else if (major && !_giza_equal (draw_project, 0.))
+    tick_right = -draw_project * inward_sign * tick_world_length / perp_length;
+
+  cairo_move_to (Dev[id].context, x - tick_right * tick_perp_x,
+                 y - tick_right * tick_perp_y);
+  cairo_line_to (Dev[id].context, x + tick_left * tick_perp_x,
+                 y + tick_left * tick_perp_y);
+}
+
+/**
+ * Draw one tick mark and optional label along an axis segment.
+ * Caller must have GIZA_TRANS_WORLD active and must supply the precomputed
+ * tick vectors from _giza_axis_tick_vectors.
+ */
+void
+_giza_draw_tick_mark (double x1, double y1, double x2, double y2,
+                      double ratio, double tickl, double tickr,
+                      double disp, double angle, const char *label,
+                      double theta_deg, double tick_perp_x, double tick_perp_y)
+{
+  int old_line_cap;
+  double x, y, displacement, label_angle, justification, orientation;
+
+  x = x1 + ratio * (x2 - x1);
+  y = y1 + ratio * (y2 - y1);
+
+  if (!(_giza_equal (tickl, 0.) && _giza_equal (tickr, 0.)))
+    {
+      cairo_move_to (Dev[id].context, x - tickr * tick_perp_x,
+                     y - tickr * tick_perp_y);
+      cairo_line_to (Dev[id].context, x + tickl * tick_perp_x,
+                     y + tickl * tick_perp_y);
+      /* stroke immediately: giza_ptext below resets the cairo path, so
+       * a deferred stroke would lose the tick whenever a label is given */
+      giza_get_line_cap (&old_line_cap);
+      giza_set_line_cap (CAIRO_LINE_CAP_SQUARE);
+      _giza_stroke ();
+      giza_set_line_cap (old_line_cap);
+    }
+
+  if (label && label[0] != '\0')
+    {
+      _giza_tick_label_style (theta_deg, disp, angle, &label_angle,
+                              &justification, &displacement);
+      orientation = fmod (angle, 360.);
+      if (orientation < 0.) orientation += 360.;
+      giza_ptext (x - displacement * tick_perp_x,
+                  y - displacement * tick_perp_y,
+                  label_angle - orientation, justification, label);
+    }
+}
 
 /**
  * Drawing: giza_tick
@@ -60,63 +207,36 @@ void
 giza_tick (double x1, double y1, double x2, double y2, double v,
            double tickl, double tickr, double disp, double angle, const char *label)
 {
+  int oldTrans;
+  double theta_deg, tick_perp_x, tick_perp_y;
+
   if (!_giza_check_device_ready ("giza_tick"))
     return;
 
   _giza_expand_clipping ();
 
-  double currentTickL_l;
-  double currentTickL_r;
-  double x,y,theta,theta_deg,dr;
-
-  theta = atan2(y2-y1,x2-x1);
-  theta_deg = theta / GIZA_DEG_TO_RAD;
-  dr = sqrt(pow(x2-x1,2) + pow(y2-y1,2));
-
-  cairo_matrix_t mat;
-  cairo_matrix_init_translate(&mat,x1,y1);
-  cairo_matrix_rotate(&mat,theta);
-
-  int oldTrans = _giza_get_trans ();
+  oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  double xch, ych;
-  giza_get_character_size (GIZA_UNITS_WORLD, &xch, &ych);
+  if (!_giza_axis_tick_vectors (x1, y1, x2, y2,
+                                &theta_deg, &tick_perp_x, &tick_perp_y))
+    {
+      _giza_set_trans (oldTrans);
+      giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax,
+                         Dev[id].VP.ymin, Dev[id].VP.ymax);
+      return;
+    }
 
-  /* set major tick length in pixels */
-  currentTickL_l = Dev[id].fontExtents.max_x_advance * tickl;
-  currentTickL_r = Dev[id].fontExtents.max_x_advance * tickr;
-  double TickL_l_tmp = 0.;
-  double TickL_r_tmp = 0.;
+  _giza_draw_tick_mark (x1, y1, x2, y2, v, tickl, tickr, disp, angle, label,
+                        theta_deg, tick_perp_x, tick_perp_y);
 
-  /* convert to world coords */
-  cairo_device_to_user_distance (Dev[id].context, &TickL_l_tmp, &currentTickL_l);
-  cairo_device_to_user_distance (Dev[id].context, &TickL_r_tmp, &currentTickL_r);
-  currentTickL_l = -currentTickL_l;
-  currentTickL_r = -currentTickL_r;
-
-  _giza_draw_tick(mat,v,dr,currentTickL_l,currentTickL_r);
-
-  /* write the label */
-  x = dr * v;
-  y = ych * disp;
-  cairo_matrix_transform_point (&mat,&x,&y);
-  giza_ptext (x, y, theta_deg + angle, 0.5, label);
-
-  /*_giza_stroke ();*/
-
-  /* stroke all the paths */
-  int lc;
-  giza_get_line_cap (&lc);
-  giza_set_line_cap (CAIRO_LINE_CAP_SQUARE);
-  _giza_stroke ();
-  giza_set_line_cap (lc);
   _giza_set_trans (oldTrans);
 
   giza_flush_device ();
 
   /* Restore clipping */
-  giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax, Dev[id].VP.ymin, Dev[id].VP.ymax);
+  giza_set_viewport (Dev[id].VP.xmin, Dev[id].VP.xmax,
+                     Dev[id].VP.ymin, Dev[id].VP.ymax);
 }
 
 /**
@@ -133,32 +253,7 @@ giza_tick_float (float x1, float y1, float x2, float y2, float v,
   if (!_giza_check_device_ready ("giza_tick"))
     return;
 
-  giza_tick((double) x1, (double) y1, (double) x2, (double) y2, (double) v,
-            (double) tickl, (double) tickr, (double) disp, (double) angle, label);
-
-}
-
-/**
- *  Internal functionality for giza_tick, also used by giza_axis
- */
-void
-_giza_draw_tick(cairo_matrix_t mat, double ratio, double dr,
-                double currentTickL_l, double currentTickL_r)
-{
-  double x,y,xpt,ypt;
-
-  /* set location of tick start and end in non-rotated coords */
-  x   = dr * ratio;
-  xpt = x;
-  y   = -currentTickL_l;
-  ypt = currentTickL_r;
-
-  /* rotate and translate */
-  cairo_matrix_transform_point (&mat,&x,&y);
-  cairo_matrix_transform_point (&mat,&xpt,&ypt);
-
-  /* draw the tick(s) along the axis */
-  cairo_move_to (Dev[id].context, x, y);
-  cairo_line_to (Dev[id].context, xpt, ypt);
+  giza_tick ((double) x1, (double) y1, (double) x2, (double) y2, (double) v,
+             (double) tickl, (double) tickr, (double) disp, (double) angle, label);
 
 }
