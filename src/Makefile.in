@@ -194,17 +194,18 @@ am__libgiza_la_SOURCES_DIST = giza-annotate.c giza-arrow-style.c \
 	giza-subpanel-private.h giza-character-size-private.h \
 	giza-drivers-private.h giza-text-background-private.h \
 	giza-colour-private.h giza-fill-private.h giza-text-private.h \
-	giza-cursor-private.h giza-io-private.h giza-tick-private.h \
-	giza-transforms-private.h giza-driver-eps-private.h \
-	giza-line-style-private.h giza-version.h \
-	giza-driver-null-private.h giza-driver-cairo-private.h \
-	giza-private.h giza-viewport-private.h \
-	giza-driver-pdf-private.h giza-render-private.h \
-	giza-warnings-private.h giza-driver-png-private.h \
-	giza-driver-mp4-private.h giza-set-font-private.h \
-	giza-window-private.h giza-driver-ps-private.h giza-shared.h \
-	giza.h giza-itf.h giza-driver-osxcocoa.m \
-	giza-driver-osxcocoa-bridge.c giza-driver-osxcocoa-private.h
+	giza-cursor-private.h giza-io-private.h giza-axis-private.h \
+	giza-tick-private.h giza-transforms-private.h \
+	giza-driver-eps-private.h giza-line-style-private.h \
+	giza-version.h giza-driver-null-private.h \
+	giza-driver-cairo-private.h giza-private.h \
+	giza-viewport-private.h giza-driver-pdf-private.h \
+	giza-render-private.h giza-warnings-private.h \
+	giza-driver-png-private.h giza-driver-mp4-private.h \
+	giza-set-font-private.h giza-window-private.h \
+	giza-driver-ps-private.h giza-shared.h giza.h giza-itf.h \
+	giza-driver-osxcocoa.m giza-driver-osxcocoa-bridge.c \
+	giza-driver-osxcocoa-private.h
 @HAVE_OSXCOCOA_TRUE@am__objects_1 =  \
 @HAVE_OSXCOCOA_TRUE@	libgiza_la-giza-driver-osxcocoa.lo \
 @HAVE_OSXCOCOA_TRUE@	libgiza_la-giza-driver-osxcocoa-bridge.lo
@@ -635,16 +636,17 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c \
 	giza-subpanel-private.h giza-character-size-private.h \
 	giza-drivers-private.h giza-text-background-private.h \
 	giza-colour-private.h giza-fill-private.h giza-text-private.h \
-	giza-cursor-private.h giza-io-private.h giza-tick-private.h \
-	giza-transforms-private.h giza-driver-eps-private.h \
-	giza-line-style-private.h giza-version.h \
-	giza-driver-null-private.h giza-driver-cairo-private.h \
-	giza-private.h giza-viewport-private.h \
-	giza-driver-pdf-private.h giza-render-private.h \
-	giza-warnings-private.h giza-driver-png-private.h \
-	giza-driver-mp4-private.h giza-set-font-private.h \
-	giza-window-private.h giza-driver-ps-private.h giza-shared.h \
-	giza.h giza-itf.h $(am__append_3)
+	giza-cursor-private.h giza-io-private.h giza-axis-private.h \
+	giza-tick-private.h giza-transforms-private.h \
+	giza-driver-eps-private.h giza-line-style-private.h \
+	giza-version.h giza-driver-null-private.h \
+	giza-driver-cairo-private.h giza-private.h \
+	giza-viewport-private.h giza-driver-pdf-private.h \
+	giza-render-private.h giza-warnings-private.h \
+	giza-driver-png-private.h giza-driver-mp4-private.h \
+	giza-set-font-private.h giza-window-private.h \
+	giza-driver-ps-private.h giza-shared.h giza.h giza-itf.h \
+	$(am__append_3)
 libgiza_la_OBJCFLAGS = $(libgiza_la_CPPFLAGS) -fobjc-arc
 AM_LIBTOOLFLAGS = --tag=CC
 libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS) $(OSXCOCOA_CFLAGS)
