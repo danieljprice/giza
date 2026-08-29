@@ -30,62 +30,10 @@
 #include "giza-viewport-private.h"
 #include "giza-drivers-private.h"
 #include "giza-axis-private.h"
+#include "giza-tick-private.h"
 #include "giza.h"
 #include <math.h>
 #include <stdio.h>
-
-/**
- * Sign for drawing a tick from an edge point toward the window interior,
- * relative to the perpendicular tick vector (tick_perp_x, tick_perp_y).
- */
-static double
-_giza_box_inward_sign (double x, double y, double tick_perp_x, double tick_perp_y,
-                       double win_cx, double win_cy, int draw_invert)
-{
-  double to_center_x, to_center_y, inward_sign;
-
-  to_center_x = win_cx - x;
-  to_center_y = win_cy - y;
-  inward_sign = (tick_perp_x * to_center_x + tick_perp_y * to_center_y > 0.) ?
-    1. : -1.;
-  if (draw_invert > 0)
-    inward_sign = -inward_sign;
-  return inward_sign;
-}
-
-/**
- * Draw a tick mark at a frame edge using precomputed perpendicular vectors.
- */
-static void
-_giza_box_draw_tick (double x, double y, double tick_length, int major,
-                     int draw_invert, double draw_project, int draw_symmetric,
-                     double tick_perp_x, double tick_perp_y,
-                     double win_cx, double win_cy)
-{
-  double tick_left, tick_right, inward_sign, perp_length, tick_world_length;
-
-  tick_world_length = fabs (tick_length);
-  if (_giza_equal (tick_world_length, 0.))
-    return;
-
-  perp_length = hypot (tick_perp_x, tick_perp_y);
-  if (_giza_equal (perp_length, 0.))
-    return;
-
-  inward_sign = _giza_box_inward_sign (x, y, tick_perp_x, tick_perp_y,
-                                       win_cx, win_cy, draw_invert);
-  tick_left = inward_sign * tick_world_length / perp_length;
-  tick_right = 0.;
-  if (draw_symmetric)
-    tick_right = tick_left;
-  else if (major && !_giza_equal (draw_project, 0.))
-    tick_right = -draw_project * inward_sign * tick_world_length / perp_length;
-
-  cairo_move_to (Dev[id].context, x - tick_right * tick_perp_x,
-                 y - tick_right * tick_perp_y);
-  cairo_line_to (Dev[id].context, x + tick_left * tick_perp_x,
-                 y + tick_left * tick_perp_y);
-}
 
 /**
  * Drawing: giza_box
@@ -326,43 +274,31 @@ giza_box (const char *xopt, double xtick, int nxsub,
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
-  win_cx = 0.5 * (Win.xmin + Win.xmax);
-  win_cy = 0.5 * (Win.ymin + Win.ymax);
+  win_cx = 0.5 * (pWin->xmin + pWin->xmax);
+  win_cy = 0.5 * (pWin->ymin + pWin->ymax);
 
-  xedge_bottom = 0;
-  xedge_top = 0;
-  yedge_left = 0;
-  yedge_right = 0;
-  xedge_axis = 0;
-  yedge_axis = 0;
-  if (xdraw_bottom)
-    xedge_bottom = _giza_axis_tick_vectors (win_x_left, win_y_bottom,
-                                              win_x_right, win_y_bottom,
-                                              &theta_deg, &xtick_x_bottom,
-                                              &xtick_y_bottom);
-  if (xdraw_top)
-    xedge_top = _giza_axis_tick_vectors (win_x_right, win_y_top,
-                                           win_x_left, win_y_top,
-                                           &theta_deg, &xtick_x_top,
-                                           &xtick_y_top);
-  if (ydraw_left)
-    yedge_left = _giza_axis_tick_vectors (win_x_left, win_y_bottom,
-                                            win_x_left, win_y_top,
-                                            &theta_deg, &ytick_x_left,
-                                            &ytick_y_left);
-  if (ydraw_right)
-    yedge_right = _giza_axis_tick_vectors (win_x_right, win_y_top,
-                                              win_x_right, win_y_bottom,
-                                              &theta_deg, &ytick_x_right,
-                                              &ytick_y_right);
-  if (xdraw_axis)
-    xedge_axis = _giza_axis_tick_vectors (Win.xmin, 0., Win.xmax, 0.,
-                                             &theta_deg, &xtick_x_ax,
-                                             &xtick_y_ax);
-  if (ydraw_axis)
-    yedge_axis = _giza_axis_tick_vectors (0., Win.ymin, 0., Win.ymax,
-                                             &theta_deg, &ytick_x_ax,
-                                             &ytick_y_ax);
+  xedge_bottom = _giza_axis_tick_vectors (win_x_left, win_y_bottom,
+                                          win_x_right, win_y_bottom,
+                                          &theta_deg, &xtick_x_bottom,
+                                          &xtick_y_bottom);
+  xedge_top = _giza_axis_tick_vectors (win_x_right, win_y_top,
+                                       win_x_left, win_y_top,
+                                       &theta_deg, &xtick_x_top,
+                                       &xtick_y_top);
+  yedge_left = _giza_axis_tick_vectors (win_x_left, win_y_bottom,
+                                        win_x_left, win_y_top,
+                                        &theta_deg, &ytick_x_left,
+                                        &ytick_y_left);
+  yedge_right = _giza_axis_tick_vectors (win_x_right, win_y_top,
+                                         win_x_right, win_y_bottom,
+                                         &theta_deg, &ytick_x_right,
+                                         &ytick_y_right);
+  xedge_axis = _giza_axis_tick_vectors (Win.xmin, 0., Win.xmax, 0.,
+                                        &theta_deg, &xtick_x_ax,
+                                        &xtick_y_ax);
+  yedge_axis = _giza_axis_tick_vectors (0., Win.ymin, 0., Win.ymax,
+                                        &theta_deg, &ytick_x_ax,
+                                        &ytick_y_ax);
 
   /* set major tick length in pixels */
   majTickL = Dev[id].fontExtents.max_x_advance * 0.33;

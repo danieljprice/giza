@@ -79,6 +79,64 @@ _giza_tick_label_style (double theta_deg, double disp, double angle,
 }
 
 /**
+ * Sign for drawing a tick toward the window interior, relative to the
+ * perpendicular tick vector.  Uses device-space directions so mirrored
+ * windows are handled correctly.
+ */
+static double
+_giza_tick_inward_sign (double x, double y, double tick_perp_x, double tick_perp_y,
+                        double win_cx, double win_cy, int draw_invert)
+{
+  double to_center_x, to_center_y, perp_x, perp_y, inward_sign;
+
+  cairo_user_to_device (Dev[id].context, &x, &y);
+  cairo_user_to_device (Dev[id].context, &win_cx, &win_cy);
+  to_center_x = win_cx - x;
+  to_center_y = win_cy - y;
+  perp_x = tick_perp_x;
+  perp_y = tick_perp_y;
+  cairo_user_to_device_distance (Dev[id].context, &perp_x, &perp_y);
+  inward_sign = (perp_x * to_center_x + perp_y * to_center_y > 0.) ? 1. : -1.;
+  if (draw_invert > 0)
+    inward_sign = -inward_sign;
+  return inward_sign;
+}
+
+/**
+ * Append one giza_box tick to the current path (caller strokes later).
+ */
+void
+_giza_box_draw_tick (double x, double y, double tick_length, int major,
+                     int draw_invert, double draw_project, int draw_symmetric,
+                     double tick_perp_x, double tick_perp_y,
+                     double win_cx, double win_cy)
+{
+  double tick_left, tick_right, inward_sign, perp_length, tick_world_length;
+
+  tick_world_length = fabs (tick_length);
+  if (_giza_equal (tick_world_length, 0.))
+    return;
+
+  perp_length = hypot (tick_perp_x, tick_perp_y);
+  if (_giza_equal (perp_length, 0.))
+    return;
+
+  inward_sign = _giza_tick_inward_sign (x, y, tick_perp_x, tick_perp_y,
+                                        win_cx, win_cy, draw_invert);
+  tick_left = inward_sign * tick_world_length / perp_length;
+  tick_right = 0.;
+  if (draw_symmetric)
+    tick_right = tick_left;
+  else if (major && !_giza_equal (draw_project, 0.))
+    tick_right = -draw_project * inward_sign * tick_world_length / perp_length;
+
+  cairo_move_to (Dev[id].context, x - tick_right * tick_perp_x,
+                 y - tick_right * tick_perp_y);
+  cairo_line_to (Dev[id].context, x + tick_left * tick_perp_x,
+                 y + tick_left * tick_perp_y);
+}
+
+/**
  * Draw one tick mark and optional label along an axis segment.
  * Caller must have GIZA_TRANS_WORLD active and must supply the precomputed
  * tick vectors from _giza_axis_tick_vectors.

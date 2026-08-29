@@ -39,4 +39,10 @@ void _giza_draw_tick_mark (double x1, double y1, double x2, double y2,
                            double theta_deg, double tick_perp_x,
                            double tick_perp_y);
 
+/* append one box tick to the current path; GIZA_TRANS_WORLD must be active */
+void _giza_box_draw_tick (double x, double y, double tick_length, int major,
+                          int draw_invert, double draw_project,
+                          int draw_symmetric, double tick_perp_x,
+                          double tick_perp_y, double win_cx, double win_cy);
+
 #endif
