@@ -1,3 +1,8 @@
+2026-08-29  Daniel Price <daniel.price@monash.edu>
+
+	* LATEST.md, NEWS, configure.ac, docs/news/index.html, docs/index.html:
+	v2.0.0
+
 2023-11-30  Daniel Price <daniel.price@monash.edu>
 
 	* LATEST.md, NEWS, configure, configure.ac, docs/news/index.html: 
