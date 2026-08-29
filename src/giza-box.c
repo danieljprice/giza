@@ -641,29 +641,29 @@ giza_box (const char *xopt, double xtick, int nxsub,
   /* draw the bottom of the box */
   if (xdraw_bottom)
     {
-      cairo_move_to (Dev[id].context, Win.xmin, Win.ymin);
-      cairo_line_to (Dev[id].context, Win.xmax, Win.ymin);
+      cairo_move_to (Dev[id].context, win_x_left, win_y_bottom);
+      cairo_line_to (Dev[id].context, win_x_right, win_y_bottom);
     }
 
   /* draw the right of the box */
   if (ydraw_right)
     {
-      cairo_move_to (Dev[id].context, Win.xmax, Win.ymin);
-      cairo_line_to (Dev[id].context, Win.xmax, Win.ymax);
+      cairo_move_to (Dev[id].context, win_x_right, win_y_bottom);
+      cairo_line_to (Dev[id].context, win_x_right, win_y_top);
     }
 
   /* draw the top of the box */
   if (xdraw_top)
     {
-      cairo_move_to (Dev[id].context, Win.xmax, Win.ymax);
-      cairo_line_to (Dev[id].context, Win.xmin, Win.ymax);
+      cairo_move_to (Dev[id].context, win_x_right, win_y_top);
+      cairo_line_to (Dev[id].context, win_x_left, win_y_top);
     }
 
   /* draw the left of the box */
   if (ydraw_left)
     {
-      cairo_move_to (Dev[id].context, Win.xmin, Win.ymax);
-      cairo_line_to (Dev[id].context, Win.xmin, Win.ymin);
+      cairo_move_to (Dev[id].context, win_x_left, win_y_top);
+      cairo_line_to (Dev[id].context, win_x_left, win_y_bottom);
     }
 
   /* draw the x axis */

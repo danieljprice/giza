@@ -49,6 +49,10 @@ static int world_y_to_pixel (double vp_y1, double vp_y2,
                              double win_y1, double win_y2, double world_y);
 static void normalize_viewport_pixels (double *vp_x1, double *vp_x2,
                                        double *vp_y1, double *vp_y2);
+static int tick_meets_horizontal_frame (cairo_surface_t *surface, int frame_y,
+                                        int x);
+static int tick_meets_vertical_frame (cairo_surface_t *surface, int frame_x,
+                                      int y);
 static int probe_horizontal_edge (cairo_surface_t *surface, int frame_y,
                                   int inward_dy, int x);
 static int probe_vertical_edge (cairo_surface_t *surface, int frame_x,
@@ -195,6 +199,20 @@ world_y_to_pixel (double vp_y1, double vp_y2, double win_y1, double win_y2,
 }
 
 static int
+tick_meets_horizontal_frame (cairo_surface_t *surface, int frame_y, int x)
+{
+  return count_ink_rect (surface, x - 3, frame_y - 1, x + 3, frame_y + 1)
+         > INK_MIN;
+}
+
+static int
+tick_meets_vertical_frame (cairo_surface_t *surface, int frame_x, int y)
+{
+  return count_ink_rect (surface, frame_x - 1, y - 3, frame_x + 1, y + 3)
+         > INK_MIN;
+}
+
+static int
 probe_horizontal_edge (cairo_surface_t *surface, int frame_y, int inward_dy,
                        int x)
 {
@@ -245,7 +263,8 @@ probe_horizontal_ticks (cairo_surface_t *surface, int frame_y, int inward_dy,
     {
       tick_x = world_x_to_pixel (vp_x1, vp_x2, win_x1, win_x2,
                                  tick_probe_world[i]);
-      if (probe_horizontal_edge (surface, frame_y, inward_dy, tick_x))
+      if (tick_meets_horizontal_frame (surface, frame_y, tick_x)
+          && probe_horizontal_edge (surface, frame_y, inward_dy, tick_x))
         pass_count++;
     }
 
@@ -265,7 +284,8 @@ probe_vertical_ticks (cairo_surface_t *surface, int frame_x, int inward_dx,
     {
       tick_y = world_y_to_pixel (vp_y1, vp_y2, win_y1, win_y2,
                                  tick_probe_world[i]);
-      if (probe_vertical_edge (surface, frame_x, inward_dx, tick_y))
+      if (tick_meets_vertical_frame (surface, frame_x, tick_y)
+          && probe_vertical_edge (surface, frame_x, inward_dx, tick_y))
         pass_count++;
     }
 
@@ -433,7 +453,7 @@ run_case (cairo_t *cr, const mirror_case_t *test)
     }
 
   if (failed)
-    fprintf (stderr, "%s: tick marks do not point toward plot interior\n",
+    fprintf (stderr, "%s: ticks must meet frame border and point inward\n",
              test->name);
 
   return failed;
