@@ -1,6 +1,6 @@
 AM_FCFLAGS = $(WERROR_CFLAGS) $(WARN_CFLAGS) -I../../src
 AM_LDFLAGS = -no-install
-LDADD = ../../src/libpgplot.la
+LDADD = ../../src/libpgplot.la ../../src/libgiza.la
 
 CLEANFILES = *.png
 
