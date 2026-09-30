@@ -153,6 +153,11 @@ giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
       return;
     }
 
+  /* The size is accumulated by the text scanner, so start from zero.
+     Callers are not required to initialise xlen and ylen. */
+  *xlen = 0.;
+  *ylen = 0.;
+
   /* save the character height (can be changed during superscript/subscripting) */
   double ch;
   giza_get_character_height (&ch);
