@@ -63,9 +63,7 @@ libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS) $(
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-       -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS) $(OSXCOCOA_LIBS) \
-       -Wl,-rpath,$(abs_top_builddir)/src/.libs \
-       -Wl,-rpath,$(libdir)
+       -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS) $(OSXCOCOA_LIBS)
 
 libcpgplot_la_SOURCES = giza-cpgplot.c
 
