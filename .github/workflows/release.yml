@@ -1,8 +1,6 @@
 name: release
-# a general github action to generate a release whenever a version tag is pushed
-# generates and uploads a tarball of the source code
-# in a way that plays nicely with git submodules
-# could be easily adapted to produce binaries for each OS
+# Creates a source tarball and GitHub release when a version tag is pushed,
+# then opens a Homebrew formula update for giza-x11.
 # Daniel Price, Aug 2020
 on:
   push:
@@ -14,21 +12,15 @@ permissions:
 
 jobs:
   release:
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
+    runs-on: macos-latest
 
-    runs-on: ${{ matrix.os }}
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - name: checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: recursive
 
     - name: Get version
-      id: get_version
       env:
           vernum: ${{ github.ref }}
           repo: ${{ github.repository }}
@@ -37,73 +29,52 @@ jobs:
           echo "repo=$(basename ${repo})" >> $GITHUB_ENV
           echo "tarfile=$(basename ${repo})-${vernum/refs\/tags\//}.tar.gz" >> $GITHUB_ENV
 
-#    - name: build tarball mac
-#      if: matrix.os == 'macos-latest'
-#      env:
-#          tarfile: ${{ steps.get_version.outputs.tarfile }}
-#          repo: ${{ steps.get_version.outputs.repo }}
-#      run: |
-#          tar cfz /tmp/$tarfile --exclude ".git*" -s "/./${repo}/" .
-
     - name: build tarball
-      if: matrix.os == 'ubuntu-latest'
       env:
           tarfile: ${{ env.tarfile }}
           repo: ${{ env.repo }}
       run: |
-          env
           echo "tarfile is $tarfile, repo is $repo"
-          tar cfz /tmp/$tarfile --exclude ".git*" \
-              --transform "s,.,${repo}," .
+          # COPYFILE_DISABLE keeps AppleDouble files out of the archive.
+          # -s renames the archive root from "." to the repository name.
+          COPYFILE_DISABLE=1 tar cfz /tmp/$tarfile --exclude ".git*" \
+              -s "/./${repo}/" .
 
     - name: check tarball and get SHA
       env:
           tarfile: ${{ env.tarfile }}
-      id: shasum
       run: |
           mv /tmp/$tarfile .
           tar tfz $tarfile
           echo "sha=$(shasum -a 256 $tarfile | awk '{printf $1}')" >> $GITHUB_ENV
 
     - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ env.version }}
-        release_name: ${{ env.version }}
-        body_path: LATEST.md
-        draft: false
-        prerelease: false
+          GH_TOKEN: ${{ github.token }}
+          tarfile: ${{ env.tarfile }}
+          version: ${{ env.version }}
+      run: |
+          gh release create "$version" "$tarfile" \
+              --title "$version" \
+              --notes-file LATEST.md
 
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
+    - name: Bump Homebrew formula
+      if: github.repository == 'danieljprice/giza'
+      continue-on-error: true
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.tarfile }}
-        asset_name: ${{ env.tarfile }}
-        asset_content_type: application/gzip
-
-    - name: Set up Homebrew
-      id: set-up-homebrew
-      uses: Homebrew/actions/setup-homebrew@master
-
-    - name: Bump Brew
-      env:
-        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.BREW_TOKEN_GIZA }}
+        HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.BREW_TOKEN }}
         version: ${{ env.version }}
+        sha: ${{ env.sha }}
+        tarfile: ${{ env.tarfile }}
         brewtap: danieljprice/all
-        formula: giza-x11 #${{ steps.get_version.outputs.repo }} # formula name same as repo name
+        formula: giza-x11
       run: |
         git config --global user.email "daniel.price@monash.edu"
         git config --global user.name "Daniel Price"
-        brew install pipgrip
         brew tap $brewtap
-        brew bump-formula-pr -f --version=${version/v/} --no-browse --no-audit \
-        --sha256=${{ env.sha }} \
-        --url="https://github.com/${{ github.repository }}/releases/download/${{ env.version }}/${{ env.tarfile }}" \
-        $brewtap/$formula
+        brew trust $brewtap
+        brew bump-formula-pr --force --no-browse --no-audit --no-fork \
+          --version="${version#v}" \
+          --sha256="${sha}" \
+          --url="https://github.com/${{ github.repository }}/releases/download/${version}/${tarfile}" \
+          $brewtap/$formula
