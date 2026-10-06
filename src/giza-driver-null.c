@@ -100,9 +100,7 @@ _giza_change_page_null (void)
       _giza_error ("_giza_change_page_null", "Could not create cairo context");
       return;
     }
-  return;
-
-  giza_draw_background ();
+  /* giza_change_page draws the background after the device page change */
 }
 
 /**

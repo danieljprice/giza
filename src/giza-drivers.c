@@ -929,12 +929,10 @@ _giza_get_key_press (int mode, int moveCurs, int nanc, const double *xanch, cons
     case GIZA_DEVICE_VPS:
       _giza_warning ("giza_get_key_press", "Current device does not support a cursor, returning x = 0, y = 0, ch = a");
       return 1;
-      break;
 #ifdef _GIZA_HAS_XW
     case GIZA_DEVICE_XW:
       _giza_get_key_press_xw (mode, moveCurs, nanc, xanch, yanch, x, y, ch);
       return 0;
-      break;
 #endif
 
 #ifdef _GIZA_HAS_OSXCOCOA

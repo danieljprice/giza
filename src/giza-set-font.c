@@ -250,7 +250,7 @@ _giza_resolve_font(const char* font, cairo_font_slant_t slant, cairo_font_weight
      * (2) what was the result of that */
     static int                         didFtInit = 0, ftInitOk = 0;
     static FT_Library                  ft_library;
-    static const cairo_user_data_key_t key;
+    static const cairo_user_data_key_t key = {0};
 
     if( !didFtInit ) {
        ftInitOk  = !FT_Init_FreeType( &ft_library ); 

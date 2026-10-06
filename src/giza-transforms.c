@@ -59,7 +59,6 @@ _giza_set_trans (int trans)
     default:
       _giza_error ("_giza_set_trans", "Internal Error: Invalid Transformation.");
       return;
-      break;
     }
   Dev[id].CurrentTrans = trans;
 }
