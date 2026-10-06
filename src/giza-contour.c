@@ -47,6 +47,10 @@ giza_contour (int sizex, int sizey, const double* data, int i1,
   if (!_giza_check_device_ready ("giza_contour"))
     return;
 
+  /* sizey is the row count. Cells are addressed with stride sizex. */
+  if (sizex < 1 || sizey < 1)
+    return;
+
   cairo_matrix_t mat;
   int sh[5];
   double h[5];
@@ -281,6 +285,10 @@ giza_contour_blanked (int sizex, int sizey, const double* data, int i1,
   if (!_giza_check_device_ready ("giza_contour_blanked"))
     return;
 
+  /* sizey is the row count. Cells are addressed with stride sizex. */
+  if (sizex < 1 || sizey < 1)
+    return;
+
   cairo_matrix_t mat;
   int sh[5];
   double hb[5];
@@ -475,6 +483,10 @@ giza_contour_fill (int sizex, int sizey, const double* data, int i1,
   if (!_giza_check_device_ready ("giza_contour_fill"))
     return;
 
+  /* sizey is the row count. Cells are addressed with stride sizex. */
+  if (sizex < 1 || sizey < 1)
+    return;
+
   cairo_matrix_t mat;
 
   int oldBuf;
@@ -522,7 +534,6 @@ giza_contour_fill (int sizex, int sizey, const double* data, int i1,
               int e2 = (e + 1) % 4;
               double va = d[e], vb = d[e2];
               int a_in = (va >= c1 && va <= c2);
-              int b_in = (vb >= c1 && vb <= c2);
 
               if (a_in && np < 16) {
                 px[np] = cx[e]; py[np] = cy[e]; np++;
@@ -640,6 +651,10 @@ giza_contour_labelled (int sizex, int sizey, const double* data, int i1,
 #define ysect_l(p1,p2) (hl[p2]*yhl[p1]-hl[p1]*yhl[p2])/(hl[p2]-hl[p1])
 
   if (!_giza_check_device_ready ("giza_contour_labelled"))
+    return;
+
+  /* sizey is the row count. Cells are addressed with stride sizex. */
+  if (sizex < 1 || sizey < 1)
     return;
 
   if (intval <= 0) intval = 20;

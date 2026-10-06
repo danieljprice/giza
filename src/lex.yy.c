@@ -1312,7 +1312,9 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	else
 		ret_val = EOB_ACT_CONTINUE_SCAN;
 
-	if ((yyg->yy_n_chars + number_to_move) > YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
+	/* yy_n_chars is an unsigned length; yy_buf_size is a signed capacity. */
+	if ((yy_size_t) yyg->yy_n_chars + (yy_size_t) number_to_move
+	    > (yy_size_t) YY_CURRENT_BUFFER_LVALUE->yy_buf_size) {
 		/* Extend the array by 50%, plus the number we really need. */
 		yy_size_t new_size = yyg->yy_n_chars + number_to_move + (yyg->yy_n_chars >> 1);
 		YY_CURRENT_BUFFER_LVALUE->yy_ch_buf = (char *) yyrealloc(
@@ -2458,6 +2460,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
              After that processing is like normal text */
           case GIZA_TOKEN_GREEK:
               token_txt = giza_greek_to_utf( *token_txt );
+              /* fall through */
           case GIZA_TOKEN_TEXT:
               {
                   /* added new character to end of string so 'top of stack'

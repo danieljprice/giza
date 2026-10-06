@@ -818,10 +818,17 @@ giza_query_device (const char *querytype, char *returnval, int* rlen)
   else if (!strcasecmp(querytype,"dev/type"))
     {
        strncpy(returnval,Dev[id].prefix,max_chars);
+       returnval[max_chars] = '\0';
        if (!_giza_int_to_device(Dev[id].type,devType,sizeof(devType)))
          {
+           /* Append the whole type, e.g. "/png" or "/vpdf", using only
+              the space the caller left after the device name. */
+           size_t used = strlen(returnval);
+           size_t room = (size_t) max_chars - used;
+
            ierr = 1;
-           strncat(returnval,devType,4*sizeof(char));
+           if (room > 0)
+             snprintf(returnval + used, room + 1, "%s", devType);
          }
     }
   /* Query current filename (as entered by user) */

@@ -11,6 +11,9 @@
  * Maps grid indices to world coords and calls cpgmove/cpgdraw */
 static void myplot(int *visble, float *x, float *y, float *z)
 {
+  /* z is the contour level supplied by cpgconx. This test draws every level the same way. */
+  (void) z;
+
   /* Simple identity-ish mapping: world = grid * scale + offset */
   float scale = 6.2832f / 50.0f;  /* 2*pi / N */
   float offset = -3.14159f;

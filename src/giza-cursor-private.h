@@ -22,7 +22,7 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
-void _giza_mark_with_cursor (int maxpts, int *npts, double xpts[maxpts], double ypts[maxpts],
+void _giza_mark_with_cursor (int maxpts, int *npts, double *xpts, double *ypts,
                              int symbol, int ordered, int mode, char *ch);
-void _giza_mark_with_cursor_float (int maxpts, int *npts, float xpts[maxpts], float ypts[maxpts],
+void _giza_mark_with_cursor_float (int maxpts, int *npts, float *xpts, float *ypts,
                              int symbol, int ordered, int mode, char *ch);

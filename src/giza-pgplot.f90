@@ -48,8 +48,7 @@ contains
 !------------------------------------------------------------
  integer function units_giza(pgplotunits)
   use giza, only:giza_units_normalized,giza_units_inches, &
-                 giza_units_mm,giza_units_device,giza_units_world,&
-                 giza_units_pixels
+                 giza_units_mm,giza_units_world,giza_units_pixels
   implicit none
   integer, intent(in) :: pgplotunits
 
@@ -186,6 +185,9 @@ integer function PGBEG (UNIT, FILE, NXSUB, NYSUB)
  if (PGBEG > 0 .and. (NXSUB.GT.1 .or. NYSUB.GT.1)) then
     call PGSUBP(NXSUB, NYSUB)
  endif
+ ! UNIT is the Fortran I/O unit from the PGPLOT calling sequence.
+ ! giza opens the device from FILE, so the unit number is not used.
+ if (UNIT < -huge(UNIT)) PGBEG = PGBEG
 
 end function PGBEG
 
@@ -367,6 +369,10 @@ subroutine PGCONX (A, IDIM, JDIM, I1, I2, J1, J2, C, NC, PLOT)
 
  NCA = abs(NC)
  VIS0 = 0
+ ! Centre sample is filled in later; start defined so every element is set.
+ H = 0.0
+ XH = 0.0
+ YH = 0.0
  VIS1 = 1
 
  do J = J2-1, J1, -1
@@ -1816,8 +1822,8 @@ end subroutine PGSITF
 !------------------------------------------------------------------------
 subroutine PGSLCT(ID)
  use giza, only:giza_select_device
+ implicit none
  integer, intent(in) :: ID
- integer :: ierr
 
  call giza_select_device(ID)
 
