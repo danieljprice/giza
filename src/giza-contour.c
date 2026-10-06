@@ -751,7 +751,6 @@ giza_contour_labelled (int sizex, int sizey, const double* data, int i1,
   /* Draw segments and place labels.
    * Walk segments, accumulating distance. Every intval cells, place a label.
    * Minimum gap between labels is minint cells. */
-  double dist_since_label = 0.0;
   double total_dist = 0.0;
 
   /* First compute total contour length for initial offset */

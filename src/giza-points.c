@@ -37,7 +37,6 @@
 static void _giza_point        (double x, double y);
 static void _giza_rect         (double x, double y, int fill, double scale);
 static void _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fraction);
-static void _giza_plus         (double x, double y);
 static void _giza_plus_size    (double x, double y, double size);
 static void _giza_fat_plus     (double x, double y, int fill, double scale, double inset_fraction);
 static void _giza_triangle     (double x, double y, int fill, int updown, float scale, float offset_fraction);
@@ -45,7 +44,6 @@ static void _giza_diamond      (double x, double y, int fill, double scale);
 static void _giza_polygon      (double x, double y, int nsides , int fill, double scale);
 static void _giza_star         (double x, double y, int npoints, double ratio, int fill, double scale);
 static void _giza_star_line    (double x, double y, int npoints, double scale);
-static void _giza_circle       (double x, double y);
 static void _giza_circle_size  (double x, double y, double size, int fill);
 static void _giza_cross        (double x, double y, double scale);
 static void _giza_arrow        (double x, double y, double angle, double scale);
@@ -460,20 +458,6 @@ _giza_rect_concave (double x, double y, int fill, double scale, double bulge_fra
  * Draw a plus centred at x, y
  */
 static void
-_giza_plus (double x, double y)
-{
-  cairo_new_sub_path (Dev[id].context);
-  cairo_move_to (Dev[id].context, x - markerHeight * 0.8, y);
-  cairo_line_to (Dev[id].context, x + markerHeight * 0.8, y);
-  cairo_move_to (Dev[id].context, x, y - markerHeight * 0.8);
-  cairo_line_to (Dev[id].context, x, y + markerHeight * 0.8);
-  _giza_stroke ();
-}
-
-/**
- * Draw a plus centred at x, y
- */
-static void
 _giza_plus_size (double x, double y, double size)
 {
   cairo_new_sub_path (Dev[id].context);
@@ -512,18 +496,6 @@ _giza_fat_plus (double x, double y, int fill, double scale, double inset_fractio
   cairo_rel_line_to (Dev[id].context, -inset  , 0);      /* left */
   if (fill) { cairo_fill(Dev[id].context); }
   cairo_stroke(  Dev[id].context );
-}
-
-/**
- * Draws a hollow circle at x, y
- */
-static void
-_giza_circle (double x, double y)
-{
-  cairo_new_sub_path (Dev[id].context);
-  cairo_move_to(Dev[id].context, x + markerHeight*0.5, y);
-  cairo_arc (Dev[id].context, x, y, markerHeight * 0.5, 0., 2. * M_PI);
-  _giza_stroke ();
 }
 
 /**

@@ -548,43 +548,6 @@ giza_render_gray_shade_float (int sizex, int sizey, const float* data, int i1,
 }
 
 /**
- * Sets the rgb for a given pixel, given position in the colour table.
- *
- * Input:
- *  -array  :- the array in which to store the colour.
- *  -pixnum :- the pixel to be coloured.
- *  -pos    :- the fraction along the colour table to get the colour from
- */
-static void
-_giza_colour_pixel (unsigned char *array, int pixNum, double pos)
-{
-  double r, g, b;
-  giza_rgb_from_table (pos, &r, &g, &b);
-  /* set the alpha */
-  array[pixNum * 4 + 3] = 255.;
-  /* set the red, green, and blue */
-  array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
-  array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
-  array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
-}
-
-/**
- * As in _giza_colour_pixel, but takes an additional alpha parameter
- */
-static void
-_giza_colour_pixel_alpha (unsigned char *array, int pixNum, double pos, double alpha)
-{
-  double r, g, b;
-  giza_rgb_from_table (pos, &r, &g, &b);
-  /* set the alpha */
-  array[pixNum * 4 + 3] = (unsigned char) (alpha * 255.);
-  /* set the red, green, and blue */
-  array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
-  array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
-  array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
-}
-
-/**
  * Sets the rgb for a given pixel, given the colour index
  *
  * Input:
@@ -819,7 +782,7 @@ _giza_get_filter (int filter, cairo_filter_t *cairofilter)
        *cairofilter = CAIRO_FILTER_GAUSSIAN;
        break;
     default:
-       *cairofilter = GIZA_FILTER_BEST;
+       *cairofilter = CAIRO_FILTER_BEST;
        break;
     }
   return;
