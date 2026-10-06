@@ -151,7 +151,11 @@ void cpgbbuf(void)
  ***************************************************************/
 int cpgbeg(int unit, const char *file, int nxsub, int nysub)
 {
-  int id = cpgopen(file);
+  int id;
+
+  /* The PGPLOT unit number is not used; the device comes from the file name. */
+  (void) unit;
+  id = cpgopen(file);
   if (id > 0 && (nxsub > 1 || nysub > 1)) {
      cpgsubp(nxsub, nysub);
   }
@@ -277,7 +281,8 @@ void cpgconx(const float *a, int idim, int jdim, int i1, int i2,
  int j1, int j2, const float *c, int nc,
  void (*plot)(int *visble, float *x, float *y, float *z))
 {
-  if (!plot) return;
+  if (!plot || idim < 1 || jdim < 1)
+    return;
 
 #define xsect_cx(p1,p2) (hcx[p2]*xhcx[p1]-hcx[p1]*xhcx[p2])/(hcx[p2]-hcx[p1])
 #define ysect_cx(p1,p2) (hcx[p2]*yhcx[p1]-hcx[p1]*yhcx[p2])/(hcx[p2]-hcx[p1])
@@ -536,7 +541,11 @@ void cpghi2d(const float *data, int nxv, int nyv, int ix1, \
  Logical center, float *ylims)
 {
   int nx = ix2 - ix1 + 1;
-  if (nx < 1 || iy1 > iy2) return;
+  if (nx < 1 || nyv < 1 || iy1 > iy2)
+    return;
+  /* nyv is the number of rows in the Fortran array. */
+  if (iy2 > nyv)
+    iy2 = nyv;
 
   /* Initialize the horizon (ylims) to a very low value */
   int i, iy;

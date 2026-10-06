@@ -66,7 +66,10 @@ giza_set_colour_table (const double *controlPoints, const double *red, const dou
 
   int i, tmpn = 0;
   int iprev = 0;
-  /*printf("contrast = %f, brightness = %f \n",contrast,brightness);*/
+
+  /* Brightness is part of the PGCTAB calling sequence. The ramp stored
+     here is scaled by contrast; brightness is not applied to the colours. */
+  (void) brightness;
 
   if (contrast >= 0.) 
     {

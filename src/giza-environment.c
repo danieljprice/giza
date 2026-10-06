@@ -104,6 +104,7 @@ giza_set_environment (double xmin, double xmax, double ymin, double ymax, int ju
       break;
     default:
       _giza_warning ("giza_set_environment", "Invalid axis option, setting to 0");
+      /* fall through */
     case 0:
       strcpy (opts, "BCTSN");
       strcpy (yopts,"BCTSN");

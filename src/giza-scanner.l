@@ -404,6 +404,7 @@ _giza_parse_string (const char *text, double *width, double *height, void (*acti
              After that processing is like normal text */
           case GIZA_TOKEN_GREEK:
               token_txt = giza_greek_to_utf( *token_txt );
+              /* fall through */
           case GIZA_TOKEN_TEXT:
               {
                   /* added new character to end of string so 'top of stack'

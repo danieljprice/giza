@@ -59,13 +59,9 @@ static int probe_vertical_edge (cairo_surface_t *surface, int frame_x,
                                 int inward_dx, int y);
 static int probe_horizontal_ticks (cairo_surface_t *surface, int frame_y,
                                    int inward_dy, double vp_x1, double vp_x2,
-                                   double vp_y1, double vp_y2,
-                                   double win_x1, double win_x2,
-                                   double win_y1, double win_y2);
+                                   double win_x1, double win_x2);
 static int probe_vertical_ticks (cairo_surface_t *surface, int frame_x,
-                                 int inward_dx, double vp_x1, double vp_x2,
-                                 double vp_y1, double vp_y2,
-                                 double win_x1, double win_x2,
+                                 int inward_dx, double vp_y1, double vp_y2,
                                  double win_y1, double win_y2);
 static int probe_world_y_edge (cairo_surface_t *surface, double world_y,
                                double vp_x1, double vp_x2,
@@ -252,9 +248,8 @@ probe_vertical_edge (cairo_surface_t *surface, int frame_x, int inward_dx,
 
 static int
 probe_horizontal_ticks (cairo_surface_t *surface, int frame_y, int inward_dy,
-                        double vp_x1, double vp_x2, double vp_y1, double vp_y2,
-                        double win_x1, double win_x2,
-                        double win_y1, double win_y2)
+                        double vp_x1, double vp_x2,
+                        double win_x1, double win_x2)
 {
   int i, pass_count, tick_x;
 
@@ -273,8 +268,7 @@ probe_horizontal_ticks (cairo_surface_t *surface, int frame_y, int inward_dy,
 
 static int
 probe_vertical_ticks (cairo_surface_t *surface, int frame_x, int inward_dx,
-                      double vp_x1, double vp_x2, double vp_y1, double vp_y2,
-                      double win_x1, double win_x2,
+                      double vp_y1, double vp_y2,
                       double win_y1, double win_y2)
 {
   int i, pass_count, tick_y;
@@ -304,8 +298,7 @@ probe_world_y_edge (cairo_surface_t *surface, double world_y,
   inward_dy = (frame_y > vp_cy) ? -1 : 1;
 
   return probe_horizontal_ticks (surface, frame_y, inward_dy,
-                                 vp_x1, vp_x2, vp_y1, vp_y2,
-                                 win_x1, win_x2, win_y1, win_y2);
+                                 vp_x1, vp_x2, win_x1, win_x2);
 }
 
 static int
@@ -320,8 +313,7 @@ probe_world_x_edge (cairo_surface_t *surface, double world_x,
   inward_dx = (frame_x < vp_cx) ? 1 : -1;
 
   return probe_vertical_ticks (surface, frame_x, inward_dx,
-                               vp_x1, vp_x2, vp_y1, vp_y2,
-                               win_x1, win_x2, win_y1, win_y2);
+                               vp_y1, vp_y2, win_y1, win_y2);
 }
 
 static int

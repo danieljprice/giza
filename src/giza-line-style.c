@@ -131,6 +131,7 @@ _giza_set_line_style (int ls, cairo_t *ct)
       break;
     default:
       _giza_warning ("giza_set_line_style", "Invalid line style, using solid");
+      /* fall through */
     case GIZA_LS_SOLID:
       _giza_n= 0;
       break;
