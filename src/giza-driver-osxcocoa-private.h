@@ -19,8 +19,12 @@
 #ifndef GIZA_DRIVER_OSXCOCOA_PRIVATE_H
 #define GIZA_DRIVER_OSXCOCOA_PRIVATE_H
 
+/* configure defines _GIZA_HAS_OSXCOCOA when the Cocoa driver is built */
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
+
 #ifdef __APPLE__
-#define _GIZA_HAS_OSXCOCOA 1
 
 /* CGContextRef is opaque here to avoid pulling in CoreGraphics headers
  * (which use Blocks syntax incompatible with plain C compiler on macOS 26) */
