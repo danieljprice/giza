@@ -110,6 +110,8 @@ make test-pgaxis test-pgncur
 
 License
 -------
+Copyright (c) 2010-2026 Daniel Price, James Wetter and the contributors listed in AUTHORS.
+
 giza is free software licensed under the GNU Lesser General Public License
 version 3 or later (LGPL-3.0+). See COPYING.LESSER for the full LGPL text;
 COPYING contains the GNU General Public License, which applies to combined
