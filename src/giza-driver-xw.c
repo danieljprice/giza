@@ -40,6 +40,13 @@
 #include <X11/Xutil.h>
 #include <string.h>
 
+/* cairo-xlib.h has included cairo-features.h, defining CAIRO_HAS_XCB_SURFACE */
+#if defined(__APPLE__) && CAIRO_HAS_XCB_SURFACE
+#define GIZA_XW_DISABLE_CAIRO_SHM 1
+#include <cairo/cairo-xcb.h>
+#include <dlfcn.h>
+#endif
+
 /**
  * Global variables specific to X.
  */
@@ -122,6 +129,45 @@ _xw_event_pending (Display *dpy, XEvent *ev, XPointer arg)
       return False;
     }
 }
+
+#ifdef GIZA_XW_DISABLE_CAIRO_SHM
+/**
+ * Stops cairo from uploading images via MIT-SHM on macOS.
+ *
+ * When cairo's Xlib backend runs on top of XCB (as in the cairo shipped with
+ * XQuartz), it sends ShmAttach and marks the segment IPC_RMID without waiting
+ * for the server. macOS forbids attaching a removed segment, so the server
+ * replies BadAccess and every image upload over 8kB fails with BadShmSeg.
+ *
+ * cairo shares one XCB device per connection, so a throwaway XCB surface on
+ * our connection gives access to that device, on which SHM can be disabled.
+ * XGetXCBConnection is looked up at runtime: it is only loaded if cairo uses
+ * XCB, so no extra link dependency is needed and plain Xlib cairo is skipped.
+ */
+static void
+_xw_disable_cairo_shm (void)
+{
+  xcb_connection_t *(*get_xcb_connection) (Display *) =
+    (xcb_connection_t *(*) (Display *)) dlsym (RTLD_DEFAULT, "XGetXCBConnection");
+  if (!get_xcb_connection)
+    return;
+
+  /* cairo only needs the visual id (to find the screen) and the colour masks */
+  xcb_visualtype_t visualtype = {
+    .visual_id  = (xcb_visualid_t) XVisualIDFromVisual (XW[id].visual),
+    .red_mask   = (uint32_t) XW[id].visual->red_mask,
+    .green_mask = (uint32_t) XW[id].visual->green_mask,
+    .blue_mask  = (uint32_t) XW[id].visual->blue_mask,
+  };
+  cairo_surface_t *probe = cairo_xcb_surface_create (get_xcb_connection (XW[id].display),
+                                                     (xcb_drawable_t) XW[id].pixmap,
+                                                     &visualtype, 1, 1);
+  cairo_device_t *device = cairo_surface_get_device (probe);
+  if (device)
+    cairo_xcb_device_debug_cap_xshm_version (device, -1, -1);
+  cairo_surface_destroy (probe);
+}
+#endif
 
 /**
  * Opens an XWindow device for drawing to.
@@ -264,6 +310,10 @@ _giza_open_device_xw (double width, double height, int units)
       _giza_error ("_giza_open_device_xw", "Could not create surface");
       return 5;
     }
+#ifdef GIZA_XW_DISABLE_CAIRO_SHM
+  /* must follow creation of the Xlib surface, which keeps the device alive */
+  _xw_disable_cairo_shm ();
+#endif
 
   Dev[id].defaultBackgroundAlpha = 1.;
 

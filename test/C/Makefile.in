@@ -92,8 +92,11 @@ host_triplet = @host@
 @HAVE_OSXCOCOA_TRUE@am__append_1 = ../../src/libgiza-osxcocoa-main.la
 @HAVE_CAIRO_XLIB_TRUE@am__append_2 = test-cairo-xw
 @HAVE_X11_TRUE@am__append_3 = test-XOpenDisplay
-TESTS = $(am__EXEEXT_1)
-check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_4)
+
+# runs automatically but skips itself when no X display is available
+@HAVE_CAIRO_XLIB_TRUE@am__append_4 = test-xw-render-shm
+TESTS = $(am__EXEEXT_2)
+check_PROGRAMS = $(am__EXEEXT_2) $(am__EXEEXT_5)
 subdir = test/C
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -107,7 +110,8 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__EXEEXT_1 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
+@HAVE_CAIRO_XLIB_TRUE@am__EXEEXT_1 = test-xw-render-shm$(EXEEXT)
+am__EXEEXT_2 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
 	test-glyph-fallback$(EXEEXT) test-pdf$(EXEEXT) \
 	test-png$(EXEEXT) test-svg$(EXEEXT) test-unicode$(EXEEXT) \
 	test-cairo-device$(EXEEXT) test-cpgpnts$(EXEEXT) \
@@ -115,10 +119,11 @@ am__EXEEXT_1 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
 	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
 	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT) \
 	test-pggray$(EXEEXT) test-page-semantics$(EXEEXT) \
-	test-streamplot$(EXEEXT) test-mirrored-window$(EXEEXT)
-@HAVE_CAIRO_XLIB_TRUE@am__EXEEXT_2 = test-cairo-xw$(EXEEXT)
-@HAVE_X11_TRUE@am__EXEEXT_3 = test-XOpenDisplay$(EXEEXT)
-am__EXEEXT_4 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
+	test-streamplot$(EXEEXT) test-mirrored-window$(EXEEXT) \
+	$(am__EXEEXT_1)
+@HAVE_CAIRO_XLIB_TRUE@am__EXEEXT_3 = test-cairo-xw$(EXEEXT)
+@HAVE_X11_TRUE@am__EXEEXT_4 = test-XOpenDisplay$(EXEEXT)
+am__EXEEXT_5 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-change-page$(EXEEXT) test-circle$(EXEEXT) \
 	test-colour-index$(EXEEXT) test-environment$(EXEEXT) \
 	test-error-bars$(EXEEXT) test-giza-xw$(EXEEXT) \
@@ -127,8 +132,8 @@ am__EXEEXT_4 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
 	test-qtext$(EXEEXT) test-rectangle$(EXEEXT) \
 	test-set-line-width$(EXEEXT) test-vector$(EXEEXT) \
 	test-window$(EXEEXT) test-contour$(EXEEXT) \
-	test-render$(EXEEXT) test-band$(EXEEXT) $(am__EXEEXT_2) \
-	$(am__EXEEXT_3)
+	test-render$(EXEEXT) test-band$(EXEEXT) $(am__EXEEXT_3) \
+	$(am__EXEEXT_4)
 test_XOpenDisplay_SOURCES = test-XOpenDisplay.c
 test_XOpenDisplay_OBJECTS = test-XOpenDisplay.$(OBJEXT)
 am__DEPENDENCIES_1 =
@@ -290,6 +295,9 @@ test_window_SOURCES = test-window.c
 test_window_OBJECTS = test-window.$(OBJEXT)
 test_window_LDADD = $(LDADD)
 test_window_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_xw_render_shm_SOURCES = test-xw-render-shm.c
+test_xw_render_shm_OBJECTS = test-xw-render-shm.$(OBJEXT)
+test_xw_render_shm_DEPENDENCIES = $(LDADD) $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -328,7 +336,7 @@ am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-set-line-width.Po \
 	./$(DEPDIR)/test-streamplot.Po ./$(DEPDIR)/test-svg.Po \
 	./$(DEPDIR)/test-unicode.Po ./$(DEPDIR)/test-vector.Po \
-	./$(DEPDIR)/test-window.Po
+	./$(DEPDIR)/test-window.Po ./$(DEPDIR)/test-xw-render-shm.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -360,7 +368,7 @@ SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-pggray.c test-png.c test-points.c test-qtext.c \
 	test-rectangle.c test-render.c test-set-line-width.c \
 	test-streamplot.c test-svg.c test-unicode.c test-vector.c \
-	test-window.c
+	test-window.c test-xw-render-shm.c
 DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-cairo-device.c test-cairo-xw.c test-change-page.c \
 	test-circle.c test-colour-index.c test-contour.c \
@@ -373,7 +381,7 @@ DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
 	test-pggray.c test-png.c test-points.c test-qtext.c \
 	test-rectangle.c test-render.c test-set-line-width.c \
 	test-streamplot.c test-svg.c test-unicode.c test-vector.c \
-	test-window.c
+	test-window.c test-xw-render-shm.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -765,10 +773,12 @@ CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
 CLEANFILES = *.png *.pdf *.svg
 
 # Tests that run non-interactively (file-based devices only)
-auto_ctests = test-format-number test-giza-round test-glyph-fallback test-pdf test-png test-svg test-unicode test-cairo-device \
-	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray \
-	test-page-semantics test-streamplot test-mirrored-window
-
+auto_ctests = test-format-number test-giza-round test-glyph-fallback \
+	test-pdf test-png test-svg test-unicode test-cairo-device \
+	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl \
+	test-cpgconx test-cpghi2d test-cpgscrl test-pggray \
+	test-page-semantics test-streamplot test-mirrored-window \
+	$(am__append_4)
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
 interactive_ctests = test-arrow test-box test-change-page test-circle \
@@ -789,6 +799,7 @@ test_cairo_xw_LDADD = $(LDADD) $(CAIRO_LIBS) $(X11_LIBS)
 test_cairo_device_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_mirrored_window_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_XOpenDisplay_LDADD = $(LDADD) $(X11_LIBS)
+test_xw_render_shm_LDADD = $(LDADD) $(X11_LIBS)
 all: all-am
 
 .SUFFIXES:
@@ -991,6 +1002,10 @@ test-window$(EXEEXT): $(test_window_OBJECTS) $(test_window_DEPENDENCIES) $(EXTRA
 	@rm -f test-window$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_window_OBJECTS) $(test_window_LDADD) $(LIBS)
 
+test-xw-render-shm$(EXEEXT): $(test_xw_render_shm_OBJECTS) $(test_xw_render_shm_DEPENDENCIES) $(EXTRA_test_xw_render_shm_DEPENDENCIES) 
+	@rm -f test-xw-render-shm$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_xw_render_shm_OBJECTS) $(test_xw_render_shm_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -1038,6 +1053,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-unicode.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-vector.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-window.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-xw-render-shm.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -1423,6 +1439,13 @@ test-mirrored-window.log: test-mirrored-window$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-xw-render-shm.log: test-xw-render-shm$(EXEEXT)
+	@p='test-xw-render-shm$(EXEEXT)'; \
+	b='test-xw-render-shm'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 .test.log:
 	@p='$<'; \
 	$(am__set_b); \
@@ -1558,6 +1581,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-unicode.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
 	-rm -f ./$(DEPDIR)/test-window.Po
+	-rm -f ./$(DEPDIR)/test-xw-render-shm.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1644,6 +1668,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-unicode.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
 	-rm -f ./$(DEPDIR)/test-window.Po
+	-rm -f ./$(DEPDIR)/test-xw-render-shm.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

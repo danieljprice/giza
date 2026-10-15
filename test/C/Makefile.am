@@ -34,6 +34,11 @@ if HAVE_X11
 interactive_ctests += test-XOpenDisplay
 endif
 
+# runs automatically but skips itself when no X display is available
+if HAVE_CAIRO_XLIB
+auto_ctests += test-xw-render-shm
+endif
+
 TESTS = $(auto_ctests)
 check_PROGRAMS = $(auto_ctests) $(interactive_ctests)
 
@@ -50,3 +55,4 @@ test_cairo_xw_LDADD = $(LDADD) $(CAIRO_LIBS) $(X11_LIBS)
 test_cairo_device_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_mirrored_window_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_XOpenDisplay_LDADD = $(LDADD) $(X11_LIBS)
+test_xw_render_shm_LDADD = $(LDADD) $(X11_LIBS)
