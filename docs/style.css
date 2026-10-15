@@ -1,3 +1,7 @@
+/* giza documentation stylesheet
+ * Copyright (c) 2018 Daniel Price
+ * Licensed under the GNU Lesser General Public License (LGPL, see COPYING.LESSER)
+ */
 table.api, .header, #menucontainer, body {
   font-family:sans-serif;
 }
