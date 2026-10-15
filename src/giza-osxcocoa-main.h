@@ -4,7 +4,7 @@
  *
  * Copyright (c) 2026      Shugo Suwazono
  *
- * LGPL v3 or later; see COPYING.LESSER.
+ * Licensed under the GNU Lesser General Public License (LGPL, see COPYING.LESSER)
  *
  * macOS native window driver — public header for giza-osxcocoa-main.m;
  * include this and rename main() to giza_main() for full interactive support.

@@ -1,4 +1,9 @@
 #!/usr/bin/env bash
+#
+# This file is part of giza, a scientific plotting library built on cairo
+# Copyright (c) 2026 Daniel Price
+# Licensed under the GNU Lesser General Public License (LGPL, see COPYING.LESSER)
+#
 # Run upstream CPAN PGPLOT Perl module smoke tests against an installed giza.
 #
 # Primary target: Ubuntu CI (after ./configure && make && sudo make install).

@@ -1,4 +1,9 @@
 #!/usr/bin/perl
+#
+# This file is part of giza, a scientific plotting library built on cairo
+# Copyright (c) 2010 James Wetter and Daniel Price
+# Licensed under the GNU Lesser General Public License (LGPL, see COPYING.LESSER)
+#
 use IO::File;
 
 # Open up the output files

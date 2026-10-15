@@ -1,4 +1,9 @@
 #!/bin/bash
+#
+# This file is part of giza, a scientific plotting library built on cairo
+# Copyright (c) 2022 Daniel Price
+# Licensed under the GNU Lesser General Public License (LGPL, see COPYING.LESSER)
+#
 destdir=../docs/documentation
 ./pgplot_status.pl > $destdir/pgplot-status.html;
 ./cpgplot_status.pl > $destdir/cpgplot-status.html;

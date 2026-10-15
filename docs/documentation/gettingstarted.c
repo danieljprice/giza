@@ -1,3 +1,9 @@
+/* giza example program — see COPYING.LESSER in the top-level directory.
+ * Copyright (c) 2018 Daniel Price
+ * This program is free software; redistribute under the terms of the
+ * GNU Lesser General Public License (LGPL, see COPYING.LESSER for details).
+ */
+
 #include <giza.h>
 
 int

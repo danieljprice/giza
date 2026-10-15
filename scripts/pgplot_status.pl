@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 #
+# This file is part of giza, a scientific plotting library built on cairo
+# Copyright (c) 2010 James Wetter and Daniel Price
+# Licensed under the GNU Lesser General Public License (LGPL, see COPYING.LESSER)
+#
 # This script parses the giza-pgplot.f90 file
 # to produce html documentation of the current
 # status of the PGPLOT interface to giza

@@ -1,3 +1,9 @@
+/* giza test program — see COPYING.LESSER in the top-level directory.
+ * Copyright (c) 2026 Daniel Price
+ * This library is free software; redistribute under the terms of the
+ * GNU Lesser General Public License (LGPL, see COPYING.LESSER for details).
+ */
+
 /* giza - regression test for box ticks on mirrored windows
  *
  * Draws giza_box frames with inverted x and/or y world limits (as used for
