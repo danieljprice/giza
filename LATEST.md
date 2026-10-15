@@ -1,5 +1,6 @@
-Changes in v2.0.1
+<!-- Copyright (c) 2026 Daniel Price. Licensed under the GNU Lesser General Public License (LGPL, see COPYING.LESSER) -->
+Changes in v2.0.2
 -----------------
-- removed hardcoded rpath that broke Fedora RPM builds (#126; thanks to Joachim Frieben)
-- link Fortran tests against libgiza explicitly (#124)
-- fixed giza_qtextlen leaving Unicode text length uninitialised, which failed test-unicode on 32-bit (#125)
+- fixed X11 BadAccess/BadShmSeg errors and missing images on the /xw device on macOS with the XQuartz cairo, by disabling cairo's MIT-SHM uploads there
+- added missing copyright statements to test files and README.md (#128; thanks to Joachim Frieben)
+- fixed compiler warnings (#129, #130)
