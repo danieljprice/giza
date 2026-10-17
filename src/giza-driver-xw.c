@@ -38,6 +38,8 @@
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
 #include <string.h>
+#include <poll.h>
+#include <errno.h>
 /**
  * Global variables specific to X.
  */
@@ -535,6 +537,40 @@ _giza_expose_xw (XEvent *event)
             event->xexpose.y);
 
 /*  XFlush(XW[id].display); */
+}
+
+/**
+ * Waits until fd is readable or a mouse button is clicked in the window
+ */
+int
+_giza_wait_fd_or_click_xw (int fd)
+{
+  const long mask = ExposureMask | ButtonPressMask | StructureNotifyMask;
+  struct pollfd pfd[2];
+  XEvent event;
+
+  /* stop pointer motion and key events selected by the cursor loop from waking us */
+  XSelectInput (XW[id].display, XW[id].window, mask);
+  pfd[0].fd = fd;
+  pfd[0].events = POLLIN;
+  pfd[1].fd = ConnectionNumber (XW[id].display);
+  pfd[1].events = POLLIN;
+
+  while (1) {
+    /* also reads whatever is waiting on the connection, so poll only wakes for new events */
+    while (XCheckWindowEvent (XW[id].display, XW[id].window, mask, &event)) {
+      if (event.type == Expose)
+        _giza_expose_xw (&event);
+      else if (event.type == ButtonPress && event.xbutton.button <= Button3) {
+        _giza_flush_xw_event_queue (&event);
+        return 1;
+      }
+    }
+    if (poll (pfd, 2, -1) < 0 && errno != EINTR)
+      return 0;
+    if (pfd[0].revents)
+      return 0;
+  }
 }
 
 /**
