@@ -86,9 +86,7 @@ giza_get_key_press_float (float *x, float *y,char *ch)
  * button is clicked in the current interactive window or the window's
  * close button is pressed, redrawing the window as needed while it
  * waits. Lets a terminal prompt also watch the plot window. Key presses
- * and scrolling in the window are ignored. Once a close has been
- * requested, here or while giza_get_key_press waited (which returns 'q'
- * for it), every later call returns -1 at once.
+ * and scrolling in the window are ignored.
  *
  * Input:
  *  -fd :- file descriptor to watch, e.g. 0 for standard input

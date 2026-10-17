@@ -1927,13 +1927,15 @@
 <td>1 :</td><td>If the device has no cursor</td>
 </tr></table><h3><a name="giza_wait_fd_or_click">giza_wait_fd_or_click</a><hr></h3>
 <table class="proto">
-<tr><td width=10%>int</td><td width=20%>giza_wait_fd_or_click</td><td> (int fd) ;</td></tr></table><p>Blocks until the file descriptor fd is readable or a mouse button is clicked in the current interactive window, redrawing the window as needed while it waits. Lets a terminal prompt also watch the plot window. Key presses and scrolling in the window are ignored.</p>
+<tr><td width=10%>int</td><td width=20%>giza_wait_fd_or_click</td><td> (int fd) ;</td></tr></table><p>Blocks until the file descriptor fd is readable, a mouse button is clicked in the current interactive window or the window's close button is pressed, redrawing the window as needed while it waits. Lets a terminal prompt also watch the plot window. Key presses and scrolling in the window are ignored. Once a close has been requested, here or while giza_get_key_press waited (which returns 'q' for it), every later call returns -1 at once.</p>
 <h4>Input:</h4>
 <table class="api"><tr>
 <td>fd :</td><td>file descriptor to watch, e.g. 0 for standard input</td>
 </tr></table><h4>Return:</h4>
 <table class="api"><tr>
-<td>1 :</td><td>a left, middle or right click in the window</td>
+<td>1  :</td><td>a left, middle or right click in the window</td>
 </tr><tr>
-<td>0 :</td><td>fd is readable, or the device has no window to watch</td>
+<td>0  :</td><td>fd is readable, or the device has no window to watch</td>
+</tr><tr>
+<td>-1 :</td><td>the window's close button was pressed</td>
 </tr></table>

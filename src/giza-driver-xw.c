@@ -942,9 +942,9 @@ _giza_expose_xw (XEvent *event)
 }
 
 /**
- * XCheckIfEvent predicate: events for our window that giza_wait_fd_or_click acts on.
- * One predicate scan reads and checks every queued event, so none is left
- * unseen in Xlib's queue while poll sleeps on the connection.
+ * XCheckIfEvent filter/predicator for the window events 
+ * that giza_wait_fd_or_click wants, which are:
+ *    (this x11 window) && (event is Expose/ButtonPress/ClientMessage)
  */
 static Bool
 _xw_wait_event (Display *dpy, XEvent *ev, XPointer arg)
