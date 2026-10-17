@@ -25,6 +25,7 @@
 #include "giza-private.h"
 #include "giza-drivers-private.h"
 #include "giza-io-private.h"
+#include "giza-driver-xw-private.h"
 #include <string.h>
 #include <giza.h>
 
@@ -78,4 +79,32 @@ giza_get_key_press_float (float *x, float *y,char *ch)
   return success;
 }
 
+/**
+ * Interactive: giza_wait_fd_or_click
+ *
+ * Synopsis: Blocks until the file descriptor fd is readable, a mouse
+ * button is clicked in the current interactive window or the window's
+ * close button is pressed, redrawing the window as needed while it
+ * waits. Lets a terminal prompt also watch the plot window. Key presses
+ * and scrolling in the window are ignored.
+ *
+ * Input:
+ *  -fd :- file descriptor to watch, e.g. 0 for standard input
+ *
+ * Return:
+ *  -1  :- a left, middle or right click in the window
+ *  -0  :- fd is readable, or the device has no window to watch
+ *  --1 :- the window's close button was pressed
+ */
+int
+giza_wait_fd_or_click (int fd)
+{
+  if (!_giza_check_device_ready ("giza_wait_fd_or_click"))
+    return 0;
 
+#ifdef _GIZA_HAS_XW
+  if (Dev[id].type == GIZA_DEVICE_XW)
+    return _giza_wait_fd_or_click_xw (fd);
+#endif
+  return 0;
+}

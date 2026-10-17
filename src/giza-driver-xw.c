@@ -39,6 +39,8 @@
 #include <X11/keysym.h>
 #include <X11/Xutil.h>
 #include <string.h>
+#include <poll.h>
+#include <errno.h>
 
 /* cairo-xlib.h has included cairo-features.h, defining CAIRO_HAS_XCB_SURFACE */
 #if defined(__APPLE__) && CAIRO_HAS_XCB_SURFACE
@@ -76,6 +78,8 @@ struct GIZA_XWindow
   int resize_pending;
   /* User resized the window (ConfigureNotify); replot when mouse button released */
   int resize_dirty;
+  /* WM_DELETE_WINDOW seen; giza_wait_fd_or_click reports it from then on */
+  int close_requested;
   /* Cached window background from last successful XAllocColor (ci 0) */
   int bg_cached;
   double bg_r, bg_g, bg_b;
@@ -283,6 +287,7 @@ _giza_open_device_xw (double width, double height, int units)
     }
 
   XStoreName (XW[id].display, XW[id].window, Dev[id].prefix);
+  XW[id].close_requested = 0;
   XSelectInput(XW[id].display, XW[id].window, StructureNotifyMask);
   XMapWindow (XW[id].display, XW[id].window);
 
@@ -701,6 +706,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
        if (event.xclient.message_type == wmProtocols
            && event.xclient.format == 32
            && (Atom) event.xclient.data.l[0] == wmDeleteMessage) {
+          XW[id].close_requested = 1;
           *ch = 'q';
           _giza_destroy_band (mode);
           _giza_flush_xw_event_queue (&event);
@@ -933,6 +939,64 @@ _giza_expose_xw (XEvent *event)
             event->xexpose.y);
 
 /*  XFlush(XW[id].display); */
+}
+
+/**
+ * XCheckIfEvent filter/predicator for the window events 
+ * that giza_wait_fd_or_click wants, which are:
+ *    (this x11 window) && (event is Expose/ButtonPress/ClientMessage)
+ */
+static Bool
+_xw_wait_event (Display *dpy, XEvent *ev, XPointer arg)
+{
+  (void) dpy;
+  return ev->xany.window == *(Window *) arg
+         && (ev->type == Expose || ev->type == ButtonPress || ev->type == ClientMessage);
+}
+
+/**
+ * Waits until fd is readable, a mouse button is clicked in the window or
+ * the window's close button is pressed
+ */
+int
+_giza_wait_fd_or_click_xw (int fd)
+{
+  struct pollfd pfd[2];
+  XEvent event;
+
+  if (XW[id].close_requested)
+    return -1;
+
+  /* stop pointer motion and key events selected by the cursor loop from waking us.
+     ConfigureNotify stays selected but unmatched, left queued for prepare_draw */
+  XSelectInput (XW[id].display, XW[id].window, ExposureMask | ButtonPressMask | StructureNotifyMask);
+  pfd[0].fd = fd;
+  pfd[0].events = POLLIN;
+  pfd[1].fd = ConnectionNumber (XW[id].display);
+  pfd[1].events = POLLIN;
+
+  while (1) {
+    while (XCheckIfEvent (XW[id].display, &event, _xw_wait_event, (XPointer) &XW[id].window)) {
+      if (event.type == ClientMessage) {
+        if (event.xclient.message_type == wmProtocols
+            && event.xclient.format == 32
+            && (Atom) event.xclient.data.l[0] == wmDeleteMessage) {
+          XW[id].close_requested = 1;
+          return -1;
+        }
+      }
+      else if (event.type == Expose)
+        _giza_expose_xw (&event);
+      else if (event.xbutton.button <= Button3) {
+        _giza_flush_xw_event_queue (&event);
+        return 1;
+      }
+    }
+    if (poll (pfd, 2, -1) < 0 && errno != EINTR)
+      return 0;
+    if (pfd[0].revents)
+      return 0;
+  }
 }
 
 /**

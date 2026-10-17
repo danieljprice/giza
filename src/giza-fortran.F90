@@ -77,6 +77,7 @@ module giza
       giza_close_device, &
       giza_close, &
       giza_get_key_press, &
+      giza_wait_fd_or_click, &
       giza_set_motion_callback, &
       giza_end_motion_callback, &
       giza_device_has_cursor, &
@@ -816,6 +817,14 @@ private
       real(kind=c_float),intent(out)     :: x,y
       character(kind=c_char),intent(out) :: ch
     end function giza_get_key_press_float
+ end interface
+
+ interface giza_wait_fd_or_click
+    function giza_wait_fd_or_click_c(fd) bind(C, name="giza_wait_fd_or_click")
+      import
+      integer(kind=c_int)                :: giza_wait_fd_or_click_c
+      integer(kind=c_int),value,intent(in) :: fd
+    end function giza_wait_fd_or_click_c
  end interface
 
  interface giza_set_motion_callback
