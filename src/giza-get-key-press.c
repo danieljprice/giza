@@ -82,17 +82,21 @@ giza_get_key_press_float (float *x, float *y,char *ch)
 /**
  * Interactive: giza_wait_fd_or_click
  *
- * Synopsis: Blocks until the file descriptor fd is readable or a mouse
- * button is clicked in the current interactive window, redrawing the
- * window as needed while it waits. Lets a terminal prompt also watch
- * the plot window. Key presses and scrolling in the window are ignored.
+ * Synopsis: Blocks until the file descriptor fd is readable, a mouse
+ * button is clicked in the current interactive window or the window's
+ * close button is pressed, redrawing the window as needed while it
+ * waits. Lets a terminal prompt also watch the plot window. Key presses
+ * and scrolling in the window are ignored. Once a close has been
+ * requested, here or while giza_get_key_press waited (which returns 'q'
+ * for it), every later call returns -1 at once.
  *
  * Input:
  *  -fd :- file descriptor to watch, e.g. 0 for standard input
  *
  * Return:
- *  -1 :- a left, middle or right click in the window
- *  -0 :- fd is readable, or the device has no window to watch
+ *  -1  :- a left, middle or right click in the window
+ *  -0  :- fd is readable, or the device has no window to watch
+ *  --1 :- the window's close button was pressed
  */
 int
 giza_wait_fd_or_click (int fd)
