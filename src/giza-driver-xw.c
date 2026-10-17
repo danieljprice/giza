@@ -996,6 +996,8 @@ _giza_wait_fd_or_click_xw (int fd)
       return 0;
     if (pfd[0].revents)
       return 0;
+    if (pfd[1].revents & (POLLERR | POLLHUP | POLLNVAL))
+      return 0;
   }
 }
 
