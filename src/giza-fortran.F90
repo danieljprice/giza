@@ -5,16 +5,16 @@
 !  Copyright (c) 2010-2022 Daniel Price
 !
 !  This library is free software; and you are welcome to redistribute
-!  it under the terms of the GNU General Public License
-!  (GPL, see LICENSE file for details) and the provision that
+!  it under the terms of the GNU Lesser General Public License
+!  (LGPL, see COPYING.LESSER file for details) and the provision that
 !  this notice remains intact. If you modify this file, please
-!  note section 5a) of the GPLv3 states that:
+!  note section 2 of the LGPLv3 states that:
 !
 !   a) The work must carry prominent notices stating that you modified
 !   it, and giving a relevant date.
 !
 !  This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
-!  See the GPL for specific language governing rights and limitations.
+!  See the LGPL for specific language governing rights and limitations.
 !
 !  The Original code is the giza plotting library.
 !
@@ -127,6 +127,7 @@ module giza
       giza_rectangle, &
       giza_render, &
       giza_render_gray, &
+      giza_render_gray_shade, &
       giza_render_transparent, &
       giza_draw_pixels, &
       giza_restore, &
@@ -141,6 +142,7 @@ module giza
       giza_get_panel, &
       giza_tick, &
       giza_vector, &
+      giza_streamplot, &
       giza_set_viewport_default, &
       giza_set_viewport, &
       giza_get_viewport, &
@@ -1544,6 +1546,26 @@ private
     end subroutine giza_render_gray_float
  end interface
 
+ interface giza_render_gray_shade
+    subroutine giza_render_gray_shade_double(sizex,sizey,data,i1,i2,j1,j2,&
+               fg,bg,extend,filter,affine) bind(C, name="giza_render_gray_shade")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
+      real(kind=c_double),intent(in) :: data(sizex,sizey)
+      real(kind=c_double),intent(in),value :: fg,bg
+      real(kind=c_double),intent(in) :: affine(6)
+    end subroutine giza_render_gray_shade_double
+
+    subroutine giza_render_gray_shade_float(sizex,sizey,data,i1,i2,j1,j2,&
+               fg,bg,extend,filter,affine) bind(C, name="giza_render_gray_shade_float")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2,extend,filter
+      real(kind=c_float),intent(in) :: data(sizex,sizey)
+      real(kind=c_float),intent(in),value :: fg,bg
+      real(kind=c_float),intent(in) :: affine(6)
+    end subroutine giza_render_gray_shade_float
+ end interface
+
  interface giza_draw_pixels
     subroutine giza_draw_pixels_double(sizex,sizey,idata,i1,i2,j1,j2,&
                xmin,xmax,ymin,ymax,extend,filter) bind(C, name="giza_draw_pixels")
@@ -1690,6 +1712,26 @@ private
       real(kind=c_float),intent(in),value :: scale,blank
       real(kind=c_float),intent(in) :: affine(6)
     end subroutine giza_vector_float
+ end interface
+
+ interface giza_streamplot
+    subroutine giza_streamplot_double(sizex,sizey,u,v,i1,i2,j1,j2,&
+                                      density,affine,blank) bind(C, name="giza_streamplot")
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      real(kind=c_double),intent(in) :: u(sizex,sizey),v(sizex,sizey)
+      real(kind=c_double),intent(in),value :: density,blank
+      real(kind=c_double),intent(in) :: affine(6)
+    end subroutine giza_streamplot_double
+
+    subroutine giza_streamplot_float(sizex,sizey,u,v,i1,i2,j1,j2,&
+                                     density,affine,blank) bind(C)
+      import
+      integer(kind=c_int),intent(in),value :: sizex,sizey,i1,i2,j1,j2
+      real(kind=c_float),intent(in) :: u(sizex,sizey),v(sizex,sizey)
+      real(kind=c_float),intent(in),value :: density,blank
+      real(kind=c_float),intent(in) :: affine(6)
+    end subroutine giza_streamplot_float
  end interface
 
 

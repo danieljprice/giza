@@ -1,0 +1,193 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html"; charset=utf-8" \>
+    <title>giza - external cairo device</title>
+    <link rel="stylesheet" href="../style.css" type="text/css" \>
+  </head>
+
+  <div class="header">
+    <a href="/giza"><img alt="giza" src="../title.png"\></a>
+  </div>
+
+  <div id="menucontainer">
+  <ul id="menulist">
+    <li><a href="../news/">news</a></li>
+    <li><a href="../download/">download</a></li>
+    <li><a href="../documentation/">documentation</a></li>
+    <li><a href="../contact/">contact</a></li>
+    <li><a href="../samples/">samples</a></li>
+  </ul>
+  </div>
+
+  <div id="content">
+    <h1>Drawing to an external Cairo context</h1>
+
+    <p>Giza can plot into a <em>caller-owned</em> <code>cairo_t</code> context.
+    This is intended for embedding giza plots in GUI toolkits (for example
+    <a href="https://docs.gtk.org/gtk4/class.DrawingArea.html">GtkDrawingArea</a>)
+    or other applications that already use Cairo for rendering.</p>
+
+    <p>This device is <strong>not</strong> opened with
+    <code>giza_open_device("/cairo", ...)</code>. Use the dedicated API described
+    below instead.</p>
+
+    <h2>Overview</h2>
+
+    <p>Opening a giza device and binding a cairo context are separate steps:</p>
+
+    <ol>
+      <li><strong>Open</strong> a cairo device (logical size only; no drawing yet).</li>
+      <li><strong>Configure</strong> the plot (world coordinates, colours, etc.) at any time.</li>
+      <li><strong>Bind</strong> a <code>cairo_t</code> with <code>giza_set_cairo_context</code>
+          when you are ready to draw.</li>
+      <li><strong>Plot</strong> using the usual giza drawing routines.</li>
+      <li><strong>Release</strong> the context with <code>giza_release_cairo_context</code>
+          when the frame is finished.</li>
+    </ol>
+
+    <p>Giza performs <code>cairo_save</code> when binding and
+    <code>cairo_restore</code> when releasing, so toolkit state on the context
+    is preserved. Giza never destroys the caller's context or surface.</p>
+
+    <h2>API summary</h2>
+
+    <div class="code">
+    <pre>
+int giza_open_device_cairo (void);
+int giza_open_device_size_cairo (double width, double height, int units);
+int giza_open_device_size_cairo_float (float width, float height, int units);
+
+int giza_set_cairo_context (cairo_t *cr);
+int giza_release_cairo_context (void);
+int giza_resize_device_cairo (double width, double height, int units);
+cairo_surface_t *giza_get_cairo_surface (void);
+    </pre>
+    </div>
+
+    <p><code>giza_open_device_cairo()</code> is like
+    <code>giza_open_device()</code>: it opens a device with a default logical
+    size (800&times;600 pixels). <code>giza_open_device_size_cairo()</code> is
+    like <code>giza_open_device_size()</code> and lets you specify width, height
+    and units (<code>GIZA_UNITS_PIXELS</code>, <code>GIZA_UNITS_MM</code>, etc.).</p>
+
+    <p>Plotting routines require a bound context. Call
+    <code>giza_set_cairo_context</code> before drawing and
+    <code>giza_release_cairo_context</code> when done (typically once per
+    expose/redraw event in a GUI).</p>
+
+    <h2>Off-screen example (image surface)</h2>
+
+    <p>Click <a href="cairo-device.c">here</a> for a complete C example, or
+    follow the steps below.</p>
+
+    <h3>1. Open the device</h3>
+    <div class="code">
+    <pre>
+#include &lt;giza.h&gt;
+#include &lt;cairo/cairo.h&gt;
+
+int dev = giza_open_device_size_cairo (400., 300., GIZA_UNITS_PIXELS);
+if (dev &lt;= 0)
+  return 1;
+    </pre>
+    </div>
+
+    <h3>2. Create a cairo surface and bind it</h3>
+    <div class="code">
+    <pre>
+cairo_surface_t *surface =
+    cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 400, 300);
+cairo_t *cr = cairo_create (surface);
+
+if (giza_set_cairo_context (cr) != 0)
+  return 1;
+    </pre>
+    </div>
+
+    <h3>3. Plot as usual</h3>
+    <div class="code">
+    <pre>
+giza_set_environment (0., 1., 0., 1., 0, 0);
+giza_box ("BCNT", 0., 0, "BCNT", 0., 0);
+giza_move (0.1, 0.5);
+giza_draw (0.9, 0.5);
+    </pre>
+    </div>
+
+    <h3>4. Release, close, and save</h3>
+    <div class="code">
+    <pre>
+giza_release_cairo_context ();
+giza_close_device ();
+
+cairo_surface_write_to_png (surface, "plot.png");
+cairo_destroy (cr);
+cairo_surface_destroy (surface);
+    </pre>
+    </div>
+
+    <h2>GTK / toolkit integration</h2>
+
+    <p>In a typical GtkDrawingArea (GTK 4) draw handler, the toolkit supplies a
+    fresh <code>cairo_t</code> for each frame. Open the giza device once when the
+    widget is created; bind and release on every draw:</p>
+
+    <div class="code">
+    <pre>
+/* once, e.g. in widget init */
+int giza_dev = giza_open_device_size_cairo (w, h, GIZA_UNITS_PIXELS);
+giza_select_device (giza_dev);
+giza_set_environment (...);   /* optional one-time setup */
+
+/* on each draw callback */
+static void on_draw (GtkDrawingArea *area, cairo_t *cr, int w, int h, gpointer data)
+{
+  (void) area;
+  (void) data;
+
+  giza_select_device (giza_dev);
+  giza_resize_device_cairo ((double) w, (double) h, GIZA_UNITS_PIXELS);
+  giza_set_cairo_context (cr);
+
+  /* ... giza plotting calls ... */
+
+  giza_release_cairo_context ();
+}
+    </pre>
+    </div>
+
+    <p>Keep <code>giza_resize_device_cairo</code> in sync with the widget size
+    whenever the allocation changes. The cairo surface passed to
+    <code>giza_set_cairo_context</code> should match that logical size.</p>
+
+    <h2>Important notes</h2>
+
+    <ul>
+      <li><strong>Ownership:</strong> You own the <code>cairo_t</code> and its
+          target surface. Do not destroy them while giza still has them bound;
+          call <code>giza_release_cairo_context</code> or
+          <code>giza_close_device</code> first.</li>
+      <li><strong>Before plotting:</strong> Always call
+          <code>giza_set_cairo_context</code> before any drawing routine. Opening
+          the device alone is not enough.</li>
+      <li><strong>Between frames:</strong> After <code>giza_release_cairo_context</code>,
+          the device remains open and configured; re-bind on the next frame.</li>
+      <li><strong>Not interactive:</strong> This device has no cursor or band
+          input; it is for rendering only.</li>
+    </ul>
+
+    <h2>Compiling</h2>
+
+    <p>Link against giza and cairo, for example:</p>
+
+    <div class="code">
+    <pre>
+gcc -o cairo-device cairo-device.c -lgiza -lcairo
+    </pre>
+    </div>
+
+    <p>See also the <a href="api.html">API reference</a> for full function
+    documentation.</p>
+  </div>
+
+</html>

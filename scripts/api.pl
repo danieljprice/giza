@@ -1,4 +1,9 @@
 #!/usr/bin/perl
+#
+# This file is part of giza, a scientific plotting library built on cairo
+# Copyright (c) 2010 James Wetter and Daniel Price
+# Licensed under the GNU Lesser General Public License (LGPL, see COPYING.LESSER)
+#
 use IO::File;
 
 # Open up the output files
@@ -16,6 +21,16 @@ $fh = new IO::File "> api.html";
 @Settings = ();
 @Drawing = ();
 @Interactive = ();
+
+# Escape characters that would break HTML in generated text
+sub htmlEscape
+{
+  my ($s) = @_;
+  $s =~ s/&/&amp;/g;
+  $s =~ s/</&lt;/g;
+  $s =~ s/>/&gt;/g;
+  return $s;
+}
 
 # Subroutine for parsing individual comments
 sub processComment
@@ -99,7 +114,13 @@ sub processComment
     }
   } while (shift);
 
-  # Add to the index and description lists 
+  # Skip internal helpers not part of the public API
+  if ($name =~ m/^_/ || (defined $prototype[0] && $prototype[0] =~ m/\bstatic\b/))
+  {
+    return;
+  }
+
+  # Add to the index and description lists
   if ($type eq "Text")
   {
     $IFile = \@IText;
@@ -135,9 +156,9 @@ sub processComment
   # Name
   push @$File, "<h3><a name=\"$name\">$name</a><hr></h3>\n";
   # Prototype
-  push @$File, "<table class=\"proto\">\n<tr><td width=10%>" . shift (@prototype) . "</td><td width=20%>" . shift (@prototype) . "</td><td>" . shift (@prototype) . ";</tr></table>";
+  push @$File, "<table class=\"proto\">\n<tr><td width=10%>" . shift (@prototype) . "</td><td width=20%>" . shift (@prototype) . "</td><td>" . shift (@prototype) . ";</td></tr></table>";
   # Description
-  push @$File, "<p>$description</p>\n";
+  push @$File, "<p>" . htmlEscape($description) . "</p>\n";
   # Lists
   foreach $item (@lists)
   {
@@ -148,8 +169,8 @@ sub processComment
     # Table contents
     while (@$item)
     {
-      push @$File, "<tr>\n<td>" . shift (@$item) . ":</td>";
-      push @$File, "<td>" . shift (@$item) . "</td>\n</tr>";
+      push @$File, "<tr>\n<td>" . htmlEscape(shift (@$item)) . ":</td>";
+      push @$File, "<td>" . htmlEscape(shift (@$item)) . "</td>\n</tr>";
     }
     # Table postamble
     push @$File, "</table>";

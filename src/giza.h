@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2022 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -23,6 +23,7 @@
  */
 
 #include <giza-shared.h>
+#include <cairo/cairo.h>
 
 
 void giza_arrow (double x1, double y1, double x2, double y2);
@@ -169,6 +170,13 @@ int giza_open_device_size (const char *newDeviceName, const char *newPrefix, dou
 			   double height, int units);
 int giza_open_device_size_float (const char *newDeviceName, const char *newPrefix,
 				 float width, float height, int units);
+int giza_open_device_cairo (void);
+int giza_open_device_size_cairo (double width, double height, int units);
+int giza_open_device_size_cairo_float (float width, float height, int units);
+int giza_set_cairo_context (cairo_t *cr);
+int giza_release_cairo_context (void);
+int giza_resize_device_cairo (double width, double height, int units);
+cairo_surface_t *giza_get_cairo_surface (void);
 void giza_select_device (int devid);
 void giza_get_device_id (int *devid);
 void giza_flush_device (void);
@@ -336,6 +344,12 @@ void giza_render_gray (int sizex, int sizey, const double* data, int i1,
 void giza_render_gray_float (int sizex, int sizey, const float* data,
 			int i1, int i2, int j1, int j2, float valMin,
 			float valMax, int extend, int filter, const float *affine);
+void giza_render_gray_shade (int sizex, int sizey, const double* data, int i1,
+		  int i2, int j1, int j2, double fg, double bg, int extend,
+		  int filter, const double *affine);
+void giza_render_gray_shade_float (int sizex, int sizey, const float* data,
+			int i1, int i2, int j1, int j2, float fg, float bg,
+			int extend, int filter, const float *affine);
 void giza_draw_pixels (int sizex, int sizey, const int* idata, int i1, int i2,
 	    int j1, int j2, double xmin, double xmax, double ymin, double ymax, int extend, int filter);
 void giza_draw_pixels_float (int sizex, int sizey, const int* idata, int i1, int i2,
@@ -370,6 +384,15 @@ void
 giza_vector_float (int n, int m, const float* horizontal, const float* vertical,
 		   int i1, int i2, int j1, int j2, float scale, int position,
 		   const float* affine, float blank);
+
+void
+giza_streamplot (int n, int m, const double *u, const double *v,
+		 int i1, int i2, int j1, int j2, double density,
+		 const double *affine, double blank);
+void
+giza_streamplot_float (int n, int m, const float *u, const float *v,
+		       int i1, int i2, int j1, int j2, float density,
+		       const float *affine, float blank);
 
 void giza_set_viewport (double xleft, double xright, double ybottom,
 			double ytop);

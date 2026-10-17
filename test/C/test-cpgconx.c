@@ -1,3 +1,9 @@
+/* giza test program — see COPYING.LESSER in the top-level directory.
+ * Copyright (c) 2026 Keith Arnaud
+ * This library is free software; redistribute under the terms of the
+ * GNU Lesser General Public License (LGPL, see COPYING.LESSER for details).
+ */
+
 /* Test cpgconx (contour with user callback) */
 #include <cpgplot.h>
 #include <math.h>
@@ -6,6 +12,9 @@
  * Maps grid indices to world coords and calls cpgmove/cpgdraw */
 static void myplot(int *visble, float *x, float *y, float *z)
 {
+  /* z is the contour level supplied by cpgconx. This test draws every level the same way. */
+  (void) z;
+
   /* Simple identity-ish mapping: world = grid * scale + offset */
   float scale = 6.2832f / 50.0f;  /* 2*pi / N */
   float offset = -3.14159f;

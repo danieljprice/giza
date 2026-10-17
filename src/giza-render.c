@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -30,6 +30,26 @@
 #include <giza.h>
 #include <stdlib.h>
 #include <math.h>
+
+/**
+ * Restrict drawing to the current world-coordinate window (PGPLOT window
+ * clipping). Viewport clipping alone does not crop cairo image paints correctly.
+ */
+static void
+_giza_clip_to_window (void)
+{
+  int clip;
+
+  giza_get_clipping (&clip);
+  if (!clip)
+    return;
+
+  cairo_rectangle (Dev[id].context,
+                   Dev[id].Win.xmin, Dev[id].Win.ymin,
+                   Dev[id].Win.xmax - Dev[id].Win.xmin,
+                   Dev[id].Win.ymax - Dev[id].Win.ymin);
+  cairo_clip (Dev[id].context);
+}
 
 /**
  * Drawing: giza_render
@@ -152,6 +172,7 @@ _giza_render (int sizex, int sizey, const double* data, int i1, int i2,
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   cairo_save (Dev[id].context);
+  _giza_clip_to_window ();
 
   cairo_matrix_init (&mat, affine[0], affine[1], affine[2], affine[3],
                    affine[4], affine[5]);
@@ -339,6 +360,7 @@ _giza_render_float (int sizex, int sizey, const float* data, int i1,
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   cairo_save (Dev[id].context);
+  _giza_clip_to_window ();
 
   cairo_matrix_init (&mat, (double) affine[0], (double) affine[1],
                    (double) affine[2], (double) affine[3],
@@ -460,40 +482,69 @@ giza_render_gray_float (int sizex, int sizey, const float* data, int i1,
 }
 
 /**
- * Sets the rgb for a given pixel, given position in the colour table.
+ * Drawing: giza_render_gray_shade
  *
- * Input:
- *  -array  :- the array in which to store the colour.
- *  -pixnum :- the pixel to be coloured.
- *  -pos    :- the fraction along the colour table to get the colour from
+ * Synopsis: Greyscale image with explicit foreground and background data levels.
+ *           BG maps to the dark end of the ramp, FG to the light end.
+ *           When FG < BG the grey ramp is reversed automatically.
+ *
+ * See Also: giza_render_gray, giza_render_gray_shade_float
  */
-static void
-_giza_colour_pixel (unsigned char *array, int pixNum, double pos)
+void
+giza_render_gray_shade (int sizex, int sizey, const double* data, int i1,
+                int i2, int j1, int j2, double fg, double bg,
+                int extend, int filter, const double *affine)
 {
-  double r, g, b;
-  giza_rgb_from_table (pos, &r, &g, &b);
-  /* set the alpha */
-  array[pixNum * 4 + 3] = 255.;
-  /* set the red, green, and blue */
-  array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
-  array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
-  array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
+  giza_save_colour_table();
+  if (fg >= bg)
+    {
+      giza_set_colour_table_gray ();
+      giza_render (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+    }
+  else
+    {
+      /* fg < bg requests a negative image (PGGRAY interpolates the shade
+       * from bg to fg, so swapped levels invert). The value normalisation
+       * in giza-itf.c is symmetric under min/max exchange, so the
+       * inversion cannot come from swapping valMin/valMax - use a
+       * white->black ramp with the levels in ascending order instead */
+      double cp[2], ramp[2];
+      cp[0] = 0.; ramp[0] = 1.;
+      cp[1] = 1.; ramp[1] = 0.;
+      giza_set_colour_table (cp, ramp, ramp, ramp, 2, 1., 0.5);
+      giza_render (sizex, sizey, data, i1, i2, j1, j2, fg, bg, extend, filter, affine);
+    }
+  giza_restore_colour_table();
 }
 
 /**
- * As in _giza_colour_pixel, but takes an additional alpha parameter
+ * Drawing: giza_render_gray_shade_float
+ *
+ * Synopsis: Same as giza_render_gray_shade but with float data
+ *
+ * See Also: giza_render_gray_shade
  */
-static void
-_giza_colour_pixel_alpha (unsigned char *array, int pixNum, double pos, double alpha)
+void
+giza_render_gray_shade_float (int sizex, int sizey, const float* data, int i1,
+                int i2, int j1, int j2, float fg, float bg,
+                int extend, int filter, const float *affine)
 {
-  double r, g, b;
-  giza_rgb_from_table (pos, &r, &g, &b);
-  /* set the alpha */
-  array[pixNum * 4 + 3] = (unsigned char) (alpha * 255.);
-  /* set the red, green, and blue */
-  array[pixNum * 4 + 2] = (unsigned char) (r * 255.);
-  array[pixNum * 4 + 1] = (unsigned char) (g * 255.);
-  array[pixNum * 4 + 0] = (unsigned char) (b * 255.);
+  giza_save_colour_table();
+  if (fg >= bg)
+    {
+      giza_set_colour_table_gray();
+      giza_render_float (sizex, sizey, data, i1, i2, j1, j2, bg, fg, extend, filter, affine);
+    }
+  else
+    {
+      /* negative image: see giza_render_gray_shade */
+      double cp[2], ramp[2];
+      cp[0] = 0.; ramp[0] = 1.;
+      cp[1] = 1.; ramp[1] = 0.;
+      giza_set_colour_table (cp, ramp, ramp, ramp, 2, 1., 0.5);
+      giza_render_float (sizex, sizey, data, i1, i2, j1, j2, fg, bg, extend, filter, affine);
+    }
+  giza_restore_colour_table();
 }
 
 /**
@@ -731,7 +782,7 @@ _giza_get_filter (int filter, cairo_filter_t *cairofilter)
        *cairofilter = CAIRO_FILTER_GAUSSIAN;
        break;
     default:
-       *cairofilter = GIZA_FILTER_BEST;
+       *cairofilter = CAIRO_FILTER_BEST;
        break;
     }
   return;

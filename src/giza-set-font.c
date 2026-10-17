@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -23,6 +23,7 @@
  */
 
 #include "giza-private.h"
+#include "giza-text-private.h"
 #include "giza-io-private.h"
 #include "giza-set-font-private.h"
 #include <giza.h>
@@ -159,6 +160,8 @@ _giza_set_font (const char *font, cairo_font_slant_t slant, cairo_font_weight_t 
 
    /* restore font matrix */
    cairo_set_font_matrix (Dev[id].context, &mat);
+
+   _giza_glyph_cache_invalidate ();
 }
 
 /**
@@ -247,7 +250,7 @@ _giza_resolve_font(const char* font, cairo_font_slant_t slant, cairo_font_weight
      * (2) what was the result of that */
     static int                         didFtInit = 0, ftInitOk = 0;
     static FT_Library                  ft_library;
-    static const cairo_user_data_key_t key;
+    static const cairo_user_data_key_t key = {0};
 
     if( !didFtInit ) {
        ftInitOk  = !FT_Init_FreeType( &ft_library ); 

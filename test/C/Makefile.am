@@ -1,6 +1,6 @@
 AM_CFLAGS = $(WERROR_CFLAGS) $(WARN_CFLAGS)
 AM_CPPFLAGS = -I../../src -I../../include $(CAIRO_CFLAGS) $(X11_CFLAGS)
-AM_LDFLAGS = -no-install -lm -lX11
+AM_LDFLAGS = -no-install -lm
 LDADD = ../../src/libgiza.la
 
 CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
@@ -12,18 +12,32 @@ LDADD += ../../src/libgiza-osxcocoa-main.la
 endif
 
 # Tests that run non-interactively (file-based devices only)
-auto_ctests = test-format-number test-pdf test-png test-svg \
-	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl
+auto_ctests = test-format-number test-giza-round test-glyph-fallback test-pdf test-png test-svg test-unicode test-cairo-device \
+	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl test-pggray \
+	test-page-semantics test-streamplot test-mirrored-window
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
-interactive_ctests = test-arrow test-box test-cairo-xw test-change-page \
+interactive_ctests = test-arrow test-box test-change-page \
 	test-circle test-colour-index \
 	test-environment \
 	test-error-bars test-giza-xw test-line-cap \
 	test-line-style test-openclose test-points \
 	test-qtext test-rectangle test-set-line-width \
-	test-vector test-window test-XOpenDisplay test-contour test-render \
+	test-vector test-window test-contour test-render \
 	test-band
+
+if HAVE_CAIRO_XLIB
+interactive_ctests += test-cairo-xw
+endif
+
+if HAVE_X11
+interactive_ctests += test-XOpenDisplay
+endif
+
+# runs automatically but skips itself when no X display is available
+if HAVE_CAIRO_XLIB
+auto_ctests += test-xw-render-shm
+endif
 
 TESTS = $(auto_ctests)
 check_PROGRAMS = $(auto_ctests) $(interactive_ctests)
@@ -35,6 +49,10 @@ test_cpgconl_LDADD = $(CPGPLOT_LDADD)
 test_cpgconx_LDADD = $(CPGPLOT_LDADD)
 test_cpghi2d_LDADD = $(CPGPLOT_LDADD)
 test_cpgscrl_LDADD = $(CPGPLOT_LDADD)
+test_pggray_LDADD = $(CPGPLOT_LDADD)
 
 test_cairo_xw_LDADD = $(LDADD) $(CAIRO_LIBS) $(X11_LIBS)
+test_cairo_device_LDADD = $(LDADD) $(CAIRO_LIBS)
+test_mirrored_window_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_XOpenDisplay_LDADD = $(LDADD) $(X11_LIBS)
+test_xw_render_shm_LDADD = $(LDADD) $(X11_LIBS)

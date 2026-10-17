@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -44,7 +44,7 @@
 void
 giza_set_window (double x1, double x2, double y1, double y2)
 {
-  if (!_giza_check_device_ready ("giza_set_window"))
+  if (!_giza_check_device_open ("giza_set_window"))
     return;
 
   /* Check the input is valid */
@@ -135,7 +135,7 @@ giza_set_window_float (float x1, float x2, float y1, float y2)
 void
 giza_set_window_equal_scale (double x1, double x2, double y1, double y2)
 {
-  if (!_giza_check_device_ready ("giza_set_window_equal_scale"))
+  if (!_giza_check_device_open ("giza_set_window_equal_scale"))
     return;
 
   /* Check the input is valid */
@@ -212,7 +212,7 @@ giza_set_window_equal_scale_float (float x1, float x2, float y1, float y2)
 void
 giza_get_window (double *x1, double *x2, double *y1, double *y2)
 {
-  if(!_giza_check_device_ready("giza_get_window")) {
+  if(!_giza_check_device_open("giza_get_window")) {
     *x1 = 0.; *x2 = 1.; *y1 = 0; *y2 = 1.; /* avoid compiler warning */
     return;
   }
@@ -230,7 +230,7 @@ giza_get_window (double *x1, double *x2, double *y1, double *y2)
 void
 giza_get_window_float (float *x1, float *x2, float *y1, float *y2)
 {
-  if(!_giza_check_device_ready("giza_get_window_float")) return;
+  if(!_giza_check_device_open("giza_get_window_float")) return;
 
   double x1d, x2d, y1d, y2d;
   giza_get_window(&x1d,&x2d,&y1d,&y2d);
@@ -247,7 +247,7 @@ giza_get_window_float (float *x1, float *x2, float *y1, float *y2)
 void
 _giza_init_window (void)
 {
-  if(!_giza_check_device_ready("_giza_init_window")) return;
+  if(!_giza_check_device_open("_giza_init_window")) return;
 
   Dev[id].Win.xmin = GIZA_DEFAULT_WINDOW_X1;
   Dev[id].Win.xmax = GIZA_DEFAULT_WINDOW_X2;

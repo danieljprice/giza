@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -35,6 +35,7 @@
 #define GIZA_DEVICE_MP4    10
 #define GIZA_DEVICE_AQT    11
 #define GIZA_DEVICE_OSXCOCOA    20
+#define GIZA_DEVICE_CAIRO       21
 
 #define GIZA_DEFAULT_PREFIX "giza"
 
@@ -51,3 +52,6 @@ void _giza_lowercase(const char *string, char *lowerstring);
 void _giza_trim(char *str);
 void _giza_get_filename_for_device (char *filename, char *prefix, int pgNum, char *extension, int lastpage);
 void _giza_get_specified_size(double paperwidth, double paperheight, int paperunits, int *width, int *height);
+int _giza_complete_device_open (int draw_background);
+void _giza_prepare_interactive_draw (void);
+void _giza_init_all_devices_once (void);

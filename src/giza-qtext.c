@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -153,6 +153,11 @@ giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
       return;
     }
 
+  /* The size is accumulated by the text scanner, so start from zero.
+     Callers are not required to initialise xlen and ylen. */
+  *xlen = 0.;
+  *ylen = 0.;
+
   /* save the character height (can be changed during superscript/subscripting) */
   double ch;
   giza_get_character_height (&ch);
@@ -178,18 +183,18 @@ giza_qtextlen (int units, const char *text, double *xlen, double *ylen)
       *ylen = *ylen / Dev[id].height;
       break;
     case GIZA_UNITS_PIXELS:
-      *xlen = *xlen * Dev[id].deviceUnitsPerPixel;
-      *ylen = *ylen * Dev[id].deviceUnitsPerPixel;
+      *xlen = *xlen / Dev[id].deviceUnitsPerPixel;
+      *ylen = *ylen / Dev[id].deviceUnitsPerPixel;
       break;
     case GIZA_UNITS_DEVICE:
       break;
     case GIZA_UNITS_MM:
-      *xlen = *xlen * Dev[id].deviceUnitsPermm;
-      *ylen = *ylen * Dev[id].deviceUnitsPermm;
+      *xlen = *xlen / Dev[id].deviceUnitsPermm;
+      *ylen = *ylen / Dev[id].deviceUnitsPermm;
       break;
     case GIZA_UNITS_INCHES:
-      *xlen = *xlen * Dev[id].deviceUnitsPermm/25.4;
-      *ylen = *ylen * Dev[id].deviceUnitsPermm/25.4;
+      *xlen = *xlen / Dev[id].deviceUnitsPermm / 25.4;
+      *ylen = *ylen / Dev[id].deviceUnitsPermm / 25.4;
       break;
     case GIZA_UNITS_WORLD:
       _giza_set_trans (GIZA_TRANS_NORM);

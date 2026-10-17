@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -29,6 +29,8 @@
 #include "giza-window-private.h"
 #include "giza-viewport-private.h"
 #include "giza-drivers-private.h"
+#include "giza-axis-private.h"
+#include "giza-tick-private.h"
 #include "giza.h"
 #include <math.h>
 #include <stdio.h>
@@ -108,6 +110,11 @@ giza_box (const char *xopt, double xtick, int nxsub,
   double majTickL, subTickL, currentTickL;
   char tmp[100];
   int i, i1, i2, j, jmax, jtmp;
+  double win_cx, win_cy, theta_deg;
+  double xtick_x_bottom, xtick_y_bottom, xtick_x_top, xtick_y_top;
+  double ytick_x_left, ytick_y_left, ytick_x_right, ytick_y_right;
+  double xtick_x_ax, xtick_y_ax, ytick_x_ax, ytick_y_ax;
+  int xedge_bottom, xedge_top, yedge_left, yedge_right, xedge_axis, yedge_axis;
   int xnumber_format = Dev[id].number_format, ynumber_format = Dev[id].number_format;
   /* get a normalized local copy of Dev[id].Win into Win such that xmin <= xmax AND ymin <= ymax
    * otherwise axes with negative increment to the right won't display ANY tickmarks */
@@ -121,6 +128,13 @@ giza_box (const char *xopt, double xtick, int nxsub,
     Win.ymin = pWin->ymax;
     Win.ymax = pWin->ymin;
   }
+
+  /* World coordinates at each frame edge (user window, not sorted Win).
+   * Win is sorted ascending for tick interval math; ticks attach to these edges. */
+  double const win_x_left   = pWin->xmin;
+  double const win_x_right  = pWin->xmax;
+  double const win_y_bottom = pWin->ymin;
+  double const win_y_top    = pWin->ymax;
 
   /* set x-options */
   for (i = 0; xopt[i]; i++)
@@ -260,6 +274,32 @@ giza_box (const char *xopt, double xtick, int nxsub,
   int oldTrans = _giza_get_trans ();
   _giza_set_trans (GIZA_TRANS_WORLD);
 
+  win_cx = 0.5 * (pWin->xmin + pWin->xmax);
+  win_cy = 0.5 * (pWin->ymin + pWin->ymax);
+
+  xedge_bottom = _giza_axis_tick_vectors (win_x_left, win_y_bottom,
+                                          win_x_right, win_y_bottom,
+                                          &theta_deg, &xtick_x_bottom,
+                                          &xtick_y_bottom);
+  xedge_top = _giza_axis_tick_vectors (win_x_right, win_y_top,
+                                       win_x_left, win_y_top,
+                                       &theta_deg, &xtick_x_top,
+                                       &xtick_y_top);
+  yedge_left = _giza_axis_tick_vectors (win_x_left, win_y_bottom,
+                                        win_x_left, win_y_top,
+                                        &theta_deg, &ytick_x_left,
+                                        &ytick_y_left);
+  yedge_right = _giza_axis_tick_vectors (win_x_right, win_y_top,
+                                         win_x_right, win_y_bottom,
+                                         &theta_deg, &ytick_x_right,
+                                         &ytick_y_right);
+  xedge_axis = _giza_axis_tick_vectors (Win.xmin, 0., Win.xmax, 0.,
+                                        &theta_deg, &xtick_x_ax,
+                                        &xtick_y_ax);
+  yedge_axis = _giza_axis_tick_vectors (0., Win.ymin, 0., Win.ymax,
+                                        &theta_deg, &ytick_x_ax,
+                                        &ytick_y_ax);
+
   /* set major tick length in pixels */
   majTickL = Dev[id].fontExtents.max_x_advance * 0.33;
   subTickL = 0.;
@@ -328,28 +368,34 @@ giza_box (const char *xopt, double xtick, int nxsub,
                 continue;
               /* draw the tick(s) everywhere where requested to */
               /* bottom */
-              if (xdraw_bottom)
+              if (xdraw_bottom && xedge_bottom)
                 {
-                  cairo_move_to (Dev[id].context, xval, Win.ymin + (major ? xdraw_project : 0) * currentTickL);
-                  cairo_line_to (Dev[id].context, xval, Win.ymin - xdraw_invert * currentTickL);
+                  _giza_box_draw_tick (xval, win_y_bottom, currentTickL, major,
+                                       xdraw_invert, (major ? xdraw_project : 0.), 0,
+                                       xtick_x_bottom, xtick_y_bottom,
+                                       win_cx, win_cy);
                 }
               /* grid */
               if (xdraw_grid && major)
                 {
-                  cairo_move_to (Dev[id].context, xval, Win.ymin);
-                  cairo_line_to (Dev[id].context, xval, Win.ymax);
+                  cairo_move_to (Dev[id].context, xval, win_y_bottom);
+                  cairo_line_to (Dev[id].context, xval, win_y_top);
                 }
               /* axis */
-              else if (xdraw_axis)
+              else if (xdraw_axis && xedge_axis)
                 {
-                  cairo_move_to (Dev[id].context, xval, -currentTickL);
-                  cairo_line_to (Dev[id].context, xval, currentTickL);
+                  _giza_box_draw_tick (xval, 0., currentTickL, major,
+                                       xdraw_invert, 0., 1,
+                                       xtick_x_ax, xtick_y_ax,
+                                       win_cx, win_cy);
                 }
               /* top */
-              if (xdraw_top)
+              if (xdraw_top && xedge_top)
                 {
-                  cairo_move_to (Dev[id].context, xval, Win.ymax - (major ? xdraw_project : 0) * currentTickL);
-                  cairo_line_to (Dev[id].context, xval, Win.ymax + xdraw_invert * currentTickL);
+                  _giza_box_draw_tick (xval, win_y_top, currentTickL, major,
+                                       xdraw_invert, (major ? xdraw_project : 0.), 0,
+                                       xtick_x_top, xtick_y_top,
+                                       win_cx, win_cy);
                 }
             }
         }
@@ -477,28 +523,34 @@ giza_box (const char *xopt, double xtick, int nxsub,
               if ( !((major && ydraw_majticks) || ydraw_minticks) )
                 continue;
                 /* left */
-              if (ydraw_left)
+              if (ydraw_left && yedge_left)
                 {
-                  cairo_move_to (Dev[id].context, Win.xmin + (major ? ydraw_project : 0) * currentTickL, yval);
-                  cairo_line_to (Dev[id].context, Win.xmin - ydraw_invert * currentTickL, yval);
+                  _giza_box_draw_tick (win_x_left, yval, currentTickL, major,
+                                       ydraw_invert, (major ? ydraw_project : 0.), 0,
+                                       ytick_x_left, ytick_y_left,
+                                       win_cx, win_cy);
                 }
               /* grid */
               if (ydraw_grid && major)
                 {
-                  cairo_move_to (Dev[id].context, Win.xmin, yval);
-                  cairo_line_to (Dev[id].context, Win.xmax, yval);
+                  cairo_move_to (Dev[id].context, win_x_left, yval);
+                  cairo_line_to (Dev[id].context, win_x_right, yval);
                 }
               /* axis */
-              else if (ydraw_axis)
+              else if (ydraw_axis && yedge_axis)
                 {
-                  cairo_move_to (Dev[id].context, -currentTickL, yval);
-                  cairo_line_to (Dev[id].context, currentTickL, yval);
+                  _giza_box_draw_tick (0., yval, currentTickL, major,
+                                       ydraw_invert, 0., 1,
+                                       ytick_x_ax, ytick_y_ax,
+                                       win_cx, win_cy);
                 }
               /* right */
-              if (ydraw_right)
+              if (ydraw_right && yedge_right)
                 {
-                  cairo_move_to (Dev[id].context, Win.xmax - (major ? ydraw_project : 0) * currentTickL, yval);
-                  cairo_line_to (Dev[id].context, Win.xmax + ydraw_invert * currentTickL, yval);
+                  _giza_box_draw_tick (win_x_right, yval, currentTickL, major,
+                                       ydraw_invert, (major ? ydraw_project : 0.), 0,
+                                       ytick_x_right, ytick_y_right,
+                                       win_cx, win_cy);
                 }
             }
         }
@@ -589,29 +641,29 @@ giza_box (const char *xopt, double xtick, int nxsub,
   /* draw the bottom of the box */
   if (xdraw_bottom)
     {
-      cairo_move_to (Dev[id].context, Win.xmin, Win.ymin);
-      cairo_line_to (Dev[id].context, Win.xmax, Win.ymin);
+      cairo_move_to (Dev[id].context, win_x_left, win_y_bottom);
+      cairo_line_to (Dev[id].context, win_x_right, win_y_bottom);
     }
 
   /* draw the right of the box */
   if (ydraw_right)
     {
-      cairo_move_to (Dev[id].context, Win.xmax, Win.ymin);
-      cairo_line_to (Dev[id].context, Win.xmax, Win.ymax);
+      cairo_move_to (Dev[id].context, win_x_right, win_y_bottom);
+      cairo_line_to (Dev[id].context, win_x_right, win_y_top);
     }
 
   /* draw the top of the box */
   if (xdraw_top)
     {
-      cairo_move_to (Dev[id].context, Win.xmax, Win.ymax);
-      cairo_line_to (Dev[id].context, Win.xmin, Win.ymax);
+      cairo_move_to (Dev[id].context, win_x_right, win_y_top);
+      cairo_line_to (Dev[id].context, win_x_left, win_y_top);
     }
 
   /* draw the left of the box */
   if (ydraw_left)
     {
-      cairo_move_to (Dev[id].context, Win.xmin, Win.ymax);
-      cairo_line_to (Dev[id].context, Win.xmin, Win.ymin);
+      cairo_move_to (Dev[id].context, win_x_left, win_y_top);
+      cairo_line_to (Dev[id].context, win_x_left, win_y_bottom);
     }
 
   /* draw the x axis */
@@ -682,8 +734,8 @@ _giza_tick_intervals (double xmin, double xmax, double xinterval, int *i1,
 }
 
 /**
- * Finds the smallest 'round' number larger than x, where round is defined
- * as 1, 2 or 5 times a power of ten.
+ * Finds the smallest 'round' number not less than |x|, where round is
+ * defined as 2, 5, or 10 times a power of ten.
  *
  * Input:
  *  -x    :- The number to be rounded
@@ -713,10 +765,12 @@ giza_round (double x, int *nsub)
     ilog = ilog - 1;
   pwr = pow (10.0, ilog);
   frac = xx / pwr;
+
+  /* Inclusive comparisons; nice tick multiples are 2, 5, and 10. */
   i = 2;
-  if (frac < nice[1])
+  if (frac <= nice[1])
     i = 1;
-  if (frac < nice[0])
+  if (frac <= nice[0])
     i = 0;
   *nsub = 5;
   if (i == 0)

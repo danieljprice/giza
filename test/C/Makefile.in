@@ -90,8 +90,13 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 @HAVE_OSXCOCOA_TRUE@am__append_1 = ../../src/libgiza-osxcocoa-main.la
-TESTS = $(am__EXEEXT_1)
-check_PROGRAMS = $(am__EXEEXT_1) $(am__EXEEXT_2)
+@HAVE_CAIRO_XLIB_TRUE@am__append_2 = test-cairo-xw
+@HAVE_X11_TRUE@am__append_3 = test-XOpenDisplay
+
+# runs automatically but skips itself when no X display is available
+@HAVE_CAIRO_XLIB_TRUE@am__append_4 = test-xw-render-shm
+TESTS = $(am__EXEEXT_2)
+check_PROGRAMS = $(am__EXEEXT_2) $(am__EXEEXT_5)
 subdir = test/C
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -105,22 +110,30 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__EXEEXT_1 = test-format-number$(EXEEXT) test-pdf$(EXEEXT) \
-	test-png$(EXEEXT) test-svg$(EXEEXT) test-cpgpnts$(EXEEXT) \
+@HAVE_CAIRO_XLIB_TRUE@am__EXEEXT_1 = test-xw-render-shm$(EXEEXT)
+am__EXEEXT_2 = test-format-number$(EXEEXT) test-giza-round$(EXEEXT) \
+	test-glyph-fallback$(EXEEXT) test-pdf$(EXEEXT) \
+	test-png$(EXEEXT) test-svg$(EXEEXT) test-unicode$(EXEEXT) \
+	test-cairo-device$(EXEEXT) test-cpgpnts$(EXEEXT) \
 	test-cpgconb$(EXEEXT) test-cpgconf$(EXEEXT) \
 	test-cpgconl$(EXEEXT) test-cpgconx$(EXEEXT) \
-	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT)
-am__EXEEXT_2 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
-	test-cairo-xw$(EXEEXT) test-change-page$(EXEEXT) \
-	test-circle$(EXEEXT) test-colour-index$(EXEEXT) \
-	test-environment$(EXEEXT) test-error-bars$(EXEEXT) \
-	test-giza-xw$(EXEEXT) test-line-cap$(EXEEXT) \
-	test-line-style$(EXEEXT) test-openclose$(EXEEXT) \
-	test-points$(EXEEXT) test-qtext$(EXEEXT) \
-	test-rectangle$(EXEEXT) test-set-line-width$(EXEEXT) \
-	test-vector$(EXEEXT) test-window$(EXEEXT) \
-	test-XOpenDisplay$(EXEEXT) test-contour$(EXEEXT) \
-	test-render$(EXEEXT)
+	test-cpghi2d$(EXEEXT) test-cpgscrl$(EXEEXT) \
+	test-pggray$(EXEEXT) test-page-semantics$(EXEEXT) \
+	test-streamplot$(EXEEXT) test-mirrored-window$(EXEEXT) \
+	$(am__EXEEXT_1)
+@HAVE_CAIRO_XLIB_TRUE@am__EXEEXT_3 = test-cairo-xw$(EXEEXT)
+@HAVE_X11_TRUE@am__EXEEXT_4 = test-XOpenDisplay$(EXEEXT)
+am__EXEEXT_5 = test-arrow$(EXEEXT) test-box$(EXEEXT) \
+	test-change-page$(EXEEXT) test-circle$(EXEEXT) \
+	test-colour-index$(EXEEXT) test-environment$(EXEEXT) \
+	test-error-bars$(EXEEXT) test-giza-xw$(EXEEXT) \
+	test-line-cap$(EXEEXT) test-line-style$(EXEEXT) \
+	test-openclose$(EXEEXT) test-points$(EXEEXT) \
+	test-qtext$(EXEEXT) test-rectangle$(EXEEXT) \
+	test-set-line-width$(EXEEXT) test-vector$(EXEEXT) \
+	test-window$(EXEEXT) test-contour$(EXEEXT) \
+	test-render$(EXEEXT) test-band$(EXEEXT) $(am__EXEEXT_3) \
+	$(am__EXEEXT_4)
 test_XOpenDisplay_SOURCES = test-XOpenDisplay.c
 test_XOpenDisplay_OBJECTS = test-XOpenDisplay.$(OBJEXT)
 am__DEPENDENCIES_1 =
@@ -133,10 +146,17 @@ test_arrow_SOURCES = test-arrow.c
 test_arrow_OBJECTS = test-arrow.$(OBJEXT)
 test_arrow_LDADD = $(LDADD)
 test_arrow_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_band_SOURCES = test-band.c
+test_band_OBJECTS = test-band.$(OBJEXT)
+test_band_LDADD = $(LDADD)
+test_band_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
 test_box_SOURCES = test-box.c
 test_box_OBJECTS = test-box.$(OBJEXT)
 test_box_LDADD = $(LDADD)
 test_box_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_cairo_device_SOURCES = test-cairo-device.c
+test_cairo_device_OBJECTS = test-cairo-device.$(OBJEXT)
+test_cairo_device_DEPENDENCIES = $(LDADD) $(am__DEPENDENCIES_1)
 test_cairo_xw_SOURCES = test-cairo-xw.c
 test_cairo_xw_OBJECTS = test-cairo-xw.$(OBJEXT)
 test_cairo_xw_DEPENDENCIES = $(LDADD) $(am__DEPENDENCIES_1) \
@@ -190,10 +210,19 @@ test_format_number_SOURCES = test-format-number.c
 test_format_number_OBJECTS = test-format-number.$(OBJEXT)
 test_format_number_LDADD = $(LDADD)
 test_format_number_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_giza_round_SOURCES = test-giza-round.c
+test_giza_round_OBJECTS = test-giza-round.$(OBJEXT)
+test_giza_round_LDADD = $(LDADD)
+test_giza_round_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
 test_giza_xw_SOURCES = test-giza-xw.c
 test_giza_xw_OBJECTS = test-giza-xw.$(OBJEXT)
 test_giza_xw_LDADD = $(LDADD)
 test_giza_xw_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_glyph_fallback_SOURCES = test-glyph-fallback.c
+test_glyph_fallback_OBJECTS = test-glyph-fallback.$(OBJEXT)
+test_glyph_fallback_LDADD = $(LDADD)
+test_glyph_fallback_DEPENDENCIES = ../../src/libgiza.la \
+	$(am__append_1)
 test_line_cap_SOURCES = test-line-cap.c
 test_line_cap_OBJECTS = test-line-cap.$(OBJEXT)
 test_line_cap_LDADD = $(LDADD)
@@ -202,14 +231,25 @@ test_line_style_SOURCES = test-line-style.c
 test_line_style_OBJECTS = test-line-style.$(OBJEXT)
 test_line_style_LDADD = $(LDADD)
 test_line_style_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_mirrored_window_SOURCES = test-mirrored-window.c
+test_mirrored_window_OBJECTS = test-mirrored-window.$(OBJEXT)
+test_mirrored_window_DEPENDENCIES = $(LDADD) $(am__DEPENDENCIES_1)
 test_openclose_SOURCES = test-openclose.c
 test_openclose_OBJECTS = test-openclose.$(OBJEXT)
 test_openclose_LDADD = $(LDADD)
 test_openclose_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_page_semantics_SOURCES = test-page-semantics.c
+test_page_semantics_OBJECTS = test-page-semantics.$(OBJEXT)
+test_page_semantics_LDADD = $(LDADD)
+test_page_semantics_DEPENDENCIES = ../../src/libgiza.la \
+	$(am__append_1)
 test_pdf_SOURCES = test-pdf.c
 test_pdf_OBJECTS = test-pdf.$(OBJEXT)
 test_pdf_LDADD = $(LDADD)
 test_pdf_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_pggray_SOURCES = test-pggray.c
+test_pggray_OBJECTS = test-pggray.$(OBJEXT)
+test_pggray_DEPENDENCIES = $(CPGPLOT_LDADD)
 test_png_SOURCES = test-png.c
 test_png_OBJECTS = test-png.$(OBJEXT)
 test_png_LDADD = $(LDADD)
@@ -235,10 +275,18 @@ test_set_line_width_OBJECTS = test-set-line-width.$(OBJEXT)
 test_set_line_width_LDADD = $(LDADD)
 test_set_line_width_DEPENDENCIES = ../../src/libgiza.la \
 	$(am__append_1)
+test_streamplot_SOURCES = test-streamplot.c
+test_streamplot_OBJECTS = test-streamplot.$(OBJEXT)
+test_streamplot_LDADD = $(LDADD)
+test_streamplot_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
 test_svg_SOURCES = test-svg.c
 test_svg_OBJECTS = test-svg.$(OBJEXT)
 test_svg_LDADD = $(LDADD)
 test_svg_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_unicode_SOURCES = test-unicode.c
+test_unicode_OBJECTS = test-unicode.$(OBJEXT)
+test_unicode_LDADD = $(LDADD)
+test_unicode_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
 test_vector_SOURCES = test-vector.c
 test_vector_OBJECTS = test-vector.$(OBJEXT)
 test_vector_LDADD = $(LDADD)
@@ -247,6 +295,9 @@ test_window_SOURCES = test-window.c
 test_window_OBJECTS = test-window.$(OBJEXT)
 test_window_LDADD = $(LDADD)
 test_window_DEPENDENCIES = ../../src/libgiza.la $(am__append_1)
+test_xw_render_shm_SOURCES = test-xw-render-shm.c
+test_xw_render_shm_OBJECTS = test-xw-render-shm.$(OBJEXT)
+test_xw_render_shm_DEPENDENCIES = $(LDADD) $(am__DEPENDENCIES_1)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -263,7 +314,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
-	./$(DEPDIR)/test-arrow.Po ./$(DEPDIR)/test-box.Po \
+	./$(DEPDIR)/test-arrow.Po ./$(DEPDIR)/test-band.Po \
+	./$(DEPDIR)/test-box.Po ./$(DEPDIR)/test-cairo-device.Po \
 	./$(DEPDIR)/test-cairo-xw.Po ./$(DEPDIR)/test-change-page.Po \
 	./$(DEPDIR)/test-circle.Po ./$(DEPDIR)/test-colour-index.Po \
 	./$(DEPDIR)/test-contour.Po ./$(DEPDIR)/test-cpgconb.Po \
@@ -271,14 +323,20 @@ am__depfiles_remade = ./$(DEPDIR)/test-XOpenDisplay.Po \
 	./$(DEPDIR)/test-cpgconx.Po ./$(DEPDIR)/test-cpghi2d.Po \
 	./$(DEPDIR)/test-cpgpnts.Po ./$(DEPDIR)/test-cpgscrl.Po \
 	./$(DEPDIR)/test-environment.Po ./$(DEPDIR)/test-error-bars.Po \
-	./$(DEPDIR)/test-format-number.Po ./$(DEPDIR)/test-giza-xw.Po \
+	./$(DEPDIR)/test-format-number.Po \
+	./$(DEPDIR)/test-giza-round.Po ./$(DEPDIR)/test-giza-xw.Po \
+	./$(DEPDIR)/test-glyph-fallback.Po \
 	./$(DEPDIR)/test-line-cap.Po ./$(DEPDIR)/test-line-style.Po \
-	./$(DEPDIR)/test-openclose.Po ./$(DEPDIR)/test-pdf.Po \
-	./$(DEPDIR)/test-png.Po ./$(DEPDIR)/test-points.Po \
-	./$(DEPDIR)/test-qtext.Po ./$(DEPDIR)/test-rectangle.Po \
-	./$(DEPDIR)/test-render.Po ./$(DEPDIR)/test-set-line-width.Po \
-	./$(DEPDIR)/test-svg.Po ./$(DEPDIR)/test-vector.Po \
-	./$(DEPDIR)/test-window.Po
+	./$(DEPDIR)/test-mirrored-window.Po \
+	./$(DEPDIR)/test-openclose.Po \
+	./$(DEPDIR)/test-page-semantics.Po ./$(DEPDIR)/test-pdf.Po \
+	./$(DEPDIR)/test-pggray.Po ./$(DEPDIR)/test-png.Po \
+	./$(DEPDIR)/test-points.Po ./$(DEPDIR)/test-qtext.Po \
+	./$(DEPDIR)/test-rectangle.Po ./$(DEPDIR)/test-render.Po \
+	./$(DEPDIR)/test-set-line-width.Po \
+	./$(DEPDIR)/test-streamplot.Po ./$(DEPDIR)/test-svg.Po \
+	./$(DEPDIR)/test-unicode.Po ./$(DEPDIR)/test-vector.Po \
+	./$(DEPDIR)/test-window.Po ./$(DEPDIR)/test-xw-render-shm.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -298,25 +356,32 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c test-cairo-xw.c \
-	test-change-page.c test-circle.c test-colour-index.c \
-	test-contour.c test-cpgconb.c test-cpgconf.c test-cpgconl.c \
-	test-cpgconx.c test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
+SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
+	test-cairo-device.c test-cairo-xw.c test-change-page.c \
+	test-circle.c test-colour-index.c test-contour.c \
+	test-cpgconb.c test-cpgconf.c test-cpgconl.c test-cpgconx.c \
+	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
 	test-environment.c test-error-bars.c test-format-number.c \
-	test-giza-xw.c test-line-cap.c test-line-style.c \
-	test-openclose.c test-pdf.c test-png.c test-points.c \
-	test-qtext.c test-rectangle.c test-render.c \
-	test-set-line-width.c test-svg.c test-vector.c test-window.c
-DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-box.c \
-	test-cairo-xw.c test-change-page.c test-circle.c \
-	test-colour-index.c test-contour.c test-cpgconb.c \
-	test-cpgconf.c test-cpgconl.c test-cpgconx.c test-cpghi2d.c \
-	test-cpgpnts.c test-cpgscrl.c test-environment.c \
-	test-error-bars.c test-format-number.c test-giza-xw.c \
-	test-line-cap.c test-line-style.c test-openclose.c test-pdf.c \
-	test-png.c test-points.c test-qtext.c test-rectangle.c \
-	test-render.c test-set-line-width.c test-svg.c test-vector.c \
-	test-window.c
+	test-giza-round.c test-giza-xw.c test-glyph-fallback.c \
+	test-line-cap.c test-line-style.c test-mirrored-window.c \
+	test-openclose.c test-page-semantics.c test-pdf.c \
+	test-pggray.c test-png.c test-points.c test-qtext.c \
+	test-rectangle.c test-render.c test-set-line-width.c \
+	test-streamplot.c test-svg.c test-unicode.c test-vector.c \
+	test-window.c test-xw-render-shm.c
+DIST_SOURCES = test-XOpenDisplay.c test-arrow.c test-band.c test-box.c \
+	test-cairo-device.c test-cairo-xw.c test-change-page.c \
+	test-circle.c test-colour-index.c test-contour.c \
+	test-cpgconb.c test-cpgconf.c test-cpgconl.c test-cpgconx.c \
+	test-cpghi2d.c test-cpgpnts.c test-cpgscrl.c \
+	test-environment.c test-error-bars.c test-format-number.c \
+	test-giza-round.c test-giza-xw.c test-glyph-fallback.c \
+	test-line-cap.c test-line-style.c test-mirrored-window.c \
+	test-openclose.c test-page-semantics.c test-pdf.c \
+	test-pggray.c test-png.c test-points.c test-qtext.c \
+	test-rectangle.c test-render.c test-set-line-width.c \
+	test-streamplot.c test-svg.c test-unicode.c test-vector.c \
+	test-window.c test-xw-render-shm.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
     n|no|NO) false;; \
@@ -585,6 +650,7 @@ FCFLAGS = @FCFLAGS@
 FC_CFLAGS = @FC_CFLAGS@
 FC_LIBS = @FC_LIBS@
 FGREP = @FGREP@
+FILECMD = @FILECMD@
 FT_CFLAGS = @FT_CFLAGS@
 FT_LIBS = @FT_LIBS@
 GIZA_VERSION_MAJOR = @GIZA_VERSION_MAJOR@
@@ -701,25 +767,26 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CFLAGS = $(WERROR_CFLAGS) $(WARN_CFLAGS)
 AM_CPPFLAGS = -I../../src -I../../include $(CAIRO_CFLAGS) $(X11_CFLAGS)
-AM_LDFLAGS = -no-install -lm -lX11
+AM_LDFLAGS = -no-install -lm
 LDADD = ../../src/libgiza.la $(am__append_1)
 CPGPLOT_LDADD = ../../src/libcpgplot.la ../../src/libgiza.la
 CLEANFILES = *.png *.pdf *.svg
 
 # Tests that run non-interactively (file-based devices only)
-auto_ctests = test-format-number test-pdf test-png test-svg \
-	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl test-cpgconx test-cpghi2d test-cpgscrl
-
+auto_ctests = test-format-number test-giza-round test-glyph-fallback \
+	test-pdf test-png test-svg test-unicode test-cairo-device \
+	test-cpgpnts test-cpgconb test-cpgconf test-cpgconl \
+	test-cpgconx test-cpghi2d test-cpgscrl test-pggray \
+	test-page-semantics test-streamplot test-mirrored-window \
+	$(am__append_4)
 
 # Tests that need an X display (use /xw or "?" which defaults to /xw)
-interactive_ctests = test-arrow test-box test-cairo-xw test-change-page \
-	test-circle test-colour-index \
-	test-environment \
-	test-error-bars test-giza-xw test-line-cap \
-	test-line-style test-openclose test-points \
-	test-qtext test-rectangle test-set-line-width \
-	test-vector test-window test-XOpenDisplay test-contour test-render
-
+interactive_ctests = test-arrow test-box test-change-page test-circle \
+	test-colour-index test-environment test-error-bars \
+	test-giza-xw test-line-cap test-line-style test-openclose \
+	test-points test-qtext test-rectangle test-set-line-width \
+	test-vector test-window test-contour test-render test-band \
+	$(am__append_2) $(am__append_3)
 test_cpgpnts_LDADD = $(CPGPLOT_LDADD)
 test_cpgconb_LDADD = $(CPGPLOT_LDADD)
 test_cpgconf_LDADD = $(CPGPLOT_LDADD)
@@ -727,8 +794,12 @@ test_cpgconl_LDADD = $(CPGPLOT_LDADD)
 test_cpgconx_LDADD = $(CPGPLOT_LDADD)
 test_cpghi2d_LDADD = $(CPGPLOT_LDADD)
 test_cpgscrl_LDADD = $(CPGPLOT_LDADD)
+test_pggray_LDADD = $(CPGPLOT_LDADD)
 test_cairo_xw_LDADD = $(LDADD) $(CAIRO_LIBS) $(X11_LIBS)
+test_cairo_device_LDADD = $(LDADD) $(CAIRO_LIBS)
+test_mirrored_window_LDADD = $(LDADD) $(CAIRO_LIBS)
 test_XOpenDisplay_LDADD = $(LDADD) $(X11_LIBS)
+test_xw_render_shm_LDADD = $(LDADD) $(X11_LIBS)
 all: all-am
 
 .SUFFIXES:
@@ -775,9 +846,17 @@ test-arrow$(EXEEXT): $(test_arrow_OBJECTS) $(test_arrow_DEPENDENCIES) $(EXTRA_te
 	@rm -f test-arrow$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_arrow_OBJECTS) $(test_arrow_LDADD) $(LIBS)
 
+test-band$(EXEEXT): $(test_band_OBJECTS) $(test_band_DEPENDENCIES) $(EXTRA_test_band_DEPENDENCIES) 
+	@rm -f test-band$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_band_OBJECTS) $(test_band_LDADD) $(LIBS)
+
 test-box$(EXEEXT): $(test_box_OBJECTS) $(test_box_DEPENDENCIES) $(EXTRA_test_box_DEPENDENCIES) 
 	@rm -f test-box$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_box_OBJECTS) $(test_box_LDADD) $(LIBS)
+
+test-cairo-device$(EXEEXT): $(test_cairo_device_OBJECTS) $(test_cairo_device_DEPENDENCIES) $(EXTRA_test_cairo_device_DEPENDENCIES) 
+	@rm -f test-cairo-device$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_cairo_device_OBJECTS) $(test_cairo_device_LDADD) $(LIBS)
 
 test-cairo-xw$(EXEEXT): $(test_cairo_xw_OBJECTS) $(test_cairo_xw_DEPENDENCIES) $(EXTRA_test_cairo_xw_DEPENDENCIES) 
 	@rm -f test-cairo-xw$(EXEEXT)
@@ -839,9 +918,17 @@ test-format-number$(EXEEXT): $(test_format_number_OBJECTS) $(test_format_number_
 	@rm -f test-format-number$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_format_number_OBJECTS) $(test_format_number_LDADD) $(LIBS)
 
+test-giza-round$(EXEEXT): $(test_giza_round_OBJECTS) $(test_giza_round_DEPENDENCIES) $(EXTRA_test_giza_round_DEPENDENCIES) 
+	@rm -f test-giza-round$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_giza_round_OBJECTS) $(test_giza_round_LDADD) $(LIBS)
+
 test-giza-xw$(EXEEXT): $(test_giza_xw_OBJECTS) $(test_giza_xw_DEPENDENCIES) $(EXTRA_test_giza_xw_DEPENDENCIES) 
 	@rm -f test-giza-xw$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_giza_xw_OBJECTS) $(test_giza_xw_LDADD) $(LIBS)
+
+test-glyph-fallback$(EXEEXT): $(test_glyph_fallback_OBJECTS) $(test_glyph_fallback_DEPENDENCIES) $(EXTRA_test_glyph_fallback_DEPENDENCIES) 
+	@rm -f test-glyph-fallback$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_glyph_fallback_OBJECTS) $(test_glyph_fallback_LDADD) $(LIBS)
 
 test-line-cap$(EXEEXT): $(test_line_cap_OBJECTS) $(test_line_cap_DEPENDENCIES) $(EXTRA_test_line_cap_DEPENDENCIES) 
 	@rm -f test-line-cap$(EXEEXT)
@@ -851,13 +938,25 @@ test-line-style$(EXEEXT): $(test_line_style_OBJECTS) $(test_line_style_DEPENDENC
 	@rm -f test-line-style$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_line_style_OBJECTS) $(test_line_style_LDADD) $(LIBS)
 
+test-mirrored-window$(EXEEXT): $(test_mirrored_window_OBJECTS) $(test_mirrored_window_DEPENDENCIES) $(EXTRA_test_mirrored_window_DEPENDENCIES) 
+	@rm -f test-mirrored-window$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_mirrored_window_OBJECTS) $(test_mirrored_window_LDADD) $(LIBS)
+
 test-openclose$(EXEEXT): $(test_openclose_OBJECTS) $(test_openclose_DEPENDENCIES) $(EXTRA_test_openclose_DEPENDENCIES) 
 	@rm -f test-openclose$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_openclose_OBJECTS) $(test_openclose_LDADD) $(LIBS)
 
+test-page-semantics$(EXEEXT): $(test_page_semantics_OBJECTS) $(test_page_semantics_DEPENDENCIES) $(EXTRA_test_page_semantics_DEPENDENCIES) 
+	@rm -f test-page-semantics$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_page_semantics_OBJECTS) $(test_page_semantics_LDADD) $(LIBS)
+
 test-pdf$(EXEEXT): $(test_pdf_OBJECTS) $(test_pdf_DEPENDENCIES) $(EXTRA_test_pdf_DEPENDENCIES) 
 	@rm -f test-pdf$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_pdf_OBJECTS) $(test_pdf_LDADD) $(LIBS)
+
+test-pggray$(EXEEXT): $(test_pggray_OBJECTS) $(test_pggray_DEPENDENCIES) $(EXTRA_test_pggray_DEPENDENCIES) 
+	@rm -f test-pggray$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_pggray_OBJECTS) $(test_pggray_LDADD) $(LIBS)
 
 test-png$(EXEEXT): $(test_png_OBJECTS) $(test_png_DEPENDENCIES) $(EXTRA_test_png_DEPENDENCIES) 
 	@rm -f test-png$(EXEEXT)
@@ -883,9 +982,17 @@ test-set-line-width$(EXEEXT): $(test_set_line_width_OBJECTS) $(test_set_line_wid
 	@rm -f test-set-line-width$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_set_line_width_OBJECTS) $(test_set_line_width_LDADD) $(LIBS)
 
+test-streamplot$(EXEEXT): $(test_streamplot_OBJECTS) $(test_streamplot_DEPENDENCIES) $(EXTRA_test_streamplot_DEPENDENCIES) 
+	@rm -f test-streamplot$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_streamplot_OBJECTS) $(test_streamplot_LDADD) $(LIBS)
+
 test-svg$(EXEEXT): $(test_svg_OBJECTS) $(test_svg_DEPENDENCIES) $(EXTRA_test_svg_DEPENDENCIES) 
 	@rm -f test-svg$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_svg_OBJECTS) $(test_svg_LDADD) $(LIBS)
+
+test-unicode$(EXEEXT): $(test_unicode_OBJECTS) $(test_unicode_DEPENDENCIES) $(EXTRA_test_unicode_DEPENDENCIES) 
+	@rm -f test-unicode$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_unicode_OBJECTS) $(test_unicode_LDADD) $(LIBS)
 
 test-vector$(EXEEXT): $(test_vector_OBJECTS) $(test_vector_DEPENDENCIES) $(EXTRA_test_vector_DEPENDENCIES) 
 	@rm -f test-vector$(EXEEXT)
@@ -895,6 +1002,10 @@ test-window$(EXEEXT): $(test_window_OBJECTS) $(test_window_DEPENDENCIES) $(EXTRA
 	@rm -f test-window$(EXEEXT)
 	$(AM_V_CCLD)$(LINK) $(test_window_OBJECTS) $(test_window_LDADD) $(LIBS)
 
+test-xw-render-shm$(EXEEXT): $(test_xw_render_shm_OBJECTS) $(test_xw_render_shm_DEPENDENCIES) $(EXTRA_test_xw_render_shm_DEPENDENCIES) 
+	@rm -f test-xw-render-shm$(EXEEXT)
+	$(AM_V_CCLD)$(LINK) $(test_xw_render_shm_OBJECTS) $(test_xw_render_shm_LDADD) $(LIBS)
+
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
 
@@ -903,7 +1014,9 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-XOpenDisplay.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-arrow.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-band.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-box.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-cairo-device.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-cairo-xw.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-change-page.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-circle.Po@am__quote@ # am--include-marker
@@ -919,20 +1032,28 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-environment.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-error-bars.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-format-number.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-giza-round.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-giza-xw.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-glyph-fallback.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-cap.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-line-style.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-mirrored-window.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-openclose.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-page-semantics.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pdf.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-pggray.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-png.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-points.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-qtext.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-rectangle.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-render.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-set-line-width.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-streamplot.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-svg.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-unicode.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-vector.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-window.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/test-xw-render-shm.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -1192,6 +1313,20 @@ test-format-number.log: test-format-number$(EXEEXT)
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
 	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-giza-round.log: test-giza-round$(EXEEXT)
+	@p='test-giza-round$(EXEEXT)'; \
+	b='test-giza-round'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-glyph-fallback.log: test-glyph-fallback$(EXEEXT)
+	@p='test-glyph-fallback$(EXEEXT)'; \
+	b='test-glyph-fallback'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
 test-pdf.log: test-pdf$(EXEEXT)
 	@p='test-pdf$(EXEEXT)'; \
 	b='test-pdf'; \
@@ -1209,6 +1344,20 @@ test-png.log: test-png$(EXEEXT)
 test-svg.log: test-svg$(EXEEXT)
 	@p='test-svg$(EXEEXT)'; \
 	b='test-svg'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-unicode.log: test-unicode$(EXEEXT)
+	@p='test-unicode$(EXEEXT)'; \
+	b='test-unicode'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-cairo-device.log: test-cairo-device$(EXEEXT)
+	@p='test-cairo-device$(EXEEXT)'; \
+	b='test-cairo-device'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -1258,6 +1407,41 @@ test-cpghi2d.log: test-cpghi2d$(EXEEXT)
 test-cpgscrl.log: test-cpgscrl$(EXEEXT)
 	@p='test-cpgscrl$(EXEEXT)'; \
 	b='test-cpgscrl'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-pggray.log: test-pggray$(EXEEXT)
+	@p='test-pggray$(EXEEXT)'; \
+	b='test-pggray'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-page-semantics.log: test-page-semantics$(EXEEXT)
+	@p='test-page-semantics$(EXEEXT)'; \
+	b='test-page-semantics'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-streamplot.log: test-streamplot$(EXEEXT)
+	@p='test-streamplot$(EXEEXT)'; \
+	b='test-streamplot'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-mirrored-window.log: test-mirrored-window$(EXEEXT)
+	@p='test-mirrored-window$(EXEEXT)'; \
+	b='test-mirrored-window'; \
+	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
+	--log-file $$b.log --trs-file $$b.trs \
+	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
+	"$$tst" $(AM_TESTS_FD_REDIRECT)
+test-xw-render-shm.log: test-xw-render-shm$(EXEEXT)
+	@p='test-xw-render-shm$(EXEEXT)'; \
+	b='test-xw-render-shm'; \
 	$(am__check_pre) $(LOG_DRIVER) --test-name "$$f" \
 	--log-file $$b.log --trs-file $$b.trs \
 	$(am__common_driver_flags) $(AM_LOG_DRIVER_FLAGS) $(LOG_DRIVER_FLAGS) -- $(LOG_COMPILE) \
@@ -1358,7 +1542,9 @@ clean-am: clean-checkPROGRAMS clean-generic clean-libtool \
 distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-XOpenDisplay.Po
 	-rm -f ./$(DEPDIR)/test-arrow.Po
+	-rm -f ./$(DEPDIR)/test-band.Po
 	-rm -f ./$(DEPDIR)/test-box.Po
+	-rm -f ./$(DEPDIR)/test-cairo-device.Po
 	-rm -f ./$(DEPDIR)/test-cairo-xw.Po
 	-rm -f ./$(DEPDIR)/test-change-page.Po
 	-rm -f ./$(DEPDIR)/test-circle.Po
@@ -1374,20 +1560,28 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/test-environment.Po
 	-rm -f ./$(DEPDIR)/test-error-bars.Po
 	-rm -f ./$(DEPDIR)/test-format-number.Po
+	-rm -f ./$(DEPDIR)/test-giza-round.Po
 	-rm -f ./$(DEPDIR)/test-giza-xw.Po
+	-rm -f ./$(DEPDIR)/test-glyph-fallback.Po
 	-rm -f ./$(DEPDIR)/test-line-cap.Po
 	-rm -f ./$(DEPDIR)/test-line-style.Po
+	-rm -f ./$(DEPDIR)/test-mirrored-window.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
+	-rm -f ./$(DEPDIR)/test-page-semantics.Po
 	-rm -f ./$(DEPDIR)/test-pdf.Po
+	-rm -f ./$(DEPDIR)/test-pggray.Po
 	-rm -f ./$(DEPDIR)/test-png.Po
 	-rm -f ./$(DEPDIR)/test-points.Po
 	-rm -f ./$(DEPDIR)/test-qtext.Po
 	-rm -f ./$(DEPDIR)/test-rectangle.Po
 	-rm -f ./$(DEPDIR)/test-render.Po
 	-rm -f ./$(DEPDIR)/test-set-line-width.Po
+	-rm -f ./$(DEPDIR)/test-streamplot.Po
 	-rm -f ./$(DEPDIR)/test-svg.Po
+	-rm -f ./$(DEPDIR)/test-unicode.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
 	-rm -f ./$(DEPDIR)/test-window.Po
+	-rm -f ./$(DEPDIR)/test-xw-render-shm.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -1435,7 +1629,9 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-XOpenDisplay.Po
 	-rm -f ./$(DEPDIR)/test-arrow.Po
+	-rm -f ./$(DEPDIR)/test-band.Po
 	-rm -f ./$(DEPDIR)/test-box.Po
+	-rm -f ./$(DEPDIR)/test-cairo-device.Po
 	-rm -f ./$(DEPDIR)/test-cairo-xw.Po
 	-rm -f ./$(DEPDIR)/test-change-page.Po
 	-rm -f ./$(DEPDIR)/test-circle.Po
@@ -1451,20 +1647,28 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/test-environment.Po
 	-rm -f ./$(DEPDIR)/test-error-bars.Po
 	-rm -f ./$(DEPDIR)/test-format-number.Po
+	-rm -f ./$(DEPDIR)/test-giza-round.Po
 	-rm -f ./$(DEPDIR)/test-giza-xw.Po
+	-rm -f ./$(DEPDIR)/test-glyph-fallback.Po
 	-rm -f ./$(DEPDIR)/test-line-cap.Po
 	-rm -f ./$(DEPDIR)/test-line-style.Po
+	-rm -f ./$(DEPDIR)/test-mirrored-window.Po
 	-rm -f ./$(DEPDIR)/test-openclose.Po
+	-rm -f ./$(DEPDIR)/test-page-semantics.Po
 	-rm -f ./$(DEPDIR)/test-pdf.Po
+	-rm -f ./$(DEPDIR)/test-pggray.Po
 	-rm -f ./$(DEPDIR)/test-png.Po
 	-rm -f ./$(DEPDIR)/test-points.Po
 	-rm -f ./$(DEPDIR)/test-qtext.Po
 	-rm -f ./$(DEPDIR)/test-rectangle.Po
 	-rm -f ./$(DEPDIR)/test-render.Po
 	-rm -f ./$(DEPDIR)/test-set-line-width.Po
+	-rm -f ./$(DEPDIR)/test-streamplot.Po
 	-rm -f ./$(DEPDIR)/test-svg.Po
+	-rm -f ./$(DEPDIR)/test-unicode.Po
 	-rm -f ./$(DEPDIR)/test-vector.Po
 	-rm -f ./$(DEPDIR)/test-window.Po
+	-rm -f ./$(DEPDIR)/test-xw-render-shm.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

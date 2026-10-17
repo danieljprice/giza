@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -46,7 +46,7 @@
  *  -0 or GIZA_COLOUR_PALETTE_DEFAULT :- default giza palette
  *  -1 or GIZA_COLOUR_PALETTE_PGPLOT  :- default PGPLOT palette
  *  -2 to 4 :- various experimental line palettes
- *  -5 :- colourblind safe palette from http://jfly.iam.u-tokyo.ac.jp/color/
+ *  -5 :- colourblind safe palette from https://jfly.uni-koeln.de/color/
  *  -6 :- optimum palette from http://web.media.mit.edu/~wad/color/palette.html
  *  -7 :- graph-a-licious
  * See Also: giza_set_colour_index, giza_set_colour_table
@@ -74,6 +74,9 @@ giza_set_colour_palette (int palette)
   switch(palette)
   {
     case GIZA_COLOUR_PALETTE_PGPLOT:
+    /* Classic PGPLOT: index 0 = background (black), 1 = foreground (white) */
+       giza_set_colour_representation (0,0.0,0.0,0.0);
+       giza_set_colour_representation (1,1.0,1.0,1.0);
     /* Installs the standard PGPLOT colour table */
        giza_set_colour_representation (2,1.0,0.0,0.0);
        giza_set_colour_representation (3,0.0,1.0,0.0);
@@ -124,7 +127,7 @@ giza_set_colour_palette (int palette)
        giza_set_colour_representation_rgb (8, 249, 223, 11); /* desert sun */
        nlinecolours = 9;
        break;
-    case 5: /* Colourblind-safe palette from http://jfly.iam.u-tokyo.ac.jp/color/ */
+    case 5: /* Colourblind-safe palette from https://jfly.uni-koeln.de/color/ */
        giza_set_colour_representation (2, 0.9, 0.6, 0.); /* orange */
        giza_set_colour_representation (3, 0.35, 0.7, 0.9); /* sky blue */
        giza_set_colour_representation (4, 0., 0.6, 0.5);  /* bluish green */

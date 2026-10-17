@@ -16,6 +16,7 @@ Features
 - Written in standard C with a Fortran 90/95/2003 interface
 - Compiles as a standalone library or can be incorporated into other codes
 - Interface routines handle both float and double precision input
+- Streamplot of 2D vector fields
 - Easily called from Fortran/C/C++ code
 - Originally written as a backend for SPLASH, in stable use now for more than 15 years
 
@@ -106,3 +107,12 @@ make test-pgaxis test-pgncur
 ./test-pgaxis
 ./test-pgncur
 ```
+
+License
+-------
+Copyright (c) 2010-2026 Daniel Price, James Wetter and the contributors listed in AUTHORS.
+
+giza is free software licensed under the GNU Lesser General Public License
+version 3 or later (LGPL-3.0+). See COPYING.LESSER for the full LGPL text;
+COPYING contains the GNU General Public License, which applies to combined
+works as specified in section 3 of the LGPL.

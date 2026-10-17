@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -94,6 +94,9 @@ typedef struct
   int CurrentTrans;
   double defaultBackgroundAlpha;
   int deviceOpen;  /* Indicates if a device is open and ready to be drawn to. */
+  int external_cairo; /* Caller owns context/surface (GIZA_DEVICE_CAIRO) */
+  int cairo_context_bound; /* cairo_save active on external context */
+  int cairo_deferred_init; /* context-dependent init pending first bind */
   int drawn;       /* Flag if anything has been drawn yet */
   int resize;      /* Flag that device has been resized */
   int prompting;   /* Turn prompting on/off for interactive device */
@@ -143,6 +146,7 @@ typedef struct
 
 extern giza_settings_t Sets;
 
+int _giza_check_device_open (char *source);
 int _giza_check_device_ready (char *source);
 void _giza_init_character_height (void);
 void _giza_scale_character_size (double scalefac);

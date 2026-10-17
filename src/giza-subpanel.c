@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -46,7 +46,7 @@
 void
 giza_subpanel (int nx, int ny)
 {
-  if (!_giza_check_device_ready ("giza_subpanel"))
+  if (!_giza_check_device_open ("giza_subpanel"))
     return;
 
   /* query viewport */
@@ -90,7 +90,7 @@ giza_subpanel (int nx, int ny)
 void
 giza_set_panel (int ix, int iy)
 {
-  if (!_giza_check_device_ready ("giza_select_panel"))
+  if (!_giza_check_device_open ("giza_select_panel"))
     return;
 
   if (ix < 1 || ix > Dev[id].nx) {
@@ -123,7 +123,7 @@ giza_set_panel (int ix, int iy)
 void
 giza_get_panel (int *ix, int *iy)
 {
-  if (!_giza_check_device_ready ("giza_query_panel"))
+  if (!_giza_check_device_open ("giza_query_panel"))
     return;
 
   *ix = Dev[id].ix;
@@ -140,7 +140,7 @@ giza_get_panel (int *ix, int *iy)
 void
 _giza_init_subpanel ()
 {
-  if (!_giza_check_device_ready ("_giza_init_subpanel"))
+  if (!_giza_check_device_open ("_giza_init_subpanel"))
     return;
 
   Dev[id].nx = 1;

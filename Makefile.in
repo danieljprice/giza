@@ -274,6 +274,7 @@ FCFLAGS = @FCFLAGS@
 FC_CFLAGS = @FC_CFLAGS@
 FC_LIBS = @FC_LIBS@
 FGREP = @FGREP@
+FILECMD = @FILECMD@
 FT_CFLAGS = @FT_CFLAGS@
 FT_LIBS = @FT_LIBS@
 GIZA_VERSION_MAJOR = @GIZA_VERSION_MAJOR@
@@ -390,7 +391,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src test
-dist_doc_DATA = AUTHORS ChangeLog NEWS README.md
+dist_doc_DATA = AUTHORS ChangeLog NEWS README.md COPYING COPYING.LESSER
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 

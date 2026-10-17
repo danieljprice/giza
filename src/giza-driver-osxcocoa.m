@@ -10,9 +10,9 @@
  *
  * This library is free software; and you are welcome to redistribute
  * it under the terms of the GNU Lesser General Public License
- * (LGPL, see COPYING file for details) and the provision that
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the LGPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
@@ -84,6 +84,7 @@
     int     _surfW;      /* source surface size (for full-width lines) */
     int     _surfH;
     CGRect  _displayRect;/* same letterbox rect as parent GizaView */
+    float   _bandR, _bandG, _bandB; /* band colour (current colour index) */
 }
 - (instancetype)initWithFrame:(NSRect)frame
                          mode:(int)mode
@@ -91,6 +92,7 @@
                       surfaceSize:(NSSize)ss
                       displayRect:(CGRect)dr;
 - (void)updateCursor:(NSPoint)surfPt displayRect:(CGRect)dr;
+- (void)setBandColorR:(float)r G:(float)g B:(float)b;
 @end
 
 @implementation GizaBandView
@@ -109,6 +111,7 @@
         _surfW  = (int)ss.width;
         _surfH  = (int)ss.height;
         _displayRect = dr;
+        _bandR = 0.9f; _bandG = 0.9f; _bandB = 0.9f;
     }
     return self;
 }
@@ -116,27 +119,31 @@
 - (BOOL)isOpaque { return NO; }
 - (BOOL)acceptsFirstResponder { return NO; }  /* events handled by GizaView */
 
-/* Convert a surface-space point to view-space for drawing */
+/* Convert cairo surface coords to view coords for drawing.
+ * GizaView is not flipped (AppKit origin bottom-left, y up); cairo uses y down. */
 - (CGPoint)_viewPtFromSurface:(NSPoint)sp
 {
     if (_surfW <= 0 || _surfH <= 0 || _displayRect.size.width < 1)
         return CGPointMake(sp.x, sp.y);
     CGFloat sx = _displayRect.origin.x + sp.x / _surfW * _displayRect.size.width;
-    CGFloat sy = _displayRect.origin.y + sp.y / _surfH * _displayRect.size.height;
+    CGFloat sy = _displayRect.origin.y + _displayRect.size.height
+               - (sp.y / _surfH * _displayRect.size.height);
     return CGPointMake(sx, sy);
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
     CGContextRef ctx = [[NSGraphicsContext currentContext] CGContext];
-    CGContextClearRect(ctx, NSRectToCGRect(self.bounds));
-
+    /* NOTE: no CGContextClearRect here. On a non-layer-backed transparent
+     * view it punches through the composited backing store to the window
+     * background (white), blanking the whole plot during cursor input.
+     * AppKit has already composited the views beneath us. */
     if (_mode <= 0) return;
 
-    /* Style: white line with 40% opacity fill for area modes */
+    /* Style: current colour index, translucent fill for area modes */
     CGContextSetLineWidth(ctx, 1.5);
-    CGContextSetRGBStrokeColor(ctx, 0.9, 0.9, 0.9, 1.0);
-    CGContextSetRGBFillColor  (ctx, 1.0, 1.0, 1.0, 0.15);
+    CGContextSetRGBStrokeColor(ctx, _bandR, _bandG, _bandB, 1.0);
+    CGContextSetRGBFillColor  (ctx, _bandR, _bandG, _bandB, 0.15);
 
     CGPoint a = [self _viewPtFromSurface:_anchor];
     CGPoint c = [self _viewPtFromSurface:_cursor];
@@ -214,6 +221,11 @@
     [self setNeedsDisplay:YES];
 }
 
+- (void)setBandColorR:(float)r G:(float)g B:(float)b
+{
+    _bandR = r; _bandG = g; _bandB = b;
+}
+
 @end
 
 /* ======================================================================== */
@@ -249,9 +261,11 @@
 - (void)setPixelData:(unsigned char*)data width:(int)w height:(int)h stride:(int)s;
 /* view 座標 → cairo surface 座標への逆変換 */
 - (NSPoint)surfacePointFromViewPoint:(NSPoint)vp;
+- (NSPoint)currentMouseViewPoint;
 /* band control */
-- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc;
+- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc colorR:(float)r G:(float)g B:(float)b;
 - (void)detachBandView;
+- (void)onWindowDidEndLiveResize:(NSNotification *)note;
 @end
 
 @implementation GizaView
@@ -269,7 +283,11 @@
     return self;
 }
 
-- (void)dealloc { if (_layer) { CGLayerRelease(_layer); _layer = NULL; } }
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    if (_layer) { CGLayerRelease(_layer); _layer = NULL; }
+}
 - (BOOL)acceptsFirstResponder { return YES; }
 - (BOOL)isFlipped             { return NO; }
 - (CGLayerRef)cgLayer         { return _layer; }
@@ -333,9 +351,25 @@
 - (void)setFrameSize:(NSSize)sz
 {
     [super setFrameSize:sz];
-    /* surface サイズは変えない。drawRect でスケーリングするだけ。
-     * _displayRect は drawRect 内で再計算されるので更新不要。 */
+    /* Cairo surface sync happens on replot via _giza_prepare_interactive_draw */
     [self setNeedsDisplay:YES];
+}
+
+/**
+ * User finished dragging the window. If a motion callback is registered,
+ * deliver 'r' so interactive mode can replot; prepare_draw syncs the surface then.
+ */
+- (void)onWindowDidEndLiveResize:(NSNotification *)note
+{
+    (void)note;
+    if (!_giza_osxcocoa_on_live_resize_end(_devId))
+        return;
+    /* Only interrupt an active cursor wait */
+    if (!_gotEvent) {
+        _eventPt = [self surfacePointFromViewPoint:[self currentMouseViewPoint]];
+        _eventCh = 'r';
+        _gotEvent = YES;
+    }
 }
 
 - (void)keyDown:(NSEvent *)ev
@@ -351,8 +385,18 @@
         case 27:                      _eventCh='q'; break;
         default: _eventCh=(char)(c&0x7F);
     }
-    _eventPt = NSMakePoint(self.bounds.size.width/2,self.bounds.size.height/2);
+    /* Return cursor position at key press, not the view centre (matches /xw). */
+    _eventPt = [self surfacePointFromViewPoint:[self currentMouseViewPoint]];
     _gotEvent = YES;
+}
+
+/* Mouse position in this view's coordinate system */
+- (NSPoint)currentMouseViewPoint
+{
+    NSWindow *win = [self window];
+    if (win)
+        return [self convertPoint:[win mouseLocationOutsideOfEventStream] fromView:nil];
+    return NSMakePoint(self.bounds.size.width / 2, self.bounds.size.height / 2);
 }
 
 - (void)_recordButton:(NSEvent *)ev ch:(char)ch {
@@ -379,6 +423,7 @@
 
 - (void)waitForInputEvent {
     _gotEvent = NO;
+    [[self window] setAcceptsMouseMovedEvents:YES];
     while (!_gotEvent) {
         NSEvent *ev = [NSApp nextEventMatchingMask:NSEventMaskAny
                                          untilDate:[NSDate distantFuture]
@@ -386,6 +431,7 @@
                                            dequeue:YES];
         if (ev) [NSApp sendEvent:ev];
     }
+    [[self window] setAcceptsMouseMovedEvents:NO];
 }
 
 /* Band-aware event loop: also handles mouse-moved events to update band */
@@ -417,7 +463,7 @@
 }
 
 /* Attach a GizaBandView overlay */
-- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc
+- (void)attachBandViewMode:(int)mode anchorSurfacePt:(NSPoint)anc colorR:(float)r G:(float)g B:(float)b
 {
     [self detachBandView];
     NSSize ss = NSMakeSize(_pixelWidth > 0 ? _pixelWidth : (int)self.bounds.size.width,
@@ -428,6 +474,7 @@
                            anchor:anc
                       surfaceSize:ss
                       displayRect:_displayRect];
+    [_bandView setBandColorR:r G:g B:b];
     [self addSubview:_bandView];
     _bandActive = YES;
 }
@@ -443,12 +490,22 @@
 
 - (NSPoint)surfacePointFromViewPoint:(NSPoint)vp
 {
-    /* _displayRect が未計算なら等倍で返す */
-    if (_pixelWidth <= 0 || _pixelHeight <= 0 || _displayRect.size.width < 1)
-        return vp;
-    /* view 座標 → surface 座標 */
+    NSSize bs = self.bounds.size;
+    /* _displayRect が未計算なら view サイズから等倍で変換 */
+    if (_pixelWidth <= 0 || _pixelHeight <= 0
+        || _displayRect.size.width < 1 || _displayRect.size.height < 1) {
+        if (bs.width > 0 && bs.height > 0) {
+            CGFloat sx = vp.x / bs.width  * (_pixelWidth  > 0 ? _pixelWidth  : bs.width);
+            CGFloat sy = (bs.height - vp.y) / bs.height
+                     * (_pixelHeight > 0 ? _pixelHeight : bs.height);
+            return NSMakePoint(sx, sy);
+        }
+        return NSMakePoint(vp.x, bs.height - vp.y);
+    }
+    /* view 座標 (y up) → cairo surface 座標 (y down) */
     CGFloat sx = (vp.x - _displayRect.origin.x) / _displayRect.size.width  * _pixelWidth;
-    CGFloat sy = (vp.y - _displayRect.origin.y) / _displayRect.size.height * _pixelHeight;
+    CGFloat sy = (_displayRect.origin.y + _displayRect.size.height - vp.y)
+               / _displayRect.size.height * _pixelHeight;
     return NSMakePoint(sx, sy);
 }
 
@@ -564,6 +621,11 @@ _giza_osxcocoa_open_window(int devId, int width, int height)
         [view rebuildLayerSize:NSMakeSize(width,height)];
         [win setContentView:view];
         [win makeFirstResponder:view];
+        [[NSNotificationCenter defaultCenter]
+            addObserver:view
+               selector:@selector(onWindowDidEndLiveResize:)
+                   name:NSWindowDidEndLiveResizeNotification
+                 object:win];
         [win makeKeyAndOrderFront:nil];
         [NSApp activateIgnoringOtherApps:YES];
         _osxcocoa_win[devId]=win; _osxcocoa_view[devId]=view; _osxcocoa_inuse[devId]=1;
@@ -574,31 +636,68 @@ _giza_osxcocoa_open_window(int devId, int width, int height)
     return result;
 }
 
-void
-_giza_osxcocoa_flush(int devId)
-{
-    if (!_osxcocoa_inuse[devId]) return;
-    _run_on_main(^{
-        GizaView *view = _osxcocoa_view[devId];
-        [view setNeedsDisplay:YES];
-        [view displayIfNeeded];
-        if (!_app_on_main) _drain_events();
-    });
-}
-
 CGContextRef
 _giza_osxcocoa_clear_and_get_context(int devId, int width, int height)
 {
-    if (!_osxcocoa_inuse[devId]) return NULL;
+    if (devId < 0 || devId >= GIZA_MAX_DEV || !_osxcocoa_inuse[devId]) return NULL;
     __block CGContextRef result = NULL;
     _run_on_main(^{
         GizaView *view = _osxcocoa_view[devId];
+        [view setFrameSize:NSMakeSize(width, height)];
         [view rebuildLayerSize:NSMakeSize(width,height)];
         [view setNeedsDisplay:YES];
         CGLayerRef layer = [view cgLayer];
         result = layer ? CGLayerGetContext(layer) : NULL;
     });
     return result;
+}
+
+/* ======================================================================== */
+/* _giza_osxcocoa_resize_window                                              */
+/* ======================================================================== */
+
+/**
+ * Resize the NSWindow and GizaView to the given pixel dimensions.
+ */
+void
+_giza_osxcocoa_resize_window(int devId, int width, int height)
+{
+    if (devId < 0 || devId >= GIZA_MAX_DEV || !_osxcocoa_inuse[devId]) return;
+    _run_on_main(^{
+        NSWindow *win = _osxcocoa_win[devId];
+        GizaView *view = _osxcocoa_view[devId];
+        [win setContentSize:NSMakeSize(width, height)];
+        [view setFrameSize:NSMakeSize(width, height)];
+        [view rebuildLayerSize:NSMakeSize(width, height)];
+        [view setNeedsDisplay:YES];
+    });
+}
+
+/* ======================================================================== */
+/* _giza_osxcocoa_get_view_size                                              */
+/* ======================================================================== */
+
+/**
+ * Return the current GizaView size in pixels (main-thread safe).
+ */
+void
+_giza_osxcocoa_get_view_size(int devId, int *width, int *height)
+{
+    if (width)  *width  = 0;
+    if (height) *height = 0;
+    if (!width || !height) return;
+    if (devId < 0 || devId >= GIZA_MAX_DEV || !_osxcocoa_inuse[devId]) return;
+
+    __block int w = 0, h = 0;
+    _run_on_main(^{
+        GizaView *view = _osxcocoa_view[devId];
+        if (!view) return;
+        NSSize sz = [view bounds].size;
+        w = (int)(sz.width  + 0.5);
+        h = (int)(sz.height + 0.5);
+    });
+    *width  = w;
+    *height = h;
 }
 
 void
@@ -652,6 +751,7 @@ _giza_osxcocoa_wait_for_event(int devId, float *x, float *y, char *ch)
 void
 _giza_osxcocoa_wait_for_event_band(int devId, int mode,
                                    float xancSurface, float yancSurface,
+                                   float bandR, float bandG, float bandB,
                                    float *x, float *y, char *ch)
 {
     if (!_osxcocoa_inuse[devId]) { *ch='q'; return; }
@@ -660,7 +760,7 @@ _giza_osxcocoa_wait_for_event_band(int devId, int mode,
     __block char c = ' ';
     _run_on_main(^{
         NSPoint anc = NSMakePoint(xancSurface, yancSurface);
-        [view attachBandViewMode:mode anchorSurfacePt:anc];
+        [view attachBandViewMode:mode anchorSurfacePt:anc colorR:bandR G:bandG B:bandB];
         [view waitForInputEventWithBand];
         pt = [view lastEventPoint];
         c  = [view lastEventChar];

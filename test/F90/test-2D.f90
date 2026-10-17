@@ -1,3 +1,8 @@
+! giza test program — see COPYING.LESSER in the top-level directory.
+! Copyright (c) 2013 Daniel Price
+! This library is free software; redistribute under the terms of the
+! GNU Lesser General Public License (LGPL, see COPYING.LESSER for details).
+!
 program testgizaplot
   use giza
   implicit none

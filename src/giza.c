@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -22,36 +22,45 @@
  *      Daniel Price <daniel.price@monash.edu> (main contact)
  */
 
+#include "giza-private.h"
+#include "giza-drivers-private.h"
 #include "giza-io-private.h"
 #include <math.h>
-#include "giza-private.h"
 #include <stdlib.h>
 
 /**
- * Checks if the currently selected device is open.
- *
- * Return value:
- *  -1 if the currently selected device is open.
- *  -0 if the currently selected device is not open
- * Input:
- *  -source :- A string that should contain the name of
- *     the function calling _giza_check_device_ready so it can
- *     be included in an error message that will be printed
- *     to stderr if no device is open.
+ * Checks if the currently selected device is open (but not necessarily bound
+ * to a cairo context on GIZA_DEVICE_CAIRO).
+ */
+int
+_giza_check_device_open (char *source)
+{
+  if (id < 0 || id >= GIZA_MAX_DEVICES)
+    {
+      _giza_error (source, "No device open.");
+      return 0;
+    }
+  if (!Dev[id].deviceOpen)
+    {
+      _giza_error (source, "No device open.");
+      return 0;
+    }
+  return 1;
+}
+
+/**
+ * Checks if the device is ready to draw: open, and for external cairo devices
+ * a caller-owned context must be bound via giza_set_cairo_context.
  */
 int
 _giza_check_device_ready (char *source)
 {
-  if (id < 0 || id >= GIZA_MAX_DEVICES) 
-    {
-
-    _giza_error(source, "No device open.");
+  if (!_giza_check_device_open (source))
     return 0;
 
-    }
-  else if (!Dev[id].deviceOpen)
+  if (Dev[id].type == GIZA_DEVICE_CAIRO && Dev[id].context == NULL)
     {
-      _giza_error (source, "No device open.");
+      _giza_error (source, "No cairo context bound (call giza_set_cairo_context first).");
       return 0;
     }
   return 1;

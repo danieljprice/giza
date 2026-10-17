@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2014 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -92,6 +92,7 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
     default:
       giza_set_fill(GIZA_FILL_HOLLOW);
       break;
+    case 2:
     case 3:
       giza_set_fill(GIZA_FILL_SOLID);
       break;
@@ -101,20 +102,42 @@ giza_histogram (int n, const double *dat, double min, double max, int nbin, int 
   _giza_set_trans (GIZA_TRANS_WORLD);
 
   /* plot the bars of the histogram */
-  for (ibin=0;ibin<nbin;ibin++)
+  if (flag == 2 || flag == 3)
     {
-       xmin = min + ibin*bin_width;
-       xmax = xmin + bin_width;
-       ymin = 0.;
-       ymax = (double) ninbin[ibin];
+      /* filled style: draw the whole histogram as a single closed
+       * staircase polygon and fill it once. Filling each bar as a
+       * separate polygon leaves antialiased seams between adjacent
+       * bars (two half-covered edges do not sum to full coverage) */
+      cairo_move_to (Dev[id].context, min, 0.);
+      for (ibin=0;ibin<nbin;ibin++)
+        {
+           xmin = min + ibin*bin_width;
+           xmax = xmin + bin_width;
+           ymax = (double) ninbin[ibin];
+           cairo_line_to (Dev[id].context, xmin, ymax);
+           cairo_line_to (Dev[id].context, xmax, ymax);
+        }
+      cairo_line_to (Dev[id].context, max, 0.);
+      cairo_close_path (Dev[id].context);
+      _giza_fill ();
+    }
+  else
+    {
+      for (ibin=0;ibin<nbin;ibin++)
+        {
+           xmin = min + ibin*bin_width;
+           xmax = xmin + bin_width;
+           ymin = 0.;
+           ymax = (double) ninbin[ibin];
 
-       /* plot only 3 sides of the rectangle for all except the last */
-       cairo_move_to (Dev[id].context, xmin, ymin);
-       cairo_line_to (Dev[id].context, xmin, ymax);
-       cairo_line_to (Dev[id].context, xmax, ymax);
-       cairo_line_to (Dev[id].context, xmax, ymin);
-       cairo_line_to (Dev[id].context, xmin, ymin);
-       _giza_fill ();
+           /* plot only 3 sides of the rectangle for all except the last */
+           cairo_move_to (Dev[id].context, xmin, ymin);
+           cairo_line_to (Dev[id].context, xmin, ymax);
+           cairo_line_to (Dev[id].context, xmax, ymax);
+           cairo_line_to (Dev[id].context, xmax, ymin);
+           cairo_line_to (Dev[id].context, xmin, ymin);
+           _giza_fill ();
+        }
     }
 
   /* restore previous fill style */

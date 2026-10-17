@@ -5,16 +5,16 @@
 !  Copyright (c) 2010-2012 Daniel Price
 !
 !  This library is free software; and you are welcome to redistribute
-!  it under the terms of the GNU General Public License
-!  (GPL, see LICENSE file for details) and the provision that
+!  it under the terms of the GNU Lesser General Public License
+!  (LGPL, see COPYING.LESSER file for details) and the provision that
 !   this notice remains intact. If you modify this file, please
-!   note section 5a) of the GPLv3 states that:
+!   note section 2 of the LGPLv3 states that:
 !
 !    a) The work must carry prominent notices stating that you modified
 !    it, and giving a relevant date.
 !
 !  This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
-!  See the GPL for specific language governing rights and limitations.
+!  See the LGPL for specific language governing rights and limitations.
 !
 !  The Original code is the giza plotting library.
 !
@@ -48,8 +48,7 @@ contains
 !------------------------------------------------------------
  integer function units_giza(pgplotunits)
   use giza, only:giza_units_normalized,giza_units_inches, &
-                 giza_units_mm,giza_units_device,giza_units_world,&
-                 giza_units_pixels
+                 giza_units_mm,giza_units_world,giza_units_pixels
   implicit none
   integer, intent(in) :: pgplotunits
 
@@ -131,7 +130,7 @@ subroutine PGAXIS (OPT, X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, 
  real, intent(in) :: ORIENT
  integer, intent(in) :: NSUB
 
- call giza_axis(OPT, X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, DISP, ORIENT)
+ call giza_axis(OPT//'TS', X1, Y1, X2, Y2, V1, V2, STEP, NSUB, DMAJL, DMAJR, FMIN, DISP, ORIENT)
 
 end subroutine PGAXIS
 
@@ -186,6 +185,9 @@ integer function PGBEG (UNIT, FILE, NXSUB, NYSUB)
  if (PGBEG > 0 .and. (NXSUB.GT.1 .or. NYSUB.GT.1)) then
     call PGSUBP(NXSUB, NYSUB)
  endif
+ ! UNIT is the Fortran I/O unit from the PGPLOT calling sequence.
+ ! giza opens the device from FILE, so the unit number is not used.
+ if (UNIT < -huge(UNIT)) PGBEG = PGBEG
 
 end function PGBEG
 
@@ -367,6 +369,10 @@ subroutine PGCONX (A, IDIM, JDIM, I1, I2, J1, J2, C, NC, PLOT)
 
  NCA = abs(NC)
  VIS0 = 0
+ ! Centre sample is filled in later; start defined so every element is set.
+ H = 0.0
+ XH = 0.0
+ YH = 0.0
  VIS1 = 1
 
  do J = J2-1, J1, -1
@@ -677,7 +683,7 @@ end subroutine PGFUNY
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
- use giza,       only:giza_render_gray,giza_extend_none,giza_filter_nearest
+ use giza,       only:giza_render_gray_shade,giza_extend_none,giza_filter_nearest
  use gizapgplot, only:convert_tr_to_affine
  implicit none
  integer, intent(in) :: IDIM, JDIM, I1, I2, J1, J2
@@ -685,7 +691,7 @@ subroutine PGGRAY (A, IDIM, JDIM, I1, I2, J1, J2, FG, BG, TR)
  real, dimension(6)  :: affine
 
  call convert_tr_to_affine(tr,affine)
- call giza_render_gray(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,giza_extend_none,giza_filter_nearest,affine)
+ call giza_render_gray_shade(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg,giza_extend_none,giza_filter_nearest,affine)
 
 end subroutine PGGRAY
 
@@ -941,16 +947,23 @@ end subroutine PGOLIN
 ! Status: IMPLEMENTED
 !------------------------------------------------------------------------
 integer function PGOPEN (DEVICE)
- use giza, only:giza_open_device,giza_set_colour_palette,giza_colour_palette_pgplot
+ use giza, only:giza_open_device,giza_set_colour_palette,giza_colour_palette_pgplot,giza_draw_background,giza_query_device
 ! use giza, only:giza_open_device_size,giza_units_mm,giza_units_inches
  implicit none
  character*(*), intent(in) :: DEVICE
+ character(len=16) :: is_hardcopy
 
 ! print*,'giza units mm = ',giza_units_mm
 ! pgopen = giza_open_device_size(device,'giza',11.0,8.5,giza_units_inches)
  pgopen = giza_open_device(device,'giza')
 
- call giza_set_colour_palette(giza_colour_palette_pgplot)
+ if (pgopen > 0) then
+    call giza_set_colour_palette(giza_colour_palette_pgplot)
+    call giza_query_device('hardcopy', is_hardcopy)
+    if (trim(is_hardcopy) /= 'YES') then
+       call giza_draw_background()
+    endif
+ endif
 
 end function PGOPEN
 
@@ -1809,8 +1822,8 @@ end subroutine PGSITF
 !------------------------------------------------------------------------
 subroutine PGSLCT(ID)
  use giza, only:giza_select_device
+ implicit none
  integer, intent(in) :: ID
- integer :: ierr
 
  call giza_select_device(ID)
 
@@ -2018,7 +2031,7 @@ subroutine PGWEDG(SIDE, DISP, WIDTH, FG, BG, LABEL)
  character *(*), intent(in) :: SIDE,LABEL
  real,           intent(in) :: DISP, WIDTH, FG, BG
 
- call giza_colour_bar(SIDE, DISP, WIDTH, FG, BG, LABEL)
+ call giza_colour_bar(SIDE, DISP, WIDTH, BG, FG, LABEL)
 
 end subroutine PGWEDG
 

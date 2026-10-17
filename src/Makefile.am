@@ -27,7 +27,7 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-colour-palette.c giza-colour-table.c giza-contour.c \
        giza-cursor-routines.c giza-device-has-cursor.c \
        giza-draw-background.c giza-draw.c giza-driver-eps.c \
-       giza-driver-null.c giza-driver-pdf.c giza-driver-png.c \
+       giza-driver-null.c giza-driver-cairo.c giza-driver-pdf.c giza-driver-png.c \
        giza-driver-mp4.c giza-driver-ps.c giza-driver-svg.c giza-driver-xw.c \
        giza-drivers.c giza-environment.c giza-error-bars.c giza-fill.c \
        giza-format-number.c giza-function-t.c giza-function-x.c \
@@ -38,15 +38,15 @@ libgiza_la_SOURCES = giza-annotate.c giza-arrow-style.c giza-arrow.c giza-axis.c
        giza-prompting.c giza-ptext.c giza-qtext.c giza-rectangle.c \
        giza-render.c giza-save.c giza-set-font.c giza-stroke.c \
        giza-subpanel.c giza-text-background.c giza-text.c giza-tick.c \
-       giza-transforms.c giza-vector.c giza-viewport.c giza-version.c \
+       giza-transforms.c giza-vector.c giza-streamplot.c giza-viewport.c giza-version.c \
        giza-warnings.c giza-window.c giza.c lex.yy.c giza-itf.c \
        giza-arrow-style-private.h giza-driver-svg-private.h giza-stroke-private.h \
        giza-band-private.h giza-driver-xw-private.h giza-subpanel-private.h \
        giza-character-size-private.h giza-drivers-private.h giza-text-background-private.h \
        giza-colour-private.h giza-fill-private.h giza-text-private.h \
-       giza-cursor-private.h giza-io-private.h giza-tick-private.h giza-transforms-private.h \
+       giza-cursor-private.h giza-io-private.h giza-axis-private.h giza-tick-private.h giza-transforms-private.h \
        giza-driver-eps-private.h giza-line-style-private.h giza-version.h \
-       giza-driver-null-private.h giza-private.h giza-viewport-private.h \
+       giza-driver-null-private.h giza-driver-cairo-private.h giza-private.h giza-viewport-private.h \
        giza-driver-pdf-private.h giza-render-private.h giza-warnings-private.h \
        giza-driver-png-private.h giza-driver-mp4-private.h giza-set-font-private.h giza-window-private.h \
        giza-driver-ps-private.h giza-shared.h giza.h giza-itf.h
@@ -63,9 +63,7 @@ libgiza_la_CPPFLAGS = $(X11_CFLAGS) $(CAIRO_CFLAGS) $(FT_CFLAGS) $(FC_CFLAGS) $(
 libcpgplot_la_CPPFLAGS = $(libgiza_la_CPPFLAGS)
 
 libgiza_la_LDFLAGS = -version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-       -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS) $(OSXCOCOA_LIBS) \
-       -Wl,-rpath,$(abs_top_builddir)/src/.libs \
-       -Wl,-rpath,$(libdir)
+       -no-undefined $(X11_LIBS) $(CAIRO_LIBS) $(FT_LIBS) $(FC_LIBS) $(OSXCOCOA_LIBS)
 
 libcpgplot_la_SOURCES = giza-cpgplot.c
 

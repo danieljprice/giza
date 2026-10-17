@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -30,6 +30,7 @@
 #include "giza-transforms-private.h"
 #include "giza-character-size-private.h"
 #include "giza-band-private.h"
+#include <X11/cursorfont.h>
 
 #ifdef _GIZA_HAS_XW
 
@@ -40,6 +41,14 @@
 #include <string.h>
 #include <poll.h>
 #include <errno.h>
+
+/* cairo-xlib.h has included cairo-features.h, defining CAIRO_HAS_XCB_SURFACE */
+#if defined(__APPLE__) && CAIRO_HAS_XCB_SURFACE
+#define GIZA_XW_DISABLE_CAIRO_SHM 1
+#include <cairo/cairo-xcb.h>
+#include <dlfcn.h>
+#endif
+
 /**
  * Global variables specific to X.
  */
@@ -64,6 +73,15 @@ struct GIZA_XWindow
   int pixelsize;
   int screensize;
   int in_use;
+  /* Set when XResizeWindow is issued; cleared once window geometry matches.
+   * Stops prepare_draw from treating async resize lag as a user resize. */
+  int resize_pending;
+  /* User resized the window (ConfigureNotify); replot when mouse button released */
+  int resize_dirty;
+  /* Cached window background from last successful XAllocColor (ci 0) */
+  int bg_cached;
+  double bg_r, bg_g, bg_b;
+  unsigned long bg_pixel;
 } XW[GIZA_MAX_DEVICES];
 
 #define GIZA_DEFAULT_WIDTH 800
@@ -77,9 +95,81 @@ static void _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anch
 static void _giza_expose_xw (XEvent *event);
 static void _giza_flush_xw_event_queue (XEvent *event);
 static int _giza_errors_xw (Display *display, XErrorEvent *error);
+static void _xw_sync_window_background (void);
+static Bool _xw_event_pending (Display *dpy, XEvent *ev, XPointer arg);
 
 static Atom wmDeleteMessage;
+static Atom wmProtocols;
 /*static int giza_xw_debug = 0;*/
+
+/**
+ * XIfEvent predicate: events for our window that the interactive loop handles.
+ * ClientMessage (WM_DELETE_WINDOW) has no event-mask bit, so XWindowEvent
+ * never returns it — that is why the close button appeared dead on macOS/XQuartz.
+ */
+static Bool
+_xw_event_pending (Display *dpy, XEvent *ev, XPointer arg)
+{
+  Window w = *(Window *) arg;
+
+  (void) dpy;
+  if (ev->xany.window != w)
+    return False;
+
+  switch (ev->type)
+    {
+    case ClientMessage:
+    case DestroyNotify:
+    case Expose:
+    case ConfigureNotify:
+    case ButtonPress:
+    case ButtonRelease:
+    case KeyPress:
+    case MotionNotify:
+      return True;
+    default:
+      return False;
+    }
+}
+
+#ifdef GIZA_XW_DISABLE_CAIRO_SHM
+/**
+ * Stops cairo from uploading images via MIT-SHM on macOS.
+ *
+ * When cairo's Xlib backend runs on top of XCB (as in the cairo shipped with
+ * XQuartz), it sends ShmAttach and marks the segment IPC_RMID without waiting
+ * for the server. macOS forbids attaching a removed segment, so the server
+ * replies BadAccess and every image upload over 8kB fails with BadShmSeg.
+ *
+ * cairo shares one XCB device per connection, so a throwaway XCB surface on
+ * our connection gives access to that device, on which SHM can be disabled.
+ * XGetXCBConnection is looked up at runtime: it is only loaded if cairo uses
+ * XCB, so no extra link dependency is needed and plain Xlib cairo is skipped.
+ */
+static void
+_xw_disable_cairo_shm (void)
+{
+  xcb_connection_t *(*get_xcb_connection) (Display *) =
+    (xcb_connection_t *(*) (Display *)) dlsym (RTLD_DEFAULT, "XGetXCBConnection");
+  if (!get_xcb_connection)
+    return;
+
+  /* cairo only needs the visual id (to find the screen) and the colour masks */
+  xcb_visualtype_t visualtype = {
+    .visual_id  = (xcb_visualid_t) XVisualIDFromVisual (XW[id].visual),
+    .red_mask   = (uint32_t) XW[id].visual->red_mask,
+    .green_mask = (uint32_t) XW[id].visual->green_mask,
+    .blue_mask  = (uint32_t) XW[id].visual->blue_mask,
+  };
+  cairo_surface_t *probe = cairo_xcb_surface_create (get_xcb_connection (XW[id].display),
+                                                     (xcb_drawable_t) XW[id].pixmap,
+                                                     &visualtype, 1, 1);
+  cairo_device_t *device = cairo_surface_get_device (probe);
+  if (device)
+    cairo_xcb_device_debug_cap_xshm_version (device, -1, -1);
+  cairo_surface_destroy (probe);
+}
+#endif
 
 /**
  * Opens an XWindow device for drawing to.
@@ -199,7 +289,8 @@ _giza_open_device_xw (double width, double height, int units)
   XMapWindow (XW[id].display, XW[id].window);
 
    /* register interest in the delete window message */
-  wmDeleteMessage = XInternAtom(XW[id].display, "WM_DELETE_WINDOW", 0);
+  wmDeleteMessage = XInternAtom(XW[id].display, "WM_DELETE_WINDOW", False);
+  wmProtocols = XInternAtom(XW[id].display, "WM_PROTOCOLS", False);
   XSetWMProtocols(XW[id].display, XW[id].window, &wmDeleteMessage, 1);
 
   /* register the routine to handle non-fatal X errors */
@@ -221,6 +312,10 @@ _giza_open_device_xw (double width, double height, int units)
       _giza_error ("_giza_open_device_xw", "Could not create surface");
       return 5;
     }
+#ifdef GIZA_XW_DISABLE_CAIRO_SHM
+  /* must follow creation of the Xlib surface, which keeps the device alive */
+  _xw_disable_cairo_shm ();
+#endif
 
   Dev[id].defaultBackgroundAlpha = 1.;
 
@@ -236,6 +331,49 @@ _giza_open_device_xw (double width, double height, int units)
 }
 
 /**
+ * Keep the X window background pixel in sync with colour index 0.
+ * Newly exposed regions (Hollywood expand, drag-resize) then match the
+ * plot background instead of the default white pixel used at create time.
+ */
+static void
+_xw_sync_window_background (void)
+{
+  XColor xc;
+  double r, g, b, a;
+
+  if (!XW[id].display || !XW[id].window)
+    return;
+
+  giza_get_colour_representation_alpha (0, &r, &g, &b, &a);
+
+  if (XW[id].bg_cached
+      && XW[id].bg_r == r && XW[id].bg_g == g && XW[id].bg_b == b)
+    {
+      XSetWindowBackground (XW[id].display, XW[id].window, XW[id].bg_pixel);
+      return;
+    }
+
+  xc.red   = (unsigned short) (r * 65535.0 + 0.5);
+  xc.green = (unsigned short) (g * 65535.0 + 0.5);
+  xc.blue  = (unsigned short) (b * 65535.0 + 0.5);
+  xc.flags = DoRed | DoGreen | DoBlue;
+
+  if (!XW[id].colormap)
+    XW[id].colormap = DefaultColormap (XW[id].display, XW[id].screennum);
+
+  if (!XAllocColor (XW[id].display, XW[id].colormap, &xc))
+    return;
+
+  XW[id].bg_cached = 1;
+  XW[id].bg_r = r;
+  XW[id].bg_g = g;
+  XW[id].bg_b = b;
+  XW[id].bg_pixel = xc.pixel;
+
+  XSetWindowBackground (XW[id].display, XW[id].window, xc.pixel);
+}
+
+/**
  * Flushes the X device.
  */
 void
@@ -243,6 +381,9 @@ _giza_flush_device_xw (void)
 {
   /* flush the offscreen surface */
   cairo_surface_flush (Dev[id].surface);
+
+  /* ensure expand/Expose margins match colour index 0 */
+  _xw_sync_window_background ();
 
   /* move the offscreen surface to the onscreen one */
   XCopyArea (XW[id].display, XW[id].pixmap, XW[id].window, XW[id].gc, 0, 0, (unsigned) XW[id].width, (unsigned) XW[id].height, 0, 0);
@@ -255,6 +396,170 @@ _giza_flush_device_xw (void)
 }
 
 /**
+ * Query the current X window outer size in pixels.
+ */
+static void
+_xw_query_window_size (unsigned int *wwin, unsigned int *hwin)
+{
+  int          x_return, y_return;
+  Window       root_return;
+  unsigned int border_width_return, depth_return;
+
+  XGetGeometry (XW[id].display, XW[id].window, &root_return,
+                &x_return, &y_return, wwin, hwin,
+                &border_width_return, &depth_return);
+}
+
+/**
+ * Update Dev[id] plot area from full window dimensions (margins excluded).
+ */
+static void
+_xw_sync_device_to_window (unsigned int wwin, unsigned int hwin)
+{
+  XW[id].width  = wwin;
+  XW[id].height = hwin;
+  Dev[id].width  = (int) wwin - 2 * GIZA_XW_MARGIN;
+  Dev[id].height = (int) hwin - 2 * GIZA_XW_MARGIN;
+  if (Dev[id].width < 1)
+    Dev[id].width = 1;
+  if (Dev[id].height < 1)
+    Dev[id].height = 1;
+
+  /* adjust panel size for resized surface */
+  _giza_init_norm_xw ();
+  Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
+  Dev[id].panelheight = Dev[id].height / Dev[id].ny;
+}
+
+/**
+ * Destroy and recreate the X pixmap and cairo surface at the current size.
+ */
+static void
+_xw_recreate_surface (void)
+{
+  if (!Dev[id].surface)
+    return;
+
+  /* create new pixmap and cairo objects before destroying the old ones */
+  Pixmap new_pixmap = XCreatePixmap (XW[id].display, XW[id].window,
+                                     (unsigned) XW[id].width,
+                                     (unsigned) XW[id].height,
+                                     (unsigned) XW[id].depth);
+  cairo_surface_t *new_surf = cairo_xlib_surface_create (XW[id].display, new_pixmap,
+                                                         XW[id].visual,
+                                                         XW[id].width, XW[id].height);
+  if (!new_surf || cairo_surface_status (new_surf) != CAIRO_STATUS_SUCCESS) {
+    _giza_error ("_xw_recreate_surface", "could not create cairo xlib surface");
+    XFreePixmap (XW[id].display, new_pixmap);
+    return;
+  }
+
+  cairo_t *new_ctx = cairo_create (new_surf);
+  if (!new_ctx || cairo_status (new_ctx) != CAIRO_STATUS_SUCCESS) {
+    _giza_error ("_xw_recreate_surface", "could not create cairo context");
+    if (new_ctx)
+      cairo_destroy (new_ctx);
+    cairo_surface_destroy (new_surf);
+    XFreePixmap (XW[id].display, new_pixmap);
+    return;
+  }
+
+  /* This function is called for each new page, so new page means new pixmap */
+  cairo_destroy (Dev[id].context);
+  cairo_surface_finish (Dev[id].surface);
+  cairo_status_t status = cairo_surface_status (Dev[id].surface);
+  if (status != CAIRO_STATUS_SUCCESS)
+    _giza_error ("_xw_recreate_surface", cairo_status_to_string (status));
+
+  cairo_surface_destroy (Dev[id].surface);
+  XFreePixmap (XW[id].display, XW[id].pixmap);
+
+  XW[id].pixmap = new_pixmap;
+  Dev[id].surface = new_surf;
+  Dev[id].context = new_ctx;
+
+  /*
+   * XCreatePixmap leaves undefined contents (often white). Fill with the
+   * plot background immediately so Expose/XCopyArea never blit a white
+   * rectangle that is later "chased" by giza_draw_background.
+   */
+  giza_draw_background ();
+}
+
+/**
+ * Apply a reported window size: sync Dev, recreate surface (fills background).
+ */
+static void
+_xw_apply_window_size (unsigned int wwin, unsigned int hwin)
+{
+  _xw_sync_device_to_window (wwin, hwin);
+  _xw_recreate_surface ();
+  XW[id].resize_pending = 0;
+}
+
+/**
+ * Non-blocking drain of ConfigureNotify; returns 1 if at least one was seen.
+ * On success, wwin and hwin hold the last reported size.
+ */
+static int
+_xw_drain_configure_notify (unsigned int *wwin, unsigned int *hwin)
+{
+  XEvent e;
+  int saw = 0;
+
+  while (XCheckTypedWindowEvent (XW[id].display, XW[id].window,
+                                 ConfigureNotify, &e))
+    {
+      *wwin = (unsigned int) e.xconfigure.width;
+      *hwin = (unsigned int) e.xconfigure.height;
+      saw = 1;
+    }
+  return saw;
+}
+
+/**
+ * Sync X window size to Dev[id] and recreate the cairo surface if needed.
+ *
+ * Called via _giza_prepare_interactive_draw before paper-size queries and
+ * viewport setup (e.g. after the user resizes the window interactively).
+ */
+void
+_giza_prepare_draw_xw (void)
+{
+  unsigned int width_return, height_return;
+
+  _xw_query_window_size (&width_return, &height_return);
+
+  /* already in sync — nothing to do */
+  if ((unsigned int) XW[id].width == width_return
+      && (unsigned int) XW[id].height == height_return)
+    {
+      XW[id].resize_pending = 0;
+      return;
+    }
+
+  /* Programmatic paper-size change: XResizeWindow is asynchronous. Keep the
+   * requested size until ConfigureNotify (or matching geometry) arrives;
+   * otherwise prepare_draw would revert Dev and wipe the new background. */
+  if (Dev[id].resize || XW[id].resize_pending)
+    {
+      unsigned int cfg_w = width_return, cfg_h = height_return;
+
+      if (_xw_drain_configure_notify (&cfg_w, &cfg_h))
+        {
+          /* WM answered (possibly with a constrained size) — adopt it */
+          _xw_query_window_size (&cfg_w, &cfg_h);
+          _xw_apply_window_size (cfg_w, cfg_h);
+          return;
+        }
+      /* Still lagging behind our XResizeWindow request */
+      return;
+    }
+
+  _xw_apply_window_size (width_return, height_return);
+}
+
+/**
  * Advances the X window device to the next page.
  * If resize was set upon function entry, resize the window accordingly.
  * If, otoh, we detect the window was resized, take appropriate action and
@@ -263,12 +568,10 @@ _giza_flush_device_xw (void)
 void
 _giza_change_page_xw (void)
 {
-  int          x_return, y_return;
-  Window       root_return;
-  unsigned int width_return, height_return, border_width_return, depth_return;
+  unsigned int width_return, height_return;
 
   /* Enquire current geometry to see if it's changed */
-  XGetGeometry(XW[id].display, XW[id].window, &root_return, &x_return, &y_return, &width_return, &height_return, &border_width_return, &depth_return);
+  _xw_query_window_size (&width_return, &height_return);
   /* interactive logging feature */
   if (Sets.autolog && Dev[id].drawn) _giza_write_log_file(Dev[id].surface);
 
@@ -277,40 +580,31 @@ _giza_change_page_xw (void)
      XW[id].width  = Dev[id].width + 2 * GIZA_XW_MARGIN;
      XW[id].height = Dev[id].height + 2 * GIZA_XW_MARGIN;
 
-     /* Request window to be resized */
+     /* Match window bg before resize so newly exposed margins are not white */
+     _xw_sync_window_background ();
+
+     /* Request window to be resized (async; see resize_pending in prepare_draw) */
      XResizeWindow(XW[id].display, XW[id].window, (unsigned) XW[id].width, (unsigned) XW[id].height);
+     XW[id].resize_pending = 1;
   } else if( (unsigned int)XW[id].width!=width_return || (unsigned int)XW[id].height!=height_return ) {
       /* Oh. Someone probably resized the XWindow behind our backs. Handle that here */
-      XW[id].width  = Dev[id].width  = width_return;
-      XW[id].height = Dev[id].height = height_return;
-
-      /* take care of margin - if there's room for that */
-      if( Dev[id].width > 2*GIZA_XW_MARGIN )
-          Dev[id].width -= 2*GIZA_XW_MARGIN;
-      if( Dev[id].height > 2*GIZA_XW_MARGIN )
-          Dev[id].height -= 2*GIZA_XW_MARGIN;
-      /* Do stuff needed to reflect changed window size, notably adjust panel size in case of resized surface*/
-      _giza_init_norm();
-      Dev[id].panelwidth  = Dev[id].width  / Dev[id].nx;
-      Dev[id].panelheight = Dev[id].height / Dev[id].ny;
+      _xw_sync_device_to_window (width_return, height_return);
   }
 
-  /* This function is called for each new page, so new page means new pixmap */
-  cairo_destroy(Dev[id].context);
-  cairo_surface_finish (Dev[id].surface);
-  cairo_status_t status = cairo_surface_status (Dev[id].surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-     _giza_error("giza_change_page_xw",cairo_status_to_string(status));
+  _xw_recreate_surface ();
 
-  cairo_surface_destroy (Dev[id].surface);
-  XFreePixmap (XW[id].display, XW[id].pixmap);
-
-  /* New page means new pixmap */
-  XW[id].pixmap = XCreatePixmap (XW[id].display, XW[id].window, (unsigned) XW[id].width, (unsigned) XW[id].height, (unsigned) XW[id].depth);
-
-  /* New pixmap means new cairo surface */
-  Dev[id].surface = cairo_xlib_surface_create (XW[id].display, XW[id].pixmap, XW[id].visual, XW[id].width, XW[id].height);
-  Dev[id].context = cairo_create (Dev[id].surface);
+  /*
+   * Push the blank (background-coloured) page to the window now so that
+   * an animated XResizeWindow expand shows black/white margins matching
+   * ci 0, not an uninitialised or stale white frame.
+   */
+  if (Dev[id].resize || XW[id].resize_pending)
+    {
+      cairo_surface_flush (Dev[id].surface);
+      XCopyArea (XW[id].display, XW[id].pixmap, XW[id].window, XW[id].gc,
+                 0, 0, (unsigned) XW[id].width, (unsigned) XW[id].height, 0, 0);
+      XFlush (XW[id].display);
+    }
 }
 
 /**
@@ -364,12 +658,18 @@ static int _giza_errors_xw (Display *display, XErrorEvent *xwerror)
  * Loops indefinitely, redrawing the window as necessary until a key is pressed.
  * Returns the x and y position of the cursor (in device coords) and the key pressed.
  *
- * Update: do not /actively/ honour resizing of the window (neither does
- *         PGPLOT) whilst waiting for key press.
+ * Update: do not recreate the cairo pixmap whilst waiting for key press
+ *         (neither does PGPLOT) — Expose keeps copying the old pixel map so
+ *         the previous plot stays visible during a drag-resize.  When a motion
+ *         callback is set, return 'r' after the user releases the
+ *         mouse so the application can replot at the final size.
  */
 static void
 _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const int *anchory, int *x, int *y, char *ch)
 {
+  long event_mask = ExposureMask | KeyPressMask | ButtonPressMask
+                  | ButtonReleaseMask | PointerMotionMask | StructureNotifyMask;
+
   /* move the cursor to the given position */
   if (moveCurs)
     {
@@ -377,33 +677,102 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
     }
 
   XEvent event;
-  XSelectInput (XW[id].display, XW[id].window, ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask | StructureNotifyMask );
+  XSelectInput (XW[id].display, XW[id].window, event_mask);
 
   _giza_init_band (mode);
   _giza_expand_clipping_xw();
 
+  /* show a live crosshair cursor while waiting for input, as PGPLOT does */
+  Cursor livecursor = XCreateFontCursor (XW[id].display, XC_crosshair);
+  XDefineCursor (XW[id].display, XW[id].window, livecursor);
+
  while(1) {
 
-    /* wait for key press/expose (avoid using XNextEvent as breaks older systems) */
-    XWindowEvent(XW[id].display, XW[id].window,
-       (long) (ExposureMask | KeyPressMask | ButtonPressMask | PointerMotionMask | StructureNotifyMask), &event);
-    /*XNextEvent(XW[id].display, &event);*/
+    /*
+     * Wait for the next interactive event.  Prefer XIfEvent over XWindowEvent:
+     * the latter cannot return ClientMessage (no mask bit), so WM_DELETE_WINDOW
+     * from the close button never woke the loop.
+     */
+    XIfEvent (XW[id].display, &event, _xw_event_pending, (XPointer) &XW[id].window);
 
     /* always return x, y values for safety */
     *x = 0;
     *y = 0;
     switch  (event.type) {
-    case ClientMessage: /* catch close window event */
-      *ch = 'q';
-       if ((Atom)event.xclient.data.l[0] == wmDeleteMessage) {
+    case ClientMessage: /* red close-box / WM_DELETE_WINDOW → same as 'q' */
+       if (event.xclient.message_type == wmProtocols
+           && event.xclient.format == 32
+           && (Atom) event.xclient.data.l[0] == wmDeleteMessage) {
+          *ch = 'q';
+          _giza_destroy_band (mode);
+          _giza_flush_xw_event_queue (&event);
+          _giza_reset_clipping_xw ();
+          XUndefineCursor (XW[id].display, XW[id].window);
+          XFreeCursor (XW[id].display, livecursor);
+          XFlush (XW[id].display);
           return;
        }
        break;
     case DestroyNotify:
       *ch = 'q';
+      _giza_destroy_band (mode);
+      _giza_reset_clipping_xw ();
+      XFreeCursor (XW[id].display, livecursor);
       return;
     case Expose: /* redraw */
       _giza_expose_xw (&event);
+      break;
+    case ConfigureNotify:
+      {
+        unsigned int cfg_w, cfg_h;
+        int old_w = XW[id].width;
+        int old_h = XW[id].height;
+
+        cfg_w = (unsigned int) event.xconfigure.width;
+        cfg_h = (unsigned int) event.xconfigure.height;
+        _xw_drain_configure_notify (&cfg_w, &cfg_h);
+        _xw_query_window_size (&cfg_w, &cfg_h);
+
+        /* Echo of our own XResizeWindow (already matching) — no replot */
+        if ((int) cfg_w == old_w && (int) cfg_h == old_h)
+          {
+            XW[id].resize_pending = 0;
+            break;
+          }
+
+        /*
+         * Programmatic / pending paper-size change: adopt final geometry later
+         * via prepare_draw; never schedule an automatic 'r' from this path.
+         */
+        if (XW[id].resize_pending || Dev[id].resize)
+          break;
+
+        /*
+         * User drag-resize: do not recreate/clear the cairo pixmap here.
+         * Expose keeps blitting the old pixel map until the mouse is released;
+         * then return 'r' (if a motion callback is set) so the client can
+         * replot and prepare_draw syncs to the final size.
+         */
+        if (Dev[id].motion_callback != NULL)
+          XW[id].resize_dirty = 1;
+        break;
+      }
+    case ButtonRelease:
+      /* End of resize drag: button up after ConfigureNotify */
+      if (XW[id].resize_dirty && Dev[id].motion_callback != NULL)
+        {
+          XW[id].resize_dirty = 0;
+          *x = event.xbutton.x;
+          *y = event.xbutton.y;
+          *ch = 'r';
+          _giza_destroy_band (mode);
+          _giza_flush_xw_event_queue (&event);
+          _giza_reset_clipping_xw ();
+          XUndefineCursor (XW[id].display, XW[id].window);
+          XFreeCursor (XW[id].display, livecursor);
+          XFlush (XW[id].display);
+          return;
+        }
       break;
     case KeyPress: /* return pos and char */
       {
@@ -423,9 +792,13 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
          if(key)
            *ch = buffer[0];
 
+          XW[id].resize_dirty = 0;
           _giza_destroy_band (mode);
           _giza_flush_xw_event_queue(&event);
           _giza_reset_clipping_xw();
+          XUndefineCursor (XW[id].display, XW[id].window);
+          XFreeCursor (XW[id].display, livecursor);
+          XFlush (XW[id].display);
          return;
        };
 
@@ -465,9 +838,13 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
            *ch = GIZA_OTHER_CLICK;
            break;
         }
+        XW[id].resize_dirty = 0;
         _giza_destroy_band (mode);
         _giza_flush_xw_event_queue(&event);
         _giza_reset_clipping_xw();
+        XUndefineCursor (XW[id].display, XW[id].window);
+        XFreeCursor (XW[id].display, livecursor);
+        XFlush (XW[id].display);
         return;
       }
     case MotionNotify:
@@ -475,6 +852,26 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
         /* discard all except the last pointer motion event */
         while(XCheckWindowEvent(XW[id].display, XW[id].window,
                               (long)(PointerMotionMask), &event) == True);
+
+        /*
+         * After a WM resize, ButtonRelease often never reaches the client.
+         * Motion with no buttons held means the user has let go — replot.
+         */
+        if (XW[id].resize_dirty && Dev[id].motion_callback != NULL
+            && !(event.xmotion.state & (Button1Mask | Button2Mask | Button3Mask)))
+          {
+            XW[id].resize_dirty = 0;
+            *x = event.xmotion.x;
+            *y = event.xmotion.y;
+            *ch = 'r';
+            _giza_destroy_band (mode);
+            _giza_flush_xw_event_queue (&event);
+            _giza_reset_clipping_xw ();
+            XUndefineCursor (XW[id].display, XW[id].window);
+            XFreeCursor (XW[id].display, livecursor);
+            XFlush (XW[id].display);
+            return;
+          }
 
         /* if a callback function is set to do things while the cursor is moving, call it */
         if (Dev[id].motion_callback != NULL) {
@@ -489,6 +886,7 @@ _giza_xevent_loop (int mode, int moveCurs, int nanc, const int *anchorx, const i
 
         _giza_refresh_band (mode, nanc, anchorx, anchory, event.xmotion.x, event.xmotion.y);
         _giza_flush_xw_event_queue(&event);
+        break;
       }
     default:
       break;

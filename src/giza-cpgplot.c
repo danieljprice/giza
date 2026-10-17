@@ -4,16 +4,16 @@
  * Copyright (c) 2010-2012 Daniel Price
  *
  * This library is free software; and you are welcome to redistribute
- * it under the terms of the GNU General Public License
- * (GPL, see LICENSE file for details) and the provision that
+ * it under the terms of the GNU Lesser General Public License
+ * (LGPL, see COPYING.LESSER file for details) and the provision that
  * this notice remains intact. If you modify this file, please
- * note section 5a) of the GPLv3 states that:
+ * note section 2 of the LGPLv3 states that:
  *
  *  a) The work must carry prominent notices stating that you modified
  *  it, and giving a relevant date.
  *
  * This software is distributed "AS IS", with ABSOLUTELY NO WARRANTY.
- * See the GPL for specific language governing rights and limitations.
+ * See the LGPL for specific language governing rights and limitations.
  *
  * The Original code is the giza plotting library.
  *
@@ -31,6 +31,7 @@
 
 #include "giza.h"
 #include "giza-private.h"
+#include "giza-drivers-private.h"
 #include "giza-io-private.h" /* for _giza_error() */
 #include "giza-driver-xw-private.h"
 #include "giza-driver-eps-private.h"
@@ -118,7 +119,11 @@ void cpgaxis(const char *opt, float x1, float y1, float x2, float y2, \
              float v1, float v2, float step, int nsub, float dmajl, \
              float dmajr, float fmin, float disp, float orient)
 {
-   giza_axis_float(opt,x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient);
+   /* PGPLOT PGAXIS has no tick options and always draws ticks (lengths set
+    * by dmajl/dmajr/fmin); giza_axis requires T/S, so request them here */
+   char giza_opt[32];
+   snprintf(giza_opt, sizeof(giza_opt), "%sTS", opt);
+   giza_axis_float(giza_opt,x1,y1,x2,y2,v1,v2,step,nsub,dmajl,dmajr,fmin,disp,orient);
 }
 
 /***************************************************************
@@ -146,7 +151,11 @@ void cpgbbuf(void)
  ***************************************************************/
 int cpgbeg(int unit, const char *file, int nxsub, int nysub)
 {
-  int id = cpgopen(file);
+  int id;
+
+  /* The PGPLOT unit number is not used; the device comes from the file name. */
+  (void) unit;
+  id = cpgopen(file);
   if (id > 0 && (nxsub > 1 || nysub > 1)) {
      cpgsubp(nxsub, nysub);
   }
@@ -272,7 +281,8 @@ void cpgconx(const float *a, int idim, int jdim, int i1, int i2,
  int j1, int j2, const float *c, int nc,
  void (*plot)(int *visble, float *x, float *y, float *z))
 {
-  if (!plot) return;
+  if (!plot || idim < 1 || jdim < 1)
+    return;
 
 #define xsect_cx(p1,p2) (hcx[p2]*xhcx[p1]-hcx[p1]*xhcx[p2])/(hcx[p2]-hcx[p1])
 #define ysect_cx(p1,p2) (hcx[p2]*yhcx[p1]-hcx[p1]*yhcx[p2])/(hcx[p2]-hcx[p1])
@@ -506,7 +516,7 @@ void cpggray(const float *a, int idim, int jdim, int i1, int i2, \
   affine[3] = tr[5];
   affine[4] = tr[0] + tr[1]*(i1 - 0.5f) + tr[2]*(j1 - 0.5f);
   affine[5] = tr[3] + tr[4]*(i1 - 0.5f) + tr[5]*(j1 - 0.5f);
-  giza_render_gray_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg, \
+  giza_render_gray_shade_float(idim,jdim,a,i1-1,i2-1,j1-1,j2-1,fg,bg, \
                          GIZA_EXTEND_NONE,GIZA_FILTER_NEAREST,affine);
 }
 
@@ -531,7 +541,11 @@ void cpghi2d(const float *data, int nxv, int nyv, int ix1, \
  Logical center, float *ylims)
 {
   int nx = ix2 - ix1 + 1;
-  if (nx < 1 || iy1 > iy2) return;
+  if (nx < 1 || nyv < 1 || iy1 > iy2)
+    return;
+  /* nyv is the number of rows in the Fortran array. */
+  if (iy2 > nyv)
+    iy2 = nyv;
 
   /* Initialize the horizon (ylims) to a very low value */
   int i, iy;
@@ -719,6 +733,34 @@ void cpgolin(int maxpt, int *npt, float *x, float *y, int symbol)
 int cpgopen(const char *device)
 {
   int pgopen = giza_open_device(device,"giza");
+  if (pgopen > 0)
+    {
+      char is_hardcopy[16];
+      int len = sizeof(is_hardcopy);
+      giza_set_colour_palette(GIZA_COLOUR_PALETTE_PGPLOT);
+      giza_query_device("hardcopy", is_hardcopy, &len);
+      if (strcmp(is_hardcopy, "YES") != 0
+          || Dev[id].type == GIZA_DEVICE_NULL
+          || Dev[id].type == GIZA_DEVICE_PNG || Dev[id].type == GIZA_DEVICE_MP4)
+        {
+          /* interactive devices, null device, and raster files: PGPLOT screen
+           * convention (black background, white foreground - matching
+           * PGPLOT's PNG driver, which renders white-on-black like /xw) */
+          giza_set_colour_representation(GIZA_BACKGROUND_COLOUR, 0., 0., 0.);
+          giza_set_colour_representation(GIZA_FOREGROUND_COLOUR, 1., 1., 1.);
+          giza_draw_background();
+        }
+      else
+        {
+          /* vector hardcopy (ps/eps/pdf/svg): PGPLOT paper convention -
+           * white background with BLACK foreground, as the classic PS
+           * driver. Without this the PGPLOT palette leaves the foreground
+           * white on giza's white page: invisible ink */
+          giza_set_colour_representation(GIZA_BACKGROUND_COLOUR, 1., 1., 1.);
+          giza_set_colour_representation(GIZA_FOREGROUND_COLOUR, 0., 0., 0.);
+          giza_draw_background();
+        }
+    }
   return pgopen;
 }
 
@@ -1538,7 +1580,7 @@ void cpgvstd(void)
 void cpgwedg(const char *side, float disp, float width, \
  float fg, float bg, const char *label)
 {
-  giza_colour_bar_float(side,disp,width,fg,bg,label);
+  giza_colour_bar_float(side,disp,width,bg,fg,label);
 }
 
 /***************************************************************
