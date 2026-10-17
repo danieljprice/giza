@@ -943,12 +943,13 @@ _giza_expose_xw (XEvent *event)
 int
 _giza_wait_fd_or_click_xw (int fd)
 {
-  const long mask = ExposureMask | ButtonPressMask | StructureNotifyMask;
+  const long mask = ExposureMask | ButtonPressMask;
   struct pollfd pfd[2];
   XEvent event;
 
-  /* stop pointer motion and key events selected by the cursor loop from waking us */
-  XSelectInput (XW[id].display, XW[id].window, mask);
+  /* stop pointer motion and key events selected by the cursor loop from waking us.
+     ConfigureNotify stays selected but unmatched, left queued for prepare_draw */
+  XSelectInput (XW[id].display, XW[id].window, mask | StructureNotifyMask);
   pfd[0].fd = fd;
   pfd[0].events = POLLIN;
   pfd[1].fd = ConnectionNumber (XW[id].display);
