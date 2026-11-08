@@ -26,6 +26,7 @@
 
 #include <giza.h>
 #include <cairo/cairo.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -165,7 +166,7 @@ surface_has_content (cairo_surface_t *surface)
 {
   unsigned char *data;
   int width, height, stride, x, y;
-  unsigned char first;
+  uint32_t first;
 
   cairo_surface_flush (surface);
   data = cairo_image_surface_get_data (surface);
@@ -176,10 +177,12 @@ surface_has_content (cairo_surface_t *surface)
   if (data == NULL || width <= 0 || height <= 0)
     return 0;
 
-  first = data[0];
+  /* CAIRO_FORMAT_ARGB32 pixels are native-endian 32-bit words: compare
+     whole pixels, byte 0 is alpha on big-endian and never changes here */
+  first = *(uint32_t *) data;
   for (y = 0; y < height; y++)
     for (x = 0; x < width; x++)
-      if (data[y * stride + x * 4] != first)
+      if (((uint32_t *) (data + y * stride))[x] != first)
         return 1;
 
   return 0;
